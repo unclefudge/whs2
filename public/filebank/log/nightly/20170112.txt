@@ -1,0 +1,40 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (05/01/2017 - 11/01/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: CAPE COD SUPERVISOR (177) Company: El-Works Pty Ltd - Shane  Task: Store Run PID: 24925
+adding Shane Brown (sbrown) to roster
+
+Site: CAPE COD SUPERVISOR (177) Company: Tobi Spiteri  Task: Store Run PID: 24926
+adding Tobi Spiteri (labour4) to roster
+
+Site: MARTIN.BOWER (211) Company: Dean Taylor Bricklaying Pty Ltd  Task: Ground Floor PID: 24795
+adding Sam Walling (brk1b) to roster
+adding Ian Taylor (brk1a) to roster
+adding Dean Taylor (brk1) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Otto Morales (brk1e) to roster
+adding Vili Kanongataa (brk1g) to roster
+adding Steven Butler (butler) to roster
+adding Daniel Stevens Frost (brk1h) to roster
+adding Eric Houghton (erich) to roster
+adding Jack Launchbury (jackl) to roster
+
+Site: ANTONOPOULOS.SELIM (217) Company: C Blair Painting & Decorating  Task: Internal PID: 23726
+adding David Blair (paint1a) to roster
+adding Colin Blair (paint1) to roster
+
+Completed
+
+

@@ -1,0 +1,1851 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (08/12/2017 - 14/12/2017)
+-------------------------------------------------------------------------
+
+14/12/2017 SNEDDON (7615) - Izaak Merlehan (Sydney Waste & Property Services) was absent
+14/12/2017 SHEEHY  (7774) - Elliot Watkins (Essential Certifiers) was absent
+14/12/2017 FIELD.PINDER (7770) - George Saliba (All Time Floor & Wall Tiling) was absent
+14/12/2017 FIELD.PINDER (7770) - Joseph Elhindi (All Time Floor & Wall Tiling) was absent
+14/12/2017 FIELD.PINDER (7770) - Robert Issa (All Time Floor & Wall Tiling) was absent
+14/12/2017 COOPER (7808) - Greg Briggs (Greg Briggs) was absent
+14/12/2017 PASSICOT   (7800) - Brad O'Brien (Kings Langley Electrical) was absent
+14/12/2017 PASSICOT   (7800) - John Norford (Kings Langley Electrical) was absent
+14/12/2017 PASSICOT   (7800) - Vic Neilsen (Kings Langley Electrical) was absent
+14/12/2017 PASSICOT   (7800) - Lindsay Wyld (Wyldmen of Waterproofing) was absent
+14/12/2017 DOUGLAS    (7740) - Michael Hongfei (Color Right PTY LTD) was absent
+14/12/2017 PULSFORD    (7796) - BOON LONG LEE (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - BOON TONG WONG (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - CHEW KIT SEIN (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - gavin  lin (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Liangmin  Liu (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - MELANIE BOTHAM (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Ming Kwan  Keng  (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Nathan Walsh (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Peter Musolino (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Phyllis Wiggett (Pro-Gyp Solutions ) was absent
+14/12/2017 PULSFORD    (7796) - Wei Chen (Pro-Gyp Solutions ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Aaron  Hoffman (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Chris Bolton (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Danny Rogan (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Lenny Dunn (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Luke Briggs (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Matthew Honey (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Michael Kirby (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Robbie Dounia (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Robert Aren (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Tony Saify (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Warwick Harris (Budget Stairs) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Balin Robinson (Icon Roofing PTY LTD) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Janardana  Commerford (Icon Roofing PTY LTD) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Ross Dickinson (Icon Roofing PTY LTD) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - William Suttor (Icon Roofing PTY LTD) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Aiden Du (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Chen Xiao Yue (Winston) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Emile Yu (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Feng Jin Boa (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Hai Jiang (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - He Bo (Bo) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - He Jei Fu (Jeff) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Jinshan Jing (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Kevin Lexuan (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Leo (Li He) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Li Jian Jun (Denny) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Mars (Mars) (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Mu Jing Weng (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Qi Shun Zheng (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Qingli Li (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Richard Santosa  (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Ricky Santosa (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Shauaibing Lu (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Shi Lin (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Simon Feng (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Wang Jun Boa (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Xiaopei Zhan (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Yi Tao (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Yuan Xue (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Yuankui Lu (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Zhang Guan Ding (Palace Painting ) was absent
+14/12/2017 JONES.CRITCHARD-JONES (7813) - Zhuping He (Palace Painting ) was absent
+14/12/2017 SWINBURN  (7825) - Brad O'Brien (Kings Langley Electrical) was absent
+14/12/2017 SWINBURN  (7825) - John Norford (Kings Langley Electrical) was absent
+14/12/2017 SWINBURN  (7825) - Vic Neilsen (Kings Langley Electrical) was absent
+14/12/2017 CONFOS (7846) - Rob Palmer (Palmers Glass) was absent
+14/12/2017 QUINN (7806) - Bernie Cohen (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Chris Manzi (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Elliot Watkins (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Morris Impala (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Nathan Lowe (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Paul Cohen (Essential Certifiers) was absent
+14/12/2017 QUINN (7806) - Rick Moy (Essential Certifiers) was absent
+14/12/2017 WILLS (7843) - Graham McLaughlin (G & G Electrical) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: STRANG (118) Company: Scott Bartley Plumbing  Task: Storm Water PID: 42917
+adding Aaron Miranda (plumb1c) to roster
+adding Graham Pratt (plumb1p) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Tanya Bartley (Tanya) to roster
+
+Site: STRANG (118) Company: RNK Bricklaying  Task: Block Work PID: 40963
+adding Ronnie Allison (brk3) to roster
+
+Site: STRANG (118) Company: Sydney Waste & Property Services  Task: Load Job PID: 43355
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: STRANG (118) Company: Sydney Waste & Property Services  Task: Labouring PID: 43354
+There were no users to add or they were already on the roster
+
+Site: STRANG (118) Company: Josh Solid Foundations  Task: Bathroom Fittings Vanity & Silicone PID: 42876
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Site: STRANG (118) Company: Sydney Waste & Property Services  Task: General Clean EXT PID: 43333
+There were no users to add or they were already on the roster
+
+Site: SNEDDON (132) Company: Onnix Constructions  Task: Footings PID: 41403
+adding Jeff Chehine (onnix) to roster
+
+Site: SNEDDON (132) Company: Sydney Waste & Property Services  Task: Labouring PID: 43183
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: MALCOM.MILES (136) Company: Scott Bartley Plumbing  Task: Ground Floor Rough In PID: 42916
+adding Aaron Miranda (plumb1c) to roster
+adding Graham Pratt (plumb1p) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Tanya Bartley (Tanya) to roster
+
+Site: MALCOM.MILES (136) Company: Next Point Electrical  Task: Finish Off PID: 42933
+adding Adam Balzan (adant) to roster
+adding Daniel Barnard (Adant6) to roster
+adding Jeremy Banoub (adant3) to roster
+adding Luke Hicks (Adant4) to roster
+adding Nathan Hall (Adant5) to roster
+adding Sean Williams (adant2) to roster
+
+Site: MALCOM.MILES (136) Company: Mervyn Ridder  Task: Downstairs Fixout PID: 41903
+adding Adrian Rankilor (adrianr) to roster
+adding Mervyn Ridder (day5) to roster
+
+Site: MALCOM.MILES (136) Company: Scott Bartley Plumbing  Task: Finish Off PID: 41901
+There were no users to add or they were already on the roster
+
+Site: PRENDEVILLE.CAMPBELL (207) Company: Dean Taylor Bricklaying   Task: First Floor PID: 43160
+adding Daniel Stevens Frost (brk1h) to roster
+adding Dean Taylor (brk1) to roster
+adding Eric Houghton (erich) to roster
+adding Flor Homburg (FHomberg) to roster
+adding Ian Taylor (brk1a) to roster
+adding Jack Launchbury (jackl) to roster
+adding Kye Daly (kyed) to roster
+adding Otto Morales (brk1e) to roster
+adding Sam Walling (brk1b) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Steven Butler (butler) to roster
+adding Vili Kanongataa (brk1g) to roster
+
+Site: SUTANTO.HENDARTO (216) Company: Pro-Gyp Solutions   Task: Cornices PID: 43172
+adding BOON LONG LEE (BLONG) to roster
+adding BOON TONG WONG (BTONG) to roster
+adding CHEW KIT SEIN (CKIT) to roster
+adding gavin  lin (riliny) to roster
+adding Liangmin  Liu (LLIU) to roster
+adding MELANIE BOTHAM (MBOTHAM) to roster
+adding Ming Kwan  Keng  (Mkeng) to roster
+adding Nathan Walsh (Progyp17) to roster
+adding Peter Musolino (progyp1a) to roster
+adding Phyllis Wiggett (phyllisw) to roster
+adding Wei Chen (progyp1n) to roster
+
+Site: SUTANTO.HENDARTO (216) Company: Pro-Gyp Solutions   Task: Downstairs PID: 42907
+There were no users to add or they were already on the roster
+
+Site: HEAD (225) Company: El-Works Pty Ltd - Shane  Task: General Clean INT PID: 43285
+adding Shane Browne  (sbrown) to roster
+
+Site: HEAD (225) Company: Sydney Waste & Property Services  Task: General Clean EXT PID: 43286
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: HEAD (225) Company: Fresh Start  Task: Ground Floor Work PID: 43306
+adding Chris Moerman (carp3) to roster
+adding Jim O'Dea (jodea) to roster
+adding Joshua Jones (carp3b) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: HEAD (225) Company: NRW Carpentry  Task: Frame & Roof PID: 43273
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: HEAD (225) Company: Lay Drafting And Construction  Task: Fixout PID: 38811
+adding Josh Lay (lay1) to roster
+adding Timothy Donohue (timothyt) to roster
+
+Site: HEAD (225) Company: Budget Stairs  Task: Finish Off PID: 42913
+adding Aaron  Hoffman (Aaron Hoffman) to roster
+adding Chris Bolton (stair1j) to roster
+adding Danny Rogan (stair1b) to roster
+adding Kevin Faulkner (stair1g) to roster
+adding Lenny Dunn (stair1k) to roster
+adding Luke Briggs (stair1h) to roster
+adding Matthew Honey (stair1f) to roster
+adding Michael Kirby (stair1e) to roster
+adding Robbie Dounia (stair1i) to roster
+adding Robert Aren (stair1a) to roster
+adding Tony Saify (stair1d) to roster
+adding Warwick Harris (stair1) to roster
+
+Site: HEAD (225) Company: Neil Higgins  Task: Ground Floor PID: 42096
+adding Neil Higgins (brk2) to roster
+
+Site: HARRIS.DEACON (227) Company: Fresh Start  Task: Start Carpentry PID: 28333
+adding Chris Moerman (carp3) to roster
+adding Jim O'Dea (jodea) to roster
+adding Joshua Jones (carp3b) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: CLARKE.HO (251) Company: Mazz's Plumbing  Task: Rough In PID: 41208
+adding Alfonso Di Monte (plumb2b) to roster
+adding Jacob Mazzeo (jacobm) to roster
+adding Raz Mazzeo (plumb2) to roster
+
+Site: CLARKE.HO (251) Company: Faulks Cement Rendering  Task: Polystyrene PID: 41210
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Lisa Faulks (Lisa) to roster
+adding Michael Manenti (text2b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: SHEEHY  (252) Company: Palace Painting   Task: Touch Ups PID: 42884
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Hai Jiang (Haij) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Ricky Santosa (rickys) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Yuankui Lu (yuankuil) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: SHEEHY  (252) Company: CC-Dean Beringer  Task: Prac Completion PID: 41378
+There were no users to add or they were already on the roster
+
+Site: FIELD.PINDER (255) Company: C Blair Painting & Decorating  Task: Touch Ups PID: 43079
+adding Colin Blair (paint1) to roster
+adding David Bliar (paint1a) to roster
+
+Site: COOPER (263) Company: Ariel Carpentry   Task: Variations PID: 43076
+adding Andrew Shaw (Andrew Shaw) to roster
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+
+Site: COOPER (263) Company: Palace Painting   Task: Touch Ups PID: 43199
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Hai Jiang (Haij) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Ricky Santosa (rickys) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Yuankui Lu (yuankuil) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: COOPER (263) Company: DM Waters  Task: Prac List PID: 41441
+adding Daniel Waters (waters1) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+adding Wesley Kean (carp11) to roster
+
+Site: COOPER (263) Company: DM Waters  Task: Bathroom Silicone PID: 43178
+There were no users to add or they were already on the roster
+
+Site: COOPER (263) Company: Sydney Waste & Property Services  Task: Final Clean EXT PID: 41442
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: PASSICOT   (267) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 43140
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+
+Site: PASSICOT   (267) Company: Sydney Waste & Property Services  Task: General Clean EXT PID: 43332
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: DOUGLAS    (268) Company: CC-Andrew Cashmore  Task: Prac Completion PID: 43134
+There were no users to add or they were already on the roster
+
+Site: DOUGLAS    (268) Company: CC-Andrew Cashmore  Task: Final Photos PID: 43135
+There were no users to add or they were already on the roster
+
+Site: PULSFORD    (272) Company: Sydney Waste & Property Services  Task: General Clean EXT PID: 43335
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: PULSFORD    (272) Company: El-Works Pty Ltd - Shane  Task: Seal Stairs PID: 43258
+adding Shane Browne  (sbrown) to roster
+
+Site: PULSFORD    (272) Company: Kings Langley Electrical  Task: Finish Off PID: 39338
+adding Brad O'Brien (spark1a) to roster
+adding John Norford (spark1) to roster
+adding Vic Neilsen (spark1b) to roster
+
+Site: PULSFORD    (272) Company: Kings Langley Electrical  Task: Ground Floor Rough IN PID: 39352
+There were no users to add or they were already on the roster
+
+Site: SIEGLOFF (279) Company: Essential Certifiers  Task: Water Proof PID: 41416
+adding Bernie Cohen (berniec) to roster
+adding Chris Manzi (chrism) to roster
+adding Elliot Watkins (elliotw) to roster
+adding Morris Impala (morrisi) to roster
+adding Nathan Lowe (nathanl) to roster
+adding Paul Cohen (paulc) to roster
+adding Rick Moy (rickm) to roster
+
+Site: SIEGLOFF (279) Company: Gyprock Professional PTY LTD  Task: First Floor PID: 42990
+adding David Bartley (gyp1b) to roster
+adding Sean Jones (gyp1) to roster
+adding Tom Bates (Tom1) to roster
+adding Wenjian  Zhang (Gyp12) to roster
+
+Site: SIEGLOFF (279) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 41415
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+
+Site: PERCY (280) Company: Ikoma  Task: Downstairs Fixout PID: 43181
+adding Bill Dowse (day2) to roster
+
+Site: PERCY (280) Company: TC Building (Todd Catto)  Task: Store Run PID: 43314
+adding Todd Catto (clean3) to roster
+
+Site: PERCY (280) Company: CC-David Wahba  Task: Prac Completion PID: 41370
+There were no users to add or they were already on the roster
+
+Site: BURDEN (285) Company: NRW Carpentry  Task: External handrails or Privacy screens PID: 43334
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: JONES.CRITCHARD-JONES (288) Company: Palace Painting   Task: External PID: 40586
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Hai Jiang (Haij) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Ricky Santosa (rickys) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Yuankui Lu (yuankuil) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: SWINBURN  (295) Company: Pro-Gyp Solutions   Task: Cornices PID: 43264
+adding BOON LONG LEE (BLONG) to roster
+adding BOON TONG WONG (BTONG) to roster
+adding CHEW KIT SEIN (CKIT) to roster
+adding gavin  lin (riliny) to roster
+adding Liangmin  Liu (LLIU) to roster
+adding MELANIE BOTHAM (MBOTHAM) to roster
+adding Ming Kwan  Keng  (Mkeng) to roster
+adding Nathan Walsh (Progyp17) to roster
+adding Peter Musolino (progyp1a) to roster
+adding Phyllis Wiggett (phyllisw) to roster
+adding Wei Chen (progyp1n) to roster
+
+Site: SWINBURN  (295) Company: Pro-Gyp Solutions   Task: Downstairs PID: 40856
+There were no users to add or they were already on the roster
+
+Site: SWINBURN  (295) Company: DM Waters  Task: Fit Vanity PID: 43149
+adding Daniel Waters (waters1) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+adding Wesley Kean (carp11) to roster
+
+Site: MARTIN.GRACE (298) Company: Kings Langley Electrical  Task: Rough In PID: 42190
+adding Brad O'Brien (spark1a) to roster
+adding John Norford (spark1) to roster
+adding Vic Neilsen (spark1b) to roster
+
+Site: IP.LEUNG  (299) Company: MLC Property Services (Michael Catto)  Task: Final Clean INT PID: 43331
+adding Michael Catto (clean2) to roster
+
+Site: IP.LEUNG  (299) Company: MLC Property Services (Michael Catto)  Task: Final Clean EXT PID: 43330
+There were no users to add or they were already on the roster
+
+Site: IP.LEUNG  (299) Company: Next Point Electrical  Task: Electrical Maintenances PID: 42912
+adding Adam Balzan (adant) to roster
+adding Daniel Barnard (Adant6) to roster
+adding Jeremy Banoub (adant3) to roster
+adding Luke Hicks (Adant4) to roster
+adding Nathan Hall (Adant5) to roster
+adding Sean Williams (adant2) to roster
+
+Site: PACQUE   (300) Company: Ashbys Scaffolding  Task: Dismantle Scaffold PID: 42960
+adding Chris Ellis (cellis) to roster
+adding Paul Manukau (scaff1b) to roster
+adding Peter Ashby (scaff1) to roster
+
+Site: PACQUE   (300) Company: Next Point Electrical  Task: Relocate Wires PID: 42910
+adding Adam Balzan (adant) to roster
+adding Daniel Barnard (Adant6) to roster
+adding Jeremy Banoub (adant3) to roster
+adding Luke Hicks (Adant4) to roster
+adding Nathan Hall (Adant5) to roster
+adding Sean Williams (adant2) to roster
+
+Site: CONFOS (301) Company: New Coat Painting  Task: Internal PID: 42549
+adding Pat Ryan (paint3) to roster
+
+Site: CONFOS (301) Company: All Time Floor & Wall Tiling  Task: Patching PID: 43353
+adding George Saliba (alltime1) to roster
+adding Joseph Elhindi (jelhindi) to roster
+adding Robert Issa (stone1a) to roster
+
+Site: CONFOS (301) Company: Gyprock Professional PTY LTD  Task: Cornices PID: 43329
+adding David Bartley (gyp1b) to roster
+adding Sean Jones (gyp1) to roster
+adding Tom Bates (Tom1) to roster
+adding Wenjian  Zhang (Gyp12) to roster
+
+Site: CONFOS (301) Company: Gyprock Professional PTY LTD  Task: Patching PID: 43289
+There were no users to add or they were already on the roster
+
+Site: HOARE.WILLEMSEN (302) Company: MLC Property Services (Michael Catto)  Task: General Clean INT PID: 43125
+adding Michael Catto (clean2) to roster
+
+Site: HOARE.WILLEMSEN (302) Company: MLC Property Services (Michael Catto)  Task: General Clean EXT PID: 43124
+There were no users to add or they were already on the roster
+
+Site: HOARE.WILLEMSEN (302) Company: Scott Bartley Plumbing  Task: Finish Off PID: 42552
+adding Aaron Miranda (plumb1c) to roster
+adding Graham Pratt (plumb1p) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Tanya Bartley (Tanya) to roster
+
+Site: QUINN (304) Company: Sydney Waste & Property Services  Task: Footings PID: 43336
+adding Andre Tang (clean12a) to roster
+adding Cassius Clay (clean11m) to roster
+adding David Clark (clean1h) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Marinus Pipper (clean11z) to roster
+adding Nicolas  Lietzow (clean11y) to roster
+adding Rannyray Arrogante (clean12b) to roster
+
+Site: QUINN (304) Company: El-Works Pty Ltd - Shane  Task: Window Protection PID: 43257
+adding Shane Browne  (sbrown) to roster
+
+Site: QUINN (304) Company: CSR Bradford Building Products  Task: Fit Batts PID: 43008
+adding Tamara Head-McNeil (tamarahm) to roster
+
+Site: QUINN (304) Company: High Performance  Task: Cladding PID: 40012
+adding Alex Kuitert (carp2e) to roster
+adding Micheal Deane (carp1d) to roster
+adding Warren Klomp (carp1) to roster
+
+Site: WILLS (311) Company: C Blair Painting & Decorating  Task: External PID: 39380
+adding Colin Blair (paint1) to roster
+adding David Bliar (paint1a) to roster
+
+Site: CARDEW.LEMON (315) Company: Master Services  Task: First Floor PID: 42289
+adding Joe Saliba (stone1) to roster
+adding Kris Dimovski (stone1b) to roster
+
+Site: GREEN (328) Company: Liam Solid Foundation  Task: Cladding PID: 43012
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Completed
+
+
+Checking for New QA to be triggered
+------------------------------------------------------------------------
+
+Task ID's for active templates (1,3,4,5,7,8,10,12,16,26,34,38,39,40,42,46,47,48,52,59,60,61,71,72,73,74,78,79,84,85,87,88,89,92,97,100,102,110,111,120,121,125,126,133,134,136,176,183,184,185,186,187,188,191,199,204,205,232,234,236,240,242,280,339,348,359,360,)
+
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (187) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[315] Task: (38) - CONCRETE FOOTINGS  Site:SNEDDON - on hold
+Existing QA[241] Task: (125) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[260] Task: (40) - CONCRETE FOOTINGS  Site:MALCOM.MILES - not required
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[280] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MALCOM.MILES - active
+Existing QA[241] Task: (126) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[281] Task: (52) - ELECTRICAL - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[349] Task: (176) - INSULATION  Site:MALCOM.MILES - active
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[421] Task: (78) - PAINTING - EXTERNAL  Site:MALCOM.MILES - active
+Existing QA[280] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MALCOM.MILES - active
+Existing QA[280] Task: (240) - EXTERNAL APPLIED SURFACE FINISHES  Site:MALCOM.MILES - active
+Existing QA[241] Task: (125) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[478] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[433] Task: (120) - STAIRCASE INSTALLATION  Site:MALCOM.MILES - on hold
+Existing QA[185] Task: (87) - PLUMBER - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[450] Task: (87) - ON COMPLETION  Site:MALCOM.MILES - on hold
+Existing QA[370] Task: (72) - INTERNAL LININGS  Site:MALCOM.MILES - active
+Existing QA[241] Task: (126) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[241] Task: (186) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[370] Task: (72) - INTERNAL LININGS  Site:MALCOM.MILES - active
+Existing QA[529] Task: (79) - PAINTING - INTERNAL  Site:MALCOM.MILES - active
+Existing QA[433] Task: (121) - STAIRCASE INSTALLATION  Site:MALCOM.MILES - on hold
+Existing QA[281] Task: (47) - ELECTRICAL - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[529] Task: (79) - PAINTING - INTERNAL  Site:MALCOM.MILES - active
+Existing QA[260] Task: (38) - CONCRETE FOOTINGS  Site:MALCOM.MILES - not required
+Existing QA[184] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[179] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MALCOM.MILES - active
+Existing QA[180] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MALCOM.MILES - on hold
+Existing QA[181] Task: (7) - ROOF FRAME - TRUSSED  Site:MALCOM.MILES - on hold
+Existing QA[184] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[186] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MALCOM.MILES - on hold
+Existing QA[179] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MALCOM.MILES - active
+Existing QA[242] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[179] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MALCOM.MILES - active
+Existing QA[180] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MALCOM.MILES - on hold
+Existing QA[181] Task: (7) - ROOF FRAME - TRUSSED  Site:MALCOM.MILES - on hold
+Existing QA[280] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MALCOM.MILES - active
+Existing QA[185] Task: (84) - PLUMBER - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[281] Task: (46) - ELECTRICAL - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[281] Task: (52) - ELECTRICAL - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[370] Task: (72) - INTERNAL LININGS  Site:MALCOM.MILES - active
+Existing QA[370] Task: (71) - INTERNAL LININGS  Site:MALCOM.MILES - active
+Existing QA[180] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MALCOM.MILES - on hold
+Existing QA[181] Task: (184) - ROOF FRAME - TRUSSED  Site:MALCOM.MILES - on hold
+Existing QA[183] Task: (110) - ROOFING - METAL  Site:MALCOM.MILES - on hold
+Existing QA[183] Task: (111) - ROOFING - METAL  Site:MALCOM.MILES - on hold
+Existing QA[241] Task: (186) - WATER PROOFING BATHROOMS  Site:MALCOM.MILES - active
+Existing QA[243] Task: (3) - CARPENTER - FIX OUT  Site:MALCOM.MILES - on hold
+Existing QA[478] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[537] Task: (60) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[179] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MALCOM.MILES - active
+Existing QA[180] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MALCOM.MILES - on hold
+Existing QA[181] Task: (7) - ROOF FRAME - TRUSSED  Site:MALCOM.MILES - on hold
+Existing QA[184] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[184] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[184] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[178] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MALCOM.MILES - active
+Existing QA[184] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MALCOM.MILES - on hold
+Existing QA[185] Task: (92) - PLUMBER - ROUGH IN  Site:MALCOM.MILES - on hold
+Existing QA[429] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[430] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[429] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[455] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[456] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[457] Task: (7) - ROOF FRAME - TRUSSED  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[541] Task: (134) - MASONRY - UPPER LEVEL  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[455] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[470] Task: (10) - EXTERNAL CLADDING / EAVES  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[482] Task: (100) - ROOFING - TILES  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[429] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[430] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[470] Task: (16) - EXTERNAL CLADDING / EAVES  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[430] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[471] Task: (133) - MASONRY - GROUND FLOOR  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[430] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PRENDEVILLE.CAMPBELL - active
+Existing QA[482] Task: (100) - ROOFING - TILES  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[504] Task: (199) - ON COMPLETION  Site:PRENDEVILLE.CAMPBELL - on hold
+Existing QA[530] Task: (97) - PLUMBER - ROUGH IN  Site:HARRIS.DEACON - on hold
+Existing QA[517] Task: (52) - ELECTRICAL - ROUGH IN  Site:HARRIS.DEACON - on hold
+Existing QA[515] Task: (187) - CONCRETE FOOTINGS  Site:HARRIS.DEACON - active
+Existing QA[515] Task: (38) - CONCRETE FOOTINGS  Site:HARRIS.DEACON - active
+Existing QA[530] Task: (97) - PLUMBER - ROUGH IN  Site:HARRIS.DEACON - on hold
+Existing QA[515] Task: (42) - CONCRETE FOOTINGS  Site:HARRIS.DEACON - active
+Existing QA[515] Task: (39) - CONCRETE FOOTINGS  Site:HARRIS.DEACON - active
+Existing QA[332] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:CLARKE.HO - on hold
+Existing QA[332] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:CLARKE.HO - on hold
+Existing QA[337] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:CLARKE.HO - on hold
+Existing QA[338] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:CLARKE.HO - active
+Existing QA[334] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:CLARKE.HO - active
+Existing QA[340] Task: (10) - EXTERNAL CLADDING / EAVES  Site:CLARKE.HO - active
+Existing QA[334] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CLARKE.HO - active
+Existing QA[335] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CLARKE.HO - not required
+Existing QA[336] Task: (7) - ROOF FRAME - TRUSSED  Site:CLARKE.HO - active
+Existing QA[339] Task: (100) - ROOFING - TILES  Site:CLARKE.HO - active
+Existing QA[335] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:CLARKE.HO - not required
+Existing QA[336] Task: (184) - ROOF FRAME - TRUSSED  Site:CLARKE.HO - active
+Existing QA[444] Task: (134) - MASONRY - UPPER LEVEL  Site:PULSFORD    - active
+Existing QA[322] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[323] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PULSFORD    - not required
+Existing QA[324] Task: (7) - ROOF FRAME - TRUSSED  Site:PULSFORD    - active
+Existing QA[304] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:PULSFORD    - on hold
+Existing QA[444] Task: (205) - MASONRY - UPPER LEVEL  Site:PULSFORD    - active
+Existing QA[451] Task: (205) - MASONRY - GROUND FLOOR  Site:PULSFORD    - not required
+Existing QA[322] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[323] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PULSFORD    - not required
+Existing QA[324] Task: (7) - ROOF FRAME - TRUSSED  Site:PULSFORD    - active
+Existing QA[464] Task: (84) - PLUMBER - ROUGH IN  Site:PULSFORD    - on hold
+Existing QA[467] Task: (46) - ELECTRICAL - ROUGH IN  Site:PULSFORD    - on hold
+Existing QA[476] Task: (176) - INSULATION  Site:PULSFORD    - active
+Existing QA[493] Task: (71) - INTERNAL LININGS  Site:PULSFORD    - active
+Existing QA[508] Task: (126) - WATER PROOFING BATHROOMS  Site:PULSFORD    - active
+Existing QA[508] Task: (186) - WATER PROOFING BATHROOMS  Site:PULSFORD    - active
+Existing QA[409] Task: (3) - CARPENTER - FIX OUT  Site:PULSFORD    - on hold
+Existing QA[304] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:PULSFORD    - on hold
+Existing QA[322] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[316] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PULSFORD    - active
+Existing QA[473] Task: (78) - PAINTING - EXTERNAL  Site:PULSFORD    - active
+Existing QA[375] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:PULSFORD    - on hold
+Existing QA[380] Task: (102) - ROOFING - TILES  Site:PULSFORD    - active
+Existing QA[304] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PULSFORD    - on hold
+Existing QA[316] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PULSFORD    - active
+Existing QA[380] Task: (100) - ROOFING - TILES  Site:PULSFORD    - active
+Existing QA[322] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[323] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PULSFORD    - not required
+Existing QA[324] Task: (7) - ROOF FRAME - TRUSSED  Site:PULSFORD    - active
+Existing QA[444] Task: (205) - MASONRY - UPPER LEVEL  Site:PULSFORD    - active
+Existing QA[451] Task: (205) - MASONRY - GROUND FLOOR  Site:PULSFORD    - not required
+Existing QA[444] Task: (232) - MASONRY - UPPER LEVEL  Site:PULSFORD    - active
+Existing QA[451] Task: (232) - MASONRY - GROUND FLOOR  Site:PULSFORD    - not required
+Existing QA[304] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PULSFORD    - on hold
+Existing QA[316] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PULSFORD    - active
+Existing QA[509] Task: (121) - STAIRCASE INSTALLATION  Site:PULSFORD    - on hold
+Existing QA[316] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PULSFORD    - active
+Existing QA[493] Task: (72) - INTERNAL LININGS  Site:PULSFORD    - active
+Existing QA[509] Task: (120) - STAIRCASE INSTALLATION  Site:PULSFORD    - on hold
+Existing QA[467] Task: (52) - ELECTRICAL - ROUGH IN  Site:PULSFORD    - on hold
+Existing QA[473] Task: (78) - PAINTING - EXTERNAL  Site:PULSFORD    - active
+Existing QA[509] Task: (120) - STAIRCASE INSTALLATION  Site:PULSFORD    - on hold
+Existing QA[493] Task: (72) - INTERNAL LININGS  Site:PULSFORD    - active
+Existing QA[493] Task: (73) - INTERNAL LININGS  Site:PULSFORD    - active
+Existing QA[316] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PULSFORD    - active
+Existing QA[409] Task: (3) - CARPENTER - FIX OUT  Site:PULSFORD    - on hold
+Existing QA[409] Task: (3) - CARPENTER - FIX OUT  Site:PULSFORD    - on hold
+Existing QA[304] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:PULSFORD    - on hold
+Existing QA[322] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[323] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PULSFORD    - not required
+Existing QA[324] Task: (7) - ROOF FRAME - TRUSSED  Site:PULSFORD    - active
+Existing QA[375] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:PULSFORD    - on hold
+Existing QA[380] Task: (100) - ROOFING - TILES  Site:PULSFORD    - active
+Existing QA[322] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:PULSFORD    - active
+Existing QA[408] Task: (10) - EXTERNAL CLADDING / EAVES  Site:PULSFORD    - active
+Existing QA[323] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:PULSFORD    - not required
+Existing QA[324] Task: (184) - ROOF FRAME - TRUSSED  Site:PULSFORD    - active
+Existing QA[75] Task: (38) - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[75] Task: (39) - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[75] Task: (42) - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[77] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[97] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[98] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:FOLEY - not required
+Existing QA[99] Task: (7) - ROOF FRAME - TRUSSED  Site:FOLEY - active
+Existing QA[112] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:FOLEY - active
+Existing QA[97] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[100] Task: (10) - EXTERNAL CLADDING / EAVES  Site:FOLEY - on hold
+Existing QA[166] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[97] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[98] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:FOLEY - not required
+Existing QA[99] Task: (7) - ROOF FRAME - TRUSSED  Site:FOLEY - active
+Existing QA[114] Task: (110) - ROOFING - METAL  Site:FOLEY - on hold
+Existing QA[143] Task: (84) - PLUMBER - ROUGH IN  Site:FOLEY - active
+Existing QA[150] Task: (46) - ELECTRICAL - ROUGH IN  Site:FOLEY - on hold
+Existing QA[75] Task: (187) - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[77] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[76] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[98] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:FOLEY - not required
+Existing QA[99] Task: (184) - ROOF FRAME - TRUSSED  Site:FOLEY - active
+Existing QA[77] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[77] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[76] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[159] Task: (176) - INSULATION  Site:FOLEY - active
+Existing QA[250] Task: (71) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[267] Task: (126) - WATER PROOFING BATHROOMS  Site:FOLEY - active
+Existing QA[97] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[100] Task: (10) - EXTERNAL CLADDING / EAVES  Site:FOLEY - on hold
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[92] Task: (3) - CARPENTER - FIX OUT  Site:FOLEY - on hold
+Existing QA[150] Task: (52) - ELECTRICAL - ROUGH IN  Site:FOLEY - on hold
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[159] Task: (176) - INSULATION  Site:FOLEY - active
+Existing QA[250] Task: (72) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[325] Task: (120) - STAIRCASE INSTALLATION  Site:FOLEY - active
+Existing QA[166] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[112] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:FOLEY - active
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[143] Task: (88) - PLUMBER - ROUGH IN  Site:FOLEY - active
+Existing QA[267] Task: (126) - WATER PROOFING BATHROOMS  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[267] Task: (186) - WATER PROOFING BATHROOMS  Site:FOLEY - active
+Existing QA[92] Task: (3) - CARPENTER - FIX OUT  Site:FOLEY - on hold
+Existing QA[114] Task: (111) - ROOFING - METAL  Site:FOLEY - on hold
+Existing QA[166] Task: (240) - EXTERNAL APPLIED SURFACE FINISHES  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[112] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[371] Task: (133) - MASONRY - GROUND FLOOR  Site:FOLEY - active
+Existing QA[114] Task: (111) - ROOFING - METAL  Site:FOLEY - on hold
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[325] Task: (121) - STAIRCASE INSTALLATION  Site:FOLEY - active
+Existing QA[325] Task: (121) - STAIRCASE INSTALLATION  Site:FOLEY - active
+Existing QA[143] Task: (85) - PLUMBER - ROUGH IN  Site:FOLEY - active
+Existing QA[250] Task: (72) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[143] Task: (85) - PLUMBER - ROUGH IN  Site:FOLEY - active
+Existing QA[174] Task: (78) - PAINTING - EXTERNAL  Site:FOLEY - active
+Existing QA[250] Task: (72) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[250] Task: (72) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[114] Task: (111) - ROOFING - METAL  Site:FOLEY - on hold
+Existing QA[494] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:FOLEY - on hold
+Existing QA[495] Task: (60) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:FOLEY - on hold
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[250] Task: (73) - INTERNAL LININGS  Site:FOLEY - active
+Existing QA[505] Task: (199) - ON COMPLETION  Site:FOLEY - active
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[495] Task: (60) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:FOLEY - reactived
+Existing QA[76] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[78] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PERCY - on hold
+Existing QA[79] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[78] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:PERCY - on hold
+Existing QA[103] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[106] Task: (10) - EXTERNAL CLADDING / EAVES  Site:PERCY - on hold
+Existing QA[104] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (184) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[103] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (7) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[115] Task: (110) - ROOFING - METAL  Site:PERCY - active
+Existing QA[103] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (7) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[291] Task: (78) - PAINTING - EXTERNAL  Site:PERCY - active
+Existing QA[151] Task: (84) - PLUMBER - ROUGH IN  Site:PERCY - active
+Existing QA[103] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (7) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[104] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (184) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[187] Task: (176) - INSULATION  Site:PERCY - active
+Existing QA[252] Task: (71) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[146] Task: (38) - CONCRETE FOOTINGS  Site:PERCY - active
+Existing QA[142] Task: (46) - ELECTRICAL - ROUGH IN  Site:PERCY - active
+Existing QA[103] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task: (7) - ROOF FRAME - TRUSSED  Site:PERCY - not required
+Existing QA[146] Task: (38) - CONCRETE FOOTINGS  Site:PERCY - active
+Existing QA[252] Task: (71) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[80] Task: (3) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[396] Task: (120) - STAIRCASE INSTALLATION  Site:PERCY - on hold
+Existing QA[252] Task: (72) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[272] Task: (126) - WATER PROOFING BATHROOMS  Site:PERCY - active
+Existing QA[326] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:PERCY - on hold
+Existing QA[272] Task: (126) - WATER PROOFING BATHROOMS  Site:PERCY - active
+Existing QA[80] Task: (3) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[272] Task: (126) - WATER PROOFING BATHROOMS  Site:PERCY - active
+Existing QA[80] Task: (3) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[272] Task: (126) - WATER PROOFING BATHROOMS  Site:PERCY - active
+Existing QA[79] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[146] Task: (38) - CONCRETE FOOTINGS  Site:PERCY - active
+Existing QA[79] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[142] Task: (52) - ELECTRICAL - ROUGH IN  Site:PERCY - active
+Existing QA[142] Task: (47) - ELECTRICAL - ROUGH IN  Site:PERCY - active
+Existing QA[79] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[383] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:PERCY - active
+Existing QA[396] Task: (120) - STAIRCASE INSTALLATION  Site:PERCY - on hold
+Existing QA[151] Task: (85) - PLUMBER - ROUGH IN  Site:PERCY - active
+Existing QA[252] Task: (72) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[142] Task: (52) - ELECTRICAL - ROUGH IN  Site:PERCY - active
+Existing QA[79] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[396] Task: (120) - STAIRCASE INSTALLATION  Site:PERCY - on hold
+Existing QA[479] Task: (199) - ON COMPLETION  Site:PERCY - on hold
+Existing QA[80] Task: (5) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[510] Task: (5) - HANDOVER  Site:PERCY - on hold
+Existing QA[272] Task: (186) - WATER PROOFING BATHROOMS  Site:PERCY - active
+Existing QA[479] Task: (199) - ON COMPLETION  Site:PERCY - on hold
+Existing QA[80] Task: (34) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[81] Task: (34) - CARPENTER - DECKS & BALCONIES  Site:PERCY - not required
+Existing QA[252] Task: (74) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[252] Task: (73) - INTERNAL LININGS  Site:PERCY - active
+Existing QA[396] Task: (121) - STAIRCASE INSTALLATION  Site:PERCY - on hold
+Existing QA[80] Task: (34) - CARPENTER - FIX OUT  Site:PERCY - active
+Existing QA[81] Task: (34) - CARPENTER - DECKS & BALCONIES  Site:PERCY - not required
+Existing QA[188] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - on hold
+Existing QA[188] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - on hold
+Existing QA[190] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[191] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[192] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MILLER.WINDEYER - not required
+Existing QA[193] Task: (7) - ROOF FRAME - TRUSSED  Site:MILLER.WINDEYER - on hold
+Existing QA[194] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MILLER.WINDEYER - active
+Existing QA[191] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[195] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MILLER.WINDEYER - active
+Existing QA[192] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MILLER.WINDEYER - not required
+Existing QA[193] Task: (184) - ROOF FRAME - TRUSSED  Site:MILLER.WINDEYER - on hold
+Existing QA[188] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - on hold
+Existing QA[197] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MILLER.WINDEYER - on hold
+Existing QA[278] Task: (78) - PAINTING - EXTERNAL  Site:MILLER.WINDEYER - active
+Existing QA[198] Task: (84) - PLUMBER - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[199] Task: (176) - INSULATION  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (71) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (74) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (73) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[201] Task: (126) - WATER PROOFING BATHROOMS  Site:MILLER.WINDEYER - active
+Existing QA[188] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - on hold
+Existing QA[191] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[282] Task: (120) - STAIRCASE INSTALLATION  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (52) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[372] Task: (359) - RENDER FINISHES - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[278] Task: (78) - PAINTING - EXTERNAL  Site:MILLER.WINDEYER - active
+Existing QA[201] Task: (186) - WATER PROOFING BATHROOMS  Site:MILLER.WINDEYER - active
+Existing QA[202] Task: (110) - ROOFING - METAL  Site:MILLER.WINDEYER - active
+Existing QA[191] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[195] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (46) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[202] Task: (111) - ROOFING - METAL  Site:MILLER.WINDEYER - active
+Existing QA[196] Task: (3) - CARPENTER - FIX OUT  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (46) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[197] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MILLER.WINDEYER - on hold
+Existing QA[544] Task: (185) - HANDOVER  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[196] Task: (3) - CARPENTER - FIX OUT  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (72) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[196] Task: (3) - CARPENTER - FIX OUT  Site:MILLER.WINDEYER - active
+Existing QA[194] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:MILLER.WINDEYER - active
+Existing QA[282] Task: (120) - STAIRCASE INSTALLATION  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (52) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (72) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[282] Task: (204) - STAIRCASE INSTALLATION  Site:MILLER.WINDEYER - active
+Existing QA[196] Task: (204) - CARPENTER - FIX OUT  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[200] Task: (73) - INTERNAL LININGS  Site:MILLER.WINDEYER - active
+Existing QA[198] Task: (85) - PLUMBER - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[201] Task: (126) - WATER PROOFING BATHROOMS  Site:MILLER.WINDEYER - active
+Existing QA[278] Task: (78) - PAINTING - EXTERNAL  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (47) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (47) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[194] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:MILLER.WINDEYER - active
+Existing QA[190] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MILLER.WINDEYER - active
+Existing QA[203] Task: (47) - ELECTRICAL - ROUGH IN  Site:MILLER.WINDEYER - active
+Existing QA[218] Task: (126) - WATER PROOFING BATHROOMS  Site:KERR - active
+Existing QA[212] Task: (3) - CARPENTER - FIX OUT  Site:KERR - active
+Existing QA[292] Task: (78) - PAINTING - EXTERNAL  Site:KERR - active
+Existing QA[302] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:KERR - active
+Existing QA[209] Task: (102) - ROOFING - TILES  Site:KERR - active
+Existing QA[327] Task: (120) - STAIRCASE INSTALLATION  Site:KERR - active
+Existing QA[350] Task: (133) - MASONRY - GROUND FLOOR  Site:KERR - active
+Existing QA[212] Task: (8) - CARPENTER - FIX OUT  Site:KERR - active
+Existing QA[351] Task: (8) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:KERR - active
+Existing QA[352] Task: (8) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:KERR - not required
+Existing QA[214] Task: (52) - ELECTRICAL - ROUGH IN  Site:KERR - active
+Existing QA[214] Task: (47) - ELECTRICAL - ROUGH IN  Site:KERR - active
+Existing QA[206] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:KERR - not required
+Existing QA[209] Task: (102) - ROOFING - TILES  Site:KERR - active
+Existing QA[213] Task: (85) - PLUMBER - ROUGH IN  Site:KERR - active
+Existing QA[212] Task: (5) - CARPENTER - FIX OUT  Site:KERR - active
+Existing QA[397] Task: (5) - HANDOVER  Site:KERR - active
+Existing QA[381] Task: (199) - ON COMPLETION  Site:KERR - active
+Existing QA[214] Task: (47) - ELECTRICAL - ROUGH IN  Site:KERR - active
+Existing QA[381] Task: (199) - ON COMPLETION  Site:KERR - active
+Existing QA[381] Task: (199) - ON COMPLETION  Site:KERR - active
+Existing QA[327] Task: (121) - STAIRCASE INSTALLATION  Site:KERR - active
+Existing QA[217] Task: (73) - INTERNAL LININGS  Site:KERR - active
+Existing QA[212] Task: (8) - CARPENTER - FIX OUT  Site:KERR - active
+Existing QA[351] Task: (8) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:KERR - active
+Existing QA[352] Task: (8) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:KERR - not required
+Existing QA[422] Task: (205) - MASONRY - UPPER LEVEL  Site:KERR - active
+Existing QA[350] Task: (205) - MASONRY - GROUND FLOOR  Site:KERR - active
+Existing QA[327] Task: (121) - STAIRCASE INSTALLATION  Site:KERR - active
+Existing QA[381] Task: (199) - ON COMPLETION  Site:KERR - active
+Existing QA[206] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:KERR - not required
+Existing QA[217] Task: (73) - INTERNAL LININGS  Site:KERR - active
+Existing QA[204] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[204] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[206] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:KERR - not required
+Existing QA[207] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:KERR - active
+Existing QA[208] Task: (184) - ROOF FRAME - TRUSSED  Site:KERR - not required
+Existing QA[209] Task: (100) - ROOFING - TILES  Site:KERR - active
+Existing QA[210] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[207] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:KERR - active
+Existing QA[208] Task: (7) - ROOF FRAME - TRUSSED  Site:KERR - not required
+Existing QA[211] Task: (16) - EXTERNAL CLADDING / EAVES  Site:KERR - active
+Existing QA[210] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[211] Task: (10) - EXTERNAL CLADDING / EAVES  Site:KERR - active
+Existing QA[210] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[207] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:KERR - active
+Existing QA[208] Task: (7) - ROOF FRAME - TRUSSED  Site:KERR - not required
+Existing QA[210] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[207] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:KERR - active
+Existing QA[208] Task: (7) - ROOF FRAME - TRUSSED  Site:KERR - not required
+Existing QA[213] Task: (84) - PLUMBER - ROUGH IN  Site:KERR - active
+Existing QA[214] Task: (46) - ELECTRICAL - ROUGH IN  Site:KERR - active
+Existing QA[215] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:KERR - active
+Existing QA[216] Task: (176) - INSULATION  Site:KERR - active
+Existing QA[217] Task: (71) - INTERNAL LININGS  Site:KERR - active
+Existing QA[218] Task: (126) - WATER PROOFING BATHROOMS  Site:KERR - active
+Existing QA[210] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:KERR - active
+Existing QA[211] Task: (10) - EXTERNAL CLADDING / EAVES  Site:KERR - active
+Existing QA[218] Task: (186) - WATER PROOFING BATHROOMS  Site:KERR - active
+Existing QA[215] Task: (240) - EXTERNAL APPLIED SURFACE FINISHES  Site:KERR - active
+Existing QA[83] Task: (3) - CARPENTER - FIX OUT  Site:MCALISTER - active
+Existing QA[167] Task: (102) - ROOFING - TILES  Site:MCALISTER - active
+Existing QA[175] Task: (186) - WATER PROOFING BATHROOMS  Site:MCALISTER - active
+Existing QA[83] Task: (34) - CARPENTER - FIX OUT  Site:MCALISTER - active
+Existing QA[84] Task: (34) - CARPENTER - DECKS & BALCONIES  Site:MCALISTER - on hold
+Existing QA[82] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[86] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[82] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[86] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[253] Task: (120) - STAIRCASE INSTALLATION  Site:MCALISTER - on hold
+Existing QA[139] Task: (52) - ELECTRICAL - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[160] Task: (72) - INTERNAL LININGS  Site:MCALISTER - active
+Existing QA[382] Task: (79) - PAINTING - INTERNAL  Site:MCALISTER - active
+Existing QA[133] Task: (85) - PLUMBER - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[139] Task: (47) - ELECTRICAL - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[139] Task: (52) - ELECTRICAL - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[160] Task: (72) - INTERNAL LININGS  Site:MCALISTER - active
+Existing QA[253] Task: (121) - STAIRCASE INSTALLATION  Site:MCALISTER - on hold
+Existing QA[139] Task: (52) - ELECTRICAL - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[160] Task: (72) - INTERNAL LININGS  Site:MCALISTER - active
+Existing QA[133] Task: (85) - PLUMBER - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[413] Task: (199) - ON COMPLETION  Site:MCALISTER - active
+Existing QA[253] Task: (121) - STAIRCASE INSTALLATION  Site:MCALISTER - on hold
+Existing QA[413] Task: (199) - ON COMPLETION  Site:MCALISTER - active
+Existing QA[382] Task: (79) - PAINTING - INTERNAL  Site:MCALISTER - active
+Existing QA[413] Task: (199) - ON COMPLETION  Site:MCALISTER - active
+Existing QA[413] Task: (199) - ON COMPLETION  Site:MCALISTER - active
+Existing QA[83] Task: (5) - CARPENTER - FIX OUT  Site:MCALISTER - active
+Existing QA[489] Task: (5) - HANDOVER  Site:MCALISTER - active
+Existing QA[82] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[82] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[85] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MCALISTER - active
+Existing QA[86] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[87] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MCALISTER - active
+Existing QA[88] Task: (7) - ROOF FRAME - TRUSSED  Site:MCALISTER - active
+Existing QA[111] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MCALISTER - active
+Existing QA[87] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MCALISTER - active
+Existing QA[88] Task: (184) - ROOF FRAME - TRUSSED  Site:MCALISTER - active
+Existing QA[113] Task: (110) - ROOFING - METAL  Site:MCALISTER - active
+Existing QA[86] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[87] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MCALISTER - active
+Existing QA[88] Task: (7) - ROOF FRAME - TRUSSED  Site:MCALISTER - active
+Existing QA[133] Task: (84) - PLUMBER - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[139] Task: (46) - ELECTRICAL - ROUGH IN  Site:MCALISTER - on hold
+Existing QA[144] Task: (176) - INSULATION  Site:MCALISTER - active
+Existing QA[160] Task: (71) - INTERNAL LININGS  Site:MCALISTER - active
+Existing QA[175] Task: (126) - WATER PROOFING BATHROOMS  Site:MCALISTER - active
+Existing QA[175] Task: (186) - WATER PROOFING BATHROOMS  Site:MCALISTER - active
+Existing QA[253] Task: (120) - STAIRCASE INSTALLATION  Site:MCALISTER - on hold
+Existing QA[86] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - active
+Existing QA[89] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MCALISTER - active
+Existing QA[483] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[484] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[496] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[497] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:JONES.CRITCHARD-JONES - not required
+Existing QA[498] Task: (7) - ROOF FRAME - TRUSSED  Site:JONES.CRITCHARD-JONES - on hold
+Existing QA[483] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[499] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:JONES.CRITCHARD-JONES - on hold
+Existing QA[496] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[542] Task: (10) - EXTERNAL CLADDING / EAVES  Site:JONES.CRITCHARD-JONES - active
+Existing QA[497] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:JONES.CRITCHARD-JONES - not required
+Existing QA[498] Task: (184) - ROOF FRAME - TRUSSED  Site:JONES.CRITCHARD-JONES - on hold
+Existing QA[518] Task: (110) - ROOFING - METAL  Site:JONES.CRITCHARD-JONES - active
+Existing QA[484] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[538] Task: (187) - CONCRETE FOOTINGS  Site:JONES.CRITCHARD-JONES - active
+Existing QA[499] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:JONES.CRITCHARD-JONES - reactived
+Existing QA[469] Task: (48) - ELECTRICAL - ROUGH IN  Site:JONES.CRITCHARD-JONES - on hold
+Existing QA[483] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[496] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:JONES.CRITCHARD-JONES - active
+Existing QA[539] Task: (71) - INTERNAL LININGS  Site:JONES.CRITCHARD-JONES - on hold
+Existing QA[234] Task: (72) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[231] Task: (85) - PLUMBER - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[293] Task: (79) - PAINTING - INTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[236] Task: (121) - STAIRCASE INSTALLATION  Site:MUNRO.MAGUIRE  - active
+Existing QA[238] Task: (38) - CONCRETE FOOTINGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (72) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (73) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[238] Task: (38) - CONCRETE FOOTINGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[293] Task: (79) - PAINTING - INTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (73) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[293] Task: (79) - PAINTING - INTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[230] Task: (5) - CARPENTER - FIX OUT  Site:MUNRO.MAGUIRE  - active
+Existing QA[376] Task: (5) - HANDOVER  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (73) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[228] Task: (78) - PAINTING - EXTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[232] Task: (47) - ELECTRICAL - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[228] Task: (78) - PAINTING - EXTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[376] Task: (185) - HANDOVER  Site:MUNRO.MAGUIRE  - active
+Existing QA[376] Task: (185) - HANDOVER  Site:MUNRO.MAGUIRE  - active
+Existing QA[491] Task: (199) - ON COMPLETION  Site:MUNRO.MAGUIRE  - active
+Existing QA[491] Task: (199) - ON COMPLETION  Site:MUNRO.MAGUIRE  - active
+Existing QA[219] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[219] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[222] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[223] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MUNRO.MAGUIRE  - not required
+Existing QA[224] Task: (7) - ROOF FRAME - TRUSSED  Site:MUNRO.MAGUIRE  - active
+Existing QA[225] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MUNRO.MAGUIRE  - active
+Existing QA[226] Task: (100) - ROOFING - TILES  Site:MUNRO.MAGUIRE  - active
+Existing QA[223] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MUNRO.MAGUIRE  - not required
+Existing QA[224] Task: (184) - ROOF FRAME - TRUSSED  Site:MUNRO.MAGUIRE  - active
+Existing QA[227] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MUNRO.MAGUIRE  - active
+Existing QA[228] Task: (78) - PAINTING - EXTERNAL  Site:MUNRO.MAGUIRE  - active
+Existing QA[222] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[229] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MUNRO.MAGUIRE  - active
+Existing QA[219] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[222] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[231] Task: (84) - PLUMBER - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[232] Task: (46) - ELECTRICAL - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[233] Task: (176) - INSULATION  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (71) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (74) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[235] Task: (126) - WATER PROOFING BATHROOMS  Site:MUNRO.MAGUIRE  - active
+Existing QA[235] Task: (186) - WATER PROOFING BATHROOMS  Site:MUNRO.MAGUIRE  - active
+Existing QA[223] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MUNRO.MAGUIRE  - not required
+Existing QA[224] Task: (184) - ROOF FRAME - TRUSSED  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (72) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[236] Task: (204) - STAIRCASE INSTALLATION  Site:MUNRO.MAGUIRE  - active
+Existing QA[230] Task: (204) - CARPENTER - FIX OUT  Site:MUNRO.MAGUIRE  - active
+Existing QA[232] Task: (52) - ELECTRICAL - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[226] Task: (102) - ROOFING - TILES  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[225] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MUNRO.MAGUIRE  - active
+Existing QA[225] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[222] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[229] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MUNRO.MAGUIRE  - active
+Existing QA[221] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MUNRO.MAGUIRE  - not required
+Existing QA[237] Task: (133) - MASONRY - GROUND FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (73) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[236] Task: (120) - STAIRCASE INSTALLATION  Site:MUNRO.MAGUIRE  - active
+Existing QA[237] Task: (133) - MASONRY - GROUND FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[232] Task: (52) - ELECTRICAL - ROUGH IN  Site:MUNRO.MAGUIRE  - active
+Existing QA[238] Task: (187) - CONCRETE FOOTINGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[230] Task: (3) - CARPENTER - FIX OUT  Site:MUNRO.MAGUIRE  - active
+Existing QA[230] Task: (3) - CARPENTER - FIX OUT  Site:MUNRO.MAGUIRE  - active
+Existing QA[234] Task: (72) - INTERNAL LININGS  Site:MUNRO.MAGUIRE  - active
+Existing QA[237] Task: (133) - MASONRY - GROUND FLOOR  Site:MUNRO.MAGUIRE  - active
+Existing QA[176] Task: (38) - CONCRETE FOOTINGS  Site:SWINBURN  - active
+Existing QA[445] Task: (126) - WATER PROOFING BATHROOMS  Site:SWINBURN  - on hold
+Existing QA[176] Task: (38) - CONCRETE FOOTINGS  Site:SWINBURN  - active
+Existing QA[269] Task: (136) - MASONRY - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[176] Task: (38) - CONCRETE FOOTINGS  Site:SWINBURN  - active
+Existing QA[269] Task: (136) - MASONRY - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[240] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[268] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:SWINBURN  - active
+Existing QA[240] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[261] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:SWINBURN  - active
+Existing QA[306] Task: (10) - EXTERNAL CLADDING / EAVES  Site:SWINBURN  - on hold
+Existing QA[410] Task: (71) - INTERNAL LININGS  Site:SWINBURN  - on hold
+Existing QA[384] Task: (84) - PLUMBER - ROUGH IN  Site:SWINBURN  - on hold
+Existing QA[366] Task: (205) - MASONRY - UPPER LEVEL  Site:SWINBURN  - active
+Existing QA[269] Task: (205) - MASONRY - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[262] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (184) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[445] Task: (186) - WATER PROOFING BATHROOMS  Site:SWINBURN  - on hold
+Existing QA[353] Task: (52) - ELECTRICAL - ROUGH IN  Site:SWINBURN  - active
+Existing QA[269] Task: (133) - MASONRY - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[262] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (184) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[519] Task: (359) - RENDER FINISHES - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[410] Task: (71) - INTERNAL LININGS  Site:SWINBURN  - on hold
+Existing QA[261] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:SWINBURN  - active
+Existing QA[262] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (7) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[307] Task: (12) - CARPENTER - FIX OUT  Site:SWINBURN  - on hold
+Existing QA[307] Task: (3) - CARPENTER - FIX OUT  Site:SWINBURN  - on hold
+Existing QA[262] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (184) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[445] Task: (186) - WATER PROOFING BATHROOMS  Site:SWINBURN  - on hold
+Existing QA[240] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[240] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[389] Task: (176) - INSULATION  Site:SWINBURN  - active
+Existing QA[262] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (184) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[353] Task: (52) - ELECTRICAL - ROUGH IN  Site:SWINBURN  - active
+Existing QA[353] Task: (52) - ELECTRICAL - ROUGH IN  Site:SWINBURN  - active
+Existing QA[353] Task: (47) - ELECTRICAL - ROUGH IN  Site:SWINBURN  - active
+Existing QA[239] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:SWINBURN  - on hold
+Existing QA[239] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:SWINBURN  - on hold
+Existing QA[240] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:SWINBURN  - on hold
+Existing QA[261] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:SWINBURN  - active
+Existing QA[262] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (7) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[268] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:SWINBURN  - active
+Existing QA[273] Task: (100) - ROOFING - TILES  Site:SWINBURN  - on hold
+Existing QA[261] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:SWINBURN  - active
+Existing QA[306] Task: (10) - EXTERNAL CLADDING / EAVES  Site:SWINBURN  - on hold
+Existing QA[262] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:SWINBURN  - not required
+Existing QA[263] Task: (184) - ROOF FRAME - TRUSSED  Site:SWINBURN  - active
+Existing QA[398] Task: (78) - PAINTING - EXTERNAL  Site:SWINBURN  - active
+Existing QA[176] Task: (38) - CONCRETE FOOTINGS  Site:SWINBURN  - active
+Existing QA[176] Task: (187) - CONCRETE FOOTINGS  Site:SWINBURN  - active
+Existing QA[384] Task: (84) - PLUMBER - ROUGH IN  Site:SWINBURN  - on hold
+Existing QA[353] Task: (46) - ELECTRICAL - ROUGH IN  Site:SWINBURN  - active
+Existing QA[389] Task: (176) - INSULATION  Site:SWINBURN  - active
+Existing QA[118] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:BURT - not required
+Existing QA[119] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:BURT - not required
+Existing QA[120] Task: (7) - ROOF FRAME - TRUSSED  Site:BURT - active
+Existing QA[140] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:BURT - active
+Existing QA[118] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:BURT - not required
+Existing QA[121] Task: (10) - EXTERNAL CLADDING / EAVES  Site:BURT - active
+Existing QA[119] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:BURT - not required
+Existing QA[120] Task: (184) - ROOF FRAME - TRUSSED  Site:BURT - active
+Existing QA[90] Task: (39) - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[116] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BURT - active
+Existing QA[90] Task: (187) - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[163] Task: (52) - ELECTRICAL - ROUGH IN  Site:BURT - active
+Existing QA[168] Task: (176) - INSULATION  Site:BURT - active
+Existing QA[177] Task: (72) - INTERNAL LININGS  Site:BURT - active
+Existing QA[254] Task: (126) - WATER PROOFING BATHROOMS  Site:BURT - active
+Existing QA[254] Task: (186) - WATER PROOFING BATHROOMS  Site:BURT - active
+Existing QA[94] Task: (97) - PLUMBER - ROUGH IN  Site:BURT - active
+Existing QA[90] Task: (187) - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[161] Task: (3) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[121] Task: (16) - EXTERNAL CLADDING / EAVES  Site:BURT - active
+Existing QA[94] Task: (88) - PLUMBER - ROUGH IN  Site:BURT - active
+Existing QA[177] Task: (74) - INTERNAL LININGS  Site:BURT - active
+Existing QA[177] Task: (73) - INTERNAL LININGS  Site:BURT - active
+Existing QA[140] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:BURT - active
+Existing QA[177] Task: (74) - INTERNAL LININGS  Site:BURT - active
+Existing QA[161] Task: (3) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[161] Task: (34) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[122] Task: (34) - CARPENTER - DECKS & BALCONIES  Site:BURT - active
+Existing QA[116] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BURT - active
+Existing QA[94] Task: (85) - PLUMBER - ROUGH IN  Site:BURT - active
+Existing QA[163] Task: (47) - ELECTRICAL - ROUGH IN  Site:BURT - active
+Existing QA[377] Task: (133) - MASONRY - GROUND FLOOR  Site:BURT - active
+Existing QA[360] Task: (102) - ROOFING - TILES  Site:BURT - active
+Existing QA[360] Task: (102) - ROOFING - TILES  Site:BURT - active
+Existing QA[363] Task: (204) - STAIRCASE INSTALLATION  Site:BURT - not required
+Existing QA[161] Task: (204) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[161] Task: (3) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[161] Task: (5) - CARPENTER - FIX OUT  Site:BURT - active
+Existing QA[435] Task: (5) - HANDOVER  Site:BURT - active
+Existing QA[446] Task: (199) - ON COMPLETION  Site:BURT - active
+Existing QA[245] Task: (89) - PLUMBER - ROUGH IN  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (38) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (187) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (39) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (38) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (39) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[399] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[400] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MARTIN.GRACE - not required
+Existing QA[401] Task: (7) - ROOF FRAME - TRUSSED  Site:MARTIN.GRACE - on hold
+Existing QA[385] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[452] Task: (16) - EXTERNAL CLADDING / EAVES  Site:MARTIN.GRACE - on hold
+Existing QA[399] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[400] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MARTIN.GRACE - not required
+Existing QA[401] Task: (7) - ROOF FRAME - TRUSSED  Site:MARTIN.GRACE - on hold
+Existing QA[452] Task: (16) - EXTERNAL CLADDING / EAVES  Site:MARTIN.GRACE - on hold
+Existing QA[294] Task: (133) - MASONRY - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[386] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[386] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[245] Task: (84) - PLUMBER - ROUGH IN  Site:MARTIN.GRACE - active
+Existing QA[385] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[386] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[477] Task: (100) - ROOFING - TILES  Site:MARTIN.GRACE - active
+Existing QA[251] Task: (38) - CONCRETE FOOTINGS  Site:MARTIN.GRACE - active
+Existing QA[294] Task: (136) - MASONRY - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[386] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[385] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[399] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MARTIN.GRACE - on hold
+Existing QA[400] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MARTIN.GRACE - not required
+Existing QA[401] Task: (7) - ROOF FRAME - TRUSSED  Site:MARTIN.GRACE - on hold
+Existing QA[107] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[108] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:IP.LEUNG  - not required
+Existing QA[109] Task: (7) - ROOF FRAME - TRUSSED  Site:IP.LEUNG  - active
+Existing QA[95] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[95] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[96] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:IP.LEUNG  - not required
+Existing QA[123] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:IP.LEUNG  - active
+Existing QA[126] Task: (100) - ROOFING - TILES  Site:IP.LEUNG  - active
+Existing QA[108] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:IP.LEUNG  - not required
+Existing QA[109] Task: (184) - ROOF FRAME - TRUSSED  Site:IP.LEUNG  - active
+Existing QA[147] Task: (134) - MASONRY - UPPER LEVEL  Site:IP.LEUNG  - active
+Existing QA[317] Task: (78) - PAINTING - EXTERNAL  Site:IP.LEUNG  - active
+Existing QA[255] Task: (84) - PLUMBER - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[256] Task: (46) - ELECTRICAL - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[274] Task: (176) - INSULATION  Site:IP.LEUNG  - active
+Existing QA[147] Task: (232) - MASONRY - UPPER LEVEL  Site:IP.LEUNG  - active
+Existing QA[246] Task: (232) - MASONRY - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[284] Task: (71) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[284] Task: (74) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[284] Task: (73) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[303] Task: (126) - WATER PROOFING BATHROOMS  Site:IP.LEUNG  - active
+Existing QA[95] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[107] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[101] Task: (3) - CARPENTER - FIX OUT  Site:IP.LEUNG  - active
+Existing QA[107] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[110] Task: (10) - EXTERNAL CLADDING / EAVES  Site:IP.LEUNG  - active
+Existing QA[141] Task: (187) - CONCRETE FOOTINGS  Site:IP.LEUNG  - active
+Existing QA[284] Task: (72) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[246] Task: (133) - MASONRY - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[283] Task: (240) - EXTERNAL APPLIED SURFACE FINISHES  Site:IP.LEUNG  - not required
+Existing QA[95] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[107] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:IP.LEUNG  - active
+Existing QA[303] Task: (126) - WATER PROOFING BATHROOMS  Site:IP.LEUNG  - active
+Existing QA[373] Task: (120) - STAIRCASE INSTALLATION  Site:IP.LEUNG  - active
+Existing QA[465] Task: (79) - PAINTING - INTERNAL  Site:IP.LEUNG  - active
+Existing QA[256] Task: (52) - ELECTRICAL - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[255] Task: (85) - PLUMBER - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[284] Task: (72) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[256] Task: (47) - ELECTRICAL - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[96] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:IP.LEUNG  - not required
+Existing QA[447] Task: (359) - RENDER FINISHES - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[246] Task: (133) - MASONRY - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[147] Task: (205) - MASONRY - UPPER LEVEL  Site:IP.LEUNG  - active
+Existing QA[246] Task: (205) - MASONRY - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[447] Task: (359) - RENDER FINISHES - GROUND FLOOR  Site:IP.LEUNG  - active
+Existing QA[317] Task: (78) - PAINTING - EXTERNAL  Site:IP.LEUNG  - active
+Existing QA[373] Task: (121) - STAIRCASE INSTALLATION  Site:IP.LEUNG  - active
+Existing QA[284] Task: (73) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[516] Task: (185) - HANDOVER  Site:IP.LEUNG  - active
+Existing QA[465] Task: (79) - PAINTING - INTERNAL  Site:IP.LEUNG  - active
+Existing QA[284] Task: (72) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[284] Task: (73) - INTERNAL LININGS  Site:IP.LEUNG  - active
+Existing QA[96] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:IP.LEUNG  - not required
+Existing QA[255] Task: (85) - PLUMBER - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[255] Task: (87) - PLUMBER - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[500] Task: (87) - ON COMPLETION  Site:IP.LEUNG  - active
+Existing QA[500] Task: (199) - ON COMPLETION  Site:IP.LEUNG  - active
+Existing QA[255] Task: (87) - PLUMBER - ROUGH IN  Site:IP.LEUNG  - active
+Existing QA[500] Task: (87) - ON COMPLETION  Site:IP.LEUNG  - active
+Existing QA[123] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:IP.LEUNG  - active
+Existing QA[96] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:IP.LEUNG  - not required
+Existing QA[516] Task: (185) - HANDOVER  Site:IP.LEUNG  - active
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[358] Task: (16) - EXTERNAL CLADDING / EAVES  Site:PACQUE   - active
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[423] Task: (84) - PLUMBER - ROUGH IN  Site:PACQUE   - active
+Existing QA[424] Task: (46) - ELECTRICAL - ROUGH IN  Site:PACQUE   - active
+Existing QA[441] Task: (176) - INSULATION  Site:PACQUE   - active
+Existing QA[480] Task: (71) - INTERNAL LININGS  Site:PACQUE   - on hold
+Existing QA[501] Task: (126) - WATER PROOFING BATHROOMS  Site:PACQUE   - active
+Existing QA[425] Task: (3) - CARPENTER - FIX OUT  Site:PACQUE   - active
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[358] Task: (16) - EXTERNAL CLADDING / EAVES  Site:PACQUE   - active
+Existing QA[287] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[358] Task: (10) - EXTERNAL CLADDING / EAVES  Site:PACQUE   - active
+Existing QA[459] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:PACQUE   - active
+Existing QA[501] Task: (186) - WATER PROOFING BATHROOMS  Site:PACQUE   - active
+Existing QA[285] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[287] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[287] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[358] Task: (10) - EXTERNAL CLADDING / EAVES  Site:PACQUE   - active
+Existing QA[288] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (184) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[285] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[287] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[502] Task: (78) - PAINTING - EXTERNAL  Site:PACQUE   - active
+Existing QA[474] Task: (204) - STAIRCASE INSTALLATION  Site:PACQUE   - active
+Existing QA[425] Task: (204) - CARPENTER - FIX OUT  Site:PACQUE   - active
+Existing QA[367] Task: (102) - ROOFING - TILES  Site:PACQUE   - active
+Existing QA[474] Task: (120) - STAIRCASE INSTALLATION  Site:PACQUE   - active
+Existing QA[511] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:PACQUE   - active
+Existing QA[474] Task: (204) - STAIRCASE INSTALLATION  Site:PACQUE   - active
+Existing QA[425] Task: (204) - CARPENTER - FIX OUT  Site:PACQUE   - active
+Existing QA[290] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:PACQUE   - not required
+Existing QA[285] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[287] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[288] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (7) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[285] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:PACQUE   - active
+Existing QA[290] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:PACQUE   - not required
+Existing QA[367] Task: (100) - ROOFING - TILES  Site:PACQUE   - active
+Existing QA[288] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:PACQUE   - active
+Existing QA[289] Task: (184) - ROOF FRAME - TRUSSED  Site:PACQUE   - not required
+Existing QA[148] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[149] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:CONFOS - active
+Existing QA[170] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:CONFOS - active
+Existing QA[171] Task: (184) - ROOF FRAME - TRUSSED  Site:CONFOS - active
+Existing QA[295] Task: (110) - ROOFING - METAL  Site:CONFOS - active
+Existing QA[148] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[169] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[170] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CONFOS - active
+Existing QA[171] Task: (7) - ROOF FRAME - TRUSSED  Site:CONFOS - active
+Existing QA[148] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[169] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[170] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CONFOS - active
+Existing QA[171] Task: (7) - ROOF FRAME - TRUSSED  Site:CONFOS - active
+Existing QA[270] Task: (16) - EXTERNAL CLADDING / EAVES  Site:CONFOS - active
+Existing QA[169] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[270] Task: (10) - EXTERNAL CLADDING / EAVES  Site:CONFOS - active
+Existing QA[169] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CONFOS - active
+Existing QA[170] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CONFOS - active
+Existing QA[171] Task: (7) - ROOF FRAME - TRUSSED  Site:CONFOS - active
+Existing QA[359] Task: (84) - PLUMBER - ROUGH IN  Site:CONFOS - active
+Existing QA[359] Task: (84) - PLUMBER - ROUGH IN  Site:CONFOS - active
+Existing QA[361] Task: (46) - ELECTRICAL - ROUGH IN  Site:CONFOS - active
+Existing QA[403] Task: (71) - INTERNAL LININGS  Site:CONFOS - active
+Existing QA[308] Task: (3) - CARPENTER - FIX OUT  Site:CONFOS - active
+Existing QA[419] Task: (126) - WATER PROOFING BATHROOMS  Site:CONFOS - active
+Existing QA[419] Task: (186) - WATER PROOFING BATHROOMS  Site:CONFOS - active
+Existing QA[460] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:CONFOS - on hold
+Existing QA[170] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:CONFOS - active
+Existing QA[171] Task: (184) - ROOF FRAME - TRUSSED  Site:CONFOS - active
+Existing QA[378] Task: (176) - INSULATION  Site:CONFOS - active
+Existing QA[390] Task: (78) - PAINTING - EXTERNAL  Site:CONFOS - active
+Existing QA[531] Task: (79) - PAINTING - INTERNAL  Site:CONFOS - active
+Existing QA[359] Task: (84) - PLUMBER - ROUGH IN  Site:CONFOS - active
+Existing QA[361] Task: (46) - ELECTRICAL - ROUGH IN  Site:CONFOS - active
+Existing QA[368] Task: (133) - MASONRY - GROUND FLOOR  Site:CONFOS - active
+Existing QA[368] Task: (133) - MASONRY - GROUND FLOOR  Site:CONFOS - active
+Existing QA[460] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:CONFOS - on hold
+Existing QA[359] Task: (85) - PLUMBER - ROUGH IN  Site:CONFOS - active
+Existing QA[361] Task: (47) - ELECTRICAL - ROUGH IN  Site:CONFOS - active
+Existing QA[361] Task: (52) - ELECTRICAL - ROUGH IN  Site:CONFOS - active
+Existing QA[403] Task: (73) - INTERNAL LININGS  Site:CONFOS - active
+Existing QA[460] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:CONFOS - on hold
+Existing QA[403] Task: (74) - INTERNAL LININGS  Site:CONFOS - active
+Existing QA[419] Task: (126) - WATER PROOFING BATHROOMS  Site:CONFOS - active
+Existing QA[419] Task: (186) - WATER PROOFING BATHROOMS  Site:CONFOS - active
+Existing QA[403] Task: (72) - INTERNAL LININGS  Site:CONFOS - active
+Existing QA[403] Task: (74) - INTERNAL LININGS  Site:CONFOS - active
+Existing QA[532] Task: (60) - CERAMIC TILING - INTERNAL - GROUND FLOOR  Site:CONFOS - on hold
+Existing QA[460] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:CONFOS - on hold
+Existing QA[512] Task: (199) - ON COMPLETION  Site:CONFOS - on hold
+Existing QA[460] Task: (59) - CERAMIC TILING - INTERNAL - FIRST FLOOR  Site:CONFOS - on hold
+Existing QA[308] Task: (5) - CARPENTER - FIX OUT  Site:CONFOS - active
+Existing QA[547] Task: (5) - HANDOVER  Site:CONFOS - active
+Existing QA[129] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[132] Task: (10) - EXTERNAL CLADDING / EAVES  Site:HOARE.WILLEMSEN - active
+Existing QA[296] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:HOARE.WILLEMSEN - active
+Existing QA[130] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:HOARE.WILLEMSEN - active
+Existing QA[131] Task: (184) - ROOF FRAME - TRUSSED  Site:HOARE.WILLEMSEN - on hold
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[318] Task: (176) - INSULATION  Site:HOARE.WILLEMSEN - active
+Existing QA[309] Task: (78) - PAINTING - EXTERNAL  Site:HOARE.WILLEMSEN - active
+Existing QA[355] Task: (84) - PLUMBER - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[134] Task: (133) - MASONRY - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[134] Task: (133) - MASONRY - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (74) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[355] Task: (84) - PLUMBER - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[379] Task: (199) - ON COMPLETION  Site:HOARE.WILLEMSEN - active
+Existing QA[379] Task: (199) - ON COMPLETION  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (72) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (46) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[431] Task: (120) - STAIRCASE INSTALLATION  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (74) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (72) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (52) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (72) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[134] Task: (133) - MASONRY - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[431] Task: (204) - STAIRCASE INSTALLATION  Site:HOARE.WILLEMSEN - active
+Existing QA[127] Task: (204) - CARPENTER - FIX OUT  Site:HOARE.WILLEMSEN - on hold
+Existing QA[275] Task: (52) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[296] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:HOARE.WILLEMSEN - active
+Existing QA[533] Task: (79) - PAINTING - INTERNAL  Site:HOARE.WILLEMSEN - active
+Existing QA[296] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (52) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (74) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (72) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[431] Task: (121) - STAIRCASE INSTALLATION  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (52) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (47) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[431] Task: (121) - STAIRCASE INSTALLATION  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[355] Task: (89) - PLUMBER - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[124] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[124] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[145] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:HOARE.WILLEMSEN - active
+Existing QA[129] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[130] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:HOARE.WILLEMSEN - active
+Existing QA[131] Task: (7) - ROOF FRAME - TRUSSED  Site:HOARE.WILLEMSEN - on hold
+Existing QA[117] Task: (38) - CONCRETE FOOTINGS  Site:HOARE.WILLEMSEN - on hold
+Existing QA[117] Task: (187) - CONCRETE FOOTINGS  Site:HOARE.WILLEMSEN - on hold
+Existing QA[117] Task: (38) - CONCRETE FOOTINGS  Site:HOARE.WILLEMSEN - on hold
+Existing QA[134] Task: (136) - MASONRY - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[129] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[130] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:HOARE.WILLEMSEN - active
+Existing QA[131] Task: (7) - ROOF FRAME - TRUSSED  Site:HOARE.WILLEMSEN - on hold
+Existing QA[117] Task: (38) - CONCRETE FOOTINGS  Site:HOARE.WILLEMSEN - on hold
+Existing QA[129] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[130] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:HOARE.WILLEMSEN - active
+Existing QA[131] Task: (7) - ROOF FRAME - TRUSSED  Site:HOARE.WILLEMSEN - on hold
+Existing QA[129] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[132] Task: (10) - EXTERNAL CLADDING / EAVES  Site:HOARE.WILLEMSEN - active
+Existing QA[296] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:HOARE.WILLEMSEN - active
+Existing QA[309] Task: (78) - PAINTING - EXTERNAL  Site:HOARE.WILLEMSEN - active
+Existing QA[318] Task: (176) - INSULATION  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (71) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[145] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:HOARE.WILLEMSEN - active
+Existing QA[436] Task: (126) - WATER PROOFING BATHROOMS  Site:HOARE.WILLEMSEN - active
+Existing QA[436] Task: (186) - WATER PROOFING BATHROOMS  Site:HOARE.WILLEMSEN - active
+Existing QA[127] Task: (3) - CARPENTER - FIX OUT  Site:HOARE.WILLEMSEN - on hold
+Existing QA[129] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[130] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:HOARE.WILLEMSEN - active
+Existing QA[131] Task: (7) - ROOF FRAME - TRUSSED  Site:HOARE.WILLEMSEN - on hold
+Existing QA[145] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (46) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[162] Task: (111) - ROOFING - METAL  Site:HOARE.WILLEMSEN - active
+Existing QA[257] Task: (100) - ROOFING - TILES  Site:HOARE.WILLEMSEN - on hold
+Existing QA[275] Task: (48) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (52) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[354] Task: (72) - INTERNAL LININGS  Site:HOARE.WILLEMSEN - active
+Existing QA[125] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:HOARE.WILLEMSEN - active
+Existing QA[145] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:HOARE.WILLEMSEN - active
+Existing QA[275] Task: (48) - ELECTRICAL - ROUGH IN  Site:HOARE.WILLEMSEN - active
+Existing QA[414] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[414] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[416] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:QUINN - active
+Existing QA[461] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:QUINN - on hold
+Existing QA[437] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[448] Task: (10) - EXTERNAL CLADDING / EAVES  Site:QUINN - on hold
+Existing QA[437] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[438] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:QUINN - not required
+Existing QA[439] Task: (7) - ROOF FRAME - TRUSSED  Site:QUINN - on hold
+Existing QA[468] Task: (110) - ROOFING - METAL  Site:QUINN - on hold
+Existing QA[411] Task: (84) - PLUMBER - ROUGH IN  Site:QUINN - on hold
+Existing QA[485] Task: (205) - MASONRY - UPPER LEVEL  Site:QUINN - active
+Existing QA[486] Task: (205) - MASONRY - GROUND FLOOR  Site:QUINN - on hold
+Existing QA[438] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:QUINN - not required
+Existing QA[439] Task: (184) - ROOF FRAME - TRUSSED  Site:QUINN - reactived
+Existing QA[534] Task: (46) - ELECTRICAL - ROUGH IN  Site:QUINN - on hold
+Existing QA[411] Task: (89) - PLUMBER - ROUGH IN  Site:QUINN - on hold
+Existing QA[448] Task: (16) - EXTERNAL CLADDING / EAVES  Site:QUINN - on hold
+Existing QA[411] Task: (89) - PLUMBER - ROUGH IN  Site:QUINN - on hold
+Existing QA[437] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[438] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:QUINN - not required
+Existing QA[439] Task: (7) - ROOF FRAME - TRUSSED  Site:QUINN - active
+Existing QA[414] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[437] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[437] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[438] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:QUINN - not required
+Existing QA[439] Task: (7) - ROOF FRAME - TRUSSED  Site:QUINN - active
+Existing QA[437] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:QUINN - on hold
+Existing QA[448] Task: (10) - EXTERNAL CLADDING / EAVES  Site:QUINN - on hold
+Created QA [548] Task: (38) - CONCRETE FOOTINGS - Site:QUINN
+Existing QA[548] Task: (187) - CONCRETE FOOTINGS  Site:QUINN - active
+Existing QA[416] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:QUINN - active
+Existing QA[136] Task: (3) - CARPENTER - FIX OUT  Site:STARR.JARVIS  - active
+Existing QA[165] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:STARR.JARVIS  - active
+Existing QA[319] Task: (186) - WATER PROOFING BATHROOMS  Site:STARR.JARVIS  - active
+Existing QA[276] Task: (85) - PLUMBER - ROUGH IN  Site:STARR.JARVIS  - active
+Existing QA[310] Task: (78) - PAINTING - EXTERNAL  Site:STARR.JARVIS  - active
+Existing QA[172] Task: (102) - ROOFING - TILES  Site:STARR.JARVIS  - active
+Existing QA[297] Task: (71) - INTERNAL LININGS  Site:STARR.JARVIS  - active
+Existing QA[387] Task: (120) - STAIRCASE INSTALLATION  Site:STARR.JARVIS  - active
+Existing QA[138] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:STARR.JARVIS  - not required
+Existing QA[297] Task: (72) - INTERNAL LININGS  Site:STARR.JARVIS  - active
+Existing QA[387] Task: (121) - STAIRCASE INSTALLATION  Site:STARR.JARVIS  - active
+Existing QA[135] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[152] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[136] Task: (5) - CARPENTER - FIX OUT  Site:STARR.JARVIS  - active
+Existing QA[426] Task: (5) - HANDOVER  Site:STARR.JARVIS  - active
+Existing QA[387] Task: (120) - STAIRCASE INSTALLATION  Site:STARR.JARVIS  - active
+Existing QA[449] Task: (280) - ON COMPLETION  Site:STARR.JARVIS  - active
+Existing QA[387] Task: (204) - STAIRCASE INSTALLATION  Site:STARR.JARVIS  - active
+Existing QA[136] Task: (204) - CARPENTER - FIX OUT  Site:STARR.JARVIS  - active
+Existing QA[449] Task: (199) - ON COMPLETION  Site:STARR.JARVIS  - active
+Existing QA[387] Task: (121) - STAIRCASE INSTALLATION  Site:STARR.JARVIS  - active
+Existing QA[449] Task: (280) - ON COMPLETION  Site:STARR.JARVIS  - active
+Existing QA[277] Task: (47) - ELECTRICAL - ROUGH IN  Site:STARR.JARVIS  - active
+Existing QA[449] Task: (199) - ON COMPLETION  Site:STARR.JARVIS  - active
+Existing QA[135] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[135] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[138] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:STARR.JARVIS  - not required
+Existing QA[165] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:STARR.JARVIS  - active
+Existing QA[172] Task: (100) - ROOFING - TILES  Site:STARR.JARVIS  - active
+Existing QA[152] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[155] Task: (10) - EXTERNAL CLADDING / EAVES  Site:STARR.JARVIS  - active
+Existing QA[153] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:STARR.JARVIS  - not required
+Existing QA[154] Task: (184) - ROOF FRAME - TRUSSED  Site:STARR.JARVIS  - active
+Existing QA[279] Task: (176) - INSULATION  Site:STARR.JARVIS  - active
+Existing QA[297] Task: (71) - INTERNAL LININGS  Site:STARR.JARVIS  - active
+Existing QA[135] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[276] Task: (84) - PLUMBER - ROUGH IN  Site:STARR.JARVIS  - active
+Existing QA[277] Task: (46) - ELECTRICAL - ROUGH IN  Site:STARR.JARVIS  - active
+Existing QA[152] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[153] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:STARR.JARVIS  - not required
+Existing QA[154] Task: (7) - ROOF FRAME - TRUSSED  Site:STARR.JARVIS  - active
+Existing QA[135] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:STARR.JARVIS  - active
+Existing QA[155] Task: (348) - EXTERNAL CLADDING / EAVES  Site:STARR.JARVIS  - active
+Existing QA[319] Task: (126) - WATER PROOFING BATHROOMS  Site:STARR.JARVIS  - active
+Existing QA[156] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:BEUKES.WEST - on hold
+Existing QA[247] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:BEUKES.WEST - active
+Existing QA[248] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:BEUKES.WEST - not required
+Existing QA[249] Task: (7) - ROOF FRAME - TRUSSED  Site:BEUKES.WEST - on hold
+Existing QA[156] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:BEUKES.WEST - on hold
+Existing QA[173] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[264] Task: (100) - ROOFING - TILES  Site:BEUKES.WEST - active
+Existing QA[247] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:BEUKES.WEST - active
+Existing QA[258] Task: (10) - EXTERNAL CLADDING / EAVES  Site:BEUKES.WEST - active
+Existing QA[248] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:BEUKES.WEST - not required
+Existing QA[249] Task: (184) - ROOF FRAME - TRUSSED  Site:BEUKES.WEST - on hold
+Existing QA[156] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:BEUKES.WEST - on hold
+Existing QA[156] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:BEUKES.WEST - on hold
+Existing QA[298] Task: (84) - PLUMBER - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[320] Task: (46) - ELECTRICAL - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[328] Task: (176) - INSULATION  Site:BEUKES.WEST - active
+Existing QA[364] Task: (71) - INTERNAL LININGS  Site:BEUKES.WEST - active
+Existing QA[374] Task: (126) - WATER PROOFING BATHROOMS  Site:BEUKES.WEST - active
+Existing QA[247] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:BEUKES.WEST - active
+Existing QA[248] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:BEUKES.WEST - not required
+Existing QA[249] Task: (7) - ROOF FRAME - TRUSSED  Site:BEUKES.WEST - on hold
+Existing QA[258] Task: (16) - EXTERNAL CLADDING / EAVES  Site:BEUKES.WEST - active
+Existing QA[369] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:BEUKES.WEST - active
+Existing QA[369] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:BEUKES.WEST - active
+Existing QA[374] Task: (186) - WATER PROOFING BATHROOMS  Site:BEUKES.WEST - active
+Existing QA[157] Task: (3) - CARPENTER - FIX OUT  Site:BEUKES.WEST - on hold
+Existing QA[369] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:BEUKES.WEST - active
+Existing QA[472] Task: (120) - STAIRCASE INSTALLATION  Site:BEUKES.WEST - active
+Existing QA[427] Task: (133) - MASONRY - GROUND FLOOR  Site:BEUKES.WEST - active
+Existing QA[417] Task: (78) - PAINTING - EXTERNAL  Site:BEUKES.WEST - active
+Existing QA[298] Task: (85) - PLUMBER - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[298] Task: (88) - PLUMBER - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[374] Task: (126) - WATER PROOFING BATHROOMS  Site:BEUKES.WEST - active
+Existing QA[440] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:BEUKES.WEST - active
+Existing QA[320] Task: (47) - ELECTRICAL - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[320] Task: (52) - ELECTRICAL - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[173] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[364] Task: (72) - INTERNAL LININGS  Site:BEUKES.WEST - active
+Existing QA[364] Task: (74) - INTERNAL LININGS  Site:BEUKES.WEST - active
+Existing QA[364] Task: (73) - INTERNAL LININGS  Site:BEUKES.WEST - active
+Existing QA[157] Task: (12) - CARPENTER - FIX OUT  Site:BEUKES.WEST - on hold
+Existing QA[298] Task: (89) - PLUMBER - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[173] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[264] Task: (102) - ROOFING - TILES  Site:BEUKES.WEST - active
+Existing QA[264] Task: (102) - ROOFING - TILES  Site:BEUKES.WEST - active
+Existing QA[417] Task: (78) - PAINTING - EXTERNAL  Site:BEUKES.WEST - active
+Existing QA[472] Task: (121) - STAIRCASE INSTALLATION  Site:BEUKES.WEST - active
+Existing QA[173] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[320] Task: (52) - ELECTRICAL - ROUGH IN  Site:BEUKES.WEST - active
+Existing QA[173] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[520] Task: (199) - ON COMPLETION  Site:BEUKES.WEST - on hold
+Existing QA[173] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:BEUKES.WEST - not required
+Existing QA[391] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[391] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[392] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:WILLS - not required
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[453] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:WILLS - active
+Existing QA[466] Task: (100) - ROOFING - TILES  Site:WILLS - on hold
+Existing QA[405] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[475] Task: (10) - EXTERNAL CLADDING / EAVES  Site:WILLS - on hold
+Existing QA[406] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (184) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[490] Task: (46) - ELECTRICAL - ROUGH IN  Site:WILLS - on hold
+Existing QA[492] Task: (176) - INSULATION  Site:WILLS - active
+Existing QA[521] Task: (71) - INTERNAL LININGS  Site:WILLS - on hold
+Existing QA[535] Task: (126) - WATER PROOFING BATHROOMS  Site:WILLS - on hold
+Existing QA[535] Task: (186) - WATER PROOFING BATHROOMS  Site:WILLS - on hold
+Existing QA[453] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:WILLS - active
+Existing QA[521] Task: (72) - INTERNAL LININGS  Site:WILLS - on hold
+Existing QA[391] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[391] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[392] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:WILLS - not required
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[391] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[487] Task: (84) - PLUMBER - ROUGH IN  Site:WILLS - on hold
+Existing QA[503] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[453] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:WILLS - active
+Existing QA[466] Task: (100) - ROOFING - TILES  Site:WILLS - on hold
+Existing QA[405] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[475] Task: (10) - EXTERNAL CLADDING / EAVES  Site:WILLS - on hold
+Existing QA[503] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:WILLS - active
+Existing QA[405] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:WILLS - active
+Existing QA[406] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:WILLS - not required
+Existing QA[407] Task: (7) - ROOF FRAME - TRUSSED  Site:WILLS - active
+Existing QA[259] Task: (52) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[259] Task: (48) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[299] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - on hold
+Existing QA[356] Task: (10) - EXTERNAL CLADDING / EAVES  Site:CARDEW.LEMON - active
+Existing QA[299] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - on hold
+Existing QA[300] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CARDEW.LEMON - active
+Existing QA[301] Task: (7) - ROOF FRAME - TRUSSED  Site:CARDEW.LEMON - not required
+Existing QA[357] Task: (3) - CARPENTER - FIX OUT  Site:CARDEW.LEMON - on hold
+Existing QA[312] Task: (102) - ROOFING - TILES  Site:CARDEW.LEMON - active
+Existing QA[481] Task: (120) - STAIRCASE INSTALLATION  Site:CARDEW.LEMON - active
+Existing QA[428] Task: (72) - INTERNAL LININGS  Site:CARDEW.LEMON - active
+Existing QA[312] Task: (102) - ROOFING - TILES  Site:CARDEW.LEMON - active
+Existing QA[259] Task: (46) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[357] Task: (3) - CARPENTER - FIX OUT  Site:CARDEW.LEMON - on hold
+Existing QA[259] Task: (52) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[265] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - active
+Existing QA[266] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:CARDEW.LEMON - active
+Existing QA[388] Task: (88) - PLUMBER - ROUGH IN  Site:CARDEW.LEMON - on hold
+Existing QA[481] Task: (204) - STAIRCASE INSTALLATION  Site:CARDEW.LEMON - active
+Existing QA[357] Task: (204) - CARPENTER - FIX OUT  Site:CARDEW.LEMON - on hold
+Existing QA[428] Task: (72) - INTERNAL LININGS  Site:CARDEW.LEMON - active
+Existing QA[481] Task: (121) - STAIRCASE INSTALLATION  Site:CARDEW.LEMON - active
+Existing QA[259] Task: (47) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[393] Task: (78) - PAINTING - EXTERNAL  Site:CARDEW.LEMON - active
+Existing QA[522] Task: (199) - ON COMPLETION  Site:CARDEW.LEMON - on hold
+Existing QA[265] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - active
+Existing QA[265] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - active
+Existing QA[266] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:CARDEW.LEMON - active
+Existing QA[299] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - on hold
+Existing QA[300] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:CARDEW.LEMON - active
+Existing QA[301] Task: (7) - ROOF FRAME - TRUSSED  Site:CARDEW.LEMON - not required
+Existing QA[311] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:CARDEW.LEMON - active
+Existing QA[312] Task: (100) - ROOFING - TILES  Site:CARDEW.LEMON - active
+Existing QA[299] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:CARDEW.LEMON - on hold
+Existing QA[356] Task: (10) - EXTERNAL CLADDING / EAVES  Site:CARDEW.LEMON - active
+Existing QA[393] Task: (78) - PAINTING - EXTERNAL  Site:CARDEW.LEMON - active
+Existing QA[311] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:CARDEW.LEMON - active
+Existing QA[388] Task: (84) - PLUMBER - ROUGH IN  Site:CARDEW.LEMON - on hold
+Existing QA[259] Task: (46) - ELECTRICAL - ROUGH IN  Site:CARDEW.LEMON - active
+Existing QA[418] Task: (176) - INSULATION  Site:CARDEW.LEMON - active
+Existing QA[428] Task: (71) - INTERNAL LININGS  Site:CARDEW.LEMON - active
+Existing QA[454] Task: (126) - WATER PROOFING BATHROOMS  Site:CARDEW.LEMON - active
+Existing QA[454] Task: (186) - WATER PROOFING BATHROOMS  Site:CARDEW.LEMON - active
+Existing QA[300] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:CARDEW.LEMON - active
+Existing QA[301] Task: (184) - ROOF FRAME - TRUSSED  Site:CARDEW.LEMON - not required
+Existing QA[313] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[329] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[330] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MURRAY - not required
+Existing QA[331] Task: (7) - ROOF FRAME - TRUSSED  Site:MURRAY - active
+Existing QA[365] Task: (100) - ROOFING - TILES  Site:MURRAY - active
+Existing QA[362] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:MURRAY - active
+Existing QA[329] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[394] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MURRAY - active
+Existing QA[330] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:MURRAY - not required
+Existing QA[331] Task: (184) - ROOF FRAME - TRUSSED  Site:MURRAY - active
+Existing QA[329] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[330] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MURRAY - not required
+Existing QA[331] Task: (7) - ROOF FRAME - TRUSSED  Site:MURRAY - active
+Existing QA[313] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[313] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[313] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[321] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:MURRAY - not required
+Existing QA[412] Task: (84) - PLUMBER - ROUGH IN  Site:MURRAY - on hold
+Existing QA[420] Task: (176) - INSULATION  Site:MURRAY - active
+Existing QA[442] Task: (71) - INTERNAL LININGS  Site:MURRAY - active
+Existing QA[462] Task: (126) - WATER PROOFING BATHROOMS  Site:MURRAY - active
+Existing QA[329] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[330] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:MURRAY - not required
+Existing QA[331] Task: (7) - ROOF FRAME - TRUSSED  Site:MURRAY - active
+Existing QA[462] Task: (186) - WATER PROOFING BATHROOMS  Site:MURRAY - active
+Existing QA[395] Task: (3) - CARPENTER - FIX OUT  Site:MURRAY - on hold
+Existing QA[432] Task: (236) - EXTERNAL APPLIED SURFACE FINISHES  Site:MURRAY - active
+Existing QA[463] Task: (78) - PAINTING - EXTERNAL  Site:MURRAY - on hold
+Existing QA[362] Task: (188) - FASCIA / GUTTERING / DOWNPIPES  Site:MURRAY - active
+Existing QA[365] Task: (102) - ROOFING - TILES  Site:MURRAY - active
+Existing QA[329] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[394] Task: (10) - EXTERNAL CLADDING / EAVES  Site:MURRAY - active
+Existing QA[313] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[329] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[458] Task: (120) - STAIRCASE INSTALLATION  Site:MURRAY - active
+Existing QA[321] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MURRAY - not required
+Existing QA[442] Task: (72) - INTERNAL LININGS  Site:MURRAY - active
+Existing QA[412] Task: (85) - PLUMBER - ROUGH IN  Site:MURRAY - on hold
+Existing QA[313] Task: (26) - FLOOR FRAMING - UPPER FLOOR  Site:MURRAY - on hold
+Existing QA[329] Task: (26) - WALL FRAMING - UPPER FLOOR  Site:MURRAY - active
+Existing QA[321] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MURRAY - not required
+Existing QA[488] Task: (133) - MASONRY - GROUND FLOOR  Site:MURRAY - active
+Existing QA[458] Task: (204) - STAIRCASE INSTALLATION  Site:MURRAY - active
+Existing QA[395] Task: (204) - CARPENTER - FIX OUT  Site:MURRAY - on hold
+Existing QA[321] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MURRAY - not required
+Existing QA[545] Task: (359) - RENDER FINISHES - GROUND FLOOR  Site:MURRAY - active
+Existing QA[395] Task: (3) - CARPENTER - FIX OUT  Site:MURRAY - on hold
+Existing QA[458] Task: (121) - STAIRCASE INSTALLATION  Site:MURRAY - active
+Existing QA[321] Task: (1) - FLOOR FRAMING - GROUND FLOOR  Site:MURRAY - not required
+Existing QA[543] Task: (100) - ROOFING - TILES  Site:GREEN - on hold
+Existing QA[523] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:GREEN - reactived
+Created QA [549] Task: (10) - EXTERNAL CLADDING / EAVES - Site:GREEN
+Existing QA[443] Task: (48) - ELECTRICAL - ROUGH IN  Site:GREEN - active
+Existing QA[506] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:GREEN - active
+Existing QA[523] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:GREEN - active
+Existing QA[524] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:GREEN - not required
+Existing QA[525] Task: (7) - ROOF FRAME - TRUSSED  Site:GREEN - active
+Existing QA[506] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:GREEN - active
+Existing QA[507] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:GREEN - active
+Existing QA[513] Task: (183) - FLOOR FRAMING - UPPER FLOOR  Site:BIRO - active
+Existing QA[514] Task: (183) - FLOOR FRAMING - GROUND FLOOR  Site:BIRO - active
+Existing QA[513] Task: (4) - FLOOR FRAMING - UPPER FLOOR  Site:BIRO - active
+Existing QA[526] Task: (7) - WALL FRAMING - UPPER FLOOR  Site:BIRO - active
+Existing QA[527] Task: (7) - ROOF FRAME - CUT & PITCHED  Site:BIRO - active
+Existing QA[528] Task: (7) - ROOF FRAME - TRUSSED  Site:BIRO - active
+Existing QA[540] Task: (100) - ROOFING - TILES  Site:BIRO - active
+Existing QA[536] Task: (191) - FASCIA / GUTTERING / DOWNPIPES  Site:BIRO - active
+Existing QA[526] Task: (10) - WALL FRAMING - UPPER FLOOR  Site:BIRO - active
+Existing QA[546] Task: (10) - EXTERNAL CLADDING / EAVES  Site:BIRO - active
+Existing QA[527] Task: (184) - ROOF FRAME - CUT & PITCHED  Site:BIRO - active
+Existing QA[528] Task: (184) - ROOF FRAME - TRUSSED  Site:BIRO - active
+
+Completed
+
+

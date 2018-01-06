@@ -1,0 +1,110 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (23/07/2017 - 29/07/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: CARSON (133) Company: P & L Faulks Cement  Task: Render Internal PID: 33484
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Michael Manenti (text2b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: O`NEIL (223) Company: Dagash  Task: Downstairs Fixout PID: 35959
+adding Shane Patrick (day1) to roster
+
+Site: HEAD (225) Company: Mark Bartley Roofing Pty.Ltd.  Task: First Floor Metal PID: 34215
+adding Brayden Roberts-Batty (braydenr) to roster
+adding Brayden Aliendi (braydena) to roster
+adding Carolyn Bartley (Carolyn) to roster
+adding Craig Whetters (roof1c) to roster
+adding Greig Bartley (roof1a) to roster
+adding Jarrod Stewart (roof1f) to roster
+adding Kenny Nelson (roof1b) to roster
+adding Kiel Cottell (roof1g) to roster
+adding Mark Bartley (roof1) to roster
+adding Nathan Mulholland (roof1l) to roster
+adding Ross O'Connor (roof1d) to roster
+adding Shane Nelson (roof1h) to roster
+
+Site: GLASCOTT  (246) Company: Mazz's Plumbing  Task: Ground Floor Rough In PID: 35455
+adding Alfonso Di Monte (plumb2b) to roster
+adding Jacob Mazzeo (jacobm) to roster
+adding Raz Mazzeo (plumb2) to roster
+
+Site: RICH  (256) Company: New Coat Painting   Task: Internal PID: 33585
+adding Pat Ryan (paint3) to roster
+
+Site: PEOPLE (261) Company: Fresh Start  Task: Polastic Eaves Windows PID: 31815
+adding Chris Moerman (carp3) to roster
+adding Joshua Jones (carp3b) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: COOPER (263) Company: Master Services  Task: Floor PID: 32480
+adding Joe Saliba (stone1) to roster
+adding Kris Dimovski (stone1b) to roster
+
+Site: GORDON    (264) Company: Ikoma Pty Ltd  Task: Downstairs Fixout PID: 35706
+adding Bill Dowse (day2) to roster
+
+Site: DOUGLAS    (268) Company: Pro-Gyp Solutions Interior Linings Pty Ltd  Task: First Floor PID: 33772
+adding Ankar Anwar (Ankara) to roster
+adding ARNO CHAO (ARNO) to roster
+adding BOON LONG LEE (BLONG) to roster
+adding BOON TONG WONG (BTONG) to roster
+adding CHEW KIT SEIN (CKIT) to roster
+adding gavin  lin (riliny) to roster
+adding Gu Ming (Gum) to roster
+adding Hasan Kemal (hasank) to roster
+adding Jarlath Endemann (Jarlathe) to roster
+adding Liangmin  Liu (LLIU) to roster
+adding Luoning Xu (luoningx) to roster
+adding Maertan Muhetaer (Maertanm) to roster
+adding Mathew Milicevic (Mathewm) to roster
+adding Mauro Franco De Oliva (maurodo) to roster
+adding Ming Kwan  Keng  (Mkeng) to roster
+adding Nathan Wiggett (progyp1c) to roster
+adding Peter Musolino (progyp1a) to roster
+adding Phyllis Wiggett (phyllisw) to roster
+adding Ravinder Singh (progyp1j) to roster
+adding Riri Lin (progyp1m) to roster
+adding Wei Chen (progyp1n) to roster
+adding Zinan Lin (progyp1l) to roster
+
+Site: FOLEY (277) Company: Lay Drafting and Construction  Task: Demolition PID: 30988
+adding Josh Lay (lay1) to roster
+
+Site: ROCK (278) Company: Mervyn Ridder  Task: Fixout PID: 33693
+adding Mervyn Ridder (day5) to roster
+
+Site: ROCK (278) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 35387
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: MILLER.WINDEYER (283) Company: DM Waters  Task: Frame & Roof PID: 32970
+adding Daniel Waters (waters1) to roster
+adding Riley  O'keefe (O'keefe) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+adding Wesley Kean (carp11) to roster
+
+Completed
+
+

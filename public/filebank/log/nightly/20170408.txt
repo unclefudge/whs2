@@ -1,0 +1,105 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (01/04/2017 - 07/04/2017)
+-------------------------------------------------------------------------
+
+07/04/2017 STRANG (7605) - Lindsay Wyld (Wyldmen of Waterproofing) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: STRANG (118) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 29703
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: STRANG (118) Company: Mervyn Ridder  Task: Downstairs Fixout PID: 27637
+adding Mervyn Ridder (day5) to roster
+
+Site: CARSON (133) Company: Greg Briggs  Task: Site Preperation PID: 29855
+adding Greg Briggs (labour1) to roster
+
+Site: ROLAND (203) Company: All Time Floor & Wall Tiling  Task: First Floor PID: 29935
+adding George Saliba (alltime1) to roster
+adding Robert Issa (stone1a) to roster
+
+Site: DYSON (206) Company: Ikoma Pty Ltd  Task: Fixout PID: 29174
+adding Bill Dowse (day2) to roster
+
+Site: MARTIN.BOWER (211) Company: Master Services  Task: Walls PID: 29398
+adding Chris Dimovski (stone1b) to roster
+adding Joe Saliba (stone1) to roster
+
+Site: HEAD (225) Company: Dean Taylor Bricklaying Pty Ltd  Task: Peirs & Base PID: 27987
+adding Daniel Stevens Frost (brk1h) to roster
+adding Dean Taylor (brk1) to roster
+adding Eric Houghton (erich) to roster
+adding Ian Taylor (brk1a) to roster
+adding Jack Launchbury (jackl) to roster
+adding Otto Morales (brk1e) to roster
+adding Sam Walling (brk1b) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Steven Butler (butler) to roster
+adding Vili Kanongataa (brk1g) to roster
+
+Site: SPEED.HOWDEN (231) Company: Pro-Gyp Solutions Interior Linings Pty Ltd  Task: First Floor PID: 29010
+adding Ankar Anwar (Ankara) to roster
+adding ARNO CHAO (ARNO) to roster
+adding gavin  lin (riliny) to roster
+adding Gu Ming (Gum) to roster
+adding Hasan Kemal (hasank) to roster
+adding Jarlath Endemann (Jarlathe) to roster
+adding Luoning Xu (luoningx) to roster
+adding Maertan Muhetaer (Maertanm) to roster
+adding Mathew Milicevic (Mathewm) to roster
+adding Mauro Franco De Oliva (maurodo) to roster
+adding Nathan Wiggett (progyp1c) to roster
+adding Peter Musolino (progyp1a) to roster
+adding Phyllis Wiggett (phyllisw) to roster
+adding Ravinder Singh (progyp1j) to roster
+adding Riri Lin (progyp1m) to roster
+adding Wei Chen (progyp1n) to roster
+adding Zinan Lin (progyp1l) to roster
+
+Site: OLIVER.WRIGHT  (248) Company: P & L Faulks Cement  Task: Polystyrene PID: 27745
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: OLIVER.WRIGHT  (248) Company: Liam Solid Foundation  Task: Ground Floor Work PID: 29861
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Site: THOMPSON (262) Company: DM Waters  Task: Polastic Eaves Windows PID: 28131
+adding Christopher Neill (Neill) to roster
+adding Daniel Waters (waters1) to roster
+adding Riley  O'keefe (O'keefe) to roster
+adding Wesley Kean (carp11) to roster
+
+Site: SOALHEIRO                                (271) Company: Fresh Start  Task: Frame & Roof PID: 29926
+adding Chris Moerman (carp3) to roster
+adding Joshua Jones (carp3b) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: BURDEN (285) Company: Josh Solid Foundations  Task: Frame & Roof PID: 27427
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Completed
+
+

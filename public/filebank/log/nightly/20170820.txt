@@ -1,0 +1,207 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (13/08/2017 - 19/08/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: CARSON (133) Company: All Time Floor & Wall Tiling  Task: Down Stairs PID: 37149
+adding George Saliba (alltime1) to roster
+adding Joseph Elhindi (jelhindi) to roster
+adding Robert Issa (stone1a) to roster
+
+Site: MALCOM.MILES (136) Company: NRW Carpentry  Task: Lay Floor PID: 36968
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: SUTANTO.HENDARTO (216) Company: Lesley Bricklaying  Task: Ground Floor PID: 36873
+adding Ronnie Allison (brk3) to roster
+
+Site: HEAD (225) Company: Palace Painting P/L  Task: External PID: 36660
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: HEAD (225) Company: P & L Faulks Cement  Task: Render Internal PID: 33872
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Michael Manenti (text2b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: ERLICH.MARSH (241) Company: Master Services  Task: Patching PID: 37055
+adding Joe Saliba (stone1) to roster
+adding Kris Dimovski (stone1b) to roster
+
+Site: MCEVOY                                   (250) Company: Scott Bartley Plumbing  Task: On Site Detention PID: 36070
+adding Aaron Miranda (plumb1c) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Tanya Bartley (Tanya) to roster
+
+Site: MCEVOY                                   (250) Company: Floor Expert  Task: Sand & Seal PID: 36002
+adding Rafello Sangil (floor1a) to roster
+adding Tibos Kovats (floora1) to roster
+
+Site: HILL (257) Company: DM Waters  Task: External handrails or Privacy screens PID: 37017
+adding Daniel Waters (waters1) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+adding Wesley Kean (carp11) to roster
+
+Site: COOPER (263) Company: Lay Drafting and Construction  Task: Ground Floor Work PID: 36710
+adding Josh Lay (lay1) to roster
+
+Site: OSHANNASSY.CATTANA  (274) Company: Mervyn Ridder  Task: Fixout PID: 37025
+adding Mervyn Ridder (day5) to roster
+
+Site: GRAY.JOHNSON (281) Company: P & L Faulks Cement  Task: Polystyrene PID: 36719
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Michael Manenti (text2b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: KERR (284) Company: Ariel Carpentry PTY LTD  Task: Polastic Eaves Windows PID: 36018
+adding Andrew Shaw (Andrew Shaw) to roster
+adding Matt McCarthy (carp4d) to roster
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+
+Site: MUNRO.MAGUIRE  (289) Company: Liam Solid Foundation  Task: Ground Floor Work PID: 36967
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Completed
+
+
+Checking for New QA to be triggered
+------------------------------------------------------------------------
+
+Task ID's for active templates (1,3,4,5,7,8,10,26,34,38,39,40,42,46,47,48,52,59,60,61,71,72,73,74,78,79,84,85,87,88,89,92,97,100,102,110,111,120,121,125,126,133,134,136,176,183,184,185,186,187,188,191,199,204,205,232,234,236,240,242,280,339,348,359,360,)
+
+Existing QA[75] Task:38 - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[75] Task:39 - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[75] Task:42 - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[77] Task:4 - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[92] Task:4 - CARPENTER - FIX OUT  Site:FOLEY - on hold
+Existing QA[93] Task:4 - CARPENTER - DECKS & BALCONIES  Site:FOLEY - active
+Existing QA[97] Task:7 - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[98] Task:7 - ROOF FRAME - CUT & PITCHED  Site:FOLEY - not required
+Existing QA[99] Task:7 - ROOF FRAME - TRUSSED  Site:FOLEY - not required
+Existing QA[100] Task:7 - EXTERNAL CLADDING / EAVES  Site:FOLEY - active
+Existing QA[93] Task:7 - CARPENTER - DECKS & BALCONIES  Site:FOLEY - active
+Existing QA[76] Task:1 - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[97] Task:7 - WALL FRAMING - UPPER FLOOR  Site:FOLEY - active
+Existing QA[98] Task:7 - ROOF FRAME - CUT & PITCHED  Site:FOLEY - not required
+Existing QA[99] Task:7 - ROOF FRAME - TRUSSED  Site:FOLEY - not required
+Existing QA[100] Task:7 - EXTERNAL CLADDING / EAVES  Site:FOLEY - active
+Existing QA[93] Task:7 - CARPENTER - DECKS & BALCONIES  Site:FOLEY - active
+Existing QA[75] Task:187 - CONCRETE FOOTINGS  Site:FOLEY - active
+Existing QA[77] Task:183 - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[76] Task:183 - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[77] Task:4 - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[92] Task:4 - CARPENTER - FIX OUT  Site:FOLEY - on hold
+Existing QA[93] Task:4 - CARPENTER - DECKS & BALCONIES  Site:FOLEY - active
+Existing QA[77] Task:183 - FLOOR FRAMING - UPPER FLOOR  Site:FOLEY - on hold
+Existing QA[76] Task:183 - FLOOR FRAMING - GROUND FLOOR  Site:FOLEY - active
+Existing QA[78] Task:183 - FLOOR FRAMING - UPPER FLOOR  Site:PERCY - on hold
+Existing QA[79] Task:183 - FLOOR FRAMING - GROUND FLOOR  Site:PERCY - not required
+Existing QA[78] Task:4 - FLOOR FRAMING - UPPER FLOOR  Site:PERCY - on hold
+Existing QA[80] Task:4 - CARPENTER - FIX OUT  Site:PERCY - on hold
+Existing QA[81] Task:4 - CARPENTER - DECKS & BALCONIES  Site:PERCY - active
+Existing QA[103] Task:7 - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task:7 - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task:7 - ROOF FRAME - TRUSSED  Site:PERCY - active
+Existing QA[106] Task:7 - EXTERNAL CLADDING / EAVES  Site:PERCY - active
+Existing QA[81] Task:7 - CARPENTER - DECKS & BALCONIES  Site:PERCY - active
+Existing QA[103] Task:7 - WALL FRAMING - UPPER FLOOR  Site:PERCY - active
+Existing QA[104] Task:7 - ROOF FRAME - CUT & PITCHED  Site:PERCY - active
+Existing QA[105] Task:7 - ROOF FRAME - TRUSSED  Site:PERCY - active
+Existing QA[106] Task:7 - EXTERNAL CLADDING / EAVES  Site:PERCY - active
+Existing QA[81] Task:7 - CARPENTER - DECKS & BALCONIES  Site:PERCY - active
+Existing QA[82] Task:4 - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - on hold
+Existing QA[83] Task:4 - CARPENTER - FIX OUT  Site:MCALISTER - on hold
+Existing QA[84] Task:4 - CARPENTER - DECKS & BALCONIES  Site:MCALISTER - on hold
+Existing QA[82] Task:183 - FLOOR FRAMING - UPPER FLOOR  Site:MCALISTER - on hold
+Existing QA[85] Task:183 - FLOOR FRAMING - GROUND FLOOR  Site:MCALISTER - active
+Existing QA[86] Task:7 - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - on hold
+Existing QA[87] Task:7 - ROOF FRAME - CUT & PITCHED  Site:MCALISTER - active
+Existing QA[88] Task:7 - ROOF FRAME - TRUSSED  Site:MCALISTER - on hold
+Existing QA[89] Task:7 - EXTERNAL CLADDING / EAVES  Site:MCALISTER - on hold
+Existing QA[84] Task:7 - CARPENTER - DECKS & BALCONIES  Site:MCALISTER - on hold
+Existing QA[111] Task:191 - FASCIA / GUTTERING / DOWNPIPES  Site:MCALISTER - active
+Existing QA[86] Task:7 - WALL FRAMING - UPPER FLOOR  Site:MCALISTER - on hold
+Existing QA[87] Task:7 - ROOF FRAME - CUT & PITCHED  Site:MCALISTER - active
+Existing QA[88] Task:7 - ROOF FRAME - TRUSSED  Site:MCALISTER - on hold
+Existing QA[89] Task:7 - EXTERNAL CLADDING / EAVES  Site:MCALISTER - on hold
+Existing QA[84] Task:7 - CARPENTER - DECKS & BALCONIES  Site:MCALISTER - on hold
+Existing QA[90] Task:39 - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[90] Task:187 - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[94] Task:97 - PLUMBER - ROUGH IN  Site:BURT - on hold
+Existing QA[90] Task:187 - CONCRETE FOOTINGS  Site:BURT - active
+Existing QA[107] Task:7 - WALL FRAMING - UPPER FLOOR  Site:IP.LEUNG  - on hold
+Existing QA[108] Task:7 - ROOF FRAME - CUT & PITCHED  Site:IP.LEUNG  - not required
+Existing QA[109] Task:7 - ROOF FRAME - TRUSSED  Site:IP.LEUNG  - on hold
+Existing QA[110] Task:7 - EXTERNAL CLADDING / EAVES  Site:IP.LEUNG  - on hold
+Existing QA[102] Task:7 - CARPENTER - DECKS & BALCONIES  Site:IP.LEUNG  - on hold
+Existing QA[95] Task:4 - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - on hold
+Existing QA[101] Task:4 - CARPENTER - FIX OUT  Site:IP.LEUNG  - on hold
+Existing QA[102] Task:4 - CARPENTER - DECKS & BALCONIES  Site:IP.LEUNG  - on hold
+Existing QA[95] Task:183 - FLOOR FRAMING - UPPER FLOOR  Site:IP.LEUNG  - on hold
+Existing QA[96] Task:183 - FLOOR FRAMING - GROUND FLOOR  Site:IP.LEUNG  - not required
+
+Completed
+
+

@@ -1,0 +1,181 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (23/04/2017 - 29/04/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: CARSON (133) Company: Lesley Bricklaying  Task: Peirs & Base PID: 30700
+adding Ronnie Allison (brk3) to roster
+
+Site: CARSON (133) Company: High Performance  Task: Cladding PID: 30568
+adding Alex Kuitert (carp2e) to roster
+adding Warren Klomp (carp1) to roster
+
+Site: MARTIN.BOWER (211) Company: New Coat Painting   Task: Internal PID: 30363
+adding Pat Ryan (paint3) to roster
+
+Site: SMITH (222) Company: Palace Painting P/L  Task: External PID: 29850
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: ERLICH.MARSH (241) Company: Sydney Waste & Property Services  Task: Strip Job PID: 30884
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Clark (clean1h) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+
+Site: ERLICH.MARSH (241) Company: Mark Bartley Roof Tiling  Task: Ground Floor PID: 30193
+adding Brayden Aliendi (braydena) to roster
+adding Craig Whetters (roof1c) to roster
+adding Greig Bartley (roof1a) to roster
+adding Jarrod Stewart (roof1f) to roster
+adding Kenny Nelson (roof1b) to roster
+adding Kiel Cottell (roof1g) to roster
+adding Mark Bartley (roof1) to roster
+adding Nathan Mulholland (roof1l) to roster
+adding Ross O'Connor (roof1d) to roster
+adding Shane Nelson (roof1h) to roster
+
+Site: FLATTERS-WRIGHT.MORRIS (245) Company: Palace Painting P/L  Task: External PID: 30703
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: SYMES (253) Company: Scott Bartley Plumbing  Task: Rough In PID: 28935
+adding Aaron Miranda (plumb1c) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Selby (plumb1i) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bell (plumb1d) to roster
+adding Scott Bartley (plumb1) to roster
+
+Site: THOMPSON (262) Company: Gyprock Professional Pty Ltd  Task: First Floor PID: 28830
+adding Aaron Howe (gyp1e) to roster
+adding David Bartley (gyp1b) to roster
+adding Matthew Myers (gyp1d) to roster
+adding Sean Jones (gyp1) to roster
+adding Tom Bates (Tom1) to roster
+adding Wenjian  Zhang (Gyp12) to roster
+
+Site: THOMPSON (262) Company: P & L Faulks Cement  Task: Polystyrene PID: 30797
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: GORDON    (264) Company: Liam Solid Foundation  Task: Lay Floor PID: 29086
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Site: SATO (270) Company: Mervyn Ridder  Task: Fixout PID: 29301
+adding Mervyn Ridder (day5) to roster
+
+Site: SATO (270) Company: Palace Painting P/L  Task: External PID: 29391
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: TRINCA (273) Company: Josh Solid Foundations  Task: Lay Floor PID: 29107
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Completed
+
+

@@ -1,0 +1,95 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (26/03/2017 - 01/04/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: DYSON (206) Company: P & L Faulks Cement  Task: Render Internal PID: 29357
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: MARTIN.BOWER (211) Company: New Coat Painting   Task: External PID: 29478
+adding Pat Ryan (paint3) to roster
+
+Site: SMITH (222) Company: Mervyn Ridder  Task: Downstairs Fixout PID: 28566
+adding Mervyn Ridder (day5) to roster
+
+Site: O`NEIL (223) Company: Sun Tiling  Task: Walls PID: 24403
+adding Jay Cho (tile3) to roster
+
+Site: HEAD (225) Company: Onnix Constructions  Task: Footings PID: 29378
+adding Jeff Chehine (onnix) to roster
+
+Site: SPEED.HOWDEN (231) Company: NRW Carpentry  Task: Cladding PID: 28999
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: GUNN (234) Company: Pro-Gyp Solutions Interior Linings Pty Ltd  Task: Downstairs PID: 27322
+adding Ankar Anwar (Ankara) to roster
+adding gavin  lin (riliny) to roster
+adding Gu Ming (Gum) to roster
+adding Hasan Kemal (hasank) to roster
+adding Jarlath Endemann (Jarlathe) to roster
+adding Luoning Xu (luoningx) to roster
+adding Maertan Muhetaer (Maertanm) to roster
+adding Mathew Milicevic (Mathewm) to roster
+adding Mauro Franco De Oliva (maurodo) to roster
+adding Nathan Wiggett (progyp1c) to roster
+adding Peter Musolino (progyp1a) to roster
+adding Phyllis Wiggett (phyllisw) to roster
+adding Ravinder Singh (progyp1j) to roster
+adding Riri Lin (progyp1m) to roster
+adding Wei Chen (progyp1n) to roster
+adding Zinan Lin (progyp1l) to roster
+
+Site: GUNN (234) Company: Ikoma Pty Ltd  Task: Ground Floor Work PID: 29016
+adding Bill Dowse (day2) to roster
+
+Site: ERLICH.MARSH (241) Company: Dean Taylor Bricklaying Pty Ltd  Task: Party Wall PID: 26320
+adding Daniel Stevens Frost (brk1h) to roster
+adding Dean Taylor (brk1) to roster
+adding Eric Houghton (erich) to roster
+adding Ian Taylor (brk1a) to roster
+adding Jack Launchbury (jackl) to roster
+adding Otto Morales (brk1e) to roster
+adding Sam Walling (brk1b) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Steven Butler (butler) to roster
+adding Vili Kanongataa (brk1g) to roster
+
+Site: DI FRANCESCO.HEMMINGS (243) Company: Lesley Bricklaying  Task: Ground Floor PID: 28549
+adding Ronnie Allison (brk3) to roster
+
+Site: SYMES (253) Company: Liam Solid Foundation  Task: Lay Floor PID: 28238
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Site: BURDEN (285) Company: Josh Solid Foundations  Task: Lay Floor PID: 27426
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Completed
+
+

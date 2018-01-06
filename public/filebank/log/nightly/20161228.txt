@@ -1,0 +1,26 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (21/12/2016 - 27/12/2016)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: BURY (191) Company: Next Point Electrical  Task: Finish Off PID: 24632
+adding Adam Balzan (adant) to roster
+adding David Spillane (adant1) to roster
+adding Sean Williams (adant2) to roster
+adding Jeremy Banoub (adant3) to roster
+adding Luke Hicks (Adant4) to roster
+adding Nathan Hall (Adant5) to roster
+
+Completed
+
+

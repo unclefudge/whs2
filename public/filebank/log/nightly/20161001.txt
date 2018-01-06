@@ -1,0 +1,113 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (24/09/2016 - 30/09/2016)
+-------------------------------------------------------------------------
+
+30/09/2016 STRANG (7605) - Jeff Chehine (Onnix Constructions) was absent
+30/09/2016 EADIE.SMIT-EADIE (7666) - Reece Krasic (Josh Solid Foundations) was absent
+30/09/2016 WATSON (7659) - Thomas Brown (P & L Faulks Cement) was absent
+30/09/2016 WATSON (7659) - Greg Sully (P & L Faulks Cement) was absent
+30/09/2016 KING.LYONS (7700) - Michael Kirby (Budget Stairs) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Jamie Ross (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - David Clark (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Matias Koskimaki (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Daniel Jo (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Sean Baker (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Jarrod Whetnall (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Markus Brautlacht (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Jannik Reinwald (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Tristian Blair (Jamie Ross) was absent
+30/09/2016 WOOLSTENCROFT (7701) - Earl Chung (Jamie Ross) was absent
+30/09/2016 GOREY.MEEKAN (7707) - Daniel McGaw (On-Point Carpentry & Joinery) was absent
+30/09/2016 GOREY.MEEKAN (7707) - Rick Moy (Essential Certifiers) was absent
+30/09/2016 LAWSON (7730) - Rick Moy (Essential Certifiers) was absent
+30/09/2016 SIMPSON (7741) - Jamie Ross (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Ivan Gibson (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - David Clark (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Matias Koskimaki (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Daniel Jo (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Sean Baker (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Jarrod Whetnall (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Markus Brautlacht (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Jannik Reinwald (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Tristian Blair (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Edward McLachlan (Jamie Ross) was absent
+30/09/2016 SIMPSON (7741) - Earl Chung (Jamie Ross) was absent
+30/09/2016 STEPHENS (7737) - Daniel Treccase (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Nathan Wiggett (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Ravinder Singh (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Yi Ding (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Zinan Lin (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Riri Lin (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Wei Chen (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Shannon Viera (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Luoning Xu (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Rilin Yang (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Hasan Kemal (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Mauro Franco De Oliva (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 STEPHENS (7737) - Simon Feng (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Leo (Li He) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Chen Xiao Yue (Winston) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Li Jian Jun (Denny) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Shi Lin (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Zhang Guan Ding (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - He Bo (Bo) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - He Jei Fu (Jeff) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Mars (Mars) (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Emile Yu (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Jinshan Jing (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Qingli Li (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Zhuping He (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Xiaopei Zhan (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Shauaibing Lu (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Xue Zheng Rong (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Qi Shun Zheng (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Mu Jing Weng (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Wang Jun Boa (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Feng Jin Boa (Palace Painting P/L) was absent
+30/09/2016 STEPHENS (7737) - Yi Tao (Palace Painting P/L) was absent
+30/09/2016 WHYTE (7743) - Peter Musolino (Pro-Gyp Solutions Pty Ltd) was absent
+30/09/2016 LEVETT (7744) - Raz Mazzeo (Mazz's Plumbing) was absent
+30/09/2016 LEVETT (7744) - Alfonso Di Monte (Mazz's Plumbing) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: DILON (101) Company: El-Works Pty Ltd - Shane  Task: General Clean PID: 20094
+adding Shane Brown (sbrown) to roster
+
+Site: BUTLER (115) Company: P & L Faulks Cement  Task: Render Internal PID: 11576
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: BUTLER (115) Company: Sapper Constructions  Task: Downstairs Fixout PID: 20364
+adding Matthew Johnson (carp10) to roster
+
+Site: STRANG (118) Company: Onnix Constructions  Task: Footings PID: 20258
+adding Jeff Chehine (onnix) to roster
+
+Site: ANTONOPOULOS.SELIM (217) Company: NRW Carpentry  Task: Lay Floor PID: 19150
+adding Neil Wanders (carp2) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Jordan Waters (carp2d) to roster
+
+Completed
+
+

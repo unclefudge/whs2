@@ -1,0 +1,48 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (27/08/2016 - 02/09/2016)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: HUNT (90) Company: Palace Painting P/L  Task: Internal PID: 9041
+There were no users to add or they were already on the roster
+
+Site: EADIE.SMIT-EADIE (145) Company: Lesley Bricklaying  Task: Patching PID: 13754
+There were no users to add or they were already on the roster
+
+Site: KING.LYONS (168) Company: High Performance  Task: Ground Floor Work PID: 18781
+There were no users to add or they were already on the roster
+
+Site: BUTCHER (179) Company: Ariel Carpentry  Task: Cladding PID: 16827
+There were no users to add or they were already on the roster
+
+Site: JONES (183) Company: Pro-Gyp Solutions Pty Ltd  Task: First Floor PID: 17599
+There were no users to add or they were already on the roster
+
+Site: GOREY.MEEKAN (192) Company: All Time Floor & Wall Tiling  Task: Walls PID: 17480
+There were no users to add or they were already on the roster
+
+Site: HANAFI.PRASIDHI (194) Company: P & L Faulks Cement  Task: Render Internal PID: 18065
+There were no users to add or they were already on the roster
+
+Site: THOMAS (197) Company: On-Point Carpentry & Joinery  Task: Fixout PID: 17880
+There were no users to add or they were already on the roster
+
+Site: LAWSON (202) Company: Dean Taylor  Task: First Floor PID: 18139
+There were no users to add or they were already on the roster
+
+Site: TINDENT PTY LTD (215) Company: Palace Painting P/L  Task: Internal PID: 18515
+There were no users to add or they were already on the roster
+
+Completed
+
+

@@ -1,0 +1,146 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (20/11/2016 - 26/11/2016)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: BUTLER (115) Company: Palace Painting P/L  Task: External PID: 22295
+adding Simon Feng (paint2) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Shi Lin (paint2d) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Emile Yu (paint2i) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Qingli Li (paint2k) to roster
+adding Zhuping He (paint2l) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Yi Tao (paint2t) to roster
+adding Kevin Lexuan (Kevinl) to roster
+
+Site: MCADAM (120) Company: DM Waters  Task: Ground Floor Work PID: 23284
+adding Wesley Kean (carp11) to roster
+adding Daniel Waters (waters1) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+
+Site: KING.LYONS (168) Company: P & L Faulks Cement  Task: Texture Coat PID: 23261
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Thomas Brown (text2c) to roster
+adding Bakir Kirimi (tex2b) to roster
+
+Site: MOLONEY (172) Company: Dagash  Task: Downstairs Fixout PID: 23155
+adding Shane Patrick (day1) to roster
+
+Site: TANNER (175) Company: Mervyn Ridder  Task: Downstairs Fixout PID: 20515
+adding Mervyn Ridder (day5) to roster
+
+Site: NJOO.MURPHY (178) Company: Josh Solid Foundations  Task: Lay T&G PID: 22525
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Site: BURY (191) Company: Wyldmen of Waterproofing  Task: Epoxy Deck PID: 23221
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: GOREY.MEEKAN (192) Company: All Time Floor & Wall Tiling  Task: Deck PID: 21804
+adding Robert Issa (stone1a) to roster
+adding George Saliba (alltime1) to roster
+
+Site: RAVULO (193) Company: Liam Solid Foundation  Task: Lay T&G PID: 23083
+adding Liam McDonagh (carp5) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Adam Tilley (carp5e) to roster
+
+Site: NORFOLK (196) Company: Sapper Constructions  Task: Fixout PID: 23112
+adding Matthew Johnson (carp10) to roster
+adding Samuel Johnson (samj) to roster
+
+Site: CHOI (198) Company: Palace Painting P/L  Task: Internal PID: 23224
+adding Simon Feng (paint2) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Shi Lin (paint2d) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Emile Yu (paint2i) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Qingli Li (paint2k) to roster
+adding Zhuping He (paint2l) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Yi Tao (paint2t) to roster
+adding Kevin Lexuan (Kevinl) to roster
+
+Site: FLEISCHER.BRISTOWE (201) Company: New Coat Painting   Task: Internal PID: 21926
+adding Pat Ryan (paint3) to roster
+
+Site: CORREA (218) Company: P & L Faulks Cement  Task: Render External PID: 23342
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Thomas Brown (text2c) to roster
+adding Bakir Kirimi (tex2b) to roster
+
+Site: IRWIN (224) Company: Dean Taylor  Task: First Floor PID: 22491
+adding Sam Walling (brk1b) to roster
+adding Ian Taylor (brk1a) to roster
+adding Dean Taylor (brk1) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Otto Morales (brk1e) to roster
+adding Vili Kanongataa (brk1g) to roster
+adding Steven Butler (butler) to roster
+adding Daniel Stevens Frost (brk1h) to roster
+
+Site: LEVETT (226) Company: Ariel Carpentry PTY LTD  Task: Ground Floor Work PID: 23061
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+adding Matt McCarthy (carp4d) to roster
+adding Andrew Shaw (Andrew Shaw) to roster
+
+Site: DURNING (235) Company: NRW Carpentry  Task: Cladding PID: 21472
+adding Neil Wanders (carp2) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Jordan Waters (carp2d) to roster
+
+Completed
+
+

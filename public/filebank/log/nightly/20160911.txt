@@ -1,0 +1,116 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (04/09/2016 - 10/09/2016)
+-------------------------------------------------------------------------
+
+09/09/2016 MAINTENANCE (0001) - Jay Cho (Sun Tiling) was absent
+09/09/2016 TEST JOB (0003) - Robert Moerman (Special Guest) was absent
+09/09/2016 TEST JOB (0003) - Test Carpenter (Special Guest) was absent
+09/09/2016 TEST JOB (0003) - HIA User (Special Guest) was absent
+09/09/2016 TEST JOB (0003) - NSCA User (Special Guest) was absent
+09/09/2016 KERIN (7696) - Geoff Barbuto (GBT Carpentry Services) was absent
+09/09/2016 SEBASTIAN (7714) - Jamie Ross (Jamie Ross) was absent
+09/09/2016 WOOLSTENCROFT (7701) - Robert Wernicke (Smik Carpentry Services) was absent
+09/09/2016 SIMPSON (7741) - Geoff Barbuto (GBT Carpentry Services) was absent
+09/09/2016 STEPHENS (7737) - Todd Catto (Todd Catto) was absent
+09/09/2016 WHYTE (7743) - Elliot Watkins (Essential Certifiers) was absent
+09/09/2016 TINDENT PTY LTD (7749) - Todd Catto (Todd Catto) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: DILON (101) Company: Ikoma Pty Ltd  Task: Downstairs Fixout PID: 18989
+adding Bill Dowse (day2) to roster
+
+Site: BUTLER (115) Company: P & L Faulks Cement  Task: Blueboard PID: 19262
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: BUTLER (115) Company: Palace Painting P/L  Task: Internal PID: 11579
+adding Simon Feng (paint2) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Shi Lin (paint2d) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Emile Yu (paint2i) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Qingli Li (paint2k) to roster
+adding Zhuping He (paint2l) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding Yi Tao (paint2t) to roster
+
+Site: KING.LYONS (168) Company: NRW Carpentry  Task: Ground Floor Work PID: 19245
+adding Neil Wanders (carp2) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Jordan Waters (carp2d) to roster
+
+Site: MOLONEY (172) Company: Gyprock Professional Pty Ltd  Task: Downstairs PID: 10661
+adding Sean Jones (gyp1) to roster
+adding David Bartley (gyp1b) to roster
+adding Matthew Myers (gyp1d) to roster
+adding Aaron Howe (gyp1e) to roster
+
+Site: BUTCHER (179) Company: Dean Taylor  Task: Party Wall PID: 18589
+adding Sam Walling (brk1b) to roster
+adding Ian Taylor (brk1a) to roster
+adding Dean Taylor (brk1) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Otto Morales (brk1e) to roster
+adding Vili Kanongataa (brk1g) to roster
+adding Steven Butler (butler) to roster
+adding Daniel Stevens Frost (brk1h) to roster
+
+Site: STEWART (184) Company: All Time Floor & Wall Tiling  Task: Walls PID: 14870
+adding Robert Issa (stone1a) to roster
+adding George Saliba (alltime1) to roster
+adding Seyrar Yesufzai (alltime2) to roster
+
+Site: STEWART (184) Company: Ariel Carpentry  Task: Frame & Roof PID: 18970
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+adding Tim Cooke (carp4tc) to roster
+
+Site: PATHER (185) Company: C Blair Painting & Decorating  Task: Internal PID: 17325
+adding David Blair (paint1a) to roster
+adding Colin Blair (paint1) to roster
+
+Site: EDWARDS@WAVERLEY (199) Company: Liam Solid Foundation  Task: Frame & Roof PID: 17411
+adding Liam McDonagh (carp5) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+
+Site: ANDREWS (210) Company: DM Waters  Task: Lay Floor PID: 18229
+adding Wesley Kean (carp11) to roster
+adding Daniel Waters (waters1) to roster
+adding Jack Harrison (carp12) to roster
+
+Completed
+
+

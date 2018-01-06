@@ -1,0 +1,22 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (08/01/2017 - 14/01/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: ROWE (232) Company: C Blair Painting & Decorating  Task: Internal PID: 23729
+adding David Blair (paint1a) to roster
+adding Colin Blair (paint1) to roster
+
+Completed
+
+

@@ -1,0 +1,233 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (24/06/2017 - 30/06/2017)
+-------------------------------------------------------------------------
+
+30/06/2017 MAINTENANCE (0001) - Josh Lay (Lay Drafting and Construction) was absent
+30/06/2017 DYSON (7733) - Aiden Du (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Chen Xiao Yue (Winston) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Emile Yu (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Feng Jin Boa (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - He Bo (Bo) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - He Jei Fu (Jeff) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Jinshan Jing (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Kevin Lexuan (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Leo (Li He) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Li Jian Jun (Denny) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Mars (Mars) (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Mu Jing Weng (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Qi Shun Zheng (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Qingli Li (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Richard Santosa  (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Shauaibing Lu (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Shi Lin (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Simon Feng (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Wang Jun Boa (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Xiaopei Zhan (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Xue Zheng Rong (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Yi Tao (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Yuan Xue (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Zhang Guan Ding (Palace Painting P/L) was absent
+30/06/2017 DYSON (7733) - Zhuping He (Palace Painting P/L) was absent
+30/06/2017 BLAIKIE (7728) - Joshua Jones (Fresh Start) was absent
+30/06/2017 BLAIKIE (7728) - Bernie Cohen (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Chris Manzi (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Elliot Watkins (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Morris Impala (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Nathan Lowe (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Paul Cohen (Essential Certifiers) was absent
+30/06/2017 BLAIKIE (7728) - Rick Moy (Essential Certifiers) was absent
+30/06/2017 SMITH (7731) - Paul Faulks (P & L Faulks Cement) was absent
+30/06/2017 O`NEIL (7739) - Greg Briggs (Greg Briggs) was absent
+30/06/2017 O`NEIL (7739) - Jay Cho (Sun Tiling) was absent
+30/06/2017 O`NEIL (7739) - Daniel Stevens Frost (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Dean Taylor (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Eric Houghton (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Flor Homburg (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Ian Taylor (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Jack Launchbury (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Otto Morales (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Sam Walling (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Shaun Roberts (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Steven Butler (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 O`NEIL (7739) - Vili Kanongataa (Dean Taylor Bricklaying Pty Ltd) was absent
+30/06/2017 HEAD (7746) - Carlo  Pane (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Cassius Clay (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Daniel Jo (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Daniel Behr (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - David Silber (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - David Clark (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Deniz Akkaya (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Duke Fong Hee (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Ebalfadl Elwdah (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Gaurav Pandey (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Hosein Hoseinzadeh (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Ike  Schwartz  (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Ivan Gibson (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Izaak Merlehan (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Liam Geisler  (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Louis Rauert (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Neal  Emegwele  (Sydney Waste & Property Services) was absent
+30/06/2017 HEAD (7746) - Wesley Baaij (Sydney Waste & Property Services) was absent
+30/06/2017 RICH  (7750) - Tobi Spiteri (Spiteri Building and Maintenance (Tobi Spiteri)) was absent
+30/06/2017 RICH  (7750) - Blake Morgan (Wyldmen of Waterproofing) was absent
+30/06/2017 RICH  (7750) - Lindsay Wyld (Wyldmen of Waterproofing) was absent
+30/06/2017 RICH  (7750) - Shane Nadjarian (Wyldmen of Waterproofing) was absent
+30/06/2017 HILL (7780) - Elliot Watkins (Essential Certifiers) was absent
+30/06/2017 DOUGLAS    (7740) - Chris Moerman (Fresh Start) was absent
+30/06/2017 DOUGLAS    (7740) - Joshua Jones (Fresh Start) was absent
+30/06/2017 DOUGLAS    (7740) - Mathew Preen (Fresh Start) was absent
+30/06/2017 DOUGLAS    (7740) - Mark McDonagh (Ashbys Scaffolding) was absent
+30/06/2017 DOUGLAS    (7740) - Paul Manukau (Ashbys Scaffolding) was absent
+30/06/2017 DOUGLAS    (7740) - Peter Ashby (Ashbys Scaffolding) was absent
+30/06/2017 LAM (7807) - Mervyn Ridder (Mervyn Ridder) was absent
+30/06/2017 ROCK (7791) - Brayden Aliendi (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 ROCK (7791) - Carolyn Bartley (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 ROCK (7791) - Greig Bartley (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 ROCK (7791) - Kiel Cottell (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 ROCK (7791) - Mark Bartley (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 ROCK (7791) - Nathan Mulholland (Mark Bartley Roofing Pty.Ltd.) was absent
+30/06/2017 GRAY.JOHNSON (7802) - Shane Browne  (El-Works Pty Ltd - Shane) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Brad O'Brien (Kings Langley Electrical) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Bernie Cohen (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Chris Manzi (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Elliot Watkins (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Morris Impala (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Nathan Lowe (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Paul Cohen (Essential Certifiers) was absent
+30/06/2017 ILENCIK.SAMPSON   (7771) - Rick Moy (Essential Certifiers) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: MAINTENANCE (62) Company: Lay Drafting and Construction  Task: Maintenance PID: 34337
+adding Josh Lay (lay1) to roster
+
+Site: O`NEIL (223) Company: Ikoma Pty Ltd  Task: Downstairs Fixout PID: 32417
+adding Bill Dowse (day2) to roster
+
+Site: O`NEIL (223) Company: Sun Tiling  Task: Walls PID: 28878
+adding Jay Cho (tile3) to roster
+
+Site: SPEED.HOWDEN (231) Company: C Blair Painting & Decorating  Task: Internal PID: 34195
+adding Colin Blair (paint1) to roster
+adding David Bliar (paint1a) to roster
+
+Site: ERLICH.MARSH (241) Company: Palace Painting P/L  Task: Internal PID: 28902
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: DI FRANCESCO.HEMMINGS (243) Company: Mervyn Ridder  Task: Ground Floor Work PID: 33914
+adding Mervyn Ridder (day5) to roster
+
+Site: OLIVER.WRIGHT  (248) Company: Palace Painting P/L  Task: External PID: 31603
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: SHEEHY  (252) Company: Dagash  Task: Fixout PID: 32093
+adding Shane Patrick (day1) to roster
+
+Site: FIELD.PINDER (255) Company: Dean Taylor Bricklaying Pty Ltd  Task: First Floor PID: 32057
+adding Daniel Stevens Frost (brk1h) to roster
+adding Dean Taylor (brk1) to roster
+adding Eric Houghton (erich) to roster
+adding Flor Homburg (FHomberg) to roster
+adding Ian Taylor (brk1a) to roster
+adding Jack Launchbury (jackl) to roster
+adding Otto Morales (brk1e) to roster
+adding Sam Walling (brk1b) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Steven Butler (butler) to roster
+adding Vili Kanongataa (brk1g) to roster
+
+Site: RICH  (256) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 34399
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: RICH  (256) Company: On-Point Carpentry & Joinery  Task: Downstairs Fixout PID: 33980
+adding Daniel McGaw (onpoint) to roster
+
+Site: HILL (257) Company: NRW Carpentry  Task: Frame & Roof PID: 31275
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Load Job PID: 34380
+adding Tobi Spiteri (labour4) to roster
+
+Site: COOPER (263) Company: Gyprock Professional Pty Ltd  Task: First Floor PID: 33248
+adding David Bartley (gyp1b) to roster
+adding Matthew Myers (gyp1d) to roster
+adding Sean Jones (gyp1) to roster
+adding Tom Bates (Tom1) to roster
+adding Wenjian  Zhang (Gyp12) to roster
+
+Site: GORDON    (264) Company: Ariel Carpentry PTY LTD  Task: Ground Floor Work PID: 32830
+adding Andrew Shaw (Andrew Shaw) to roster
+adding Matt McCarthy (carp4d) to roster
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+
+Site: GAMEROV   (293) Company: Sapper Constructions  Task: Frame & Roof PID: 30527
+adding Matthew Johnson (carp10) to roster
+adding Samuel Johnson (samj) to roster
+
+Site: GAMEROV   (293) Company: Sapper Constructions  Task: Demolition PID: 33327
+There were no users to add or they were already on the roster
+
+Completed
+
+

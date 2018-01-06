@@ -11,6 +11,5 @@ npm-debug.log
 yarn-error.log
 .env
 /source
-/public/filebank
 /public/filebankOrig
 /public/filebankOrig1

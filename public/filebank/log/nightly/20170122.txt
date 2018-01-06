@@ -1,0 +1,80 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (15/01/2017 - 21/01/2017)
+-------------------------------------------------------------------------
+
+There were no Non-Attendees to add or they were already on the list
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: STRANG (118) Company: Dean Taylor Bricklaying Pty Ltd  Task: Ground Floor PID: 24241
+adding Sam Walling (brk1b) to roster
+adding Ian Taylor (brk1a) to roster
+adding Dean Taylor (brk1) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Otto Morales (brk1e) to roster
+adding Vili Kanongataa (brk1g) to roster
+adding Steven Butler (butler) to roster
+adding Daniel Stevens Frost (brk1h) to roster
+adding Eric Houghton (erich) to roster
+adding Jack Launchbury (jackl) to roster
+
+Site: NJOO.MURPHY (178) Company: New Coat Painting   Task: Internal PID: 24258
+adding Pat Ryan (paint3) to roster
+
+Site: RAVULO (193) Company: Lay Drafting and Construction  Task: Prac List PID: 24888
+adding Josh Lay (lay1) to roster
+
+Site: MARTIN.BOWER (211) Company: NRW Carpentry  Task: Frame & Roof PID: 24046
+adding Neil Wanders (carp2) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Jordan Waters (carp2d) to roster
+
+Site: HU.LI (219) Company: Fresh Start  Task: Lay Floor PID: 20843
+adding Joshua Jones (carp3b) to roster
+adding Chris Moerman (carp3) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: O`NEIL (223) Company: High Performance  Task: Lay Floor PID: 24032
+adding Warren Klomp (carp1) to roster
+adding Tim Peacock (carp1b) to roster
+adding Jacob Ferguson (carp1a) to roster
+adding Alex Kuitert (carp2e) to roster
+
+Site: IRWIN (224) Company: C Blair Painting & Decorating  Task: External PID: 24079
+adding David Blair (paint1a) to roster
+adding Colin Blair (paint1) to roster
+
+Site: RUMBLE.LAMBKIN (229) Company: P & L Faulks Cement  Task: Polystyrene PID: 24419
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Thomas Brown (text2c) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding John Chalouhi (Tex3b) to roster
+
+Site: HUDSON (230) Company: P & L Faulks Cement  Task: Polystyrene PID: 23945
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Thomas Brown (text2c) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding John Chalouhi (Tex3b) to roster
+
+Completed
+
+

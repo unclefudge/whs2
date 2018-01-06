@@ -1,0 +1,346 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (17/09/2016 - 23/09/2016)
+-------------------------------------------------------------------------
+
+23/09/2016 MAINTENANCE (0001) - Todd Catto (Todd Catto) was absent
+23/09/2016 MAINTENANCE (0001) - Jamie Ross (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Ivan Gibson (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - David Clark (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Matias Koskimaki (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Daniel Jo (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Sean Baker (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Jarrod Whetnall (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Markus Brautlacht (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Jannik Reinwald (Jamie Ross) was absent
+23/09/2016 MAINTENANCE (0001) - Tim  Cooke (DM Waters) was absent
+23/09/2016 MAINTENANCE (0001) - Tristian Blair (Jamie Ross) was absent
+23/09/2016 DILON (7628) - Issa Chahine (Balustrade Specialist NSW) was absent
+23/09/2016 STRANG (7605) - Tim  Cooke (DM Waters) was absent
+23/09/2016 SPENCER (7656) - Simon Feng (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Leo (Li He) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Chen Xiao Yue (Winston) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Li Jian Jun (Denny) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Shi Lin (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Zhang Guan Ding (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - He Bo (Bo) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - He Jei Fu (Jeff) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Mars (Mars) (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Emile Yu (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Jinshan Jing (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Qingli Li (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Zhuping He (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Xiaopei Zhan (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Shauaibing Lu (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Xue Zheng Rong (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Qi Shun Zheng (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Mu Jing Weng (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Wang Jun Boa (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Feng Jin Boa (Palace Painting P/L) was absent
+23/09/2016 SPENCER (7656) - Yi Tao (Palace Painting P/L) was absent
+23/09/2016 MURRAY (7644) - Sam Walling (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Ian Taylor (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Dean Taylor (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Shaun Roberts (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Otto Morales (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Vili Kanongataa (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Steven Butler (Dean Taylor) was absent
+23/09/2016 MURRAY (7644) - Daniel Stevens Frost (Dean Taylor) was absent
+23/09/2016 KHNANIA (7688) - Daniel McGaw (On-Point Carpentry & Joinery) was absent
+23/09/2016 SMITH.PAOLONI (7668) - Josh Matelic (Josh Solid Foundations) was absent
+23/09/2016 SMITH.PAOLONI (7668) - Reece Krasic (Josh Solid Foundations) was absent
+23/09/2016 WATSON (7659) - Paul Faulks JNR (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Paul Faulks (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Greg Sully (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Adrian Miller (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Richard Sharman (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Brad Turner (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Gavin Quinn (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - John Downey (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Joe Sanderson (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Stephen Doney (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Cathal Mcoroy (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Dalton Clarke (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Michael Manenti (P & L Faulks Cement) was absent
+23/09/2016 WATSON (7659) - Thomas Brown (P & L Faulks Cement) was absent
+23/09/2016 RICHMOND (7683) - Colin Blair (C Blair Painting & Decorating) was absent
+23/09/2016 KING.LYONS (7700) - Ross O'Connor (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Mark Bartley (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Kiel Cottell (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Kenny Nelson (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Jarrod Stewart (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Greig Bartley (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Craig Whetters (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Shane Nelson (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Nathan Mulholland (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Hayden Harmon (Mark Bartley Roof Tiling) was absent
+23/09/2016 KING.LYONS (7700) - Brayden Aliendi (Mark Bartley Roof Tiling) was absent
+23/09/2016 SEBASTIAN (7714) - Paul Faulks JNR (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Paul Faulks (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Greg Sully (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Adrian Miller (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Richard Sharman (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Brad Turner (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Gavin Quinn (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - John Downey (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Joe Sanderson (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Stephen Doney (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Cathal Mcoroy (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Dalton Clarke (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Michael Manenti (P & L Faulks Cement) was absent
+23/09/2016 SEBASTIAN (7714) - Peter Musolino (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Daniel Treccase (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Nathan Wiggett (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Ravinder Singh (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Yi Ding (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Zinan Lin (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Riri Lin (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Wei Chen (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Shannon Viera (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Luoning Xu (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Rilin Yang (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Hasan Kemal (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 SEBASTIAN (7714) - Mauro Franco De Oliva (Pro-Gyp Solutions Pty Ltd) was absent
+23/09/2016 DODD (7680) - Elliot Watkins (Essential Certifiers) was absent
+23/09/2016 NJOO.MURPHY (7662) - Robert Issa (All Time Floor & Wall Tiling) was absent
+23/09/2016 NJOO.MURPHY (7662) - George Saliba (All Time Floor & Wall Tiling) was absent
+23/09/2016 BUTCHER (7699) - Arthur Higgins (A & S Insulation) was absent
+23/09/2016 BUTCHER (7699) - Anthony Higgins (A & S Insulation) was absent
+23/09/2016 GOREY.MEEKAN (7707) - Blake Morgan (Wyldmen of Waterproofing) was absent
+23/09/2016 GOREY.MEEKAN (7707) - Lindsay Wyld (Wyldmen of Waterproofing) was absent
+23/09/2016 GOREY.MEEKAN (7707) - Shane Nadjarian (Wyldmen of Waterproofing) was absent
+23/09/2016 CHOI (7718) - Jamie Ross (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Ivan Gibson (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - David Clark (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Matias Koskimaki (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Daniel Jo (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Sean Baker (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Jarrod Whetnall (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Markus Brautlacht (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Jannik Reinwald (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Tim  Cooke (DM Waters) was absent
+23/09/2016 CHOI (7718) - Tristian Blair (Jamie Ross) was absent
+23/09/2016 CHOI (7718) - Arthur Higgins (A & S Insulation) was absent
+23/09/2016 CHOI (7718) - Anthony Higgins (A & S Insulation) was absent
+23/09/2016 EDWARDS@WAVERLEY (7706) - Tim  Cooke (DM Waters) was absent
+23/09/2016 LAWSON (7730) - Jasan Tanti (Liam Solid Foundation) was absent
+23/09/2016 GUNNER.WILLIAMS (7697) - Peter Ashby (Ashbys Scaffolding) was absent
+23/09/2016 STEPHENS (7737) - Mitchell Biddulph (Wizard Home Improvements) was absent
+23/09/2016 STEPHENS (7737) - Aaron Miranda (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Joel Bartley (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Scott Bell (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Phil McGrath (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Scott Bartley (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Travis Marks (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Jimmy Taylor (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Ryan Selby (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Graham Pratt (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Max Smith (Scott Bartley Plumbing) was absent
+23/09/2016 STEPHENS (7737) - Warwick Harris (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Robert Aren (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Justin King (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Derek Moffit (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Tony Saify (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Michael Kirby (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Matthew Honey (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Kevin Faulkner (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Luke Biggs (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Robbie Dounia (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Chris Bolton (Budget Stairs) was absent
+23/09/2016 STEPHENS (7737) - Lenny Dunn (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Jack Harrison (DM Waters) was absent
+23/09/2016 ANDREWS (7738) - Warwick Harris (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Robert Aren (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Justin King (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Derek Moffit (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Tony Saify (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Michael Kirby (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Matthew Honey (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Kevin Faulkner (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Luke Biggs (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Robbie Dounia (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Chris Bolton (Budget Stairs) was absent
+23/09/2016 ANDREWS (7738) - Lenny Dunn (Budget Stairs) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Aaron Miranda (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Joel Bartley (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Scott Bell (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Ryan Roden (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Scott Bartley (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Travis Marks (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Jimmy Taylor (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Liam Samson (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Ryan Selby (Scott Bartley Plumbing) was absent
+23/09/2016 TINDENT PTY LTD (7749) - Graham Pratt (Scott Bartley Plumbing) was absent
+23/09/2016 LEVETT (7744) - Peter Ashby (Ashbys Scaffolding) was absent
+23/09/2016 LEVETT (7744) - Paul Manaku (Ashbys Scaffolding) was absent
+23/09/2016 LEVETT (7744) - Mark McDonagh (Ashbys Scaffolding) was absent
+23/09/2016 LEVETT (7744) - Chris Ellias (Ashbys Scaffolding) was absent
+23/09/2016 LEVETT (7744) - Phillip Godoy (Ashbys Scaffolding) was absent
+23/09/2016 LEVETT (7744) - James Hong (Ashbys Scaffolding) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: BUTLER (115) Company: Sapper Constructions  Task: Downstairs Fixout PID: 19628
+adding Matthew Johnson (carp10) to roster
+
+Site: STRANG (118) Company: Jamie Ross  Task: Demolition PID: 7041
+adding Jamie Ross (clean1) to roster
+adding Ivan Gibson (clean1c) to roster
+adding David Clark (clean1h) to roster
+adding Matias Koskimaki (clean1t) to roster
+adding Daniel Jo (clean1v) to roster
+adding Sean Baker (clean1x) to roster
+adding Jarrod Whetnall (clean2a) to roster
+adding Markus Brautlacht (clean1z) to roster
+adding Jannik Reinwald (Jannik) to roster
+adding Tristian Blair (clean11) to roster
+adding Edward McLachlan (clean12) to roster
+
+Site: WANG.TANG (149) Company: Ikoma Pty Ltd  Task: Ground Floor Work PID: 19845
+adding Bill Dowse (day2) to roster
+
+Site: WATSON (163) Company: P & L Faulks Cement  Task: Polystyrene PID: 19547
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: RICHMOND (164) Company: C Blair Painting & Decorating  Task: Internal PID: 19066
+adding David Blair (paint1a) to roster
+adding Colin Blair (paint1) to roster
+
+Site: MOLONEY (172) Company: Dagash  Task: Fixout PID: 19706
+adding Shane Patrick (day1) to roster
+
+Site: SEBASTIAN (173) Company: P & L Faulks Cement  Task: Polystyrene PID: 17640
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: TANNER (175) Company: P & L Faulks Cement  Task: Render External PID: 16400
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: TANNER (175) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 16401
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: TANNER (175) Company: P & L Faulks Cement  Task: Render Internal PID: 16398
+There were no users to add or they were already on the roster
+
+Site: BURY (191) Company: Ariel Carpentry  Task: Frame & Roof PID: 19836
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+
+Site: GOREY.MEEKAN (192) Company: Lesley Bricklaying  Task: Patching PID: 19163
+adding Ronnie Allison (brk3) to roster
+
+Site: EDWARDS@WAVERLEY (199) Company: Jamie Ross  Task: Load Bricks PID: 19900
+adding Jamie Ross (clean1) to roster
+adding Ivan Gibson (clean1c) to roster
+adding David Clark (clean1h) to roster
+adding Matias Koskimaki (clean1t) to roster
+adding Daniel Jo (clean1v) to roster
+adding Sean Baker (clean1x) to roster
+adding Jarrod Whetnall (clean2a) to roster
+adding Markus Brautlacht (clean1z) to roster
+adding Jannik Reinwald (Jannik) to roster
+adding Tristian Blair (clean11) to roster
+adding Edward McLachlan (clean12) to roster
+
+Site: LAWSON (202) Company: Liam Solid Foundation  Task: Ground Floor Work PID: 19453
+adding Liam McDonagh (carp5) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+
+Site: LAWSON (202) Company: Liam Solid Foundation  Task: Frame & Roof PID: 19455
+There were no users to add or they were already on the roster
+
+Site: STEPHENS (208) Company: Wizard Home Improvements  Task: Cladding PID: 18215
+adding Paul Duncum (vin1) to roster
+adding Mitchell Biddulph (vin1a) to roster
+
+Site: STEPHENS (208) Company: Scott Bartley Plumbing  Task: Rough In PID: 18216
+adding Aaron Miranda (plumb1c) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Scott Bell (plumb1d) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Travis Marks (plumb1g) to roster
+adding Jimmy Taylor (plumb1h) to roster
+adding Liam Samson (plumb1k) to roster
+adding Ryan Selby (plumb1i) to roster
+adding Graham Pratt (plumb1j) to roster
+adding Max Smith (plumb1l) to roster
+
+Site: ANDREWS (210) Company: DM Waters  Task: Polastic Eaves Windows PID: 18237
+adding Wesley Kean (carp11) to roster
+adding Daniel Waters (waters1) to roster
+adding Tim  Cooke (Tim) to roster
+
+Site: THRELFO (214) Company: P & L Faulks Cement  Task: Polystyrene PID: 18394
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Greg Sully (tex1i) to roster
+adding Adrian Miller (tex1d) to roster
+adding Richard Sharman (tex1j) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding John Downey (text1w - john downey ) to roster
+adding Joe Sanderson (text1y) to roster
+adding Stephen Doney (text1z) to roster
+adding Cathal Mcoroy (text2a) to roster
+adding Dalton Clarke (text2d) to roster
+adding Michael Manenti (text2b) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: THRELFO (214) Company: Gyprock Professional Pty Ltd  Task: First Floor PID: 18400
+adding Sean Jones (gyp1) to roster
+adding David Bartley (gyp1b) to roster
+adding Matthew Myers (gyp1d) to roster
+adding Aaron Howe (gyp1e) to roster
+
+Completed
+
+

@@ -1,0 +1,504 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (13/07/2017 - 19/07/2017)
+-------------------------------------------------------------------------
+
+19/07/2017 CAPE COD OFFICE (0004) - Alfonso Di Monte (Mazz's Plumbing) was absent
+19/07/2017 CAPE COD OFFICE (0004) - Jacob Mazzeo (Mazz's Plumbing) was absent
+19/07/2017 CAPE COD OFFICE (0004) - Raz Mazzeo (Mazz's Plumbing) was absent
+19/07/2017 BASTIAN  (7782) - Rick Moy (Essential Certifiers) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: CARSON (133) Company: Kings Langley Electrical  Task: Ground Floor Rough IN PID: 35489
+adding Brad O'Brien (spark1a) to roster
+adding John Norford (spark1) to roster
+adding Vic Neilsen (spark1b) to roster
+
+Site: MALCOM.MILES (136) Company: NRW Carpentry  Task: Ground Floor Work PID: 34527
+adding Cameron  Dack (Carp2f) to roster
+adding Jordan Waters (carp2d) to roster
+adding Luke Vanderwal (carp2c) to roster
+adding Neil Wanders (carp2) to roster
+
+Site: CAPE COD SUPERVISOR (177) Company: P & L Faulks Cement  Task: Render External PID: 35479
+adding Adrian Miller (adrianm) to roster
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Michael Manenti (text2b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: BLAIKIE (213) Company: Wyldmen of Waterproofing  Task: Water Proof Bathroom PID: 30663
+adding Blake Morgan (seal1a) to roster
+adding Lindsay Wyld (seal1) to roster
+adding Shane Nadjarian (seal1d) to roster
+
+Site: BLAIKIE (213) Company: TC Building (Todd Catto)  Task: General Clean PID: 35384
+adding Todd Catto (clean3) to roster
+
+Site: BLAIKIE (213) Company: Dagash  Task: Fixout PID: 30664
+adding Shane Patrick (day1) to roster
+
+Site: BLAIKIE (213) Company: Palace Painting P/L  Task: External PID: 35357
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: BLAIKIE (213) Company: El-Works Pty Ltd - Shane  Task: Load Job PID: 35500
+adding Shane Browne  (sbrown) to roster
+
+Site: O`NEIL (223) Company: Gyprock Professional Pty Ltd  Task: Sand PID: 35497
+adding David Bartley (gyp1b) to roster
+adding Matthew Myers (gyp1d) to roster
+adding Sean Jones (gyp1) to roster
+adding Tom Bates (Tom1) to roster
+adding Wenjian  Zhang (Gyp12) to roster
+
+Site: O`NEIL (223) Company: TC Building (Todd Catto)  Task: General Clean PID: 35408
+adding Todd Catto (clean3) to roster
+
+Site: O`NEIL (223) Company: Sun Tiling  Task: Deck PID: 34354
+adding Jay Cho (tile3) to roster
+
+Site: HEAD (225) Company: Palace Painting P/L  Task: External PID: 35345
+adding Aiden Du (tianbod) to roster
+adding Chen Xiao Yue (Winston) (paint2b) to roster
+adding Emile Yu (paint2i) to roster
+adding Feng Jin Boa (paint2s) to roster
+adding He Bo (Bo) (paint2f) to roster
+adding He Jei Fu (Jeff) (paint2g) to roster
+adding Jinshan Jing (paint2j) to roster
+adding Kevin Lexuan (Kevinl) to roster
+adding Leo (Li He) (paint2a) to roster
+adding Li Jian Jun (Denny) (paint2c) to roster
+adding Mars (Mars) (paint2h) to roster
+adding Mu Jing Weng (paint2q) to roster
+adding Qi Shun Zheng (paint2p) to roster
+adding Qingli Li (paint2k) to roster
+adding Richard Santosa  (rzsz) to roster
+adding Shauaibing Lu (paint2n) to roster
+adding Shi Lin (paint2d) to roster
+adding Simon Feng (paint2) to roster
+adding Wang Jun Boa (paint2r) to roster
+adding Xiaopei Zhan (paint2m) to roster
+adding Xue Zheng Rong (paint2o) to roster
+adding Yi Tao (paint2t) to roster
+adding Yuan Xue (yuanx) to roster
+adding Zhang Guan Ding (paint2e) to roster
+adding Zhuping He (paint2l) to roster
+
+Site: RUMBLE.LAMBKIN (229) Company: El-Works Pty Ltd - Shane  Task: Store Run PID: 35275
+adding Shane Browne  (sbrown) to roster
+
+Site: GLASCOTT  (246) Company: Mark Bartley Roofing Pty.Ltd.  Task: Ground Floor PID: 35482
+adding Brayden Roberts-Batty (braydenr) to roster
+adding Brayden Aliendi (braydena) to roster
+adding Carolyn Bartley (Carolyn) to roster
+adding Craig Whetters (roof1c) to roster
+adding Greig Bartley (roof1a) to roster
+adding Jarrod Stewart (roof1f) to roster
+adding Kenny Nelson (roof1b) to roster
+adding Kiel Cottell (roof1g) to roster
+adding Mark Bartley (roof1) to roster
+adding Nathan Mulholland (roof1l) to roster
+adding Ross O'Connor (roof1d) to roster
+adding Shane Nelson (roof1h) to roster
+
+Site: GLASCOTT  (246) Company: C Blair Painting & Decorating  Task: External PID: 35041
+adding Colin Blair (paint1) to roster
+adding David Bliar (paint1a) to roster
+
+Site: GLASCOTT  (246) Company: Sydney Waste & Property Services  Task: Strip Job PID: 35235
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: OLIVER.WRIGHT  (248) Company: Mark Bartley Roofing Pty.Ltd.  Task: Ground Floor Gutters PID: 33175
+adding Brayden Roberts-Batty (braydenr) to roster
+adding Brayden Aliendi (braydena) to roster
+adding Carolyn Bartley (Carolyn) to roster
+adding Craig Whetters (roof1c) to roster
+adding Greig Bartley (roof1a) to roster
+adding Jarrod Stewart (roof1f) to roster
+adding Kenny Nelson (roof1b) to roster
+adding Kiel Cottell (roof1g) to roster
+adding Mark Bartley (roof1) to roster
+adding Nathan Mulholland (roof1l) to roster
+adding Ross O'Connor (roof1d) to roster
+adding Shane Nelson (roof1h) to roster
+
+Site: MCEVOY                                   (250) Company: New Coat Painting   Task: Internal PID: 32359
+adding Pat Ryan (paint3) to roster
+
+Site: SYMES (253) Company: Lesley Bricklaying  Task: Peirs & Base PID: 35274
+adding Ronnie Allison (brk3) to roster
+
+Site: FIELD.PINDER (255) Company: Greg Briggs  Task: Brick Clean PID: 35466
+adding Greg Briggs (labour1) to roster
+
+Site: FIELD.PINDER (255) Company: TMS High Pressure Water  Task: Brick Clean PID: 35432
+adding Paul Tramp (wat1) to roster
+
+Site: RICH  (256) Company: Greg Briggs  Task: Paint Clean PID: 35415
+adding Greg Briggs (labour1) to roster
+
+Site: RICH  (256) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Store Run PID: 35416
+adding Tobi Spiteri (labour4) to roster
+
+Site: RICH  (256) Company: Sun Tiling  Task: Patching PID: 35398
+adding Jay Cho (tile3) to roster
+
+Site: RICH  (256) Company: Lay Drafting and Construction  Task: Ground Floor Work PID: 35256
+adding Josh Lay (lay1) to roster
+
+Site: HILL (257) Company: Essential Certifiers  Task: Frame Inspection PID: 31288
+adding Bernie Cohen (berniec) to roster
+adding Chris Manzi (chrism) to roster
+adding Elliot Watkins (elliotw) to roster
+adding Morris Impala (morrisi) to roster
+adding Nathan Lowe (nathanl) to roster
+adding Paul Cohen (paulc) to roster
+adding Rick Moy (rickm) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: High Performance  Task: Stairwell Cutout PID: 34027
+adding Alex Kuitert (carp2e) to roster
+adding Micheal Deane (carp1d) to roster
+adding Warren Klomp (carp1) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: Essential Certifiers  Task: Frame Inspection PID: 31181
+adding Bernie Cohen (berniec) to roster
+adding Chris Manzi (chrism) to roster
+adding Elliot Watkins (elliotw) to roster
+adding Morris Impala (morrisi) to roster
+adding Nathan Lowe (nathanl) to roster
+adding Paul Cohen (paulc) to roster
+adding Rick Moy (rickm) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: Scott Bartley Plumbing  Task: Rough In PID: 34893
+adding Aaron Miranda (plumb1c) to roster
+adding Joel Bartley (plumb1e) to roster
+adding Liam Samson (plumb1k) to roster
+adding Max Smith (plumb1l) to roster
+adding Phil McGrath (plumb1a) to roster
+adding Ryan Roden (plumb1b) to roster
+adding Scott Bartley (plumb1) to roster
+adding Tanya Bartley (Tanya) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: High Performance  Task: Polastic Eaves Windows PID: 31178
+There were no users to add or they were already on the roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Platform Down PID: 34728
+adding Tobi Spiteri (labour4) to roster
+
+Site: BRADBERY.BRANDES DE ROOS (259) Company: Scott Bartley Plumbing  Task: Deck Drainage PID: 34739
+There were no users to add or they were already on the roster
+
+Site: LUM.SO (260) Company: Budget Stairs  Task: Rough In PID: 35491
+adding Chris Bolton (stair1j) to roster
+adding Danny Rogan (stair1b) to roster
+adding Kevin Faulkner (stair1g) to roster
+adding Lenny Dunn (stair1k) to roster
+adding Luke Briggs (stair1h) to roster
+adding Matthew Honey (stair1f) to roster
+adding Michael Kirby (stair1e) to roster
+adding Robbie Dounia (stair1i) to roster
+adding Robert Aren (stair1a) to roster
+adding Tony Saify (stair1d) to roster
+adding Warwick Harris (stair1) to roster
+
+Site: PEOPLE (261) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Tarps PID: 35477
+adding Tobi Spiteri (labour4) to roster
+
+Site: PEOPLE (261) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Load Platform PID: 35470
+There were no users to add or they were already on the roster
+
+Site: PEOPLE (261) Company: Fresh Start  Task: Frame & Roof PID: 34715
+adding Chris Moerman (carp3) to roster
+adding Joshua Jones (carp3b) to roster
+adding Mathew Preen (carp3d) to roster
+
+Site: THOMPSON (262) Company: Greg Briggs  Task: Final Clean PID: 35413
+adding Greg Briggs (labour1) to roster
+
+Site: THOMPSON (262) Company: Sydney Waste & Property Services  Task: General Clean PID: 35496
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: GORDON    (264) Company: All Time Floor & Wall Tiling  Task: Grouting PID: 35493
+adding George Saliba (alltime1) to roster
+adding Joseph Elhindi (jelhindi) to roster
+adding Robert Issa (stone1a) to roster
+
+Site: GORDON    (264) Company: Ikoma Pty Ltd  Task: Downstairs Fixout PID: 34713
+adding Bill Dowse (day2) to roster
+
+Site: GORDON    (264) Company: Budget Stairs  Task: Measure Up PID: 31409
+adding Chris Bolton (stair1j) to roster
+adding Danny Rogan (stair1b) to roster
+adding Kevin Faulkner (stair1g) to roster
+adding Lenny Dunn (stair1k) to roster
+adding Luke Briggs (stair1h) to roster
+adding Matthew Honey (stair1f) to roster
+adding Michael Kirby (stair1e) to roster
+adding Robbie Dounia (stair1i) to roster
+adding Robert Aren (stair1a) to roster
+adding Tony Saify (stair1d) to roster
+adding Warwick Harris (stair1) to roster
+
+Site: PASSICOT   (267) Company: El-Works Pty Ltd - Shane  Task: Brick Clean PID: 34263
+adding Shane Browne  (sbrown) to roster
+
+Site: DOUGLAS    (268) Company: Budget Stairs  Task: Measure Up PID: 35412
+adding Chris Bolton (stair1j) to roster
+adding Danny Rogan (stair1b) to roster
+adding Kevin Faulkner (stair1g) to roster
+adding Lenny Dunn (stair1k) to roster
+adding Luke Briggs (stair1h) to roster
+adding Matthew Honey (stair1f) to roster
+adding Michael Kirby (stair1e) to roster
+adding Robbie Dounia (stair1i) to roster
+adding Robert Aren (stair1a) to roster
+adding Tony Saify (stair1d) to roster
+adding Warwick Harris (stair1) to roster
+
+Site: DOUGLAS    (268) Company: Next Point Electrical  Task: Rough In PID: 33768
+adding Adam Balzan (adant) to roster
+adding Daniel Barnard (Adant6) to roster
+adding David Spillane (adant1) to roster
+adding Jeremy Banoub (adant3) to roster
+adding Luke Hicks (Adant4) to roster
+adding Nathan Hall (Adant5) to roster
+adding Sean Williams (adant2) to roster
+
+Site: DOUGLAS    (268) Company: TC Building (Todd Catto)  Task: General Clean PID: 31437
+adding Todd Catto (clean3) to roster
+
+Site: SATO (270) Company: Master Services  Task: Down Stairs PID: 34608
+adding Joe Saliba (stone1) to roster
+adding Kris Dimovski (stone1b) to roster
+
+Site: BASTIAN  (276) Company: MLC Property Services (Michael Catto)  Task: Load Job PID: 35409
+adding Michael Catto (clean2) to roster
+
+Site: BASTIAN  (276) Company: Mervyn Ridder  Task: Fixout PID: 33821
+adding Mervyn Ridder (day5) to roster
+
+Site: ROCK (278) Company: Lay Drafting and Construction  Task: Ground Floor Work PID: 35383
+adding Josh Lay (lay1) to roster
+
+Site: SIEGLOFF (279) Company: Sydney Waste & Property Services  Task: Load Job PID: 34939
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: MILLER.WINDEYER (283) Company: Sydney Waste & Property Services  Task: Steel Assist PID: 35501
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: MILLER.WINDEYER (283) Company: DM Waters  Task: Lay Floor PID: 32968
+adding Daniel Waters (waters1) to roster
+adding Riley  O'keefe (O'keefe) to roster
+adding Timothy Vella (Tim.vella1999@gmail.com) to roster
+adding Wesley Kean (carp11) to roster
+
+Site: MILLER.WINDEYER (283) Company: MLC Property Services (Michael Catto)  Task: Site Weld PID: 35473
+adding Michael Catto (clean2) to roster
+
+Site: KERR (284) Company: Ariel Carpentry PTY LTD  Task: Start Carpentry PID: 33959
+adding Andrew Shaw (Andrew Shaw) to roster
+adding Matt McCarthy (carp4d) to roster
+adding Philip Doughty (carp4) to roster
+adding Samuel Doughty (carp4a) to roster
+
+Site: KERR (284) Company: MLC Property Services (Michael Catto)  Task: Strip Job PID: 34729
+adding Michael Catto (clean2) to roster
+
+Site: BURDEN (285) Company: Sydney Waste & Property Services  Task: General Clean PID: 35280
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: BURDEN (285) Company: On-Point Carpentry & Joinery  Task: Lay Floor PID: 34969
+adding Daniel McGaw (onpoint) to roster
+
+Site: ILENCIK.SAMPSON   (287) Company: Sydney Waste & Property Services  Task: Demolition PID: 35251
+adding Carlo  Pane (clean11j) to roster
+adding Cassius Clay (clean11m) to roster
+adding Daniel Jo (clean1v) to roster
+adding Daniel Behr (clean11d) to roster
+adding David Silber (clean11p) to roster
+adding David Clark (clean1h) to roster
+adding Deniz Akkaya (Clean11r) to roster
+adding Duke Fong Hee (clean11g) to roster
+adding Ebalfadl Elwdah (clean11n) to roster
+adding Gaurav Pandey (clean11l) to roster
+adding Hosein Hoseinzadeh (clean11o) to roster
+adding Ike  Schwartz  (Ike) to roster
+adding Ivan Gibson (clean1c) to roster
+adding Izaak Merlehan (clean11f) to roster
+adding Jamie Ross (clean1) to roster
+adding Jirakiat Chaosuan (clean1g) to roster
+adding Liam Geisler  (clean11i) to roster
+adding Louis Rauert (clean11a) to roster
+adding Neal  Emegwele  (Clean11e) to roster
+adding Wesley Baaij (clean11q) to roster
+
+Site: ILENCIK.SAMPSON   (287) Company: All Time Floor & Wall Tiling  Task: Screed PID: 35301
+adding George Saliba (alltime1) to roster
+adding Joseph Elhindi (jelhindi) to roster
+adding Robert Issa (stone1a) to roster
+
+Site: ILENCIK.SAMPSON   (287) Company: All Time Floor & Wall Tiling  Task: First Floor PID: 32568
+There were no users to add or they were already on the roster
+
+Site: ILENCIK.SAMPSON   (287) Company: Sydney Waste & Property Services  Task: Preperation for Demolition PID: 35300
+There were no users to add or they were already on the roster
+
+Site: MUNRO.MAGUIRE  (289) Company: Liam Solid Foundation  Task: Lay Floor PID: 32947
+adding Adam Tilley (carp5e) to roster
+adding Corey Drivas (carp5c) to roster
+adding Jasan Tanti (carp5d) to roster
+adding Liam McDonagh (carp5) to roster
+
+Site: LYRAS (292) Company: Josh Solid Foundations  Task: Polastic Eaves Windows PID: 33000
+adding Josh Matelic (carp5a) to roster
+adding Reece Krasic (carp5b) to roster
+
+Site: LYRAS (292) Company: Josh Solid Foundations  Task: Platform Down PID: 32999
+There were no users to add or they were already on the roster
+
+Site: LYRAS (292) Company: Spiteri Building and Maintenance (Tobi Spiteri)  Task: Platform Down PID: 32998
+adding Tobi Spiteri (labour4) to roster
+
+Site: GAMEROV   (293) Company: Neil Higgins  Task: Ground Floor PID: 32220
+adding Neil Higgins (brk2) to roster
+
+Site: GAMEROV   (293) Company: Sapper Constructions  Task: Frame & Roof PID: 34350
+adding Matthew Johnson (carp10) to roster
+adding Samuel Johnson (samj) to roster
+
+Completed
+
+

@@ -1,0 +1,25 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (03/06/2017 - 09/06/2017)
+-------------------------------------------------------------------------
+
+09/06/2017 CAPE COD SUPERVISOR (0005) - Colin Blair (C Blair Painting & Decorating) was absent
+09/06/2017 CAPE COD SUPERVISOR (0005) - David Bliar (C Blair Painting & Decorating) was absent
+09/06/2017 JACOBSON (7765) - He Jei Fu (Jeff) (Palace Painting P/L) was absent
+09/06/2017 TRINCA (7810) - Elliot Watkins (Essential Certifiers) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: DYSON (206) Company: Floor Expert  Task: Sand & Seal PID: 32794
+adding Rafello Sangil (floor1a) to roster
+adding Tibos Kovats (floora1) to roster
+
+Completed
+
+

@@ -1,0 +1,107 @@
+Nightly Update
+--------------
+
+Adding Non-Attendees to the Non-Logged in list (11/02/2017 - 17/02/2017)
+-------------------------------------------------------------------------
+
+17/02/2017 MAINTENANCE (0001) - Pat Ryan (New Coat Painting ) was absent
+17/02/2017 MAINTENANCE (0001) - Shane Patrick (Dagash) was absent
+17/02/2017 MAINTENANCE (0001) - Shane Browne  (El-Works Pty Ltd - Shane) was absent
+17/02/2017 STRANG (7605) - Bakir Kirimi (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Brad Turner (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Greg Sully (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - John Downey (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - John Chalouhi (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Paul Faulks JNR (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Paul Faulks (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Richard Sharman (P & L Faulks Cement) was absent
+17/02/2017 STRANG (7605) - Thomas Brown (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Bakir Kirimi (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Brad Turner (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Gavin Quinn (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Greg Sully (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - John Downey (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - John Chalouhi (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Paul Faulks JNR (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Paul Faulks (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Richard Sharman (P & L Faulks Cement) was absent
+17/02/2017 KING.LYONS (7700) - Thomas Brown (P & L Faulks Cement) was absent
+17/02/2017 SEBASTIAN (7714) - Ankar Anwar (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - gavin  lin (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Gu Ming (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Hasan Kemal (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Jarlath Endemann (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Luoning Xu (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Maertan Muhetaer (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Mathew Milicevic (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Mauro Franco De Oliva (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Nathan Wiggett (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Peter Musolino (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Phyllis Wiggett (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Ravinder Singh (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Riri Lin (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Wei Chen (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 SEBASTIAN (7714) - Zinan Lin (Pro-Gyp Solutions Interior Linings Pty Ltd) was absent
+17/02/2017 HANAFI.PRASIDHI (7725) - Ryan Roden (Scott Bartley Plumbing) was absent
+17/02/2017 DI FRANCESCO.HEMMINGS (7781) - Tobi Spiteri (Tobi Spiteri) was absent
+17/02/2017 DI FRANCESCO.HEMMINGS (7781) - Paul Manaku (Ashbys Scaffolding) was absent
+17/02/2017 JACOBSON (7765) - Morris Impala (Essential Certifiers) was absent
+
+Completed
+
+
+Adding New Users to Roster
+------------------------------------------------------------------------
+
+
+Site: MAINTENANCE (62) Company: Dagash  Task: Maintenance PID: 26693
+adding Shane Patrick (day1) to roster
+
+Site: MAINTENANCE (62) Company: New Coat Painting   Task: Internal PID: 26696
+adding Pat Ryan (paint3) to roster
+
+Site: HUMPHREYS.PAYNE (89) Company: Lay Drafting and Construction  Task: Prac List PID: 26727
+adding Josh Lay (lay1) to roster
+
+Site: STRANG (118) Company: P & L Faulks Cement  Task: Render Internal PID: 24333
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: MARTIN.BOWER (211) Company: Dean Taylor Bricklaying Pty Ltd  Task: First Floor PID: 26664
+adding Daniel Stevens Frost (brk1h) to roster
+adding Dean Taylor (brk1) to roster
+adding Eric Houghton (erich) to roster
+adding Ian Taylor (brk1a) to roster
+adding Jack Launchbury (jackl) to roster
+adding Otto Morales (brk1e) to roster
+adding Sam Walling (brk1b) to roster
+adding Shaun Roberts (brk1d) to roster
+adding Steven Butler (butler) to roster
+adding Vili Kanongataa (brk1g) to roster
+
+Site: HU.LI (219) Company: P & L Faulks Cement  Task: Blueboard PID: 25921
+adding Bakir Kirimi (tex2b) to roster
+adding Brad Turner (text1p) to roster
+adding Gavin Quinn (text1q) to roster
+adding Greg Sully (tex1i) to roster
+adding John Downey (text1w - john downey ) to roster
+adding John Chalouhi (Tex3b) to roster
+adding Paul Faulks JNR (tex1a) to roster
+adding Paul Faulks (tex1) to roster
+adding Richard Sharman (tex1j) to roster
+adding Thomas Brown (text2c) to roster
+
+Site: ERLICH.MARSH (241) Company: Onnix Constructions  Task: Slab PID: 26831
+adding Jeff Chehine (onnix) to roster
+
+Completed
+
+
