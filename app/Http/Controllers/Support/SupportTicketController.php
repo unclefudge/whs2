@@ -1,0 +1,297 @@
+<?php
+
+namespace App\Http\Controllers\Support;
+
+use Illuminate\Http\Request;
+use Validator;
+
+use DB;
+use PDF;
+use Mail;
+use Session;
+use App\Models\Support\SupportTicket;
+use App\Models\Support\SupportTicketAction;
+use App\Http\Requests;
+use App\Http\Requests\Support\SupportTicketRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use Yajra\Datatables\Datatables;
+use nilsenj\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+
+use App\Http\Requests\Site\SiteHazardRequest;
+use App\Models\Site\Site;
+use App\Models\Site\SiteHazard;
+use App\Models\Site\SiteHazardAction;
+
+/**
+ * Class SupportTicketController
+ * @package App\Http\Controllers
+ */
+class SupportTicketController extends Controller {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('support/ticket/list');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('support/ticket/create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(SupportTicketRequest $request)
+    {
+        $ticket_request = $request->all();
+        $ticket_request['company_id'] = Auth::user()->company_id;
+        $ticket_request['attachment'] = '';  // clear attachment as it's attached to Action
+        $ticket = SupportTicket::create($ticket_request);
+
+        //Create action taken + attach image to issue
+        if ($ticket) {
+            $action_request = ['action' => $request->get('summary')];
+            $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+
+            // Handle attachment
+            if ($request->hasFile('attachment'))
+                $action->saveAttachment($request->file('attachment'));
+
+            // Email ticket
+            if (!$ticket->type)
+            $ticket->emailTicket($action);
+
+        }
+        Toastr::success("Created support ticket");
+
+        return redirect('support/ticket');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $ticket = SupportTicket::findorFail($id);
+
+        return view('support/ticket/show', compact('ticket'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Add action to existing ticket
+     */
+    public function addAction(Request $request)
+    {
+        $ticket_id = $request->get('ticket_id');
+        $ticket = SupportTicket::findorFail($ticket_id);
+
+        //Add action to ticket
+        if ($ticket) {
+            $action = $ticket->actions()->save(new SupportTicketAction(['action' => $request->get('action')]));
+
+            // Handle attachment
+            if ($request->hasFile('attachment'))
+                $action->saveAttachment($request->file('attachment'));
+
+            // Email action
+            $action->emailAction($action);
+
+            $ticket->updated_by = Auth::user()->id;
+            $ticket->touch();
+            $ticket->save();
+
+            Toastr::success("Added action");
+        }
+
+        return redirect('support/ticket/' . $ticket_id);
+    }
+
+    /**
+     * Update Priority of existing ticket
+     */
+    public function updatePriority(Request $request, $id, $priority)
+    {
+        $ticket = SupportTicket::findorFail($id);
+
+        $old = $ticket->priority_text;
+        $ticket->priority = $priority;
+        $action_request = ['action' => "Changed ticket priority from $old to " . $ticket->priority_text];
+        $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+        $ticket->save();
+        Toastr::success("Updated priority to " . $ticket->priority_text);
+
+        return redirect('support/ticket/' . $id);
+    }
+
+    /**
+     * Update ETA of existing ticket
+     */
+    public function updateETA(Request $request, $id, $date)
+    {
+        $ticket = SupportTicket::findorFail($id);
+        $eta = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+        $ticket->eta = $eta;
+        $ticket->save();
+
+        return redirect('support/ticket/' . $id);
+    }
+
+    /**
+     * Update Hours of existing ticket
+     */
+    public function updateHours(Request $request, $id, $hours)
+    {
+        $ticket = SupportTicket::findorFail($id);
+        $ticket->hours = $hours;
+        $ticket->save();
+
+        return redirect('support/ticket/' . $id);
+    }
+
+    /**
+     * Update status of existing ticket
+     */
+    public function updateStatus(Request $request, $id, $status)
+    {
+        $ticket = SupportTicket::findorFail($id);
+        $ticket->status = $status;
+
+        if ($status) {
+            $ticket->resolved_at = null;
+            $ticket->eta = null;
+            $action_request = ['action' => 'Re-opened ticket'];
+            $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+            Toastr::success("Re-opened ticket");
+        } else {
+            $ticket->resolved_at = Carbon::now();
+            $action_request = ['action' => 'Resolved ticket'];
+            $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+            Toastr::success("Resolved ticket");
+        }
+        $ticket->save();
+
+        return redirect('support/ticket/' . $id);
+    }
+
+    /**
+     * Get Tickets current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getTickets(Request $request)
+    {
+        if (Auth::user()->security)
+            $user_list = Auth::user()->company->users()->pluck('id')->toArray();
+        else
+            $user_list = [Auth::user()->id];
+        $ticket_records = DB::table('support_tickets AS t')
+            ->select(['t.id', 't.name', 't.created_by', 't.attachment', 't.priority', 't.status', 't.resolved_at', 't.eta',
+                DB::raw('DATE_FORMAT(t.updated_at, "%d/%m/%y") AS nicedate'),
+                DB::raw('DATE_FORMAT(t.eta, "%d/%m/%y") AS niceeta'),
+                DB::raw('CONCAT(users.firstname, " ", users.lastname) AS fullname'),
+            ])
+            ->join('users', 't.updated_by', '=', 'users.id')
+            ->where('t.status', '=', $request->get('status'))
+            ->where('t.type', '=', '0')
+            ->whereIn('t.created_by', $user_list);
+        //->orderBy('site_hazards.created_at', 'DESC');
+
+
+        $dt = Datatables::of($ticket_records)
+            ->addColumn('view', function ($ticket) {
+                return ('<div class="text-center"><a href="/support/ticket/' . $ticket->id . '"><i class="fa fa-search"></i></a></div>');
+            })
+            //->editColumn('id', '<div class="text-center"><a href="/site/hazard/{{$id}}"><i class="fa fa-search"></i></a></div>')
+            ->editColumn('priority', function ($ticket) {
+                if ($ticket->priority == '0') return 'none';
+                if ($ticket->priority == '1') return 'low';
+                if ($ticket->priority == '2') return 'med';
+                if ($ticket->priority == '3') return 'high';
+                if ($ticket->priority == '4') return 'progress';
+            })
+            ->editColumn('niceeta', function ($ticket) {
+                if (!$ticket->eta) return 'none';
+
+                return $ticket->niceeta;
+            })
+            ->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Upgrades current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getUpgrades(Request $request)
+    {
+        //$company_list = Auth::user()->company->reportsToCompany()->sites()->pluck('id')->toArray();
+        $company_list = Auth::user()->company->companies()->pluck('id')->toArray();
+        //$user_list = Auth::user()->company->users($request->get('status'))->pluck('id')->toArray();
+        $ticket_records = DB::table('support_tickets AS t')
+            ->select(['t.id', 't.name', 't.created_by', 't.attachment', 't.priority', 't.status', 't.resolved_at', 't.eta', 't.hours',
+                DB::raw('DATE_FORMAT(t.updated_at, "%d/%m/%y") AS nicedate'),
+                DB::raw('DATE_FORMAT(t.eta, "%d/%m/%y") AS niceeta'),
+                DB::raw('CONCAT(users.firstname, " ", users.lastname) AS fullname'),
+            ])
+            ->join('users', 't.updated_by', '=', 'users.id')
+            ->where('t.status', '=', $request->get('status'))
+            ->where('t.type', '=', '1')
+            ->whereIn('t.company_id', $company_list);
+
+        $dt = Datatables::of($ticket_records)
+            ->addColumn('view', function ($ticket) {
+                return ('<div class="text-center"><a href="/support/ticket/' . $ticket->id . '"><i class="fa fa-search"></i></a></div>');
+            })
+            ->editColumn('priority', function ($ticket) {
+                if ($ticket->priority == '0') return 'none';
+                if ($ticket->priority == '1') return '1-low';
+                if ($ticket->priority == '2') return '2-med';
+                if ($ticket->priority == '3') return '3-high';
+                if ($ticket->priority == '4') return '4-progress';
+            })
+            ->editColumn('niceeta', function ($ticket) {
+                if (!$ticket->eta) return 'none';
+
+                return $ticket->niceeta;
+            })
+            ->editColumn('hours', function ($ticket) {
+                if ($ticket->hours == 0)
+                    return '?';
+
+                if ($ticket->hours >= 8)
+                    return $ticket->hours/8 . ' day';
+
+                return $ticket->hours . ' hr';
+            })
+            ->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            ->make(true);
+
+        return $dt;
+    }
+}

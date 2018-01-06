@@ -1,0 +1,522 @@
+<?php
+
+namespace App;
+
+use DB;
+use App\Models\Site\Site;
+use App\Models\Site\Planner\SiteAttendance;
+use App\Models\Site\Planner\SiteCompliance;
+use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\SiteAccident;
+use App\Models\Site\SiteHazard;
+use App\Models\Company\Company;
+use App\Models\Company\CompanySupervisor;
+use App\Models\Company\CompanyDoc;
+use App\Models\Company\CompanyDocCategory;
+use App\Models\Comms\Todo;
+use App\Models\Comms\TodoUser;
+use App\Models\Comms\Notify;
+use App\Models\Comms\NotifyUser;
+use App\Models\Misc\Role2;
+use App\Models\Misc\Permission2;
+use App\Models\Safety\ToolboxTalk;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use nilsenj\Toastr\Facades\Toastr;
+
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+use App\Traits\UserRolesPermissions;
+
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract{ 
+
+    use Authenticatable, CanResetPassword;
+    use Authorizable; 
+    use UserRolesPermissions;
+
+    // The database table used by the model.
+    protected $table = 'users';
+
+    // The attributes that are mass assignable.
+    protected $fillable = [
+        'username', 'email', 'password', 'phone', 'firstname', 'lastname',
+        'address', 'address2', 'suburb', 'state', 'postcode', 'country',
+        'employment_type', 'subcontractor_type', 'photo', 'notes', 'company_id', 'client_id',
+        'last_ip', 'last_login', 'password_reset', 'security',
+        'status', 'created_by', 'updated_by',
+    ];
+
+    // The attributes excluded from the model's JSON form.
+    protected $hidden = ['password', 'remember_token'];
+
+    // The date fields to be converted to Carbon instances
+    protected $dates = ['last_login'];
+
+    /**
+     * A User belongs to a company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company\Company');
+    }
+
+    /**
+     * A User was created by a User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by');
+    }
+
+    /**
+     * A User has many SiteAttendance
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function siteAttendance()
+    {
+        return $this->hasMany('App\Models\SiteAttendance', 'user_id');
+    }
+
+    /**
+     * A user may have one or more Area Supervisors
+     */
+    public function areaSupervisors()
+    {
+        $parent_ids = DB::table('company_supervisors')->where('user_id', $this->id)->where('parent_id', '<>', 0)->pluck('parent_id')->toArray();
+        $user_ids = DB::table('company_supervisors')->whereIn('id', $parent_ids)->pluck('user_id')->toArray();
+
+        return User::whereIn('id', $user_ids)->get();
+    }
+
+    /**
+     * A user may have one or more Sub Supervisors they manage
+     */
+    public function subSupervisors()
+    {
+        $record = DB::table('company_supervisors')->where('user_id', $this->id)->where('parent_id', 0)->first();
+        $user_ids = [];
+
+        if ($record)
+            $user_ids = DB::table('company_supervisors')->where('parent_id', $record->id)->pluck('user_id')->toArray();
+
+        return User::whereIn('id', $user_ids)->get();
+    }
+
+    /**
+     * A dropdown list of Sub Supervisors that this user manages
+     *
+     * @return array
+     */
+    public function subSupervisorsSelect($prompt = '')
+    {
+        $array = [];
+        foreach ($this->subSupervisors() as $user)
+            $array[$user->id] = $user->fullname;
+
+        asort($array);
+
+        return ($prompt) ? $array = array('' => 'Select supervisor') + $array : $array;
+    }
+
+
+    /**
+     * A list of sites this user is supervisor for
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function supervisorsSites($status = '')
+    {
+        $site_list = DB::table('site_supervisor')->where('user_id', $this->id)->pluck('id')->toArray();
+
+        return ($status != '') ? Site::where('status', $status)->whereIn('id', $site_list)->get() : Site::whereIn('id', $site_list)->get();
+    }
+
+    /**
+     * A list of sites this user is Area supervisor for
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function areaSites($status = null)
+    {
+        // list of users (themselves + any users they supervise)
+        $user_list = $this->isAreaSupervisor() ? array_merge([$this->id], $this->subSupervisors()->pluck('id')->toArray()) : [$this->id];
+        // List of sites they or any of the subSupervisors supervise
+        $site_list = DB::table('site_supervisor')->whereIn('user_id', $user_list)->pluck('site_id')->toArray();
+
+        return ($status) ? Site::where('status', $status)->whereIn('id', $site_list)->orderBy('name')->get() : Site::whereIn('id', $site_list)->orderBy('name')->get();
+    }
+
+    /**
+     * A list of Site this user is allowed to access
+     *
+     * @return array
+     */
+    public function siteListArray()
+    {
+        $site_list = [];
+        // Allow Supervisor + Construction Manager to access their sites
+        if ($this->is('con.manager'))
+            $site_list = $this->company->sites()->pluck('id')->toArray();
+        else if ($this->is('area.supervisor|supervisor'))
+            $site_list = $this->areaSites()->pluck('id')->toArray();
+
+        return $site_list;
+    }
+
+
+    /**
+     * A dropdown list of types of Site Document user can access
+     *
+     * @return array
+     */
+    public function siteDocTypeSelect($action, $prompt = '')
+    {
+        $array = [];
+        if ($this->hasPermission2("$action.safety.doc")) {
+            $array['RISK'] = "Risk";
+            $array['HAZ'] = "Hazard";
+        }
+        if ($this->hasPermission2("$action.site.doc"))
+            $array['PLAN'] = "Plan";
+
+        if ($prompt == 'all')
+            return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All types') + $array : $array;
+
+        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
+    }
+
+    /**
+     * A dropdown list of types of General Document user can access
+     *
+     * @return array
+     */
+    public function companyDocTypeSelect($action, $prompt = '')
+    {
+        $array = [];
+        //$array = CompanyDocCategory::where('company_id', $this->company->id);
+        if ($action == 'edit')
+            $array = CompanyDocCategory::where('id', '>', '6')->where('status', '1')->orderBy('name')->pluck('name', 'id')->toArray();
+        else
+            $array = CompanyDocCategory::where('status', '1')->orderBy('name')->pluck('name', 'id')->toArray();
+
+        if ($prompt == 'all')
+            return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
+
+        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Category') + $array : $array;
+    }
+
+    /**
+     * A list of Site Hazards this user is allowed to view
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function siteHazards($status = '')
+    {
+        $site_list = [];
+        $user_list = [];
+        $company_level = $this->permissionLevel('view.site.hazard', $this->company_id);
+        $parent_level = $this->permissionLevel('view.site.hazard', $this->company->reportsToCompany()->id);
+        if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
+            $site_list = $this->authSites('view.site.hazard')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
+        else
+            $user_list =  $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
+
+        if ($status)
+            return SiteHazard::where('status', '=', $status)
+                ->where(function ($q) use ($site_list, $user_list) {
+                    $q->whereIn('created_by', $user_list);
+                    $q->orWhereIn('site_id', $site_list);
+                })->get();
+
+        return SiteHazard::where(function ($q) use ($site_list, $user_list) {
+            $q->whereIn('created_by', $user_list);
+            $q->orWhereIn('site_id', $site_list);
+        })->get();
+
+    }
+
+    /**
+     * A list of Site Accidents this user is allowed to view
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function siteAccidents($status = '')
+    {
+        $site_list = [];
+        $user_list = [];
+        $company_level = $this->permissionLevel('view.site.accident', $this->company_id);
+        $parent_level = $this->permissionLevel('view.site.accident', $this->company->reportsToCompany()->id);
+        if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
+            $site_list = $this->authSites('view.site.accident')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
+        else
+            $user_list =  $this->authUsers('view.site.accident')->pluck('id')->toArray(); // Else - check users
+
+        if ($status != '')
+            return SiteAccident::where('status', '=', $status)
+                ->where(function ($q) use ($site_list, $user_list) {
+                    $q->whereIn('created_by', $user_list);
+                    $q->orWhereIn('site_id', $site_list);
+                })->get();
+
+        return SiteAccident::where(function ($q) use ($site_list, $user_list) {
+            $q->whereIn('created_by', $user_list);
+            $q->orWhereIn('site_id', $site_list);
+        })->get();
+    }
+
+
+    /**
+     * User is a Supervisor
+     * @return boolean
+     */
+    public function isSupervisor()
+    {
+        return (CompanySupervisor::where('user_id', $this->id)->first()) ? true : false;
+    }
+
+    /**
+     * User is a Area Supervisor
+     * @return boolean
+     */
+    public function isAreaSupervisor()
+    {
+        return (CompanySupervisor::where('user_id', $this->id)->where('parent_id', 0)->first()) ? true : false;
+    }
+
+    /**
+     * User is from same company as [company]
+     * @param $company
+     * @return boolean
+     */
+    public function isCompany($company)
+    {
+        return ($this->company_id == $company->id) ? true : false;
+    }
+
+    /**
+     * User is from Cape Cod
+     * @param $company
+     * @return boolean
+     */
+    public function isCC()
+    {
+        return ($this->company_id == 3) ? true : false;
+    }
+
+    /**
+     * A list of Sites a user attended on a certain date
+     * @param $date
+     * @return mixed
+     */
+    public function attendSitesOnDate($date)
+    {
+        return SiteAttendance::whereDate('date', $date)->where('user_id', $this->id)->get();
+    }
+
+    /**
+     * A list of times User has been 'Non-Compliant' on work sites
+     * @return collection
+     */
+    public function nonCompliant($status = '')
+    {
+        $one_year_ago = Carbon::now()->subYear();
+        if ($status != '')
+            return siteCompliance::where('user_id', $this->id)->where('reason', '1')->where('status', $status)->where('archive', '0')->whereDate('date', '>', $one_year_ago)->orderBy('date')->get();
+
+        return siteCompliance::where('user_id', $this->id)->where('reason', '1')->where('archive', '0')->whereDate('date', '>', $one_year_ago)->orderBy('date')->get();
+    }
+
+    /**
+     * A User has multiple ToDoo tasks
+     */
+    public function todo($status = '')
+    {
+        $todo_ids = TodoUser::where('user_id', $this->id)->pluck('todo_id')->toArray();
+
+        return ($status != '') ? Todo::whereIn('id', $todo_ids)->where('status', $status)->orderBy('due_at')->get() : Todo::whereIn('id', $todo_ids)->orderBy('due_at')->get();
+    }
+
+    /**
+     * A User has multiple ToDoo tasks of Type (x)
+     */
+    public function todoType($type, $status = '')
+    {
+        $todo_ids = TodoUser::where('user_id', $this->id)->pluck('todo_id')->toArray();
+
+        return ($status != '') ? Todo::whereIn('id', $todo_ids)->where('type', $type)->where('status', $status)->orderBy('due_at')->get() : Todo::whereIn('id', $todo_ids)->orderBy('due_at')->get();
+    }
+
+    /**
+     * A User has multiple Toolbox Talks
+     */
+    public function toolboxs($status = '')
+    {
+        $todos = ($status) ? Todo::where('type', 'toolbox')->where('status', $status)->get() : Todo::where('type', 'toolbox')->get();
+
+        $toolbox_assigned = [];
+        foreach ($todos as $todo) {
+            if (in_array($this->id, $todo->assignedTo()->pluck('id')->toArray()))
+                $toolbox_assigned[] = $todo->type_id;
+        }
+
+        return ToolboxTalk::find($toolbox_assigned);
+    }
+
+    /**
+     * A User has multiple Notify Alerts
+     */
+    public function notify()
+    {
+        $today = Carbon::today();
+        $notifys = Notify::where('from', '<=', $today)->where('to', '>=', $today)->get();
+
+        $notify_ids = [];
+        foreach ($notifys as $notify) {
+            if ($notify->action == 'many' && in_array($this->id, $notify->assignedTo()->pluck('id')->toArray()))
+                $notify_ids[] = $notify->id;
+            else if (!$notify->isOpenedBy($this) && in_array($this->id, $notify->assignedTo()->pluck('id')->toArray()))
+                $notify_ids[] = $notify->id;
+        }
+
+        return Notify::find($notify_ids);
+    }
+
+    /**
+     * Get the owner of record  (getter)
+     *
+     * @return string;
+     */
+    public function getOwnedByAttribute()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Display records last update_by + date
+     *
+     * @return string
+     */
+    public function displayUpdatedBy()
+    {
+        $user = User::findOrFail($this->updated_by);
+
+        return '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
+        '<span style="font-weight: 400">By:</span> ' . $user->fullname;
+    }
+
+    /**
+     * Set the phone number to AU format  (mutator)
+     *
+     * @param $phone
+     */
+    public function setPhoneAttribute($phone)
+    {
+        $this->attributes['phone'] = format_phone('au', $phone);
+    }
+
+    /**
+     * Set the suburb to uppercase format  (mutator)
+     *
+     * @param $value
+     */
+    public function setSuburbAttribute($value)
+    {
+        $this->attributes['suburb'] = strtoupper($value);
+    }
+
+    /**
+     * Get the Full name (first + last)   (getter)
+     *
+     * @return string;
+     */
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getSuburbStatePostcodeAttribute()
+    {
+        $string = strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return $string;
+    }
+
+    /**
+     * Get the parent permission  (getter)
+     */
+    public function getParentPermissionsAttribute()
+    {
+        $array = DB::table('permission_user AS pu')
+            ->select('permission_id')
+            ->where('pu.user_id', $this->id)
+            ->where('p.model', 'p')
+            ->join('permissions AS p', 'pu.permission_id', '=', 'p.id')
+            ->pluck('pu.permission_id')->toArray();
+
+        return $array;
+    }
+
+
+    /**
+     * A user belongs to many roles
+     */
+    public function roles2()
+    {
+        return $this->belongsToMany('App\Models\Misc\Role2', 'role_user', 'user_id', 'role_id');
+    }
+
+    /**
+     * A user belongs to many permission
+     */
+    public function permissions2($company_id)
+    {
+        return DB::table('permission_user')->where(['user_id' => $this->id, 'company_id' => $company_id])->get();
+    }
+
+
+    /**
+     * The "booting" method of the model.
+     *
+     * Overrides parent function
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        if (Auth::check()) {
+            // create a event to happen on creating
+            static::creating(function ($table) {
+                $table->created_by = Auth::user()->id;
+                $table->updated_by = Auth::user()->id;
+            });
+
+            // create a event to happen on updating
+            static::updating(function ($table) {
+                $table->updated_by = Auth::user()->id;
+            });
+        }
+    }
+}
+

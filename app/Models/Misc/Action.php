@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Models\Misc;
+
+use URL;
+use Mail;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+class Action extends Model {
+
+    protected $table = 'actions';
+    protected $fillable = ['table', 'table_id', 'todo_id', 'action', 'attachment', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+
+    /**
+     * A Action belongs to a Parent Record
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function record()
+    {
+        if ($this->table == 'site_hazards')
+            return $this->belongsTo('App\Models\Site\SiteHazards', 'table_id');
+        if ($this->table == 'site_qa')
+            return $this->belongsTo('App\Models\Site\SiteQa', 'table_id');
+        if ($this->table == 'site_asbestos')
+            return $this->belongsTo('App\Models\Site\SiteAsbestos', 'table_id');
+    }
+
+    /**
+     * A Action 'may' belong to a Todoo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function todo()
+    {
+        return ($this->todo_id) ? $this->belongsTo('App\Models\Comms\Todo', 'todo_id') : null;
+    }
+
+    /**
+     * A Action belongs to a user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'created_by');
+    }
+
+
+    /**
+     * Get the owner of record   (getter)
+     *
+     * @return string;
+     */
+    public function getOwnedByAttribute()
+    {
+        return $this->record->owned_by;
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * Overrides parent function
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        if (Auth::check()) {
+            // create a event to happen on creating
+            static::creating(function ($table) {
+                $table->created_by = Auth::user()->id;
+                $table->updated_by = Auth::user()->id;
+            });
+
+            // create a event to happen on updating
+            static::updating(function ($table) {
+                $table->updated_by = Auth::user()->id;
+            });
+        }
+    }
+}

@@ -1,0 +1,698 @@
+<?php
+
+namespace App\Models\Site;
+
+use DB;
+use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\Planner\SiteAttendance;
+use App\Models\Site\Planner\SiteRoster;
+use App\Models\Site\Planner\SiteCompliance;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\User;
+use App\Models\Site\Planner\Task;
+
+class Site extends Model {
+
+    protected $table = 'sites';
+    protected $fillable = [
+        'name', 'code', 'slug',
+        'address', 'address2', 'suburb', 'state', 'postcode', 'country',
+        'photo', 'notes', 'client_id', 'client_phone', 'client_phone2', 'client_phone_desc', 'client_phone2_desc',
+        'contract_sent', 'contract_signed', 'deposit_paid', 'engineering', 'construction', 'hbcf', 'consultant_name',
+        'completion_signed', 'completed', 'status', 'created_by', 'updated_by'];
+    protected $dates = ['completed', 'contract_sent', 'contract_signed', 'deposit_paid', 'completion_signed'];
+
+    /**
+     * A Site belongs to a client
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Misc\Client');
+    }
+
+    /**
+     * A Site has many SiteAttendance
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function attendance()
+    {
+        return $this->hasMany('App\Models\Site\Planner\SiteAttendance');
+    }
+
+    /**
+     * A Site has many SiteHazards
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function hazards()
+    {
+        return $this->hasMany('App\Models\Site\SiteHazard');
+    }
+
+    /**
+     * Does a Site has any open SiteHazards
+     *
+     * @return bool
+     */
+    public function hasHazardsOpen()
+    {
+        return $this->hazards->filter(function ($record) {
+            return $record->status;
+        })->count();
+    }
+
+    /**
+     * A Site has open SiteHazards
+     *
+     * @return bool
+     */
+    public function hazardsOpen()
+    {
+        return $this->hazards->filter(function ($record) {
+            return $record->status;
+        });
+    }
+
+    /**
+     * A Site has many SiteAccidents
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accidents()
+    {
+        return $this->hasMany('App\Models\Site\SiteAccident');
+    }
+
+    /**
+     * A Site has open SiteAccidents
+     *
+     * @return bool
+     */
+    public function hasAccidentsOpen()
+    {
+        return $this->accidents->filter(function ($record) {
+            return $record->status;
+        })->count();
+    }
+
+    /**
+     * A Site has many Documents
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function docs()
+    {
+        return $this->hasMany('App\Models\Site\SiteDoc');
+    }
+
+
+    /**
+     * A Site has many documents of certain 'type'
+     */
+    public function docsOfType($type, $status = '1')
+    {
+        return $this->docs->filter(function ($record) use ($status, $type) {
+            return $record->status == $status && $record->type == $type;
+        });
+    }
+
+    /**
+     * A Site has many QA Reports
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function qaReports()
+    {
+        return $this->hasMany('App\Models\Site\SiteQa');
+    }
+
+    /**
+     * A Site has QA Report ($x)
+     *
+     * @return bool
+     */
+    public function hasTemplateQa($id)
+    {
+        return $this->qaReports->contains('master_id', $id);
+    }
+
+    /**
+     * A Site has many supervisors
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function supervisors()
+    {
+        return $this->belongsToMany('App\User', 'site_supervisor', 'site_id', 'user_id');
+    }
+
+    /**
+     * A dropdown list of supervisors for the site.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function supervisorsSelect($prompt = '')
+    {
+        $array = [];
+        foreach ($this->supervisors as $user) {
+            if ($user->status)
+                $array[$user->id] = $user->fullname;
+        }
+        asort($array);
+
+        return ($prompt) ? $array = array('' => 'Select supervisor(s)') + $array : $array;
+    }
+
+    /**
+     * An array of supervisors emails for this site
+     *
+     * @return string
+     */
+    public function supervisorsEmails()
+    {
+        $array = [];   // || in_array($super->id, $user->subSupervisors()->pluck('id')->toArray()
+        foreach ($this->supervisors as $user) {
+            if ($user->status && validEmail($user->email))
+                $array[] = $user->email;
+            foreach ($user->areaSupervisors() as $area) {
+                if ($area->status && validEmail($area->email))
+                    $array[] = $area->email;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * A list of supervisors for this site
+     *
+     * @return string
+     */
+    public function supervisorsSBC()
+    {
+        $string = '';
+        foreach ($this->supervisors as $user) {
+            if ($user->status)
+                $string .= $user->fullname . ', ';
+        }
+
+        return rtrim($string, ', ');
+    }
+
+    /**
+     * A list of supervisors for this site
+     *
+     * @return string
+     */
+    public function supervisorsContactSBC()
+    {
+        $string = '';
+        foreach ($this->supervisors as $user) {
+            if ($user->status)
+                $string .= $user->fullname . ' (' . $user->phone . '), ';
+        }
+
+        return rtrim($string, ', ');
+    }
+
+    /**
+     * A list of supervisors for this site 'first' name only
+     *
+     * @return string
+     */
+    public function supervisorsFirstNameSBC()
+    {
+        $string = '';
+        foreach ($this->supervisors as $user) {
+            if ($user->status)
+                $string .= $user->firstname . ', ';
+        }
+
+        return rtrim($string, ', ');
+    }
+
+    /**
+     * Determines if a User is a Supervisor of this site
+     *
+     * @return string
+     */
+    public function isUserSupervisor($user)
+    {
+        foreach ($this->supervisors as $super) {
+            if ($user->id == $super->id)
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determines if a User is an Area Supervisor of this site
+     *
+     * @return string
+     */
+    public function isSupervisorOrAreaSupervisor($user)
+    {
+        foreach ($this->supervisors as $super) {
+            if ($user->id == $super->id || in_array($super->id, $user->subSupervisors()->pluck('id')->toArray()))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * A Site may have Area Supervisors
+     *
+     * @return collection
+     */
+    public function areaSupervisors()
+    {
+        $area_super_ids = [];
+        foreach ($this->supervisors as $super) {
+            foreach ($super->areaSupervisors() as $area_super) {
+                $area_super_ids[] = $area_super->id;
+            }
+        }
+
+        return User::whereIn('id', array_unique($area_super_ids))->get();
+    }
+
+    /**
+     * An array of area supervisors emails for this site
+     *
+     * @return string
+     */
+    public function areaSupervisorsEmails()
+    {
+        $array = [];
+        foreach ($this->areaSupervisors() as $user) {
+            if ($user->status && validEmail($user->email))
+                $array[] = $user->email;
+            //foreach ($user->areaSupervisors() as $area) {
+            //    if ($area->status && validEmail($area->email))
+            //        $array[] = $area->email;
+            //}
+        }
+
+        return $array;
+    }
+
+    /**
+     * A Site may have Senior Supervisors (Area Supervisors / Construction Managers)
+     *
+     * @return collection
+     */
+		 /*
+    public function seniorSupervisors()
+    {
+        $area_super_ids = $this->areaSupervisors()->pluck('id')->toArray();
+        $con_mgr_ids = [];
+        //$records = DB::table('role_user')->where('role_id', 8)->get();  // Construction Mgrs
+        //foreach ($records as $rec)
+        //    $con_mgr_ids[] = $rec->user_id;
+
+        return User::whereIn('id', array_unique(array_merge($area_super_ids,$con_mgr_ids)))->get();
+    }*/
+
+    /**
+     * An array of senior supervisors emails for this site
+     *
+     * @return string
+     */
+    /*
+    public function seniorSupervisorsEmails()
+    {
+        $array = [];
+        foreach ($this->seniorSupervisors() as $user) {
+            if ($user->status && validEmail($user->email))
+                $array[] = $user->email;
+            //foreach ($user->areaSupervisors() as $area) {
+            //    if ($area->status && validEmail($area->email))
+            //        $array[] = $area->email;
+           // }
+        }
+
+        return $array;
+    }*/
+
+    /**
+     * A SiteAttendance for specific date yyyy-mm-dd
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function onsite($date = '')
+    {
+        if (!$date)
+            $date = Carbon::today()->format('Y-m-d');
+
+        $onsite = SiteAttendance::where('site_id', $this->id)->where('date', 'LIKE', $date . '%')->get();
+
+        return ($onsite->isEmpty()) ? 0 : $onsite;
+    }
+
+
+    /**
+     * Is a specific user onsite
+     *
+     * @return record
+     */
+    public function isUserOnsite($user_id, $date = '')
+    {
+        if (!$date)
+            $date = Carbon::today()->format('Y-m-d');
+
+        return SiteAttendance::where('site_id', $this->id)->where('user_id', $user_id)->whereDate('date', '=', $date)->first();
+    }
+
+    /**
+     * Is a specific user on site roster
+     *
+     * @return record
+     */
+    public function isUserOnRoster($user_id, $date = '')
+    {
+        if (!$date)
+            $date = Carbon::today()->format('Y-m-d');
+
+        $onsite = SiteRoster::where('site_id', $this->id)->where('user_id', $user_id)->whereDate('date', '=', $date)->first();
+
+        return ($onsite) ? $onsite->id : 0;
+    }
+
+    /**
+     * Is a specific user on site non-attendee list (Compliance table)
+     *
+     * @return record
+     */
+    public function isUserOnCompliance($user_id, $date = '')
+    {
+        if (!$date)
+            $date = Carbon::today()->format('Y-m-d');
+
+        $oncomply = SiteCompliance::where('site_id', $this->id)
+            ->where('user_id', $user_id)
+            ->whereDate('date', '=', $date)
+            ->first();
+
+        return ($oncomply) ? $oncomply->id : 0;
+    }
+
+    /**
+     * Is a company on site planner
+     *
+     * @return record
+     */
+    public function isCompanyOnPlanner($company_id, $date = '')
+    {
+        if (!$date)
+            $date = Carbon::today()->format('Y-m-d');
+
+        $carbon_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+        $weekend = ($carbon_date->isWeekend() ? 1 : 0);
+
+        $onplan = SitePlanner::where('site_id', $this->id)
+            ->where('entity_type', 'c')
+            ->where('entity_id', $company_id)
+            ->whereDate('from', '<=', $date)
+            ->whereDate('to', '>=', $date)
+            ->where('weekend', $weekend)
+            ->first();
+
+        return ($onplan) ? true : false;
+    }
+
+    /**
+     * Company Tasks for given site + date
+     *
+     * @return array
+     */
+    public function entityTasksOnDate($entity_type, $entity_id, $date)
+    {
+        $carbon_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+        $weekend = ($carbon_date->isWeekend() ? 1 : 0);
+        $planner = SitePlanner::where('site_id', $this->id)
+            ->where('entity_type', $entity_type)->where('entity_id', $entity_id)
+            ->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)
+            ->where('weekend', $weekend)->get();
+
+        $tasks = [];
+        foreach ($planner as $plan) {
+            if ($plan->task_id) {
+                $task = Task::find($plan->task_id);
+                $tasks[$task->id] = ($task) ? $task->name : 'Task Unassigned';
+            }
+
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * Trades for given site + date
+     *
+     * @return array
+     */
+    public function entityTradesOnDate($entity_type, $entity_id, $date)
+    {
+        $carbon_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+        $weekend = ($carbon_date->isWeekend() ? 1 : 0);
+        $planner = SitePlanner::where('site_id', $this->id)
+            ->where('entity_type', $entity_type)->where('entity_id', $entity_id)
+            ->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)
+            ->where('weekend', $weekend)->get();
+
+        $trades = [];
+        foreach ($planner as $plan) {
+            if ($plan->task_id) {
+                $task = Task::find($plan->task_id);
+                if (!isset($trades[$task->trade_id]))
+                    $trades[$task->trade_id] = $task->trade->name;
+            }
+
+        }
+
+        return $trades;
+    }
+
+    /**
+     * Company Tasks for given site + date
+     *
+     * @return array
+     */
+    public function anyTasksOnDate($date)
+    {
+        $carbon_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+        $weekend = ($carbon_date->isWeekend() ? 1 : 0);
+        $planner = SitePlanner::where('site_id', $this->id)
+            ->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)
+            ->where('weekend', $weekend)->first();
+        $onplan = SitePlanner::where('site_id', $this->id)
+            ->whereDate('from', '<=', $date)
+            ->whereDate('to', '>=', $date)
+            ->where('weekend', $weekend)
+            ->first();
+
+        return ($planner) ? true : false;
+    }
+
+    /**
+     * Return status text name
+     *
+     * @return string
+     */
+    public function statusText($colour = '')
+    {
+        $status_text = ['0' => 'Completed', '1' => "Active", '-1' => "Upcoming"];
+
+        if ($colour) {
+            switch ($this->status) {
+                case '0':
+                    return '<span class="label label-sm label-danger">' . $status_text[$this->status] . '</span>';
+                case '1':
+                    return '<span class="label label-sm label-success">' . $status_text[$this->status] . '</span>';
+                case '-1':
+                    return '<span class="label label-sm label-warning">' . $status_text[$this->status] . '</span>';
+            }
+
+        }
+
+        return $status_text[$this->status];
+    }
+
+    /**
+     * Get the 'START' job task date if it exists  (getter)
+     *
+     * @return string;
+     */
+    public function getJobStartAttribute()
+    {
+        $startTask = SitePlanner::where('site_id', $this->id)->where('task_id', '11')->first();
+
+        return ($startTask) ? $startTask->from : null;
+    }
+
+    /**
+     * Get the first task date if it exists  (getter)
+     *
+     * @return string;
+     */
+    public function getJobFirstTaskAttribute()
+    {
+        $firstTask = SitePlanner::where('site_id', $this->id)->orderBy('from')->first();
+
+        return ($firstTask) ? $firstTask->from : null;
+    }
+
+    /**
+     * Get the owner of record  (getter)
+     *
+     * @return string;
+     */
+    public function getOwnedByAttribute()
+    {
+        return $this->client->owned_by;
+    }
+
+    /**
+     * Return records last update_by + date
+     *
+     * @return string
+     */
+    public function displayUpdatedBy()
+    {
+        $user = User::findOrFail($this->updated_by);
+
+        return '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
+        '<span style="font-weight: 400">By:</span> ' . $user->fullname;
+    }
+
+    /**
+     * Set the resolved_date  (mutator)
+     *
+     *  - Fix for Carbon saving 0000-00-00 00:00:00 format
+     *  - otherwise trys to save as -0001-11-30 06:12:32
+     */
+    public function setCompletedAttribute($date)
+    {
+        $date == "0000-00-00 00:00:00" ? "0000-00-00 00:00:00" : $date;
+        $this->attributes['completed'] = $date;
+    }
+
+    /**
+     * Set the name + create slug attributes  (mutator)
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
+        $this->attributes['slug'] = getUniqueSlug($this, $value);
+    }
+
+    /**
+     * Set the suburb to uppercase format  (mutator)
+     */
+    public function setSuburbAttribute($value)
+    {
+        $this->attributes['suburb'] = strtoupper($value);
+    }
+
+    /**
+     * Set the phone number to AU format  (mutator)
+     *
+     * @param $phone
+     */
+    public function setClientPhoneAttribute($phone)
+    {
+        $this->attributes['client_phone'] = format_phone('au', $phone);
+    }
+
+    /**
+     * Set the phone number to AU format  (mutator)
+     *
+     * @param $phone
+     */
+    public function setClientPhone2Attribute($phone)
+    {
+        $this->attributes['client_phone2'] = format_phone('au', $phone);
+    }
+
+    /**
+     * Get Shorten Name   (getter)
+     *
+     * @return string;
+     */
+
+    public function getNameShortAttribute()
+    {
+        return substr($this->name, 0, 15);
+    }
+
+    /**
+     * Get site reference (code + name + suburb)   (getter)
+     *
+     * @return string;
+     */
+
+    public function getRefAttribute()
+    {
+        return '#' . $this->code . ' ' . $this->name . ' @' . $this->suburb;
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getSuburbStatePostcodeAttribute()
+    {
+        $string = strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return $string;
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getFullAddressAttribute($value)
+    {
+        $string = $this->getSuburbStatePostcodeAttribute();
+        if ($this->attributes['address'])
+            $string = $this->attributes['address'] . ', ' . $string;
+
+        return $string;
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * Overrides parent function
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        if (Auth::check()) {
+            // create a event to happen on creating
+            static::creating(function ($table) {
+                $table->created_by = Auth::user()->id;
+                $table->updated_by = Auth::user()->id;
+            });
+
+            // create a event to happen on updating
+            static::updating(function ($table) {
+                $table->updated_by = Auth::user()->id;
+            });
+        }
+    }
+}
