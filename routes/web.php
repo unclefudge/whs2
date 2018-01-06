@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Check-in
 
-    // User Routes
+    // User Routes 
     Route::get('user/dt/users', 'UserController@getUsers');
     Route::get('user/dt/contractors', 'UserController@getContractors');
     Route::get('user/{username}/settings', 'UserController@showSettings');
