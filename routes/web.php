@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Check-in
 
-    // User Routes 
+    // User Routes
     Route::get('user/dt/users', 'UserController@getUsers');
     Route::get('user/dt/contractors', 'UserController@getContractors');
     Route::get('user/{username}/settings', 'UserController@showSettings');
@@ -313,6 +313,11 @@ Route::get('cron/expired-swms', 'Misc\CronController@expiredSWMS');
 
 Route::get('test/cal', 'Misc\PagesController@testcal');
 Route::get('manage/updateroles', 'Misc\PagesController@updateRoles');
+
+// PHP Info
+Route::get('php-info', function () {
+    phpinfo();
+});
 
 
 
