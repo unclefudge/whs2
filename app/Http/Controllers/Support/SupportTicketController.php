@@ -239,7 +239,8 @@ class SupportTicketController extends Controller {
 
                 return $ticket->niceeta;
             })
-            ->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            //->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            ->rawColumns(['view'])
             ->make(true);
 
         return $dt;
@@ -289,7 +290,8 @@ class SupportTicketController extends Controller {
 
                 return $ticket->hours . ' hr';
             })
-            ->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            //->filterColumn('fullname', 'whereRaw', "CONCAT(users . firstname, ' ', users . lastname) like ? ", [" % $1 % "])
+            ->rawColumns(['view'])
             ->make(true);
 
         return $dt;

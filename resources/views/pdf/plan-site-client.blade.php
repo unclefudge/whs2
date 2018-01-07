@@ -44,61 +44,68 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
+
+        td.pad5, th.pad5 {
+            padding: 5px !important;
+            line-height: 1em !important;
+        }
     </style>
 </head>
 
 <body>
 <div class="container">
+    <?php $site_count = 0; ?>
     @foreach($sitedata as $siteplan)
-        <?php $rowOdd = '1' ?>
-        <div class="page22">
-            <?php $site = App\Models\Site\Site::find($siteplan->site_id) ?>
-            <div class="row">
-                <div class="col-xs-8">
-                    <h3 style="margin: 0px">{{ $site->name }}
-                        <small>site: {{ $site->code }}</small>
-                    </h3>{{ $site->address }}, {{  $site->suburb_state_postcode }}</div>
-                <div class="col-xs-4">
-                    <h6><b>Supervisor:</b> {{ $site->supervisorsSBC() }}</h6>
-                </div>
+        <?php $site_count ++ ?>
+        <?php $site = App\Models\Site\Site::find($siteplan->site_id) ?>
+        <div class="row">
+            <div class="col-xs-8">
+                <h3 style="margin: 0px">{{ $site->name }}
+                    <small>site: {{ $site->code }}</small>
+                </h3>{{ $site->address }}, {{  $site->suburb_state_postcode }}</div>
+            <div class="col-xs-4">
+                <h6><b>Supervisor:</b> {{ $site->supervisorsSBC() }}</h6>
             </div>
-            <?php $rowOdd = !$rowOdd ?>
-            <hr style="margin: 5px 0px">
-            @foreach($siteplan->weeks as $week_num => $week_data )
-                <div class="row">
-                    <div class="col-xs-12"><h6 style="margin: 0px 0px 5px 0px"><b>Week {{ $week_num }}</b></h6></div>
-                </div>
-                <table class="table table-striped table-bordered table-hover order-column" style="padding: 0px; margin: 0px">
-                    @foreach($week_data as $row )
-                        <?php $cell_array = explode(' ', trim($row[1])) ?>
-                        @if($cell_array[0] == 'MONDAY' || $cell_array[0] == 'TUESDAY' || $cell_array[0] == 'WEDNESDAY' || $cell_array[0] == 'THURSDAY' || $cell_array[0] == 'FRIDAY')
-                            <thead>
-                            <tr style="background-color: #f0f6fa; font-weight: bold;">
-                                <th width="16%">{!! $row[1] !!}</th>
-                                <th width="16%">{!! $row[2] !!}</th>
-                                <th width="16%">{!! $row[3] !!}</th>
-                                <th width="16%">{!! $row[4] !!}</th>
-                                <th width="16%">{!! $row[5] !!}</th>
-                            </tr>
-                            </thead>
-                        @else
-                            <tr>
-                                @if($row[1] == 'NOTHING-ON-PLAN')
-                                    <td colspan="5">No tasks for this week</td>
-                                @else
-                                    <td width="16%">{!! $row[1] !!}</td>
-                                    <td width="16%">{!! $row[2] !!}</td>
-                                    <td width="16%">{!! $row[3] !!}</td>
-                                    <td width="16%">{!! $row[4] !!}</td>
-                                    <td width="16%">{!! $row[5] !!}</td>
-                                @endif
-                            </tr>
-                        @endif
-                    @endforeach
-                </table>
-                <br>
-            @endforeach
         </div>
+
+        <hr style="margin: 5px 0px">
+        @foreach($siteplan->weeks as $week_num => $week_data )
+            <div class="row">
+                <div class="col-xs-12"><h6 style="margin: 0px 0px 5px 0px"><b>Week {{ $week_num }}</b></h6></div>
+            </div>
+            <table class="table table-striped table-bordered table-hover order-column" style="padding: 0px; margin: 0px">
+                @foreach($week_data as $row )
+                    <?php $cell_array = explode(' ', trim($row[1])) ?>
+                    @if($cell_array[0] == 'MONDAY' || $cell_array[0] == 'TUESDAY' || $cell_array[0] == 'WEDNESDAY' || $cell_array[0] == 'THURSDAY' || $cell_array[0] == 'FRIDAY')
+                        <thead>
+                        <tr style="background-color: #f0f6fa; font-weight: bold;">
+                            <th width="16%" class="pad5">{!! $row[1] !!}</th>
+                            <th width="16%" class="pad5">{!! $row[2] !!}</th>
+                            <th width="16%" class="pad5">{!! $row[3] !!}</th>
+                            <th width="16%" class="pad5">{!! $row[4] !!}</th>
+                            <th width="16%" class="pad5">{!! $row[5] !!}</th>
+                        </tr>
+                        </thead>
+                    @else
+                        <tr>
+                            @if($row[1] == 'NOTHING-ON-PLAN')
+                                <td colspan="5" class="pad5">No tasks for this week</td>
+                            @else
+                                <td width="16%" class="pad5">{!! $row[1] !!}</td>
+                                <td width="16%" class="pad5">{!! $row[2] !!}</td>
+                                <td width="16%" class="pad5">{!! $row[3] !!}</td>
+                                <td width="16%" class="pad5">{!! $row[4] !!}</td>
+                                <td width="16%" class="pad5">{!! $row[5] !!}</td>
+                            @endif
+                        </tr>
+                    @endif
+                @endforeach
+            </table>
+            <br>
+        @endforeach
+        @if ($site_count < count($sitedata))
+            <div class="page"></div>
+        @endif
     @endforeach
 </div>
 </body>

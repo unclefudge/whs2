@@ -44,15 +44,20 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
+        td.pad5, th.pad5 {
+            padding: 5px !important;
+            line-height: 1em !important;
+        }
+
     </style>
 </head>
 
 <body>
 <div class="container">
+    <?php $site_count = 0; ?>
     @foreach($sitedata as $siteplan)
-        <?php $rowOdd = '1' ?>
-        <div class="page22">
             <?php $company = App\Models\Company\Company::find($siteplan->company_id) ?>
+            <?php $site_count ++ ?>
             <div class="row">
                 <div class="col-xs-8">
                     <h3 style="margin: 0px">{{ $company->name_alias }}
@@ -60,7 +65,6 @@
                 <div class="col-xs-4">
                 </div>
             </div>
-            <?php $rowOdd = !$rowOdd ?>
             <hr style="margin: 5px 0px">
 
             @foreach($siteplan->weeks as $week_num => $week_data )
@@ -72,25 +76,25 @@
                         @if($row[0] == 'SITE')
                             <thead>
                             <tr style="background-color: #f0f6fa; font-weight: bold;">
-                                <th width="16%">{!! $row[0] !!}</th>
-                                <th width="16%">{!! $row[1] !!}</th>
-                                <th width="16%">{!! $row[2] !!}</th>
-                                <th width="16%">{!! $row[3] !!}</th>
-                                <th width="16%">{!! $row[4] !!}</th>
-                                <th width="16%">{!! $row[5] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[0] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[1] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[2] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[3] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[4] !!}</th>
+                                <th width="16%" class="pad5">{!! $row[5] !!}</th>
                             </tr>
                             </thead>
                         @else
                             <tr>
                                 @if($row[0] == 'NOTHING-ON-PLAN')
-                                    <td colspan="6">No tasks for this week</td>
+                                    <td colspan="6" class="pad5">No tasks for this week</td>
                                 @else
-                                    <td width="16%">{!! $row[0] !!}</td>
-                                    <td width="16%">{!! $row[1] !!}</td>
-                                    <td width="16%">{!! $row[2] !!}</td>
-                                    <td width="16%">{!! $row[3] !!}</td>
-                                    <td width="16%">{!! $row[4] !!}</td>
-                                    <td width="16%">{!! $row[5] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[0] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[1] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[2] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[3] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[4] !!}</td>
+                                    <td width="16%" class="pad5">{!! $row[5] !!}</td>
                                 @endif
                             </tr>
                         @endif
@@ -118,8 +122,9 @@
                 </tr>
             @endforeach
 
-
-        </div>
+            @if ($site_count < count($sitedata))
+                <div class="page"></div>
+            @endif
     @endforeach
 </div>
 </body>

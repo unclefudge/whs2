@@ -43,6 +43,11 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
+        td.pad5 {
+            padding: 5px !important;
+            line-height: 1em !important;
+        }
+
     </style>
 </head>
 
@@ -75,18 +80,18 @@
         <tbody>
         @foreach($startdata as $row)
             <tr>
-                <td>{!! $row['date'] !!}</td>
-                <td>{!! $row['code'] !!}</td>
-                <td>{!! $row['name'] !!}</td>
-                <td>{!! $row['supervisor'] !!}</td>
-                <td>{!! $row['company'] !!}</td>
-                <td>{!! $row['contract_sent'] !!}</td>
-                <td>{!! $row['contract_signed'] !!}</td>
-                <td>{!! $row['deposit_paid'] !!}</td>
-                <td>{!! $row['eng'] !!}</td>
-                <td>{!! $row['cc'] !!}</td>
-                <td>{!! $row['hbcf'] !!}</td>
-                <td>{!! $row['consultant'] !!}</td>
+                <td class="pad5">{!! $row['date'] !!}</td>
+                <td class="pad5">{!! $row['code'] !!}</td>
+                <td class="pad5">{!! $row['name'] !!}</td>
+                <td class="pad5">{!! $row['supervisor'] !!}</td>
+                <td class="pad5">{!! $row['company'] !!}</td>
+                <td class="pad5">{!! $row['contract_sent'] !!}</td>
+                <td class="pad5">{!! $row['contract_signed'] !!}</td>
+                <td class="pad5">{!! $row['deposit_paid'] !!}</td>
+                <td class="pad5">{!! $row['eng'] !!}</td>
+                <td class="pad5">{!! $row['cc'] !!}</td>
+                <td class="pad5">{!! $row['hbcf'] !!}</td>
+                <td class="pad5">{!! $row['consultant'] !!}</td>
             </tr>
         @endforeach
         </tbody>

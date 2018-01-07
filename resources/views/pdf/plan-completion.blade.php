@@ -43,6 +43,10 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
+        td.pad5, th.pad5 {
+            padding: 5px !important;
+            line-height: 1em !important;
+        }
     </style>
 </head>
 
@@ -58,21 +62,21 @@
     <table class="table table-striped table-bordered table-hover order-column" style="padding: 0px; margin: 0px">
         <thead>
         <tr style="background-color: #f0f6fa; font-weight: bold;">
-            <th width="10%">Completion Date</th>
-            <th width="5%">Job #</th>
-            <th width="15%">Site</th>
-            <th width="15%">Supervisor</th>
-            <th>Prac Papers Signed</th>
+            <th width="10%" class="pad5">Completion Date</th>
+            <th width="5%" class="pad5">Job #</th>
+            <th width="15%" class="pad5">Site</th>
+            <th width="15%" class="pad5">Supervisor</th>
+            <th class="pad5">Prac Papers Signed</th>
         </tr>
         </thead>
         <tbody>
         @foreach($startdata as $row)
             <tr>
-                <td>{!! $row['date'] !!}</td>
-                <td>{!! $row['code'] !!}</td>
-                <td>{!! $row['name'] !!}</td>
-                <td>{!! $row['supervisor'] !!}</td>
-                <td>{!! $row['completion_signed'] !!}</td>
+                <td class="pad5">{!! $row['date'] !!}</td>
+                <td class="pad5">{!! $row['code'] !!}</td>
+                <td class="pad5">{!! $row['name'] !!}</td>
+                <td class="pad5">{!! $row['supervisor'] !!}</td>
+                <td class="pad5">{!! $row['completion_signed'] !!}</td>
             </tr>
         @endforeach
         </tbody>

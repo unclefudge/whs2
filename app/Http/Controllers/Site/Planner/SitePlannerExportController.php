@@ -163,8 +163,14 @@ class SitePlannerExportController extends Controller {
                     foreach ($planner as $plan) {
                         $key = $plan->entity_type . '.' . $plan->entity_id;
                         if (!isset($entities[$key])) {
-                            $entity_name = ($plan->entity_type == 'c') ? Company::find($plan->entity_id)->name : Trade::find($plan->entity_id)->name;
-                            //$entity_name = ($plan->entity_type == 'c') ? Company::find($plan->entity_id)->name : "trade $plan->entity_id";
+                            //$entity_name = ($plan->entity_type == 'c') ? Company::find($plan->entity_id)->name : Trade::find($plan->entity_id)->name;
+                            if ($plan->entity_type == 'c') {
+                                $company = Company::find($plan->entity_id);
+                                $entity_name = ($company) ? $company->name : "Company $plan->entity_id";
+                            } else {
+                                $trade = Trade::find($plan->entity_id);
+                                $entity_name = ($trade) ? $trade->name : "Trade $plan->entity_id";
+                            }
                             $entities[$key] = ['key' => $key, 'entity_type' => $plan->entity_type, 'entity_id' => $plan->entity_id, 'entity_name' => $entity_name,];
                             for ($i = 0; $i < 5; $i ++)
                                 $entities[$key][$dates[$i]] = '';
