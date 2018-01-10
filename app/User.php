@@ -34,10 +34,10 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use App\Traits\UserRolesPermissions;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract{ 
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable, CanResetPassword;
-    use Authorizable; 
+    use Authorizable;
     use UserRolesPermissions;
 
     // The database table used by the model.
@@ -230,7 +230,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
             $site_list = $this->authSites('view.site.hazard')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
-            $user_list =  $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
+            $user_list = $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
 
         if ($status)
             return SiteHazard::where('status', '=', $status)
@@ -260,7 +260,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
             $site_list = $this->authSites('view.site.accident')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
-            $user_list =  $this->authUsers('view.site.accident')->pluck('id')->toArray(); // Else - check users
+            $user_list = $this->authUsers('view.site.accident')->pluck('id')->toArray(); // Else - check users
 
         if ($status != '')
             return SiteAccident::where('status', '=', $status)
@@ -301,7 +301,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function isCompany($company)
     {
-        return ($this->company_id == $company->id) ? true : false;
+        // Get company record if integer
+        if (is_int($company))
+            $company = Company::find($company);
+
+        if ($company)
+            return ($this->company_id == $company->id) ? true : false;
+
+        return false;
     }
 
     /**
@@ -441,6 +448,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @return string;
      */
     public function getFullnameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * Get the Full name (first + last)   (getter)
+     *
+     * @return string;
+     */
+    public function getNameAttribute()
     {
         return $this->firstname . ' ' . $this->lastname;
     }

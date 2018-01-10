@@ -11,7 +11,7 @@ class SiteAccident extends Model {
 
     protected $table = 'site_accidents';
     protected $fillable = [
-        'site_id', 'date', 'name', 'company', 'age', 'occupation', 'location', 'nature',
+        'site_id', 'date', 'supervisor', 'name', 'company', 'age', 'occupation', 'location', 'nature',
         'referred', 'damage', 'info', 'action', 'notes', 'status',
         'resolved_at', 'created_by', 'updated_by', 'created_at', 'updated_at'
     ];
@@ -45,14 +45,14 @@ class SiteAccident extends Model {
     {
         $site = Site::findOrFail($this->site_id);
 
-        $email_to = [];
         if (\App::environment('prod')) {
             $email_roles = notificationsUsersEmailType('site.accident');
             $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles,$email_supers), SORT_REGULAR);
-        }
-        //$email_to[] = env('EMAIL_ME');
-        $email_user = (validEmail(Auth::user()->email)) ?  Auth::user()->email : '';
+            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
+        } else
+            $email_to = [env('EMAIL_DEV')];
+
+        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
         $data = [
             'id'                => $this->id,
             'site'              => $site->name . ' (' . $site->code . ')',

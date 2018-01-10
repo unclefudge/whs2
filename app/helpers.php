@@ -358,6 +358,22 @@ function reformatOldStr($str)
     return $str;
 }
 
+function removeNullValues($array)
+{
+    $newArray = [];
+    if (is_array($array)) {
+        foreach ($array as $key => $value) {
+            if ($value !== null) {
+                $newArray[$key] = $value;
+            }
+        }
+
+        return $newArray;
+    } else
+        return $array;
+
+}
+
 /**
  * Function: sanitize
  * Returns a sanitized string, typically for URLs.

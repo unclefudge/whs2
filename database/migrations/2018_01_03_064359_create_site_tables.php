@@ -15,27 +15,27 @@ class CreateSiteTables extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('name', 100)->nullable();
             $table->string('code')->unique();
             $table->string('slug')->unique();
 
             // Address
-            $table->string('address', 200);
-            $table->string('address2', 200);
-            $table->string('suburb', 150);
-            $table->string('state', 40);
-            $table->string('postcode', 10);
-            $table->string('country', 100);
+            $table->string('address', 200)->nullable();
+            $table->string('address2', 200)->nullable();
+            $table->string('suburb', 150)->nullable();
+            $table->string('state', 40)->nullable();
+            $table->string('postcode', 10)->nullable();
+            $table->string('country', 100)->nullable();
 
-            $table->string('photo', 250);
+            $table->string('photo', 250)->nullable();
 
             // Client fields
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->string('client_phone', 25);
-            $table->string('client_phone_desc', 25);
-            $table->string('client_phone2', 25);
-            $table->string('client_phone2_desc', 25);
+            $table->string('client_phone', 25)->nullable();
+            $table->string('client_phone_desc', 25)->nullable();
+            $table->string('client_phone2', 25)->nullable();
+            $table->string('client_phone2_desc', 25)->nullable();
 
 
             // Admin fields
@@ -46,13 +46,13 @@ class CreateSiteTables extends Migration
             $table->tinyInteger('engineering')->default(0);
             $table->tinyInteger('construction')->default(0);
             $table->tinyInteger('hbcf')->default(0);
-            $table->string('consultant_name', 50);
+            $table->string('consultant_name', 50)->nullable();
 
 
             // Extra fields
-            $table->timestamp('completed');
+            $table->timestamp('completed')->nullable();
             $table->tinyInteger('status')->default(1);
-            $table->text('notes');
+            $table->text('notes')->nullable();
 
 
             // Modify info
@@ -79,15 +79,15 @@ class CreateSiteTables extends Migration
         //
         Schema::create('site_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
+            $table->string('type', 10)->nullable();
             $table->integer('category_id')->unsigned()->nullable();
             $table->integer('site_id')->unsigned()->nullable();
-            $table->string('name', 100);
-            $table->string('attachment', 255);
-            $table->string('reference', 50);
-            $table->string('version', 10);
+            $table->string('name', 100)->nullable();
+            $table->string('attachment', 255)->nullable();
+            $table->string('reference', 50)->nullable();
+            $table->string('version', 10)->nullable();
             $table->tinyInteger('private')->default(0);
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->string('share', 2)->default('b');
             $table->tinyInteger('status')->default(1);
             $table->integer('for_company_id')->unsigned()->nullable();
@@ -106,8 +106,8 @@ class CreateSiteTables extends Migration
 
         Schema::create('site_docs_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
-            $table->string('name', 100);
+            $table->string('type', 10)->nullable();
+            $table->string('name', 100)->nullable();
             $table->integer('parent')->unsigned();
             $table->tinyInteger('private')->default(0);
             $table->tinyInteger('status')->default(1);
@@ -130,14 +130,14 @@ class CreateSiteTables extends Migration
             $table->increments('id');
             $table->integer('site_id')->unsigned();
 
-            $table->text('reason');
+            $table->text('reason')->nullable();
             $table->tinyInteger('action_required')->default(0);
-            $table->text('location');
-            $table->string('source', 250);
+            $table->text('location')->nullable();
+            $table->string('source', 250)->nullable();
             $table->tinyInteger('rating')->default(0);
             $table->tinyInteger('failure')->default(0);
-            $table->string('attachment', 250);
-            $table->text('notes');
+            $table->string('attachment', 250)->nullable();
+            $table->text('notes')->nullable();
 
             $table->tinyInteger('status')->default(1);
             $table->dateTime('resolved_at')->nullable();
@@ -159,19 +159,19 @@ class CreateSiteTables extends Migration
         Schema::create('site_accidents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('site_id')->unsigned();
-            $table->string('supervisor');
-            $table->dateTime('date');
-            $table->string('name', 100);
-            $table->string('company', 100);
-            $table->string('age', 10);
-            $table->string('occupation', 100);
-            $table->text('location');
-            $table->text('nature');
-            $table->string('referred', 50);
-            $table->string('damage', 100);
-            $table->text('info');
-            $table->text('action');
-            $table->text('notes');
+            $table->string('supervisor')->nullable();
+            $table->dateTime('date')->nullable();
+            $table->string('name', 100)->nullable();
+            $table->string('company', 100)->nullable();
+            $table->string('age', 10)->nullable();
+            $table->string('occupation', 100)->nullable();
+            $table->text('location')->nullable();
+            $table->text('nature')->nullable();
+            $table->string('referred', 50)->nullable();
+            $table->string('damage', 100)->nullable();
+            $table->text('info')->nullable();
+            $table->text('action')->nullable();
+            $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->dateTime('resolved_at')->nullable();
 
@@ -191,21 +191,21 @@ class CreateSiteTables extends Migration
         Schema::create('site_asbestos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('site_id')->unsigned()->nullable();
-            $table->string('amount', 10);
+            $table->string('amount', 10)->nullable();
             $table->tinyInteger('friable');
-            $table->string('type', 255);
-            $table->text('location');
+            $table->string('type', 255)->nullable();
+            $table->text('location')->nullable();
             $table->dateTime('date_from')->nullable();
             $table->dateTime('date_to')->nullable();
-            $table->string('hours_from', 50);
-            $table->string('hours_to', 50);
-            $table->string('workers', 10);
+            $table->string('hours_from', 50)->nullable();
+            $table->string('hours_to', 50)->nullable();
+            $table->string('workers', 10)->nullable();
             $table->tinyInteger('equip_overalls')->default(0);
             $table->tinyInteger('equip_mask')->default(0);
             $table->tinyInteger('equip_gloves')->default(0);
             $table->tinyInteger('equip_half_face')->default(0);
             $table->tinyInteger('equip_full_face')->default(0);
-            $table->string('equip_other', 255);
+            $table->string('equip_other', 255)->nullable();
             $table->tinyInteger('method_fencing')->default(0);
             $table->tinyInteger('method_signage')->default(0);
             $table->tinyInteger('method_water')->default(0);
@@ -213,13 +213,13 @@ class CreateSiteTables extends Migration
             $table->tinyInteger('method_barriers')->default(0);
             $table->tinyInteger('method_plastic')->default(0);
             $table->tinyInteger('method_vacuum')->default(0);
-            $table->string('method_other', 255);
-            $table->text('isolation');
+            $table->string('method_other', 255)->nullable();
+            $table->text('isolation')->nullable();
             $table->tinyInteger('register')->default(0);
             $table->tinyInteger('swms')->default(0);
             $table->tinyInteger('inspection')->default(0);
             $table->integer('supervisor_id')->unsigned()->nullable();
-            $table->string('attachment', 255);
+            $table->string('attachment', 255)->nullable();
             $table->integer('company_id')->unsigned()->nullable();
             $table->tinyInteger('status')->default(1);
             $table->dateTime('resolved_at')->nullable();
@@ -239,16 +239,16 @@ class CreateSiteTables extends Migration
         //
         Schema::create('site_qa', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('name', 100)->nullable();
             $table->integer('site_id')->unsigned()->nullable();
-            $table->string('version', 10);
+            $table->string('version', 10)->nullable();
             $table->tinyInteger('master')->default(0);
             $table->integer('master_id')->unsigned()->nullable();
             $table->integer('supervisor_sign_by')->unsigned()->nullable();
             $table->timestamp('supervisor_sign_at')->nullable();
             $table->integer('manager_sign_by')->unsigned();
             $table->timestamp('manager_sign_at')->nullable();
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->string('share', 2)->default('b');
             $table->tinyInteger('status')->default(0);
             $table->integer('company_id')->unsigned()->nullable();
@@ -267,7 +267,7 @@ class CreateSiteTables extends Migration
             $table->increments('id');
             $table->integer('doc_id')->unsigned();
             $table->integer('task_id')->unsigned()->nullable();
-            $table->text('name');
+            $table->text('name')->nullable();
             $table->integer('order')->unsigned();
             $table->tinyInteger('super')->default(0);
             $table->tinyInteger('master')->default(0);
@@ -292,11 +292,11 @@ class CreateSiteTables extends Migration
         //
         Schema::create('actions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('table', 50);
+            $table->string('table', 50)->nullable();
             $table->integer('table_id')->unsigned();
             $table->integer('todo_id')->unsigned()->nullable();
-            $table->text('action');
-            $table->string('attachment', 250);
+            $table->text('action')->nullable();
+            $table->string('attachment', 250)->nullable();
 
             // Modify info
             $table->integer('created_by')->unsigned();

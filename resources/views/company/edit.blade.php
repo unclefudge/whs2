@@ -21,9 +21,37 @@
     </ul>
     @stop
 
+
     @section('content')
             <!-- BEGIN PAGE CONTENT INNER -->
     <div class="page-content-inner">
+        @if ($company->status == 2 && $company->signup_step == 2)
+            {{-- Company Signup Progress --}}
+            <div class="mt-element-step">
+                <div class="row step-line" id="steps">
+                    <div class="col-md-3 mt-step-col first active">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
+                        <div class="mt-step-content font-grey-cascade">Register</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col">
+                        <div class="mt-step-number bg-white font-grey">2</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
+                        <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col">
+                        <div class="mt-step-number bg-white font-grey">3</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Users</div>
+                        <div class="mt-step-content font-grey-cascade">Add users</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col last">
+                        <div class="mt-step-number bg-white font-grey">4</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -43,6 +71,9 @@
                             <div class="col-md-12">
                                 {!! Form::model($company, ['method' => 'PATCH', 'action' => ['Company\CompanyController@update', $company->id]]) !!}
                                 {!! Form::hidden('id', $company->id) !!}
+                                @if ($company->status == 2 && $company->signup_step == 2)
+                                    {!! Form::text('signup_step', 3) !!}
+                                @endif
                                 <div class="form-body">
                                     {{-- Inactive Company --}}
                                     @if(!$company->status)
@@ -61,18 +92,20 @@
                                         <div class="row">
                                             <div class="col-md-5">
                                                 <div class="form-group {!! fieldHasError('name', $errors) !!}">
-                                                    {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::label('name', 'Company Name', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('name', $errors) !!}
                                                 </div>
                                             </div>
-                                            <div class="col-md-5">
-                                                <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
-                                                    {!! Form::label('nickname', 'Preferred Name', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('nickname', null, ['class' => 'form-control']) !!}
-                                                    {!! fieldErrorMessage('nickname', $errors) !!}
+                                            @if (Auth::user()->company_id == $company->reportsToCompany()->id)
+                                                <div class="col-md-5">
+                                                    <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
+                                                        {!! Form::label('nickname', 'Preferred Name', ['class' => 'control-label']) !!}
+                                                        {!! Form::text('nickname', null, ['class' => 'form-control']) !!}
+                                                        {!! fieldErrorMessage('nickname', $errors) !!}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                             @if(Auth::user()->allowed2('del.company', $company))
                                                 <div class="col-md-2 pull-right">
                                                     <div class="form-group {!! fieldHasError('status', $errors) !!}">
@@ -103,14 +136,14 @@
                                             <div class="col-md-5">
                                                 <div class="form-group {!! fieldHasError('address', $errors) !!}">
                                                     {!! Form::label('address', 'Address', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('address', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('address', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('address', $errors) !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group {!! fieldHasError('suburb', $errors) !!}">
                                                     {!! Form::label('suburb', 'Suburb', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('suburb', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('suburb', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('suburb', $errors) !!}
                                                 </div>
                                             </div>
@@ -118,14 +151,14 @@
                                                 <div class="form-group {!! fieldHasError('state', $errors) !!}">
                                                     {!! Form::label('state', 'State', ['class' => 'control-label']) !!}
                                                     {!! Form::select('state', $ozstates::all(),
-                                                     'NSW', ['class' => 'form-control bs-select']) !!}
+                                                     'NSW', ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('state', $errors) !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group {!! fieldHasError('postcode', $errors) !!}">
                                                     {!! Form::label('postcode', 'Postcode', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('postcode', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('postcode', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('postcode', $errors) !!}
                                                 </div>
                                             </div>
@@ -136,14 +169,14 @@
                                             <div class="col-md-3">
                                                 <div class="form-group {!! fieldHasError('phone', $errors) !!}">
                                                     {!! Form::label('phone', 'Phone', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('phone', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('phone', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('phone', $errors) !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="form-group {!! fieldHasError('email', $errors) !!}">
                                                     {!! Form::label('email', 'Email', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('email', null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('email', $errors) !!}
                                                 </div>
                                             </div>
@@ -155,18 +188,20 @@
                                                 <div class="form-group {!! fieldHasError('primary_user', $errors) !!}">
                                                     {!! Form::label('primary_user', 'Primary User Contact', ['class' => 'control-label']) !!}
                                                     {!! Form::select('primary_user', $company->usersSelect('prompt'),
-                                                         null, ['class' => 'form-control bs-select']) !!}
+                                                         null, ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('primary_user', $errors) !!}
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
-                                                    {!! Form::label('secondary_user', 'Secondary User Contact', ['class' => 'control-label']) !!}
-                                                    {!! Form::select('secondary_user', $company->usersSelect('prompt'),
-                                                         null, ['class' => 'form-control bs-select']) !!}
-                                                    {!! fieldErrorMessage('secondary_user', $errors) !!}
+                                            @if (!($company->status == 2 && $company->signup_step == 2))
+                                                <div class="col-md-6">
+                                                    <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
+                                                        {!! Form::label('secondary_user', 'Secondary User Contact', ['class' => 'control-label']) !!}
+                                                        {!! Form::select('secondary_user', $company->usersSelect('prompt'),
+                                                             null, ['class' => 'form-control bs-select']) !!}
+                                                        {!! fieldErrorMessage('secondary_user', $errors) !!}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </div>
 
                                         {{-- Business Details --}}
@@ -176,7 +211,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group {!! fieldHasError('abn', $errors) !!}">
                                                     {!! Form::label('abn', 'ABN', ['class' => 'control-label']) !!}
-                                                    {!! Form::text('abn', $company->abn, ['class' => 'form-control']) !!}
+                                                    {!! Form::text('abn', $company->abn, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('abn', $errors) !!}
                                                 </div>
                                             </div>
@@ -185,7 +220,7 @@
                                                     {!! Form::label('business_entity', 'Business Entity', ['class' => 'control-label']) !!}
                                                     {!! Form::select('business_entity',['' => 'Select entity', 'Company' => 'Company', 'Partnership' => 'Partnership',
                                                     'Sole Trader' => 'Sole Trader', 'Trading Trust' => 'Trading Trust'],
-                                                     $company->business_entity, ['class' => 'form-control bs-select']) !!}
+                                                     $company->business_entity, ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('business_entity', $errors) !!}
                                                 </div>
                                             </div>
@@ -193,7 +228,7 @@
                                                 <div class="form-group {!! fieldHasError('gst', $errors) !!}">
                                                     {!! Form::label('gst', 'GST Registered', ['class' => 'control-label']) !!}
                                                     {!! Form::select('gst',['' => 'Select type', '1' => 'Yes', '0' => 'No'],
-                                                     $company->gst, ['class' => 'form-control bs-select']) !!}
+                                                     $company->gst, ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('gst', $errors) !!}
                                                 </div>
                                             </div>
@@ -318,7 +353,9 @@
                                         @endif
 
                                         <div class="form-actions right">
-                                            <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+                                            @if (!($company->status == 2 && $company->signup_step == 2))
+                                                <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+                                            @endif
                                             <button type="submit" class="btn green">Save</button>
                                         </div>
                                 </div>

@@ -236,7 +236,7 @@
                                             </div>
                                         @endif
 
-                                        @if (Auth::user()->hasAnyPermissionType('site|trade|area.super'))
+                                        @if (Auth::user()->company->subscription && Auth::user()->hasAnyPermissionType('site|trade|area.super'))
                                             <div class="col-md-2">
                                                 <ul class="mega-menu-submenu">
                                                     @if (Auth::user()->hasAnyPermissionType('site|trade|area.super'))
@@ -302,6 +302,7 @@
                                                         <li><h3 class="h3-submenu">Configuration</h3></li>
                                                         @if(Auth::user()->hasAnyPermissionType('settings') && (Auth::user()->id == 3 || Auth::user()->id == 109))
                                                             <li><a href="/manage/role" class="nav-link"> Settings</a></li>
+                                                            <li><a href="/manage/settings/notifications" class="nav-link"> Notifications</a></li>
                                                         @endif
                                                     @endif
                                                 </ul>

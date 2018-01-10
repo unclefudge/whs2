@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Session;
 use Auth;
 use App\User;
+use App\Models\Company\Company;
 use App\Models\Site\Site;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -133,23 +134,19 @@ class AuthController extends Controller
         return back()->withErrors(['username' => 'These credentials do not match our records.']);
     }
 
-    /*
-    public function getLoginSite()
+/*
+    public function getSignupReferred($key)
     {
-        if (view()->exists('auth.authenticate')) {
-            return view('auth.authenticate');
+        dd($key);
+        list($company_id, $licence_no) = explode('-',$key, 2);
+        $company = Company::find($company_id);
+        if ($company && $company->licence_no == $licence_no) {
+            return view('company/signup', compact($company));
         }
 
-        $worksite = '';
-        if (Session::has('siteID')) {
-            $site_id = Session::get('siteID');
-            $worksite = Site::where([ 'code' => $site_id])->first();
-            if (!$worksite)
-                Session::forget('siteID');
-        }
-
-        return view('auth.login', compact('worksite'));
-    }*/
+        return view('errors/404');
+    }
+*/
 
     /**
      * Log the user out of the application.

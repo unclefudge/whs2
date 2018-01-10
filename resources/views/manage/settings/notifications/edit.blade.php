@@ -38,16 +38,38 @@
                             <div class="col-md-12">
                                 {{-- Company Documents (Type 1) --}}
                                 <div class="form-group {!! fieldHasError('type1', $errors) !!}">
-                                    Company Documents
-                                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                       data-content="Licences, Insurance & Contracts, Electrical Test & Tagging - expired, require sign off" data-original-title="Company Documents">
-                                        <i class="fa fa-question-circle font-grey-silver"></i>
-                                    </a>
-                                    {!! Form::label('type1', "&nbsp;", ['class' => 'control-label']) !!}
-                                    {!! Form::select('type1', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(1)->pluck('id')->toArray(),
-                                          ['class' => 'form-control select2', 'name' => 'type1[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                    {!! fieldErrorMessage('type1', $errors) !!}
+                                    <div class="col-md-3">
+                                        Company Documents
+                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                           data-content="Licences, Insurance & Contracts, Electrical Test & Tagging - expired, require sign off" data-original-title="Company Documents">
+                                            <i class="fa fa-question-circle font-grey-silver"></i>
+                                        </a>
+                                        {!! Form::label('type1', "&nbsp;", ['class' => 'control-label']) !!}
+                                    </div>
+                                    <div class="col-md-9">
+                                        {!! Form::select('type1', Auth::user()->company->staffSelect(),
+                                           Auth::user()->company->notificationsUsersTypeArray(1),
+                                           ['class' => 'form-control select2', 'name' => 'type1[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
+                                        {!! fieldErrorMessage('type1', $errors) !!}
+                                    </div>
+                                </div>
+
+                                {{-- Company Signup (Type 7) --}}
+                                <div class="form-group {!! fieldHasError('type7', $errors) !!}">
+                                    <div class="col-md-3">
+                                        Company Signup Completion
+                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                           data-content="Child company has completed the signup process" data-original-title="Company Signup">
+                                            <i class="fa fa-question-circle font-grey-silver"></i>
+                                        </a>
+                                        {!! Form::label('type7', "&nbsp;", ['class' => 'control-label']) !!}
+                                    </div>
+                                    <div class="col-md-9">
+                                        {!! Form::select('type7', Auth::user()->company->staffSelect(),
+                                              Auth::user()->company->notificationsUsersTypeArray(7),
+                                              ['class' => 'form-control select2', 'name' => 'type7[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
+                                        {!! fieldErrorMessage('type7', $errors) !!}
+                                    </div>
                                 </div>
 
                                 {{-- WHS (Type 2) --}}
@@ -59,7 +81,7 @@
                                     </a>
                                     {!! Form::label('type2', "&nbsp;", ['class' => 'control-label']) !!}
                                     {!! Form::select('type2', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(2)->pluck('id')->toArray(),
+                                          Auth::user()->company->notificationsUsersTypeArray(2),
                                            ['class' => 'form-control select2', 'name' => 'type2[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('type2', $errors) !!}
                                 </div>
@@ -73,7 +95,7 @@
                                     </a>
                                     {!! Form::label('type3', "&nbsp;", ['class' => 'control-label']) !!}
                                     {!! Form::select('type3', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(3)->pluck('id')->toArray()
+                                          Auth::user()->company->notificationsUsersTypeArray(3)
                                           , ['class' => 'form-control select2', 'name' => 'type3[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('type3', $errors) !!}
                                 </div>
@@ -87,7 +109,7 @@
                                     </a>
                                     {!! Form::label('type4', "&nbsp;", ['class' => 'control-label']) !!}
                                     {!! Form::select('type4', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(4)->pluck('id')->toArray(),
+                                          Auth::user()->company->notificationsUsersTypeArray(4),
                                            ['class' => 'form-control select2', 'name' => 'type4[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('type4', $errors) !!}
                                 </div>
@@ -101,7 +123,7 @@
                                     </a>
                                     {!! Form::label('type5', "&nbsp;", ['class' => 'control-label']) !!}
                                     {!! Form::select('type5', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(5)->pluck('id')->toArray(),
+                                          Auth::user()->company->notificationsUsersTypeArray(5),
                                            ['class' => 'form-control select2', 'name' => 'type5[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('type5', $errors) !!}
                                 </div>
@@ -115,7 +137,7 @@
                                     </a>
                                     {!! Form::label('type6', "&nbsp;", ['class' => 'control-label']) !!}
                                     {!! Form::select('type6', Auth::user()->company->staffSelect(),
-                                          Auth::user()->company->notificationsUsersType(6)->pluck('id')->toArray(),
+                                          Auth::user()->company->notificationsUsersTypeArray(6),
                                            ['class' => 'form-control select2', 'name' => 'type6[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('type6', $errors) !!}
                                 </div>

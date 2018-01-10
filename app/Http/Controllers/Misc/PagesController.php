@@ -41,6 +41,8 @@ class PagesController extends Controller {
         }*/
 
         $worksite = '';
+
+        // If Site login show check-in form
         if (Session::has('siteID')) {
             $worksite = Site::where('code', Session::get('siteID'))->first();
             if (!$worksite->isUserOnsite(Auth::user()->id)) {
@@ -69,6 +71,13 @@ class PagesController extends Controller {
         if (Auth::user()->password_reset)
             return redirect('/user/' . Auth::user()->username . '/settings/password');
 
+        // If primary user and incompleted company Signup - redirect to correct step
+        if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {
+            if (Auth::user()->company->signup_step == 2)
+                return redirect('/company/'.Auth::user()->company->id.'/edit');
+            if (Auth::user()->company->signup_step == 3)
+                return redirect('company/'.Auth::user()->company->id.'/signup/3');
+        }
         return view('pages/home', compact('worksite'));
     }
 

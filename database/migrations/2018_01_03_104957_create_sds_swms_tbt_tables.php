@@ -18,15 +18,15 @@ class CreateSdsSwmsTbtTables extends Migration
         //
         Schema::create('safety_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
+            $table->string('type', 10)->nullable();
             $table->integer('category_id')->unsigned()->nullable();
-            $table->string('name', 100);
-            $table->string('attachment', 255);
+            $table->string('name', 100)->nullable();
+            $table->string('attachment', 255)->nullable();
             $table->dateTime('expiry')->nullable();
-            $table->string('reference', 50);
-            $table->string('version', 10);
+            $table->string('reference', 50)->nullable();
+            $table->string('version', 10)->nullable();
             $table->string('share', 2)->default('b');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->integer('for_company_id')->unsigned()->nullable();
             $table->integer('company_id')->unsigned()->default(0);
@@ -44,8 +44,8 @@ class CreateSdsSwmsTbtTables extends Migration
 
         Schema::create('safety_docs_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
-            $table->string('name', 100);
+            $table->string('type', 10)->nullable();
+            $table->string('name', 100)->nullable();
             $table->integer('parent')->unsigned();
             $table->tinyInteger('status')->default(1);
 
@@ -65,12 +65,12 @@ class CreateSdsSwmsTbtTables extends Migration
         //
         Schema::create('toolbox_talks', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 250);
-            $table->text('overview');
-            $table->text('hazards');
-            $table->text('controls');
-            $table->text('further');
-            $table->string('version', 10);
+            $table->string('name', 250)->nullable();
+            $table->text('overview')->nullable();
+            $table->text('hazards')->nullable();
+            $table->text('controls')->nullable();
+            $table->text('further')->nullable();
+            $table->string('version', 10)->nullable();
             $table->tinyInteger('master')->default(0);
             $table->integer('master_id')->unsigned()->nullable();
             $table->integer('authorised_by')->unsigned()->nullable();
@@ -97,11 +97,11 @@ class CreateSdsSwmsTbtTables extends Migration
         //
         Schema::create('wms_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
-            $table->string('project', 100);
-            $table->string('attachment', 255);
-            $table->string('reference', 50);
-            $table->string('version', 10);
+            $table->string('name', 100)->nullable();
+            $table->string('project', 100)->nullable();
+            $table->string('attachment', 255)->nullable();
+            $table->string('reference', 50)->nullable();
+            $table->string('version', 10)->nullable();
             $table->tinyInteger('builder')->default(0);
             $table->tinyInteger('master')->default(0);
             $table->integer('master_id')->unsigned()->nullable();
@@ -111,9 +111,9 @@ class CreateSdsSwmsTbtTables extends Migration
             $table->timestamp('principle_signed_at')->nullable();
             $table->integer('user_signed_id')->unsigned()->nullable();
             $table->timestamp('user_signed_at')->nullable();
-            $table->text('res_compliance');
-            $table->text('res_review');
-            $table->text('notes');
+            $table->text('res_compliance')->nullable();
+            $table->text('res_review')->nullable();
+            $table->text('notes')->nullable();
             $table->string('share', 2)->default('b');
             $table->tinyInteger('status')->default(0);
             $table->integer('for_company_id')->unsigned()->nullable();
@@ -133,11 +133,11 @@ class CreateSdsSwmsTbtTables extends Migration
         Schema::create('wms_steps', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('doc_id')->unsigned();
-            $table->text('name');
+            $table->text('name')->nullable();
             $table->integer('order')->unsigned();
-            $table->string('likelihood', 25);
-            $table->string('consequence', 25);
-            $table->string('rating', 25);
+            $table->string('likelihood', 25)->nullable();
+            $table->string('consequence', 25)->nullable();
+            $table->string('rating', 25)->nullable();
             $table->tinyInteger('master')->default(0);
             $table->integer('master_id')->unsigned()->nullable();
 
@@ -154,7 +154,7 @@ class CreateSdsSwmsTbtTables extends Migration
         Schema::create('wms_hazards', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('step_id')->unsigned();
-            $table->text('name');
+            $table->text('name')->nullable();
             $table->integer('order')->unsigned();
             $table->tinyInteger('master')->default(0);
             $table->integer('master_id')->unsigned()->nullable();
@@ -172,7 +172,7 @@ class CreateSdsSwmsTbtTables extends Migration
         Schema::create('wms_controls', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('step_id')->unsigned();
-            $table->text('name');
+            $table->text('name')->nullable();
             $table->tinyInteger('res_principle');
             $table->tinyInteger('res_company');
             $table->tinyInteger('res_worker');
@@ -196,8 +196,8 @@ class CreateSdsSwmsTbtTables extends Migration
         //
         Schema::create('safety_tips', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 250);
-            $table->text('body');
+            $table->string('title', 250)->nullable();
+            $table->text('body')->nullable();
             $table->dateTime('last_published');
             $table->tinyInteger('status')->default(0);
 

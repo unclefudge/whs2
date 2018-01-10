@@ -35,8 +35,8 @@ class CreateTradesTable extends Migration
             $table->increments('id');
             $table->integer('trade_id')->unsigned();
             $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
-            $table->string('name',50);
-            $table->string('code',15);
+            $table->string('name',50)->nullable();
+            $table->string('code',15)->nullable();
             $table->tinyInteger('upcoming')->default(0);
             $table->tinyInteger('status')->default(1);
 

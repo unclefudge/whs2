@@ -18,34 +18,34 @@ class CreateCompanyTables extends Migration
         //
         Schema::create('companys', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
-            $table->string('nickname', 100);
-            $table->string('slug', 100)->unique();
-            $table->string('email');
-            $table->string('phone', 50);
-            $table->string('logo_banner', 250);
-            $table->string('logo_profile', 250);
+            $table->string('name', 100)->nullable();
+            $table->string('nickname', 100)->nullable();
+            $table->string('slug', 100)->unique()->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone', 50)->nullable();
+            $table->string('logo_banner', 250)->nullable();
+            $table->string('logo_profile', 250)->nullable();
 
             // Address
-            $table->string('address', 200);
-            $table->string('address2', 200);
-            $table->string('suburb', 150);
-            $table->string('state', 40);
-            $table->string('postcode', 10);
-            $table->string('country', 100);
+            $table->string('address', 200)->nullable();
+            $table->string('address2', 200)->nullable();
+            $table->string('suburb', 150)->nullable();
+            $table->string('state', 40)->nullable();
+            $table->string('postcode', 10)->nullable();
+            $table->string('country', 100)->nullable();
 
             // Business details
-            $table->string('abn', 20);
+            $table->string('abn', 20)->nullable();
             $table->tinyInteger('gst')->nullable();
             $table->tinyInteger('payroll_tax')->nullable();
-            $table->string('creditor_code', 25);
-            $table->string('business_entity', 25);
-            $table->string('sub_group', 25);
-            $table->string('category', 50);
+            $table->string('creditor_code', 25)->nullable();
+            $table->string('business_entity', 25)->nullable();
+            $table->string('sub_group', 25)->nullable();
+            $table->string('category', 50)->nullable();
 
             // Trade details
             $table->tinyInteger('licence_required')->default(1);
-            $table->tinyInteger('maxjobs');
+            $table->tinyInteger('maxjobs')->default(1);
             $table->tinyInteger('transient')->default(0);
 
             // Contacts
@@ -53,7 +53,9 @@ class CreateCompanyTables extends Migration
             $table->integer('secondary_user')->unsigned()->default(0);
 
             // Additional fields
-            $table->text('notes');
+            $table->string('signup_key', 250)->nullable();
+            $table->tinyInteger('signup_step')->default(1);
+            $table->text('notes')->nullable();
             $table->tinyInteger('subscription')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->integer('parent_company')->unsigned()->default(0);
@@ -111,9 +113,9 @@ class CreateCompanyTables extends Migration
         Schema::create('company_leave', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->unsigned();
-            $table->dateTime('from')->index();
-            $table->dateTime('to')->index();
-            $table->text('notes');
+            $table->dateTime('from')->nullable()->index();
+            $table->dateTime('to')->nullable()->index();
+            $table->text('notes')->nullable();
 
             // Foreign keys
             $table->foreign('company_id')->references('id')->on('companys')->onDelete('cascade');
@@ -130,18 +132,18 @@ class CreateCompanyTables extends Migration
         //
         Schema::create('company_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
+            $table->string('type', 10)->nullable();
             $table->integer('category_id')->unsigned()->nullable();
-            $table->string('name', 100);
-            $table->string('attachment', 255);
+            $table->string('name', 100)->nullable();
+            $table->string('attachment', 255)->nullable();
             $table->dateTime('expiry')->nullable();
-            $table->string('version', 10);
-            $table->string('ref_no', 50);
-            $table->string('ref_name', 50);
-            $table->string('ref_type', 100);
+            $table->string('version', 10)->nullable();
+            $table->string('ref_no', 50)->nullable();
+            $table->string('ref_name', 50)->nullable();
+            $table->string('ref_type', 100)->nullable();
             $table->tinyInteger('private')->default(0);
             $table->string('share', 2)->default('b');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->integer('for_company_id')->unsigned()->nullable();
             $table->integer('company_id')->unsigned()->default(0);
@@ -161,8 +163,8 @@ class CreateCompanyTables extends Migration
 
         Schema::create('company_docs_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 10);
-            $table->string('name', 100);
+            $table->string('type', 10)->nullable();
+            $table->string('name', 100)->nullable();
             $table->integer('parent')->unsigned();
             $table->tinyInteger('private')->default(0);
             $table->tinyInteger('status')->default(1);
@@ -180,8 +182,8 @@ class CreateCompanyTables extends Migration
 
         Schema::create('contractor_licence', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 25);
-            $table->string('name', 250);
+            $table->string('type', 25)->nullable();
+            $table->string('name', 250)->nullable();
             $table->integer('parent')->unsigned()->default(0);
             $table->tinyInteger('status')->default(1);
             $table->text('notes');

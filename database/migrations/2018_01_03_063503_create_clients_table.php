@@ -15,20 +15,20 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('name', 100)->nullable();
             $table->string('slug')->unique();
-            $table->string('email');
-            $table->string('phone', 50);
+            $table->string('email')->nullable();
+            $table->string('phone', 50)->nullable();
 
             // Address
-            $table->string('address', 200);
-            $table->string('address2', 200);
-            $table->string('suburb', 150);
-            $table->string('state', 40);
-            $table->string('postcode', 10);
-            $table->string('country', 100);
+            $table->string('address', 200)->nullable();
+            $table->string('address2', 200)->nullable();
+            $table->string('suburb', 150)->nullable();
+            $table->string('state', 40)->nullable();
+            $table->string('postcode', 10)->nullable();
+            $table->string('country', 100)->nullable();
 
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
 
             // Foreign keys

@@ -84,12 +84,14 @@ class UserController extends Controller {
         if (!Auth::user()->allowed2('add.user'))
             return view('errors/404');
 
-        $user_request = $request->except('roles');
+        $user_request = removeNullValues($request->all());
+        $user_request['company_id'] = Auth::user()->company_id;
         $user_request['password'] = bcrypt($user_request['password']);  // encrypt password from form
+        $user_request['password_reset'] = 1;
 
         // Empty State field if rest of address fields are empty
-        if (!$user_request['address'] && !$user_request['suburb'] && !$user_request['postcode'])
-            $user_request['state'] = '';
+        if (!$request->filled('address') && !$request->filled('suburb') && !$request->filled('postcode'))
+            $user_request['state'] = null;
 
         // Null email field if empty  - for unique validation
         if (!$user_request['email'])
@@ -100,32 +102,23 @@ class UserController extends Controller {
         Toastr::success("Created new user");
 
         // Attach Roles
-        foreach ($request->get('roles') as $role)
-            $user->attachRole($role);
+        if ($request->filled('roles'))
+            foreach ($request->get('roles') as $role)
+                $user->attachRole2($role->id);
 
+        // Send out Welcome Email to user
+        Mail::to(Auth::user())->send(new \App\Mail\User\UserWelcome($user, request('password')));
 
-        // Email new User
-        if (\App::environment('prod')) {
-            $email_list = "tara@capecod.com.au; gary@capcod.com.au";
-            $email_list = explode(';', $email_list);
-            $email_list = array_map('trim', $email_list); // trim white spaces
+        // Notify company + parent company new user created
+        if ($user->company->subscription && $user->company->notificationsUsersType('user.created'))
+            Mail::to($user->company->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
+        if ($user->company->parent_company && $user->company->reportsToCompany()->notificationsUsersType('user.created'))
+            Mail::to($user->company->reportsToCompany()->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
 
-            $email_user = Auth::user()->email;
-            $data = [
-                'date'         => $user->created_at->format('d/m/Y g:i a'),
-                'username'     => $user->username,
-                'fullname'     => $user->fullname,
-                'company_name' => $user->company->name,
-                'created_by'   => Auth::user()->fullname,
-                'site_owner'   => Auth::user()->company->name,
-            ];
-            Mail::send('emails/new-user', $data, function ($m) use ($email_list) {
-                $m->from('do-not-reply@safeworksite.net');
-                $m->to($email_list);
-                $m->subject('New User Notification');
-            });
+        // Signup Process - Initial update
+        if ($user->company->signup_step == 3) {
+            return redirect("company/$user->company->id/signup/3");
         }
-
         return redirect('user');
     }
 

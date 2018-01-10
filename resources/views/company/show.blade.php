@@ -23,6 +23,33 @@
     @section('content')
             <!-- BEGIN PAGE CONTENT INNER -->
     <div class="page-content-inner">
+        @if (Auth::user()->company_id == $company->id && $company->signup_step == 4)
+            {{-- Company Signup Progress --}}
+            <div class="mt-element-step">
+                <div class="row step-line" id="steps">
+                    <div class="col-md-3 mt-step-col first active">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
+                        <div class="mt-step-content font-grey-cascade">Register</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col active">
+                        <div class="mt-step-number bg-white font-grey">2</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
+                        <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col active">
+                        <div class="mt-step-number bg-white font-grey">3</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Users</div>
+                        <div class="mt-step-content font-grey-cascade">Add users</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col last">
+                        <div class="mt-step-number bg-white font-grey">4</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -55,6 +82,17 @@
                                     <small class='font-grey-cascade' style="margin:0px"> {{ $company->nickname }}</small>
                                 </h3>
 
+                                @if (Auth::user()->company_id == $company->id && $company->signup_step == 4)
+                                    <div class="note note-warning">
+                                        Please upload copies of your licences, Insurance & Contracts and relevant documents
+                                        <br><br>
+                                        Once you've add all your documents please click
+                                        <button class="btn dark btn-outline btn-xs" href="javascript:;"> Complete Signup</button>
+                                    </div>
+
+                                    <a href="/company/{{ $company->id }}/signup/5" class="btn green pull-right">Complete Signup</a><br><br>
+                                @endif
+
                                 {{-- Company details --}}
                                 <h3 class="font-green form-section">Company Details
                                     @if(!$company->approved_by && $company->reportsToCompany()->id == Auth::user()->company_id)
@@ -82,9 +120,9 @@
                                     </div>
                                     <div class="col-md-6" style="line-height: 2">
                                         <div class="col-md-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                        <div class="col-md-8">{{ $company->primary_contact()->fullname }}</div>
+                                        <div class="col-md-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
                                         <div class="col-md-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                        <div class="col-md-8">@if($company->secondary_user){{ $company->secondary_contact()->fullname }}@else N/A @endif</div>
+                                        <div class="col-md-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
                                     </div>
                                 </div>
 
@@ -376,7 +414,7 @@
                                                     </div>
                                                     <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : 'N/A' !!}</div>
                                                     <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
-                                                    <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>        
+                                                    <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
                                                     <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
                                                     <div class="col-md-1">
                                                         @if (Auth::user()->allowed2('edit.company', $company))
@@ -437,8 +475,8 @@
                                                     </div>
                                                 @else
                                                     <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
-                                                    <div class="col-md-8">N/A <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
-                                                                    class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a></div>
+                                                    <div class="col-md-8">N/A {{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
+                                                                    class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a>--}}</div>
                                                     <div class="col-md-1">
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="add">Add</a>
                                                     </div>
@@ -472,9 +510,9 @@
                                                     </div>
                                                 @else
                                                     <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
-                                                    <div class="col-md-8">N/A <a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
+                                                    <div class="col-md-8">N/A {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
                                                                                                                                                                          style="padding-left: 20px"></i>
-                                                            Pre-filled form</a></div>
+                                                            Pre-filled form</a>--}}</div>
                                                     <div class="col-md-1">
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="add">Add</a>
                                                     </div>

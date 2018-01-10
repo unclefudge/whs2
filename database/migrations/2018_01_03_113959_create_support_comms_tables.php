@@ -19,13 +19,13 @@ class CreateSupportCommsTables extends Migration
         Schema::create('support_tickets', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('type')->default(0);
-            $table->string('name', 250);
-            $table->text('summary');
+            $table->string('name', 250)->nullable();
+            $table->text('summary')->nullable();
             $table->tinyInteger('priority')->default(0);
             $table->dateTime('eta')->nullable();
             $table->integer('hours')->default(0);
-            $table->string('attachment', 250);
-            $table->text('notes');
+            $table->string('attachment', 250)->nullable();
+            $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->dateTime('resolved_at')->nullable();
 
@@ -44,7 +44,7 @@ class CreateSupportCommsTables extends Migration
         Schema::create('support_tickets_actions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ticket_id')->unsigned();
-            $table->text('action');
+            $table->text('action')->nullable();
             $table->string('attachment', 250);
 
             // Foreign keys
@@ -63,9 +63,9 @@ class CreateSupportCommsTables extends Migration
         //
         Schema::create('notify', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 250);
-            $table->text('info');
-            $table->string('type', 50);
+            $table->string('name', 250)->nullable();
+            $table->text('info')->nullable();
+            $table->string('type', 50)->nullable();
             $table->integer('type_id')->unsigned();
             $table->dateTime('from')->nullable();
             $table->dateTime('to')->nullable();
@@ -101,16 +101,16 @@ class CreateSupportCommsTables extends Migration
         //
         Schema::create('todo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 250);
-            $table->text('info');
-            $table->string('type', 50);
+            $table->string('name', 250)->nullable();
+            $table->text('info')->nullable();
+            $table->string('type', 50)->nullable();
             $table->integer('type_id')->unsigned();
             $table->dateTime('due_at')->nullable();
             $table->dateTime('done_at')->nullable();
             $table->integer('done_by')->unsigned();
             $table->tinyInteger('priority')->default(0);
-            $table->string('attachment', 250);
-            $table->text('comments');
+            $table->string('attachment', 250)->nullable();
+            $table->text('comments')->nullable();
             $table->tinyInteger('status')->default(1);
 
             // Foreign keys

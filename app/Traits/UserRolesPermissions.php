@@ -46,7 +46,9 @@ trait UserRolesPermissions {
      */
     public function attachRole2($role)
     {
-        return DB::table('role_user')->insert(['user_id' => $this->id, 'role_id' => $role]);
+        // Determine if exists
+        $exists = DB::table('role_user')->where(['user_id' => $this->id, 'role_id' => $role])->first();
+        return ($exists) ? true : DB::table('role_user')->insert(['user_id' => $this->id, 'role_id' => $role]);
     }
 
     /**
@@ -121,7 +123,9 @@ trait UserRolesPermissions {
      */
     public function attachPermission2($permission, $level, $company_id)
     {
-        return DB::table('permission_user')->insert(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id]);
+        // Determine if exists
+        $exists =  DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'company_id' => $company_id])->first();
+        return ($exists) ? true : DB::table('permission_user')->insert(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id]);
     }
 
     /**

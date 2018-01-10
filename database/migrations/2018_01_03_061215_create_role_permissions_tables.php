@@ -19,7 +19,7 @@ class CreateRolePermissionsTables extends Migration
             $table->string('slug')->unique();
             $table->string('description')->nullable();
             $table->tinyInteger('external')->default(0);
-            $table->string('child');
+            $table->string('child')->nullable();
             $table->tinyInteger('security')->default(1);
 
             // Foreign keys

@@ -11,48 +11,43 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'HomeController@index');
+Route::get('/welcome', function () {
+    return view('welcome3');
 });
-
-//Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
 // Site Login
-Route::get('site/login/{site_id}', function ($site_id) {
+Route::get('/login/site/{site_id}', function ($site_id) {
     Session::put('siteID', $site_id);
 
-    return redirect('/auth/login');
+    return redirect('/login');
 });
 
-
-
 // Authentication routes...
-Route::get('login', 'Auth\AuthController@getLogin')->name('login');
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::get('/login', 'Auth\SessionController@create')->name('login');
+Route::post('/login', 'Auth\SessionController@store');
+Route::get('/logout', 'Auth\SessionController@destroy')->name('logout');
+
+// Signup routes..
+Route::get('/signup', 'Auth\RegistrationController@create')->name('register');
+Route::get('/signup/ref/{key}', 'Auth\RegistrationController@refCreate');
+Route::post('/signup/ref/', 'Auth\RegistrationController@refStore');
+
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset.token');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
 //Route::get('site/login', 'Auth\AuthController@getLoginSite');
-
-// Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
-
-// Password reset link request routes...
-Route::get('password/email', 'Auth\PasswordController@showResetForm');
-Route::post('password/email', 'Auth\PasswordController@postEmail');
-
-// Password reset routes...
-Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
-Route::post('password/reset', 'Auth\PasswordController@postReset');
-
 //Route::get('/home', 'HomeController@index');
-
 
 Route::group(['middleware' => 'auth'], function () {
     // Pages
-    Route::get('/', 'Misc\PagesController@index');
+    //Route::get('/', 'Misc\PagesController@index');
+    Route::get('/home', 'Misc\PagesController@index');
     Route::get('/dashboard', 'Misc\PagesController@index');
     Route::get('/manage/report', 'Misc\PagesController@reports');
     Route::get('/manage/report/newusers', 'Misc\PagesController@newusers');
@@ -107,6 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('company/{id}/edit/logo', 'Company\CompanyController@updateLogo');
     Route::get('company/{id}/name', 'Company\CompanyController@getCompanyName');
     Route::get('company/{id}/approve', 'Company\CompanyController@approveCompany');
+    Route::get('company/{id}/signup/{step}', 'Company\CompanyController@signupProcess');
     Route::resource('company', 'Company\CompanyController');
 
     // Client Routes
@@ -244,8 +240,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Configuration
     Route::resource('manage/settings/notifications', 'Misc\SettingsNotificationController');
-    //Route::get('manage/settings/notifications', 'Company\CompanyNotificationController@show');
-    //Route::post('manage/settings/notifications', 'Company\CompanyNotificationController@update');
 
     // Planners
     Route::any('planner/weekly', 'Site\Planner\SitePlannerController@showWeekly');
@@ -318,6 +312,5 @@ Route::get('manage/updateroles', 'Misc\PagesController@updateRoles');
 Route::get('php-info', function () {
     phpinfo();
 });
-
 
 

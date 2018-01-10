@@ -31,7 +31,7 @@ class Company extends Model {
         'address', 'address2', 'suburb', 'state', 'postcode', 'country', 'primarty_user', 'secondary_user',
         'abn', 'gst', 'business_entity', 'sub_group', 'payroll_tax', 'creditor_code', 'category',
         'licence_required', 'licence_no', 'licence_type', 'licence_expiry',
-        'transient', 'maxjobs', 'notes', 'parent_company', 'subscription',
+        'transient', 'maxjobs', 'notes', 'parent_company', 'subscription', 'signup_key', 'signup_step',
         'status', 'created_by', 'updated_by', 'approved_by', 'approved_at'];
 
     protected $dates = ['licence_expiry', 'approved_at'];
@@ -283,7 +283,6 @@ class Company extends Model {
     {
         $array = [];
         foreach ($this->users() as $user) {
-            ;
             if ($user->status)
                 $array[$user->id] = (Auth::user()->company->subscription > 1) ? $user->full_name . " (" . $user->company->name_alias . ")" : $user->full_name;
         }
@@ -1054,7 +1053,7 @@ class Company extends Model {
      */
     public function notifications()
     {
-        return $this->hasMany('App\Models\Company\CompanyNotification');
+        return $this->hasMany('App\Models\Misc\SettingsNotification');
     }
 
     /**
@@ -1067,9 +1066,24 @@ class Company extends Model {
         if (!is_int($type))
             $type = SettingsNotificationTypes::type($type);
 
-        $users = SettingsNotification::where('type', $type)->where('company_id', $this->id)->pluck('user_id')->toArray();
+        $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
 
-        return User::find($users);
+        return ($users) ? User::find($users) : null;
+    }
+
+    /**
+     * A Users with Notification of Type 'type'
+     *
+     * @return Array
+     */
+    public function notificationsUsersTypeArray($type)
+    {
+        if (!is_int($type))
+            $type = SettingsNotificationTypes::type($type);
+
+        $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
+
+        return ($users) ? User::find($users)->pluck('id')->toArray() : [];
     }
 
     /**

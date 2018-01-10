@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
@@ -35,12 +33,12 @@ class PasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function showResetForm()
+    public function create()
     {
         return view('auth/password');
     }
 
-    public function postEmail(Request $request)
+    public function sendEmail(Request $request)
     {
         $this->validate($request, ['email' => 'required|email']);
 
@@ -48,6 +46,7 @@ class PasswordController extends Controller
             $message->subject($this->getEmailSubject());
         });
 
+        dd($response);
         switch ($response) {
             case Password::RESET_LINK_SENT:
                 return redirect()->back()->with('status', trans($response));

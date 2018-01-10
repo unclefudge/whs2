@@ -21,6 +21,33 @@
 
 @section('content')
     <div class="page-content-inner">
+        @if (Auth::user()->company->status == 2 && Auth::user()->company->signup_step == 3)
+            {{-- Company Signup Progress --}}
+            <div class="mt-element-step">
+                <div class="row step-line" id="steps">
+                    <div class="col-md-3 mt-step-col first active">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
+                        <div class="mt-step-content font-grey-cascade">Register</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col active">
+                        <div class="mt-step-number bg-white font-grey">2</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
+                        <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col">
+                        <div class="mt-step-number bg-white font-grey">3</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Users</div>
+                        <div class="mt-step-content font-grey-cascade">Add users</div>
+                    </div>
+                    <div class="col-md-3 mt-step-col last">
+                        <div class="mt-step-number bg-white font-grey">4</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -45,24 +72,20 @@
                             {{-- Login Details --}}
                             <h3 class="font-green form-section">Login Details</h3>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('username', $errors) !!}">
                                         {!! Form::label('username', 'Username', ['class' => 'control-label']) !!}
-                                        {!! Form::text('username', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('username', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('username', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('password', $errors) !!}">
-                                        {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
-                                        {!! Form::text('password', '123456', ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('password', $errors) !!}
-                                        {{-- rand(1000, 9999) --}}
                                     </div>
                                 </div>
                                 <div class="col-md-2 pull-right">
                                     <div class="form-group {!! fieldHasError('security', $errors) !!}">
-                                        <p class="myswitch-label" style="font-size: 14px">Security Access</p>
+                                        <p class="myswitch-label" style="font-size: 14px">Security Access
+                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                               data-content="Grants user the abilty to edit other users permissions with your company" data-original-title="Security Access">
+                                                <i class="fa fa-question-circle font-grey-silver"></i>
+                                            </a></p>
                                         {!! Form::label('security', "&nbsp;", ['class' => 'control-label']) !!}
                                         {!! Form::checkbox('security', '1', null,
                                          ['class' => 'make-switch',
@@ -71,54 +94,37 @@
                                         {!! fieldErrorMessage('security', $errors) !!}
                                     </div>
                                 </div>
-
-                                {{--
-                                    <div class="col-md-4 pull-right">
-                                        {!! Form::hidden('role_type', 'ext', ['class' => 'form-control', 'id' => 'role_type']) !!}
-                                        {!! Form::hidden('company_id', Auth::user()->company_id ) !!}
-                                        <div class="form-group {!! fieldHasError('roles_ext', $errors) !!}">
-                                            <label for="roles_ext" class="control-label">Role(s)</label>
-                                            <select id="roles_ext" name="roles_ext[]" class="form-control select2-multiple" multiple style="width: 100%">
-                                                <optgroup label="External Roles">
-                                                    <option value="2" @if (is_array(old("roles_ext")) && in_array('2' ,old("roles_ext"))) selected @endif >Security</option>
-                                                    @foreach(App\Models\Misc\Role2::where('model', 'ext')->orderBy('name')->pluck('name', 'id')->toArray() as $value => $name)
-                                                        <option value="{{ $value }}" @if (is_array(old("roles_ext")) && in_array($value ,old("roles_ext"))) selected @endif >{{ $name }}</option>
-                                                    @endforeach
-                                                </optgroup>
-                                            </select>
-                                            {!! fieldErrorMessage('roles_ext', $errors) !!}
-                                        </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group {!! fieldHasError('password', $errors) !!}">
+                                        {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
+                                        {!! Form::text('password', null, ['class' => 'form-control', 'required', 'placeholder' => 'User will be forced to choose new password upon login']) !!}
+                                        {!! fieldErrorMessage('password', $errors) !!}
+                                        {{-- rand(1000, 9999) --}}
                                     </div>
-                                    --}}
-
-
+                                </div>
                             </div>
 
                             {{-- Roles + Company--}}
+
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('roles', $errors) !!}">
-                                        {!! Form::label('roles', 'Role(s)', ['class' => 'control-label']) !!}
-                                        {!! Form::select('roles', Auth::user()->company->rolesSelect(), null,
-                                        ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple']) !!}
-                                        {{--
-                                        <select id="roles" name="roles[]" class="form-control select2-multiple" multiple style="width: 100%">
-                                            @foreach(App\Models\Misc\Role2::where('model', Auth::user()->company_id)->orderBy('name')->pluck('name', 'id')->toArray() as $value => $name)
-                                                @if(Auth::user()->security)
-                                                    <option value="{{ $value }}"
-                                                            @if (is_array(old("rint")) && in_array($value ,old("int"))) selected @endif >{{ $name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>--}}
-                                        {!! fieldErrorMessage('roles', $errors) !!}
-                                    </div>
-                                </div>
                                 @if(Auth::user()->company->subscription > 1)
+                                    {!! Form::hidden('subscription', 1) !!}
+                                    <div class="col-md-6">
+                                        <div class="form-group {!! fieldHasError('roles', $errors) !!}">
+                                            {!! Form::label('roles', 'Role(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::select('roles', Auth::user()->company->rolesSelect(), null,
+                                            ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
+                                            {!! fieldErrorMessage('roles', $errors) !!}
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <div class="form-group {!! fieldHasError('company_id', $errors) !!}">
                                             {!! Form::label('company_id', 'Company', ['class' => 'control-label']) !!}
                                             {!! Form::select('company_id', Auth::user()->company->companiesSelect('prompt'),
-                                             null, ['class' => 'form-control select2']) !!}
+                                             null, ['class' => 'form-control select2', 'required']) !!}
                                             {!! fieldErrorMessage('company_id', $errors) !!}
                                         </div>
                                     </div>
@@ -131,14 +137,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
                                         {!! Form::label('firstname', 'First Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('firstname', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('firstname', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
                                         {!! Form::label('lastname', 'Last Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('lastname', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('lastname', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('lastname', $errors) !!}
                                     </div>
                                 </div>

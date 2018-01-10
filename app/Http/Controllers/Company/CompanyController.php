@@ -9,6 +9,7 @@ use DB;
 use Mail;
 use Carbon\Carbon;
 use App\User;
+use App\Mail\CompanyWelcome;
 use App\Models\Company\Company;
 use App\Models\Site\Planner\SitePlanner;
 use App\Http\Requests;
@@ -57,46 +58,30 @@ class CompanyController extends Controller {
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyRequest $request)
+    public function store()
     {
+        $this->validate(request(), [
+            'name'        => 'required',
+            'person_name' => 'required',
+            'email'       => 'required|email|max:255',
+        ]);
+
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.company') || Auth::user()->company->subscription < 2)
             return view('errors/404');
 
+        //Mail::to($request->get('email'))->send(new CompanyWelcome(Auth::user()->company, Auth::user()->company, $request->get('person_name')));
+        //dd($request->all());
+
         // Create Company
-        $company_request = $request->except('supervisors', 'trades', 'licence_expiry');
-        $company_request['licence_expiry'] = ($request->get('licence_expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('licence_expiry') . '00:00')->toDateTimeString() : null;
+        $newCompany = Company::create(request()->all());
+        $newCompany->signup_key = $newCompany->id . '-' . md5(uniqid(rand(), true));
+        $newCompany->save();
 
-        $newCompany = Company::create($company_request);
+        // Mail request to new company
+        Mail::to(request('email'))->send(new App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
 
-        // Update trades + supervisors for company
-        if ($request->get('trades'))
-            $newCompany->tradesSkilledIn()->sync($request->get('trades'));
-        if ($request->get('supervisors'))
-            $newCompany->supervisedBy()->sync($request->get('supervisors'));
-
-        // Email new Company
-        $email_list = "tara@capecod.com.au; company@capecod.com.au; gary@capcod.com.au";
-        $email_list = explode(';', $email_list);
-        $email_list = array_map('trim', $email_list); // trim white spaces
-
-        $email_user = Auth::user()->email;
-        $data = [
-            'date'         => $newCompany->created_at->format('d/m/Y g:i a'),
-            'name'         => $newCompany->name,
-            'address'      => $newCompany->address . ' ' . $newCompany->SuburbStatePostcode,
-            'phone'        => $newCompany->phone,
-            'email'        => $newCompany->email,
-            'created_by'   => Auth::user()->fullname,
-            'user_company' => Auth::user()->company->name,
-        ];
-        Mail::send('emails/new-company', $data, function ($m) use ($email_list) {
-            $m->from('do-not-reply@safeworksite.net');
-            $m->to($email_list);
-            $m->subject('New Company Notification');
-        });
-
-        Toastr::success("Created new company");
+        Toastr::success("Company signup sent");
 
         return redirect('company');
     }
@@ -111,7 +96,7 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.company', $company))
+        if (!Auth::user()->allowed2('view.company', $company) || $company->status == 2)
             return view('errors/404');
 
         return view('company/show', compact('company'));
@@ -138,6 +123,47 @@ class CompanyController extends Controller {
     }
 
     /**
+     * Show the form for sign up process step x
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signupProcess($id, $step)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('view.company', $company))
+            return view('errors/404');
+
+        // Add Users
+        if ($step == 3)
+            return view('company/signup-users', compact('company'));
+
+        // Add Documents
+        if ($step == 4) {
+            // Company added all users so email parent company
+            if ($company->parent_company) {
+                //Mail::to($company->reportsToCompany()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
+            }
+            $company->status = 1;
+            $company->signup_step = 4;
+            $company->save();
+
+            return redirect("company/$company->id");
+        }
+
+        // Signup complete
+        if ($step == 5) {
+            $company->signup_step = 0;
+            $company->save();
+            Toastr::success("Congratulations! Signup Complete");
+
+            return redirect("company/$company->id");
+        }
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @return \Illuminate\Http\Response
@@ -147,15 +173,14 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        // User must be able to edit company or has subscription 3+ with ability to edit trades
-        if (!(Auth::user()->allowed2('edit.company', $company) || Auth::user()->company->subscription > 2 &&
-            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id))
+        // User must be able to edit company or has subscription 2+ with ability to edit trades
+        if (!(Auth::user()->allowed2('edit.company', $company) || (Auth::user()->company->subscription > 1 &&
+                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id)))
         )
             return view('errors/404');
 
         $company_request = $request->except('supervisors', 'trades', 'slug');
 
-        //dd($company_request);
         // If not Transient set field to 0 and clear supervisors
         if (!$request->has('transient'))
             $company_request['transient'] = '0';
@@ -170,6 +195,7 @@ class CompanyController extends Controller {
             $company_request['approved_by'] = 0;
             $company_request['approved_at'] = null;
         }
+
         $company->update($company_request);
 
         // Update trades + supervisors for company
@@ -194,10 +220,13 @@ class CompanyController extends Controller {
             Toastr::error("Deactivated Company");
         }
 
-
         Toastr::success("Saved changes");
 
-        return redirect('/company/' . $company->id);
+        // Signup Process - Initial update
+        if ($company->signup_step == 3)
+            return redirect("company/$company->id/signup/3");   // Adding users
+
+        return redirect("company/$company->id");
     }
 
     /**
@@ -279,13 +308,13 @@ class CompanyController extends Controller {
 
         $dt = Datatables::of($companies)
             ->editColumn('id', function ($company) {
-                return "<div class='text-center'><a href='/company/$company->id'><i class='fa fa-search'></i></a></div>";
+                return ($company->status == 2) ? '' : "<div class='text-center'><a href='/company/$company->id'><i class='fa fa-search'></i></a></div>";
             })
             ->editColumn('name', function ($company) {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
-                if (!$company->approved_by && $company->reportsToCompany()->id == Auth::user()->company_id)
+                if (!$company->approved_by && $company->status == 1 && $company->reportsToCompany()->id == Auth::user()->company_id)
                     $name .= ' &nbsp; <span class="label label-sm label-warning">Pending approval</span>';
 
                 return $name;

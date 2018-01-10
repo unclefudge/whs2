@@ -42,29 +42,23 @@
 
                         <div class="form-body">
                             {!! Form::hidden('parent_company', Auth::User()->company->id) !!}
+                            {!! Form::hidden('status', 2) !!}
                             <div class="row">
                                 <div class="col-md-7">
                                     {{-- Company Name --}}
                                     <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('name', $errors) !!}">
-                                            {!! Form::label('company_name', 'Company Name', ['class' => 'control-label']) !!}
-                                            {!! Form::text('company_name', null, ['class' => 'form-control']) !!}
-                                            {!! fieldErrorMessage('company_name', $errors) !!}
+                                            {!! Form::label('name', 'Company Name', ['class' => 'control-label']) !!}
+                                            {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('name', $errors) !!}
                                         </div>
                                     </div>
-                                    {{-- Primary User Details --}}
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
-                                            {!! Form::label('firstname', 'First Name', ['class' => 'control-label']) !!}
-                                            {!! Form::text('firstname', null, ['class' => 'form-control']) !!}
-                                            {!! fieldErrorMessage('firstname', $errors) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
-                                            {!! Form::label('lastname', 'Last Name', ['class' => 'control-label']) !!}
-                                            {!! Form::text('lastname', null, ['class' => 'form-control']) !!}
-                                            {!! fieldErrorMessage('lastname', $errors) !!}
+                                    {{-- User Details --}}
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('person_name', $errors) !!}">
+                                            {!! Form::label('person_name', 'Persons Name', ['class' => 'control-label']) !!}
+                                            {!! Form::text('person_name', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('person_name', $errors) !!}
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -78,7 +72,7 @@
                                 <div class="col-md-5">
                                     <br>
                                     <div class="note note-warning">
-                                        <p>This form will send an email to the specified company inviting them to join Safeworksite.</p>
+                                        <p>This form will send an email to the specified company inviting them to join SafeWorksite.</p>
                                         <p><br>Once they have completed the sign up process you will be notified and will be able to access their details.</p>
                                     </div>
                                 </div>
@@ -94,7 +88,7 @@
             </div>
         </div>
     </div>
-    @stop <!-- END Content -->
+@stop {{-- END Content --}}
 
 
 @section('page-level-plugins-head')
@@ -118,18 +112,5 @@
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 
-<script>
-    $(document).ready(function () {
-        //$('#transient').bootstrapSwitch('state', false);
-        if ($('#transient').bootstrapSwitch('state'))
-            $('#super-div').show();
-        else
-            $('#supervisors').val('');
-
-        $('#transient').on('switchChange.bootstrapSwitch', function (event, state) {
-            $('#super-div').toggle();
-        });
-    });
-</script>
 @stop
 

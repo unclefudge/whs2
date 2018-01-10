@@ -22,7 +22,7 @@ class CreateSitePlannerTables extends Migration
             $table->dateTime('from')->index();
             $table->dateTime('to')->index();
             $table->integer('days')->unsigned();
-            $table->string('entity_type', 10);
+            $table->string('entity_type', 10)->nullable();
             $table->integer('entity_id')->unsigned()->index();
             $table->integer('task_id')->unsigned()->nullable();
             $table->tinyInteger('weekend')->default(0);
@@ -83,7 +83,7 @@ class CreateSitePlannerTables extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->timestamp('date')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'))->index();
             $table->integer('reason')->nullable();
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->tinyInteger('archive')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->timestamp('resolved_at')->nullable();

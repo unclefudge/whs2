@@ -213,7 +213,7 @@
                 </li>-->
                     <li class="divider"></li>
                     <li>
-                        <a href="{{ url('/auth/logout') }}">
+                        <a href="/logout">
                             <i class="fa fa-key"></i> Log Out </a>
                     </li>
             </ul>

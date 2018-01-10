@@ -32,11 +32,10 @@ class UserRequest extends Request {
             'password'           => 'required|min:3',
             'firstname'          => 'required',
             'lastname'           => 'required',
-            'company_id'         => 'required',
             'email'              => 'required_if:status,1|email|max:255|unique:users,email,NULL',
-            //'email' => 'email|max:255|unique:users,email,NULL,id,email,NOT_EMPTY'
+            'roles'              => 'required_if:subscription,1',
+            'employment_type'    => 'required',
             'subcontractor_type' => 'required_if:employment_type,2',
-            'roles'              => 'required',
         ];
 
         $tabs = $this->get('tabs');

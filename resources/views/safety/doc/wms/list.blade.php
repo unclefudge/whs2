@@ -70,7 +70,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Safe Work Method Template Library</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->hasPermission2('add.wms'))
+                            @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/wms/create" data-original-title="Add">
                                     <i class="fa fa-plus"></i> Add
                                 </a>
@@ -83,9 +83,11 @@
                             <div class="form-group">
                                 <select name="status2" id="status2" class="form-control bs-select">
                                     <option value="1" selected>Active</option>
-                                    <option value="2">Pending</option>
-                                    <option value="0">Draft</option>
-                                    <option value="-1">Archived</option>
+                                    @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
+                                        <option value="2">Pending</option>
+                                        <option value="0">Draft</option>
+                                        <option value="-1">Archived</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>

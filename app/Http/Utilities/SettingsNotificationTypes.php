@@ -11,6 +11,8 @@ class SettingsNotificationTypes {
         '4' => 'site.hazard',
         '5' => 'site.asbestos',
         '6' => 'site.qa',
+        '7' => 'company.signup',
+        '8' => 'user.created',
     ];
 
 

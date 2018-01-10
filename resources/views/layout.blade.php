@@ -93,7 +93,7 @@
 
 @yield('custom-page-scripts')
 
-{{--  }{!! Toastr::render() !!} --}}
+{!! Toastr::render() !!}
 @include('sweet::alert')
 
 </body>

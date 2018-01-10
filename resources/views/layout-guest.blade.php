@@ -71,7 +71,6 @@
             <!-- END RESPONSIVE MENU TOGGLER -->
 
             <!-- BEGIN TOP NAVIGATION MENU -->
-
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
                     <!-- END TODO DROPDOWN -->
@@ -79,8 +78,13 @@
                         <span class="separator"></span>
                     </li>
                     <li class="dropdown dropdown-user dropdown-dark">
-                        <a href="/auth/login">
+                        <a href="/login">
                             <span class="username username-hide-mobile">Login</span>
+                        </a>
+                    </li>
+                    <li class="dropdown dropdown-user dropdown-dark">
+                        <a href="/signup">
+                            <span class="username username-hide-mobile">Sign Up</span>
                         </a>
                     </li>
                 </ul>
@@ -98,10 +102,6 @@
                     <li class="menu-dropdown classic-menu-dropdown ">
                         <a href="/"><i class="fa fa-home"></i> Home </a>
                     </li>
-                    <li class="menu-dropdown classic-menu-dropdown ">
-                        <a href="/support/ticket"><i class="fa fa-tag"></i> Support </a>
-                    </li>
-
                 </ul>
             </div>
             <!-- END MEGA MENU -->
@@ -118,9 +118,7 @@
         <div class="page-head">
             <div class="container">
                 <!-- BEGIN PAGE TITLE -->
-                <div class="page-title">
-                    <h1>Welcome</h1>
-                </div>
+                @yield('pagetitle')
             </div>
         </div>
         <!-- END PAGE HEAD-->
@@ -129,19 +127,12 @@
              style="background: #eff3f8">
             <div class="container">
                 <!-- BEGIN PAGE BREADCRUMBS -->
+                @yield('breadcrumbs')
                 <!-- END PAGE BREADCRUMBS -->
 
                 <!-- BEGIN PAGE CONTENT INNER -->
                 <div class="page-content-inner">
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                    </div>
+                    @yield('content')
                 </div>
                 <!-- END PAGE CONTENT INNER -->
             </div>
@@ -224,6 +215,7 @@
 <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
 <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+@yield('page-level-plugins')
 
 <!-- END PAGE LEVEL PLUGINS -->
 
@@ -234,6 +226,7 @@
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
 <script src="/js/libs.js" type="text/javascript"></script>
+@yield('page-level-scripts')
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
@@ -241,6 +234,8 @@
 <script src="/assets/layouts/layout3/scripts/demo.min.js" type="text/javascript"></script>
 <script src="/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
 <!-- END THEME LAYOUT SCRIPTS -->
+
+@yield('custom-page-scripts')
 
 
 <script type="text/javascript"></script>

@@ -43,7 +43,7 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
-        td.pad5 {
+        td.pad5, th.pad5 {
             padding: 5px !important;
             line-height: 1em !important;
         }
@@ -63,18 +63,18 @@
     <table class="table table-striped table-bordered table-hover order-column" id="table1" style="padding: 0px; margin: 0px">
         <thead>
         <tr style="background-color: #f0f6fa; font-weight: bold; overflow: hidden;">
-            <th width="5%">Start Date</th>
-            <th width="5%">Job #</th>
-            <th width="15%">Site</th>
-            <th width="15%">Supervisor</th>
-            <th>Company Allocated</th>
-            <th width="5%">Contract Sent</th>
-            <th width="5%">Contract Signed</th>
-            <th width="5%">Deposit Paid</th>
-            <th width="3%">ENG</th>
-            <th width="3%">CC</th>
-            <th width="3%">HBCF</th>
-            <th width="15%">Consultant</th>
+            <th width="5%" class="pad5">Start Date</th>
+            <th width="5%" class="pad5">Job #</th>
+            <th width="15%" class="pad5">Site</th>
+            <th width="15%" class="pad5">Supervisor</th>
+            <th class="pad5">Company Allocated</th>
+            <th width="5%" class="pad5">Contract Sent</th>
+            <th width="5%" class="pad5">Contract Signed</th>
+            <th width="5%" class="pad5">Deposit Paid</th>
+            <th width="3%" class="pad5">ENG</th>
+            <th width="3%" class="pad5">CC</th>
+            <th width="3%" class="pad5">HBCF</th>
+            <th width="15%" class="pad5">Consultant</th>
         </tr>
         </thead>
         <tbody>

@@ -52,6 +52,7 @@
                                     <b>Supervisor(s):</b> {{ $hazard->site->supervisorsSBC() }}<br>
                                 </div>
                             </div>
+
                             <hr>
                             <h4 class="font-green-haze">Hazard Details</h4>
                             <div class="row" style="line-height: 1.5em">
@@ -106,7 +107,7 @@
                         </div>
                         {!! Form::close() !!}
 
-                        {{-- Actions --}}
+                        {{-- Notes --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <app-actions :table_id="{{ $hazard->id }}"></app-actions>
@@ -118,7 +119,7 @@
                             <div class="col-md-12">
                                 <h3>Assigned Tasks
                                     {{-- Show add if user has permission to edit hazard --}}
-                                    @if ($hazard->status && Auth::user()->allowed2('edit.site.hazard', $hazard))
+                                    @if ($hazard->status && Auth::user()->allowed2('edit.site.hazard', $hazard) && Auth::user()->isCompany($hazard->owned_by->id))
                                         <a href="/todo/create/hazard/{{ $hazard->id}}" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">
                                             <i class="fa fa-plus"></i> Add
                                         </a>

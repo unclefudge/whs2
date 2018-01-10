@@ -240,7 +240,7 @@ class Todo extends Model {
                 }
             }
         } else if (\App::environment('local', 'dev'))
-            $email_list[] = env('EMAIL_ME');
+            $email_list = [env('EMAIL_ME')];
 
 
         $email_user = (\App::environment('prod')) ? Auth::user()->email : '';
@@ -294,7 +294,7 @@ class Todo extends Model {
                         $email_list[] = $user->email;
                 }
             } else if (\App::environment('local', 'dev')) {
-                $email_list[] = env('EMAIL_ME');
+                $email_list = [env('EMAIL_ME')];
             }
         }
 

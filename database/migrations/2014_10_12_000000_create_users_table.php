@@ -20,21 +20,21 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
 
             // Contact Details
-            $table->string('firstname', 50);
-            $table->string('lastname', 50);
-            $table->string('address', 200);
-            $table->string('address2', 200);
-            $table->string('suburb', 150);
-            $table->string('state', 40);
-            $table->string('postcode', 10);
-            $table->string('country', 100);
-            $table->string('phone');
+            $table->string('firstname', 50)->nullable();
+            $table->string('lastname', 50)->nullable();
+            $table->string('address', 200)->nullable();
+            $table->string('address2', 200)->nullable();
+            $table->string('suburb', 150)->nullable();
+            $table->string('state', 40)->nullable();
+            $table->string('postcode', 10)->nullable();
+            $table->string('country', 100)->nullable();
+            $table->string('phone')->nullable();
 
             // Additional fields
             $table->tinyInteger('employment_type')->default(0);
             $table->tinyInteger('subcontractor_type')->default(0);
-            $table->string('photo', 250);
-            $table->text('notes');
+            $table->string('photo', 250)->nullable();
+            $table->text('notes')->nullable();
 
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);
@@ -44,8 +44,8 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('password_reset')->default(1);
             $table->rememberToken();
-            $table->string('last_ip', 25);
-            $table->timestamp('last_login');
+            $table->string('last_ip', 25)->nullable();
+            $table->timestamp('last_login')->nullable();
 
             // Modify info
             $table->integer('created_by')->unsigned();

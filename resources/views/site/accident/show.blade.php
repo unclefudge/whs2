@@ -125,6 +125,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
+                                    {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
+                                    {!! Form::text('supervisor', $accident->supervisor, ['class' => 'form-control',
+                                    ($accident->supervisor && Auth::user()->id == $accident->created_by && 1 == 2) ? '' : 'readonly']) !!}
+                                    {!! fieldErrorMessage('supervisor', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+
 
                         <h4 class="font-green-haze">Workers details</h4>
                         <!-- Name / Age / Occupation -->
