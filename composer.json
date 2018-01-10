@@ -19,7 +19,7 @@
         "barryvdh/laravel-dompdf": "dev-master",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
-        "spatie/laravel-backup": "^3.0.0",
+        "spatie/laravel-backup": "^5.1",
         "Doctrine/dbal": "^2.5"
     },
     "require-dev": {

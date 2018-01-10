@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\Inspire::class,
+        \App\Console\Commands\NightlyUpdate::class,
     ];
 
     /**
@@ -24,8 +25,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // $schedule->command('inspire')->hourly();
+        if (\App::environment('prod')) {
+            $schedule->command('backup:clean')->weekly()->mondays()->at('00:01');
+            $schedule->command('backup:run')->daily()->at('00:02');
+            $schedule->command('app:nightly-update')->daily()->at('20:45');
+            //$schedule->command('app:nightly-update')->daily()->at('00:05');
+        }
     }
 
     /**
