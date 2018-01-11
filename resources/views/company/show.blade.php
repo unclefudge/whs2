@@ -925,6 +925,9 @@
             $("#ref_name").val($(this).data('ref_name'));
             $('#ref_type').val($(this).data('ref_type')).prop('selected', true);
         }
+        if ($(this).data('cat') == '7') {
+            $("#lic_no").val($(this).data('ref_no'));
+        }
         if ($(this).data('cat') < 8)
             $("#extra_lic_type").val('');
         if ($(this).data('cat') == '8') {
