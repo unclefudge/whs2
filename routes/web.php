@@ -229,17 +229,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('safety/doc/dt/wms_templates', 'Safety\WmsController@getWmsTemplates');
     Route::resource('safety/doc/wms', 'Safety\WmsController');
 
-    // Roles / Permission
-    Route::get('manage/role/permissions', 'Misc\RoleController@getPermissions');
-    Route::get('manage/role/resetpermissions', 'Misc\PagesController@resetPermissions');
-    Route::get('manage/role/child-primary/{id}', 'Misc\RoleController@childPrimary');
-    Route::get('manage/role/child-default/{id}', 'Misc\RoleController@childDefault');
-    Route::get('manage/role/parent', 'Misc\RoleController@parent');
-    Route::get('manage/role/child', 'Misc\RoleController@child');
-    Route::resource('manage/role', 'Misc\RoleController');
-
     // Configuration
-    Route::resource('manage/settings/notifications', 'Misc\SettingsNotificationController');
+    Route::get('settings', 'Misc\PagesController@settings');
+    Route::resource('settings/notifications', 'Misc\SettingsNotificationController');
+
+    // Roles / Permission
+    Route::get('settings/role/permissions', 'Misc\RoleController@getPermissions');
+    Route::get('settings/role/resetpermissions', 'Misc\PagesController@resetPermissions');
+    Route::get('settings/role/child-role/{id}', 'Misc\RoleController@childRole');
+    Route::get('settings/role/child-primary/{id}', 'Misc\RoleController@childPrimary');
+    Route::get('settings/role/child-default/{id}', 'Misc\RoleController@childDefault');
+    Route::get('settings/role/parent', 'Misc\RoleController@parent');
+    Route::get('settings/role/child', 'Misc\RoleController@child');
+    Route::resource('settings/role', 'Misc\RoleController');
+
 
     // Planners
     Route::any('planner/weekly', 'Site\Planner\SitePlannerController@showWeekly');

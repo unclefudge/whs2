@@ -416,10 +416,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function displayUpdatedBy()
     {
-        $user = User::findOrFail($this->updated_by);
+        $user = User::find($this->updated_by);
 
-        return '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
-        '<span style="font-weight: 400">By:</span> ' . $user->fullname;
+        return ($user) ? '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
+        '<span style="font-weight: 400">By:</span> ' . $user->fullname : "$this->updated_by";
     }
 
     /**

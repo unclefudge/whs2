@@ -11,7 +11,8 @@
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        <li><a href="/manage/role">Role Management</a><i class="fa fa-circle"></i></li>
+        <li><a href="/settings">Settings</a><i class="fa fa-circle"></i></li>
+        <li><a href="/settings/role">Role Management</a><i class="fa fa-circle"></i></li>
         <li><span>Create new role</span></li>
     </ul>
 @stop
@@ -46,32 +47,17 @@
                                         {!! fieldErrorMessage('name', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="form-group {!! fieldHasError('description', $errors) !!}">
                                         {!! Form::label('description', 'Description', ['class' => 'control-label']) !!}
                                         {!! Form::text('description', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('description', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group {!! fieldHasError('company_id', $errors) !!}">
-                                        {!! Form::label('company_id', 'Company ID', ['class' => 'control-label']) !!}
-                                        {!! Form::text('company_id', '1', ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('company_id', $errors) !!}
-                                    </div>
-                                </div>
                             </div>
 
-                            <h3 class="form-section"></h3>
-
-                            <!-- Permissions -->
-                            <div class="row">
-                                <div class="col-md-12">
-
-                                </div>
-                            </div>
                             <div class="form-actions right">
-                                <a href="/manage/role" class="btn default"> Back</a>
+                                <a href="/settings/role" class="btn default"> Back</a>
                                 <button type="submit" class="btn green">Save</button>
                             </div>
                         </div> <!--/form-body-->

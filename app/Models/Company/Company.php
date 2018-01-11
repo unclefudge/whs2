@@ -508,11 +508,16 @@ class Company extends Model {
      *
      * @return array
      */
-    public function rolesSelect($prompt = '')
+    public function rolesSelect($type = 'all')
     {
-        $array = Role2::where('company_id', $this->id)->orderBy('name')->pluck('name', 'id')->toArray();
+        switch ($type) {
+            case 'ext' : $array = Role2::where('company_id', $this->id)->where('external', 1)->orderBy('name')->pluck('name', 'id')->toArray(); break;
+            case 'int' : $array = Role2::where('company_id', $this->id)->where('external', 0)->orderBy('name')->pluck('name', 'id')->toArray(); break;
+            case 'all' : $array = Role2::where('company_id', $this->id)->orderBy('name')->pluck('name', 'id')->toArray();
+        }
 
-        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Role') + $array : $array;
+        //return ($prompt && count($array) > 1) ? $array = array('' => 'Select Role') + $array : $array;
+        return  $array;
     }
 
     /**
@@ -1089,7 +1094,7 @@ class Company extends Model {
     /**
      * User Emails with Notification of Type 'type'
      *
-     * @return Collection
+     * @return Array
      */
     public function notificationsUsersEmailType($type)
     {

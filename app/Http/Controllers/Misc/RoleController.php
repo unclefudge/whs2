@@ -26,12 +26,14 @@ class RoleController extends Controller {
      */
     public function index()
     {
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->company->subscription && Auth::user()->hasAnyPermissionType('settings')))
+            return view('errors/404');
+
         $roles = Role2::all()->sortBy('name');
 
-        if (Auth::user()->company->subscription)
-            return view('manage/role/list', compact('roles'));
+        return view('manage/settings/role/list', compact('roles'));
 
-        return view('errors/404');
     }
 
     /**
@@ -41,10 +43,11 @@ class RoleController extends Controller {
      */
     public function create()
     {
-        //if (!Auth::user()->hasPermission2('add.role'))
-        //   return view('errors/404');
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->hasPermission2('edit.settings'))
+            return view('errors/404');
 
-        return view('manage/role/create');
+        return view('manage/settings/role/create');
     }
 
     /**
@@ -55,14 +58,16 @@ class RoleController extends Controller {
     public function store(RoleRequest $request)
     {
         // Check authorisation and throw 404 if not
-        //if (!(Auth::user()->hasPermission2('add.role') || Auth::user()->hasPermission2('edit.settings'))
-        //    return view('errors/404');
+        if (!Auth::user()->hasPermission2('edit.settings'))
+            return view('errors/404');
 
         // Create Role
-        Role::create($request->all());
+        $role_request = $request->all();
+        $role_request['company_id'] = Auth::user()->company_id;
+        Role2::create($role_request);
         Toastr::success("Created new role");
 
-        return redirect('manage/role');
+        return redirect('/settings/role');
     }
 
     /**
@@ -75,12 +80,12 @@ class RoleController extends Controller {
         $role = Role2::findorFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.role', $role)) 
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('view.settings', $role) || !Auth::user()->allowed2('edit.settings', $role))
+            return view('errors/404');
 
         $pt = getPermissionTypes();
 
-        return view('manage/role/edit', compact('role', 'pt'));
+        return view('manage/settings/role/edit', compact('role', 'pt'));
     }
 
     /**
@@ -93,26 +98,29 @@ class RoleController extends Controller {
         $role = Role2::findorFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.role', $role)) 
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.settings', $role))
+            return view('errors/404');
 
-        if (Auth::user()->id == 3) {
-            $permissions = Permission2::all();
+        $role_request = $request->only('name', 'description');
 
-            // Update Permissions
-            $role->detachAllPermissions();
-            foreach ($permissions as $permission) {
-                if ($request->get("p$permission->id") != 0)
-                    $role->attachPermission($permission->id, $request->get("p$permission->id"), Auth::user()->company_id);
-            }
+        //dd($role_request);
+        $role->update($role_request);
 
-            Toastr::success("Saved changes");
+        $permissions = Permission2::all();
 
-            // Get Permissions
-            $pt = getPermissionTypes();
+        // Update Permissions
+        $role->detachAllPermissions();
+        foreach ($permissions as $permission) {
+            if ($request->get("p$permission->id") != 0)
+                $role->attachPermission($permission->id, $request->get("p$permission->id"), Auth::user()->company_id);
         }
 
-        return view('manage/role/edit', compact('role', 'pt'));
+        Toastr::success("Saved changes");
+
+        // Get Permissions
+        $pt = getPermissionTypes();
+
+        return view('manage/settings/role/edit', compact('role', 'pt'));
     }
 
     /**
@@ -126,25 +134,36 @@ class RoleController extends Controller {
     }
 
     /**
+     * Update role to make default 'Child' External
+     */
+    public function childRole(Request $request, $id)
+    {
+        // Set new Primary
+        $new = Role2::findorFail($id);
+        $new->external = 1 - $new->external;
+        $new->save();
+
+        return redirect('/settings/role');
+    }
+
+    /**
      * Update role to make default 'Child' Primary
      */
     public function childPrimary(Request $request, $id)
     {
-
-
         // Clear Old Primary
-        $old = Role2::where('company_id', Auth::user()->company_id)->where('model', 'primary')->first();
+        $old = Role2::where('company_id', Auth::user()->company_id)->where('child', 'primary')->first();
         if ($old) {
             $old->child = '';
             $old->save();
         }
 
         // Set new Primary
-        $new = Role::findorFail($id);
+        $new = Role2::findorFail($id);
         $new->child = 'primary';
         $new->save();
 
-        return redirect('manage/role');
+        return redirect('/settings/role');
     }
 
     /**
@@ -154,18 +173,18 @@ class RoleController extends Controller {
     {
 
         // Clear Old Primary
-        $old = Role2::where('company_id', Auth::user()->company_id)->where('model', 'child')->first();
+        $old = Role2::where('company_id', Auth::user()->company_id)->where('child', 'default')->first();
         if ($old) {
             $old->child = '';
             $old->save();
         }
 
         // Set new Primary
-        $new = Role::findorFail($id);
+        $new = Role2::findorFail($id);
         $new->child = 'default';
         $new->save();
 
-        return redirect('manage/role');
+        return redirect('/settings/role');
     }
 
     public function show(Request $request)
@@ -176,12 +195,12 @@ class RoleController extends Controller {
 
     public function parent(Request $request)
     {
-        return view('manage/role/edit_parent');
+        return view('manage/settings/role/edit_parent');
     }
 
     public function child(Request $request)
     {
-        return view('manage/role/edit_child');
+        return view('manage/settings/role/edit_child');
     }
 
 

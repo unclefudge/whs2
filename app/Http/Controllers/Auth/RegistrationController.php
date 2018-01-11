@@ -86,8 +86,14 @@ class RegistrationController extends Controller {
 
         // Create user
         $user = User::create($user_request);
+        $user->save();
 
+        // Updated Created fields as user self created prior to being authenticated
+        $user->created_by = $user->id;
+
+        //
         // Attach Role + Permission
+        //
 
         // Attach parent company default primary_user role
         $primary_user_role = Role2::where('company_id', $company->reportsToCompany()->id)->where('child', 'primary')->first();
@@ -106,6 +112,7 @@ class RegistrationController extends Controller {
         // Update Company Primary User + Signup step
         $company->primary_user = $user->id;
         $company->signup_step = 2;
+        $company->nickname = null;
         $company->save();
 
 

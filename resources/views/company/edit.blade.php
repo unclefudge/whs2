@@ -72,7 +72,7 @@
                                 {!! Form::model($company, ['method' => 'PATCH', 'action' => ['Company\CompanyController@update', $company->id]]) !!}
                                 {!! Form::hidden('id', $company->id) !!}
                                 @if ($company->status == 2 && $company->signup_step == 2)
-                                    {!! Form::text('signup_step', 3) !!}
+                                    {!! Form::hidden('signup_step', 3) !!}
                                 @endif
                                 <div class="form-body">
                                     {{-- Inactive Company --}}

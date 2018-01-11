@@ -46,6 +46,7 @@ class CompanyController extends Controller {
      */
     public function create()
     {
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.company') || Auth::user()->company->subscription < 2)
             return view('errors/404');
 
@@ -70,16 +71,14 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('add.company') || Auth::user()->company->subscription < 2)
             return view('errors/404');
 
-        //Mail::to($request->get('email'))->send(new CompanyWelcome(Auth::user()->company, Auth::user()->company, $request->get('person_name')));
-        //dd($request->all());
-
         // Create Company
         $newCompany = Company::create(request()->all());
         $newCompany->signup_key = $newCompany->id . '-' . md5(uniqid(rand(), true));
+        $newCompany->nickname = request('person_name');
         $newCompany->save();
 
         // Mail request to new company
-        Mail::to(request('email'))->send(new App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
+        Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
 
         Toastr::success("Company signup sent");
 
@@ -134,6 +133,12 @@ class CompanyController extends Controller {
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.company', $company))
             return view('errors/404');
+
+        // Resend Welcome Email
+        if ($step == 1) {
+            Mail::to($company)->send(new \App\Mail\Company\CompanyWelcome($company, Auth::user()->company, $company->nickname));
+            return view('company/list');
+        }
 
         // Add Users
         if ($step == 3)
@@ -312,6 +317,14 @@ class CompanyController extends Controller {
             })
             ->editColumn('name', function ($company) {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
+                if ($company->status == 2) {
+                    if ($company->signup_step == 1)
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/company/'.$company->id.'/signup/1" class="btn btn-outline btn-xs dark">Resend Email Request</a>';
+                    if ($company->signup_step == 2)
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Setting up company profile</span></a>';
+                    if ($company->signup_step == 3)
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Adding Users</span></a>';
+                }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
                 if (!$company->approved_by && $company->status == 1 && $company->reportsToCompany()->id == Auth::user()->company_id)
@@ -371,43 +384,5 @@ class CompanyController extends Controller {
             ->make(true);
 
         return $dt;
-    }
-
-    /**
-     * Overide the default return URL form failed validation request
-     * with custom user/{username}/settings/info
-     *
-     * @param array $errors
-     * @return $this|JsonResponse
-     */
-    public function response(array $errors)
-    {
-        // Optionally, send a custom response on authorize failure
-        // (default is to just redirect to initial page with errors)
-        //
-        // Can return a response, a view, a redirect, or whatever else
-
-        if ($this->ajax() || $this->wantsJson()) {
-            return new JsonResponse($errors, 422);
-        }
-
-        $user = User::find($this->get('id'));
-        $username = $user->username;
-        $tabs = $this->get('tabs');
-
-        switch ($tabs) {
-            case 'settings:info':
-                return $this->redirector->to('user/' . $username . '/settings/info')
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-            case 'settings:password':
-                return $this->redirector->to('user/' . $username . '/settings/password')
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-            default:
-                return $this->redirector->to($this->getRedirectUrl())
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-        }
     }
 }

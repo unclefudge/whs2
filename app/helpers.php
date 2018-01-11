@@ -156,7 +156,7 @@ function permOptions($action, $type = '')
  *
  * @return string
  */
-function permSelect($permission, $type, $model, $company_id)
+function permSelect($permission, $type, $model, $company_id, $disable = false)
 {
     $permission_id = \App\Models\Misc\Permission2::where('slug', $permission)->first()->id;
     list($action, $rest) = explode('.', $permission);
@@ -187,7 +187,7 @@ function permSelect($permission, $type, $model, $company_id)
     }
 
     // Disable select if Max Level or Auth User not of same company as User model
-    $disabled = ($user_model && Auth::user()->company_id != $company_id) ? 'disabled' : '';
+    $disabled = ($disable || ($user_model && Auth::user()->company_id != $company_id)) ? 'disabled' : '';
     $string = "<select class='form-control bs-select' name='p$permission_id' $disabled>";
     $string .= $options;
     $string .= '</select>';

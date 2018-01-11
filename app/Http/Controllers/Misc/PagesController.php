@@ -134,6 +134,11 @@ class PagesController extends Controller {
         return view('manage/report/missing_company_info', compact('companies'));
     }
 
+    public function settings()
+    {
+        return view('manage/settings/list');
+    }
+
     public function companyUsers(Request $request)
     {
         $companies_allowed = Auth::user()->company->companies(1)->pluck('id')->toArray();

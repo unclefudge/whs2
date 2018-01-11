@@ -106,10 +106,9 @@
                                 </div>
                             </div>
 
-                            {{-- Roles + Company--}}
-
+                            {{-- Roles--}}
                             <div class="row">
-                                @if(Auth::user()->company->subscription > 1)
+                                @if(Auth::user()->company->subscription)
                                     {!! Form::hidden('subscription', 1) !!}
                                     <div class="col-md-6">
                                         <div class="form-group {!! fieldHasError('roles', $errors) !!}">
@@ -117,15 +116,6 @@
                                             {!! Form::select('roles', Auth::user()->company->rolesSelect(), null,
                                             ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
                                             {!! fieldErrorMessage('roles', $errors) !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="form-group {!! fieldHasError('company_id', $errors) !!}">
-                                            {!! Form::label('company_id', 'Company', ['class' => 'control-label']) !!}
-                                            {!! Form::select('company_id', Auth::user()->company->companiesSelect('prompt'),
-                                             null, ['class' => 'form-control select2', 'required']) !!}
-                                            {!! fieldErrorMessage('company_id', $errors) !!}
                                         </div>
                                     </div>
                                 @endif

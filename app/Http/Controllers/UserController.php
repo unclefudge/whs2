@@ -101,10 +101,18 @@ class UserController extends Controller {
         $user = User::create($user_request);
         Toastr::success("Created new user");
 
-        // Attach Roles
+        // Attach parent company default child role
+        if ($user->company->parent_company) {
+            $default_user_role = Role2::where('company_id', $user->company->reportsToCompany()->id)->where('child', 'default')->first();
+            if ($default_user_role)
+                $user->attachRole2($default_user_role->id);
+        }
+
+        // Attached Company Own Roles
         if ($request->filled('roles'))
-            foreach ($request->get('roles') as $role)
-                $user->attachRole2($role->id);
+            foreach ($request->get('roles') as $role_id)
+                $user->attachRole2($role_id);
+
 
         // Send out Welcome Email to user
         Mail::to(Auth::user())->send(new \App\Mail\User\UserWelcome($user, request('password')));
@@ -117,7 +125,7 @@ class UserController extends Controller {
 
         // Signup Process - Initial update
         if ($user->company->signup_step == 3) {
-            return redirect("company/$user->company->id/signup/3");
+            return redirect("company/".$user->company->id."/signup/3");
         }
         return redirect('user');
     }
@@ -129,7 +137,7 @@ class UserController extends Controller {
      */
     public function show($username)
     {
-        $user = User::where(compact('username'))->firstorFail();
+        $user = (is_int($username)) ? User::firstorFail($username) : User::where(compact('username'))->firstorFail();
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.user', $user))

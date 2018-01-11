@@ -5,6 +5,8 @@ $sub2 = (Auth::user()->company->subscription > 1) ? 1 : 0;
 $plan = (Auth::user()->company->addon('planner')) ? 1 : 0;
 $cc = (Auth::user()->isCC()) ? 1 : 0;
 
+$dis = (Auth::user()->allowed2('edit.settings', $role)) ? false : true;
+$cid = Auth::user()->company_id;
 /*$sub1 = 1;
 $sub2 = 1;
 $plan = 0;
@@ -21,7 +23,8 @@ $cc = 1;*/
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        <li><a href="/manage/role">Role Management</a><i class="fa fa-circle"></i></li>
+        <li><a href="/settings">Settings</a><i class="fa fa-circle"></i></li>
+        <li><a href="/settings/role">Role Management</a><i class="fa fa-circle"></i></li>
         <li><span>Edit role</span></li>
     </ul>
 @stop
@@ -44,14 +47,32 @@ $cc = 1;*/
                     </div>
 
                     <div class="portlet-body form">
-                        {!! Form::model('permission_role_company', ['method' => 'PATCH', 'action' => ['Misc\RoleController@update', $role->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($role, ['method' => 'PATCH', 'action' => ['Misc\RoleController@update', $role->id], 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
 
                         <div class="form-body">
-                            <h1 style="margin-top: 0">{{ $role->name }}
-                                <small><br>{{ $role->description }}</small>
-                            </h1>
+                            <h1 style="margin-top: 0">{{ $role->name }}</h1>
+                            <h3 class="font-green form-section">Role</h3>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {!! fieldHasError('name', $errors) !!}">
+                                        {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
+                                        {!! Form::text('name', null, ['class' => 'form-control', ($dis) ? 'disabled' : '']) !!}
+                                        {!! fieldErrorMessage('name', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group {!! fieldHasError('description', $errors) !!}">
+                                        {!! Form::label('description', 'Description', ['class' => 'control-label']) !!}
+                                        {!! Form::text('description', null, ['class' => 'form-control', ($dis) ? 'disabled' : '']) !!}
+                                        {!! fieldErrorMessage('description', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="font-green form-section">Permissions</h3>
+
                             <div class="note note-warning">
                                 <p>Permissions are separated into 5 categories (View, Edit, Create, Delete, Sign Off) and these determine what actions users can do for associated records or
                                     function.</p>
@@ -99,20 +120,20 @@ $cc = 1;*/
                                     <table class="table table-bordered table-striped">
                                         <tr>
                                             <td>User</td>
-                                            <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                            <td width="15%">{!! permSelect('add.user', 'add', $role, Auth::user()->company_id) !!}</td>
-                                            <td width="15%">{!! permSelect('del.user', 'arc', $role, Auth::user()->company_id) !!}</td>
-                                            <td width="15%">{!! permSelect('sig.user', 'sig', $role, Auth::user()->company_id) !!}</td>
+                                            <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('add.user', 'add', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('del.user', 'arc', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('sig.user', 'sig', $role, $cid, $dis) !!}</td>
                                         </tr>
                                         <tr>
                                             <td>Company</td>
-                                            <td width="15%">{!! permSelect('view.company', 'all', $role, Auth::user()->company_id) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company', 'all', $role, Auth::user()->company_id) !!}</td>
+                                            <td width="15%">{!! permSelect('view.company', 'all', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.company', 'all', $role, $cid, $dis) !!}</td>
                                             @if ($sub2)
-                                                <td width="15%">{!! permSelect('add.company', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company', 'arc', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.company', 'sig', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company', 'arc', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.company', 'sig', $role, $cid, $dis) !!}</td>
                                             @else
                                                 <td width="45%" colspan="3"></td>
                                             @endif
@@ -120,8 +141,8 @@ $cc = 1;*/
                                         @if($cc)
                                             <tr>
                                                 <td>Company Acounting<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                <td width="15%">{!! permSelect('view.company.accounting', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.accounting', 'all', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.company.accounting', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.accounting', 'all', $role, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
                                         @endif
@@ -134,26 +155,26 @@ $cc = 1;*/
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <td>Site</td>
-                                                <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.site', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.site', 'arc', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.site', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.site', 'arc', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             @if ($plan)
                                                 <tr>
                                                     <td>Trades / Tasks</td>
-                                                    <td width="15%">{!! permSelect('view.trade', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.trade', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.trade', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.trade', 'arc', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.trade', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.trade', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.trade', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.trade', 'arc', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 </tr>
                                             @endif
                                             <tr>
                                                 <td>Area Supervisors</td>
-                                                <td width="15%">{!! permSelect('view.area.super', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.area.super', 'all', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.area.super', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.area.super', 'all', $role, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
                                         </table>
@@ -168,20 +189,20 @@ $cc = 1;*/
                                             <table class="table table-bordered table-striped">
                                                 <tr>
                                                     <td>Weekly</td>
-                                                    <td width="15%">{!! permSelect('view.weekly.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.weekly.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.weekly.planner', 'super.plan', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.weekly.planner', 'super.plan', $role, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Site</td>
-                                                    <td width="15%">{!! permSelect('view.site.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.planner', 'super.plan', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.planner', 'super.plan', $role, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Trade</td>
-                                                    <td width="15%">{!! permSelect('view.trade.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.trade.planner', 'super.plan', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.trade.planner', 'super.plan', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.trade.planner', 'super.plan', $role, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
                                                 </tr>
                                             </table>
@@ -197,16 +218,16 @@ $cc = 1;*/
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <td>Attendance</td>
-                                                <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $role, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
                                             @if($cc)
                                                 @if ($plan)
                                                     <tr>
                                                         <td>Compliance<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                        <td width="15%">{!! permSelect('view.compliance', ($sub2) ? 'super.company' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                        <td width="15%">{!! permSelect('edit.compliance', ($sub2) ? 'super.company' : 'super', $role, Auth::user()->company_id) !!}</td>
+                                                        <td width="15%">{!! permSelect('view.compliance', ($sub2) ? 'super.company' : 'super', $role, $cid, $dis) !!}</td>
+                                                        <td width="15%">{!! permSelect('edit.compliance', ($sub2) ? 'super.company' : 'super', $role, $cid, $dis) !!}</td>
                                                         <td width="45%" colspan="3"></td>
                                                     </tr>
                                                 @endif
@@ -224,60 +245,60 @@ $cc = 1;*/
                                             <tr>
                                                 <td>Accident Reports</td>
                                                 @if ($plan)
-                                                    <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every' : 'super.individual', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every' : 'super.individual', $role, $cid, $dis) !!}</td>
                                                 @else
-                                                    <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $role, $cid, $dis) !!}</td>
                                                 @endif
-                                                <td width="15%">{!! permSelect('add.site.accident', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.site.accident', 'res', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('add.site.accident', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.site.accident', 'res', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             <tr>
                                                 <td>Hazard Reports</td>
                                                 @if ($plan)
-                                                    <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every' : 'super.individual', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every' : 'super.individual', $role, $cid, $dis) !!}</td>
                                                 @else
-                                                    <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $role, $cid, $dis) !!}</td>
                                                 @endif
-                                                <td width="15%">{!! permSelect('add.site.hazard', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.site.hazard', 'res', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('add.site.hazard', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.site.hazard', 'res', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             <tr>
                                                 <td>Safety (Risk / Hazardous Materials)</td>
-                                                <td width="15%">{!! permSelect('view.safety.doc', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.safety.doc', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.safety.doc', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.safety.doc', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.safety.doc', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.safety.doc', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.safety.doc', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.safety.doc', 'del', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             <tr>
                                                 <td>General / Plans</td>
-                                                <td width="15%">{!! permSelect('view.site.doc', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.site.doc', ($plan) ? 'super.plan' : 'super', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.site.doc', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.site.doc', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.site.doc', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.site.doc', ($plan) ? 'super.plan' : 'super', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.site.doc', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.site.doc', 'del', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             @if($cc)
                                                 <tr>
                                                     <td>Quality Assurance Reports<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.site.qa', 'super', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.qa', 'super', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.site.qa', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.site.qa', 'res', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('sig.site.qa', 'sig', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.qa', 'super', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.qa', 'super', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.site.qa', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.site.qa', 'res', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('sig.site.qa', 'sig', $role, $cid, $dis) !!}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Asbestos Notifications<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.site.asbestos', 'super', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.site.asbestos', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.site.asbestos', 'res', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.asbestos', 'super', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.site.asbestos', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.site.asbestos', 'res', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 </tr>
                                             @endif
@@ -293,27 +314,27 @@ $cc = 1;*/
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <td>Safe Work Method Statements</td>
-                                                <td width="15%">{!! permSelect('view.wms', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.wms', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.wms', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.wms', 'arc', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.wms', 'sig', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.wms', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.wms', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.wms', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.wms', 'arc', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.wms', 'sig', $role, $cid, $dis) !!}</td>
                                             </tr>
                                             <tr>
                                                 <td>Toolbox Talks</td>
-                                                <td width="15%">{!! permSelect('view.toolbox', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.toolbox', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.toolbox', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.toolbox', 'res', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.toolbox', 'sig', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.toolbox', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.toolbox', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.toolbox', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.toolbox', 'res', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.toolbox', 'sig', $role, $cid, $dis) !!}</td>
                                             </tr>
                                             <tr>
                                                 <td>Safety Data Sheets (SDS)</td>
-                                                <td width="15%">{!! permSelect('view.sds', 'all', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.sds', 'all', $role, $cid, $dis) !!}</td>
                                                 @if (false)
-                                                    <td width="15%">{!! permSelect('edit.sds', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.sds', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.sds', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.sds', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.sds', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.sds', 'del', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 @else
                                                     <td width="60%" colspan="4"></td>
@@ -321,10 +342,10 @@ $cc = 1;*/
                                             </tr>
                                             <tr>
                                                 <td>Company Documents</td>
-                                                <td width="15%">{!! permSelect('view.company.doc', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc', ($sub2) ? 'own' : 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.company.doc', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.doc', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company.doc', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company.doc', 'del', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                         </table>
@@ -341,13 +362,13 @@ $cc = 1;*/
                                                 @if ($cc)
                                                     <tr>
                                                         <td>Management Reports<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                        <td width="15%">{!! permSelect('view.manage.report', 'all', $role, Auth::user()->company_id) !!}</td>
+                                                        <td width="15%">{!! permSelect('view.manage.report', 'all', $role, $cid, $dis) !!}</td>
                                                         <td width="60%" colspan="4"></td>
                                                     </tr>
                                                 @endif
                                                 <tr>
                                                     <td>Export Site Data</td>
-                                                    <td width="15%">{!! permSelect('view.site.export', 'super', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.export', 'super', $role, $cid, $dis) !!}</td>
                                                     <td width="60%" colspan="4"></td>
                                                 </tr>
                                             </table>
@@ -364,26 +385,26 @@ $cc = 1;*/
                                             <table class="table table-bordered table-striped">
                                                 <tr>
                                                     <td>Alert Nofications<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.notify', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.notify', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.notify', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.notify', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.notify', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.notify', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.notify', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.notify', 'del', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Safety Tips<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.safetytip', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.safetytip', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.safetytip', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.safetytip', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.safetytip', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.safetytip', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.safetytip', 'add', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.safetytip', 'del', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 </tr>
                                                 {{--
                                                 <tr>
                                                     <td>To Do Tasks</td>
-                                                    <td width="15%">{!! permSelect('view.todo', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.todo', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.todo', 'add', $role, Auth::user()->company_id) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.todo', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.todo', 'all', $role, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.todo', 'add', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                     <td width="15%"></td>
                                                 </tr>
@@ -401,17 +422,17 @@ $cc = 1;*/
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <td>Settings</td>
-                                                <td width="15%">{!! permSelect('view.settings', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.settings', 'all', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.settings', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.settings', 'all', $role, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
                                             {{--
                                             <tr>
                                                 <td>Roles / Permissions</td>
-                                                <td width="15%">{!! permSelect('view.role', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.role', 'all', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('add.role', 'add', $role, Auth::user()->company_id) !!}</td>
-                                                <td width="15%">{!! permSelect('dell.role', 'del', $role, Auth::user()->company_id) !!}</td>
+                                                <td width="15%">{!! permSelect('view.role', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.role', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.role', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('dell.role', 'del', $role, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
                                             --}}
@@ -420,8 +441,8 @@ $cc = 1;*/
                                 </div>
                             </div>
                             <div class="form-actions right">
-                                <a href="/manage/role" class="btn default"> Back</a>
-                                @if(Auth::user()->hasPermission2('edit.settings'))
+                                <a href="/settings/role" class="btn default"> Back</a>
+                                @if(Auth::user()->allowed2('edit.settings', $role))
                                     <button type="submit" class="btn green">Save</button>
                                 @endif
                             </div>

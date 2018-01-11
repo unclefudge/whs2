@@ -12,7 +12,7 @@ $cc = ($user->company->reportsToCompany()->id == '3') ? 1 : 0;
             @if(Auth::user()->security && Auth::user()->company_id == $user->company->reportsToCompany()->id )
                 <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                     {!! Form::label('roles', 'Assigned Role(s)', ['class' => 'control-label']) !!}
-                    {!! Form::select('roles', $user->company->reportsToCompany()->rolesSelect(), $user->roles2->pluck('id')->toArray(),
+                    {!! Form::select('roles', $user->company->reportsToCompany()->rolesSelect('ext'), $user->roles2->pluck('id')->toArray(),
                     ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple']) !!}
                     {!! fieldErrorMessage('roles', $errors) !!}
                 </div>

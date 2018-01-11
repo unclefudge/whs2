@@ -198,7 +198,7 @@
                     </li>
                 @endif
 
-                @if (Auth::user()->hasAnyPermissionType('user|company|client|trade|compliance|contractor|site.doc.manager|safetytip'))
+                @if (Auth::user()->hasAnyPermissionType('user|company|client|trade|compliance|contractor|site.doc.manager|safetytip|settings'))
                     <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                         <a href="javascript:;"><i class="fa fa-crosshairs"></i> Management
                             <span class="arrow"></span>
@@ -301,8 +301,7 @@
                                                     @if(Auth::user()->hasAnyPermissionType('settings'))
                                                         <li><h3 class="h3-submenu">Configuration</h3></li>
                                                         @if(Auth::user()->hasAnyPermissionType('settings') && (Auth::user()->id == 3 || Auth::user()->id == 109))
-                                                            <li><a href="/manage/role" class="nav-link"> Settings</a></li>
-                                                            <li><a href="/manage/settings/notifications" class="nav-link"> Notifications</a></li>
+                                                            <li><a href="/settings" class="nav-link"> Settings</a></li>
                                                         @endif
                                                     @endif
                                                 </ul>
