@@ -190,7 +190,7 @@
                 </span>
             </a>
             <ul class="dropdown-menu dropdown-menu-default">
-                <li><a href="/user/{{ Auth::user()->username }}"><i class="fa fa-user"></i> My Profile </a></li>
+                <li><a href="/user/{{ Auth::user()->id }}"><i class="fa fa-user"></i> My Profile </a></li>
                 @if(Auth::user()->hasAnyPermission2('view.company|edit.company'))
                     <li><a href="/company/{{ Auth::user()->company_id }}"><i class="fa fa-users"></i> Company Profile </a></li>
                     @endif

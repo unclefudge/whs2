@@ -28,21 +28,6 @@ use nilsenj\Toastr\Facades\Toastr;
 class UserController extends Controller {
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    /*protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'username' => 'required|min:3|max:50|unique:users',
-            'email'    => 'email|max:255|unique:users',
-            'password' => 'required|min:3',
-        ]);
-    }*/
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -125,8 +110,9 @@ class UserController extends Controller {
 
         // Signup Process - Initial update
         if ($user->company->signup_step == 3) {
-            return redirect("company/".$user->company->id."/signup/3");
+            return redirect("company/" . $user->company->id . "/signup/3");
         }
+
         return redirect('user');
     }
 
@@ -135,9 +121,9 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($username)
+    public function show($id)
     {
-        $user = (is_int($username)) ? User::firstorFail($username) : User::where(compact('username'))->firstorFail();
+        $user = User::findorFail($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.user', $user))
@@ -146,6 +132,25 @@ class UserController extends Controller {
         $tabs = ['profile', 'info'];
 
         return view('user/show', compact('user', 'tabs'));
+    }
+
+    /**
+     * Edit the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id, $tab = 'info')
+    {
+        $user = User::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        if (Auth::user()->password_reset)
+            Toastr::warning("Your password was reset by an admin and you are required to choose an new one");
+
+        return view('user/edit', compact('user'));
     }
 
     /**
@@ -175,63 +180,77 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $username)
+    public function update(Request $request, $username)
     {
         $user = User::where(compact('username'))->firstOrFail();
+
+        //dd($request->all());
+        $this->validate(request(), [
+            'username'           => 'required|min:3|max:50|unique:users,username,' . $user->id,
+            'firstname'          => 'required',
+            'lastname'           => 'required',
+            'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $user->id . ',id',
+            'roles'              => 'required_if:subscription,1',
+            'employment_type'    => 'required',
+            'subcontractor_type' => 'required_if:employment_type,2',
+        ]);
+
+        if (request()->filled('password') || request()->filled('password_force')) {
+            $this->validate(request(), [
+                'password' => 'required:|confirmed|min:3',
+            ]);
+
+        }
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.user', $user))
             return view('errors/404');
 
-        $user_request = $request->except('tabs');
-
-        $tabs = $request->get('tabs');
+        $user_request = $request->all();
         $password_reset = false;
 
-        switch ($tabs) {
-            case 'settings:info': {
-                // Empty State field if rest of address fields are empty
-                if (!$request['address'] && !$request['suburb'] && !$request['postcode'])
-                    $user_request['state'] = '';
+        // Empty State field if rest of address fields are empty
+        if (!$request->filled('address') && !$request->filled('suburb') && !$request->filled('postcode'))
+            $user_request['state'] = null;
 
-                // Null email field if empty  - for unique validation
-                if (!$request['email'])
-                    $user_request['email'] = null;
+        // Null email field if empty  - for unique validation
+        if (!$user_request['email'])
+            $user_request['email'] = null;
 
-                // Update status
-                if ($request->get('status')) {
-                    $user_request['status'] = 1;
-                } else {
-                    // If user being made inactive and has email then append 'achived-userid' to front to allow
-                    // for the email to be potentially reused by another user
-                    if ($user->status && $user->email) {
-                        Toastr::warning("Updated email");
-                        $user_request['email'] = 'archived-' . $user->id . '-' . $user->email;
-                        if ($user_request['notes'])
-                            $user_request['notes'] .= "\nupdated email to " . $user_request['email'] . ' due to archiving';
-                        else
-                            $user_request['notes'] = "updated email to " . $user_request['email'] . ' due to archiving';
-                    }
-                    $user_request['status'] = 0;
-                }
-            }
-            case 'settings:password': {
-                // encrypt password
-                if ($request->get('password'))
-                    $user_request['password'] = bcrypt($user_request['password']);
-
-                // Password has ben set by someone other then user so force user to reset after login
-                if (Auth::user()->id != $user->id)
-                    $user_request['password_reset'] = 1;
-
-                // Password has been reset by user after being set by another
-                if (Auth::user()->password_reset && Auth::user()->id == $user->id) {
-                    $user_request['password_reset'] = 0;
-                    $password_reset = true;
-                }
+        // If user being made inactive then update email
+        if ($request->filled('status') && $request->get('status') == 0) {
+            // If user being made inactive and has email then append 'achived-userid' to front to allow
+            // for the email to be potentially reused by another user
+            if ($user->status && $user->email) {
+                Toastr::warning("Updated email");
+                $user_request['email'] = 'archived-' . $user->id . '-' . $user->email;
+                if ($user_request['notes'])
+                    $user_request['notes'] .= "\nupdated email to " . $user_request['email'] . ' due to archiving';
+                else
+                    $user_request['notes'] = "updated email to " . $user_request['email'] . ' due to archiving';
             }
         }
 
+        // Encrypt password
+        if ($request->filled('password'))
+            $user_request['password'] = bcrypt($user_request['password']);
+        // Password has ben set by someone other then user so force user to reset after login
+        if ($request->filled('newpassword')) {
+            $user_request['password'] = bcrypt($user_request['newpassword']);
+            $user_request['password_reset'] = 1;
+        }
+
+        if ($request->filled('password')) {
+            // Password has been reset by user after being set by another
+            if (Auth::user()->password_reset && Auth::user()->id == $user->id) {
+                $user_request['password_reset'] = 0;
+                $password_reset = true;
+            }
+        }
+
+        //dd($user_request);
+
+        // Update User
         $user->update($user_request);
 
         if ($password_reset) {
@@ -242,9 +261,8 @@ class UserController extends Controller {
         }
 
         Toastr::success("Saved changes");
-        $tabs = explode(':', $request->get('tabs'));
 
-        return redirect('/user/' . $user->username . '/' . $tabs[0] . '/' . $tabs[1]);
+        return redirect('/user/' . $user->id);
     }
 
     /**
@@ -380,7 +398,7 @@ class UserController extends Controller {
 
         $dt = Datatables::of($user_records)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(users.firstname,' ',users.lastname) like ?", ["%$1%"])
-            ->editColumn('id', '<div class="text-center"><a href="/user/{{$username}}"><i class="fa fa-search"></i></a></div>')
+            ->editColumn('id', '<div class="text-center"><a href="/user/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('full_name', function ($user) {
                 $string = $user->firstname . ' ' . $user->lastname;
 
@@ -393,14 +411,18 @@ class UserController extends Controller {
 
                 return $string;
             })
-            ->editColumn('name', '<a href="company/{{$company_id}}">{{$name}}</a>')
+            ->editColumn('name', function ($user) {
+                $cname = $user->company->name;
+                $cid = $user->company->id;
+                return '<a href="company/'.$cid.'">'.$cname.'</a>';
+            })
             ->editColumn('last_login', function ($user) {
                 return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';
             })
             ->removeColumn('slug')
             ->addColumn('action', function ($user) {
                 if (Auth::user()->allowed2('edit.user', $user))
-                    return '<a href="/user/' . $user->username . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                    return '<a href="/user/' . $user->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
             })
             ->rawColumns(['id', 'full_name', 'name', 'action'])
             ->make(true);

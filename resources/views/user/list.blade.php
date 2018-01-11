@@ -95,7 +95,7 @@
             {data: 'id', name: 'users.id', orderable: false, searchable: false},
             {data: 'username', name: 'users.username'},
             {data: 'full_name', name: 'full_name', orderable: false, searchable: false},
-            {data: 'name', name: 'companys.name', orderable: false, searchable: false},
+            {data: 'name', name: 'companys.name'},
             {data: 'last_login', name: 'users.last_login'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],

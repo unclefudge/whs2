@@ -10,8 +10,8 @@ use App\Models\Site\Site;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SessionController extends Controller
-{
+class SessionController extends Controller {
+
     /**
      * Create a new controller instance.
      *
@@ -29,7 +29,7 @@ class SessionController extends Controller
         $worksite = '';
         if (Session::has('siteID')) {
             $site_id = Session::get('siteID');
-            $worksite = Site::where([ 'code' => $site_id])->first();
+            $worksite = Site::where(['code' => $site_id])->first();
             if (!$worksite)
                 Session::forget('siteID');
         }
@@ -44,6 +44,9 @@ class SessionController extends Controller
     {
 
         if (auth()->attempt(request(['username', 'password'])) || auth()->attempt(request(['email', 'password']))) {
+            if (Auth::user()->password_reset)
+                return redirect('/user/' . Auth::user()->id . '/edit');
+
             return redirect('/dashboard');
         }
 

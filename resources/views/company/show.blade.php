@@ -106,6 +106,10 @@
                                 {{-- Contact Details --}}
                                 <div class="row">
                                     <div class="col-md-6" style="line-height: 2">
+                                        <div class="col-md-4" style="padding-left: 0px"><b>Phone</b></div>
+                                        <div class="col-md-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else N/A @endif</div>
+                                        <div class="col-md-4" style="padding-left: 0px"><b>Email</b></div>
+                                        <div class="col-md-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else N/A @endif</div>
                                         <div class="col-md-4" style="padding-left: 0px"><b>Address</b></div>
                                         <div class="col-md-8">
                                             @if($company->address)
@@ -113,10 +117,6 @@
                                             @endif
                                             {{ $company->SuburbStatePostcode }}
                                         </div>
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Phone</b></div>
-                                        <div class="col-md-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else N/A @endif</div>
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Email</b></div>
-                                        <div class="col-md-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else N/A @endif</div>
                                     </div>
                                     <div class="col-md-6" style="line-height: 2">
                                         <div class="col-md-4" style="padding-left: 0px"><b>Primary Contact</b></div>

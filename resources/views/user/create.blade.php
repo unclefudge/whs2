@@ -101,7 +101,6 @@
                                         {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
                                         {!! Form::text('password', null, ['class' => 'form-control', 'required', 'placeholder' => 'User will be forced to choose new password upon login']) !!}
                                         {!! fieldErrorMessage('password', $errors) !!}
-                                        {{-- rand(1000, 9999) --}}
                                     </div>
                                 </div>
                             </div>
@@ -222,7 +221,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
 
                             <!-- Notes -->
                             <div class="row">

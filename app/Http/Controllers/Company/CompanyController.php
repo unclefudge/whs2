@@ -378,7 +378,7 @@ class CompanyController extends Controller {
             })
             ->addColumn('action', function ($user) {
                 if (Auth::user()->allowed2('view.user', $user))
-                    return '<div class="text-center"><a href="/user/' . $user->username . '"><i class="fa fa-search"></i></a></div>';
+                    return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
             })
             ->rawColumns(['full_name', 'phone', 'email', 'action'])
             ->make(true);

@@ -29,10 +29,12 @@ class UserRequest extends Request {
     {
         $rules = [
             'username'           => 'required|min:3|max:50|unique:users',
+            //'username'           => 'required|min:3|max:50|unique:users,username,' . $this->get('id'),
             'password'           => 'required|min:3',
             'firstname'          => 'required',
             'lastname'           => 'required',
             'email'              => 'required_if:status,1|email|max:255|unique:users,email,NULL',
+            //'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $this->get('id') . ',id',
             'roles'              => 'required_if:subscription,1',
             'employment_type'    => 'required',
             'subcontractor_type' => 'required_if:employment_type,2',
