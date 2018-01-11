@@ -1115,19 +1115,19 @@
 
     // Show Modal on errors
     @if (count($errors) > 0)
-      display_fields({{ Input::old('category_id') }})
+      display_fields({{ old('category_id') }})
     $('#file-modal').modal('show');
-    $(".modal-title").html("<b>{{ Input::old('name') }}</b>");
+    $(".modal-title").html("<b>{{ old('name') }}</b>");
     $("#pending_div").hide();
     $("#rejected_div").hide();
-    @if (Input::old('action') == 'edit')
-    @if (Input::old('status') == '2')
+    @if (old('action') == 'edit')
+    @if (old('status') == '2')
       $("#pending_div").show();
-    @elseif (Input::old('status') == '3')
+    @elseif (old('status') == '3')
       $("#rejected_div").show();
     @endif
-    $(".modal-body #doc_link").html("{{ Input::old('doc_name') }}");
-    $(".modal-body #doc_link").attr('href', "{{ Input::old('doc_url') }}");
+    $(".modal-body #doc_link").html("{{ old('doc_name') }}");
+    $(".modal-body #doc_link").attr('href', "{{ old('doc_url') }}");
     $("#file_field").hide();
     $("#del_doc").show();
     @else
