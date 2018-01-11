@@ -26,7 +26,6 @@ class ToolboxRequest extends Request {
         return [
             'toolbox_type'   => 'required',
             'name'           => 'required',
-            'for_company_id' => 'required',
             'master_id'      => 'required_if:toolbox_type,library',
             'previous_id'    => 'required_if:toolbox_type,previous',
         ];

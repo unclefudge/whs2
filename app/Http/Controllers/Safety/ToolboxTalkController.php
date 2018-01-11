@@ -115,7 +115,9 @@ class ToolboxTalkController extends Controller {
         else
             $tool_request['master_id'] = $request->get('master_id');
 
-        //dd($tool_request);
+        $tool_request['company_id'] = ($request->has('parent_switch')) ? Auth::user()->company->reportsToCompany()->id : Auth::user()->company_id;
+        $tool_request['for_company_id'] = Auth::user()->company_id;
+
         // Create Toolbox
         $newTalk = ToolboxTalk::create($tool_request);
 

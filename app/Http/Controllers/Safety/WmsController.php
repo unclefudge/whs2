@@ -288,6 +288,7 @@ class WmsController extends Controller {
     {
         $doc = WmsDoc::findOrFail($id);
         if ($doc->builder && $doc->status == 1) {
+            //return view('pdf/workmethod', compact('doc'));
             $file = $this->createPdf($doc);
             //dd($file);
             $doc->attachment = $file;

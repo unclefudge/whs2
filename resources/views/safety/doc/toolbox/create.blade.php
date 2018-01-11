@@ -61,8 +61,7 @@
                         @include('form-error')
 
                         <input type="hidden" name="version" value="1.0">
-                        <input type="hidden" name="for_company_id" value="{{ Auth::user()->company_id }}">
-                        <input type="hidden" name="company_id" value="{{ Auth::user()->company->reportsToCompany()->id }}">
+
                         <div class="form-body">
                             <!-- Template or File -->
                             <div class="row">
@@ -111,6 +110,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- TBT Owner -->
+                            @if (Auth::user()->company->subscription)
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p class="myswitch-label">&nbsp; </p>
+                                            <span style="padding-right: 30px">Is this talk for a {{ Auth::user()->company->reportsToCompany()->name }} site?</span>
+                                            {!! Form::label('parent_switch', "&nbsp;", ['class' => 'control-label']) !!}
+                                            {!! Form::checkbox('parent_switch', '1', true, ['class' => 'make-switch',
+                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <input type="hidden" name="parent_switch" value="1">
+                            @endif
+
                             {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
                             <div class="row" @if(!(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')) style="display: none;" @endif>
                                 <div class="col-md-6">
@@ -187,6 +205,7 @@
                 $('#previous_div').hide();
             }
         }
+
         /* Select2 */
         $("#master_id").select2({
             placeholder: "Select template",
@@ -198,6 +217,16 @@
         $("#for_company_id").select2({
             placeholder: "Select Company",
         });
+
+        /* toggle Parent + set in on page load */
+        if ($('#parent_switch').bootstrapSwitch('state') == false) {
+            $('#parent-div').show();
+        }
+
+        $('#parent_switch').on('switchChange.bootstrapSwitch', function (event, state) {
+            $('#parent-div').toggle();
+        });
+
         $('#master_id').change(function () {
             $('#name').val('');
             // strip the version out of text

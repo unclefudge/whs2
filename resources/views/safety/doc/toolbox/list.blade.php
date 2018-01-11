@@ -53,7 +53,7 @@
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
                                 <th> Name</th>
-                                <th> Company</th>
+                                <th  width="20%"> Company</th>
                                 <th width="10%"> Updated</th>
                                 <th width="10%"> Completed</th>
                                 <th width="10%"></th>
