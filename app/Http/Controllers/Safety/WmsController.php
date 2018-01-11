@@ -513,7 +513,7 @@ class WmsController extends Controller {
     {
         $records = DB::table('wms_docs AS d')
             ->select(['d.id', 'd.attachment', 'd.name', 'd.version', 'd.company_id', 'd.status', 'd.updated_at'])
-            ->where('d.company_id', Auth::user()->company_id)
+            ->where('d.company_id', 3)
             ->where('d.master', '1')
             ->where('d.status', $request->get('status'));
 

@@ -154,15 +154,6 @@ class CompanyDoc extends Model {
             'url'               => URL::to('/company') . '/' . $this->for_company_id,
         ];
         $doc = $this;
-        /*
-        Mail::send('emails/company-doc-rejected', $data, function ($m) use ($email_to, $email_user, $doc, $data) {
-            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.net';
-            $m->from($send_from, Auth::user()->fullname);
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Company Document Not Approved - ' . $doc->name);
-        });*/
     }
 
     /**
