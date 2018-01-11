@@ -114,10 +114,8 @@ class WmsController extends Controller {
 
         $wms_request = $request->all();
 
-        //dd($wms_request);
-
         // If Principle checkbox Yes then assign principle fields + document owner
-        if ($request->get('principle_switch') && !$request->has('master')) {
+        if ($request->get('principle_switch') && !$request->get('master')) {
             $wms_request['company_id'] = Auth::user()->company->reportsToCompany()->id;
             $wms_request['principle_id'] = Auth::user()->company->reportsToCompany()->id;
             $wms_request['principle'] = Auth::user()->company->reportsToCompany()->name;
@@ -133,7 +131,7 @@ class WmsController extends Controller {
             $wms_request['master_id'] = null;
 
         // If Replace checkbox Yes then archive selected SWMS
-        if ($request->get('replace_switch') && $request->has('replace_id')) {
+        if ($request->get('replace_switch') && $request->filled('replace_id')) {
             $replace_wms = WmsDoc::findOrFail($request->get('replace_id'));
             $replace_wms->status = - 1;
             $replace_wms->save();
@@ -142,8 +140,6 @@ class WmsController extends Controller {
                 $replace_wms->emailArchived();
         }
 
-
-        //dd($wms_request);
         // Create WMSdoc
         $newDoc = WmsDoc::create($wms_request);
 
@@ -176,12 +172,12 @@ class WmsController extends Controller {
     {
         $doc = WmsDoc::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('sig.wms', $doc))
-            return view('errors/404');
-
         // Signed off by Company doc is For
         if ($doc->for_company_id == Auth::user()->company_id) {
+            // Check authorisation and throw 404 if not
+            if (!Auth::user()->allowed2('edit.wms', $doc))
+                return view('errors/404');
+
             $doc->user_signed_id = Auth::user()->id;
             $doc->user_signed_at = Carbon::now();
 
@@ -197,6 +193,10 @@ class WmsController extends Controller {
 
         // Signed off by Principle doc
         if ($doc->principle_id && $doc->company_id == Auth::user()->company_id) {
+            // Check authorisation and throw 404 if not
+            if (!Auth::user()->allowed2('sig.wms', $doc))
+                return view('errors/404');
+
             $doc->principle_signed_id = Auth::user()->id;
             $doc->principle_signed_at = Carbon::now();
             // Move doc to active if user signed else make pending
@@ -500,7 +500,7 @@ class WmsController extends Controller {
                 return '<a href="/safety/doc/wms/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
             })
-            ->rawColumns(['id', 'name', 'action'])
+            ->rawColumns(['id', 'name', 'company_name', 'principle', 'action'])
             ->make(true);
 
         return $dt;
@@ -672,6 +672,12 @@ class WmsController extends Controller {
         $file_path = public_path('filebank/company/' . $doc->for_company_id . '/wms/' . $file);
         if (file_exists($file_path))
             unlink($file_path);
+
+        // Make Directory if doesn't exist
+        if (!file_exists('filebank/company/' . $doc->for_company_id . '/wms'))
+            if (!mkdir('filebank/company/' . $doc->for_company_id . '/wms', 0755, true))
+                die('Failed to create folders...');
+
         $pdf->save($file_path);
 
         return $file;
@@ -702,8 +708,8 @@ class WmsController extends Controller {
                 $todo->assignUsers($for_company->seniorUsers());
 
                 echo '<br>' . $exp->status . ' ' . $count ++ . ' ' . $exp->updated_at->format('Y-m-d') . " - $exp->name (" . $for_company->name . ") <br>";
-                print_r($user_list);
-                dd($todo);
+                //print_r($user_list);
+                //dd($todo);
             } else {
                 echo '<br>' . $exp->status . ' ' . $count ++ . ' ' . $exp->updated_at->format('Y-m-d') . " - $exp->name EXISTING TODO<br>";
             }
