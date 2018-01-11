@@ -179,7 +179,7 @@
                             </div>
                             <!-- Save as Template -->
                             {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
-                            @if(!(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109'))
+                            @if(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')
                                 <div class="row" id="master_div">
                                     <div class="col-md-6">
                                         <div class="form-group">
