@@ -152,7 +152,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <p class="myswitch-label">&nbsp; </p>
-                                         <span style="padding-right: 30px">Is this replacing an existing or expired SWMS?</span>
+                                            <span style="padding-right: 30px">Is this replacing an existing or expired SWMS?</span>
                                             {!! Form::label('replace_switch', "&nbsp;", ['class' => 'control-label']) !!}
                                             {!! Form::checkbox('replace_switch', '1', (isset($data['replace_id'])) ? true : false, ['class' => 'make-switch',
                                              'data-on-text'=>'Yes', 'data-on-color'=>'success',
@@ -178,19 +178,23 @@
                                 </div>
                             </div>
                             <!-- Save as Template -->
-                             {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
-                            <div class="row" id="master_div" @if(!(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')) style="display: none;" @endif>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <p class="myswitch-label">&nbsp;</p>
-                                        <span style="padding-right: 30px">Save as a master template for others to access?</span>
-                                        {!! Form::label('master', "&nbsp;", ['class' => 'control-label']) !!}
-                                        {!! Form::checkbox('master', '1', false, ['class' => 'make-switch',
-                                         'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                                         'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                            {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
+                            @if(!(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109'))
+                                <div class="row" id="master_div">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p class="myswitch-label">&nbsp;</p>
+                                            <span style="padding-right: 30px">Save as a master template for others to access?</span>
+                                            {!! Form::label('master', "&nbsp;", ['class' => 'control-label']) !!}
+                                            {!! Form::checkbox('master', '1', false, ['class' => 'make-switch',
+                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @else
+                                <input type="hidden" name="master" value="0">
+                            @endif
                         </div>
                         <div class="form-actions right">
                             <a href="/safety/doc/wms" class="btn default"> Back</a>
