@@ -22,7 +22,7 @@
         <input v-model="xx.params.site_start" type="hidden" value="{{ $site_start }}">
         <input v-model="xx.user_company_id" type="hidden" value="{{ Auth::user()->company_id }}">
         <input v-model="xx.show_contact" type="hidden" value="{{ (Auth::user()->company->parent_company) ? '1': '0' }}">
-        @if (Auth::user()->company->parent_company && Auth::user()->company->reportsToCompany()->id == 3)
+        @if (Auth::user()->company->parent_company && Auth::user()->company->reportsTo()->id == 3)
             <div class="note note-warning">
                 This is a guide only. Contact with Site Supervisor is still required.
             </div>

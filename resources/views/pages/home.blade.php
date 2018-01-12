@@ -9,18 +9,18 @@
 @stop
 
 @section('content')
-    @if (Auth::user()->company->reportsToCompany()->currentSafetytip())
+    @if (Auth::user()->company->reportsTo()->currentSafetytip())
         <div class="row">
             <div class="col-md-12">
                 <div class="widget-thumb widget-bg-color-green margin-bottom-20">
-                    <h4 class="widget-thumb-heading font-white text-uppercase">{{ Auth::user()->company->reportsToCompany()->currentSafetytip()->title }}
+                    <h4 class="widget-thumb-heading font-white text-uppercase">{{ Auth::user()->company->reportsTo()->currentSafetytip()->title }}
                         <span class="pull-right" style="color: #cbd4e0;
     font-size: 26px"> <i class="fa fa-comment-o font-white"></i></span>
                     </h4>
                     <i class="widget-thumb-icon bg-white font-dark fa fa-check pull-left"
                        style="height: 40px; width:40px; line-height: 25px; font-size: 30px; padding: 10px 5px"></i>
                     <div class="font-grey-steel"
-                         style="min-height: 35px">{{ Auth::user()->company->reportsToCompany()->currentSafetytip()->body }}</div>
+                         style="min-height: 35px">{{ Auth::user()->company->reportsTo()->currentSafetytip()->body }}</div>
                 </div>
             </div>
         </div>

@@ -216,7 +216,7 @@ class Company extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function reportsToCompany()
+    public function reportsTo()
     {
         return ($this->parentCompany) ? $this->parentCompany : $this;
     }
@@ -656,7 +656,7 @@ class Company extends Model {
      */
     public function sitesPlannedFor($status = '', $date_from = '', $date_to = '')
     {
-        $client_list = $this->reportsToCompany()->clients->pluck('id')->toArray();
+        $client_list = $this->reportsTo()->clients->pluck('id')->toArray();
         $collection = ($status != '') ? Site::where('status', $status)->whereIn('client_id', $client_list)->get() : Site::whereIn('client_id', $client_list)->get();
 
         // If Company has no Parent then return full collection
@@ -864,7 +864,7 @@ class Company extends Model {
         $templates = WmsDoc::where('master', '1')
             ->where(function ($q) {
                 $q->where('company_id', Auth::user()->company_id);
-                $q->orWhere('company_id', Auth::user()->company->reportsToCompany()->id);
+                $q->orWhere('company_id', Auth::user()->company->reportsTo()->id);
             })
             ->where('status', '1')->get();
 
@@ -921,7 +921,7 @@ class Company extends Model {
         $templates = ToolboxTalk::where('master', '1')
             ->where(function ($q) {
                 $q->where('company_id', Auth::user()->company_id);
-                $q->orWhere('company_id', Auth::user()->company->reportsToCompany()->id);
+                $q->orWhere('company_id', Auth::user()->company->reportsTo()->id);
             })
             ->where('status', '1')->get();
 
@@ -1205,6 +1205,14 @@ class Company extends Model {
     {
         $stripped = preg_replace("/[^0-9]/", "", $value);
         $this->attributes['abn'] = preg_replace("/([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{3})/", "$1 $2 $3 $4", $stripped);
+    }
+
+    /**
+     * Get the Company Id  (getter)
+     */
+    public function getCidAttribute()
+    {
+        return $this->id;
     }
 
     /**

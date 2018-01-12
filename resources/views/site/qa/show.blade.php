@@ -50,7 +50,7 @@
                             <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $qa->status }}">
                             <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
                             <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
-                            <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsToCompany()->id }}">
+                            <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
                             <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.qa', $qa) }}">
                             <input v-model="xx.user_manager" type="hidden" id="user_manager"
                                    value="{!! (in_array(Auth::user()->id, $qa->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">

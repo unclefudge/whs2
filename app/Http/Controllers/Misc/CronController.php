@@ -374,9 +374,9 @@ class CronController extends Controller {
                     if ($date == Carbon::today()->addDays(14)->format('Y-m-d')) {
                         // Due in 2 weeks
                         if ($lh_ca) $doc->createExpiredToDo($lh_ca, false);
-                        $doc->emailExpired($company->reportsToCompany()->notificationsUsersEmailType('company.doc'), false);
-                        echo "Created ToDo for company + emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('company.doc')) . "<br>";
-                        $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('company.doc')) . "\n";
+                        $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('company.doc'), false);
+                        echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "<br>";
+                        $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "\n";
                     } else {
                         // Expired
                         if ($doc->status != 0) {
@@ -388,9 +388,9 @@ class CronController extends Controller {
                         echo "Created ToDo for company<br>";
                         $log .= "Created ToDo for company\n";
                         if ($date == Carbon::today()->subDays(14)->format('Y-m-d')) {
-                            $doc->emailExpired($company->reportsToCompany()->notificationsUsersEmailType('company.doc'), true);
-                            echo "Emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('company.doc')). "<br>";
-                            $log .= "Emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('company.doc')) . "\n";
+                            $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('company.doc'), true);
+                            echo "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')). "<br>";
+                            $log .= "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "\n";
                         }
                     }
                 }
@@ -447,18 +447,18 @@ class CronController extends Controller {
                     if ($date == Carbon::today()->addDays(14)->subYear()->format('Y-m-d')) {
                         // Due in 2 weeks
                         if ($lh_ca) $doc->createExpiredToDo($lh_ca, false);
-                        $doc->emailExpired($company->reportsToCompany()->notificationsUsersEmailType('whs'), false);
-                        echo "Created ToDo for company + emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('whs')) . "<br>";
-                        $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('whs')) . "\n";
+                        $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('whs'), false);
+                        echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "<br>";
+                        $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "\n";
                     } else {
                         $doc->closeToDo(User::find(1));
                         if ($company->seniorUsers()) $doc->createExpiredToDo($company->seniorUsers(), true);
                         echo "Created ToDo for company<br>";
                         $log .= "Created ToDo for company\n";
                         if ($date == Carbon::today()->subDays(28)->format('Y-m-d')) {
-                            $doc->emailExpired($company->reportsToCompany()->notificationsUsersEmailType('whs'), true);
-                            echo "Emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('whs')). "<br>";
-                            $log .= "Emailed " . implode("; ",$company->reportsToCompany()->notificationsUsersEmailType('whs')) . "\n";
+                            $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('whs'), true);
+                            echo "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')). "<br>";
+                            $log .= "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "\n";
                         }
                     }
                 }

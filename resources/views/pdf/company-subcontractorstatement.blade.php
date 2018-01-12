@@ -93,9 +93,9 @@
                 {{-- Note 2 --}}
                 <div style="width: 100%; display: table;">
                     <span style="display: table-cell; width: 190px;">has entered into a contract with: </span>
-                    <span style="display: table-cell; border-bottom: 1px dotted #555555;">{{ $company->reportsToCompany()->name }}</span>
+                    <span style="display: table-cell; border-bottom: 1px dotted #555555;">{{ $company->reportsTo()->name }}</span>
                     <span class="text-right" style="display: table-cell; width: 40px;"> &nbsp; ABN: &nbsp; </span>
-                    <span style="display: table-cell; width: 100px; border-bottom: 1px dotted #555555;">{{ $company->reportsToCompany()->abn }}</span>
+                    <span style="display: table-cell; width: 100px; border-bottom: 1px dotted #555555;">{{ $company->reportsTo()->abn }}</span>
                 </div>
                 <div><span style="color:#bfbfbf; padding-left: 250px">(Business name of principal contractor)</span> <span class="pull-right"><b>(Note 2)</b></span></div>
 

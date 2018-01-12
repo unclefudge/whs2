@@ -168,7 +168,7 @@ class CompanyDoc extends Model {
                 $email_to[] = $company->seniorUsersEmail();
 
                 // Send CC to Parent Company Account
-                $email_user = $company->reportsToCompany()->notificationsUsersEmailType('company.doc');
+                $email_user = $company->reportsTo()->notificationsUsersEmailType('company.doc');
             }
         } else {
             $email_to = [env('EMAIL_ME')];

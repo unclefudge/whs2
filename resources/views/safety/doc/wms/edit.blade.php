@@ -30,8 +30,8 @@
         <input v-model="xx.company.parent_name" type="hidden" value="Parent Company">
         @else
             <input v-model="xx.company.name" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->name }}">
-            <input v-model="xx.company.parent_id" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->reportsToCompany()->id }}">
-            <input v-model="xx.company.parent_name" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->reportsToCompany()->name }}">
+            <input v-model="xx.company.parent_id" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->reportsTo()->id }}">
+            <input v-model="xx.company.parent_name" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->reportsTo()->name }}">
         @endif
         <input v-model="xx.user.name" type="hidden" value="{{ Auth::user()->fullname }}">
         <input v-model="xx.user.company_id" type="hidden" value="{{ Auth::user()->company_id }}">

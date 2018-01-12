@@ -33,7 +33,10 @@
                             <span class="caption-helper"> ID: {{ $user->id }}</span>
                         </div>
                         <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
+                            @if (Auth::user()->allowed2('edit.user', $user))
+                                <a href="/user/{{ $user->id }}/security" class="btn btn-circle green btn-outline btn-sm">
+                                    <i class="fa fa-lock"></i> @if (Auth::user()->security) Edit @endif Security Settings</a>
+                            @endif
                             <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
                     </div>
@@ -43,13 +46,40 @@
                                 {!! Form::model($user, ['method' => 'PATCH', 'action' => ['UserController@update', $user->username]]) !!}
 
                                 <div class="form-body">
-                                    {{-- Inactive User --}}
-                                    @if(!$user->status)
-                                        <h3 class="font-red uppercase pull-right" style="margin:-20px 0 10px;">Inactive</h3>
-                                    @endif
-
-                                    <h1 class="sbold hidden-sm hidden-xs" style="margin: -20px 0 15px 0">{{ $user->name }}</h1>
-                                    <h3 class="sbold visible-sm visible-xs">{{ $user->name }}</h3>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h1 class="sbold hidden-sm hidden-xs" style="{!! ($user->name) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $user->name }}<br>
+                                                <small class='font-grey-cascade'>{{ $user->company->name_alias }}</small>
+                                            </h1>
+                                            <h3 class="sbold visible-sm visible-xs">{{ $user->name }}
+                                                <small class='font-grey-cascade' style="margin:0px"> {{ $user->company->name_alias }}</small>
+                                            </h3>
+                                            @if ($user->security )
+                                                <span class='label label-warning'>Security Access</span>
+                                            @endif
+                                            @if ($user->id == $user->company->primary_user )
+                                                <span class='label label-info'>Primary Contact</span>
+                                            @endif
+                                            @if ($user->id == $user->company->secondary_user )
+                                                <span class='label label-info'>Secondary Contact</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-4">
+                                            <!-- Inactive User -->
+                                            @if(!$user->status)
+                                                <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive User</h3>
+                                            @endif
+                                            @if ($user->roles2->count() > 0)
+                                                <br><br>
+                                                @if ($user->rolesSBC() && Auth::user()->isCompany($user->company_id))
+                                                    <b>Roles: </b>{{ $user->rolesSBC() }}<br>
+                                                @endif
+                                                @if ($user->company->parent_company && $user->parentRolesSBC())
+                                                    <b>{{ $user->company->reportsTo()->name }} Roles:</b> {{ $user->parentRolesSBC() }}
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
 
                                     @include('form-error')
 
@@ -101,7 +131,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group {!! fieldHasError('password_confirmation', $errors) !!}">
-                                                    {!! Form::label('password_confirmation', 'Confirm Password', ['class' => 'control-label']) !!}
+                                                    {!! Form::label('password_confirmation', 'Re-type Password', ['class' => 'control-label']) !!}
                                                     <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" id="password_confirmation" class="form-control">
                                                     {!! fieldErrorMessage('password_confirmation', $errors) !!}
                                                 </div>
@@ -273,15 +303,6 @@
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-    if ($('#transient').bootstrapSwitch('state'))
-        $('#super-div').show();
-    else
-        $('#supervisors').val('');
-
-    $('#transient').on('switchChange.bootstrapSwitch', function (event, state) {
-        $('#super-div').toggle();
-    });
-
     $('.date-picker').datepicker({
         autoclose: true,
         clearBtn: true,
@@ -294,19 +315,5 @@
         $('#butt_password').hide();
     });
 
-    $('#status').change(function () {
-        if ($('#status').val() == '0') {
-            swal({
-                title: "Deactivating a Company",
-                text: "Once you make a company <b>Inactive</b> and save it will also:<br><br>" +
-                "<div style='text-align: left'><ul>" +
-                "<li>Make all users within this company 'Inactive'</li>" +
-                "<li>Remove company from planner for all future events</li>" +
-                "</ul></div>",
-                allowOutsideClick: true,
-                html: true,
-            });
-        }
-    });
 </script>
 @stop

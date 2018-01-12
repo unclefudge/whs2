@@ -196,8 +196,8 @@ class CompanyExportController extends Controller {
 
         $data = ['date_from'             => $date_from, 'date_to' => $date_to,
                  'suburb_state_postcode' => $company->suburb_state_postcode,
-                 'parent_name'           => $company->reportsToCompany()->name,
-                 'parent_abn'            => $company->reportsToCompany()->abn,
+                 'parent_name'           => $company->reportsTo()->name,
+                 'parent_abn'            => $company->reportsTo()->abn,
         ];
 
         //dd($data);

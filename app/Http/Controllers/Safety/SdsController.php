@@ -241,7 +241,7 @@ class SdsController extends Controller {
         else
             $category_list = SafetyDocCategory::pluck('id')->toArray();
 
-        //$company_list = [Auth::user()->company_id, Auth::user()->company->reportsToCompany()->id];
+        //$company_list = [Auth::user()->company_id, Auth::user()->company->reportsTo()->id];
         $records = DB::table('safety_docs as d')
             ->select(['d.id', 'd.type', 'd.category_id', 'd.attachment', 'd.name', 'c.id as cid', 'c.name as cat_name'])
             ->join('safety_docs_categories as c', 'd.category_id', '=', 'c.id')

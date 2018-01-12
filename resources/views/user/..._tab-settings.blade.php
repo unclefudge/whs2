@@ -95,7 +95,7 @@
                             {{--
     <div class="col-md-4">
         <div class="form-group {!! fieldHasError('company_id', $errors) !!}">
-            @if($user->id != Auth::user()->id && $user->company->reportsToCompany()->id == Auth::user()->company_id)
+            @if($user->id != Auth::user()->id && $user->company->reportsTo()->id == Auth::user()->company_id)
                     {!! Form::label('company_id', 'Company', ['class' => 'control-label']) !!}
                     {!! Form::select('company_id', Auth::user()->company->companiesSelect(),
                      null, ['class' => 'form-control bs-select']) !!}

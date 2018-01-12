@@ -97,7 +97,7 @@ trait UserRolesPermissions {
      */
     public function parentRolesSBC()
     {
-        $role_ids = Role2::where('company_id', $this->company->reportsToCompany()->id)->pluck('id')->toArray();
+        $role_ids = Role2::where('company_id', $this->company->reportsTo()->id)->pluck('id')->toArray();
         $roles = DB::table('role_user')->where('user_id', $this->id)->whereIn('role_id', $role_ids)
             ->join('roles', 'role_user.role_id', '=', 'roles.id')->orderBy('roles.name')->get();
 
@@ -160,7 +160,7 @@ trait UserRolesPermissions {
         $permission_array = explode('|', $type);
         foreach ($permission_array as $permission) {
             foreach ($permission_types as $ptype) {
-                if ($this->permissionLevel("$ptype.$permission", $this->company_id) || $this->permissionLevel("$ptype.$permission", $this->company->reportsToCompany()->id))
+                if ($this->permissionLevel("$ptype.$permission", $this->company_id) || $this->permissionLevel("$ptype.$permission", $this->company->reportsTo()->id))
                     return true;
             }
         }
@@ -177,7 +177,7 @@ trait UserRolesPermissions {
     {
         // Get permission level attached to user
         if ($this->permissionLevel($permission, $this->company_id)) return true;
-        if ($this->permissionLevel($permission, $this->company->reportsToCompany()->id)) return true;
+        if ($this->permissionLevel($permission, $this->company->reportsTo()->id)) return true;
 
         return false;
     }
@@ -288,13 +288,13 @@ trait UserRolesPermissions {
         if ($company_level == '1') $company_ids = $this->company->users()->pluck('id')->toArray(); // Delete / Sign Off All
 
         // Parent Company
-        $parent_level = $this->permissionLevel($permission, $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
         $parent_ids = [];
-        if ($parent_level == '99') $parent_ids = $this->company->reportsToCompany()->users()->pluck('id')->toArray(); // All
-        if ($parent_level == '50') $parent_ids = $this->company->reportsToCompany()->staff->pluck('id')->toArray(); // Our Company
+        if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->users()->pluck('id')->toArray(); // All
+        if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->staff->pluck('id')->toArray(); // Our Company
         if ($parent_level == '20') $parent_ids = $this->company->users()->pluck('id')->toArray(); // Own Company
         if ($parent_level == '10') $parent_ids = [$this->id]; // Individual Only
-        if ($parent_level == '1') $parent_ids = $this->company->reportsToCompany()->users()->pluck('id')->toArray(); // Delete / Sign Off All
+        if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->users()->pluck('id')->toArray(); // Delete / Sign Off All
 
         $merged_ids = array_merge($company_ids, $parent_ids);
 
@@ -316,11 +316,11 @@ trait UserRolesPermissions {
         if ($company_level == '1') $company_ids = $this->company->companies()->pluck('id')->toArray(); // Delete / Sign Off All
 
         // Parent Company
-        $parent_level = $this->permissionLevel($permission, $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
         $parent_ids = [];
-        if ($parent_level == '99') $parent_ids = $this->company->reportsToCompany()->companies()->pluck('id')->toArray(); // All
+        if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->companies()->pluck('id')->toArray(); // All
         if ($parent_level == '20') $parent_ids = $this->company->companies()->pluck('id')->toArray(); // Own Company
-        if ($parent_level == '1') $parent_ids = $this->company->reportsToCompany()->companies()->pluck('id')->toArray(); // Delete / Sign Off All
+        if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->companies()->pluck('id')->toArray(); // Delete / Sign Off All
 
         $merged_ids = array_merge($company_ids, $parent_ids);
 
@@ -344,12 +344,12 @@ trait UserRolesPermissions {
         if ($company_level == '1') $company_ids = $this->company->sites()->pluck('id')->toArray(); // Delete / Sign Off All
 
         // Parent Company
-        $parent_level = $this->permissionLevel($permission, $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
         $parent_ids = [];
-        if ($parent_level == '99') $parent_ids = $this->company->reportsToCompany()->sites()->pluck('id')->toArray(); // All
-        if ($parent_level == '50') $parent_ids = $this->company->reportsToCompany()->sites()->pluck('id')->toArray(); // Our Company
+        if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // All
+        if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
         if ($parent_level == '30') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
-        if ($parent_level == '1') $parent_ids = $this->company->reportsToCompany()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
+        if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
 
         $merged_ids = array_merge($company_ids, $parent_ids);
 
@@ -400,7 +400,7 @@ trait UserRolesPermissions {
 
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
-        $parent_level = $this->permissionLevel($permission, $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
 
         // Return false if Company + Parent levels == 0
         if ($company_level == 0 && $parent_level == 0)

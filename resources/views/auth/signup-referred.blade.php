@@ -12,7 +12,7 @@
 @section('content')
     <div class="page-content-inner">
         <div class="note note-warning">
-            <p>Your company {{ $company->name }} has been invited to join SafeWorksite by <b>{{ $company->reportsToCompany()->name }}</b></p>
+            <p>Your company {{ $company->name }} has been invited to join SafeWorksite by <b>{{ $company->reportsTo()->name }}</b></p>
             <p><br>SafeWorksite is an online WHS platform to help you and your work mates stay safe. To be able to perform any work on a site managed by Cape Cod you are required to sign up and register any workers within your company.</p>
             <p><br>Please complete the below form to register with SafeWorksite</p>
         </div>

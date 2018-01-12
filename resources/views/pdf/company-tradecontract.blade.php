@@ -67,22 +67,22 @@
                 <h5 style="margin: 0px">Principal contractor</h5>
                 <hr style="margin: 5px 0px 10px 0px">
                 <div class="col-xs-2">NAME</div>
-                <div class="col-xs-10">{{ $company->reportsToCompany()->name }}</div>
+                <div class="col-xs-10">{{ $company->reportsTo()->name }}</div>
                 <div class="col-xs-2">ADDRESS</div>
-                <div class="col-xs-10">{{ $company->reportsToCompany()->address }}</div>
+                <div class="col-xs-10">{{ $company->reportsTo()->address }}</div>
                 <div class="col-xs-2">SUBURB</div>
-                <div class="col-xs-4">{{ $company->reportsToCompany()->suburb }}</div>
+                <div class="col-xs-4">{{ $company->reportsTo()->suburb }}</div>
                 <div class="col-xs-1">STATE</div>
-                <div class="col-xs-2">{{ $company->reportsToCompany()->state }}</div>
-                <div class="col-xs-3">POSTCODE &nbsp; &nbsp; {{ $company->reportsToCompany()->postcode }}</div>
+                <div class="col-xs-2">{{ $company->reportsTo()->state }}</div>
+                <div class="col-xs-3">POSTCODE &nbsp; &nbsp; {{ $company->reportsTo()->postcode }}</div>
                 <div class="col-xs-2">ABN</div>
-                <div class="col-xs-4">{{ $company->reportsToCompany()->abn }}</div>
+                <div class="col-xs-4">{{ $company->reportsTo()->abn }}</div>
                 <div class="col-xs-2">&nbsp;</div>
                 <div class="col-xs-4">&nbsp;</div>
                 <div class="col-xs-2">PHONE</div>
-                <div class="col-xs-4">{{ $company->reportsToCompany()->phone }}</div>
+                <div class="col-xs-4">{{ $company->reportsTo()->phone }}</div>
                 <div class="col-xs-1">EMAIL</div>
-                <div class="col-xs-5">{!! ($company->reportsToCompany()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsToCompany()->email !!}</div>
+                <div class="col-xs-5">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</div>
                 <div class="col-xs-4">HIA MEMBER NUMBER</div>
                 <div class="col-xs-6">&nbsp;</div>
             </div>

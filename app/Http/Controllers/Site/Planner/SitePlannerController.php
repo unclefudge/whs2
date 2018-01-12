@@ -296,7 +296,7 @@ class SitePlannerController extends Controller {
 
         if (Auth::user()->company->addon('planner')) {
             if ($super_id == 'all')
-                $allowedSites = Auth::user()->company->reportsToCompany()->sites('1')->pluck('id')->toArray();
+                $allowedSites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
             else
                 $allowedSites = DB::table('site_supervisor')->select('site_id')->where('user_id', $super_id)->pluck('site_id')->toArray();
         } else {
@@ -346,7 +346,7 @@ class SitePlannerController extends Controller {
 
         // Exclude Quotes (tasks with code 'Q' from maxjobs
         $excludeTasks = [];
-        if (Auth::user()->company->reportsToCompany()->id == '3')
+        if (Auth::user()->company->reportsTo()->id == '3')
             $excludeTasks = Task::where('code', 'Q')->pluck('id')->toArray();
 
         $planner2 = $this->getPlannerForWeek($date_from, $date_to, $allowedSites, $excludeTasks);
@@ -463,7 +463,7 @@ class SitePlannerController extends Controller {
         // Get a list of Companys on planner that have exceeded their 'maxjobs'
         //
         $quote_ids = [];
-        if (Auth::user()->company->reportsToCompany()->id == '3')
+        if (Auth::user()->company->reportsTo()->id == '3')
             $quote_ids = Task::where('code', 'Q')->pluck('id')->toArray();
 
         $today_14 = Carbon::now()->subDays(14);
@@ -1152,7 +1152,7 @@ class SitePlannerController extends Controller {
     public function getJobStarts(Request $request, $exists)
     {
         $today = Carbon::now();
-        $allowedSites = Auth::user()->company->reportsToCompany()->sites('1')->pluck('id')->toArray();
+        $allowedSites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
         $sites = Site::whereIn('id', $allowedSites)->where('status', '1')->orderBy('name')->get();
 
         //$startJobIDs = Task::where('code', 'START')->where('status', '1')->pluck('id')->toArray();
@@ -1188,7 +1188,7 @@ class SitePlannerController extends Controller {
     public function getSitesWithStart(Request $request)
     {
 
-        $allowedSites = Auth::user()->company->reportsToCompany()->sites('1')->pluck('id')->toArray();
+        $allowedSites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
         $sites = Site::whereIn('id', $allowedSites)->where('status', '1')->orderBy('name')->get();
 
         $startJobIDs = Task::where('code', 'START')->where('status', '1')->pluck('id')->toArray();
@@ -1220,7 +1220,7 @@ class SitePlannerController extends Controller {
     public function getSitesWithoutSuper(Request $request)
     {
 
-        $allowedSites = Auth::user()->company->reportsToCompany()->sites()->pluck('id')->toArray();
+        $allowedSites = Auth::user()->company->reportsTo()->sites()->pluck('id')->toArray();
         $sites = Site::whereIn('id', $allowedSites)->where('status', '<>', '0')->orderBy('name')->get();
 
         $array = [];

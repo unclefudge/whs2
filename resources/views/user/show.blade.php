@@ -26,7 +26,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-users "></i>
+                        <i class="fa fa-user "></i>
                         <span class="caption-subject font-green-haze bold uppercase">User Profile</span>
                         <span class="caption-helper"> ID: {{ $user->id }}</span>
                     </div>
@@ -60,16 +60,15 @@
                         <div class="col-md-4">
                             <!-- Inactive User -->
                             @if(!$user->status)
-                                <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive</h3>
-                            @else
-                                <br><br>
+                                <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive User</h3>
                             @endif
                             @if ($user->roles2->count() > 0)
+                                <br><br>
                                 @if ($user->rolesSBC())
                                     <b>Roles: </b>{{ $user->rolesSBC() }}<br>
                                 @endif
                                 @if ($user->company->parent_company && $user->parentRolesSBC())
-                                    <b>{{ $user->company->reportsToCompany()->name }} Roles:</b> {{ $user->parentRolesSBC() }}
+                                    <b>{{ $user->company->reportsTo()->name }} Roles:</b> {{ $user->parentRolesSBC() }}
                                 @endif
                             @endif
                         </div>
@@ -141,7 +140,7 @@
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#usergroup').change(function () {
-        window.location = '/user/' + $('#username').val() + '/settings/security/permissions/reset/' + this.value;
+        window.location = '/user/' + $('#username').val() + '/security/permissions/reset/' + this.value;
     });
 
     $(document).ready(function () {
@@ -150,10 +149,6 @@
         $("#roles").select2({
             placeholder: "Select role",
             width: '100%',
-        });
-        /* Select2 */
-        $("#trades").select2({
-            placeholder: "Select trade",
         });
 
         // Show Subcontractor field

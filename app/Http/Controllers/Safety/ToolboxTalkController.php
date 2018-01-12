@@ -115,7 +115,7 @@ class ToolboxTalkController extends Controller {
         else
             $tool_request['master_id'] = $request->get('master_id');
 
-        $tool_request['company_id'] = ($request->has('parent_switch')) ? Auth::user()->company->reportsToCompany()->id : Auth::user()->company_id;
+        $tool_request['company_id'] = ($request->has('parent_switch')) ? Auth::user()->company->reportsTo()->id : Auth::user()->company_id;
         $tool_request['for_company_id'] = Auth::user()->company_id;
 
         // Create Toolbox
@@ -412,13 +412,13 @@ class ToolboxTalkController extends Controller {
         $company_ids = [];
         if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company_id) == 99)
             $company_ids[] = Auth::user()->company_id;
-        if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsToCompany()->id) == 99)
-            $company_ids[] = Auth::user()->company->reportsToCompany()->id;
+        if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsTo()->id) == 99)
+            $company_ids[] = Auth::user()->company->reportsTo()->id;
 
         // For Company IDs of Toolboxs user is allowed to view
         // ie. User can view Toolboxs owned by their Parent but they have access to only view 'Own Company'
         $for_company_ids = [];
-        if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsToCompany()->id) == 20)
+        if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsTo()->id) == 20)
             $for_company_ids[] = Auth::user()->company_id;
 
         $records = DB::table('toolbox_talks AS t')
@@ -496,7 +496,7 @@ class ToolboxTalkController extends Controller {
             ->where(function ($q) {
                 $q->where('t.for_company_id', Auth::user()->company_id);
                 $q->orWhere('t.company_id', Auth::user()->company_id);
-                $q->orWhere('t.company_id', Auth::user()->company->reportsToCompany()->id);
+                $q->orWhere('t.company_id', Auth::user()->company->reportsTo()->id);
             })
             ->where('t.master', '1')
             ->where('t.status', $request->get('status'));

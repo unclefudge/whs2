@@ -88,7 +88,7 @@ class UserController extends Controller {
 
         // Attach parent company default child role
         if ($user->company->parent_company) {
-            $default_user_role = Role2::where('company_id', $user->company->reportsToCompany()->id)->where('child', 'default')->first();
+            $default_user_role = Role2::where('company_id', $user->company->reportsTo()->id)->where('child', 'default')->first();
             if ($default_user_role)
                 $user->attachRole2($default_user_role->id);
         }
@@ -105,8 +105,8 @@ class UserController extends Controller {
         // Notify company + parent company new user created
         if ($user->company->subscription && $user->company->notificationsUsersType('user.created'))
             Mail::to($user->company->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
-        if ($user->company->parent_company && $user->company->reportsToCompany()->notificationsUsersType('user.created'))
-            Mail::to($user->company->reportsToCompany()->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
+        if ($user->company->parent_company && $user->company->reportsTo()->notificationsUsersType('user.created'))
+            Mail::to($user->company->reportsTo()->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
 
         // Signup Process - Initial update
         if ($user->company->signup_step == 3) {
@@ -135,6 +135,22 @@ class UserController extends Controller {
     }
 
     /**
+     * Display the settings for the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showSecurity($id)
+    {
+        $user = User::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        return view('user/security', compact('user'));
+    }
+
+    /**
      * Edit the resource.
      *
      * @return \Illuminate\Http\Response
@@ -153,27 +169,6 @@ class UserController extends Controller {
         return view('user/edit', compact('user'));
     }
 
-    /**
-     * Display the settings for the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showSettings($username, $tab = 'info')
-    {
-        $user = User::where(compact('username'))->firstOrFail();
-
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.user', $user))
-            return view('errors/404');
-
-        $tabs = ['settings', $tab];
-
-        if ($tab == 'password' && Auth::user()->password_reset)
-            Toastr::warning("Your password was reset by an admin and you are required to choose an new one");
-
-
-        return view('user/show', compact('user', 'tabs'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -184,7 +179,7 @@ class UserController extends Controller {
     {
         $user = User::where(compact('username'))->firstOrFail();
 
-        //dd($request->all());
+        // Validate
         $this->validate(request(), [
             'username'           => 'required|min:3|max:50|unique:users,username,' . $user->id,
             'firstname'          => 'required',
@@ -248,7 +243,6 @@ class UserController extends Controller {
             }
         }
 
-        //dd($user_request);
 
         // Update User
         $user->update($user_request);
@@ -266,43 +260,13 @@ class UserController extends Controller {
     }
 
     /**
-     * Update the photo on user model resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePhoto(UserRequest $request, $username)
-    {
-        $user = User::where(compact('username'))->firstOrFail();
-
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.user', $user))
-            return view('errors/404');
-
-        $file = $request->file('photo');
-        $path = "filebank/users/" . $user->id;
-        $name = "photo." . strtolower($file->getClientOriginalExtension());
-        $path_name = $path . '/' . $name;
-        $file->move($path, $name);
-
-        Image::make(url($path_name))
-            ->fit(740)
-            ->save($path_name);
-
-        $user->photo = $path_name;
-        $user->save();
-        Toastr::success("Saved changes");
-
-        return redirect('/user/' . $user->username . '/settings/photo');
-    }
-
-    /**
      * Update the security for user resource in storage.
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateSecurity(Request $request, $username)
+    public function updateSecurity(Request $request, $id)
     {
-        $user = User::where(compact('username'))->firstOrFail();
+        $user = User::findOrFail($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->security || !Auth::user()->allowed2('edit.user', $user))
@@ -341,7 +305,7 @@ class UserController extends Controller {
 
         Toastr::success("Saved changes");
 
-        return redirect('/user/' . $user->username . '/settings/security');
+        return redirect('/user/' . $user->id . '/security');
     }
 
     /**
@@ -349,9 +313,9 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function getSecurityPermissions(Request $request, $username)
+    public function getSecurityPermissions(Request $request, $id)
     {
-        $user = User::where(compact('username'))->firstOrFail();
+        $user = User::findOrFail($id);
         $permissions = DB::table('permission_user')
             ->where('user_id', $user->id)
             ->lists('permission_id');
@@ -360,6 +324,37 @@ class UserController extends Controller {
 
         return $array;
     }
+
+    /**
+     * Update the photo on user model resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    /*
+    public function updatePhoto(UserRequest $request, $username)
+    {
+        $user = User::where(compact('username'))->firstOrFail();
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        $file = $request->file('photo');
+        $path = "filebank/users/" . $user->id;
+        $name = "photo." . strtolower($file->getClientOriginalExtension());
+        $path_name = $path . '/' . $name;
+        $file->move($path, $name);
+
+        Image::make(url($path_name))
+            ->fit(740)
+            ->save($path_name);
+
+        $user->photo = $path_name;
+        $user->save();
+        Toastr::success("Saved changes");
+
+        return redirect('/user/' . $user->username . '/settings/photo');
+    }*/
 
 
     /**

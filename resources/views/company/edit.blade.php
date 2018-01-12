@@ -80,7 +80,7 @@
                                         <h3 class="font-red uppercase pull-right" style="margin:-20px 0 10px;">Inactive Company</h3>
                                     @endif
                                     {{-- Company details pending --}}
-                                    @if(!$company->approved_by && $company->reportsToCompany()->id == Auth::user()->company_id)
+                                    @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
                                         <h3 class="pull-right" style="margin:-10px 0 0px;"><span class="label label-warning">Pending approval</span></h3>
                                     @endif
                                     <h1 class="sbold hidden-sm hidden-xs" style="margin: -20px 0 15px 0">{{ $company->name }}</h1>
@@ -97,7 +97,7 @@
                                                     {!! fieldErrorMessage('name', $errors) !!}
                                                 </div>
                                             </div>
-                                            @if (Auth::user()->company_id == $company->reportsToCompany()->id)
+                                            @if (Auth::user()->company_id == $company->reportsTo()->id)
                                                 <div class="col-md-5">
                                                     <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
                                                         {!! Form::label('nickname', 'Preferred Name', ['class' => 'control-label']) !!}
@@ -285,7 +285,7 @@
                                         @endif
 
                                         {{-- Trade Details --}}
-                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id)
+                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)
                                             <h3 class="font-green form-section">Trade Details</h3>
                                             {{-- Max Jobs + Trades  --}}
                                             {{-- Pass required field via hidden because user can't edit  --}}

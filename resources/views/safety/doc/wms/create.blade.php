@@ -131,7 +131,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <p class="myswitch-label">&nbsp; </p>
-                                         <span style="padding-right: 30px">Is {{ Auth::user()->company->reportsToCompany()->name }} the Principal
+                                         <span style="padding-right: 30px">Is {{ Auth::user()->company->reportsTo()->name }} the Principal
                                             Contractor?</span>
                                             {!! Form::label('principle_switch', "&nbsp;", ['class' => 'control-label']) !!}
                                             {!! Form::checkbox('principle_switch', '1', true, ['class' => 'make-switch',

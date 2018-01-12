@@ -46,7 +46,7 @@
         <tip-modal :show.sync="showTipModal"></tip-modal>
         <input v-model="store.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
         <input v-model="store.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
-        <input v-model="store.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsToCompany()->id }}">
+        <input v-model="store.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
 
         <div class="page-content-inner">
             <div class="row">

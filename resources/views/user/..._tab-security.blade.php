@@ -31,7 +31,7 @@
                         </li>
                         @if ($user->company->parent_company)
                             <li>
-                                <a href="#tab2" data-toggle="tab">{{ $user->company->reportsToCompany()->name }}</a>
+                                <a href="#tab2" data-toggle="tab">{{ $user->company->reportsTo()->name }}</a>
                             </li>
                         @endif
                     </ul>

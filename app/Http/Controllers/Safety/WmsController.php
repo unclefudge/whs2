@@ -116,9 +116,9 @@ class WmsController extends Controller {
 
         // If Principle checkbox Yes then assign principle fields + document owner
         if ($request->get('principle_switch') && !$request->get('master')) {
-            $wms_request['company_id'] = Auth::user()->company->reportsToCompany()->id;
-            $wms_request['principle_id'] = Auth::user()->company->reportsToCompany()->id;
-            $wms_request['principle'] = Auth::user()->company->reportsToCompany()->name;
+            $wms_request['company_id'] = Auth::user()->company->reportsTo()->id;
+            $wms_request['principle_id'] = Auth::user()->company->reportsTo()->id;
+            $wms_request['principle'] = Auth::user()->company->reportsTo()->name;
         } else
             $wms_request['company_id'] = $wms_request['for_company_id'];
 
@@ -435,13 +435,13 @@ class WmsController extends Controller {
         $company_ids = [];
         if (Auth::user()->permissionLevel('view.wms', Auth::user()->company_id) == 99)
             $company_ids[] = Auth::user()->company_id;
-        if (Auth::user()->permissionLevel('view.wms', Auth::user()->company->reportsToCompany()->id) == 99)
-            $company_ids[] = Auth::user()->company->reportsToCompany()->id;
+        if (Auth::user()->permissionLevel('view.wms', Auth::user()->company->reportsTo()->id) == 99)
+            $company_ids[] = Auth::user()->company->reportsTo()->id;
 
         // For Company IDs of Toolboxs user is allowed to view
         // ie. User can view Toolboxs owned by their Parent but they have access to only view 'Own Company'
         $for_company_ids = [];
-        if (Auth::user()->permissionLevel('view.wms', Auth::user()->company->reportsToCompany()->id) == 20)
+        if (Auth::user()->permissionLevel('view.wms', Auth::user()->company->reportsTo()->id) == 20)
             $for_company_ids[] = Auth::user()->company_id;
 
         $records = DB::table('wms_docs AS d')

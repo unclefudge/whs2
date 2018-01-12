@@ -226,7 +226,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $site_list = [];
         $user_list = [];
         $company_level = $this->permissionLevel('view.site.hazard', $this->company_id);
-        $parent_level = $this->permissionLevel('view.site.hazard', $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel('view.site.hazard', $this->company->reportsTo()->id);
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
             $site_list = $this->authSites('view.site.hazard')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
@@ -256,7 +256,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $site_list = [];
         $user_list = [];
         $company_level = $this->permissionLevel('view.site.accident', $this->company_id);
-        $parent_level = $this->permissionLevel('view.site.accident', $this->company->reportsToCompany()->id);
+        $parent_level = $this->permissionLevel('view.site.accident', $this->company->reportsTo()->id);
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
             $site_list = $this->authSites('view.site.accident')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
@@ -460,6 +460,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getNameAttribute()
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * Get the Company Id   (getter)
+     *
+     * @return string;
+     */
+    public function getCidAttribute()
+    {
+        return $this->company_id;
     }
 
     /**

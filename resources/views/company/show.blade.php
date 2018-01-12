@@ -74,7 +74,7 @@
                                     <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive Company</h3>
                                 @endif
                                 <h1 class="sbold hidden-sm hidden-xs" style="{!! ($company->nickname) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $company->name }}
-                                    @if (Auth::user()->company_id == $company->reportsToCompany()->id)
+                                    @if (Auth::user()->company_id == $company->reportsTo()->id)
                                         <small class='font-grey-cascade'>{{ $company->nickname }}</small>
                                     @endif
                                 </h1>
@@ -95,7 +95,7 @@
 
                                 {{-- Company details --}}
                                 <h3 class="font-green form-section">Company Details
-                                    @if(!$company->approved_by && $company->reportsToCompany()->id == Auth::user()->company_id)
+                                    @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
                                         <span class="label label-warning">Pending approval</span>
                                     @endif
                                     @if(Auth::user()->allowed2('edit.company', $company))
@@ -128,7 +128,7 @@
 
                                 {{-- Busines Details --}}
                                 <h3 class="font-green form-section">Business Details
-                                    @if(!$company->approved_by && $company->reportsToCompany()->id == Auth::user()->company_id)
+                                    @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
                                         <span class="label label-warning">Pending approval</span>
                                     @endif
                                     @if(Auth::user()->allowed2('edit.company', $company))
@@ -169,7 +169,7 @@
                                 {{-- Trade Details --}}
                                 @if(Auth::user()->isCC())
                                     <h3 class="font-green form-section">Trade Details
-                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id))
+                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
                                             <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
                                         @endif
                                     </h3>
@@ -641,7 +641,7 @@
                     {!! Form::model('company_doc', ['action' => ['Company\CompanyDocController@profile'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
                     {{-- @include('form-error') --}}
                     {!! Form::hidden('for_company_id', $company->id, ['class' => 'form-control']) !!}
-                    {!! Form::hidden('company_id', $company->reportsToCompany()->id, ['class' => 'form-control']) !!}
+                    {!! Form::hidden('company_id', $company->reportsTo()->id, ['class' => 'form-control']) !!}
                     {!! Form::hidden('category_id', null, ['class' => 'form-control', 'id' => 'category_id']) !!}
                     {!! Form::hidden('doc_id', null, ['class' => 'form-control', 'id' => 'doc_id']) !!}
                     {!! Form::hidden('doc_name', null, ['class' => 'form-control', 'id' => 'doc_name']) !!}

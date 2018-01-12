@@ -52,7 +52,7 @@
     <template id="comply-template">
         <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
         <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
-        <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsToCompany()->id }}">
+        <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
 
         <div class="page-content-inner">
             <div class="row">

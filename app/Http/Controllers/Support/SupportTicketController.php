@@ -251,7 +251,7 @@ class SupportTicketController extends Controller {
      */
     public function getUpgrades(Request $request)
     {
-        //$company_list = Auth::user()->company->reportsToCompany()->sites()->pluck('id')->toArray();
+        //$company_list = Auth::user()->company->reportsTo()->sites()->pluck('id')->toArray();
         $company_list = Auth::user()->company->companies()->pluck('id')->toArray();
         //$user_list = Auth::user()->company->users($request->get('status'))->pluck('id')->toArray();
         $ticket_records = DB::table('support_tickets AS t')

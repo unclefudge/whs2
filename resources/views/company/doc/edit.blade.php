@@ -172,7 +172,7 @@
                             </div>
                             <div class="form-actions right">
                                 <button type="submit" name="back" value="back" class="btn default"> Back</button>
-                                @if ($doc->status == 2 && Auth::user()->hasPermission2('del.company') && $doc->company->reportsToCompany()->id == Auth::user()->company_id)
+                                @if ($doc->status == 2 && Auth::user()->hasPermission2('del.company') && $doc->company->reportsTo()->id == Auth::user()->company_id)
                                     <button type="submit" class="btn dark" name="reject_doc" value="reject">Reject Document</button>
                                     <button type="submit" class="btn green">Approve and Save</button>
                                 @else

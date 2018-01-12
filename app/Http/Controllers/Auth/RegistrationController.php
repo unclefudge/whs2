@@ -96,7 +96,7 @@ class RegistrationController extends Controller {
         //
 
         // Attach parent company default primary_user role
-        $primary_user_role = Role2::where('company_id', $company->reportsToCompany()->id)->where('child', 'primary')->first();
+        $primary_user_role = Role2::where('company_id', $company->reportsTo()->id)->where('child', 'primary')->first();
         if ($primary_user_role)
             $user->attachRole2($primary_user_role->id);
 

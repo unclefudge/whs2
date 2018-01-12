@@ -35,7 +35,7 @@ class TipController extends Controller {
                 DB::raw('DATE_FORMAT(last_published,\'%d/%m/%y\') AS niceDate '),
                 DB::raw('CONCAT(users.firstname, " ", users.lastname) AS fullname')])
                 ->join('users', 'safety_tips.created_by', '=', 'users.id')
-                ->where('safety_tips.company_id', Auth::user()->company->reportsToCompany()->id)
+                ->where('safety_tips.company_id', Auth::user()->company->reportsTo()->id)
                 ->orderBy('last_published', 'DESC')->get();
 
             return $tips;
@@ -72,7 +72,7 @@ class TipController extends Controller {
             return view('errors/404');
 
         if ($request->ajax()) {
-            if (Auth::user()->company->reportsToCompany()->id == $tip->company_id) {
+            if (Auth::user()->company->reportsTo()->id == $tip->company_id) {
                 $tip->update($request->all());
 
                 return $tip;

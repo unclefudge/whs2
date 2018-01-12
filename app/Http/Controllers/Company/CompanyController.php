@@ -113,7 +113,7 @@ class CompanyController extends Controller {
         /// Check authorisation and throw 404 if not
         // User must be able to edit company or has subscription 3+ with ability to edit trades
         if (!(Auth::user()->allowed2('edit.company', $company) || Auth::user()->company->subscription > 2 &&
-            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id))
+            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
         )
             return view('errors/404');
 
@@ -148,7 +148,7 @@ class CompanyController extends Controller {
         if ($step == 4) {
             // Company added all users so email parent company
             if ($company->parent_company) {
-                //Mail::to($company->reportsToCompany()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
+                //Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
             }
             $company->status = 1;
             $company->signup_step = 4;
@@ -180,7 +180,7 @@ class CompanyController extends Controller {
         /// Check authorisation and throw 404 if not
         // User must be able to edit company or has subscription 2+ with ability to edit trades
         if (!(Auth::user()->allowed2('edit.company', $company) || (Auth::user()->company->subscription > 1 &&
-                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsToCompany()->id == Auth::user()->company_id)))
+                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)))
         )
             return view('errors/404');
 
@@ -205,7 +205,7 @@ class CompanyController extends Controller {
 
         // Update trades + supervisors for company
         // Only updatable by 'parent' company
-        if ($company->reportsToCompany()->id == Auth::user()->company_id) {
+        if ($company->reportsTo()->id == Auth::user()->company_id) {
             if ($request->get('trades'))
                 $company->tradesSkilledIn()->sync($request->get('trades'));
             else
@@ -327,7 +327,7 @@ class CompanyController extends Controller {
                 }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
-                if (!$company->approved_by && $company->status == 1 && $company->reportsToCompany()->id == Auth::user()->company_id)
+                if (!$company->approved_by && $company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id)
                     $name .= ' &nbsp; <span class="label label-sm label-warning">Pending approval</span>';
 
                 return $name;

@@ -247,7 +247,7 @@ class WmsDoc extends Model {
                 $email_to[] = $company->seniorUsersEmail();
 
                 // Send CC to Parent Company Account
-                $email_user = $company->reportsToCompany()->notificationsUsersEmailType('whs');
+                $email_user = $company->reportsTo()->notificationsUsersEmailType('whs');
             }
         } else {
             $email_to = [env('EMAIL_ME')];

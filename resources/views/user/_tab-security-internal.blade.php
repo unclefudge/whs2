@@ -5,13 +5,13 @@ $sub1 = ($user->company->subscription > 0) ? 1 : 0;
 $sub2 = ($user->company->subscription > 1) ? 1 : 0;
 $plan = ($user->company->addon('planner')) ? 1 : 0;
 $cc = ($user->isCC()) ? 1 : 0;
-$cid = $user->company_id;
-$dis = $user->security ? false : true;
+$cid = $user->cid;
+$dis = Auth::user()->security ? false : true;
 ?>
 <div class="row">
-    @if (App\Models\Misc\Role2::where('company_id', $user->company_id)->first())
+    @if (App\Models\Misc\Role2::where('company_id', $user->cid)->first())
         <div class="col-md-9">
-            @if(Auth::user()->security)
+            @if(Auth::user()->security && Auth::user()->isCompany($user->cid))
                 <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                     {!! Form::label('roles', 'Assigned Role(s)', ['class' => 'control-label']) !!}
                     {!! Form::select('roles', $user->company->rolesSelect(), $user->roles2->pluck('id')->toArray(),
@@ -23,22 +23,24 @@ $dis = $user->security ? false : true;
             @endif
         </div>
     @endif
-    <div class="col-md-3 pull-right">
-        <label class="uniform-inline ">
-            <div class="form-group {!! fieldHasError('security', $errors) !!}">
-                <p class="myswitch-label" style="font-size: 14px">Security Access</p>
-                {!! Form::label('security', "&nbsp;", ['class' => 'control-label']) !!}
-                {!! Form::checkbox('security', '1', null,
-                 ['class' => 'make-switch', (Auth::user()->id == $user->id) ? 'readonly' : '',
-                 'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                 'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
-                {!! fieldErrorMessage('security', $errors) !!}
-                @if (Auth::user()->id == $user->id)
-                    <div class="font-red">(can't modify own access)</div>
-                @endif
-            </div>
-        </label>
-    </div>
+    @if (Auth::user()->security && Auth::user()->isCompany($user->cid))
+        <div class="col-md-3 pull-right">
+            <label class="uniform-inline ">
+                <div class="form-group {!! fieldHasError('security', $errors) !!}">
+                    <p class="myswitch-label" style="font-size: 14px">Security Access</p>
+                    {!! Form::label('security', "&nbsp;", ['class' => 'control-label']) !!}
+                    {!! Form::checkbox('security', '1', null,
+                     ['class' => 'make-switch', (Auth::user()->id == $user->id) ? 'readonly' : '',
+                     'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                     'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                    {!! fieldErrorMessage('security', $errors) !!}
+                    @if (Auth::user()->id == $user->id)
+                        <div class="font-red">(can't modify own access)</div>
+                    @endif
+                </div>
+            </label>
+        </div>
+    @endif
 </div>
 
 <table class="table table-striped">
@@ -376,18 +378,9 @@ $dis = $user->security ? false : true;
             <td width="15%">{!! permSelect('view.role', 'all', $user, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.role', 'all', $user, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('add.role', 'add', $user, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('dell.role', 'del', $user, $user->company_id) !!}</td>
+            <td width="15%">{!! permSelect('dell.role', 'del', $user, $user->cid) !!}</td>
             <td width="15%"></td>
         </tr>
         --}}
     </table>
-@endif
-
-@if (Auth::user()->security)
-    <div class="margin-top-10">
-        <button type="submit" class="btn green"> Save Changes</button>
-        <a href="/user/{{ $user->username }}/settings/security">
-            <button type="button" class="btn default"> Cancel</button>
-        </a>
-    </div>
 @endif

@@ -117,7 +117,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <p class="myswitch-label">&nbsp; </p>
-                                            <span style="padding-right: 30px">Is this talk for a {{ Auth::user()->company->reportsToCompany()->name }} site?</span>
+                                            <span style="padding-right: 30px">Is this talk for a {{ Auth::user()->company->reportsTo()->name }} site?</span>
                                             {!! Form::label('parent_switch', "&nbsp;", ['class' => 'control-label']) !!}
                                             {!! Form::checkbox('parent_switch', '1', true, ['class' => 'make-switch',
                                              'data-on-text'=>'Yes', 'data-on-color'=>'success',

@@ -101,7 +101,7 @@ class SitePlannerExportController extends Controller {
             if ($site_id)
                 $sites[] = $site_id;
             else
-                $sites = Auth::user()->company->reportsToCompany()->sites('1')->pluck('id')->toArray();
+                $sites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
 
             // Sort Sites by Site Name
             $site_list = [];

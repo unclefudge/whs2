@@ -68,12 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
     // User Routes
     Route::get('user/dt/users', 'UserController@getUsers');
     Route::get('user/dt/contractors', 'UserController@getContractors');
-    Route::get('user/{username}/settings', 'UserController@showSettings');
-    Route::post('user/{username}/settings/photo', 'UserController@updatePhoto');
-    Route::post('user/{username}/settings/security', 'UserController@updateSecurity');
-    Route::get('user/{username}/settings/security/permissions', 'UserController@getSecurityPermissions');
-    Route::get('user/{username}/settings/security/permissions/reset/{role_id}', 'UserController@resetSecurityPermissions');
-    Route::get('user/{username}/settings/{tab}', 'UserController@showSettings');
+    Route::get('user/{id}/security', 'UserController@showSecurity');
+    Route::post('user/{id}/security', 'UserController@updateSecurity');
+    Route::get('user/{id}/security/permissions', 'UserController@getSecurityPermissions');
+    Route::get('user/{id}/security/permissions/reset/{role_id}', 'UserController@resetSecurityPermissions');
     Route::get('contractor', 'UserController@contractorList');
     Route::resource('user', 'UserController');
 
