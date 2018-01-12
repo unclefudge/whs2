@@ -21,8 +21,10 @@ Route::get('/welcome', function () {
 // Site Login
 Route::get('/login/site/{site_id}', function ($site_id) {
     Session::put('siteID', $site_id);
+    $worksite = \App\Models\Site\Site::where(['code' => $site_id])->first();
 
-    return redirect('/login');
+    //return redirect('/login');
+    return view('auth/login-site', compact('worksite'));
 });
 
 // Authentication routes...

@@ -14,11 +14,9 @@
                                 {{-- Login Details --}}
                                 <h3 class="font-green form-section" style="margin: 0px 0px 10px 0px">Sign In</h3>
 
-                                {{--
                                 @if ($worksite && $worksite->address)
                                     <p style="text-align:center; margin: 0; padding:10px"> {{  $worksite->name }} ({{ $worksite->code }})<br>{{  $worksite->address }}, {{  $worksite->suburb }} </p>
                                 @endif
-                                --}}
 
                                 <span class="help-block font-red">{!! $errors->first('message') !!}</span>
 
