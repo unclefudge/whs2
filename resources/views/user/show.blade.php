@@ -139,10 +139,6 @@
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $('#usergroup').change(function () {
-        window.location = '/user/' + $('#username').val() + '/security/permissions/reset/' + this.value;
-    });
-
     $(document).ready(function () {
 
         /* Select2 */

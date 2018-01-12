@@ -71,6 +71,7 @@
             <!-- END RESPONSIVE MENU TOGGLER -->
 
             <!-- BEGIN TOP NAVIGATION MENU -->
+            {{--
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
                     <!-- END TODO DROPDOWN -->
@@ -79,16 +80,18 @@
                     </li>
                     <li class="dropdown dropdown-user dropdown-dark">
                         <a href="/login">
-                            <span class="username username-hide-mobile">Login</span>
+                            <span class="username">Login</span>
                         </a>
                     </li>
+
                     <li class="dropdown dropdown-user dropdown-dark">
                         <a href="/signup">
                             <span class="username username-hide-mobile">Sign Up</span>
                         </a>
                     </li>
+
                 </ul>
-            </div>
+            </div>--}}
             <!-- END TOP NAVIGATION MENU -->
 
         </div>
@@ -101,6 +104,9 @@
                 <ul class="nav navbar-nav">
                     <li class="menu-dropdown classic-menu-dropdown ">
                         <a href="/"><i class="fa fa-home"></i> Home </a>
+                    </li>
+                    <li class="menu-dropdown classic-menu-dropdown">
+                        <a href="/login"><i class="fa fa-lock"></i> Login </a>
                     </li>
                 </ul>
             </div>

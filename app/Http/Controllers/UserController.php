@@ -313,6 +313,7 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+		 /*
     public function getSecurityPermissions(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -323,7 +324,7 @@ class UserController extends Controller {
             $array[] = "$permission";
 
         return $array;
-    }
+    }*/
 
     /**
      * Update the photo on user model resource in storage.

@@ -6,8 +6,8 @@
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                 <i class="icon-bell"></i>
                 @if (Auth::user()->todo('1')->count())
-                <span class="badge badge-default">{{ Auth::user()->todo('1')->count() }}</span>
-                    @endif
+                    <span class="badge badge-default">{{ Auth::user()->todo('1')->count() }}</span>
+                @endif
             </a>
             <ul class="dropdown-menu">
                 <li class="external">
@@ -35,7 +35,7 @@
         </li>
         <!-- END NOTIFICATION DROPDOWN -->
         <!-- BEGIN TODO DROPDOWN -->
-        <!--
+        {{--
         <li class="dropdown dropdown-extended dropdown-tasks dropdown-dark" id="header_task_bar">
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                 <i class="icon-calendar"></i>
@@ -63,38 +63,10 @@
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span class="task">
-                                    <span class="desc">Application deployment</span>
-                                    <span class="percent">65%</span>
-                                </span>
-                                <span class="progress">
-                                    <span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65"
-                                          aria-valuemin="0" aria-valuemax="100">
-                                        <span class="sr-only">65% Complete</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span class="task">
-                                    <span class="desc">Database migration</span>
-                                    <span class="percent">10%</span>
-                                </span>
-                                <span class="progress">
-                                    <span style="width: 10%;" class="progress-bar progress-bar-warning" aria-valuenow="10"
-                                          aria-valuemin="0" aria-valuemax="100">
-                                        <span class="sr-only">10% Complete</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
             </ul>
-        </li>-->
+        </li>--}}
         <!-- END TODO DROPDOWN -->
         <li class="droddown dropdown-separator">
             <span class="separator"></span>
@@ -113,50 +85,6 @@
                 </li>
                 <li>
                     <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-                        <li>
-                            <a href="#">
-                                <span class="photo">
-                                    <img src="/assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt=""> </span>
-                                <span class="subject">
-                                    <span class="from"> Lisa Wong </span>
-                                    <span class="time">Just Now </span>
-                                </span>
-                                <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="photo">
-                                    <img src="/assets/layouts/layout3/img/avatar3.jpg" class="img-circle" alt=""> </span>
-                                <span class="subject">
-                                    <span class="from"> Richard Doe </span>
-                                    <span class="time">16 mins </span>
-                                </span>
-                                <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                                    <span class="photo">
-                                                        <img src="/assets/layouts/layout3/img/avatar1.jpg" class="img-circle" alt=""> </span>
-                                                    <span class="subject">
-                                                        <span class="from"> Bob Nilson </span>
-                                                        <span class="time">2 hrs </span>
-                                                    </span>
-                                <span class="message"> Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                                    <span class="photo">
-                                                        <img src="/assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt=""> </span>
-                                                    <span class="subject">
-                                                        <span class="from"> Lisa Wong </span>
-                                                        <span class="time">40 mins </span>
-                                                    </span>
-                                <span class="message"> Vivamus sed auctor 40% nibh congue nibh... </span>
-                            </a>
-                        </li>
                         <li>
                             <a href="#">
                                                     <span class="photo">
@@ -193,29 +121,12 @@
                 <li><a href="/user/{{ Auth::user()->id }}"><i class="fa fa-user"></i> My Profile </a></li>
                 @if(Auth::user()->hasAnyPermission2('view.company|edit.company'))
                     <li><a href="/company/{{ Auth::user()->company_id }}"><i class="fa fa-users"></i> Company Profile </a></li>
-                    @endif
-                            <!--
+                @endif
+                <li class="divider"></li>
                 <li>
-                    <a href="app_calendar.html">
-                        <i class="icon-calendar"></i> My Calendar </a>
+                    <a href="/logout">
+                        <i class="fa fa-key"></i> Log Out </a>
                 </li>
-                <li>
-                    <a href="app_inbox.html">
-                        <i class="icon-envelope-open"></i> My Inbox
-                        <span class="badge badge-danger"> 3 </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="app_todo_2.html">
-                        <i class="icon-rocket"></i> My Tasks
-                        <span class="badge badge-success"> 7 </span>
-                    </a>
-                </li>-->
-                    <li class="divider"></li>
-                    <li>
-                        <a href="/logout">
-                            <i class="fa fa-key"></i> Log Out </a>
-                    </li>
             </ul>
         </li>
         <!-- END USER LOGIN DROPDOWN -->
