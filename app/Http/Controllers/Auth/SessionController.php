@@ -35,6 +35,7 @@ class SessionController extends Controller {
         }*/
 
         Session::forget('siteID');
+
         return view('auth/login', compact('worksite'));
     }
 
@@ -43,8 +44,12 @@ class SessionController extends Controller {
      */
     protected function store()
     {
+        $email = preg_match('/@/', request('username')) ? true : false;
 
-        if (auth()->attempt(request(['username', 'password'])) || auth()->attempt(request(['email', 'password']))) {
+        $credentials = ($email) ? ['email' => request('username'), 'password' => request('password')] :
+            ['username' => request('username'), 'password' => request('password')];
+
+        if (auth()->attempt($credentials)) {
             if (Auth::user()->password_reset)
                 return redirect('/user/' . Auth::user()->id . '/edit');
 

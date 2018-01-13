@@ -10,7 +10,7 @@
     <div class="page-content-inner">
         <div class="row">
             <div class="col-md-12">
-                <p style="text-align:center;"><img src="/img/safety-gear.jpg" align="middle"></p>
+                <p style="text-align:center;"><img src="/img/safety-gear.jpg" class="img-responsive" align="middle"></p>
             </div>
         </div>
 
