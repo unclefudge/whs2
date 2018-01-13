@@ -337,7 +337,7 @@
                                             @endif
                                         @endif
 
-                                        @if (Auth::user()->allowed2('edit.company', $company) && Auth::user()->company_id == $company->reportsTocompany()->id)
+                                        @if (Auth::user()->allowed2('edit.company', $company) && Auth::user()->company_id == $company->reportsTo()->id)
                                             <hr>
                                             <!-- Notes -->
                                             <div class="row">

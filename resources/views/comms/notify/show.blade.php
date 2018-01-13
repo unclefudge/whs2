@@ -72,7 +72,7 @@
                                     <div class="form-group {!! fieldHasError('action', $errors) !!}">
                                         {!! Form::label('action', 'Frequency of Alert', ['class' => 'control-label']) !!}
                                         {!! Form::select('action', ['once' => 'Only once', 'many' => 'For whole duration of date range'],
-                                             'once', ['class' => 'form-control bs-select', 'disabled']) !!}
+                                             $notify->action, ['class' => 'form-control bs-select', 'disabled']) !!}
                                         {!! fieldErrorMessage('action', $errors) !!}
                                     </div>
                                 </div>

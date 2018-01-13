@@ -12,18 +12,12 @@
 */
 
 Route::get('/', 'HomeController@index');
-Route::get('/welcome', function () {
-    return view('welcome3');
-});
-
-//Route::get('/home', 'HomeController@index')->name('home');
 
 // Site Login
 Route::get('/login/site/{site_id}', function ($site_id) {
     Session::put('siteID', $site_id);
     $worksite = \App\Models\Site\Site::where(['code' => $site_id])->first();
 
-    //return redirect('/login');
     return view('auth/login-site', compact('worksite'));
 });
 
@@ -43,9 +37,7 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset.token');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-//Route::get('site/login', 'Auth\AuthController@getLoginSite');
-//Route::get('/home', 'HomeController@index');
-
+// Logged in Routes
 Route::group(['middleware' => 'auth'], function () {
     // Pages
     //Route::get('/', 'Misc\PagesController@index');
@@ -298,7 +290,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-// Cron
+// Cron routes
 Route::get('cron/nightly', 'Misc\CronController@nightly');
 Route::get('cron/roster', 'Misc\CronController@roster');
 Route::get('cron/qa', 'Misc\CronController@qa');
