@@ -54,8 +54,8 @@
                                 <div class="col-md-2 pull-right">
                                     <div class="form-group {!! fieldHasError('priority', $errors) !!}">
                                         {!! Form::label('priority', 'Priority', ['class' => 'control-label']) !!}
-                                        {!! Form::select('priority', ['' => 'None', '1' => 'Low', '2' => 'Medium', '3' =>'High', '4' =>'In Progress'],
-                                             '', ['class' => 'form-control bs-select']) !!}
+                                        {!! Form::select('priority', ['0' => 'None', '1' => 'Low', '2' => 'Medium', '3' =>'High', '4' =>'In Progress'],
+                                             '0', ['class' => 'form-control bs-select']) !!}
                                     </div>
                                 </div>
                             </div>

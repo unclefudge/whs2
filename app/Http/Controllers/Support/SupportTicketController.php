@@ -58,9 +58,11 @@ class SupportTicketController extends Controller {
      */
     public function store(SupportTicketRequest $request)
     {
-        $ticket_request = $request->all();
+        $ticket_request = removeNullValues($request->all());
         $ticket_request['company_id'] = Auth::user()->company_id;
         $ticket_request['attachment'] = '';  // clear attachment as it's attached to Action
+
+        //dd($ticket_request);
         $ticket = SupportTicket::create($ticket_request);
 
         //Create action taken + attach image to issue

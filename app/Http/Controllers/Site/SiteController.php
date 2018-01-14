@@ -158,10 +158,10 @@ class SiteController extends Controller {
 
         $site_request = $request->except('slug');
 
-        $site_request['contract_sent'] = ($request->has('contract_sent')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('contract_sent') . '00:00')->toDateTimeString() : null;
-        $site_request['contract_signed'] = ($request->has('contract_signed')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('contract_signed') . '00:00')->toDateTimeString() : null;
-        $site_request['deposit_paid'] = ($request->has('deposit_paid')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('deposit_paid') . '00:00')->toDateTimeString() : null;
-        $site_request['completion_signed'] = ($request->has('completion_signed')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('completion_signed') . '00:00')->toDateTimeString() : null;
+        $site_request['contract_sent'] = ($request->filled('contract_sent')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('contract_sent') . '00:00')->toDateTimeString() : null;
+        $site_request['contract_signed'] = ($request->filled('contract_signed')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('contract_signed') . '00:00')->toDateTimeString() : null;
+        $site_request['deposit_paid'] = ($request->filled('deposit_paid')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('deposit_paid') . '00:00')->toDateTimeString() : null;
+        $site_request['completion_signed'] = ($request->filled('completion_signed')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('completion_signed') . '00:00')->toDateTimeString() : null;
 
         // Clear Site Certificates if not set
         if (!$request->has('engineering')) $site_request['engineering'] = '0';
