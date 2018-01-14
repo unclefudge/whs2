@@ -291,7 +291,7 @@
                                         <div class="col-md-12" style="margin: 0px; padding: 0px">
                                             <div class="col-md-3" style="margin: 0px;">
                                                 <i class="fa" style="font-size: 20px; min-width: 35px"></i>
-                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence</a>
+                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence other then Contractors Licence</a>
                                             </div>
                                             <div class="col-md-9">&nbsp;</div>
                                         </div>
