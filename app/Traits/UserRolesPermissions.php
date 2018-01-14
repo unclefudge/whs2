@@ -453,8 +453,9 @@ trait UserRolesPermissions {
 
             // Company Accounting
             if ($permissiontype == 'company.accounting') {
-                if ($this->hasPermission2($permission) && $record->id == $this->company_id) // User belong to same company record
-                    return true;
+                //if ($this->hasPermission2($permission) && $record->id == $this->company_id) // User belong to same company record
+                //    return true;
+                if ($this->authCompanies($permission)->contains('id', $record->id) && $record->id != $this->company_id) return true;
 
                 return false;
             }

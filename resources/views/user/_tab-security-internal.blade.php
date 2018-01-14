@@ -123,6 +123,14 @@ $dis = Auth::user()->security ? false : true;
             <td width="15%">{!! permSelect('edit.area.super', 'all', $user, $cid, $dis) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
+        @if ($cc)
+            <tr>
+                <td>Admin Info<br><span class="font-grey-silver">Cape Cod Only</span></td>
+                <td width="15%">{!! permSelect('view.site.admin', 'all', $user, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.admin', 'all', $user, $cid, $dis) !!}</td>
+                <td width="45%" colspan="3"></td>
+            </tr>
+        @endif
     </table>
 
     @if ($plan)

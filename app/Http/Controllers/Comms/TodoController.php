@@ -291,6 +291,7 @@ class TodoController extends Controller {
 
                 return $todo->duedate;
             })
+            ->rawColumns(['view'])
             ->make(true);
 
         return $dt;
