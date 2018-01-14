@@ -8,6 +8,7 @@ use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteCompliance;
 use App\Models\Site\SiteQa;
+use App\Models\Misc\Permission2;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -433,35 +434,35 @@ class PagesController extends Controller {
         //
         // Creating Permission
         //
-        $name = 'company.accounting';
-        $slug = 'company.accounting';
+        $name = 'support.ticket';
+        $slug = 'support.ticket';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
-        $p = Permission::create(['name' => "View $name", 'slug' => "view.$slug"]);
+        $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);
         $p->model = 'c';
         $p->save();
-        $p = Permission::create(['name' => "View Parent $name", 'slug' => "view.p.$slug"]);
+        $p = Permission2::create(['name' => "View Parent $name", 'slug' => "view.p.$slug"]);
         $p->model = 'p';
         $p->save();
         // Edit
-        $p = Permission::create(['name' => "Edit $name", 'slug' => "edit.$slug"]);
+        $p = Permission2::create(['name' => "Edit $name", 'slug' => "edit.$slug"]);
         $p->model = 'c';
         $p->save();
-        $p = Permission::create(['name' => "Edit Parent $name", 'slug' => "edit.p.$slug"]);
+        $p = Permission2::create(['name' => "Edit Parent $name", 'slug' => "edit.p.$slug"]);
         $p->model = 'p';
         $p->save();
         // Add
-        $p = Permission::create(['name' => "Add $name", 'slug' => "add.$slug"]);
+        $p = Permission2::create(['name' => "Add $name", 'slug' => "add.$slug"]);
         $p->model = 'c';
         $p->save();
-        $p = Permission::create(['name' => "Add Parent $name", 'slug' => "add.p.$slug"]);
+        $p = Permission2::create(['name' => "Add Parent $name", 'slug' => "add.p.$slug"]);
         $p->model = 'p';
         $p->save();
         // Delete
-        $p = Permission::create(['name' => "Delete $name", 'slug' => "del.$slug"]);
+        $p = Permission2::create(['name' => "Delete $name", 'slug' => "del.$slug"]);
         $p->model = 'c';
         $p->save();
-        $p = Permission::create(['name' => "Delete Parent $name", 'slug' => "del.p.$slug"]);
+        $p = Permission2::create(['name' => "Delete Parent $name", 'slug' => "del.p.$slug"]);
         $p->model = 'p';
         $p->save();
         echo "<br><br>Completed<br>-------------<br>";

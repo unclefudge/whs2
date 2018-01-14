@@ -399,6 +399,7 @@ $cc = 1;*/
                                                     <td width="15%">{!! permSelect('del.safetytip', 'del', $role, $cid, $dis) !!}</td>
                                                     <td width="15%"></td>
                                                 </tr>
+
                                                 {{--
                                                 <tr>
                                                     <td>To Do Tasks</td>

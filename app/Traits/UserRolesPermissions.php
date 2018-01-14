@@ -398,6 +398,16 @@ trait UserRolesPermissions {
         if ($permission == 'add.todo')
             return true;
 
+        // Support Tickets
+        if ($permission == 'view.support.ticket' || $permission == 'edit.support.ticket') {
+            if ($record->created_by == $this->id) // User can always view/edit own record
+                return true;
+            if ($this->security && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) // User belongs to own or child company
+                return true;
+
+            return false;
+        }
+
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
         $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
@@ -495,16 +505,6 @@ trait UserRolesPermissions {
                 if ($action == 'view' && $record->master && $record->company_id == '3') return true; // User can view library
                 if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
                 if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-
-                return false;
-            }
-
-            // Support Tickets
-            if ($permissiontype == 'support.ticket') {
-                if ($record->created_by == $this->id && ($action == 'view' || $action == 'edit')) // User can always view/edit own record
-                    return true;
-                if ($this->security && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) // User belongs to own or child company
-                    return true;
 
                 return false;
             }
