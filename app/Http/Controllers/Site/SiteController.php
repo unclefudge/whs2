@@ -153,7 +153,7 @@ class SiteController extends Controller {
         $site = Site::where(compact('slug'))->firstOrFail();
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.site', $site) && Auth::user()->allowed2('edit.company.accounting', $site->owned_by))
+        if (!Auth::user()->allowed2('edit.site.admin', $site))
             return view('errors/404');
 
         $site_request = $request->except('slug');

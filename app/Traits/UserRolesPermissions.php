@@ -472,7 +472,7 @@ trait UserRolesPermissions {
 
 
             // Sites + Planners (Weekly/Site/Trade)
-            if ($permissiontype == 'site' || $permissiontype == 'weekly.planner' || $permissiontype == 'site.planner' || $permissiontype == 'trade.planner') {
+            if ($permissiontype == 'site' || $permissiontype == 'site.admin' || $permissiontype == 'weekly.planner' || $permissiontype == 'site.planner' || $permissiontype == 'trade.planner') {
                 if ($this->authSites($permission)->contains('id', $record->id)) return true;
 
                 return false;
