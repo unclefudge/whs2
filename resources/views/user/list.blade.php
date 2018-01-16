@@ -52,7 +52,6 @@
                                 <th> Name</th>
                                 <th> Company</th>
                                 <th> Last Login</th>
-                                <th width="5%"></th>
                             </tr>
                             </thead>
                         </table>
@@ -97,7 +96,8 @@
             {data: 'full_name', name: 'full_name', orderable: false, searchable: false},
             {data: 'name', name: 'companys.name'},
             {data: 'last_login', name: 'users.last_login'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'firstname', name: 'users.firstname', visible: false},
+            {data: 'lastname', name: 'users.lastname', visible: false},
         ],
         order: [
             [2, "asc"]

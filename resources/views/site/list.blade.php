@@ -58,7 +58,6 @@
                                     <th width="15%"> Phone</th> @endif
                                 <th> Address</th>
                                 <th> Supervisor</th>
-                                <th width="5%"></th>
                             </tr>
                             </thead>
                         </table>
@@ -108,7 +107,6 @@
                 data: 'address', name: 'address'
             },
             {data: 'supervisor', name: 'supervisor'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [
             [2, "asc"], [3, 'asc']

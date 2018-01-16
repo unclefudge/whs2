@@ -386,8 +386,7 @@ class UserController extends Controller {
         $user_records = User::select([
             'users.id', 'users.username', 'users.firstname', 'users.lastname', 'users.company_id', 'users.security', 'users.company_id',
             DB::raw('CONCAT(users.firstname, " ", users.lastname) AS full_name'),
-            'companys.name',
-            'users.address', 'users.last_login', 'users.status'])
+            'companys.name', 'users.address', 'users.last_login', 'users.status'])
             ->join('companys', 'users.company_id', '=', 'companys.id')
             ->whereIn('users.id', $user_list)
             ->where('users.status', $request->get('status'));
@@ -416,12 +415,7 @@ class UserController extends Controller {
                 return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';
             })
             ->removeColumn('slug')
-            ->addColumn('action', function ($user) {
-                return '';
-                //if (Auth::user()->allowed2('edit.user', $user))
-                //    return '<a href="/user/' . $user->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
-            })
-            ->rawColumns(['id', 'full_name', 'name', 'action'])
+            ->rawColumns(['id', 'full_name', 'name'])
             ->make(true);
 
         return $dt;
@@ -446,7 +440,7 @@ class UserController extends Controller {
             ->whereIn('users.id', $user_list);
 
         $dt = Datatables::of($user_records)
-            ->filterColumn('full_name', 'whereRaw', "CONCAT(users.firstname,' ',users.lastname) like ?", ["%$1%"])
+            //->filterColumn('full_name', 'whereRaw', "CONCAT(users.firstname,' ',users.lastname) like ?", ["%$1%"])
             ->editColumn('full_name', function ($user) {
                 $company = Company::find($user->company_id);
                 $string = $user->firstname . ' ' . $user->lastname;
@@ -465,12 +459,7 @@ class UserController extends Controller {
                 return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';
             })
             ->removeColumn('slug')
-            ->addColumn('action', function ($user) {
-                return '';
-                //if (Auth::user()->allowed2('edit.user', $user))
-                //    return '<a href="/user/' . $user->username . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
-            })
-            ->rawColumns(['id', 'full_name', 'name', 'action'])
+            ->rawColumns(['id', 'full_name', 'name'])
             ->make(true);
 
         //var_dump($dt);

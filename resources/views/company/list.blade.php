@@ -96,7 +96,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'name', name: 'name'},
             {data: 'trade', name: 'trade'},
-            {data: 'manager', name: 'manager', orderable: false, searchable: false},
+            {data: 'manager', name: 'manager'},
         ],
         order: [
             [1, "asc"]
