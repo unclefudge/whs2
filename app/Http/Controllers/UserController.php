@@ -417,8 +417,9 @@ class UserController extends Controller {
             })
             ->removeColumn('slug')
             ->addColumn('action', function ($user) {
-                if (Auth::user()->allowed2('edit.user', $user))
-                    return '<a href="/user/' . $user->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                return '';
+                //if (Auth::user()->allowed2('edit.user', $user))
+                //    return '<a href="/user/' . $user->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
             })
             ->rawColumns(['id', 'full_name', 'name', 'action'])
             ->make(true);
@@ -465,8 +466,9 @@ class UserController extends Controller {
             })
             ->removeColumn('slug')
             ->addColumn('action', function ($user) {
-                if (Auth::user()->allowed2('edit.user', $user))
-                    return '<a href="/user/' . $user->username . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                return '';
+                //if (Auth::user()->allowed2('edit.user', $user))
+                //    return '<a href="/user/' . $user->username . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
             })
             ->rawColumns(['id', 'full_name', 'name', 'action'])
             ->make(true);
