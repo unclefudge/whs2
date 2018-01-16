@@ -234,7 +234,8 @@ class SiteController extends Controller {
                     return $site->supervisorsSBC();
             })
             ->addColumn('action', function ($site) {
-                return (Auth::user()->allowed2('edit.site', $site)) ? '<a href="/site/' . $site->slug . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>' : '';
+                return '';
+                //return (Auth::user()->allowed2('edit.site', $site)) ? '<a href="/site/' . $site->slug . '/settings" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>' : '';
             })
             ->rawColumns(['id', 'client_phone', 'action'])
             ->make(true);
