@@ -349,6 +349,7 @@ trait UserRolesPermissions {
         if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // All
         if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
         if ($parent_level == '30') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+        if ($parent_level == '20') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
         if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
 
         $merged_ids = array_merge($company_ids, $parent_ids);
