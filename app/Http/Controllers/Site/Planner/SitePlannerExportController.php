@@ -683,7 +683,7 @@ class SitePlannerExportController extends Controller {
                 } else
                     Toastr::success("Sent email");
 
-                return view('planner/export/start');
+                return view('site/export/start');
             }
         }
     }

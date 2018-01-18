@@ -79,6 +79,10 @@ class SupportTicket extends Model {
      */
     public function emailTicket($action)
     {
+        // Send out Welcome Email to user
+        //Mail::to('fudge@jordan.net.au')->send(new \App\Mail\Misc\SupportTicketCreated($this));
+
+
         $email_list = env('EMAIL_ME');
         if (\App::environment('prod', 'dev'))
             $email_list = "jo@capecod.com.au; tara@capecod.com.au; robert@capecod.com.au; ".$email_list;
@@ -105,6 +109,7 @@ class SupportTicket extends Model {
             if ($filename && file_exists($file_path))
                 $m->attach($file_path);
         });
+        
     }
 
     /**
