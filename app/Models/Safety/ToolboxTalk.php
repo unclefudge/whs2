@@ -240,7 +240,7 @@ class ToolboxTalk extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to[] = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to[] = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
@@ -270,7 +270,7 @@ class ToolboxTalk extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to[] = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to[] = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
         // Send to User who created
@@ -301,7 +301,7 @@ class ToolboxTalk extends Model {
     public function emailOverdue()
     {
         if (\App::environment('prod'))
-            $email_to = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else if (\App::environment('local', 'dev'))
             $email_to = [env('EMAIL_ME')];
 
@@ -333,7 +333,7 @@ class ToolboxTalk extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to[] = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to[] = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
 
@@ -364,7 +364,7 @@ class ToolboxTalk extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to[] = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to[] = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
 

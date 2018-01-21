@@ -167,7 +167,7 @@ class WmsDoc extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to = notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
@@ -201,7 +201,7 @@ class WmsDoc extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to = notificationsUsersEmailType('whs'); 
+            $email_to = $this->owned_by->notificationsUsersEmailType('whs'); 
         //$email_to[] = env('EMAIL_ME');
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
