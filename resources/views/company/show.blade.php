@@ -186,38 +186,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Trade Details --}}
-                                @if(Auth::user()->isCC())
-                                    <h3 class="font-green form-section">Trade Details
-                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                        @endif
-                                    </h3>
-                                    <div class="row">
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
-                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
-                                            </div>
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
-                                                <div class="col-xs-8">{{ $company->maxjobs }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6" style="line-height: 2">
-                                            @if($company->transient && Auth::user()->isCC())
-                                                <h4 class="font-red">TRANSIENT COMPANY &nbsp;
-                                                    <small><b>Supervised by:</b> {{ $company->supervisedBySBC() }}</small>
-                                                </h4>
-                                            @elseif($company->transient)
-                                                <b>Supervised by:</b> {{ $company->supervisedBySBC() }}
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-
-
-                                @if(Auth::user()->allowed2('edit.company', $company))
+                                @if(Auth::user()->allowed2('show.company.doc.lic', $company))
                                     {{-- Licences --}}
                                     <h3 class="font-green form-section">Licences
                                         <button class="btn btn-xs default pull-right" id="but_show_lic_expired">Show Expired</button>
@@ -254,7 +223,9 @@
                                             <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></div>
                                             <div class="col-md-8">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : 'N/A' !!}</div>
                                             <div class="col-md-1">
-                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="add">Add</a>
+                                                @if (Auth::user()->allowed2('edit.company.doc.lic', $company->activeCompanyDoc('7')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="add">Add</a>
+                                                @endif
                                             </div>
                                         @endif
 
@@ -615,6 +586,36 @@
                                         </table>
                                     </div>
                                 </div>
+
+                                {{-- Planner Details --}}
+                                @if(Auth::user()->isCC() && $company->id != 3)
+                                    <h3 class="font-green form-section">Planner Details
+                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
+                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
+                                        @endif
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-6" style="line-height: 2">
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
+                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
+                                            </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
+                                                <div class="col-xs-8">{{ $company->maxjobs }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="line-height: 2">
+                                            @if($company->transient && Auth::user()->isCC())
+                                                <h4 class="font-red">TRANSIENT COMPANY &nbsp;
+                                                    <small><b>Supervised by:</b> {{ $company->supervisedBySBC() }}</small>
+                                                </h4>
+                                            @elseif($company->transient)
+                                                <b>Supervised by:</b> {{ $company->supervisedBySBC() }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
 
 
                                 {{-- Staff --}}

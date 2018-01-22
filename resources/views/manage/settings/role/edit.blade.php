@@ -313,7 +313,48 @@ $cc = 1;*/
                                         </table>
 
 
-                                        <h5 class="font-green-haze" style="font-size: 16px">General Documents
+                                        <h5 class="font-green-haze" style="font-size: 16px">Company Documents
+                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                               data-content="Grants ability to view or modify documents which belong to your company."
+                                               data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
+                                            </a>
+                                        </h5>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>General</td>
+                                                <td width="15%">{!! permSelect('view.company.doc.gen', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.doc.gen', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company.doc.gen', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company.doc.gen', 'del', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.company.doc.gen', 'sig', $role, $cid, $dis) !!}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Licences</td>
+                                                <td width="15%">{!! permSelect('view.company.doc.lic', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.doc.lic', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company.doc.lic', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company.doc.lic', 'arc', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.company.doc.lic', 'sig', $role, $cid, $dis) !!}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Insurance & Contracts</td>
+                                                <td width="15%">{!! permSelect('view.company.doc.ics', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.doc.ics', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company.doc.ics', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company.doc.ics', 'arc', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.company.doc.ics', 'sig', $role, $cid, $dis) !!}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>WHS (Test & Tag)</td>
+                                                <td width="15%">{!! permSelect('view.company.doc.whs', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.doc.whs', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.company.doc.whs', 'add', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.company.doc.whs', 'arc', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('sig.company.doc.whs', 'sig', $role, $cid, $dis) !!}</td>
+                                            </tr>
+                                        </table>
+
+                                        <h5 class="font-green-haze" style="font-size: 16px">Other Documents
                                             <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                                                data-content="Grants ability to view or modify documents which belong to your company."
                                                data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
@@ -347,14 +388,6 @@ $cc = 1;*/
                                                 @else
                                                     <td width="60%" colspan="4"></td>
                                                 @endif
-                                            </tr>
-                                            <tr>
-                                                <td>Company Documents</td>
-                                                <td width="15%">{!! permSelect('view.company.doc', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc', 'add', $role, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc', 'del', $role, $cid, $dis) !!}</td>
-                                                <td width="15%"></td>
                                             </tr>
                                         </table>
 

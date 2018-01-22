@@ -24,7 +24,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Company Documents</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->hasPermission2('add.company.doc'))
+                            @if(Auth::user()->hasPermission2('add.company.doc.gen') | Auth::user()->hasPermission2('add.company.doc.lic') || Auth::user()->hasPermission2('add.company.doc.whs') || Auth::user()->hasPermission2('add.company.doc.ics'))
                                 <button type="submit" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">
                                     <i class="fa fa-plus"></i> Add
                                 </button>

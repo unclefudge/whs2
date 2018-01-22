@@ -48,6 +48,7 @@ trait UserRolesPermissions {
     {
         // Determine if exists
         $exists = DB::table('role_user')->where(['user_id' => $this->id, 'role_id' => $role])->first();
+
         return ($exists) ? true : DB::table('role_user')->insert(['user_id' => $this->id, 'role_id' => $role]);
     }
 
@@ -124,7 +125,8 @@ trait UserRolesPermissions {
     public function attachPermission2($permission, $level, $company_id)
     {
         // Determine if exists
-        $exists =  DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'company_id' => $company_id])->first();
+        $exists = DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'company_id' => $company_id])->first();
+
         return ($exists) ? true : DB::table('permission_user')->insert(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id]);
     }
 
@@ -391,6 +393,8 @@ trait UserRolesPermissions {
      */
     public function allowed2($permission, $record = '')
     {
+        list($action, $permissiontype) = explode('.', $permission, 2);
+
         // User can always view/edit own profile
         if (($permission == 'view.user' || $permission == 'edit.user') && $record->id == $this->id)
             return true;
@@ -409,6 +413,14 @@ trait UserRolesPermissions {
             return false;
         }
 
+        // Company Docs - Show
+        if ($permission == 'show.company.doc.gen' || $permission == 'show.company.doc.lic' || $permission == 'show.company.doc.ics' || $permission == 'show.company.doc.whs') {
+            if ($this->permissionLevel("view.$permissiontype", $record->id) || $this->permissionLevel("view.$permissiontype", $record->reportsTo()->id))
+                return true;
+
+            return false;
+        }
+
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
         $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
@@ -417,7 +429,6 @@ trait UserRolesPermissions {
         if ($company_level == 0 && $parent_level == 0)
             return false;
 
-        list($action, $permissiontype) = explode('.', $permission, 2);
         if ($action == 'add') // Don't need any further checking because 'add' doesn't affect any specific record.
             return true;      //  - also we know they must have 'add' permission if they reached this far.
         else {
@@ -462,11 +473,16 @@ trait UserRolesPermissions {
             }
 
             // Company Documents
-            if ($permissiontype == 'company.doc') {
-                if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) // User belong to same company record
-                    return true;
-                if ($this->hasPermission2("$action.company") && $record->for_company_id == $this->company_id && ($record->status == '2' || $record->status == '3')) // User had edit access for company doc record
-                    return true;
+            if ($permissiontype == 'company.doc.gen' || $permissiontype == 'company.doc.lic' || $permissiontype == 'company.doc.whs' || $permissiontype == 'company.doc.ics') {
+                // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
+                if ($action == 'view' || $record->status == '2' || $record->status == '3') {
+                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
+                    // User requires 'Sign Off' at Document Owner level to update an active document
+                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                }
 
                 return false;
             }
@@ -494,7 +510,8 @@ trait UserRolesPermissions {
 
             // Site (Doc, QA, Asbestos, Export) + Attendance + Compliance + Safety Doc
             if ($permissiontype == 'site.doc' || $permissiontype == 'site.qa' || $permissiontype == 'site.asbestos' || $permissiontype == 'site.export' ||
-                $permissiontype == 'attendance' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc') {
+                $permissiontype == 'attendance' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
+            ) {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
 
                 return false;
@@ -503,7 +520,6 @@ trait UserRolesPermissions {
             // Toolbox + WMS
             if ($permissiontype == 'toolbox' || $permissiontype == 'wms') {
                 if ($permissiontype == 'toolbox' && $action == 'view' && $record->isAssignedToUser($this)) return true; // Toolbox Assigned to user
-
                 if ($action == 'view' && $record->master && $record->company_id == '3') return true; // User can view library
                 if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
                 if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company

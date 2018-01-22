@@ -5,11 +5,13 @@ $sub1 = ($user->company->reportsTo()->subscription > 0) ? 1 : 0;
 $sub2 = ($user->company->reportsTo()->subscription > 1) ? 1 : 0;
 $plan = ($user->company->reportsTo()->addon('planner')) ? 1 : 0;
 $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
+$cid = $user->company->reportsTo()->id;
+$dis = false;
 ?>
-@if (App\Models\Misc\Role2::where('company_id', $user->company->reportsTo()->id)->first())
+@if (App\Models\Misc\Role2::where('company_id', $cid)->first())
     <div class="row">
         <div class="col-md-12">
-            @if(Auth::user()->security && Auth::user()->isCompany($user->company->reportsTo()->id))
+            @if(Auth::user()->security && Auth::user()->isCompany($cid))
                 <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                     {!! Form::label('roles', 'Assigned Role(s)', ['class' => 'control-label']) !!}
                     {!! Form::select('roles', $user->company->reportsTo()->rolesSelect('ext'), $user->roles2->pluck('id')->toArray(),
@@ -48,20 +50,20 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
 <table class="table table-bordered table-striped">
     <tr>
         <td>User</td>
-        <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-        <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-        <td width="15%">{!! permSelect('add.user', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-        <td width="15%">{!! permSelect('del.user', 'arc', $user, $user->company->reportsTo()->id) !!}</td>
-        <td width="15%">{!! permSelect('sig.user', 'sig', $user, $user->company->reportsTo()->id) !!}</td>
+        <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('add.user', 'add', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('del.user', 'arc', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('sig.user', 'sig', $user, $cid) !!}</td>
     </tr>
     <tr>
         <td>Company</td>
-        <td width="15%">{!! permSelect('view.company', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-        <td width="15%">{!! permSelect('edit.company', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+        <td width="15%">{!! permSelect('view.company', 'all', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('edit.company', 'all', $user, $cid) !!}</td>
         @if ($sub2)
-            <td width="15%">{!! permSelect('add.company', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.company', 'arc', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('sig.company', 'sig', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('add.company', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.company', 'arc', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('sig.company', 'sig', $user, $cid) !!}</td>
         @else
             <td width="45%" colspan="3"></td>
         @endif
@@ -69,8 +71,8 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
     @if($cc)
         <tr>
             <td>Company Acounting</td>
-            <td width="15%">{!! permSelect('view.company.accounting', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.accounting', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.company.accounting', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.accounting', 'all', $user, $cid) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
     @endif
@@ -83,26 +85,26 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
     <table class="table table-bordered table-striped">
         <tr>
             <td>Site</td>
-            <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.site', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.site', 'arc', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.site', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.site', 'arc', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         @if ($plan)
             <tr>
                 <td>Trades / Tasks</td>
-                <td width="15%">{!! permSelect('view.trade', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.trade', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.trade', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.trade', 'arc', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.trade', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.trade', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.trade', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.trade', 'arc', $user, $cid) !!}</td>
                 <td width="15%"></td>
             </tr>
         @endif
         <tr>
             <td>Area Supervisors</td>
-            <td width="15%">{!! permSelect('view.area.super', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.area.super', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.area.super', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.area.super', 'all', $user, $cid) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
     </table>
@@ -117,20 +119,20 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
         <table class="table table-bordered table-striped">
             <tr>
                 <td>Weekly</td>
-                <td width="15%">{!! permSelect('view.weekly.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.weekly.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.weekly.planner', 'super.plan', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.weekly.planner', 'super.plan', $user, $cid) !!}</td>
                 <td width="45%" colspan="3"></td>
             </tr>
             <tr>
                 <td>Site</td>
-                <td width="15%">{!! permSelect('view.site.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.planner', 'super.plan', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.planner', 'super.plan', $user, $cid) !!}</td>
                 <td width="45%" colspan="3"></td>
             </tr>
             <tr>
                 <td>Trade</td>
-                <td width="15%">{!! permSelect('view.trade.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.trade.planner', 'super.plan', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.trade.planner', 'super.plan', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.trade.planner', 'super.plan', $user, $cid) !!}</td>
                 <td width="45%" colspan="3"></td>
             </tr>
         </table>
@@ -146,16 +148,16 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
     <table class="table table-bordered table-striped">
         <tr>
             <td>Attendance</td>
-            <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $user, $cid) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
         @if($cc)
             @if ($plan)
                 <tr>
                     <td>Compliance</td>
-                    <td width="15%">{!! permSelect('view.compliance', ($sub2) ? 'super.company' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-                    <td width="15%">{!! permSelect('edit.compliance', ($sub2) ? 'super.company' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
+                    <td width="15%">{!! permSelect('view.compliance', ($sub2) ? 'super.company' : 'super', $user, $cid) !!}</td>
+                    <td width="15%">{!! permSelect('edit.compliance', ($sub2) ? 'super.company' : 'super', $user, $cid) !!}</td>
                     <td width="45%" colspan="3"></td>
                 </tr>
             @endif
@@ -173,67 +175,109 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
         <tr>
             <td>Accident Reports</td>
             @if ($plan)
-                <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every' : 'super.individual', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every' : 'super.individual', $user, $cid) !!}</td>
             @else
-                <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.accident', ($sub2) ? 'every-plan' : 'super.individual', $user, $cid) !!}</td>
             @endif
-            <td width="15%">{!! permSelect('add.site.accident', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.site.accident', 'res', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('add.site.accident', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.site.accident', 'res', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td>Hazard Reports</td>
             @if ($plan)
-                <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every' : 'super.individual', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every' : 'super.individual', $user, $cid) !!}</td>
             @else
-                <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.hazard', ($sub2) ? 'every-plan' : 'super.individual', $user, $cid) !!}</td>
             @endif
-            <td width="15%">{!! permSelect('add.site.hazard', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.site.hazard', 'res', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('add.site.hazard', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.site.hazard', 'res', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td>Safety (Risk / Hazardous Materials)</td>
-            <td width="15%">{!! permSelect('view.safety.doc', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.safety.doc', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.safety.doc', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.safety.doc', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.safety.doc', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.safety.doc', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.safety.doc', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.safety.doc', 'del', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td>General / Plans</td>
-            <td width="15%">{!! permSelect('view.site.doc', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.site.doc', ($plan) ? 'super.plan' : 'super', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.site.doc', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.site.doc', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.site.doc', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.site.doc', ($plan) ? 'super.plan' : 'super', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.site.doc', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.site.doc', 'del', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         @if($cc)
             <tr>
                 <td>Quality Assurance Reports</td>
-                <td width="15%">{!! permSelect('view.site.qa', 'super', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.qa', 'super', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.site.qa', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.site.qa', 'res', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('sig.site.qa', 'sig', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.qa', 'super', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.qa', 'super', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.site.qa', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.site.qa', 'res', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('sig.site.qa', 'sig', $user, $cid) !!}</td>
             </tr>
             <tr>
                 <td>Asbestos Notifications</td>
-                <td width="15%">{!! permSelect('view.site.asbestos', 'super', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.site.asbestos', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.site.asbestos', 'res', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.asbestos', 'super', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.site.asbestos', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.site.asbestos', 'res', $user, $cid) !!}</td>
                 <td width="15%"></td>
             </tr>
         @endif
     </table>
 
 
-    <h5 class="font-green-haze" style="font-size: 16px">General Documents
+    <h5 class="font-green-haze" style="font-size: 16px">Company Documents
+        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+           data-content="Grants ability to view or modify documents which belong to your company."
+           data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
+        </a>
+    </h5>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>General</td>
+            <td width="15%">{!! permSelect('view.company.doc.gen', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.doc.gen', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('add.company.doc.gen', 'add', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('del.company.doc.gen', 'del', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('sig.company.doc.gen', 'sig', $user, $cid, $dis) !!}</td>
+        </tr>
+        <tr>
+            <td>Licences</td>
+            <td width="15%">{!! permSelect('view.company.doc.lic', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.doc.lic', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('add.company.doc.lic', 'add', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('del.company.doc.lic', 'arc', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('sig.company.doc.lic', 'sig', $user, $cid, $dis) !!}</td>
+        </tr>
+        <tr>
+            <td>Insurance & Contracts</td>
+            <td width="15%">{!! permSelect('view.company.doc.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.doc.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('add.company.doc.ics', 'add', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('del.company.doc.ics', 'arc', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('sig.company.doc.ics', 'sig', $user, $cid, $dis) !!}</td>
+        </tr>
+        <tr>
+            <td>WHS (Test & Tag)</td>
+            <td width="15%">{!! permSelect('view.company.doc.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.doc.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('add.company.doc.whs', 'add', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('del.company.doc.whs', 'arc', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('sig.company.doc.whs', 'sig', $user, $cid, $dis) !!}</td>
+        </tr>
+    </table>
+
+
+    <h5 class="font-green-haze" style="font-size: 16px">Other Documents
         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
            data-content="Grants ability to view or modify documents which belong to your company."
            data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
@@ -242,27 +286,27 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
     <table class="table table-bordered table-striped">
         <tr>
             <td>Safe Work Method Statements</td>
-            <td width="15%">{!! permSelect('view.wms', ($sub2) ? 'own' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.wms', ($sub2) ? 'own' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.wms', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.wms', 'arc', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('sig.wms', 'sig', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.wms', ($sub2) ? 'own' : 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.wms', ($sub2) ? 'own' : 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.wms', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.wms', 'arc', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('sig.wms', 'sig', $user, $cid) !!}</td>
         </tr>
         <tr>
             <td>Toolbox Talks</td>
-            <td width="15%">{!! permSelect('view.toolbox', ($sub2) ? 'own' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.toolbox', ($sub2) ? 'own' : 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.toolbox', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.toolbox', 'res', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('sig.toolbox', 'sig', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.toolbox', ($sub2) ? 'own' : 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.toolbox', ($sub2) ? 'own' : 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.toolbox', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.toolbox', 'res', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('sig.toolbox', 'sig', $user, $cid) !!}</td>
         </tr>
         <tr>
             <td>Safety Data Sheets (SDS)</td>
-            <td width="15%">{!! permSelect('view.sds', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.sds', 'all', $user, $cid) !!}</td>
             @if (false)
-                <td width="15%">{!! permSelect('edit.sds', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.sds', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.sds', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('edit.sds', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.sds', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.sds', 'del', $user, $cid) !!}</td>
                 <td width="15%"></td>
             @else
                 <td width="60%" colspan="4"></td>
@@ -270,10 +314,10 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
         </tr>
         <tr>
             <td>Company Documents</td>
-            <td width="15%">{!! permSelect('view.company.doc', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.doc', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.company.doc', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('del.company.doc', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.company.doc', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.doc', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.company.doc', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('del.company.doc', 'del', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
     </table>
@@ -290,13 +334,13 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
             @if ($cc)
                 <tr>
                     <td>Management Reports</td>
-                    <td width="15%">{!! permSelect('view.manage.report', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+                    <td width="15%">{!! permSelect('view.manage.report', 'all', $user, $cid) !!}</td>
                     <td width="60%" colspan="4"></td>
                 </tr>
             @endif
             <tr>
                 <td>Export Site Data</td>
-                <td width="15%">{!! permSelect('view.site.export', 'super', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.site.export', 'super', $user, $cid) !!}</td>
                 <td width="60%" colspan="4"></td>
             </tr>
         </table>
@@ -313,26 +357,26 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
         <table class="table table-bordered table-striped">
             <tr>
                 <td>Alert Nofications</td>
-                <td width="15%">{!! permSelect('view.notify', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.notify', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.notify', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.notify', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.notify', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.notify', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.notify', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.notify', 'del', $user, $cid) !!}</td>
                 <td width="15%"></td>
             </tr>
             <tr>
                 <td>Safety Tips</td>
-                <td width="15%">{!! permSelect('view.safetytip', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.safetytip', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.safetytip', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('del.safetytip', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.safetytip', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.safetytip', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.safetytip', 'add', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('del.safetytip', 'del', $user, $cid) !!}</td>
                 <td width="15%"></td>
             </tr>
             {{--
             <tr>
                 <td>To Do Tasks</td>
-                <td width="15%">{!! permSelect('view.todo', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('edit.todo', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-                <td width="15%">{!! permSelect('add.todo', 'add', $user, $user->company->reportsTo()->id) !!}</td>
+                <td width="15%">{!! permSelect('view.todo', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('edit.todo', 'all', $user, $cid) !!}</td>
+                <td width="15%">{!! permSelect('add.todo', 'add', $user, $cid) !!}</td>
                 <td width="15%"></td>
                 <td width="15%"></td>
             </tr>
@@ -350,17 +394,17 @@ $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
     <table class="table table-bordered table-striped">
         <tr>
             <td>Settings</td>
-            <td width="15%">{!! permSelect('view.settings', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.settings', 'all', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.settings', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.settings', 'all', $user, $cid) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
         {{--
         <tr>
             <td>Roles / Permissions</td>
-            <td width="15%">{!! permSelect('view.role', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('edit.role', 'all', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('add.role', 'add', $user, $user->company->reportsTo()->id) !!}</td>
-            <td width="15%">{!! permSelect('dell.role', 'del', $user, $user->company->reportsTo()->id) !!}</td>
+            <td width="15%">{!! permSelect('view.role', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('edit.role', 'all', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.role', 'add', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('dell.role', 'del', $user, $cid) !!}</td>
             <td width="15%"></td>
         </tr>
         --}}

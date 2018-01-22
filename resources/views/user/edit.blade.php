@@ -209,36 +209,39 @@
                                         </div>
                                     </div>
 
-                                    {{-- Employment Type --}}
+                                    {{-- Additional Info --}}
                                     <h3 class="font-green form-section">Additional Information</h3>
                                     <hr>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                                {!! Form::label('employment_type', 'Employment Type', ['class' => 'control-label']) !!}
-                                                {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee', '2' => 'Subcontractor',  '3' => 'External Employment Company'],
-                                                         null, ['class' => 'form-control bs-select']) !!}
-                                                {!! fieldErrorMessage('employment_type', $errors) !!}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
-                                                {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
-                                                {!! Form::select('subcontractor_type', $companyEntity::all(),
-                                                         null, ['class' => 'form-control bs-select']) !!}
-                                                {!! fieldErrorMessage('subcontractor_type', $errors) !!}
-                                                <br><br>
-                                                <div class="note note-warning" style="display: none" id="subcontractor_wc">
-                                                    A separate Worker's Compensation Policy is required for this Subcontractor
-                                                </div>
-                                                <div class="note note-warning" style="display: none" id="subcontractor_sa">
-                                                    A separate Sickness & Accident Policy is required for this Subcontractor
+                                    {{-- Employment Type --}}
+                                    @if (Auth::user()->id != $user->id || (Auth::user()->security && Auth::user()->isCompany($user->company_id)))
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
+                                                    {!! Form::label('employment_type', 'Employment Type', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee', '2' => 'Subcontractor',  '3' => 'External Employment Company'],
+                                                             null, ['class' => 'form-control bs-select']) !!}
+                                                    {!! fieldErrorMessage('employment_type', $errors) !!}
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
+                                                    {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('subcontractor_type', $companyEntity::all(),
+                                                             null, ['class' => 'form-control bs-select']) !!}
+                                                    {!! fieldErrorMessage('subcontractor_type', $errors) !!}
+                                                    <br><br>
+                                                    <div class="note note-warning" style="display: none" id="subcontractor_wc">
+                                                        A separate Worker's Compensation Policy is required for this Subcontractor
+                                                    </div>
+                                                    <div class="note note-warning" style="display: none" id="subcontractor_sa">
+                                                        A separate Sickness & Accident Policy is required for this Subcontractor
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
 
-                                    <!-- Notes -->
+                                    {{-- Notes --}}
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group {!! fieldHasError('notes', $errors) !!}">

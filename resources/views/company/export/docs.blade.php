@@ -9,7 +9,7 @@
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        @if (Auth::user()->hasPermission2('view.company.doc'))
+        @if (Auth::user()->hasPermission2('view.company.doc.gen') || Auth::user()->hasPermission2('view.company.doc.lic') || Auth::user()->hasPermission2('view.company.doc.whs') || Auth::user()->hasPermission2('view.company.doc.ics'))
             <li><a href="/company/doc">Company Documents</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>Export</span></li>

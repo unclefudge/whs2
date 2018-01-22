@@ -129,11 +129,11 @@
                                                 </ul>
                                             </div>
                                         @endif
-                                        @if (Auth::user()->hasAnyPermissionType('company.doc'))
+                                        @if (Auth::user()->hasAnyPermissionType('company.doc.gen') || Auth::user()->hasAnyPermissionType('company.doc.lic') || Auth::user()->hasAnyPermissionType('company.doc.whs') || Auth::user()->hasAnyPermissionType('company.doc.ics'))
                                             <div class="col-md-2">
                                                 <ul class="mega-menu-submenu">
                                                     <li><h3 class="h3-submenu">Documents</h3></li>
-                                                    @if (Auth::user()->hasPermission2('view.company.doc'))
+                                                    @if (Auth::user()->hasPermission2('view.company.doc.gen') || Auth::user()->hasPermission2('view.company.doc.lic') || Auth::user()->hasPermission2('view.company.whs') || Auth::user()->hasPermission2('view.company.ics'))
                                                         <li><a href="/company/doc" class="nav-link "> Company Documents</a></li>
                                                     @endif
                                                 </ul>

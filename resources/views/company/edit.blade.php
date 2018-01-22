@@ -97,7 +97,7 @@
                                                     {!! fieldErrorMessage('name', $errors) !!}
                                                 </div>
                                             </div>
-                                            @if (Auth::user()->company_id == $company->reportsTo()->id)
+                                            @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
                                                 <div class="col-md-5">
                                                     <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
                                                         {!! Form::label('nickname', 'Preferred Name', ['class' => 'control-label']) !!}
@@ -196,7 +196,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
                                                         {!! Form::label('secondary_user', 'Secondary User Contact', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('secondary_user', $company->usersSelect('prompt'),
+                                                        {!! Form::select('secondary_user', array_merge(['0' => 'None'], $company->usersSelect()),
                                                              null, ['class' => 'form-control bs-select']) !!}
                                                         {!! fieldErrorMessage('secondary_user', $errors) !!}
                                                     </div>
@@ -284,9 +284,9 @@
                                             </div>
                                         @endif
 
-                                        {{-- Trade Details --}}
-                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)
-                                            <h3 class="font-green form-section">Trade Details</h3>
+                                        {{-- Planner Details --}}
+                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                                            <h3 class="font-green form-section">Planner Details</h3>
                                             {{-- Max Jobs + Trades  --}}
                                             {{-- Pass required field via hidden because user can't edit  --}}
                                             @if (!Auth::user()->allowed2('edit.company', $company))

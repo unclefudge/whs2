@@ -274,12 +274,14 @@ class UserController extends Controller {
 
 
         // Update Security but ensure at least one user from company has security access
-        $security_count = User::where('company_id', $user->company_id)->where('security', '1')->where('status', '1')->get()->count();
-        if ($user->security && !$request->has('security') && $security_count < 2) {
-            Toastr::warning("Unable to remove Security Access because at least one user within company must have it.");
-        } else {
-            $user->security = $request->has('security') ? 1 : 0;
-            $user->save();
+        if (Auth::user()->isCompany($user->company_id)) {
+            $security_count = User::where('company_id', $user->company_id)->where('security', '1')->where('status', '1')->get()->count();
+            if ($user->security && !$request->has('security') && $security_count < 2) {
+                Toastr::warning("Unable to remove Security Access because at least one user within company must have it.");
+            } else {
+                $user->security = $request->has('security') ? 1 : 0;
+                $user->save();
+            }
         }
 
         // Update Permissions

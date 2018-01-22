@@ -43,8 +43,12 @@ class CreateCompanyTables extends Migration
             $table->string('sub_group', 25)->nullable();
             $table->string('category', 50)->nullable();
 
-            // Trade details
+            // Trade Details
+            $table->string('trade', 250)->nullable();
+            $table->string('trade_other', 250)->nullable();
             $table->tinyInteger('licence_required')->default(1);
+
+            // Planner details
             $table->tinyInteger('maxjobs')->default(1);
             $table->tinyInteger('transient')->default(0);
 

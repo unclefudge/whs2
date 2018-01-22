@@ -32,7 +32,9 @@ class CompanyDocController extends Controller {
      */
     public function index(Request $request)
     {
-        if (!Auth::user()->company->subscription || !Auth::user()->hasAnyPermissionType('company.doc'))
+        if (!(Auth::user()->company->subscription || Auth::user()->hasAnyPermissionType('company.doc.gen') || Auth::user()->hasAnyPermissionType('company.doc.lic')
+            || Auth::user()->hasAnyPermissionType('company.doc.whs') || Auth::user()->hasAnyPermissionType('company.doc.ics'))
+        )
             return view('errors/404');
 
         $category_id = '';
@@ -70,7 +72,9 @@ class CompanyDocController extends Controller {
     public function create(Request $request)
     {
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company.doc'))
+        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
+            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
+        )
             return view('errors/404');
 
         $category_id = $request->get('category_id');
@@ -86,9 +90,10 @@ class CompanyDocController extends Controller {
     public function edit(Request $request, $id)
     {
         $doc = CompanyDoc::findOrFail($id);
+        $type = $doc->type;
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.company.doc', $doc))
+        if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
             return view('errors/404');
 
         return view('company/doc/edit', compact('doc'));
@@ -102,9 +107,10 @@ class CompanyDocController extends Controller {
     public function destroy(Request $request, $id)
     {
         $doc = CompanyDoc::findOrFail($id);
+        $type = $doc->type;
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('del.company.doc', $doc))
+        if (!Auth::user()->allowed2("del.company.doc.$type", $doc))
             return json_encode("failed");
 
         // Delete attached file
@@ -123,7 +129,9 @@ class CompanyDocController extends Controller {
     public function store(CompanyDocRequest $request)
     {
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company.doc'))
+        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
+            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
+        )
             return view('errors/404');
 
         $category_id = $request->get('category_id');
@@ -165,7 +173,9 @@ class CompanyDocController extends Controller {
     public function upload(Request $request)
     {
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company.doc'))
+        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
+            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
+        )
             return json_encode("failed");
 
         // Handle file upload
@@ -211,9 +221,10 @@ class CompanyDocController extends Controller {
             return view('/company/doc/list', compact('category_id'));
 
         $doc = CompanyDoc::findOrFail($id);
+        $type = $doc->type;
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.company.doc', $doc))
+        if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
             return view('errors/404');
 
         $doc_request = $request->all();
@@ -333,8 +344,9 @@ class CompanyDocController extends Controller {
         if ($request->get('doc_id')) {
             // Update Company Doc
             $doc = CompanyDoc::findOrFail($request->get('doc_id'));
+            $type = $doc->type;
             // Check authorisation and throw 404 if not
-            if (!Auth::user()->allowed2('edit.company.doc', $doc))
+            if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
                 return view('errors/404');
 
             $doc->update($doc_request);
@@ -451,16 +463,17 @@ class CompanyDocController extends Controller {
             })
             ->addColumn('action', function ($doc) {
                 $rec = CompanyDoc::find($doc->id);
+                $type = $rec->type;
                 $company = ($rec->for_company_id) ? Company::find($rec->for_company_id) : Company::find($rec->company_id);
                 $actions = '';
                 $expiry = ($rec->expiry) ? $rec->expiry->format('d/m/Y') : '';
 
-                if (($rec->category_id > 20 && Auth::user()->allowed2('edit.company.doc', $rec)) ||
+                if (($rec->category_id > 20 && Auth::user()->allowed2("edit.company.doc.$type", $rec)) ||
                     ($rec->status == 2 || $rec->status == 3 || ($rec->status == 1 && Auth::user()->allowed2('del.company', $company)))
                 )
                     $actions .= '<a href="/company/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
-                if (Auth::user()->allowed2('del.company.doc', $rec) && $doc->category_id > 20)
+                if (Auth::user()->allowed2("del.company.doc.$type", $rec) && $doc->category_id > 20)
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
                 return $actions;
