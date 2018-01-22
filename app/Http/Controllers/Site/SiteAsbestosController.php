@@ -95,9 +95,9 @@ class SiteAsbestosController extends Controller {
         // Additional Complex Custom Validation for Inspection + Supervisor fields
         $validator = Validator::make($request->all(), []);
         $validator->after(function ($validator) {
-            if (request()->get('friable') == '0' && Input::get('amount_over') == '1' && Input::get('inspection') != '1')
+            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('inspection') != '1')
                 $validator->errors()->add('inspection', 'The inspection confirmation field must be YES');
-            if (request()->get('friable') == '0' && Input::get('amount_over') == '1' && Input::get('supervisor_id') == '')
+            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('supervisor_id') == '')
                 $validator->errors()->add('supervisor_id', 'You must select a Supervisor');
         });
 
