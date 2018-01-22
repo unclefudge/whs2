@@ -125,7 +125,8 @@
                                         </div>
                                         <div class="row" style="margin: 0px">
                                             <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                            <div class="col-xs-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
+                                            <div class="col-xs-8">@if($company->secondary_user)<a
+                                                        href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,31 +142,46 @@
                                 </h3>
                                 <div class="row">
                                     <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>ABN</b></div>
-                                        <div class="col-xs-8">{{ ($company->abn) ? $company->abn : 'N/A' }}</div>
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Business Entity</b></div>
-                                        <div class="col-xs-8">{{ ($company->business_entity) ? $company->business_entity : 'N/A' }}</div>
+                                        <div class="row" style="margin: 0px">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>ABN</b></div>
+                                            <div class="col-xs-8">{{ ($company->abn) ? $company->abn : 'N/A' }}</div>
+                                        </div>
+                                        <div class="row" style="margin: 0px">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Business Entity</b></div>
+                                            <div class="col-xs-8">{{ ($company->business_entity) ? $company->business_entity : 'N/A' }}</div>
+                                        </div>
                                         @if (Auth::user()->allowed2('view.company.accounting', $company))
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Subgroup</b></div>
-                                            <div class="col-xs-8">{{ ($company->sub_group) ? $company->sub_group : 'N/A' }}</div>
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Category</b></div>
-                                            <div class="col-xs-8">{{ ($company->category) ? $company->category : 'N/A' }}</div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Subgroup</b></div>
+                                                <div class="col-xs-8">{{ ($company->sub_group) ? $company->sub_group : 'N/A' }}</div>
+                                            </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Category</b></div>
+                                                <div class="col-xs-8">{{ ($company->category) ? $company->category : 'N/A' }}</div>
+                                            </div>
                                         @endif
                                     </div>
                                     <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>GST Registered</b></div>
-                                        <div class="col-xs-8">@if($company->gst) Yes @elseif($company->gst == '0') No @else N/A @endif</div>
+                                        <div class="row" style="margin: 0px">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>GST Registered</b></div>
+                                            <div class="col-xs-8">@if($company->gst) Yes @elseif($company->gst == '0') No @else N/A @endif</div>
+                                        </div>
                                         @if (Auth::user()->allowed2('view.company.accounting', $company))
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Payroll Tax</b></div>
-                                            <div class="col-xs-8">
-                                                @if($company->payroll_tax)
-                                                    {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }}
-                                                @else
-                                                    N/A
-                                                @endif
+
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Payroll Tax</b></div>
+                                                <div class="col-xs-8">
+                                                    @if($company->payroll_tax)
+                                                        {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Creditor Code</b></div>
-                                            <div class="col-xs-8">{{ $company->creditor_code }} </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Creditor Code</b></div>
+                                                <div class="col-xs-8">{{ $company->creditor_code }} </div>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -179,10 +195,14 @@
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-6" style="line-height: 2">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
-                                            <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
-                                            <div class="col-xs-8">{{ $company->maxjobs }}</div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
+                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
+                                            </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
+                                                <div class="col-xs-8">{{ $company->maxjobs }}</div>
+                                            </div>
                                         </div>
                                         <div class="col-md-6" style="line-height: 2">
                                             @if($company->transient && Auth::user()->isCC())
@@ -295,7 +315,8 @@
                                         <div class="col-md-12" style="margin: 0px; padding: 0px">
                                             <div class="col-md-3" style="margin: 0px;">
                                                 <i class="fa" style="font-size: 20px; min-width: 35px"></i>
-                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence other then Contractors Licence</a>
+                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence other then
+                                                    Contractors Licence</a>
                                             </div>
                                             <div class="col-md-9">&nbsp;</div>
                                         </div>
