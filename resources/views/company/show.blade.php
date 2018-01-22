@@ -119,10 +119,14 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                        <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                        <div class="col-xs-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
+                                        <div class="row">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
+                                            <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
+                                            <div class="col-xs-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
+                                        </div>
                                     </div>
                                 </div>
 
