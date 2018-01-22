@@ -106,12 +106,12 @@
                                 {{-- Contact Details --}}
                                 <div class="row">
                                     <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Phone</b></div>
-                                        <div class="col-md-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else N/A @endif</div>
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Email</b></div>
-                                        <div class="col-md-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else N/A @endif</div>
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Address</b></div>
-                                        <div class="col-md-8">
+                                        <div class="col-xs-4" style="padding-left: 0px"><b>Phone</b></div>
+                                        <div class="col-xs-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else N/A @endif</div>
+                                        <div class="col-xs-4" style="padding-left: 0px"><b>Email</b></div>
+                                        <div class="col-xs-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else N/A @endif</div>
+                                        <div class="col-xs-4" style="padding-left: 0px"><b>Address</b></div>
+                                        <div class="col-xs-8">
                                             @if($company->address)
                                                 {{ $company->address }}&nbsp;
                                             @endif
@@ -119,10 +119,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                        <div class="col-md-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
-                                        <div class="col-md-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                        <div class="col-md-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
+                                        <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
+                                        <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
+                                        <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
+                                        <div class="col-xs-8">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
                                     </div>
                                 </div>
 

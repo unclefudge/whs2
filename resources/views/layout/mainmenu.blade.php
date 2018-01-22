@@ -301,7 +301,7 @@
                                                 <ul class="mega-menu-submenu">
                                                     @if(Auth::user()->hasAnyPermissionType('settings'))
                                                         <li><h3 class="h3-submenu">Configuration</h3></li>
-                                                        @if(Auth::user()->hasAnyPermissionType('settings') && (Auth::user()->id == 3 || Auth::user()->id == 109))
+                                                        @if(Auth::user()->hasAnyPermissionType('settings'))
                                                             <li><a href="/settings" class="nav-link"> Settings</a></li>
                                                         @endif
                                                     @endif
