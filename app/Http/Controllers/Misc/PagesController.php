@@ -168,11 +168,19 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
-        echo "Companies with no trade allocated<br><br>";
-        $companies = \App\Models\Company\Company::all();
-        foreach ($companies as $company) {
-            if (!$company->tradesSkilledInSBC())
-                echo $company->name."<br>";
+        echo "Set Company doc type<br><br>";
+        $docs = \App\Models\Company\CompanyDoc::all();
+        foreach ($docs as $doc) {
+            if ($doc->category_id < 6)
+                $doc->type = 'ics';
+            elseif ($doc->category_id == 6)
+                $doc->type = 'whs';
+            elseif ($doc->category_id > 6 && $doc->category_id < 10 )
+                $doc->type = 'lic';
+            elseif ($doc->category_id > 20)
+                $doc->type = 'gen';
+
+            $doc->save();
         }
         /*echo "Child Company LH default permissions<br><br>";
         $lh =  DB::table('role_user')->where('role_id', 12)->get();

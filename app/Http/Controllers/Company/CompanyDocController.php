@@ -308,6 +308,7 @@ class CompanyDocController extends Controller {
             return redirect('/company/' . $doc->for_company_id);
         }
 
+
         // Determine Status of Doc
         // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
         if ($request->has('status') && $request->get('status') == 0)
@@ -338,19 +339,17 @@ class CompanyDocController extends Controller {
             $doc_request['name'] = $request->get('extra_lic_name'); //'Additional Licence';
         }
 
-
-        //dd($doc_request);
         // Determine if its a new or existing document
         if ($request->get('doc_id')) {
             // Update Company Doc
             $doc = CompanyDoc::findOrFail($request->get('doc_id'));
             $type = $doc->type;
+
             // Check authorisation and throw 404 if not
             if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
                 return view('errors/404');
 
             $doc->update($doc_request);
-
             Toastr::success("Updated document");
         } else {
             // Create Company Doc
@@ -415,7 +414,7 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function profileDestroy(Request $request, $id)
+    public function profileDestroy($id)
     {
         $doc = CompanyDoc::findOrFail($id);
         $company = Company::findOrFail($doc->for_company_id);

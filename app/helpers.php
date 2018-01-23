@@ -272,7 +272,7 @@ EOT;
 
 function format_expiry_field($date)
 {
-    if (!$date || get_class($date) != 'Carbon\Carbon')
+    if (!$date || get_class($date) != 'Illuminate\Support\Carbon')
         return "<b>Expiry:</b> N/A";
     elseif ($date->isPast())
         return "<span class='font-red'><b>Expired:</b> " . $date->format('d/m/Y') . "</span>";
