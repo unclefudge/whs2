@@ -538,15 +538,15 @@
                                             <div class="col-md-8">{!! format_expiry_field($company->activeCompanyDoc('6')->expiry) !!}</div>
                                             <div class="col-md-1">
                                                 @if (Auth::user()->allowed2('edit.company.doc.whs', $company->activeCompanyDoc('6')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('6')->id }}"
-                                                           data-ref_no="{{ $company->activeCompanyDoc('6')->ref_no }}"
-                                                           data-ref_name="{{ $company->activeCompanyDoc('6')->ref_name }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('6')->notes }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('6')->expiry) ? $company->activeCompanyDoc('6')->expiry->format('d/m/Y') : '' }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('6')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('6')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('6')->status }}">Edit</a>
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('6')->id }}"
+                                                       data-ref_no="{{ $company->activeCompanyDoc('6')->ref_no }}"
+                                                       data-ref_name="{{ $company->activeCompanyDoc('6')->ref_name }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('6')->notes }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('6')->expiry) ? $company->activeCompanyDoc('6')->expiry->format('d/m/Y') : '' }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('6')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('6')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('6')->status }}">Edit</a>
                                                 @endif
                                             </div>
                                         @else
@@ -594,12 +594,9 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="line-height: 2">
-                                            @if($company->transient && Auth::user()->isCC())
-                                                <h4 class="font-red">TRANSIENT COMPANY &nbsp;
-                                                    <small><b>Supervised by:</b> {{ $company->supervisedBySBC() }}</small>
-                                                </h4>
-                                            @elseif($company->transient)
-                                                <b>Supervised by:</b> {{ $company->supervisedBySBC() }}
+                                            @if(Auth::user()->isCC())
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
+                                                <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
                                             @endif
                                         </div>
                                     </div>

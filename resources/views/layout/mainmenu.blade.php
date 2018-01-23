@@ -198,7 +198,7 @@
                     </li>
                 @endif
 
-                @if (Auth::user()->hasAnyPermissionType('user|client|trade|compliance|contractor|site.doc.manager|safetytip|settings') ||
+                @if (Auth::user()->hasAnyPermissionType('user|client|trade|compliance|contractor|site.doc.manager|site.export|safetytip|settings|') ||
                 (Auth::user()->company->subscription > 1 &&  Auth::user()->hasAnyPermissionType('company')))
                     <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                         <a href="javascript:;"><i class="fa fa-crosshairs"></i> Management
