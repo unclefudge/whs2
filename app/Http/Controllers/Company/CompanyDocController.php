@@ -149,6 +149,16 @@ class CompanyDocController extends Controller {
         elseif ($doc_request['category_id'] > 20)
             $doc_request['type'] = 'gen';
 
+        // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
+        /*
+        if (Auth::user()->hasPermission2('del.company.doc'.$doc_request['type'])) {
+            $doc_request['approved_by'] = Auth::user()->id;
+            $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
+            $doc_request['status'] = 1;
+        } else {
+            $doc_request['status'] = 2;
+        }*/
+
         // Create Company Doc
         $doc = CompanyDoc::create($doc_request);
 
@@ -277,13 +287,13 @@ class CompanyDocController extends Controller {
             $doc_request['type'] = 'lic';
         elseif ($doc_request['category_id'] > 20)
             $doc_request['type'] = 'gen';
-        
+
         $doc->update($doc_request);
 
         // Close any ToDoo and create new one
         if ($doc->category_id < 21) {
             $doc->closeToDo();
-            if ($doc_request['status'] == 2)
+            if ($doc->status == 2)
                 $doc->createApprovalToDo(['3']);
         }
 
@@ -336,7 +346,7 @@ class CompanyDocController extends Controller {
         // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
         if ($request->has('status') && $request->get('status') == 0)
             $doc_request['status'] = 0;
-        else if (Auth::user()->hasPermission2('del.company') && $doc_request['company_id'] == Auth::user()->company_id) {
+        else if (Auth::user()->hasPermission2('del.company.doc') && $doc_request['company_id'] == Auth::user()->company_id) {
             $doc_request['approved_by'] = Auth::user()->id;
             $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
             $doc_request['status'] = 1;

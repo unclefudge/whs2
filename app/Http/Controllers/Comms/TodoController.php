@@ -277,7 +277,10 @@ class TodoController extends Controller {
         ])
             ->join('todo', 'todo_user.todo_id', '=', 'todo.id')
             ->join('users', 'todo.created_by', '=', 'users.id')
-            ->where('todo_user.user_id', Auth::user()->id)
+            ->where(function ($q) {
+                $q->where('todo_user.user_id', Auth::user()->id);
+                $q->orWhere('todo.created_by', Auth::user()->id);
+            })
             ->where('todo.status', $request->get('status'))
             ->orderBy('todo.due_at');
 
@@ -291,7 +294,7 @@ class TodoController extends Controller {
 
                 return $todo->duedate;
             })
-            ->rawColumns(['view'])
+            ->rawColumns(['view', 'task'])
             ->make(true);
 
         return $dt;
