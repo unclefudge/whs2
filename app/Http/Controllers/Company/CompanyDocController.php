@@ -143,6 +143,12 @@ class CompanyDocController extends Controller {
         $doc_request = $request->all();
         $doc_request['expiry'] = ($request->get('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('expiry') . '00:00')->toDateTimeString() : null;
 
+        // Set Type
+        if ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
+            $doc_request['type'] = 'lic';
+        elseif ($doc_request['category_id'] > 20)
+            $doc_request['type'] = 'gen';
+
         // Create Company Doc
         $doc = CompanyDoc::create($doc_request);
 
@@ -196,6 +202,12 @@ class CompanyDocController extends Controller {
                 $doc_request['company_id'] = Auth::user()->company_id;
                 $doc_request['for_company_id'] = Auth::user()->company_id;
                 $doc_request['expiry'] = null;
+
+                // Set Type
+                if ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
+                    $doc_request['type'] = 'lic';
+                elseif ($doc_request['category_id'] > 20)
+                    $doc_request['type'] = 'gen';
 
                 // Create Site Doc
                 $doc = CompanyDoc::create($doc_request);
@@ -255,6 +267,17 @@ class CompanyDocController extends Controller {
                 $doc_request['status'] = 2;
             }
         }
+
+        // Set Type
+        if ($doc_request['category_id'] < 6)
+            $doc_request['type'] = 'ics';
+        elseif ($doc_request['category_id'] == 6)
+            $doc_request['type'] = 'whs';
+        elseif ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
+            $doc_request['type'] = 'lic';
+        elseif ($doc_request['category_id'] > 20)
+            $doc_request['type'] = 'gen';
+        
         $doc->update($doc_request);
 
         // Close any ToDoo and create new one
