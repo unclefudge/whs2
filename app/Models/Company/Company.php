@@ -785,8 +785,12 @@ class Company extends Model {
     {
         $str = '';
         $doc = CompanyDoc::where('category_id', 7)->where('for_company_id', $this->id)->where('status', '>', '0')->first();
-        foreach (explode(',', $doc->ref_type) as $class_id) {
-            $str .= ContractorLicence::find($class_id)->name . ', ';
+        if ($doc) {
+            foreach (explode(',', $doc->ref_type) as $class_id) {
+                $lic = ContractorLicence::find($class_id);
+                if ($lic)
+                    $str .= $lic->name . ', ';
+            }
         }
 
         return rtrim($str, ', ');

@@ -112,9 +112,11 @@ class Todo extends Model {
                 return '/todo/' . $this->id;
             case 'company doc':
                 $doc = CompanyDoc::find($this->type_id);
-                $company = Company::find($doc->for_company_id);
+                if ($doc) {
+                    $company = Company::find($doc->for_company_id);
 
-                return '/company/' . $company->id;
+                    return '/company/' . $company->id;
+                }
             case 'general':
                 return '/todo/' . $this->id;
         }
