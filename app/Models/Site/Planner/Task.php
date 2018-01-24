@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class Task extends Model
 {
     protected $table = 'trade_task';
-    protected $fillable = [
-        'name', 'code', 'upcoming', 'status',
-        'trade_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'code', 'upcoming', 'status', 'trade_id', 'created_by', 'updated_by'];
 
 
     /**
