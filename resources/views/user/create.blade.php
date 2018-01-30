@@ -90,7 +90,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('username', $errors) !!}">
-                                        {!! Form::label('username', 'Username', ['class' => 'control-label']) !!}
+                                        {!! Form::label('username', 'Username *', ['class' => 'control-label']) !!}
                                         {!! Form::text('username', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('username', $errors) !!}
                                     </div>
@@ -114,7 +114,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('password', $errors) !!}">
-                                        {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
+                                        {!! Form::label('password', 'Password *', ['class' => 'control-label']) !!}
                                         {!! Form::text('password', null, ['class' => 'form-control', 'required', 'placeholder' => 'User will be forced to choose new password upon login']) !!}
                                         {!! fieldErrorMessage('password', $errors) !!}
                                     </div>
@@ -141,14 +141,14 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
-                                        {!! Form::label('firstname', 'First Name', ['class' => 'control-label']) !!}
+                                        {!! Form::label('firstname', 'First Name 8', ['class' => 'control-label']) !!}
                                         {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('firstname', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
-                                        {!! Form::label('lastname', 'Last Name', ['class' => 'control-label']) !!}
+                                        {!! Form::label('lastname', 'Last Name *', ['class' => 'control-label']) !!}
                                         {!! Form::text('lastname', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('lastname', $errors) !!}
                                     </div>
@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('email', $errors) !!}">
-                                        {!! Form::label('email', 'Email', ['class' => 'control-label']) !!}
+                                        {!! Form::label('email', 'Email *', ['class' => 'control-label']) !!}
                                         {!! Form::text('email', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('email', $errors) !!}
                                     </div>
@@ -216,7 +216,7 @@
                                 <div class="col-md-6">
                                     {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
                                     <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                        {!! Form::label('employment_type', 'Employment type: What is the relationship of this person to your company', ['class' => 'control-label']) !!}
+                                        {!! Form::label('employment_type', 'Employment type * : What is the relationship of this person to your company', ['class' => 'control-label']) !!}
                                         {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
                                         '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
                                                  '', ['class' => 'form-control bs-select']) !!}
