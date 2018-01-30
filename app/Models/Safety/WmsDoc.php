@@ -139,7 +139,7 @@ class WmsDoc extends Model {
         $doc = $this;
         Mail::send('emails/workmethod', $data, function ($m) use ($email_list, $email_user, $doc, $data) {
             $user_email = $data['user_email'];
-            ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.net';
+            ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
 
             $m->from($send_from, Auth::user()->fullname);
             $m->to($email_list);
@@ -182,7 +182,7 @@ class WmsDoc extends Model {
         ];
         $doc = $this;
         Mail::send('emails/workmethod-signoff', $data, function ($m) use ($email_to, $email_user, $doc, $data) {
-            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.net';
+            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, Auth::user()->fullname);
             $m->to($email_to);
             if ($email_user)
@@ -215,7 +215,7 @@ class WmsDoc extends Model {
         ];
         $doc = $this;
         Mail::send('emails/workmethod-archived', $data, function ($m) use ($email_to, $email_user, $doc, $data) {
-            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.net';
+            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, Auth::user()->fullname);
             $m->to($email_to);
             if ($email_user)
@@ -257,7 +257,7 @@ class WmsDoc extends Model {
         $mesg = ($expired == true) ? "has Expired " . $this->updated_at->addYear()->format('d/m/Y') : "due to expire " . $this->updated_at->addYear()->format('d/m/Y');
 
         $data = [
-            'user_email'        => 'do-not-reply@safeworksite.net',
+            'user_email'        => 'do-not-reply@safeworksite.com.au',
             'user_fullname'     => 'Safeworksite',
             'user_company_name' => 'Safeworksite',
             'company_name'      => $company->name,
@@ -267,7 +267,7 @@ class WmsDoc extends Model {
         ];
         $doc = $this;
         Mail::send('emails/workmethod-expired', $data, function ($m) use ($email_to, $email_user, $doc, $mesg, $data) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             if ($email_user)
                 $m->cc($email_user);

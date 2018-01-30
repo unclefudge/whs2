@@ -79,12 +79,12 @@
                     <div class="row">
                         <div class="col-md-8" style="line-height: 2">
                             <div class="col-md-3" style="padding-left: 0px"><b>Phone</b></div>
-                            <div class="col-md-9">@if ($user->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $user->phone) }}"> {{ $user->phone }} </a>@else N/A @endif</div>
+                            <div class="col-md-9">@if ($user->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $user->phone) }}"> {{ $user->phone }} </a>@else - @endif</div>
                             <div class="col-md-3" style="padding-left: 0px"><b>Email</b></div>
-                            <div class="col-md-9">@if ($user->email)<a href="mailto:{{ $user->email }}"> {{ $user->email }} </a>@else N/A @endif</div>
+                            <div class="col-md-9">@if ($user->email)<a href="mailto:{{ $user->email }}"> {{ $user->email }} </a>@else - @endif</div>
                             <div class="col-md-3" style="padding-left: 0px"><b>Address</b></div>
                             <div class="col-md-9">
-                                @if($user->address){{ $user->address }}&nbsp; @else N/A @endif
+                                @if($user->address){{ $user->address }}&nbsp; @else - @endif
                                 {{ $user->SuburbStatePostcode }}
                             </div>
                         </div>

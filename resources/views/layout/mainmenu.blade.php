@@ -23,6 +23,7 @@
                     <a href="/"><i class="fa fa-home"></i> Home </a>
                 </li>
 
+                @if (Auth::user()->company->status == 1)
                 {{-- Job Site Info --}}
                 @if (Auth::user()->hasAnyPermissionType('site.hazard|site.accident|safety.doc|site.doc|site'))
                     <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
@@ -317,6 +318,7 @@
                         </ul>
                     </li>
                 @endif
+                @endif {{-- End - Company status == 1 --}}
 
                 @if(Auth::user()->isCC())
                     <li class="menu-dropdown classic-menu-dropdown {{ (Request::is('dashboard') ? 'active' : '') }}">

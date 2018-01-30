@@ -78,6 +78,10 @@ class PagesController extends Controller {
                 return redirect('/company/'.Auth::user()->company->id.'/edit');
             if (Auth::user()->company->signup_step == 3)
                 return redirect('company/'.Auth::user()->company->id.'/signup/3');
+            if (Auth::user()->company->signup_step == 4)
+                return redirect('company/'.Auth::user()->company->id);
+            if (Auth::user()->company->signup_step == 5)
+                return redirect('company/'.Auth::user()->company->id.'/signup/5');
         }
         return view('pages/home', compact('worksite'));
     }

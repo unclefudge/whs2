@@ -9,6 +9,7 @@
     </div>
 @stop
 
+@if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -18,34 +19,49 @@
         <li><span>Create new user</span></li>
     </ul>
 @stop
+@endif
 
 @section('content')
     <div class="page-content-inner">
-        @if (Auth::user()->company->status == 2 && Auth::user()->company->signup_step == 3)
+        @if (Auth::user()->company->status == 2)
             {{-- Company Signup Progress --}}
             <div class="mt-element-step">
                 <div class="row step-line" id="steps">
-                    <div class="col-md-3 mt-step-col first active">
-                        <div class="mt-step-number bg-white font-grey">1</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
-                        <div class="mt-step-content font-grey-cascade">Register</div>
+                    <div class="col-sm-3 mt-step-col first active">
+                        <a href="/user/{{ Auth::user()->company->primary_user }}/edit">
+                            <div class="mt-step-number bg-white font-grey">1</div>
+                        </a>
+                        <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
+                        <div class="mt-step-content font-grey-cascade">Add primary user</div>
                     </div>
-                    <div class="col-md-3 mt-step-col active">
-                        <div class="mt-step-number bg-white font-grey">2</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
-                        <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                    <div class="col-sm-3 mt-step-col active">
+                        <a href="/company/{{ Auth::user()->company_id }}/edit">
+                            <div class="mt-step-number bg-white font-grey">2</div>
+                        </a>
+                        <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
+                        <div class="mt-step-content font-grey-cascade">Add company info</div>
                     </div>
-                    <div class="col-md-3 mt-step-col">
+                    <div class="col-sm-3 mt-step-col">
                         <div class="mt-step-number bg-white font-grey">3</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Users</div>
-                        <div class="mt-step-content font-grey-cascade">Add users</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
+                        <div class="mt-step-content font-grey-cascade">Add workers</div>
                     </div>
-                    <div class="col-md-3 mt-step-col last">
+                    <div class="col-sm-3 mt-step-col last">
                         <div class="mt-step-number bg-white font-grey">4</div>
                         <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
                         <div class="mt-step-content font-grey-cascade">Upload documents</div>
                     </div>
                 </div>
+            </div>
+            <div class="note note-warning">
+                <b>Step 3: Add all additional users that work on job sites.</b><br><br>All workers require their own login<br><br>
+                <ul>
+                    <li>Add users by clicking
+                        <button class="btn dark btn-outline btn-xs" href="javascript:;"> Add User</button>
+                    </li>
+                </ul>
+                Once you've added all your users please click
+                <button class="btn dark btn-outline btn-xs" href="javascript:;"> Continue</button>
             </div>
         @endif
         <div class="row">
@@ -198,10 +214,12 @@
                             <h3 class="font-green form-section">Additional Information</h3>
                             <div class="row">
                                 <div class="col-md-6">
+                                    {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
                                     <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                        {!! Form::label('employment_type', 'Employment Type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee', '2' => 'Subcontractor',  '3' => 'External Employment Company'],
-                                                 null, ['class' => 'form-control bs-select']) !!}
+                                        {!! Form::label('employment_type', 'Employment type: What is the relationship of this person to your company', ['class' => 'control-label']) !!}
+                                        {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
+                                        '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
+                                                 '', ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('employment_type', $errors) !!}
                                     </div>
                                 </div>
@@ -273,12 +291,12 @@
 
 
         // Show Subcontractor field
-        if ($("#employment_type").val() == '2')
+        if ($("#employment_type").val() == '3')
             $("#subcontract_type_field").show();
 
         $("#employment_type").on("change", function () {
             $("#subcontract_type_field").hide();
-            if ($("#employment_type").val() == '2')
+            if ($("#employment_type").val() == '3')
                 $("#subcontract_type_field").show();
         });
 

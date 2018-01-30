@@ -100,7 +100,7 @@ class SupportTicket extends Model {
         ];
         $filename = $this->attachment;
         Mail::send('emails/supportTicket', $data, function ($m) use ($email_list, $email_user, $filename, $action) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_list);
             if ($email_user)
                 $m->cc($email_user);

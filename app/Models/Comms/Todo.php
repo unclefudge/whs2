@@ -274,7 +274,7 @@ class Todo extends Model {
         ];
 
         Mail::send('emails/todo', $data, function ($m) use ($email_list, $email_user, $overdue) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_list);
             if (validEmail($email_user))
                 $m->cc($email_user);
@@ -320,7 +320,7 @@ class Todo extends Model {
         ];
 
         Mail::send('emails/todo-completed', $data, function ($m) use ($email_list, $email_user) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_list);
             if (validEmail($email_user))
                 $m->cc($email_user);

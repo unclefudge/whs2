@@ -8,6 +8,7 @@
     </div>
 @stop
 
+@if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -17,12 +18,43 @@
         <li><a href="/user/{{ $user->id }}">Profile</a><i class="fa fa-circle"></i></li>
         <li><span>Edit</span></li>
     </ul>
-    @stop
+@stop
+@endif
 
 
-    @section('content')
-            <!-- BEGIN PAGE CONTENT INNER -->
+@section('content')
+    {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
+        @if (Auth::user()->company->status == 2)
+            {{-- Company Signup Progress --}}
+            <div class="mt-element-step">
+                <div class="row step-line" id="steps">
+                    <div class="col-sm-3 mt-step-col first">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
+                        <div class="mt-step-content font-grey-cascade">Add primary user</div>
+                    </div>
+                    <div class="col-sm-3 mt-step-col">
+                        <div class="mt-step-number bg-white font-grey">2</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
+                        <div class="mt-step-content font-grey-cascade">Add company info</div>
+                    </div>
+                    <div class="col-sm-3 mt-step-col">
+                        <div class="mt-step-number bg-white font-grey">3</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
+                        <div class="mt-step-content font-grey-cascade">Add workers</div>
+                    </div>
+                    <div class="col-sm-3 mt-step-col last">
+                        <div class="mt-step-number bg-white font-grey">4</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
+                    </div>
+                </div>
+            </div>
+            <div class="note note-warning">
+                <p><b>Step 1: Add information relating to the business owner (primary user) that will have full access to the website.</b></p>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -33,7 +65,7 @@
                             <span class="caption-helper"> ID: {{ $user->id }}</span>
                         </div>
                         <div class="actions">
-                            @if (Auth::user()->allowed2('edit.user', $user))
+                            @if (Auth::user()->allowed2('edit.user', $user) && Auth::user()->company->status == 1)
                                 <a href="/user/{{ $user->id }}/security" class="btn btn-circle green btn-outline btn-sm">
                                     <i class="fa fa-lock"></i> @if (Auth::user()->security) Edit @endif Security Settings</a>
                             @endif
@@ -122,15 +154,20 @@
                                                 </div>
                                             </div>
                                         @else
+                                            @if (Auth::user()->password_reset)
+                                                <div class="note note-warning">
+                                                    Your password has been reset and you are required to change it.
+                                                </div>
+                                            @endif
                                             <div class="col-md-6">
-                                                <div class="form-group {!! fieldHasError('password', $errors) !!}">
+                                                <div class="form-group {!! fieldHasError('password', $errors) !!} @if (Auth::user()->password_reset) has-error @endif">
                                                     {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
                                                     <input type="password" name="password" value="{{ old('password') }}" id="password" class="form-control">
                                                     {!! fieldErrorMessage('password', $errors) !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group {!! fieldHasError('password_confirmation', $errors) !!}">
+                                                <div class="form-group {!! fieldHasError('password_confirmation', $errors) !!} @if (Auth::user()->password_reset) has-error @endif">
                                                     {!! Form::label('password_confirmation', 'Re-type Password', ['class' => 'control-label']) !!}
                                                     <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" id="password_confirmation" class="form-control">
                                                     {!! fieldErrorMessage('password_confirmation', $errors) !!}
@@ -211,15 +248,16 @@
 
                                     {{-- Additional Info --}}
                                     <h3 class="font-green form-section">Additional Information</h3>
-                                    <hr>
                                     {{-- Employment Type --}}
                                     @if (Auth::user()->id != $user->id || (Auth::user()->security && Auth::user()->isCompany($user->company_id)))
                                         <div class="row">
                                             <div class="col-md-6">
+                                                {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
                                                 <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                                    {!! Form::label('employment_type', 'Employment Type', ['class' => 'control-label']) !!}
-                                                    {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee', '2' => 'Subcontractor',  '3' => 'External Employment Company'],
-                                                             null, ['class' => 'form-control bs-select']) !!}
+                                                    {!! Form::label('employment_type', 'Employment type: What is the relationship of this person to your company', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
+                                                    '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
+                                                             '', ['class' => 'form-control bs-select']) !!}
                                                     {!! fieldErrorMessage('employment_type', $errors) !!}
                                                 </div>
                                             </div>
@@ -254,8 +292,12 @@
                                     </div>
 
                                     <div class="form-actions right">
-                                        <a href="{{ URL::previous() }}" class="btn default"> Back</a>
-                                        <button type="submit" class="btn green">Save</button>
+                                        @if (Auth::user()->company->status == 2)
+                                            <button type="submit" class="btn green"> Continue</button>
+                                        @else
+                                            <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+                                            <button type="submit" class="btn green"> Save</button>
+                                        @endif
                                     </div>
                                 </div>
                                 {!! Form::close() !!}
@@ -317,6 +359,32 @@
         $('#password_div').show();
         $('#butt_password').hide();
     });
+
+    $(document).ready(function () {
+
+        /* Select2 */
+
+        // Show Subcontractor field
+        if ($("#employment_type").val() == '3')
+            $("#subcontract_type_field").show();
+
+        $("#employment_type").on("change", function () {
+            $("#subcontract_type_field").hide();
+            if ($("#employment_type").val() == '3')
+                $("#subcontract_type_field").show();
+        });
+
+        // Show appropriate Subcontractor message
+        $("#subcontractor_type").on("change", function () {
+            $("#subcontractor_wc").hide();
+            $("#subcontractor_sa").hide();
+            if ($("#subcontractor_type").val() == '1' || $("#subcontractor_type").val() == '4')
+                $("#subcontractor_wc").show();
+            if ($("#subcontractor_type").val() == '2' || $("#subcontractor_type").val() == '3')
+                $("#subcontractor_sa").show();
+        });
+    });
+</script>
 
 </script>
 @stop

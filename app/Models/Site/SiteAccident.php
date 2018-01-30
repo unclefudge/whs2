@@ -72,7 +72,7 @@ class SiteAccident extends Model {
         ];
 
         Mail::send('emails.siteAccident', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             if ($email_user)
                 $m->cc($email_user);

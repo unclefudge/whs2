@@ -506,7 +506,7 @@ class SiteQaController extends Controller {
                 ];
                 Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
                     $user_email = Auth::user()->email;
-                    ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.net';
+                    ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
 
                     $m->from($send_from, Auth::user()->fullname);
                     $m->to($email_list);

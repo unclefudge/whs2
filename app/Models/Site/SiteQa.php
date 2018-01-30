@@ -254,7 +254,7 @@ class SiteQa extends Model {
         ];
 
         Mail::send('emails/siteQA-overdue', $data, function ($m) use ($email_to) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             $m->subject('Quality Assurance Overdue Notification');
         });
@@ -285,7 +285,7 @@ class SiteQa extends Model {
         ];
 
         Mail::send('emails/siteQA-completed', $data, function ($m) use ($email_to) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             $m->subject('Quality Assurance Completed Notification');
         });
@@ -318,7 +318,7 @@ class SiteQa extends Model {
         ];
 
         Mail::send('emails/siteQA-action', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             if ($email_user)
                 $m->cc($email_user);

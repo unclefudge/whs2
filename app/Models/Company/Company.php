@@ -797,6 +797,42 @@ class Company extends Model {
     }
 
     /**
+     * Determine if Workers Comp is Required
+     *
+     * @return boolean
+     */
+    public function requiresWCinsurance()
+    {
+        if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
+            return true;
+
+        foreach ($this->staff as $staff) {
+            if ($staff->employment_type == 1 || $staff->employment_type == 4 )
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if Workers Comp is Required
+     *
+     * @return boolean
+     */
+    public function requiresSAinsurance()
+    {
+        if ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader')
+            return true;
+
+        foreach ($this->staff as $staff) {
+            if ($staff->employment_type == 2 || $staff->employment_type == 3 )
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Missing Company Info
      *
      * @return string

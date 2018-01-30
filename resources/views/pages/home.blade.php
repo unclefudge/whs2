@@ -246,7 +246,7 @@
                                                 </div>
                                             </div>
                                             <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : 'N/A'!!}</div>
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
                                             </div>
                                         </a>
                                     </li>
@@ -272,7 +272,7 @@
                                                 </div>
                                             </div>
                                             <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : 'N/A'!!}</div>
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
                                             </div>
                                         </a>
                                     </li>
@@ -359,7 +359,7 @@
                                             </div>
                                         </div>
                                         <div class="col2">
-                                            <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : 'N/A'!!} </div>
+                                            <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!} </div>
                                         </div>
                                     </a>
                                 </li>

@@ -178,7 +178,7 @@ class CompanyDoc extends Model {
         $mesg = ($expired == true) ? "has Expired " . $this->expiry->format('d/m/Y') : "due to expire " . $this->expiry->format('d/m/Y');
 
         $data = [
-            'user_email'        => 'do-not-reply@safeworksite.net',
+            'user_email'        => 'do-not-reply@safeworksite.com.au',
             'user_fullname'     => 'Safeworksite',
             'user_company_name' => 'Safeworksite',
             'company_name'      => $company->name_alias,
@@ -190,7 +190,7 @@ class CompanyDoc extends Model {
         $doc = $this;
         /*
         Mail::send('emails/company-doc-expired', $data, function ($m) use ($email_to, $email_user, $doc, $mesg, $data) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             if ($email_user)
                 $m->cc($email_user);

@@ -4,10 +4,11 @@
 
 @section('pagetitle')
     <div class="page-title">
-        <h1><i class="fa fa-users"></i> Company Profile</h1>
+        <h1><i class="fa fa-users"></i> Workers</h1>
     </div>
 @stop
 
+@if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -15,39 +16,54 @@
             <li><a href="/company">Companies</a><i class="fa fa-circle"></i></li>
             <li><span>Profile</span></li>
         @else
-            <li><span>Company Profile</span></li>
+            <li><span>Workers</span></li>
         @endif
     </ul>
-    @stop
+@stop
+@endif
 
-    @section('content')
-            <!-- BEGIN PAGE CONTENT INNER -->
+@section('content')
+    {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
 
         {{-- Company Signup Progress --}}
         <div class="mt-element-step">
             <div class="row step-line" id="steps">
-                <div class="col-md-3 mt-step-col first active">
-                    <div class="mt-step-number bg-white font-grey">1</div>
-                    <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
-                    <div class="mt-step-content font-grey-cascade">Register</div>
+                <div class="col-sm-3 mt-step-col first active">
+                    <a href="/user/{{ Auth::user()->company->primary_user }}/edit">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                    </a>
+                    <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
+                    <div class="mt-step-content font-grey-cascade">Add primary user</div>
                 </div>
-                <div class="col-md-3 mt-step-col active">
-                    <div class="mt-step-number bg-white font-grey">2</div>
-                    <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
-                    <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                <div class="col-sm-3 mt-step-col active">
+                    <a href="/company/{{ Auth::user()->company_id }}/edit">
+                        <div class="mt-step-number bg-white font-grey">2</div>
+                    </a>
+                    <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
+                    <div class="mt-step-content font-grey-cascade">Add company info</div>
                 </div>
-                <div class="col-md-3 mt-step-col">
+                <div class="col-sm-3 mt-step-col">
                     <div class="mt-step-number bg-white font-grey">3</div>
-                    <div class="mt-step-title uppercase font-grey-cascade">Users</div>
-                    <div class="mt-step-content font-grey-cascade">Add users</div>
+                    <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
+                    <div class="mt-step-content font-grey-cascade">Add workers</div>
                 </div>
-                <div class="col-md-3 mt-step-col last">
+                <div class="col-sm-3 mt-step-col last">
                     <div class="mt-step-number bg-white font-grey">4</div>
                     <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
                     <div class="mt-step-content font-grey-cascade">Upload documents</div>
                 </div>
             </div>
+        </div>
+        <div class="note note-warning">
+            <b>Step 3: Add all additional users that work on job sites.</b><br><br>All workers require their own login<br><br>
+            <ul>
+                <li>Add users by clicking
+                    <button class="btn dark btn-outline btn-xs" href="javascript:;"> Add User</button>
+                </li>
+            </ul>
+            Once you've added all your users please click
+            <button class="btn dark btn-outline btn-xs" href="javascript:;"> Continue</button>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -55,7 +71,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-users "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Company Profile</span>
+                            <span class="caption-subject font-green-haze bold uppercase">Workers</span>
                             <span class="caption-helper"> ID: {{ $company->id }}</span>
                         </div>
                         <div class="actions">
@@ -70,16 +86,7 @@
                             <div class="col-md-12">
                                 <h1 class="sbold hidden-sm hidden-xs" style="{!! ($company->nickname) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $company->name }}</h1>
 
-                                <div class="note note-warning">
-                                    Please add all the users that will be performing work on job sites
-                                    <ul>
-                                        <li>Add users by clicking
-                                            <button class="btn dark btn-outline btn-xs" href="javascript:;"> Add User</button>
-                                        </li>
-                                    </ul>
-                                    Once you've add all your users please click <button class="btn dark btn-outline btn-xs" href="javascript:;"> Continue to next step</button>
-                                </div>
-
+                                <a href="/company/{{ $company->id }}/signup/4" class="btn green pull-right" style="margin-left: 20px">Continue</a>
                                 <a href="/user/create" class="btn dark pull-right">Add User</a>
 
                                 {{-- Staff --}}
@@ -99,10 +106,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-actions right">
-                            <a href="/company/{{ $company->id }}/signup/4" class="btn green">Continue to next step</a>
                         </div>
                     </div>
                 </div>

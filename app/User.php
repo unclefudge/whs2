@@ -463,6 +463,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * Get the Employment Typetext   (getter)
+     *
+     * @return string;
+     */
+    public function getEmploymentTypeTextAttribute()
+    {
+        if ($this->employment_type == 1) return 'Employee';
+        if ($this->employment_type == 2) return 'External Employment Company';
+        if ($this->employment_type == 3) return 'Subcontractor';
+
+        return '';
+    }
+
+    /**
      * Get the Company Id   (getter)
      *
      * @return string;

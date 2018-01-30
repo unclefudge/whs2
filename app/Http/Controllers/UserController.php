@@ -256,6 +256,10 @@ class UserController extends Controller {
 
         Toastr::success("Saved changes");
 
+        // Signup Process - Initial update
+        if (Auth::user()->company->status == 2)
+            return redirect("company/".Auth::user()->company_id."/edit");   // Adding company info
+
         return redirect('/user/' . $user->id);
     }
 

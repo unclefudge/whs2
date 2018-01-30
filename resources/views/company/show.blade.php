@@ -8,6 +8,7 @@
     </div>
 @stop
 
+@if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -18,29 +19,36 @@
             <li><span>Company Profile</span></li>
         @endif
     </ul>
-    @stop
+@stop
+@endif
 
-    @section('content')
-            <!-- BEGIN PAGE CONTENT INNER -->
+@section('content')
+    {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
-        @if (Auth::user()->company_id == $company->id && $company->signup_step == 4)
+        @if ($company->status == 2)
             {{-- Company Signup Progress --}}
             <div class="mt-element-step">
                 <div class="row step-line" id="steps">
                     <div class="col-md-3 mt-step-col first active">
-                        <div class="mt-step-number bg-white font-grey">1</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Sign In</div>
-                        <div class="mt-step-content font-grey-cascade">Register</div>
+                        <a href="/user/{{ Auth::user()->company->primary_user }}/edit">
+                            <div class="mt-step-number bg-white font-grey">1</div>
+                        </a>
+                        <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
+                        <div class="mt-step-content font-grey-cascade">Add primary user</div>
                     </div>
                     <div class="col-md-3 mt-step-col active">
-                        <div class="mt-step-number bg-white font-grey">2</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Profile</div>
-                        <div class="mt-step-content font-grey-cascade">Company Profile</div>
+                        <a href="/company/{{ Auth::user()->company_id }}/edit">
+                            <div class="mt-step-number bg-white font-grey">2</div>
+                        </a>
+                        <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
+                        <div class="mt-step-content font-grey-cascade">Add company info</div>
                     </div>
                     <div class="col-md-3 mt-step-col active">
-                        <div class="mt-step-number bg-white font-grey">3</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Users</div>
-                        <div class="mt-step-content font-grey-cascade">Add users</div>
+                        <a href="/company/{{ Auth::user()->company_id }}/signup/3">
+                            <div class="mt-step-number bg-white font-grey">3</div>
+                        </a>
+                        <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
+                        <div class="mt-step-content font-grey-cascade">Add workers</div>
                     </div>
                     <div class="col-md-3 mt-step-col last">
                         <div class="mt-step-number bg-white font-grey">4</div>
@@ -48,6 +56,13 @@
                         <div class="mt-step-content font-grey-cascade">Upload documents</div>
                     </div>
                 </div>
+            </div>
+
+            <div class="note note-warning">
+                <b>Step 4 : Upload required documents for your company.</b><br><br>
+                Documents required are determined by the information you have provided to us. Required documents have be marked 'Required'<br><br>
+                Once you've add all your documents please click
+                <button class="btn dark btn-outline btn-xs" href="javascript:;"> Continue</button>
             </div>
         @endif
         <div class="row">
@@ -82,109 +97,105 @@
                                     <small class='font-grey-cascade' style="margin:0px"> {{ $company->nickname }}</small>
                                 </h3>
 
-                                @if (Auth::user()->company_id == $company->id && $company->signup_step == 4)
-                                    <div class="note note-warning">
-                                        Please upload copies of your licences, Insurance & Contracts and relevant documents
-                                        <br><br>
-                                        Once you've add all your documents please click
-                                        <button class="btn dark btn-outline btn-xs" href="javascript:;"> Complete Signup</button>
-                                    </div>
-
-                                    <a href="/company/{{ $company->id }}/signup/5" class="btn green pull-right">Complete Signup</a><br><br>
+                                @if (Auth::user()->company_id == $company->id && $company->status == 2)
+                                    <a href="/company/{{ $company->id }}/signup/5" class="btn green pull-right">Continue</a><br><br>
                                 @endif
 
-                                {{-- Company details --}}
-                                <h3 class="font-green form-section">Company Details
-                                    @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                        <span class="label label-warning">Pending approval</span>
-                                    @endif
-                                    @if(Auth::user()->allowed2('edit.company', $company))
-                                        <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                    @endif
-                                </h3>
-
-                                {{-- Contact Details --}}
-                                <div class="row">
-                                    <div class="col-md-6" style="line-height: 2">
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Phone</b></div>
-                                        <div class="col-xs-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else N/A @endif</div>
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Email</b></div>
-                                        <div class="col-xs-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else N/A @endif</div>
-                                        <div class="col-xs-4" style="padding-left: 0px"><b>Address</b></div>
-                                        <div class="col-xs-8">
-                                            @if($company->address)
-                                                {{ $company->address }}&nbsp;
-                                            @endif
-                                            {{ $company->SuburbStatePostcode }}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6" style="line-height: 2">
-                                        <div class="row" style="margin: 0px">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                            <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
-                                        </div>
-                                        <div class="row" style="margin: 0px">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                            <div class="col-xs-8">@if($company->secondary_user)<a
-                                                        href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else N/A @endif</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Busines Details --}}
-                                <h3 class="font-green form-section">Business Details
-                                    @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                        <span class="label label-warning">Pending approval</span>
-                                    @endif
-                                    @if(Auth::user()->allowed2('edit.company', $company))
-                                        <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                    @endif
-                                </h3>
-                                <div class="row">
-                                    <div class="col-md-6" style="line-height: 2">
-                                        <div class="row" style="margin: 0px">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>ABN</b></div>
-                                            <div class="col-xs-8">{{ ($company->abn) ? $company->abn : 'N/A' }}</div>
-                                        </div>
-                                        <div class="row" style="margin: 0px">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Business Entity</b></div>
-                                            <div class="col-xs-8">{{ ($company->business_entity) ? $company->business_entity : 'N/A' }}</div>
-                                        </div>
-                                        @if (Auth::user()->allowed2('view.company.accounting', $company))
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Subgroup</b></div>
-                                                <div class="col-xs-8">{{ ($company->sub_group) ? $company->sub_group : 'N/A' }}</div>
-                                            </div>
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Category</b></div>
-                                                <div class="col-xs-8">{{ ($company->category) ? $company->category : 'N/A' }}</div>
-                                            </div>
+                                @if ($company->status != 2)
+                                    {{-- Company details --}}
+                                    <h3 class="font-green form-section">Company Details
+                                        @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
+                                            <span class="label label-warning">Pending approval</span>
                                         @endif
-                                    </div>
-                                    <div class="col-md-6" style="line-height: 2">
-                                        <div class="row" style="margin: 0px">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>GST Registered</b></div>
-                                            <div class="col-xs-8">@if($company->gst) Yes @elseif($company->gst == '0') No @else N/A @endif</div>
-                                        </div>
-                                        @if (Auth::user()->allowed2('view.company.accounting', $company))
+                                        @if(Auth::user()->allowed2('edit.company', $company))
+                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
+                                        @endif
+                                    </h3>
 
+                                    {{-- Contact Details --}}
+                                    <div class="row">
+                                        <div class="col-md-6" style="line-height: 2">
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Phone</b></div>
+                                            <div class="col-xs-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else - @endif
+                                            </div>
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Email</b></div>
+                                            <div class="col-xs-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else - @endif</div>
+                                            <div class="col-xs-4" style="padding-left: 0px"><b>Address</b></div>
+                                            <div class="col-xs-8">
+                                                @if($company->address)
+                                                    {{ $company->address }}&nbsp;
+                                                @endif
+                                                {{ $company->SuburbStatePostcode }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="line-height: 2">
                                             <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Payroll Tax</b></div>
-                                                <div class="col-xs-8">
-                                                    @if($company->payroll_tax)
-                                                        {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }}
-                                                    @else
-                                                        N/A
-                                                    @endif
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
+                                                <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
+                                            </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
+                                                <div class="col-xs-8">@if($company->secondary_user)<a
+                                                            href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else - @endif</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Busines Details --}}
+                                    <h3 class="font-green form-section">Business Details
+                                        @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
+                                            <span class="label label-warning">Pending approval</span>
+                                        @endif
+                                        @if(Auth::user()->allowed2('edit.company', $company))
+                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
+                                        @endif
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-6" style="line-height: 2">
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Business Entity</b></div>
+                                                <div class="col-xs-8">{{ ($company->business_entity) ? $company->business_entity : '-' }}</div>
+                                            </div>
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>ABN</b></div>
+                                                <div class="col-xs-8">{{ ($company->abn) ? $company->abn : '-' }}</div>
+                                            </div>
+                                            @if (Auth::user()->allowed2('view.company.accounting', $company))
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Subgroup</b></div>
+                                                    <div class="col-xs-8">{{ ($company->sub_group) ? $company->sub_group : '-' }}</div>
                                                 </div>
-                                            </div>
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Category</b></div>
+                                                    <div class="col-xs-8">{{ ($company->category) ? $company->category : '-' }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-6" style="line-height: 2">
                                             <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Creditor Code</b></div>
-                                                <div class="col-xs-8">{{ $company->creditor_code }} </div>
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>GST Registered</b></div>
+                                                <div class="col-xs-8">@if($company->gst) Yes @elseif($company->gst == '0') No @else - @endif</div>
                                             </div>
-                                        @endif
+                                            @if (Auth::user()->allowed2('view.company.accounting', $company))
+
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Payroll Tax</b></div>
+                                                    <div class="col-xs-8">
+                                                        @if($company->payroll_tax)
+                                                            {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Creditor Code</b></div>
+                                                    <div class="col-xs-8">{{ $company->creditor_code }} </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
 
                                 @if(Auth::user()->allowed2('show.company.doc.lic', $company))
                                     {{-- Licences --}}
@@ -218,7 +229,7 @@
                                             </div>
                                         @else
                                             <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></div>
-                                            <div class="col-md-8">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : 'N/A' !!}</div>
+                                            <div class="col-md-8">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : '-' !!}</div>
                                             <div class="col-md-1">
                                                 @if (Auth::user()->allowed2('add.company.doc.lic'))
                                                     <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="add">Add</a>
@@ -338,7 +349,7 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></div>
-                                                <div class="col-md-8">N/A</div>
+                                                <div class="col-md-8"><span class="font-red">Required</span></div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('add.company.doc.ics'))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="add">Add</a>
@@ -357,7 +368,7 @@
                                                     @if (($company->activeCompanyDoc('2')->status == 3))
                                                         <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
-                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : 'N/A' !!}</div>
+                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : '-' !!}</div>
                                                 <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('2')->ref_no }}</div>
                                                 <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('2')->ref_name }}</div>
                                                 <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
@@ -377,7 +388,7 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></div>
-                                                <div class="col-md-8">N/A</div>
+                                                <div class="col-md-8">{!! ($company->requiresWCinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('add.company.doc.ics'))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="add">Add</a>
@@ -400,7 +411,7 @@
                                                     @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
                                                                                                                style="margin-left:30px">Not approved</span> @endif
                                                 </div>
-                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : 'N/A' !!}</div>
+                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : '-' !!}</div>
                                                 <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
                                                 <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
                                                 <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
@@ -420,7 +431,7 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></div>
-                                                <div class="col-md-8">N/A</div>
+                                                <div class="col-md-8">{!! ($company->requiresSAinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('add.company.doc.ics'))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="add">Add</a>
@@ -444,7 +455,7 @@
                                                                                                                style="margin-left:30px">Pending approval</span> @endif
                                                     @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
-                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : 'N/A' !!}</div>
+                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('4')))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="edit"
@@ -458,7 +469,7 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
-                                                <div class="col-md-8">N/A {{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
+                                                <div class="col-md-8"><span class="font-red">Required</span> {{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
                                                                     class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a>--}}</div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('add.company.doc.ics'))
@@ -478,7 +489,7 @@
                                                                                                                style="margin-left:30px">Pending approval</span> @endif
                                                     @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
-                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : 'N/A' !!}</div>
+                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
                                                 <div class="col-md-1">
                                                     @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="edit"
@@ -492,7 +503,7 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
-                                                <div class="col-md-8">N/A {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
+                                                <div class="col-md-8"><span class="font-red">Required</span> {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
                                                                                                                                                                          style="padding-left: 20px"></i>
                                                             Pre-filled form</a>--}}</div>
                                                 <div class="col-md-1">
@@ -551,7 +562,7 @@
                                             </div>
                                         @else
                                             <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></div>
-                                            <div class="col-md-8">N/A</div>
+                                            <div class="col-md-8">-</div>
                                             <div class="col-md-1">
                                                 @if (Auth::user()->allowed2('add.company.doc.whs'))
                                                     <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="add">Add</a>
@@ -575,57 +586,59 @@
                                     </div>
                                 @endif
 
-                                {{-- Planner Details --}}
-                                @if(Auth::user()->isCC() && $company->id != 3)
-                                    <h3 class="font-green form-section">Planner Details
-                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                        @endif
-                                    </h3>
-                                    <div class="row">
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
-                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
-                                            </div>
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
-                                                <div class="col-xs-8">{{ $company->maxjobs }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6" style="line-height: 2">
-                                            @if(Auth::user()->isCC())
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
-                                                <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
+                                @if ($company->status != 2)
+                                    {{-- Planner Details --}}
+                                    @if(Auth::user()->isCC() && $company->id != 3)
+                                        <h3 class="font-green form-section">Planner Details
+                                            @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
+                                                <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
                                             @endif
+                                        </h3>
+                                        <div class="row">
+                                            <div class="col-md-6" style="line-height: 2">
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
+                                                    <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
+                                                </div>
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
+                                                    <div class="col-xs-8">{{ $company->maxjobs }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" style="line-height: 2">
+                                                @if(Auth::user()->isCC())
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
+                                                    <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+
+                                    {{-- Staff --}}
+                                    <h3 class="form-section font-green">Staff</h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
+                                                <thead>
+                                                <tr class="mytable-header">
+                                                    <th width="5%"> #</th>
+                                                    <th> Name</th>
+                                                    <th> Phone</th>
+                                                    <th> Email</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
-                                @endif
 
-
-                                {{-- Staff --}}
-                                <h3 class="form-section font-green">Staff</h3>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
-                                            <thead>
-                                            <tr class="mytable-header">
-                                                <th width="5%"> #</th>
-                                                <th> Name</th>
-                                                <th> Phone</th>
-                                                <th> Email</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                {{-- Notes --}}
-                                @if($company->notes && Auth::user()->company_id == $company->parent_company)
-                                    <h3 class="font-green form-section">Notes</h3>
-                                    <div class="row">
-                                        <div class="col-md-12">{{ $company->notes }}</div>
-                                    </div>
+                                    {{-- Notes --}}
+                                    @if($company->notes && Auth::user()->company_id == $company->parent_company)
+                                        <h3 class="font-green form-section">Notes</h3>
+                                        <div class="row">
+                                            <div class="col-md-12">{{ $company->notes }}</div>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>

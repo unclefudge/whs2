@@ -95,7 +95,7 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.company', $company) || $company->status == 2)
+        if (!Auth::user()->allowed2('view.company', $company))
             return view('errors/404');
 
         return view('company/show', compact('company'));
@@ -142,24 +142,32 @@ class CompanyController extends Controller {
 
         // Add Users
         if ($step == 3)
-            return view('company/signup-users', compact('company'));
+            return view('company/signup/users', compact('company'));
 
         // Add Documents
         if ($step == 4) {
-            // Company added all users so email parent company
-            if ($company->parent_company) {
-                //Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
-            }
-            $company->status = 1;
             $company->signup_step = 4;
             $company->save();
 
             return redirect("company/$company->id");
         }
 
-        // Signup complete
+        // Summary
         if ($step == 5) {
+            $company->signup_step = 5;
+            $company->save();
+
+            //dd('here');
+            return view("company/signup/summary", compact('company'));
+        }
+
+        // Signup complete
+        if ($step == 6) {
             $company->signup_step = 0;
+            $company->status = 1;
+            if ($company->parent_company) {
+                //Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
+            }
             $company->save();
             Toastr::success("Congratulations! Signup Complete");
 
@@ -324,6 +332,10 @@ class CompanyController extends Controller {
                         $name .= ' &nbsp; <span class="label label-sm label-info">Setting up company profile</span></a>';
                     if ($company->signup_step == 3)
                         $name .= ' &nbsp; <span class="label label-sm label-info">Adding Users</span></a>';
+                    if ($company->signup_step == 4)
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Uploading Documents</span></a>';
+                    if ($company->signup_step == 5)
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Confirming infomation</span></a>';
                 }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';

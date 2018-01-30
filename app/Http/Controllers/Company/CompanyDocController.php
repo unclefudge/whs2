@@ -294,7 +294,7 @@ class CompanyDocController extends Controller {
         if ($doc->category_id < 21) {
             $doc->closeToDo();
             if ($doc->status == 2)
-                $doc->createApprovalToDo(['3']);
+                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc'));
         }
 
         // Handle attached file

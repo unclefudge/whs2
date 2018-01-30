@@ -254,7 +254,7 @@ class ToolboxTalk extends Model {
         ];
         $talk = $this;
         Mail::send('emails/toolbox-signoff', $data, function ($m) use ($email_to, $email_user, $talk, $data) {
-            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.net';
+            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, Auth::user()->fullname);
             $m->to($email_to);
             if ($email_user)
@@ -286,7 +286,7 @@ class ToolboxTalk extends Model {
         ];
         $talk = $this;
         Mail::send('emails/toolbox-rejected', $data, function ($m) use ($email_to, $email_user, $talk, $data) {
-            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.net';
+            ($email_user) ? $send_from = $email_user : $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, Auth::user()->fullname);
             $m->to($email_to);
             if ($email_user)
@@ -320,7 +320,7 @@ class ToolboxTalk extends Model {
         ];
 
         Mail::send('emails/toolbox-overdue', $data, function ($m) use ($email_to) {
-            $m->from('do-not-reply@safeworksite.net');
+            $m->from('do-not-reply@safeworksite.com.au');
             $m->to($email_to);
             $m->subject('Toolbox Talk Overdue Notification');
         });
@@ -350,7 +350,7 @@ class ToolboxTalk extends Model {
         ];
         $talk = $this;
         Mail::send('emails/toolbox-modified', $data, function ($m) use ($email_to, $talk, $data) {
-            $send_from = 'do-not-reply@safeworksite.net';
+            $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, 'Safeworksite');
             $m->to($email_to);
             $m->subject('Toolbox Talk Created using Modified Template - ' . $talk->name);
@@ -378,7 +378,7 @@ class ToolboxTalk extends Model {
         ];
         $talk = $this;
         Mail::send('emails/toolbox-active-template', $data, function ($m) use ($email_to, $talk, $data) {
-            $send_from = 'do-not-reply@safeworksite.net';
+            $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, 'Safeworksite');
             $m->to($email_to);
             $m->subject('New Toolbox Talk Template Created - ' . $talk->name);

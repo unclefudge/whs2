@@ -29,7 +29,37 @@ class RegistrationController extends Controller {
      */
     protected function create()
     {
-        return view('auth/signup');
+        return view('company/signup/welcome');
+    }
+
+    /**
+     * Create a new Referred Registration - Welcome
+     *
+     */
+    protected function refCreate($key)
+    {
+        list($company_id, $rest) = explode('-', $key, 2);
+        $company = Company::find($company_id);
+        if ($company && $company->signup_key == $key) {
+            return view('company/signup/welcome-referred', compact('company'));
+        }
+
+        return view('errors/404');
+    }
+
+    /**
+     * Create a new registration - Signup form
+     *
+     */
+    protected function primaryCreate($key)
+    {
+        list($company_id, $rest) = explode('-', $key, 2);
+        $company = Company::find($company_id);
+        if ($company && $company->signup_key == $key) {
+            return view('company/signup/primary', compact('company'));
+        }
+
+        return view('errors/404');
     }
 
     /**
@@ -39,21 +69,6 @@ class RegistrationController extends Controller {
     protected function store()
     {
         //
-    }
-
-    /**
-     * Create a new Referred Registration - signup form
-     *
-     */
-    protected function refCreate($key)
-    {
-        list($company_id, $rest) = explode('-', $key, 2);
-        $company = Company::find($company_id);
-        if ($company && $company->signup_key == $key) {
-            return view('auth/signup-referred', compact('company'));
-        }
-
-        return view('errors/404');
     }
 
     /**

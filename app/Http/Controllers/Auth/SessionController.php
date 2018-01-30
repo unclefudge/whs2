@@ -50,6 +50,12 @@ class SessionController extends Controller {
             ['username' => request('username'), 'password' => request('password')];
 
         if (auth()->attempt($credentials)) {
+            // Inactive user
+            if (!Auth::user()->status) {
+                Auth::logout();
+                return back()->withErrors(['message' => 'These credentials do not match our records.']);
+            }
+
             if (Auth::user()->password_reset)
                 return redirect('/user/' . Auth::user()->id . '/edit');
 
