@@ -20,6 +20,7 @@ use App\Models\Comms\NotifyUser;
 use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
 use App\Models\Safety\ToolboxTalk;
+use App\Http\Utilities\CompanyEntityTypes;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use nilsenj\Toastr\Facades\Toastr;
@@ -474,6 +475,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         if ($this->employment_type == 3) return 'Subcontractor';
 
         return '';
+    }
+
+    /**
+     * Get the Employment Typetext   (getter)
+     *
+     * @return string;
+     */
+    public function getSubcontractorEntityTextAttribute()
+    {
+        return CompanyEntityTypes::name($this->subcontractor_type);
     }
 
     /**

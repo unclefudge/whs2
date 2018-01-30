@@ -257,7 +257,7 @@
                                                     {!! Form::label('employment_type', 'Employment type: What is the relationship of this person to your company', ['class' => 'control-label']) !!}
                                                     {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
                                                     '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
-                                                             '', ['class' => 'form-control bs-select']) !!}
+                                                             null, ['class' => 'form-control bs-select']) !!}
                                                     {!! fieldErrorMessage('employment_type', $errors) !!}
                                                 </div>
                                             </div>
@@ -372,6 +372,8 @@
             $("#subcontract_type_field").hide();
             if ($("#employment_type").val() == '3')
                 $("#subcontract_type_field").show();
+            else
+                $("#subcontractor_type").val(0);
         });
 
         // Show appropriate Subcontractor message

@@ -84,7 +84,7 @@
                             <div class="col-md-9">@if ($user->email)<a href="mailto:{{ $user->email }}"> {{ $user->email }} </a>@else - @endif</div>
                             <div class="col-md-3" style="padding-left: 0px"><b>Address</b></div>
                             <div class="col-md-9">
-                                @if($user->address){{ $user->address }}&nbsp; @else - @endif
+                                @if($user->address || $user->SuburbStatePostcode){{ $user->address }}&nbsp; @else - @endif
                                 {{ $user->SuburbStatePostcode }}
                             </div>
                         </div>
@@ -92,12 +92,25 @@
                         </div>
                     </div>
 
-                    {{-- Notes --}}
-                    @if($user->notes && Auth::user()->security)
-                        <h3 class="font-green form-section">Notes</h3>
+                    {{-- Additional Info --}}
+                    @if ((Auth::user()->security && Auth::user()->isCompany($user->company_id)) ||  ($user->company->parent_company && Auth::user()->isCompany($user->company->reportsTo()->id)))
+                        <h3 class="font-green form-section">Additional Information</h3>
                         <div class="row">
-                            <div class="col-md-12">{{ $user->notes }}</div>
+                            <div class="col-md-2"><b>Employment Type</b></div>
+                            <div class="col-md-10">{{ $user->employment_type_text }}</div>
+                            @if ($user->employment_type == 3)
+                                <div class="col-md-2"><b>Subcontractor Entity</b></div>
+                                <div class="col-md-10">{{ $user->subcontractor_entity_text }}</div>
+                                @endif
                         </div>
+
+                        {{-- Notes --}}
+                        @if($user->notes)
+                            <h3 class="font-green form-section">Notes</h3>
+                            <div class="row">
+                                <div class="col-md-12">{{ $user->notes }}</div>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -139,34 +152,5 @@
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        /* Select2 */
-        $("#roles").select2({
-            placeholder: "Select role",
-            width: '100%',
-        });
-
-        // Show Subcontractor field
-        if ($("#employment_type").val() == '2')
-            $("#subcontract_type_field").show();
-
-        $("#employment_type").on("change", function () {
-            $("#subcontract_type_field").hide();
-            if ($("#employment_type").val() == '2')
-                $("#subcontract_type_field").show();
-        });
-
-        // Show appropiate Subcontractor message
-        $("#subcontractor_type").on("change", function () {
-            $("#subcontractor_wc").hide();
-            $("#subcontractor_sa").hide();
-            if ($("#subcontractor_type").val() == '1' || $("#subcontractor_type").val() == '4')
-                $("#subcontractor_wc").show();
-            if ($("#subcontractor_type").val() == '2' || $("#subcontractor_type").val() == '3')
-                $("#subcontractor_sa").show();
-        });
-    });
-
 </script>
 @stop

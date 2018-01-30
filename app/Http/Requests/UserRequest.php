@@ -37,7 +37,7 @@ class UserRequest extends Request {
             //'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $this->get('id') . ',id',
             'roles'              => 'required_if:subscription,1',
             'employment_type'    => 'required',
-            'subcontractor_type' => 'required_if:employment_type,2',
+            'subcontractor_type' => 'required_if:employment_type,3',
         ];
 
         $tabs = $this->get('tabs');
@@ -78,7 +78,7 @@ class UserRequest extends Request {
             'company_id.required'            => 'The company field is required.',
             'photo'                          => 'No image was selected.',
             'email.required_if'              => 'The email field is required if user active ie. Login Enabled.',
-            'roles'                          => 'You must select at least one role',
+            'roles.required_if'              => 'You must select at least one role',
             'subcontractor_type.required_if' => 'The subcontractor entity is required',
         ];
     }

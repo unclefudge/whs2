@@ -180,15 +180,22 @@ class UserController extends Controller {
         $user = User::where(compact('username'))->firstOrFail();
 
         // Validate
-        $this->validate(request(), [
+        $rules = [
             'username'           => 'required|min:3|max:50|unique:users,username,' . $user->id,
             'firstname'          => 'required',
             'lastname'           => 'required',
             'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $user->id . ',id',
             'roles'              => 'required_if:subscription,1',
-            //'employment_type'    => 'required',
-            //'subcontractor_type' => 'required_if:employment_type,2',
-        ]);
+            'employment_type'    => 'required',
+            'subcontractor_type' => 'required_if:employment_type,3',
+        ];
+
+        $mesgs = [
+            'email.required_if'              => 'The email field is required if user active ie. Login Enabled.',
+            'roles.required_if'                          => 'You must select at least one role',
+            'subcontractor_type.required_if' => 'The subcontractor entity is required',
+        ];
+        $this->validate(request(), $rules, $mesgs);
 
         if (request()->filled('password') || request()->filled('password_force')) {
             $this->validate(request(), [
@@ -201,7 +208,8 @@ class UserController extends Controller {
         if (!Auth::user()->allowed2('edit.user', $user))
             return view('errors/404');
 
-        $user_request = removeNullValues($request->all());
+        //$user_request = removeNullValues($request->all());
+        $user_request = $request->all();
         $password_reset = false;
 
         // Empty State field if rest of address fields are empty
@@ -212,6 +220,10 @@ class UserController extends Controller {
         if (!$user_request['email'])
             $user_request['email'] = null;
 
+        // Zero Subcontractor_type field if empty
+        if (!$request->get('subcontractor_type'))
+            $user_request['subcontractor_type'] = 0;
+
         // If user being made inactive then update email
         if ($request->filled('status') && $request->get('status') == 0) {
             // If user being made inactive and has email then append 'achived-userid' to front to allow
@@ -219,7 +231,7 @@ class UserController extends Controller {
             if ($user->status && $user->email) {
                 Toastr::warning("Updated email");
                 $user_request['email'] = 'archived-' . $user->id . '-' . $user->email;
-                if ($user_request['notes'])
+                if ($request->get('notes'))
                     $user_request['notes'] .= "\nupdated email to " . $user_request['email'] . ' due to archiving';
                 else
                     $user_request['notes'] = "updated email to " . $user_request['email'] . ' due to archiving';
