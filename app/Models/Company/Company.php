@@ -807,7 +807,7 @@ class Company extends Model {
             return true;
 
         foreach ($this->staff as $staff) {
-            if ($staff->employment_type == 1 || $staff->employment_type == 4 )
+            if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
                 return true;
         }
 
@@ -825,7 +825,7 @@ class Company extends Model {
             return true;
 
         foreach ($this->staff as $staff) {
-            if ($staff->employment_type == 2 || $staff->employment_type == 3 )
+            if ($staff->employment_type == 3 && ($staff->subcontractor_type == 2 || $staff->subcontractor_type == 3))
                 return true;
         }
 

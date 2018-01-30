@@ -20,7 +20,7 @@ class TradeController extends Controller {
     {
         if ($request->ajax()) {
             $trades = Trade::select(['id', 'name', 'company_id', 'status'])
-                ->where('company_id', '=', Auth::user()->company_id)
+                //->where('company_id', '=', Auth::user()->company_id)
                 ->get();
 
             foreach ($trades as $trade)
@@ -34,7 +34,7 @@ class TradeController extends Controller {
             return view('errors/404');
 
         $trades = Trade::select(['id', 'name'])
-            ->where('company_id', '=', Auth::user()->company_id)
+            //->where('company_id', '=', Auth::user()->company_id)
             ->where('trades.status', '=', '1');
 
         return view('planner/trade/list', compact('trades'));

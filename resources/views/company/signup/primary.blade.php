@@ -166,9 +166,9 @@
                                 <div class="col-md-6">
                                     {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
                                     <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                        {!! Form::label('employment_type', 'What is the relationship of this person to your company', ['class' => 'control-label']) !!}
-                                        {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Our company employs them directly',
-                                        '2' => 'Our company employs them using an external labour hire business',  '3' => 'They are a separate entity that subcontracts to our company'],
+                                        {!! Form::label('employment_type', 'Employment type: What is the relationship of this person to your company', ['class' => 'control-label']) !!}
+                                        {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
+                                        '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
                                                  '', ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('employment_type', $errors) !!}
                                     </div>

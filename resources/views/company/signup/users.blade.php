@@ -86,7 +86,6 @@
                             <div class="col-md-12">
                                 <h1 class="sbold hidden-sm hidden-xs" style="{!! ($company->nickname) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $company->name }}</h1>
 
-                                <a href="/company/{{ $company->id }}/signup/4" class="btn green pull-right" style="margin-left: 20px">Continue</a>
                                 <a href="/user/create" class="btn dark pull-right">Add User</a>
 
                                 {{-- Staff --}}
@@ -104,6 +103,10 @@
                                             </thead>
                                         </table>
                                     </div>
+                                </div>
+
+                                <div class="form-actions right">
+                                    <a href="/company/{{ $company->id }}/signup/4" class="btn green pull-right" style="margin-left: 20px">Continue</a>
                                 </div>
                             </div>
                         </div>

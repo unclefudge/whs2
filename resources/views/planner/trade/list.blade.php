@@ -44,7 +44,7 @@
                                 <span class="caption-subject bold uppercase font-green-haze"> Trades List</span>
                             </div>
                             <div class="actions">
-                                @if (Auth::user()->hasPermission2('add.trade'))
+                                @if (Auth::user()->hasPermission2('add.trade') && Auth::user()->id == 2)
                                     <a v-on:click="$root.$broadcast('add-trade-modal')" class="btn btn-circle green btn-outline btn-sm"
                                        data-original-title="Add">
                                         <i class="fa fa-plus"></i> Add
@@ -54,22 +54,26 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <div class="row">
-                                <div class="col-md-4 pull-right" style="padding-bottom: 10px">
-                                    <button v-on:click="store.showDisabled = ! store.showDisabled" class="btn grey pull-right">
-                                        <span v-if="store.showDisabled"> Hide Disabled</span>
-                                        <span v-else="store.showDisabled"> Show Disabled</span>
-                                    </button>
+                            @if (Auth::user()->id == 2)
+                                <div class="row">
+                                    <div class="col-md-4 pull-right" style="padding-bottom: 10px">
+                                        <button v-on:click="store.showDisabled = ! store.showDisabled" class="btn grey pull-right">
+                                            <span v-if="store.showDisabled"> Hide Disabled</span>
+                                            <span v-else="store.showDisabled"> Show Disabled</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
                             <table v-show="tradeList.length" class="table table-striped table-bordered table-nohover order-column">
                                 <thead>
                                 <tr class="mytable-header">
                                     <th width="5%"></th>
                                     <th><a href="#" v-on:click="sortBy('name')"> Name </a></th>
-                                    <th width="12%" class="hidden-sm hidden-xs"> Actions</th>
-                                    <th width="25%" class="visible-sm visible-xs"> Actions</th>
+                                    @if (Auth::user()->id == 2)
+                                        <th width="12%" class="hidden-sm hidden-xs"> Actions</th>
+                                        <th width="25%" class="visible-sm visible-xs"> Actions</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -84,15 +88,15 @@
                                         <td>
                                             <span :class="{ 'disabled': !trade.status }">@{{ trade.name }}</span>
                                         </td>
-                                        <td>
-                                            @if (Auth::user()->hasPermission2('edit.trade'))
-                                                <button v-on:click="$root.$broadcast('edit-trade-modal', trade)" class="
+                                        @if (Auth::user()->hasPermission2('del.trade') && Auth::user()->id == 2)
+                                            <td>
+                                                @if (Auth::user()->hasPermission2('edit.trade'))
+                                                    <button v-on:click="$root.$broadcast('edit-trade-modal', trade)" class="
                                             btn blue btn-xs btn-outline sbold uppercase margin-bottom">
-                                                    <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
-                                                </button>
-                                            @endif
+                                                        <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
+                                                    </button>
+                                                @endif
 
-                                            @if (Auth::user()->hasPermission2('del.trade'))
                                                 <span v-if="trade.status">
                                                     <button v-on:click="toggleTradeStatus(trade)" class="btn green btn-xs btn-outline sbold uppercase margin-bottom">
                                                         <i class="fa fa-eye"></i>
@@ -103,8 +107,8 @@
                                                         <i class="fa fa-eye-slash"></i>
                                                     </button>
                                                 </span>
-                                            @endif
-                                        </td>
+                                            </td>
+                                        @endif
                                     </tr>
                                     <tr v-if="trade.open" style="background-color: #444D58" class="nohover">
                                         <td colspan="3">

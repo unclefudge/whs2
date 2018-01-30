@@ -100,7 +100,7 @@ class UserController extends Controller {
 
 
         // Send out Welcome Email to user
-        Mail::to(Auth::user())->send(new \App\Mail\User\UserWelcome($user, request('password')));
+        Mail::to($user)->send(new \App\Mail\User\UserWelcome($user, request('password')));
 
         // Notify company + parent company new user created
         if ($user->company->subscription && $user->company->notificationsUsersType('user.created'))

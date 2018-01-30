@@ -97,10 +97,6 @@
                                     <small class='font-grey-cascade' style="margin:0px"> {{ $company->nickname }}</small>
                                 </h3>
 
-                                @if (Auth::user()->company_id == $company->id && $company->status == 2)
-                                    <a href="/company/{{ $company->id }}/signup/5" class="btn green pull-right">Continue</a><br><br>
-                                @endif
-
                                 @if ($company->status != 2)
                                     {{-- Company details --}}
                                     <h3 class="font-green form-section">Company Details
@@ -639,6 +635,13 @@
                                             <div class="col-md-12">{{ $company->notes }}</div>
                                         </div>
                                     @endif
+                                @endif
+
+                                @if (Auth::user()->company_id == $company->id && $company->status == 2)
+                                    <br>
+                                    <div class="form-actions right">
+                                        <a href="/company/{{ $company->id }}/signup/5" class="btn green pull-right">Continue</a>
+                                    </div>
                                 @endif
                             </div>
                         </div>
