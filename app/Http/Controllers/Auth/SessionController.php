@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use DB;
 use Auth;
 use Session;
 use App\User;
@@ -54,11 +55,13 @@ class SessionController extends Controller {
             // Inactive user
             if (!Auth::user()->status) {
                 Auth::logout();
+
                 return back()->withErrors(['message' => 'These credentials do not match our records.']);
             }
 
             // Record last_login but disable timestamps to preserve last time record was updated.
             Auth::user()->last_login = Carbon::now();
+            Auth::user()->updated_by = Auth::user()->updated_by;
             Auth::user()->timestamps = false;
             Auth::user()->save();
 
