@@ -40,7 +40,7 @@ class SettingsNotificationController extends Controller {
      */
     public function update(Request $request, $id)
     {
-        for ($i = 1; $i < 7; $i ++) {
+        for ($i = 1; $i < 8; $i ++) {
             $users = $request->get("type$i");
             $this->syncUsers($id, $i, $users);
         }

@@ -9,7 +9,6 @@ use DB;
 use Mail;
 use Carbon\Carbon;
 use App\User;
-use App\Mail\CompanyWelcome;
 use App\Models\Company\Company;
 use App\Models\Site\Planner\SitePlanner;
 use App\Http\Requests;
@@ -165,9 +164,8 @@ class CompanyController extends Controller {
         if ($step == 6) {
             $company->signup_step = 0;
             $company->status = 1;
-            if ($company->parent_company) {
-                //Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
-            }
+            if ($company->parent_company)
+                Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new \App\Mail\Company\CompanyCreated($company));
             $company->save();
             Toastr::success("Congratulations! Signup Complete");
 
