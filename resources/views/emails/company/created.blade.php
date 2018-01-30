@@ -12,6 +12,7 @@
 | **Primary Contact**  | {{ $company->primary_contact()->fullname  }} @if ($company->phone){{ $company->primary_contact()->phone  }}) @endif |
 | **Created By** | {{ $company->createdBy->name  }} |
 
+----
 
 The following users were created:
 
