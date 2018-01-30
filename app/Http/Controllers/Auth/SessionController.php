@@ -9,6 +9,7 @@ use App\Models\Company\Company;
 use App\Models\Site\Site;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SessionController extends Controller {
 
@@ -55,6 +56,11 @@ class SessionController extends Controller {
                 Auth::logout();
                 return back()->withErrors(['message' => 'These credentials do not match our records.']);
             }
+
+            // Record last_login but disable timestamps to preserve last time record was updated.
+            Auth::user()->last_login = Carbon::now();
+            Auth::user()->timestamps = false;
+            Auth::user()->save();
 
             if (Auth::user()->password_reset)
                 return redirect('/user/' . Auth::user()->id . '/edit');

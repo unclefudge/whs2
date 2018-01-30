@@ -53,7 +53,7 @@
                                     <td>{{ $user->fullname }}</td>
                                     <td>{{ $user->company->name_alias }}</td>
                                     <td>{{ $user->rolesSBC() }}</td>
-                                    <td>{{ $user->createdBy->fullname }}</td>
+                                    <td>{{ ($user->createdBy) ? $user->createdBy->fullname : '-' }}</td>
                                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                 </tr>
                                 @endforeach
