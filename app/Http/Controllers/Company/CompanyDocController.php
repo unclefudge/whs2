@@ -394,7 +394,7 @@ class CompanyDocController extends Controller {
         $doc->closeToDo();
         if ($doc_request['status'] == 2) {
             $company = Company::findOrFail($doc->for_company_id);
-            $doc->createApprovalToDo(['3']); // Need to update with real user emails
+            $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc')); // Need to update with real user emails
         }
 
 
