@@ -16,10 +16,10 @@
 
 The following users were created:
 
-|  Username  | Name  | Phone  | Email  |
+|  Username  | Name  | Email  | Phone
 | ----------:|-------|--------|--------|
 @foreach ($company->staff as $staff)
-| {{ $staff->username }}  | {{ $staff->fullname }} | {{ $staff->phone }} | {{ $staff->email }}
+| {{ $staff->username }}  | {{ $staff->fullname }} | {{ $staff->email }} | {{ $staff->phone }}
 @endforeach
 
 
