@@ -54,7 +54,7 @@ class Company extends Model {
         if ($this->primary_user)
             return User::findOrFail($this->primary_user);
 
-        return User::findOrFail(591);
+        return null;
     }
 
     /**
@@ -65,7 +65,7 @@ class Company extends Model {
         if ($this->secondary_user)
             return User::findOrFail($this->secondary_user);
 
-        return User::findOrFail(592);
+        return null;
     }
 
     /**

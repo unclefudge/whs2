@@ -127,7 +127,7 @@
                                         <div class="col-md-6" style="line-height: 2">
                                             <div class="row" style="margin: 0px">
                                                 <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                                <div class="col-xs-8"><a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a></div>
+                                                <div class="col-xs-8">@if($company->primary_user)<a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a>@else - @endif</div>
                                             </div>
                                             <div class="row" style="margin: 0px">
                                                 <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
