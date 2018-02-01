@@ -79,11 +79,12 @@ class CompanyDoc extends Model {
         ];
 
         // Create ToDoo and assign to Site Supervisors
+        /*
         if ($user_list) {
             $todo = Todo::create($todo_request);
             $todo->assignUsers($user_list);
             $todo->emailToDo();
-        }
+        }*/
 
     }
 
