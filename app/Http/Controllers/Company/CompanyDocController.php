@@ -542,6 +542,7 @@ class CompanyDocController extends Controller {
             ->editColumn('name', function ($doc) {
                 return '<a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o" style="min-width: 25px"></i>' . $doc->name . '</a>';
             })
+            ->rawColumns(['id', 'name', 'action'])
             ->make(true);
 
         return $dt;

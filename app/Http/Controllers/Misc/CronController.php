@@ -373,7 +373,7 @@ class CronController extends Controller {
 
                     if ($date == Carbon::today()->addDays(14)->format('Y-m-d')) {
                         // Due in 2 weeks
-                        if ($lh_ca) $doc->createExpiredToDo($lh_ca, false);
+                        if ($company->seniorUsers()) $doc->createExpiredToDo($company->seniorUsers(), false);
                         $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('company.doc'), false);
                         echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "<br>";
                         $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "\n";
@@ -446,7 +446,7 @@ class CronController extends Controller {
 
                     if ($date == Carbon::today()->addDays(14)->subYear()->format('Y-m-d')) {
                         // Due in 2 weeks
-                        if ($lh_ca) $doc->createExpiredToDo($lh_ca, false);
+                        if ($company->seniorUsers()) $doc->createExpiredToDo($company->seniorUsers(), false);
                         $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('whs'), false);
                         echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "<br>";
                         $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "\n";
