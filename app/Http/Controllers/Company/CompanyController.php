@@ -164,7 +164,7 @@ class CompanyController extends Controller {
         if ($step == 6) {
             $company->signup_step = 0;
             $company->status = 1;
-            if ($company->parent_company)
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('company.signup'))
                 Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new \App\Mail\Company\CompanyCreated($company));
             $company->save();
             Toastr::success("Congratulations! Signup Complete");

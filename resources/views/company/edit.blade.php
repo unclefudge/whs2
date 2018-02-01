@@ -292,7 +292,7 @@
                                         @endif
 
                                         {{-- Trade Details --}}
-                                   
+
 
                                         {{-- Planner Details --}}
                                         @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
