@@ -326,7 +326,9 @@ class CompanyDocController extends Controller {
     public function profile(CompanyProfileDocRequest $request)
     {
         $doc_request = $request->all();
+        //dd($doc_request);
         $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', $request->get('expiry') . '00:00')->toDateTimeString();
+        $type = $request->get('type');
 
         // Verify if document is rejected
         if ($request->has('reject_doc')) {
@@ -346,7 +348,7 @@ class CompanyDocController extends Controller {
         // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
         if ($request->has('status') && $request->get('status') == 0)
             $doc_request['status'] = 0;
-        else if (Auth::user()->hasPermission2('del.company.doc') && $doc_request['company_id'] == Auth::user()->company_id) {
+        else if (Auth::user()->hasPermission2("sig.company.doc.$type") && $doc_request['company_id'] == Auth::user()->company_id) {
             $doc_request['approved_by'] = Auth::user()->id;
             $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
             $doc_request['status'] = 1;
@@ -376,7 +378,6 @@ class CompanyDocController extends Controller {
         if ($request->get('doc_id')) {
             // Update Company Doc
             $doc = CompanyDoc::findOrFail($request->get('doc_id'));
-            $type = $doc->type;
 
             // Check authorisation and throw 404 if not
             if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
