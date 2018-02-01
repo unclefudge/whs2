@@ -487,7 +487,7 @@
                                                 </div>
                                                 <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
                                                 <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
+                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('5')))
                                                         <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="edit"
                                                            data-doc_id="{{ $company->activeCompanyDoc('5')->id }}"
                                                            data-expiry="{{ ($company->activeCompanyDoc('5')->expiry) ? $company->activeCompanyDoc('5')->expiry->format('d/m/Y') : '' }}"
@@ -834,7 +834,7 @@
 @stop
 
 @section('page-level-styles-head')
-    <link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>
+    <!--<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>-->
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop

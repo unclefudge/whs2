@@ -259,7 +259,7 @@
 
     var host = window.location.hostname;
     var dev = true;
-    if (host == 'safeworksite.net')
+    if (host == 'safeworksite.com.au')
         dev = false;
 
     var xx = {

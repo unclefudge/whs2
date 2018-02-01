@@ -291,8 +291,8 @@
                                             </div>
                                         @endif
 
-                                        {{-- Planner Details --}}
-                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                                        {{-- Trade Details --}}
+                                        @if (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
                                             <h3 class="font-green form-section">Planner Details</h3>
                                             {{-- Max Jobs + Trades  --}}
                                             {{-- Pass required field via hidden because user can't edit  --}}
@@ -311,7 +311,7 @@
                                                     <div class="form-group {!! fieldHasError('trades', $errors) !!}">
                                                         {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
                                                         {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
-                                                         $company->tradesSkilledIn->pluck('id')->toArray(), ['class' => 'form-control bs-select', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple']) !!}
+                                                         $company->tradesSkilledIn->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple', 'id' => 'trades']) !!}
                                                         {!! fieldErrorMessage('trades', $errors) !!}
                                                     </div>
                                                 </div>
@@ -336,7 +336,61 @@
                                                              @if (!$company->transient) style="display: none" @endif id="super-div">
                                                             {!! Form::label('supervisors', 'Supervisor(s)', ['class' => 'control-label']) !!}
                                                             {!! Form::select('supervisors', Auth::user()->company->supervisorsSelect(),
-                                                             $company->supervisedBy->pluck('id')->toArray(), ['class' => 'form-control bs-select', 'name' => 'supervisors[]', 'title' => 'Select one or more supervisors', 'multiple']) !!}
+                                                             $company->supervisedBy->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'supervisors[]', 'title' => 'Select one or more supervisors', 'multiple']) !!}
+                                                            {!! fieldErrorMessage('supervisors', $errors) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endif
+
+
+                                        {{-- Planner Details --}}
+                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                                            <h3 class="font-green form-section">Planner Details</h3>
+                                            {{-- Max Jobs + Trades  --}}
+                                            {{-- Pass required field via hidden because user can't edit  --}}
+                                            @if (!Auth::user()->allowed2('edit.company', $company))
+                                                {!! Form::hidden('name', $company->name) !!}
+                                            @endif
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="form-group {!! fieldHasError('maxjobs', $errors) !!}">
+                                                        {!! Form::label('maxjobs', 'Max Jobs', ['class' => 'control-label']) !!}
+                                                        {!! Form::text('maxjobs', null, ['class' => 'form-control']) !!}
+                                                        {!! fieldErrorMessage('maxjobs', $errors) !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group {!! fieldHasError('trades', $errors) !!}">
+                                                        {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
+                                                        {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
+                                                         $company->tradesSkilledIn->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple', 'id' => 'trades']) !!}
+                                                        {!! fieldErrorMessage('trades', $errors) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- Transient --}}
+                                            @if (Auth::user()->isCC())
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group {!! fieldHasError('transient', $errors) !!}">
+                                                            <p class="myswitch-label" style="font-size: 14px">&nbsp; Transient</p>
+                                                            {!! Form::label('transient', "&nbsp;", ['class' => 'control-label']) !!}
+                                                            {!! Form::checkbox('transient', '1', $company->transient ? true : false,
+                                                             ['class' => 'make-switch',
+                                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                                            {!! fieldErrorMessage('transient', $errors) !!}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group {!! fieldHasError('supervisors', $errors) !!}"
+                                                             @if (!$company->transient) style="display: none" @endif id="super-div">
+                                                            {!! Form::label('supervisors', 'Supervisor(s)', ['class' => 'control-label']) !!}
+                                                            {!! Form::select('supervisors', Auth::user()->company->supervisorsSelect(),
+                                                             $company->supervisedBy->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'supervisors[]', 'title' => 'Select one or more supervisors', 'multiple']) !!}
                                                             {!! fieldErrorMessage('supervisors', $errors) !!}
                                                         </div>
                                                     </div>
@@ -395,7 +449,9 @@
 @stop
 
 @section('page-level-styles-head')
-    <link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>
+    <!--<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
@@ -416,34 +472,42 @@
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-    if ($('#transient').bootstrapSwitch('state'))
-        $('#super-div').show();
-    else
-        $('#supervisors').val('');
+    $(document).ready(function () {
+        /* Select2 */
+        $("#trades").select2({
+            placeholder: "Select one or more",
+            width: '100%',
+        });
 
-    $('#transient').on('switchChange.bootstrapSwitch', function (event, state) {
-        $('#super-div').toggle();
-    });
+        if ($('#transient').bootstrapSwitch('state'))
+            $('#super-div').show();
+        else
+            $('#supervisors').val('');
 
-    $('.date-picker').datepicker({
-        autoclose: true,
-        clearBtn: true,
-        format: 'dd/mm/yyyy',
-    });
+        $('#transient').on('switchChange.bootstrapSwitch', function (event, state) {
+            $('#super-div').toggle();
+        });
 
-    $('#status').change(function () {
-        if ($('#status').val() == '0') {
-            swal({
-                title: "Deactivating a Company",
-                text: "Once you make a company <b>Inactive</b> and save it will also:<br><br>" +
-                "<div style='text-align: left'><ul>" +
-                "<li>Make all users within this company 'Inactive'</li>" +
-                "<li>Remove company from planner for all future events</li>" +
-                "</ul></div>",
-                allowOutsideClick: true,
-                html: true,
-            });
-        }
+        $('.date-picker').datepicker({
+            autoclose: true,
+            clearBtn: true,
+            format: 'dd/mm/yyyy',
+        });
+
+        $('#status').change(function () {
+            if ($('#status').val() == '0') {
+                swal({
+                    title: "Deactivating a Company",
+                    text: "Once you make a company <b>Inactive</b> and save it will also:<br><br>" +
+                    "<div style='text-align: left'><ul>" +
+                    "<li>Make all users within this company 'Inactive'</li>" +
+                    "<li>Remove company from planner for all future events</li>" +
+                    "</ul></div>",
+                    allowOutsideClick: true,
+                    html: true,
+                });
+            }
+        });
     });
 </script>
 @stop

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class Trade extends Model {
 
     protected $table = 'trades';
-    protected $fillable = ['name', 'status', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'licence_req', 'status', 'company_id', 'created_by', 'updated_by'];
 
     /**
      * A Trade belongs to a company

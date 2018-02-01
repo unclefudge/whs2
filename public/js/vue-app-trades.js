@@ -1,7 +1,13 @@
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
 
+var host = window.location.hostname;
+var dev = true;
+if (host == 'safeworksite.com.au')
+    dev = false;
+
 var store = {
     showDisabled: false,
+    dev: dev,
     action: '',
     user_id: '',
     company_id: '', //'9', //$('#cid').val(),
@@ -282,10 +288,12 @@ Vue.component('TaskModal', {
         },
 
         addTask: function (task) {
+            alert(this.store.company_id);
             var taskdata = {
                 name: task.name,
                 code: task.code,
                 trade_id: task.trade_id,
+                company_id: this.store.company_id,
                 status: 1,
             };
 

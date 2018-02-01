@@ -121,7 +121,7 @@
 
                             <p v-else>No Trades yet!</p>
 
-                            <!-- <pre v-if="xx.dev">@{{ $data | json }}</pre> -->
+                             <!--<pre v-if="store.dev">@{{ $data | json }}</pre> -->
 
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                 </td>
             </tr>
 
-            <!-- <pre v-if="xx.dev">@{{ $data | json }}</pre> -->
+             <!--<pre v-if='store.dev'>@{{ $data | json }}</pre> -->
             </tbody>
         </table>
         <div v-show="load_task" style="background-color: #FFF; padding: 20px;">
@@ -268,16 +268,6 @@
                                     <input v-model="task.code" type="text" name="code" class="form-control">
                                 </div>
                             </div>
-                            <!--
-                            <div class="col-md-6">
-                                <div class="form-group" style="margin-top: 30px;">
-                                    <div class="checkbox-list">
-                                        <input type="checkbox" v-model="task.upcoming" v-checkbox v-bind:true-value="1" v-bind:false-value="0">
-                                        Upcoming
-                                    </div>
-                                </div>
-                            </div>
-                            -->
                         </div>
                     </div>
                 </div>
