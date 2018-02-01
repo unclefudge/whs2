@@ -292,58 +292,7 @@
                                         @endif
 
                                         {{-- Trade Details --}}
-                                        @if (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                                            <h3 class="font-green form-section">Planner Details</h3>
-                                            {{-- Max Jobs + Trades  --}}
-                                            {{-- Pass required field via hidden because user can't edit  --}}
-                                            @if (!Auth::user()->allowed2('edit.company', $company))
-                                                {!! Form::hidden('name', $company->name) !!}
-                                            @endif
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <div class="form-group {!! fieldHasError('maxjobs', $errors) !!}">
-                                                        {!! Form::label('maxjobs', 'Max Jobs', ['class' => 'control-label']) !!}
-                                                        {!! Form::text('maxjobs', null, ['class' => 'form-control']) !!}
-                                                        {!! fieldErrorMessage('maxjobs', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group {!! fieldHasError('trades', $errors) !!}">
-                                                        {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
-                                                         $company->tradesSkilledIn->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple', 'id' => 'trades']) !!}
-                                                        {!! fieldErrorMessage('trades', $errors) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {{-- Transient --}}
-                                            @if (Auth::user()->isCC())
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-group {!! fieldHasError('transient', $errors) !!}">
-                                                            <p class="myswitch-label" style="font-size: 14px">&nbsp; Transient</p>
-                                                            {!! Form::label('transient', "&nbsp;", ['class' => 'control-label']) !!}
-                                                            {!! Form::checkbox('transient', '1', $company->transient ? true : false,
-                                                             ['class' => 'make-switch',
-                                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
-                                                            {!! fieldErrorMessage('transient', $errors) !!}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group {!! fieldHasError('supervisors', $errors) !!}"
-                                                             @if (!$company->transient) style="display: none" @endif id="super-div">
-                                                            {!! Form::label('supervisors', 'Supervisor(s)', ['class' => 'control-label']) !!}
-                                                            {!! Form::select('supervisors', Auth::user()->company->supervisorsSelect(),
-                                                             $company->supervisedBy->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'supervisors[]', 'title' => 'Select one or more supervisors', 'multiple']) !!}
-                                                            {!! fieldErrorMessage('supervisors', $errors) !!}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endif
-
+                                   
 
                                         {{-- Planner Details --}}
                                         @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
