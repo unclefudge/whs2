@@ -35,10 +35,8 @@
                     <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
                     <div class="mt-step-content font-grey-cascade">Add workers</div>
                 </div>
-                <div class="col-md-3 mt-step-col last active">
-                    <a href="/company/{{ $company->id }}">
-                        <div class="mt-step-number bg-white font-grey">4</div>
-                    </a>
+                <div class="col-md-3 mt-step-col last">
+                    <div class="mt-step-number bg-white font-grey">4</div>
                     <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
                     <div class="mt-step-content font-grey-cascade">Upload documents</div>
                 </div>
@@ -46,9 +44,12 @@
         </div>
 
         <div class="note note-warning">
-            <b>Please review the summary to ensure it is correct</b><br><br>
+            <h3>You have completed the first 3 steps and it's time to confirm your details.</h3>
+            <b>Please review the summary to ensure it is correct. If you need to modify any information please use the edit button.</b><br><br>
             Once you are satisified please click
-            <button class="btn dark btn-outline btn-xs" href="javascript:;"> Complete Signup</button>
+            <button class="btn dark btn-outline btn-xs" href="javascript:;"> Continue</button>
+            and your company will be made active and you'll be able to login into SafeWorksite job sites.
+            <br><br>Please be aware your company will be marked <span class="font-red">NON COMPLIANT</span> until you have completed step 4 and uploaded required documents.
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -143,176 +144,8 @@
                                 </div>
                             </div>
 
-                            {{-- Documents --}}
-                            <h3 class="font-green form-section">4. Documents <a href="/company/{{ $company->id }}" class="btn btn-xs default pull-right">Edit</a></h3>
-
-                            <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2" id="lic_current">
-                                {{-- Contractor Licence --}}
-                                @if ($company->activeCompanyDoc('7'))
-                                    <div class="col-md-3">
-                                        <a href="{{ $company->activeCompanyDoc('7')->attachment_url }}" style="color:#333; display: block">
-                                            <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></a>
-                                        @if (($company->activeCompanyDoc('7')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                        @if (($company->activeCompanyDoc('7')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                    </div>
-                                    <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('7')->expiry) !!}</div>
-                                    <div class="col-md-2"><b>Lic:</b> {{ $company->activeCompanyDoc('7')->ref_no }}</div>
-                                    <div class="col-md-5"><b>Class:</b> {!! $company->contractorLicenceSBC() !!}</div>
-                                @else
-                                    <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></div>
-                                    <div class="col-md-9">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                @endif
-
-                                {{-- Asbestos Licence --}}
-                                @if ($company->activeCompanyDoc('8'))
-                                    <div class="col-md-3">
-                                        <a href="{{ $company->activeCompanyDoc('8')->attachment_url }}" style="color:#333; display: block">
-                                            <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $company->activeCompanyDoc('8')->name }}</b></a>
-                                        @if (($company->activeCompanyDoc('8')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                        @if (($company->activeCompanyDoc('8')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                    </div>
-                                    <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('8')->expiry) !!}</div>
-                                    <div class="col-md-7"><b>Class:</b> {!! $company->activeCompanyDoc('8')->ref_type !!}</div>
-                                @endif
-
-                                {{-- Additional Licence --}}
-                                @foreach ($company->companyDocs('9', '1') as $extra)
-                                    <div class="col-md-3">
-                                        <a href="{{ $extra->attachment_url }}" style="color:#333; display: block">
-                                            <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $extra->name }}</b></a>
-                                        @if (($extra->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                        @if (($extra->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                    </div>
-                                    <div class="col-md-9">{!! format_expiry_field($extra->expiry) !!}</div>
-                                @endforeach
-                            </div>
-
-                            <div id="ic_current">
-                                {{-- Public Liabilty --}}
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                    @if ($company->activeCompanyDoc('1'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('1')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></a>
-                                            @if (($company->activeCompanyDoc('1')->status == 2))
-                                                <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('1')->status == 3))
-                                                <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('1')->expiry) !!}</div>
-                                        <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('1')->ref_no }}</div>
-                                        <div class="col-md-5"><b>Insurer:</b> {{ $company->activeCompanyDoc('1')->ref_name }}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></div>
-                                        <div class="col-md-8"><span class="font-red">Required</span></div>
-                                    @endif
-                                </div>
-                                {{-- Workers Comp --}}
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                    @if ($company->activeCompanyDoc('2'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('2')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></a>
-                                            @if (($company->activeCompanyDoc('2')->status == 2))
-                                                <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('2')->status == 3))
-                                                <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : '-' !!}</div>
-                                        <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('2')->ref_no }}</div>
-                                        <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('2')->ref_name }}</div>
-                                        <div class="col-md-8 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></div>
-                                        <div class="col-md-9">{!! ($company->requiresWCinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                    @endif
-                                    @if ($company->activeCompanyDoc('2'))
-                                        <div class="col-md-7 hidden-sm hidden-xs pull-right"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                    @endif
-                                </div>
-
-                                {{-- Sickness & Accident Insurance --}}
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                    @if ($company->activeCompanyDoc('3'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('3')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></a>
-                                            @if (($company->activeCompanyDoc('3')->status == 2)) <span class="label label-warning"
-                                                                                                       style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
-                                                                                                       style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : '-' !!}</div>
-                                        <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
-                                        <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
-                                        <div class="col-md-8 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></div>
-                                        <div class="col-md-9">{!! ($company->requiresSAinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                    @endif
-                                    @if ($company->activeCompanyDoc('3'))
-                                        <div class="col-md-5 hidden-sm hidden-xs">&nbsp;</div>
-                                        <div class="col-md-7 hidden-sm hidden-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                    @endif
-                                </div>
-
-
-                                {{-- Subcontractor Statement --}}
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                    @if ($company->activeCompanyDoc('4'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('4')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></a>
-                                            @if (($company->activeCompanyDoc('4')->status == 2)) <span class="label label-warning"
-                                                                                                       style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-9">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
-                                        <div class="col-md-9"><span class="font-red">Required</span></div>
-                                    @endif
-                                </div>
-
-                                {{-- Trade Contract --}}
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                    @if ($company->activeCompanyDoc('5'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('5')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></a>
-                                            @if (($company->activeCompanyDoc('5')->status == 2)) <span class="label label-warning"
-                                                                                                       style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-9">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
-                                        <div class="col-md-9"><span class="font-red">Required</span></div>
-                                    @endif
-                                </div>
-                                <!--<div>Downloadable Pre-filled Forms:  <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/current" target="_blank">Subcontractors Statement</a> &nbsp; -  &nbsp; <a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank">Period Trade Contract</a></div>-->
-
-                                <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2" id="ett_current">
-                                    @if ($company->activeCompanyDoc('6'))
-                                        <div class="col-md-3">
-                                            <a href="{{ $company->activeCompanyDoc('6')->attachment_url }}" style="color:#333; display: block">
-                                                <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></a>
-                                            @if (($company->activeCompanyDoc('6')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                            @if (($company->activeCompanyDoc('6')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                        </div>
-                                        <div class="col-md-9">{!! format_expiry_field($company->activeCompanyDoc('6')->expiry) !!}</div>
-                                    @else
-                                        <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></div>
-                                        <div class="col-md-9">-</div>
-                                    @endif
-                                </div>
-
-                            </div>
-
-
-
                             <div class="form-actions right">
-                                <a href="/company/{{ $company->id }}/signup/6" class="btn green">Complete Signup</a>
+                                <a href="/company/{{ $company->id }}/signup/5" class="btn green">Continue</a>
                             </div>
                         </div>
                         {!! Form::close() !!}

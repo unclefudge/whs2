@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\Planner\Trade;
+use App\Models\Site\Planner\Task;
 use App\Http\Requests;
 use App\Http\Requests\Company\CompanyRequest;
 use App\Http\Controllers\Controller;
@@ -76,6 +78,17 @@ class CompanyController extends Controller {
         $newCompany->nickname = request('person_name');
         $newCompany->save();
 
+        if (request('trades')) {
+            $newCompany->tradesSkilledIn()->sync(request('trades'));
+            foreach (request('trades') as $trade) {
+                if (Trade::find($trade)->licence_req) {
+                    $newCompany->licence_required = 1;
+                    $newCompany->save();
+                    break;
+                }
+            }
+        }
+
         // Mail request to new company
         Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
 
@@ -136,6 +149,7 @@ class CompanyController extends Controller {
         // Resend Welcome Email
         if ($step == 1) {
             Mail::to($company)->send(new \App\Mail\Company\CompanyWelcome($company, Auth::user()->company, $company->nickname));
+
             return view('company/list');
         }
 
@@ -143,29 +157,31 @@ class CompanyController extends Controller {
         if ($step == 3)
             return view('company/signup/users', compact('company'));
 
-        // Add Documents
+        // Summary
         if ($step == 4) {
             $company->signup_step = 4;
-            $company->save();
-
-            return redirect("company/$company->id");
-        }
-
-        // Summary
-        if ($step == 5) {
-            $company->signup_step = 5;
             $company->save();
 
             //dd('here');
             return view("company/signup/summary", compact('company'));
         }
 
+        // Add Documents
+        if ($step == 5) {
+            $company->signup_step = 5;
+            $company->status = 1;
+            $email_to = (\App::environment('prod')) ? $company->reportsTo()->notificationsUsersType('company.signup') : env('EMAIL_ME');
+            if ($company->parent_company && $email_to)
+                Mail::to($email_to)->send(new \App\Mail\Company\CompanyCreated($company));
+
+            $company->save();
+
+            return redirect("company/$company->id");
+        }
+
         // Signup complete
         if ($step == 6) {
             $company->signup_step = 0;
-            $company->status = 1;
-            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('company.signup'))
-                Mail::to($company->reportsTo()->notificationsUsersType('company.signup'))->send(new \App\Mail\Company\CompanyCreated($company));
             $company->save();
             Toastr::success("Congratulations! Signup Complete");
 
@@ -192,10 +208,6 @@ class CompanyController extends Controller {
 
         $company_request = $request->except('supervisors', 'trades', 'slug');
 
-        // If not Transient set field to 0 and clear supervisors
-        if (!$request->has('transient'))
-            $company_request['transient'] = '0';
-
         //$company_request['licence_expiry'] = ($request->get('licence_expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('licence_expiry') . '00:00')->toDateTimeString() : null;
 
         // If updated by Parent Company with 'authorise' permissions update approved fields else reset
@@ -209,20 +221,6 @@ class CompanyController extends Controller {
 
         $company->update($company_request);
 
-        // Update trades + supervisors for company
-        // Only updatable by 'parent' company
-        if ($company->reportsTo()->id == Auth::user()->company_id) {
-            if ($request->get('trades'))
-                $company->tradesSkilledIn()->sync($request->get('trades'));
-            else
-                $company->tradesSkilledIn()->detach();
-
-            if ($request->has('transient'))
-                $company->supervisedBy()->sync($request->get('supervisors'));
-            else
-                $company->supervisedBy()->detach();
-        }
-
         // Actions for making company inactive
         // delete future leave
         if (!$company->status) {
@@ -234,10 +232,103 @@ class CompanyController extends Controller {
         Toastr::success("Saved changes");
 
         // Signup Process - Initial update
-        if ($company->signup_step == 3)
+        if ($company->status == 2 && $company->signup_step)
             return redirect("company/$company->id/signup/3");   // Adding users
 
         return redirect("company/$company->id");
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function editTrade($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        // User must be able to edit company or has subscription 3+ with ability to edit trades
+        if (!(Auth::user()->allowed2('edit.company', $company) || Auth::user()->company->subscription > 2 &&
+            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
+        )
+            return view('errors/404');
+
+        return view('company/edit-trade', compact('company'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateTrade(Request $request, $id)
+    {
+        $this->validate(request(), ['supervisors' => 'required_with:transient',]);
+
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        // User must be able to edit company or has subscription 2+ with ability to edit trades
+        if (!(Auth::user()->allowed2('edit.company', $company) || (Auth::user()->company->subscription > 1 &&
+                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)))
+        )
+            return view('errors/404');
+
+        // Update trades + supervisors for company
+        // Only updatable by 'parent' company
+        if ($company->reportsTo()->id == Auth::user()->company_id) {
+
+            // Trades
+            $old_trades = $company->tradesSkilledIn;
+            $new_trades = $request->get('trades');
+
+            $planned_trades = '';
+            foreach ($old_trades as $old_trade) {
+                if (!$new_trades || !in_array($old_trade->id, $new_trades)) {
+                    echo "checking trade $old_trade->id<br>";
+                    // Determine if company on planner for this trade
+                    $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $company->id)
+                        ->whereIn('task_id', Trade::find($old_trade->id)->tasks->pluck('id')->toArray())
+                        ->where('to', '>', Carbon::today()->format('Y-m-d'))->get();
+
+                    if ($planner->count()) {
+                        $planned_trades .= "'" . Trade::find($old_trade->id)->name . "', ";
+                        continue;
+                    }
+                }
+            }
+            $planned_trades = rtrim($planned_trades, ', ');
+        }
+
+        if ($planned_trades)
+            return back()->withErrors(['planned_trades' => "This company is currently on the planner for $planned_trades and MUST be removed first."]);
+
+        if ($request->get('trades')) {
+            $company->tradesSkilledIn()->sync($request->get('trades'));
+            $company->licence_required = 0;
+            foreach (request('trades') as $trade) {
+                if (Trade::find($trade)->licence_req) {
+                    $company->licence_required = 1;
+                    break;
+                }
+            }
+        } else
+            $company->tradesSkilledIn()->detach();
+
+        if ($request->has('transient')) {
+
+            $company->supervisedBy()->sync($request->get('supervisors'));
+            $company->transient = 1;
+        } else {
+            $company->supervisedBy()->detach();
+            $company->transient = 0;
+        }
+        $company->save();
+
+
+        return redirect("company/$company->id");
+
     }
 
     /**
@@ -325,20 +416,23 @@ class CompanyController extends Controller {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
                 if ($company->status == 2) {
                     if ($company->signup_step == 1)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/company/'.$company->id.'/signup/1" class="btn btn-outline btn-xs dark">Resend Email Request</a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/company/' . $company->id . '/signup/1" class="btn btn-outline btn-xs dark">Resend Email ' . $company->email . '</a>';
                     if ($company->signup_step == 2)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Setting up company profile</span></a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Adding company info</span></a>';
                     if ($company->signup_step == 3)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Adding Users</span></a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Adding users</span></a>';
                     if ($company->signup_step == 4)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Uploading Documents</span></a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Confirming information</span></a>';
                     if ($company->signup_step == 5)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Confirming infomation</span></a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Uploading documents</span></a>';
+
                 }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
                 if (!$company->approved_by && $company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id)
                     $name .= ' &nbsp; <span class="label label-sm label-warning">Pending approval</span>';
+                if (!$company->compliantDocs() && $company->status == 1)
+                    $name .= ' &nbsp; <span class="label label-sm label-danger">Non Compliant</span>';
 
                 return $name;
             })

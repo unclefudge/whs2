@@ -877,7 +877,7 @@ class SitePlannerController extends Controller {
      */
     public function getUpcomingTasks(Request $request, $date)
     {
-        $trade_list = Auth::user()->company->tradeList->pluck('id')->toArray();
+        $trade_list = Auth::user()->company->tradeList()->pluck('id')->toArray();
         $tasks = Task::whereIn('trade_id', $trade_list)->where('upcoming', '1')->where('status', '1')->orderBy('name')->get();
 
         // Upcoming Task Categories
@@ -1054,7 +1054,10 @@ class SitePlannerController extends Controller {
      */
     public function getTrades(Request $request)
     {
-        $trades = Trade::where('company_id', '=', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
+        $trades = Trade::where('status', '1')->where(function ($q)  {
+            $q->where('company_id', Auth::user()->company_id);
+            $q->orWhere('company_id', 1);
+        })->orderBy('name')->get();
         $array = [];
         $array[] = ['value' => '', 'text' => 'Select trade'];
         // Create array in specific Vuejs 'select' format.

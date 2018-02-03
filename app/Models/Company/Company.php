@@ -8,11 +8,11 @@ use Illuminate\Support\Str;
 use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\Planner\Trade;
+use App\Models\Site\Planner\Task;
 use App\Models\Comms\SafetyTip;
 use App\Models\Safety\WmsDoc;
 use App\Models\Safety\ToolboxTalk;
-use App\Models\Site\Planner\Trade;
-use App\Models\Site\Planner\Task;
 use App\Models\Misc\ContractorLicence;
 use App\Models\Misc\SettingsNotification;
 use App\Models\Misc\Role2;
@@ -170,7 +170,8 @@ class Company extends Model {
      */
     public function tradeList()
     {
-        return $this->hasMany('App\Models\Site\Planner\Trade');
+        //return $this->hasMany('App\Models\Site\Planner\Trade');
+        return Trade::where('company_id', 1)->orWhere('company_id', $this->id)->get();
     }
 
     /**
@@ -181,7 +182,7 @@ class Company extends Model {
     public function tradeListSelect($prompt = '')
     {
         $array = [];
-        foreach ($this->tradeList as $trade) {
+        foreach ($this->tradeList() as $trade) {
             if ($trade->status)
                 $array[$trade->id] = $trade->name;
         }
@@ -349,6 +350,23 @@ class Company extends Model {
         }
         if ($count)
             Toastr::error("($count) Users deactivated");
+    }
+
+    /**
+     *  Delete company from Planner from specified date and replace with generic trade (if possible).
+     */
+    public function onPlannerForTrade($trade_id, $past = false)
+    {
+        $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $this->id)
+            ->whereIn('task_id', Trade::find($trade_id)->tasks->pluck('id')->toArray())
+            ->where('to', '>', Carbon::today()->format('Y-m-d'))->get();
+        foreach ($planner as $plan) {
+            echo "plan:".$plan->date." task:".$plan->task_id."<br>";
+            if (Task::find($plan->task_id)->trade->id == $old_trade->id ) {
+                $planned_trades[] =  $old_trade->id;
+            }
+
+        }
     }
 
     /**
@@ -833,6 +851,24 @@ class Company extends Model {
     }
 
     /**
+     * Determine if a company is WHS compliant ie. uploaded required document
+     *
+     * @return Array
+     */
+    public function compliantDocs()
+    {
+        $compliant = true;
+        if (!$this->activeCompanyDoc('1') || $this->activeCompanyDoc('1')->status != 1) return false;   // Public Liabilty
+        if ($this->requiresWCinsurance() && (!$this->activeCompanyDoc('2') || $this->activeCompanyDoc('2')->status != 1)) return false;  // WC Insurance
+        if ($this->requiresSAinsurance() && (!$this->activeCompanyDoc('3') || $this->activeCompanyDoc('3')->status != 1)) return false;  // SA Insurance
+        if (!$this->activeCompanyDoc('4') || $this->activeCompanyDoc('4')->status != 1) return false;  // Subcontractors Statement
+        if (!$this->activeCompanyDoc('5') || $this->activeCompanyDoc('5')->status != 1) return false;  // Period Trade
+        if ($this->licence_required && (!$this->activeCompanyDoc('7') || $this->activeCompanyDoc('7')->status != 1)) return false;  // Contractors Licence
+
+        return true;
+    }
+
+    /**
      * Missing Company Info
      *
      * @return string
@@ -1108,12 +1144,17 @@ class Company extends Model {
      */
     public function notificationsUsersType($type)
     {
-        if (!is_int($type))
-            $type = SettingsNotificationTypes::type($type);
+        if (\App::environment('prod')) {
+            if (!is_int($type))
+                $type = SettingsNotificationTypes::type($type);
 
-        $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
+            $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
 
-        return ($users) ? User::find($users) : null;
+            return ($users) ? User::find($users) : null;
+        }
+
+        return User::find(1);
+
     }
 
     /**
@@ -1123,12 +1164,16 @@ class Company extends Model {
      */
     public function notificationsUsersTypeArray($type)
     {
-        if (!is_int($type))
-            $type = SettingsNotificationTypes::type($type);
+        if (\App::environment('prod')) {
+            if (!is_int($type))
+                $type = SettingsNotificationTypes::type($type);
 
-        $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
+            $users = $this->notifications->where('type', $type)->pluck('user_id')->toArray();
 
-        return ($users) ? User::find($users)->pluck('id')->toArray() : [];
+            return ($users) ? User::find($users)->pluck('id')->toArray() : [];
+        }
+
+        return User::find(1);
     }
 
     /**

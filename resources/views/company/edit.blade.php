@@ -77,7 +77,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($company, ['method' => 'PATCH', 'action' => ['Company\CompanyController@update', $company->id]]) !!}
-                                {!! Form::hidden('id', $company->id) !!}
                                 @if ($company->status == 2 && $company->signup_step == 2)
                                     {!! Form::hidden('signup_step', 3) !!}
                                 @endif
@@ -267,17 +266,6 @@
                                                         {!! fieldErrorMessage('creditor_code', $errors) !!}
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group {!! fieldHasError('licence_required', $errors) !!}">
-                                                        <label for="licence_required" class="control-label">Requires a Contractor Licence</label>
-                                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                                           data-content="A Contractors Licence is required if the company performs any of the following trades: {!! $licenceTypes::allSBC()  !!}"
-                                                           data-original-title="Contractors Licence"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
-                                                        {!! Form::select('licence_required',['' => 'Select option', '0' => 'No', '1' => 'Yes'],
-                                                         null, ['class' => 'form-control bs-select']) !!}
-                                                        {!! fieldErrorMessage('licence_required', $errors) !!}
-                                                    </div>
-                                                </div>
                                                 {{-- Payroll Tax --}}
                                                 <div class="col-md-12">
                                                     <div class="form-group {!! fieldHasError('payroll_tax', $errors) !!}">
@@ -291,60 +279,22 @@
                                             </div>
                                         @endif
 
-                                        {{-- Trade Details --}}
-
-
-                                        {{-- Planner Details --}}
-                                        @if (Auth::user()->company->addon('planner') && Auth::user()->hasAnyPermission2('add.trade|edit.trade') && Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                                            <h3 class="font-green form-section">Planner Details</h3>
-                                            {{-- Max Jobs + Trades  --}}
-                                            {{-- Pass required field via hidden because user can't edit  --}}
-                                            @if (!Auth::user()->allowed2('edit.company', $company))
-                                                {!! Form::hidden('name', $company->name) !!}
-                                            @endif
+                                        {{-- WHS Compliance --}}
+                                        @if ((Auth::user()->isCompany(3) && Auth::user()->security) || Auth::user()->id == 351)
+                                            <h3 class="font-green form-section">WHS Compliance</h3>
                                             <div class="row">
-                                                <div class="col-md-2">
-                                                    <div class="form-group {!! fieldHasError('maxjobs', $errors) !!}">
-                                                        {!! Form::label('maxjobs', 'Max Jobs', ['class' => 'control-label']) !!}
-                                                        {!! Form::text('maxjobs', null, ['class' => 'form-control']) !!}
-                                                        {!! fieldErrorMessage('maxjobs', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group {!! fieldHasError('trades', $errors) !!}">
-                                                        {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
-                                                         $company->tradesSkilledIn->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple', 'id' => 'trades']) !!}
-                                                        {!! fieldErrorMessage('trades', $errors) !!}
+                                                <div class="col-md-3">
+                                                    <div class="form-group {!! fieldHasError('licence_required', $errors) !!}">
+                                                        <label for="licence_required" class="control-label">Requires a Contractor Licence</label>
+                                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                                           data-content="A Contractors Licence is required if the company performs any of the following trades: {!! $licenceTypes::allSBC()  !!}"
+                                                           data-original-title="Contractors Licence"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
+                                                        {!! Form::select('licence_required',['' => 'Select option', '0' => 'No', '1' => 'Yes'],
+                                                         null, ['class' => 'form-control bs-select']) !!}
+                                                        {!! fieldErrorMessage('licence_required', $errors) !!}
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {{-- Transient --}}
-                                            @if (Auth::user()->isCC())
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-group {!! fieldHasError('transient', $errors) !!}">
-                                                            <p class="myswitch-label" style="font-size: 14px">&nbsp; Transient</p>
-                                                            {!! Form::label('transient', "&nbsp;", ['class' => 'control-label']) !!}
-                                                            {!! Form::checkbox('transient', '1', $company->transient ? true : false,
-                                                             ['class' => 'make-switch',
-                                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
-                                                            {!! fieldErrorMessage('transient', $errors) !!}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group {!! fieldHasError('supervisors', $errors) !!}"
-                                                             @if (!$company->transient) style="display: none" @endif id="super-div">
-                                                            {!! Form::label('supervisors', 'Supervisor(s)', ['class' => 'control-label']) !!}
-                                                            {!! Form::select('supervisors', Auth::user()->company->supervisorsSelect(),
-                                                             $company->supervisedBy->pluck('id')->toArray(), ['class' => 'form-control select2', 'name' => 'supervisors[]', 'title' => 'Select one or more supervisors', 'multiple']) !!}
-                                                            {!! fieldErrorMessage('supervisors', $errors) !!}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
                                         @endif
 
                                         @if (Auth::user()->allowed2('edit.company', $company) && Auth::user()->company_id == $company->reportsTo()->id)
@@ -395,10 +345,10 @@
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" tytype="text/css"/>
-@stop
+    @stop
 
-@section('page-level-styles-head')
-    <!--<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>-->
+    @section('page-level-styles-head')
+            <!--<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>-->
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop

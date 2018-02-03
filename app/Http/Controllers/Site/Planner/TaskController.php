@@ -18,7 +18,7 @@ class TaskController extends Controller {
     public function show(Request $request, $id)
     {
         if ($request->ajax()) {
-            return Task::where('trade_id', '=', $id)->get();
+            return Task::where('trade_id', '=', $id)->where('company_id', Auth::user()->company_id)->get();
         }
 
         return view('errors/404');

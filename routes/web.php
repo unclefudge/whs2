@@ -89,11 +89,13 @@ Route::group(['middleware' => 'auth'], function () {
     // Company Routes
     Route::get('company/dt/companies', 'Company\CompanyController@getCompanies');
     Route::get('company/dt/staff', 'Company\CompanyController@getStaff');
-    //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');
-    Route::post('company/{id}/edit/logo', 'Company\CompanyController@updateLogo');
     Route::get('company/{id}/name', 'Company\CompanyController@getCompanyName');
     Route::get('company/{id}/approve', 'Company\CompanyController@approveCompany');
     Route::get('company/{id}/signup/{step}', 'Company\CompanyController@signupProcess');
+    Route::post('company/{id}/trade', 'Company\CompanyController@updateTrade');
+    Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
+    //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');
+    //Route::post('company/{id}/edit/logo', 'Company\CompanyController@updateLogo');
     Route::resource('company', 'Company\CompanyController');
 
     // Client Routes

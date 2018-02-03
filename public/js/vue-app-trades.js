@@ -288,7 +288,6 @@ Vue.component('TaskModal', {
         },
 
         addTask: function (task) {
-            alert(this.store.company_id);
             var taskdata = {
                 name: task.name,
                 code: task.code,

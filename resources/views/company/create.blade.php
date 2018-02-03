@@ -68,6 +68,15 @@
                                             {!! fieldErrorMessage('email', $errors) !!}
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('trades', $errors) !!} {!! fieldHasError('planned_trades', $errors) !!}">
+                                            {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
+                                             null, ['class' => 'form-control select2', 'name' => 'trades[]', 'title' => 'Select one or more trades', 'multiple', 'id' => 'trades']) !!}
+                                            {!! fieldErrorMessage('trades', $errors) !!}
+                                            {!! fieldErrorMessage('planned_trades', $errors) !!}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-5">
                                     <br>
@@ -111,6 +120,12 @@
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        /* Select2 */
+        $("#trades").select2({placeholder: "Select one or more", width: '100%'});
+    });
+</script>
 
 @stop
 

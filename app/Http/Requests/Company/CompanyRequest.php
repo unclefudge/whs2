@@ -44,7 +44,7 @@ class CompanyRequest extends Request {
                     'business_entity' => 'required',
                     'gst'             => 'required',
                     'email'           => 'required|email|max:255',
-                    'supervisors'     => 'required_with:transient',
+                    //'supervisors'     => 'required_with:transient',
                 ];
             }
         }

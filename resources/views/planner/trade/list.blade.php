@@ -86,7 +86,9 @@
                                                 <i class="fa fa-plus-circle" style="color: #32c5d2;"></i></span>
                                         </td>
                                         <td>
-                                            <span :class="{ 'disabled': !trade.status }">@{{ trade.name }}</span>
+                                            <span :class="{ 'disabled': !trade.status }">
+                                                @{{ trade.name }} <span v-if="trade.company_id != 1" class='badge badge-info badge-roundless'>Custom</span>
+                                            </span>
                                         </td>
                                         @if (Auth::user()->hasPermission2('del.trade') && Auth::user()->id == 2)
                                             <td>
@@ -147,7 +149,7 @@
             <th width="14%"> Action</th>
             </thead>
             <tbody>
-            <tr v-for="task in taskList | filterDisabled">
+            <tr v-for="task in taskList | filterDisabled | orderBy 'name'">
                 <td>
                     <span v-if="task.upcoming" class="upcoming" v-bind:class="{ 'disabled': task.status == 0 }">@{{ task.code }}</span>
                     <span v-else v-bind:class="{ 'disabled': !task.status }">@{{ task.code }}</span>

@@ -103,10 +103,12 @@ class UserController extends Controller {
         Mail::to($user)->send(new \App\Mail\User\UserWelcome($user, request('password')));
 
         // Notify company + parent company new user created
-        if ($user->company->subscription && $user->company->notificationsUsersType('user.created'))
-            Mail::to($user->company->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
-        if ($user->company->parent_company && $user->company->reportsTo()->notificationsUsersType('user.created'))
-            Mail::to($user->company->reportsTo()->notificationsUsersType('user.created'))->send(new \App\Mail\User\UserCreated($user, Auth::user()));
+        $email_to_company = (\App::environment('prod')) ? $user->company->notificationsUsersType('user.created') : env('EMAIL_ME');
+        $email_to_parent = (\App::environment('prod')) ? $user->company->reportsTo()->notificationsUsersType('user.created') : env('EMAIL_ME');
+        if ($user->company->subscription && $email_to_company)
+            Mail::to($email_to_company)->send(new \App\Mail\User\UserCreated($user, Auth::user()));
+        if ($user->company->parent_company && $email_to_parent)
+            Mail::to($email_to_parent)->send(new \App\Mail\User\UserCreated($user, Auth::user()));
 
         // Signup Process - Initial update
         if ($user->company->signup_step == 3) {

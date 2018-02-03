@@ -75,14 +75,15 @@ class PagesController extends Controller {
         // If primary user and incompleted company Signup - redirect to correct step
         if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {
             if (Auth::user()->company->signup_step == 2)
-                return redirect('/company/'.Auth::user()->company->id.'/edit');
+                return redirect('/company/' . Auth::user()->company->id . '/edit');
             if (Auth::user()->company->signup_step == 3)
-                return redirect('company/'.Auth::user()->company->id.'/signup/3');
+                return redirect('company/' . Auth::user()->company->id . '/signup/3');
             if (Auth::user()->company->signup_step == 4)
-                return redirect('company/'.Auth::user()->company->id);
+                return redirect('company/' . Auth::user()->company->id);
             if (Auth::user()->company->signup_step == 5)
-                return redirect('company/'.Auth::user()->company->id.'/signup/5');
+                return redirect('company/' . Auth::user()->company->id . '/signup/5');
         }
+
         return view('pages/home', compact('worksite'));
     }
 
@@ -157,7 +158,7 @@ class PagesController extends Controller {
         $user_companies = [];
         foreach ($companies_list as $c) {
             $company = \App\Models\Company\Company::find($c->id);
-           
+
             $user_companies[] = (object) ['id'  => $company->id, 'name' => $company->name_both, 'users' => $c->users,
                                           'sec' => $company->securityUsers(1)->count(), 'pu' => $company->primary_user, 'su' => $company->secondary_user, 'updated_at' => $company->updated_at->format('d/m/Y')];
 
@@ -172,20 +173,7 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
-        echo "Set Company doc type<br><br>";
-        $docs = \App\Models\Company\CompanyDoc::all();
-        foreach ($docs as $doc) {
-            if ($doc->category_id < 6)
-                $doc->type = 'ics';
-            elseif ($doc->category_id == 6)
-                $doc->type = 'whs';
-            elseif ($doc->category_id > 6 && $doc->category_id < 10 )
-                $doc->type = 'lic';
-            elseif ($doc->category_id > 20)
-                $doc->type = 'gen';
 
-            $doc->save();
-        }
         /*echo "Child Company LH default permissions<br><br>";
         $lh =  DB::table('role_user')->where('role_id', 12)->get();
         foreach ($lh as $u) {
