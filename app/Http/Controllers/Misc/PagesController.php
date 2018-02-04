@@ -173,7 +173,17 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
-
+        echo "Todo assigned to inactive user<br><br>";
+        $docs = \App\Models\Comms\Todo::all();
+        foreach ($docs as $doc) {
+            if ($doc->status) {
+                foreach ($doc->users as $user) {
+                    $u = User::find($user->user_id);
+                    if (!$u->status)
+                        echo "ToDo [$doc->id] - $doc->name ($u->fullname)<br>";
+                }
+            }
+        }
         /*echo "Child Company LH default permissions<br><br>";
         $lh =  DB::table('role_user')->where('role_id', 12)->get();
         foreach ($lh as $u) {

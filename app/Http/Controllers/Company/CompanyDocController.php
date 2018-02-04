@@ -524,10 +524,8 @@ class CompanyDocController extends Controller {
     {
         if ($request->get('type') == 'insurance_contract')
             $categories = ['1', '2', '3', '4', '5'];
-        elseif ($request->get('type') == 'electrical_testtag')
-            $categories = ['6'];
-        elseif ($request->get('type') == 'licence')
-            $categories = ['7', '8', '9'];
+        elseif ($request->get('type') == 'whs')
+            $categories = ['6', '7', '8', '9'];
 
         $records = DB::table('company_docs as d')
             ->select(['d.id', 'd.category_id', 'd.attachment', 'd.name', 'd.ref_no', 'd.ref_name', 'd.expiry', 'd.attachment',

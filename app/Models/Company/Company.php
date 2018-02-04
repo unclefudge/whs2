@@ -821,12 +821,14 @@ class Company extends Model {
      */
     public function requiresWCinsurance()
     {
-        if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
-            return true;
-
-        foreach ($this->staff as $staff) {
-            if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
+        if ($this->category == 'On Site Trade') {
+            if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
                 return true;
+
+            foreach ($this->staff as $staff) {
+                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
+                    return true;
+            }
         }
 
         return false;
@@ -839,15 +841,34 @@ class Company extends Model {
      */
     public function requiresSAinsurance()
     {
-        if ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader')
-            return true;
-
-        foreach ($this->staff as $staff) {
-            if ($staff->employment_type == 3 && ($staff->subcontractor_type == 2 || $staff->subcontractor_type == 3))
+        if ($this->category == 'On Site Trade') {
+            if ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader')
                 return true;
+
+            foreach ($this->staff as $staff) {
+                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 2 || $staff->subcontractor_type == 3))
+                    return true;
+            }
         }
 
         return false;
+    }
+
+    /**
+     * Determine if Contractors Licence is Required for any of their trades
+     *
+     * @return boolean
+     */
+    public function requiresContractorsLicence()
+    {
+        if ($this->category == 'On Site Trade') {
+            foreach ($this->tradesSkilledIn() as $trade) {
+                if (Trade::find($trade)->licence_req)
+                    return 1;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -857,13 +878,14 @@ class Company extends Model {
      */
     public function compliantDocs()
     {
-        $compliant = true;
-        if (!$this->activeCompanyDoc('1') || $this->activeCompanyDoc('1')->status != 1) return false;   // Public Liabilty
-        if ($this->requiresWCinsurance() && (!$this->activeCompanyDoc('2') || $this->activeCompanyDoc('2')->status != 1)) return false;  // WC Insurance
-        if ($this->requiresSAinsurance() && (!$this->activeCompanyDoc('3') || $this->activeCompanyDoc('3')->status != 1)) return false;  // SA Insurance
-        if (!$this->activeCompanyDoc('4') || $this->activeCompanyDoc('4')->status != 1) return false;  // Subcontractors Statement
-        if (!$this->activeCompanyDoc('5') || $this->activeCompanyDoc('5')->status != 1) return false;  // Period Trade
-        if ($this->licence_required && (!$this->activeCompanyDoc('7') || $this->activeCompanyDoc('7')->status != 1)) return false;  // Contractors Licence
+        if ($this->category == 'On Site Trade') {
+            if (!$this->activeCompanyDoc('1') || $this->activeCompanyDoc('1')->status != 1) return false;   // Public Liabilty
+            if ($this->requiresWCinsurance() && (!$this->activeCompanyDoc('2') || $this->activeCompanyDoc('2')->status != 1)) return false;  // WC Insurance
+            if ($this->requiresSAinsurance() && (!$this->activeCompanyDoc('3') || $this->activeCompanyDoc('3')->status != 1)) return false;  // SA Insurance
+            if (!$this->activeCompanyDoc('4') || $this->activeCompanyDoc('4')->status != 1) return false;  // Subcontractors Statement
+            if (!$this->activeCompanyDoc('5') || $this->activeCompanyDoc('5')->status != 1) return false;  // Period Trade
+            if ($this->licence_required && (!$this->activeCompanyDoc('7') || $this->activeCompanyDoc('7')->status != 1)) return false;  // Contractors Licence
+        }
 
         return true;
     }

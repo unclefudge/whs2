@@ -304,6 +304,8 @@ class CompanyController extends Controller {
         if ($planned_trades)
             return back()->withErrors(['planned_trades' => "This company is currently on the planner for $planned_trades and MUST be removed first."]);
 
+        $old_licence_overide = ($company->licence_required != $company->requiresContractorsLicence()) ? true : false ;
+        $old_trades_skilled_in = $company->tradesSkilledInSBC();
         if ($request->get('trades')) {
             $company->tradesSkilledIn()->sync($request->get('trades'));
             $company->licence_required = 0;
@@ -312,6 +314,10 @@ class CompanyController extends Controller {
                     $company->licence_required = 1;
                     break;
                 }
+            }
+            // Licence Required field was previous overridden and trades have now changed
+            if ($old_licence_overide && $old_trades_skilled_in != $company->tradesSkilledInSBC()) {
+                // email tara
             }
         } else
             $company->tradesSkilledIn()->detach();
