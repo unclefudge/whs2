@@ -343,10 +343,11 @@ class CompanyDocController extends Controller {
             return redirect('/company/' . $doc->for_company_id);
         }
 
-
         // Determine Status of Doc
         // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
-        if ($request->has('status') && $request->get('status') == 0)
+        if ($request->has('archive_doc'))
+            $doc_request['status'] = 0;
+        elseif ($request->has('status') && $request->get('status') == 0)
             $doc_request['status'] = 0;
         else if (Auth::user()->hasPermission2("sig.company.doc.$type") && $doc_request['company_id'] == Auth::user()->company_id) {
             $doc_request['approved_by'] = Auth::user()->id;
@@ -374,6 +375,7 @@ class CompanyDocController extends Controller {
             $doc_request['name'] = $request->get('extra_lic_name'); //'Additional Licence';
         }
 
+        //dd($doc_request);
         // Determine if its a new or existing document
         if ($request->get('doc_id')) {
             // Update Company Doc

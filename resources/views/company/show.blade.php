@@ -417,7 +417,7 @@
                                     </h3>
                                     @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
                                         <div class="row" style="line-height: 2">
-                                            <div class="col-md-3"><b>Requires a Contrator Licence</b></div>
+                                            <div class="col-md-3"><b>Requires a Contractor Licence</b></div>
                                             <div class="col-md-2">{!! ($company->licence_required) ? 'Yes' : 'No' !!}</div>
                                         </div>
                                     @endif
@@ -803,6 +803,7 @@
                     @endif
                     @if (Auth::user()->allowed2('sig.company', $company))
                         <button class="btn dark" id="reject_doc" name="reject_doc" value="reject">Reject Document</button>
+                        <button class="btn dark" id="archive_doc" name="archive_doc" value="archive">Archive</button>
                         <button type="submit" class="btn green">Approve and Save</button>
                     @else
                         <button type="submit" class="btn green">Save</button>
@@ -905,16 +906,19 @@
                 $("#rejected_div").hide();
                 $("#reject_doc").hide();
                 $("#pending_div").hide();
+                $("#archive_doc").show();
             }
             if ($(this).data('doc_status') == 2) {
                 $("#reject_doc").show();
                 $("#pending_div").show();
                 $("#rejected_div").hide();
+                $("#archive_doc").hide();
             }
             if ($(this).data('doc_status') == 3) {
                 $("#rejected_div").show();
                 $("#reject_doc").hide();
                 $("#pending_div").hide();
+                $("#archive_doc").hide();
             }
         } else {
             $("#file_field").show();
