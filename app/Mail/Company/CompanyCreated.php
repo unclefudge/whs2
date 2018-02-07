@@ -8,8 +8,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CompanyCreated extends Mailable
-{
+class CompanyCreated extends Mailable {
+
     use Queueable, SerializesModels;
 
     public $company;
@@ -32,5 +32,6 @@ class CompanyCreated extends Mailable
     public function build()
     {
         return $this->markdown('emails/company/created')->subject('SafeWorksite - New Company');
+
     }
 }

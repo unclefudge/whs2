@@ -5,16 +5,13 @@ namespace App\Http\Utilities;
 class CompanyTypes {
 
     protected static $companyTypes = [
-        ''                      => 'Select category',
-        'Consultants/Externals' => 'Consultants/Externals',
-        'Guest'                 => 'Guest',
-        'Internal Staff'        => 'Internal Staff',
-        'Inspector/Certifier'   => 'Inspector/Certifier',
-        'Office Use'            => 'Office Use',
-        'On Site Trade'         => 'On Site Trade',
-        'Supplier'              => 'Supplier',
-        'Web Development'       => 'Web Development',
-        'Unallocation'          => 'Unallocation'
+        '1' => 'Subcontractor (On Site Trade)',
+        '2' => 'Service Provider',
+        '3' => 'Supply & Fit',
+        '4' => 'Supply Only',
+        '5' => 'Consultant',
+        '6' => 'Internal Staff',
+        '7' => 'Unallocated',
     ];
 
 

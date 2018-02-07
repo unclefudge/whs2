@@ -42,6 +42,7 @@ class CompanyRequest extends Request {
                     'primary_user'    => 'required',
                     'abn'             => 'required',
                     'business_entity' => 'required',
+                    'category'        => 'required',
                     'gst'             => 'required',
                     'email'           => 'required|email|max:255',
                     //'supervisors'     => 'required_with:transient',

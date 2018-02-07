@@ -8,8 +8,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CompanyWelcome extends Mailable
-{
+class CompanyWelcome extends Mailable {
+
     use Queueable, SerializesModels;
 
     public $company, $parent_company, $name;

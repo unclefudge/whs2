@@ -338,6 +338,28 @@ class CompanyController extends Controller {
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function approveCompany($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('sig.company', $company))
+            return view('errors/404');
+
+        $company->approved_by = Auth::user()->id;
+        $company->approved_at = Carbon::now()->toDateTimeString();
+        $company->save();
+        Toastr::success("Approved company");
+
+        return redirect('/company/' . $company->id);
+
+    }
+
+    /**
      * Update the photo on user model resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -367,28 +389,6 @@ class CompanyController extends Controller {
         Toastr::success("Saved changes");
 
         return redirect('/company/' . $company->id . '/settings/logo');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function approveCompany($id)
-    {
-        $company = Company::findorFail($id);
-
-        /// Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('sig.company', $company))
-            return view('errors/404');
-
-        $company->approved_by = Auth::user()->id;
-        $company->approved_at = Carbon::now()->toDateTimeString();
-        $company->save();
-        Toastr::success("Approved company");
-
-        return redirect('/company/' . $company->id);
-
     }
 
     /**

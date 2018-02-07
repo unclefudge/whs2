@@ -815,6 +815,25 @@ class Company extends Model {
     }
 
     /**
+     * Determine if a certain document type is Required
+     *
+     * @return boolean
+     */
+    public function requiresCompanyDoc($type)
+    {
+        if ($this->category == 'On Site Trade') {
+            if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
+                return true;
+
+            foreach ($this->staff as $staff) {
+                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+    /**
      * Determine if Workers Comp is Required
      *
      * @return boolean
@@ -862,8 +881,8 @@ class Company extends Model {
     public function requiresContractorsLicence()
     {
         if ($this->category == 'On Site Trade') {
-            foreach ($this->tradesSkilledIn() as $trade) {
-                if (Trade::find($trade)->licence_req)
+            foreach ($this->tradesSkilledIn as $trade) {
+                if ($trade->licence_req)
                     return 1;
             }
         }

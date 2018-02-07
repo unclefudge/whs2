@@ -2,6 +2,7 @@
 @inject('licenceTypes', 'App\Http\Utilities\LicenceTypes')
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
 @inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
+@inject('companyEntityTypes', 'App\Http\Utilities\CompanyEntityTypes')
 @extends('layout')
 
 @section('pagetitle')
@@ -94,6 +95,9 @@
 
                                     @include('form-error')
                                     @if (Auth::user()->allowed2('edit.company', $company))
+
+                                        {{-- Contact Details --}}
+                                        <h3 class="font-green form-section">Company Details</h3>
                                         {{-- Name + Status --}}
                                         <div class="row">
                                             <div class="col-md-5">
@@ -133,9 +137,6 @@
                                                 </div>
                                             </div>
                                         @endif
-
-                                        {{-- Contact Details --}}
-                                        <h3 class="font-green form-section">Contact Details</h3>
 
                                         {{-- Address --}}
                                         <div class="row">
@@ -217,8 +218,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group {!! fieldHasError('business_entity', $errors) !!}">
                                                     {!! Form::label('business_entity', 'Business Entity *', ['class' => 'control-label']) !!}
-                                                    {!! Form::select('business_entity',['' => 'Select entity', 'Company' => 'Company', 'Partnership' => 'Partnership',
-                                                    'Sole Trader' => 'Sole Trader', 'Trading Trust' => 'Trading Trust'],
+                                                    {!! Form::select('business_entity',$companyEntityTypes::all(),
                                                      $company->business_entity, ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('business_entity', $errors) !!}
                                                 </div>
@@ -233,7 +233,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group {!! fieldHasError('gst', $errors) !!}">
                                                     {!! Form::label('gst', 'GST Registered *', ['class' => 'control-label']) !!}
-                                                    {!! Form::select('gst',['' => 'Select type', '1' => 'Yes', '0' => 'No'],
+                                                    {!! Form::select('gst',['1' => 'Yes', '0' => 'No'],
                                                      $company->gst, ['class' => 'form-control bs-select', 'required']) !!}
                                                     {!! fieldErrorMessage('gst', $errors) !!}
                                                 </div>
@@ -242,6 +242,7 @@
 
                                         @if (Auth::user()->allowed2('edit.company.accounting', $company))
                                             <div class="row">
+                                                {{--
                                                 <div class="col-md-3">
                                                     <div class="form-group {!! fieldHasError('sub_group', $errors) !!}">
                                                         {!! Form::label('sub_group', 'Subgroup', ['class' => 'control-label']) !!}
@@ -251,11 +252,12 @@
                                                         {!! fieldErrorMessage('sub_group', $errors) !!}
                                                     </div>
                                                 </div>
+                                                --}}
                                                 <div class="col-md-3">
                                                     <div class="form-group {!! fieldHasError('category', $errors) !!}">
-                                                        {!! Form::label('category', 'Category', ['class' => 'control-label']) !!}
+                                                        {!! Form::label('category', 'Category *', ['class' => 'control-label']) !!}
                                                         {!! Form::select('category',$companyTypes::all(),
-                                                         $company->category, ['class' => 'form-control bs-select']) !!}
+                                                         $company->category, ['class' => 'form-control bs-select', 'required']) !!}
                                                         {!! fieldErrorMessage('category', $errors) !!}
                                                     </div>
                                                 </div>
@@ -289,9 +291,17 @@
                                                         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                                                            data-content="A Contractors Licence is required if the company performs any of the following trades: {!! $licenceTypes::allSBC()  !!}"
                                                            data-original-title="Contractors Licence"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
-                                                        {!! Form::select('licence_required',['' => 'Select option', '0' => 'No', '1' => 'Yes'],
-                                                         null, ['class' => 'form-control bs-select']) !!}
+                                                        {!! Form::select('licence_required',['0' => 'No', '1' => 'Yes'],
+                                                         $company->licence_required, ['class' => 'form-control bs-select', 'id' => 'licence_required']) !!}
                                                         {!! fieldErrorMessage('licence_required', $errors) !!}
+                                                    </div>
+                                                    {!! Form::hidden('requiresContractorsLicence', $company->requiresContractorsLicence(), ['id' => 'requiresContractorsLicence']) !!}
+                                                </div>
+                                                <div class="col-md-6" style="display: none" id="overide_div">
+                                                    <br>
+                                                    <div class="note note-warning">
+                                                        <p id="req_yes">Company <span style="text-decoration: underline">doesn't</span> require a licence but you have set to <b>REQUIRED</b></p>
+                                                        <p id="req_no">Company requires a licence but you have set to <b>NOT REQUIRED</b></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -392,6 +402,28 @@
             clearBtn: true,
             format: 'dd/mm/yyyy',
         });
+
+        /* Over Ride Licence */
+        $('#licence_required').change(function () {
+            overide();
+        });
+
+        overide();
+
+        function overide() {
+            $('#req_yes').hide();
+            $('#req_no').hide();
+            //alert($('#licence_required').val());
+            if ($('#licence_required').val() != $('#requiresContractorsLicence').val()) {
+                //alert('over');
+                $('#overide_div').show();
+                if ($('#licence_required').val() == 1)
+                    $('#req_yes').show();
+                else
+                    $('#req_no').show();
+            } else
+                $('#overide_div').hide();
+        }
 
         $('#status').change(function () {
             if ($('#status').val() == '0') {

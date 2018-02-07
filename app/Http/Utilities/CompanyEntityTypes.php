@@ -5,7 +5,7 @@ namespace App\Http\Utilities;
 class CompanyEntityTypes {
 
     protected static $companyEntityTypes = [
-        ''  => 'Select entity',
+        //''  => 'Select entity',
         '1' => 'Company',
         '2' => 'Partnership',
         '3' => 'Sole Trader',
