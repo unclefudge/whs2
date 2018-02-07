@@ -66,6 +66,7 @@ class CompanyController extends Controller {
             'name'        => 'required',
             'person_name' => 'required',
             'email'       => 'required|email|max:255',
+            'category'    => 'required',
         ]);
 
         // Check authorisation and throw 404 if not
@@ -304,7 +305,7 @@ class CompanyController extends Controller {
         if ($planned_trades)
             return back()->withErrors(['planned_trades' => "This company is currently on the planner for $planned_trades and MUST be removed first."]);
 
-        $old_licence_overide = ($company->licence_required != $company->requiresContractorsLicence()) ? true : false ;
+        $old_licence_overide = ($company->licence_required != $company->requiresContractorsLicence()) ? true : false;
         $old_trades_skilled_in = $company->tradesSkilledInSBC();
         if ($request->get('trades')) {
             $company->tradesSkilledIn()->sync($request->get('trades'));

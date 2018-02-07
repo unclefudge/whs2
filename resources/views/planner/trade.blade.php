@@ -75,7 +75,7 @@
                             <div class="col-md-3">
                                 <select v-model="xx.params.trade_id" class="form-control bs-select" v-on:change="getCompanyForTrade" id="trade_id">
                                     <option value='' selected>Select Trade</option>
-                                    @foreach (Auth::user()->company->tradeListSelect() as $id => $name)
+                                    @foreach (Auth::user()->company->tradeListPlannerSelect() as $id => $name)
                                         <option value="{{ $id }}"
                                                 @if($id == $trade_id) selected @endif>{{ $name }}</option>
                                     @endforeach

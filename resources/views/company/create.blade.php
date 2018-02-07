@@ -2,6 +2,7 @@
 @inject('licenceTypes', 'App\Http\Utilities\LicenceTypes')
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
 @inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
+@inject('companyEntityTypes', 'App\Http\Utilities\CompanyEntityTypes')
 
 @extends('layout')
 
@@ -69,6 +70,17 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('category', $errors) !!}">
+                                            <label for="category" class="control-label">Category *</label>
+                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                               data-content="Used to determine which documents are required to be WHS compliant. Public Liability, Workers Comp. Sickness & Accident, Contractors Licence etc"
+                                               data-original-title="Category"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
+                                            {!! Form::select('category',array_merge(['' => 'Select one'], $companyTypes::all()),
+                                             null, ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('category', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('trades', $errors) !!} {!! fieldHasError('planned_trades', $errors) !!}">
                                             {!! Form::label('trades', 'Trade(s)', ['class' => 'control-label']) !!}
                                             {!! Form::select('trades', Auth::user()->company->tradeListSelect(),
@@ -124,6 +136,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#trades").select2({placeholder: "Select one or more", width: '100%'});
+        $("#category").select2({placeholder: "Select one", width: '100%'});
     });
 </script>
 

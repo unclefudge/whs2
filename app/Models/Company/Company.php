@@ -162,27 +162,52 @@ class Company extends Model {
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Task') + $array : $array;
     }
 
-
     /**
-     * A Parent company has many trades (list of trades they use for planner).
+     * A Collection of standard trades (list of trades they use for company creation).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return Collection
      */
     public function tradeList()
     {
-        //return $this->hasMany('App\Models\Site\Planner\Trade');
-        return Trade::where('company_id', 1)->orWhere('company_id', $this->id)->get();
+        return Trade::where('company_id', 1)->get();
     }
 
     /**
      * A Parent company has many trades (list of trades they use for planner).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return Collection
+     */
+    public function tradeListPlanner()
+    {
+        return Trade::where('company_id', 1)->orWhere('company_id', $this->id)->get();
+    }
+
+    /**
+     * A array of standard trades (list of trades they use for company creation).
+     *
+     * @return array
      */
     public function tradeListSelect($prompt = '')
     {
         $array = [];
         foreach ($this->tradeList() as $trade) {
+            if ($trade->status)
+                $array[$trade->id] = $trade->name;
+        }
+        asort($array);
+
+        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Trade(s)') + $array : $array;
+    }
+
+    /**
+     * A Parent company has many trades (list of trades they use for planner).
+     *
+     * @return array
+     */
+    public function tradeListPlannerSelect($prompt = '')
+    {
+        $array = [];
+        foreach ($this->tradeListplanner() as $trade) {
             if ($trade->status)
                 $array[$trade->id] = $trade->name;
         }

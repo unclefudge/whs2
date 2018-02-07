@@ -877,7 +877,7 @@ class SitePlannerController extends Controller {
      */
     public function getUpcomingTasks(Request $request, $date)
     {
-        $trade_list = Auth::user()->company->tradeList()->pluck('id')->toArray();
+        $trade_list = Auth::user()->company->tradeListPlanner()->pluck('id')->toArray();
         $tasks = Task::whereIn('trade_id', $trade_list)->where('upcoming', '1')->where('status', '1')->orderBy('name')->get();
 
         // Upcoming Task Categories
