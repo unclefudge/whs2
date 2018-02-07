@@ -213,7 +213,7 @@ class CompanyController extends Controller {
         //$company_request['licence_expiry'] = ($request->get('licence_expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('licence_expiry') . '00:00')->toDateTimeString() : null;
 
         // If updated by Parent Company with 'authorise' permissions update approved fields else reset
-        if (Auth::user()->allowed2('del.company', $company)) {
+        if (Auth::user()->allowed2('sig.company', $company)) {
             $company_request['approved_by'] = Auth::user()->id;
             $company_request['approved_at'] = Carbon::now()->toDateTimeString();
         } else {
