@@ -15,6 +15,7 @@ use App\Models\Site\Planner\Trade;
 use App\Models\Site\Planner\Task;
 use App\Http\Requests;
 use App\Http\Requests\Company\CompanyRequest;
+use App\Http\Utilities\CompanyTypes;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -444,7 +445,11 @@ class CompanyController extends Controller {
                 return $name;
             })
             ->addColumn('trade', function ($company) {
-                return ($company->category) ? "<b>$company->category:</b></span> " . $company->tradesSkilledInSBC() : $company->tradesSkilledInSBC();
+                if (preg_match('/[0-9]/', $company->category))
+                    return "<b>" .CompanyTypes::name($company->category) . ":</b></span> " . $company->tradesSkilledInSBC();
+
+                return "<b>" . $company->category . ":</b></span> " . $company->tradesSkilledInSBC();
+                //return "<b>".CompanyTypes::name($company->category).":</b></span> " . $company->tradesSkilledInSBC();
             })
             ->addColumn('manager', function ($company) {
                 return $company->seniorUsersSBC();
