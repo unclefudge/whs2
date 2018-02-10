@@ -326,7 +326,7 @@ trait UserRolesPermissions {
 
         $merged_ids = array_merge($company_ids, $parent_ids);
 
-        return ($status) ? Company::where('status', $status)->whereIn('id', $merged_ids)->get() : Company::whereIn('id', $merged_ids)->get();
+        return ($status || $status == 0) ? Company::where('status', $status)->whereIn('id', $merged_ids)->get() : Company::whereIn('id', $merged_ids)->get();
     }
 
     /**
