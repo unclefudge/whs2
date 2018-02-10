@@ -370,8 +370,9 @@ class PagesController extends Controller {
                     $company->primary_user = $data[19];
                     $company->secondary_user = $data[20];
 
-                    $company->approved_by = 424;
-                    $company->approved_at = Carbon::now();
+                    $company->status = 0;
+                    //$company->approved_by = 424;
+                    //$company->approved_at = Carbon::now();
                     echo "<h1>$company->name</h1>";
                     //dd($company);
                     //print_r($company);
