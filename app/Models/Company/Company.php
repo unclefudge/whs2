@@ -905,7 +905,7 @@ class Company extends Model {
      */
     public function requiresContractorsLicence()
     {
-        if ($this->category == '1' || $this->category == '2' ) {
+        if ($this->category == '1' || $this->category == '2' || $this->category == '4' ) {
             foreach ($this->tradesSkilledIn as $trade) {
                 if ($trade->licence_req)
                     return 1;
