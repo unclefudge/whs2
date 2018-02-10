@@ -115,7 +115,7 @@
                         @if($item_data['status'] == '1')
                             <i class="fa fa-check-square-o" style="color:#32c5d2; font-size: 16px; padding-top: 5px"></i>
                         @elseif($item_data['status'] == '-1')
-                            -
+                            N/A
                         @else
                             <i class="fa fa-square-o" style="color:#e7505a; font-size: 16px; padding-top: 5px"></i>
                         @endif

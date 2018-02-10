@@ -374,7 +374,7 @@ class PagesController extends Controller {
                     //$company->approved_by = 424;
                     //$company->approved_at = Carbon::now();
                     echo "<h1>$company->name</h1>";
-                    //dd($company);
+                    dd($company);
                     //print_r($company);
                     $company->save();
 
