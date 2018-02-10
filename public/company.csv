@@ -1,0 +1,121 @@
+id,name,nickname,email,phone,address,suburb,state,postcode,abn,gst,payroll_tax,creditor_code,business_entity,sub_group,category,licence_required,maxjobs,transient,primary_user,secondary_user
+3,Cape Cod,,company@capecod.com.au,(02) 9849 4444,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,Company,,0,1,0,0,6,0
+1,System,,system@openhands.com.au,(03) 6248 9382,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,Company,,0,1,0,0,251,0
+2,Open Hands,,fudge@openhands.com.au,0414 849 091,1438 South Arm Rd,CLIFTON BEACH,TAS,7020,15 003 781 280,1,0,OPENHA,Trading Trust,Contractors,0,1,0,0,0,0
+4,A & S Home Insulations,A & S Insulation,ashomeinsulation1@bigpond.com,0412 679 463,PO BOX 128,HORSLEY PARK,NSW,2175,21 829 155 426,1,4,ASHOME,Partnership,Subcontractor,1,1,1,0,150,0
+7,All Seasons Gutter Guard,NULL,allseasons@tpg.com.au,(02) 9214 6723,25 Railway Parade,WOONONA EAST,NSW,2517,12 134 269 480,1,4,ALLSG,Company,Subcontractor,1,1,1,0,187,0
+8,Ariel Carpentry PTY LTD,Ariel Carpentry,pd@arielcarp.com.au,0417 505346,76 Henry Street,GUILDFORD,NSW,2161,33 071 230 487,1,6,ARIEL,Company,Subcontractor,1,1,1,0,10,0
+9,Ashby's Scaffolding PTY LTD,Ashbys Scaffolding,info@ashby.com.au,0412 130 296,6 Coen Close,BOSSLEY PARK,NSW,2176,41 003 173 939,1,6,ASHBY,Company,Subcontractor,1,1,2,0,88,0
+13,Budget Stairs,,stairs@budgetstairs.com.au,(02) 9774 2066,63 Davies Road,PADSTOW,NSW,2211,50 003 099 401,1,0,BUD,Company,,4,1,2,0,12,0
+14,C Blair Painting & Decorating,,ccblair@hotmail.com,0412 083 442,22 Skyfarmer Place,RABY,NSW,2566,82 177 096 827,1,1,BLAIR,Partnership,Subcontractor,1,1,1,0,86,0
+21,Dean Taylor Bricklaying PTY LTD,Dean Taylor Bricklaying ,deantaylorbricklaying@hotmail.com,0419 126 060,31/100-106 Queenscliff Road,QUEENSCLIFF,NSW,2096,64 151 946 333,1,6,TAYLOR,Company,Subcontractor,1,1,1,0,84,83
+23,Essential Certifiers,,info@essentialcertifiers.com.au,(02) 9612 5000,PO BOX 383,CASULA MALL,NSW,2170,84 047 117 254,1,0,ESSEN,Company,Service Provider,2,1,4,0,81,0
+26,Floor Expert PTY LTD,Floor Expert,timfloorexpert@hotmail.com,(02) 9564 1753,39 Walker Avenue,HABERFIELD,NSW,2045,12 167 121 833,1,4,FLOOREXP,Company,Subcontractor,1,1,1,0,151,0
+27,Fresh Start Constructions,Fresh Start,admin@freshstartconstructions.com,0406 460 531,43 Mckellar Street,SOUTH WINDSOR,NSW,2756,56 760 996 858,1,6,FRESH,Partnership,Subcontractor,1,1,1,0,79,0
+28,G & G Electrical PTY LTD,G & G Electrical,grahammc@live.com.au,0417 691 320,38 Mustang Drive,RABY,NSW,2566,76 003 196 398,1,4,GG,Company,Subcontractor,1,1,1,0,76,0
+29,G.B.T.Carpentry Services PTY LTD,GBT Carpentry Services,gbtcarpentry13@gmail.com,0418 690 238,13 Drury Place,HEBERSHAM,NSW,2770,18 064 186 250,1,8,GBTCARP,Company,Subcontractor,1,1,10,0,75,0
+31,GJ & CA Briggs,Greg Briggs,cangreg@optusnet.com.au,0424 535 025,13/1161 Pittwater Road,COLLAROY,NSW,2097,50 305 802 357,0,8,GJB,Partnership,Subcontractor,1,1,10,1,73,0
+32,Gyprock Professional PTY LTD,,gyppro22@gmail.com,0432 426 440,30 Hillcrest St,TERRIGAL,NSW,2260,19 600 540 261,1,0,GYPPROF,Company,Subcontractor,1,1,1,0,69,0
+35,High Performance Construction PTY LTD,High Performance,wazr70@gmail.com,0401 679 665,25 Irelands Road,BLACKTOWN,NSW,2148,76 805 643 678,1,6,HIGHP,Company,Subcontractor,1,1,1,0,65,0
+58,Open Hands,,fudge@jordan.net.au,(03) 6248 9382,1438 South Arm Rd,CLIFTON BEACH,TAS,7020,15 003 781 280,1,0,OPENHA,Trading Trust,Contractors,0,1,1,0,637,0
+36,Hydroflo Guttering Systems,Hydro Flow,kasjan@tpg.com.au,(02) 4572 5271,778-784 Richmond Road,BERKSHIRE PARK,NSW,2765,69 887 579 052,1,6,HYD,Company,Subcontractor,1,1,2,0,64,0
+37,Icoolm Air ,,sales@icoolm.com.au,(02) 9651 6222,3/276 New Line Rd ,DURAL,NSW,2158,61 854 960 294,1,0,ICM,Trading Trust,Subcontractor,1,1,1,0,63,539
+39,Ikoma PTY LTD,Ikoma,ikoma@live.com.au,0410 128 278,62 Roberta Street,GREYSTANES,NSW,2145,99 060 508 803,1,8,IKOMA,Company,Subcontractor,1,1,3,0,61,0
+41,Sydney Waste & Property Services PTY LTD,Sydney Waste & Property Services,sydwaste@gmail.com,0421 338 148,39 Mountview Avenue,BEVERLY HILLS,NSW,2209,97 158 827 000,1,6,SYDWASTE,Company,Subcontractor,1,1,10,0,59,0
+44,Kings Langley Electrical Services PTY LTD,Kings Langley Electrical,kles@bigpond.com.au,0418 624 819,105 Isaac Smith Parade,KINGS LANGLEY,NSW,2147,14 003 808 437,1,6,KLE,Company,Subcontractor,1,1,2,0,50,0
+47,Rnk Bricklayering,RNK Bricklaying,ronaldallison@bigpond.com,0417 486 809,4 Nineteenth Ave ,HOXTON PARK,NSW,2171,16 710 927 625,1,0,RNK,Partnership,Subcontractor,1,1,1,0,47,0
+50,Mark Bartley's Roofing PTY LTD,,caz@markbartleyroofing.com.au,0418 235 212,5 Carlowrie Crescent,EAST HILLS,NSW,2213,13 001 768 485,1,6,MBR,Company,Subcontractor,1,1,3,0,39,535
+51,Master Services PTY LTD,Master Services,jsalibatiling@hotmail.com,0419 427 455,2/7 Sixth Avenue,CONDELL PARK,NSW,2200,73 151 827 799,1,6,MASTER,Company,Subcontractor,1,1,1,0,54,0
+52,Mazz's Plumbing Services PTY LTD,Mazz's Plumbing,omazz68@gmail.com,0414 402 770,25 Ann Street,ENFIELD,NSW,2136,47 077 846 738,1,6,MAZ,Company,Subcontractor,1,1,1,0,36,0
+53,C F Ridder & M Ridder Ta Mervyn D Ridder,Mervyn Ridder,kazmer@live.com.au,(02) 9863 5073,113 Targo Road,PENDLE HILL,NSW,2145,56 232 234 091,1,8,MERVRID,Partnership,Subcontractor,1,1,3,0,35,0
+54,Mlc Property Solutions PTY LTD,MLC Property Services (Michael Catto),miccatto@gmail.com,0406 248 570,6 Whipbird Place,ERSKINE PARK,NSW,2759,39 601 092 835,1,7,MLCPROP,Company,Subcontractor,1,1,10,1,34,0
+86,CC-Dean Beringer,,dean@capecod.com.au,0403 183 628,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,50,0,0,0
+88,CC-David Wahba,,david@capecod.com.au,0428 444 179,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,50,0,0,0
+90,CC-Gary Klomp,,gary@capecod.com.au,0422 237 186,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,50,0,0,0
+55,Neil Higgins Bricklaying,Neil Higgins,neil.higgins64@outlook.com,0415 160 753,6c Royal Place,ST CLAIR,NSW,2759,83 378 459 414,1,4,HIGGINS,Sole Trader,Subcontractor,1,1,1,0,32,0
+56,New Coat Painting,NULL,patryan04@optusnet.com.au,0419 628 812,60 Semillon Crescent,ESCHOL PARK,NSW,2558,24 769 844 707,1,8,NEWCOAT,Partnership,Subcontractor,1,1,1,0,16,0
+57,Nrw Carpentry PTY LTD,NRW Carpentry,nrwcarpentry@hotmail.com,0402 481 084,72 Hamilton Street,RIVERSTONE,NSW,2765,88 131 429 993,1,6,NRWPL,Company,Subcontractor,1,1,1,0,29,0
+59,Faulks Cement Rendering PTY LTD,Faulks Cement Rendering,faulksrendering@hotmail.com,0407 073 668,7 Ocean Place,ILLAWONG,NSW,2570,52 164 357 920,1,6,PLF,Company,Subcontractor,1,1,3,0,20,554
+61,Palace Painting & Decorating PTY LTD,Palace Painting ,wfengfen@bigpond.net.au,0412 385 143,12 Thompson Avenue,NEWINGTON,NSW,2127,82 123 900 952,1,6,PALACE,Company,Subcontractor,1,1,2,0,17,531
+69,Scott Bartley Plumbing Services PTY LTD,Scott Bartley Plumbing,tanya@scottbartleyplumbing.com.au,0418 204 151,43 Kelvin Parade,PICNIC POINT,NSW,2213,51 063 725 940,1,6,SBP,Company,Subcontractor,1,1,3,0,98,0
+73,San Sing Enterprises PTY LTD T/a SSE Interiors,SSE Interiors,brian@sseinteriors.com.au,0416 067 895,PO BOX 991,RYDE,NSW,1680,63 068 868 397,1,6,SSEINTER,Company,Subcontractor,1,1,1,0,134,0
+75,Sun Tiling PTY LTD,Sun Tiling,john.cho@live.com.au,0404 049 321,15 Mawson Crescent,ERMINGTON,NSW,2113,89 137 655 237,1,6,SUNTIL,Company,Subcontractor,1,1,1,0,103,0
+78,Tms High Pressure Water Cleaning,TMS High Pressure Water,pktrampe@gmail.com,(02) 9872 3742,45 Larra Crescent,NORTH ROCKS,NSW,2151,49 696 334 619,1,4,TMS,Partnership,Subcontractor,1,1,1,0,104,0
+104,Test Company,,jo@bowlhead.com.au,0415 580 234,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,1,0,237,204
+105,CC-Andrew Cashmore,,andrew@capecod.com.au,0411 600 009,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,1,0,0,0
+79,S & T.K Catto T/A TC Building Removals,TC Building (Todd Catto),todd2008@live.com.au,0410 883 530,12 Gardiner Crescent,FAIRFIELD WEST,NSW,2165,21 891 138 084,1,7,TCBR,Partnership,Subcontractor,1,1,10,1,105,0
+80,L B W Technologies PTY LTD T/as The Wyldmen Of Waterproofing,Wyldmen of Waterproofing,lindsaywyld@bigpond.com,0413 733 633,PO BOX 1704,GREEN VALLEY,NSW,2168,23 112 264 669,1,6,TWW,Company,Subcontractor,1,1,2,0,107,0
+96,Jonspin Building Services PTY LTD,Jonspin Building Services,jonspin@bigpond.com.au,0417 064 161,6 Premier Drive,ALBION PARK,NSW,2527,90 083 226 028,1,6,JSS,Company,Contractors,2,1,1,0,408,0
+100,Palmers Glass,,tina@palmersglass.com.au,(02) 9808 1344,44 Buffalo Road,GLADESVILLE,NSW,2111,68 054 148 560,1,0,PG,Company,,4,1,2,0,253,0
+101,Sep Civil Excavation & Plant Hire PTY LTD,Sep Civil  Excavation & Plant Hire,john@sepcivil.com.au,0458 000 058,121 Vardys Road,SEVEN HILL,NSW,2147,23 136 755 489,1,4,SEPCIV,Company,Subcontractor,1,1,3,0,250,0
+103,Wizard Home Improvements PTY LTD,Wizard Home Improvements,wizardhomeimprovements@live.com,(02) 9833 2006,Shop 2 19 Stoddard Road,PROSPECT,NSW,2148,44 003 309 153,1,1,WIZARD,Company,Subcontractor,1,1,1,0,259,0
+106,Corfen,Corfen,p.mspiteri@gmail.com,0409 725 472,26 Colonial Drive,BLIGH PARK,NSW,2756,66 731 467 365,1,4,CORFEN,Partnership,Subcontractor,1,1,1,0,249,0
+108,Next Point Electrical PTY LTD,Next Point Electrical,admin@nextpointelectrical.com.au,0409 625 450,28 Ashley Avenue,WEST PENNANT HILLS,NSW,2125,78 609 498 035,1,6,NEXTPOIN,Company,Subcontractor,1,1,1,0,273,0
+109,Pegasus Roofing PTY LTD,NULL,sales@pegasusroofing.net.au,0400 394 517,PO BOX 3076,FREEMANS REACH,NSW,2756,91 010 606 201,1,6,PEGASUS,Company,Subcontractor,1,1,2,0,272,0
+111,Lay Drafting And Construction,,laydnc@gmail.com,0404 864 914,4 Zerafa Place,QUAKERS HILL,NSW,2763,71 985 171 808,1,8,LAYDC,Partnership,Subcontractor,1,1,1,0,279,0
+113,Onnix Construction PTY LTD,Onnix Constructions,info@onnix.com.au,0418 460 024,PO BOX 7146,MOUNT LEWIS,NSW,2190,93 125 459 074,1,6,ONNIX,Company,Subcontractor,1,1,1,0,292,292
+114,Pro-gyp Solutions Interior Linings PTY LTD,Pro-Gyp Solutions,admin@pro-gypsolutions.com.au,0406 240 156,PO BOX 8145,GLENMORE PARK,NSW,2746,63 606 600 506,1,6,PROGY,Company,Subcontractor,1,1,1,0,298,0
+118,Roofworx (NSW) PTY LTD,Roofworx,info@roofworxnsw.com.au,(02) 4623 8042,PO BOX 4159,BRADBURY,NSW,2560,19 100 790 127,1,6,ROOFWORX,Company,Subcontractor,1,1,1,0,324,0
+124,Cc-whs,,,,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,10,0,0,0
+119,D M Waters Construction PTY LTD,DM Waters,dan-wat@hotmail.com,0433 474 822,45 Oleander Crescent,RIVERSTONE,NSW,2765,65 604 319 182,1,6,DMWATERS,Company,Subcontractor,1,1,1,0,334,0
+120,Solid Foundations Carpentry PTY LTD,Josh Solid Foundations,solidfoundations@bigpond.com,0415 375 881,25 Walseley Crescent,GLEDSWOOD HILLS,NSW,2557,78 612 396 193,1,6,SOLIDFO,Partnership,Subcontractor,1,1,1,0,100,0
+121,Solid Foundations Carpentry PTY LTD,Liam Solid Foundation,solidfoundations@bigpond.com,0417 676 776,25 Walseley Crescent,GLEDSWOOD HILLS,NSW,2557,78 612 396 193,1,6,SOLIDFO,Company,Subcontractor,1,1,1,0,101,0
+122,Allcon Developments,Balustrade Specialist NSW,balustradespecialistnsw@gmail.com,0403 144 144,61 Berith Road,GREYSTANES,NSW,2145,83 141 849 390,0,6,ALLCO,Company,Subcontractor,1,1,1,0,340,0
+129,TA Damp Busters,,lectrossydney@gmail.com,0418 522 622,59 Liverpool Street,BURWOOD,NSW,2134,15 003 781 280,1,0,DAMP,Company,Subcontractor,1,1,1,0,382,0
+125,All Time Wall And Floor Tiling,All Time Floor & Wall Tiling,alltime.tiles.stone@gmail.com,0407 285 064,35 Dans Avenue,COOGEE,NSW,2034,42 588 492 581,1,6,ALLTIME,Sole Trader,Subcontractor,1,1,1,0,374,0
+128,El-works PTY LTD,El-Works Pty Ltd - Shane,elworksptyltd@gmail.com,0424 387 755,51 Horsfield Road,HORSFIELD BAY,NSW,2256,18 613 381 203,1,8,ELWORKS,Company,Subcontractor,1,1,1,0,377,0
+134,CC-Aaron Graham,,aaron@capecod.com.au,0401 435 003,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,1,0,0,0
+132,G.S.A Roofing,GSA Roofing,gsaroofing@gmail.com,0402 312 303,2a Still Avenue,CRANEBROOK,NSW,2749,32 237 740 509,1,4,GSAROOF,Partnership,Subcontractor,1,1,1,0,425,0
+135,Stegbar,,dragotomasich@stegbar.com.au,0418 203 870,84-98 Hume Highway,LANSVALE,NSW,2166,62 087 012 226,1,0,STE,Company,,5,1,4,0,584,0
+136,Trend,NULL,mark.brown@trendwindows.com.au,0419 254 486,44-52 Mandoon Rd,GIRAWEEN,NSW,2145,67 007 037 756,1,5,TWW,Company,Service Provider,5,1,4,0,585,0
+138,Better Living Solutions,Ventis,info@betterlivingsolutions.com.au,1300 856 381,281 Great Western Hwy,WARRIMOO,NSW,2774,73 160 356 150,0,0,DAMP,Company,Subcontractor,5,1,2,0,577,0
+137,Hunters Hill Window Tinting Services,,admin@huntershillwindowtinting.com,0418 464 185,36 Betty Hendry Rd,NORTH RYDE,NSW,2113,31 075 014 809,1,0,HWT,Company,,1,1,3,0,581,0
+140,All Sydney Side Lines PTY LTD,All Sydney Side Lines,sydneysidelines@bigpond.com,0408 612 184,11 Edward Street,KINGSGROVE,NSW,2208,91 091 893 060,1,4,ALLSYD,Company,Subcontractor,1,1,1,0,529,0
+141,Icon Roofing PTY LTD,,info@iconroof.com.au,0428 204 046,39 Yurong Street,DARLINGHURST,NSW,2010,79 601 950 805,1,6,ICON,Company,Subcontractor,1,1,1,0,550,0
+142,Color Right PTY LTD,,miccolorright@gmail.com,0432 427 732,20 Third Avenue,CAMPSIE,NSW,2194,22 604 722 321,1,0,COLORRI,Company,,1,1,1,0,551,0
+143,Byrnseys Concrete Pumping,,byrnseysconcretepumping@gmail.com,0413 458 103,10 Holmes Drive,CUMBERLAND REACH,NSW,2756,98 093 345 469,1,0,BCP,Company,Subcontractor,1,1,1,0,553,0
+144,Kneebone & Beretta Consulting PTY LTD,Kneebone & Beretta Consulting,debbie@kbgconsulting.com,(02) 8850 0799,Unit 18/7 Anella Avenue,CASTLE HILL,NSW,2154,43 734 246 264,1,0,KBC,Company,Service Provider,2,0,1,0,627,0
+145,E2 Civil & Structural Design (Aust) PTY LTD,E2 Civil & Structural Design Australia,info@e2design.com.au,(02) 8594 6111,PO Box 608,WAVERLEY,NSW,2024,11 615 893 073,1,0,ETWOAUST,Company,Service Provider,2,1,1,0,579,0
+146,CSR Bradford Building Products,,csrbmar@csr.com.au,(02) 9765 7000,GPO Box 9983,SYDNEY,NSW,2001,55 008 631 356,1,0,CSR,Company,,5,1,1,0,578,0
+147,NSW Insulation,,accountsnsw@insulfix.com.au,(02) 9894 9100,"Unit B, 2 Hudson Avenue",CASTLE HILL,NSW,2154,44 395 074 083,1,0,NSWI,Company,,4,1,1,0,582,0
+148,Sydney Safety Training,,bookings@sydneysafety.com.au,(02) 9892 3370,395 Guildford Road West ,GUILDFORD,NSW,2161,12 158 377 532,1,0,,Company,,3,1,1,0,564,0
+149,Friction Concrete Pumping PTY LTD,Friction Concrete Pumping ,luke@frictionconcrete.com.au,0410 652 402,PO Box 4166,PITT TOWN,NSW,2756,35 613 200 249,1,0,FCP,Company,Subcontractor,2,1,1,0,580,0
+150,Line Pro Concrete Pumping PTY LTD T/as Attitude Pumping,Line Pro Concrete Pumping,,(02) 4572 3041,PO Box 1228,WINDSOR,NSW,2756,81 150 245 382,1,0,LINEPRO,Company,Subcontractor,2,1,1,0,0,0
+151,Royal Concrete Pumping,NULL,royalconcretepumping@gmail.com,0432 487 259,22 Conlan Street,BLIGH PARK,NSW,2756,11 266 157 904,1,4,ROYALCP,Sole Trader,Subcontractor,2,1,1,0,583,0
+152,Wesley Baaij,NULL,wesley@baaij.nl,0484 847 396,27 Paul Street,BONDI JUNCTION,NSW,2022,69 766 297 519,0,0,WESLEY,Sole Trader,Subcontractor,1,1,1,0,566,0
+153,Abacus Flooring,,info@abacusflooring.com.au,(02) 8425 8999,Suite 11 Level 1 410 Pacific Hwy,ARTARMON,NSW,2064,71 057 655 517,1,4,ABACUS,Company,Subcontractor,1,1,0,0,610,0
+154,Fullers PTY LTD T/a All About Crane,,allaboutcranes@bigpond.com,0418 672 309,76 Peel Road,BAULKHAM HILLS,NSW,2153,26 201 948 402,1,4,ALLABOUT,Company,Subcontractor,2,1,0,0,624,0
+155,Artek Design & Drafting Services,,tabone3@bigpond.com,0417 436 712,229 Avoca Drive,GREEN POINT,NSW,2251,20 057 903 780,1,1,ARTEK,Sole Trader,Consultants,3,1,0,0,614,0
+157,M J Beesley Drafting PTY LTD,,mjbeesley74@gmail.com,0425 257 618,11 Dickens Street,WINSTON HILLS,NSW,2153,32 077 422 523,1,4,BEESLEY,Company,Contractors,3,1,0,0,631,0
+158,Beyond Architechniques PTY LTD,,beyondarchitechniques@gmail.com,0400 554 402,PO BOX 5161,CHULLORA,NSW,2190,17 147 635 318,1,1,BEYOND,Company,Contractors,3,1,0,0,615,0
+159,Bluemist Designs PTY LTD,,designs@bluemist.net.au,0414 233 640,5 Rose Street,CROYDON PARK,NSW,2133,96 104 864 459,1,1,BLUEMIST,Company,Consultants,3,1,0,0,0,0
+160,Carsoli Holdings PTY LTD,,t.proia@bigpond.net.au,(02) 9477 2406,27 Lawson Parade,ST IVES,NSW,2075,96 002 812 473,1,1,CARSOLI,Company,Contractors,3,1,0,0,617,0
+161,Alrail P/L TA Castle Railing & Gates,,sales@castlerailing.com.au,(02) 4964 9688,24 Laverick Avenue,TOMAGO,NSW,2022,17 106 211 885,1,1,CASTLE,Company,Subcontractor,1,1,0,0,612,0
+163,Design N Draft PTY LTD,,design.n.draft@optusnet.com.au,0421 335 276,4 Russell Avenue,WINSTON HILLS,NSW,2153,41 105 331 011,1,1,DESIN,Company,Contractors,3,1,0,0,619,0
+164,D & S Carpentry Contracting,,daneschnoor@hotmail.com,0410 627 673,28 Landy Avenue,PENRITH,NSW,2750,79 440 722 044,1,4,DSCARP,Sole Trader,Subcontractor,1,1,0,0,0,0
+165,Eastern Flow Concrete Pumping PTY LTD,,sveda1@logitel.net.au,0414 567 641,PO BOX 1353,DEE WHY,NSW,2099,65 126 200 833,1,4,EASTERN,Company,Subcontractor,2,1,0,0,620,0
+166,Elementree Homes PTY LTD T/as Elementree Drafting Services,,accounts@elementreedrafting.com.au,0411 849 322,PO BOX 14,TEMORA,NSW,2666,52 120 952 801,1,6,ELEMENT,Company,Contractors,3,1,0,0,621,0
+167,Emdraft PTY LTD,,emdraftptyltd@bigpond.com,0418 966 699,PO BOX 383,KINGSGROVE,NSW,1480,98 079 368 568,1,1,EMDRAFT,Company,Contractors,3,1,0,0,622,0
+170,Four Points Developments P/L,,terry@fourpoints.com.au,0414 255 365,16 Timbertop Drive,UMINA BEACH,NSW,2257,92 001 350 330,1,1,FOURP,Company,Consultants,3,1,0,0,623,0
+171,Andrew Rothery T/A I Build P/L,,ibuild99@outlook.com,0413 803 875,13 Neville Street,BLACKTOWN,NSW,2148,87 084 053 403,1,4,IBUILD,Company,Consultants,3,1,0,0,613,0
+172,Indrele Drafting PTY LTD,,archidesign@bigpond.com,0434 886 858,12 Hart Street,SMITHFIELD,NSW,2164,52 001 578 294,1,1,INDRELE,Company,Contractors,3,1,0,0,625,0
+173,Jims Building Inspections (Five Dock),,fivedock@jimsbuildinginspections.com.au,0451 308 020,15/12 Morgan Street,BOTANY,NSW,2019,99 608 708 363,1,4,JIMBUILD,Company,Contractors,2,1,0,0,626,0
+175,Allen & Laverne Enterprises P/L,,rallen2000@hotmail.com,0438 605 580,27 Carmen Street,ST IVES,NSW,2075,73 105 378 274,1,6,LAVERN,Company,Consultants,3,1,0,0,611,0
+177,Levi Petrusma,,levi@capecod.com.au,0432 556 320,4 Adella Avenue,BLACKTOWN,NSW,2148,53 525 603 744,0,8,LPETRUS,Sole Trader,Contractors,3,1,0,0,565,0
+178,Lulbrunt No 17 PTY Limited,,lesallbranch@hotmail.com,0419 282 577,12/22 Soldiers Point Road,SOLDIERS POINT,NSW,2317,30 001 876 222,1,1,LULBRUNT,Company,Contractors,3,1,0,0,630,0
+179,Meeta Goel,,meeta1983@yahoo.com,0410 338 778,18 Francis Street,CASTLE HILL,NSW,2154,53 673 029 489,0,1,MEETA,Sole Trader,Consultants,3,1,0,0,632,0
+180,Michael Richard Paul,,mrpaul043@hotmail.com,0406 546 706,3/11 Mitcham Street,GAYTHORNE,QLD,4051,20 279 374 989,0,4,MRPAUL,Sole Trader,Contractors,3,1,0,0,634,0
+181,Newline Concrete Pumping,,newlineconcretepumping@gmail.com,0438 987 032,PO BOX 3188,FREEMANS REACH,NSW,2756,38 614 777 883,1,4,NCP,Company,Subcontractor,2,1,0,0,635,0
+182,Oak Design PTY LTD,,oakdes@bigpond.com.au,0425 222 627,Unit 401 45 Bowman Street,PYRMONT,NSW,2009,94 066 083 654,1,6,OAKDES,Company,Consultants,3,1,0,0,636,0
+183,Rocco Raso T/a Plan Ahead Designs,,roc@planahead.com.au,0414 387 500,PO BOX 464,BONDI JUNCTION,NSW,1355,89 387 745 475,1,1,PLANAHEA,Sole Trader,Consultants,3,1,0,0,639,0
+184,Michael A Richards ,,arkitec@exemail.com,0404 911 349,1/27 Edward Street,HASTINGS,VIC,3915,35 124 424 055,1,1,RICHARDS,Sole Trader,Consultants,3,1,0,0,633,0
+187,Sean Beck,,seanbeck0408@outlook.com,0409 666 256,54 Correlis Street,HARRINGTON PARK,NSW,2756,74 369 040 067,1,1,SEANBECK,Sole Trader,Contractors,3,1,0,0,641,0
+188,Sharper Services PTY LTD,,steve.harper@optusnet.com.au,0412 073 613,PO BOX 419,SAWTELL,NSW,2452,79 102 561 099,1,1,SHARPER,Company,Contractors,3,1,0,0,642,0
+189,Shrek Concrete Pumping PTY LTD,,shreks_concrete_pumping@hotmail.com,0413 458 103,PO BOX 4255,PITT TOWN,NSW,2756,54 130 250 341,1,4,SHREK,Company,Subcontractor,2,1,0,0,0,0
+190,Scott B Mcdougall & Associates PTY LTD,,sbmcdougall@iinet.net.au,0411 589 666,3 Alex Place,BAULKHAM HILLS,NSW,2153,91 058 815 964,1,1,SMCDOUG,Company,Consultants,3,1,0,0,640,0
+191,Paul Walsh & Co PTY LTD,,walshco@bigpond.com,0409 988 444,11/132 Junction Lane,WAHROONGA,NSW,2076,34 072 468 636,1,1,WALSH,Company,Consultants,3,1,0,0,638,0
+192,Warm Floors PTY LTD,,sales@comfortheat.com.au,(02) 9979 8600,PO BOX 220,MONA VALE,NSW,2103,26 003 886 262,1,4,WARMFL,Company,Subcontractor,4,1,0,0,644,0
+193,Cc-jaimie Smith,,Jaimie@capecod.com.au,0401 289 972,"4th Floor, 410 Church St",PARRAMATTA,NSW,2151,54 000 605 407,0,0,,,,0,1,1,0,0,0
+194,Jones & Jones Building & Constructions,NULL,jones.jonesbc@gmail.com,0433 490 293,30 Diamond Crescent,BONNYRIGG,NSW,2177,69 472 861 163,1,0,JONES,Sole Trader,Subcontractor,1,1,1,0,600,0
+195,Proseal Services PTY LTD,NULL,prosealnsw@gmail.com,0434 621 751,28 Jeffrey Avenue,GREYSTANES,NSW,2145,22 160 282 664,1,0,PROSEAL,Company,Subcontractor,1,1,1,1,609,0
+196,Norwest Structural PTY LTD,NULL,andrew@norweststructural.com,0419 439 939,59 Churchill Drive,WINSTON HILLS,NSW,2153,56 155 860 601,1,0,NORWSTRU,Company,Subcontractor,1,1,1,0,606,0

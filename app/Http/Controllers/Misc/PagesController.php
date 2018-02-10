@@ -341,56 +341,40 @@ class PagesController extends Controller {
     {
         echo "Importing Companies<br><br>";
         $row = 0;
-        if (($handle = fopen(public_path("subcontractor2.csv"), "r")) !== false) {
+        if (($handle = fopen(public_path("company.csv"), "r")) !== false) {
             while (($data = fgetcsv($handle, 5000, ",")) !== false) {
                 $row ++;
                 if ($row == 1) continue;
                 $num = count($data);
 
-                $company = \App\Models\Company\Company::find($data[3]);
-                if ($company) {
-                    $company->name = $data[0];
-                    $company->category = $data[1];
-                    $company->creditor_code = $data[2];
-                    $company->nickname = $data[4];
-                    /*
-                    //$company->trade = $data[2];
-                    $company->business_entity = $data[6];
-                    $company->sub_group = $data[7];
-                    $company->abn = $data[8];
-                    $addy = explode(',', $data[9]);
-                    if ($data[9] && count($addy) == 4)
-                        list($company->address, $company->suburb, $company->state, $company->postcode) = explode(',', $data[9]);
-                    elseif (($data[9] && count($addy) > 1))
-                        echo "<br>***" . count($addy) . '***';
-                    $company->email = $data[10];
-                    $company->gst = ($data[17] == 'YES') ? 1 : 0;
-                    $company->payroll_tax = $data[23][0];
-                    //$company->wc_category = $data[20];
-                    //$company->pub_name = $data[26];
-                    //$company->pub_no = $data[27];
-                    //$company->pub_exp = $data[28];
-                    //$company->wc_name = $data[30];
-                    //$company->wc_no = $data[31];
-                    //$company->wc_exp = $data[32];
-                    $company->licence_no = ($data[33] && $data[33] != 'N/A') ? $data[33] : '';
-                    $company->licence_expiry = null;
-                    if ($data[34] && preg_match('/\d+\/\d+\/\d+/', $data[34]))
-                        $company->licence_expiry = Carbon::createFromFormat('d/m/Y H:i', $data[34] . '00:00');
+                $company = \App\Models\Company\Company::find($data[0]);
+                if ($company && !($company->id == 120 || $company->id == 121)) {
+                    $company->name = $data[1];
+                    $company->nickname = $data[2];
+                    $company->email = $data[3];
+                    $company->phone = $data[4];
+                    $company->address = $data[5];
+                    $company->suburb = $data[6];
+                    $company->state = $data[7];
+                    $company->postcode = $data[8];
+                    $company->abn = $data[9];
+                    $company->gst = $data[10];
+                    $company->payroll_tax = $data[11];
+                    $company->creditor_code = $data[12];
+                    $company->business_entity = $data[13];
+                    $company->sub_group = $data[14];
+                    $company->category = $data[15];
+                    $company->licence_required = $data[16];
+                    $company->maxjobs = $data[17];
+                    $company->transient = $data[18];
+                    $company->primary_user = $data[19];
+                    $company->secondary_user = $data[20];
 
-                    if ($company->status) {
-                        echo '<br><b>' . $company->name . '</b> ';
-                        if ($company->licence_expiry)
-                            echo $company->licence_expiry->format('d-m-Y');
-                        echo '<br>';
-                    } else {
-                        echo '<br><b>ACHIVED - ' . $company->name . '</b>';
-                        if ($company->licence_expiry)
-                            echo $company->licence_expiry->format('d-m-Y') . '-' . $data[34] . $data[33];
-                        echo '<br>';
-                    }
-                    */
-                    echo "$company->name - $company->nickname.<br>";
+                    $company->approved_by = 424;
+                    $company->approved_at = Carbon::now();
+                    echo "<h1>$company->name</h1>";
+                    //dd($company);
+                    //print_r($company);
                     $company->save();
 
                     /*for ($c = 0; $c < $num; $c ++) {
