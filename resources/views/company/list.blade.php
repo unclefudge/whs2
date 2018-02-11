@@ -2,7 +2,7 @@
 
 @section('pagetitle')
     <div class="page-title">
-        <h1><i class="fa fa-industry"></i> Company Management</h1>
+        <h1><i class="fa fa-users"></i> Company Management</h1>
     </div>
 @stop
 

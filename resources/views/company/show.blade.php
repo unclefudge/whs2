@@ -1,14 +1,15 @@
+@inject('ozstates', 'App\Http\Utilities\Ozstates')
 @inject('licenceTypes', 'App\Http\Utilities\LicenceTypes')
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
+@inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
+@inject('companyEntityTypes', 'App\Http\Utilities\CompanyEntityTypes')
 @extends('layout')
 
-{{--
 @section('pagetitle')
     <div class="page-title">
         <h1><i class="fa fa-users"></i> Company Profile</h1>
     </div>
 @stop
---}}
 
 @if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
@@ -61,617 +62,1041 @@
                 <button class="btn dark btn-outline btn-xs" href="javascript:;"> Completed Signup</button>
             </div>
         @endif
+
         <div class="row">
             <div class="col-md-12">
-                <div class="portlet light bordered">
+                <div class="member-bar">
+                    <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
+                    <i class="icon-users-member-bar"></i>
+                    <div class="member-name">
+                        <div class="full-name-wrap">
+                            <a href="/reseller/member/member_account_details/?member_id=8013759" class="status-update">{{ $company->name }}</a>
+                        </div>
+                        <span class="member-number">Company ID #{{ $company->id }}</span>
+                        <span class="member-split">&nbsp;|&nbsp;</span>
+                        <span class="member-number">Active</span>
+                        <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
+
+                    </div>
+                    @if (!$company->compliantDocs())
+                        <span class='label label-danger'>Non Compliant</span>
+                    @endif
+                    {{--
+        <ul class="member-bar-menu">
+            <li class="member-bar-item active"><i class="icon-customer"></i><a class="member-bar-link" href="/reseller/member/member_account_details/?member_id=8013759" title="Profile">PROFILE</a>
+            </li>
+            <li class="member-bar-item "><i class="icon-domains"></i><a class="member-bar-link" href="/reseller/member/member_manage_domains/?member_id=8013759" title="Domains">DOMAINS</a>
+            </li>
+            <li class="member-bar-item "><i class="icon-hosting"></i><a class="member-bar-link" href="/reseller/member/member_manage_hosting/?member_id=8013759&product_type=hosting"
+                                                                        title="Hosting">HOSTING</a></li>
+            <li class="member-bar-item "><i class="icon-products"></i><a class="member-bar-link" href="/reseller/member/member_manage_products/?member_id=8013759"
+                                                                         title="Products">PRODUCTS</a></li>
+            <li class="member-bar-item "><i class="icon-login"></i><a class="member-bar-link"
+                                                                      href="http://fudge.secureapi.com.au/members/member/member_login/?login_as=WiZ%2BqLpDc3enUYT%2BAATcVFL0vnmvAEl6ePHU%2FfgDwgJdA3Wdf05URqzZQZo9yMeIe899vfnaBkMGkZT%2F8sKpTFtLj%2F1I%2FB%2B71sIJjm%2B1jxSrC2I5K31%2FK1ylS2oSnLvbsf0pxUC2xZbjr7VhDuDwxAGOskD7Q%2FYzNhr8Wyk9Mxplu3K0SuvlJGfZtvJRITOCidH6DUCSVR3qyrg%2BNwGBQ1OQAkVfv6w5EmBNYh0Mc39MbqfEXio%2BYHsbpu8YByyrUZUVNDdn1cc%3D"
+                                                                      target="_blank" title="Login as Customer">LOG IN</a></li>
+        </ul>
+        --}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {{-- Company Details --}}
+            <div class="col-lg-6 col-xs-12 col-sm-12">
+                {{-- Show Company Details --}}
+                <div class="portlet light" id="show_company">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-users "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Company Profile</span>
-                            <span class="caption-helper"> ID: {{ $company->id }}</span>
+                            <span class="caption-subject font-dark bold uppercase">Company Details</span>
+                            @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
+                                <span class="label label-warning">Pending approval</span>
+                            @endif
                         </div>
                         <div class="actions">
                             @if (Auth::user()->allowed2('sig.company', $company) && !$company->approved_by)
-                                <a href="/company/{{ $company->id }}/approve" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve Company & Business Details</a>
+                                <a href="/company/{{ $company->id }}/approve" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve</a>
                             @endif
-                            <div class="btn-group">
-                                <a class="btn btn-circle green btn-outline btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> <i
-                                            class="fa fa-pencil"></i> Edit
-                                    <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    @if(Auth::user()->allowed2('edit.company', $company))
-                                        <li><a href="/company/{{ $company->id }}/edit">Company Details</a></li>
-                                        <li><a href="/company/{{ $company->id }}/edit">Business Details</a></li>
-                                        <li><a href="/company/{{ $company->id }}/edit">WHS Compliance</a></li>
-                                    @endif
-                                    @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-                                        <li><a href="/company/{{ $company->id }}/edit/trade">Trade @if(Auth::user()->company->addon('planner'))& Planner @endif Details</a></li>
-                                    @endif
-                                </ul>
+                            <a href="#" class="btn btn-circle green btn-outline btn-sm" id="update_company">Edit</a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-3">Status:</div>
+                            <div class="col-xs-9">{!! $company->status_text !!}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Name:</div>
+                            <div class="col-xs-9">{{ $company->name }}</div>
+                        </div>
+                        <hr class="field-hr">
+                        @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                            <div class="row">
+                                <div class="col-md-3">Preferred Name:</div>
+                                <div class="col-md-9">@if($company->nickname) {{ $company->nickname }} @else - @endif</div>
                             </div>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
+                            <hr class="field-hr">
+                        @endif
+                        <div class="row">
+                            <div class="col-md-3">Phone:</div>
+                            <div class="col-xs-9">{!! ($company->phone) ? "<a href='tel:'".preg_replace("/[^0-9]/", "", $company->phone)."> $company->phone </a>" : '-' !!}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Email:</div>
+                            <div class="col-xs-9">{!! ($company->email) ? "<a href='mailto:$company->email'> $company->email</a>" : '-' !!}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Address:</div>
+                            <div class="col-xs-9">{!! $company->address_formatted !!}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Primary Contact:</div>
+                            <div class="col-xs-9">@if($company->primary_user)<a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a>@else - @endif</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Secondary Contact:</div>
+                            <div class="col-xs-9">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else - @endif
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                    </div>
+                </div>
+
+                {{-- Edit Company Details --}}
+                <div class="portlet light" style="display: none;" id="edit_company">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span class="caption-subject font-dark bold uppercase">Company Details</span>
+                            @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
+                                <span class="label label-warning">Pending approval</span>
+                            @endif
                         </div>
                     </div>
                     <div class="portlet-body form">
+                        {!! Form::model($company, ['method' => 'PATCH', 'action' => ['Company\CompanyController@update', $company->id]]) !!}
+                        {{-- Status --}}
                         <div class="row">
-                            <div class="col-md-12">
-                                <!-- Inactive Company -->
-                                @if(!$company->status)
-                                    <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive</h3>
-                                    @else<h3 class="font-green uppercase pull-right" style="margin:0 0 10px;">Active</h3>
-                                @endif
-                                <h1 class="sbold hidden-sm hidden-xs" style="{!! ($company->nickname) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $company->name }}
-                                    @if (Auth::user()->company_id == $company->reportsTo()->id)
-                                        <small class='font-grey-cascade'>{{ $company->nickname }}</small>
-                                    @endif
-                                </h1>
-                                <h3 class="sbold visible-sm visible-xs">{{ $company->name }}
-                                    <small class='font-grey-cascade' style="margin:0px"> {{ $company->nickname }}</small>
-                                </h3>
-                                @if (!$company->compliantDocs() )
-                                    <span class='label label-danger'>Non Compliant</span>
-                                @endif
-
-                                @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
-                                    {{-- Company details --}}
-                                    <h3 class="font-green form-section">Company Details
-                                        @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                            <span class="label label-warning">Pending approval</span>
-                                        @endif
-                                        @if(Auth::user()->allowed2('edit.company', $company))
-                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                        @endif
-                                    </h3>
-
-                                    {{-- Contact Details --}}
-                                    <div class="row">
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Phone</b></div>
-                                            <div class="col-xs-8">@if ($company->phone)<a href="tel:{{ preg_replace("/[^0-9]/", "", $company->phone) }}"> {{ $company->phone }} </a>@else - @endif
-                                            </div>
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Email</b></div>
-                                            <div class="col-xs-8">@if ($company->email)<a href="mailto:{{ $company->email }}"> {{ $company->email }} </a>@else - @endif</div>
-                                            <div class="col-xs-4" style="padding-left: 0px"><b>Address</b></div>
-                                            <div class="col-xs-8">
-                                                @if($company->address)
-                                                    {{ $company->address }}&nbsp;
-                                                @endif
-                                                {{ $company->SuburbStatePostcode }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Primary Contact</b></div>
-                                                <div class="col-xs-8">@if($company->primary_user)<a
-                                                            href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a>@else - @endif</div>
-                                            </div>
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Secondary Contact</b></div>
-                                                <div class="col-xs-8">@if($company->secondary_user)<a
-                                                            href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else - @endif</div>
-                                            </div>
-                                            @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Preferred Name</b></div>
-                                                    <div class="col-xs-8">@if($company->nickname) @else - @endif</div>
-                                                </div>
-                                            @endif
-                                        </div>
+                            @if(Auth::user()->allowed2('del.company', $company))
+                                <div class="form-group {!! fieldHasError('status', $errors) !!}">
+                                    {!! Form::label('status', 'Status:', ['class' => 'col-md-3 control-label']) !!}
+                                    <div class="col-md-9">
+                                        {!! Form::select('status', ['1' => 'Active', '0' => 'Inactive'], null, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('status', $errors) !!}
                                     </div>
-
-                                    {{-- Busines Details --}}
-                                    <h3 class="font-green form-section">Business Details
-                                        @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                            <span class="label label-warning">Pending approval</span>
-                                        @endif
-                                        @if(Auth::user()->allowed2('edit.company', $company))
-                                            <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
-                                        @endif
-                                    </h3>
-                                    <div class="row">
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Business Entity</b></div>
-                                                <div class="col-xs-8">{{ ($company->business_entity) ? $company->business_entity : '-' }}</div>
-                                            </div>
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>ABN</b></div>
-                                                <div class="col-xs-8">{{ ($company->abn) ? $company->abn : '-' }}</div>
-                                            </div>
-                                            @if (Auth::user()->allowed2('view.company.accounting', $company))
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Subgroup</b></div>
-                                                    <div class="col-xs-8">{{ ($company->sub_group) ? $company->sub_group : '-' }}</div>
-                                                </div>
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Category</b></div>
-                                                    <div class="col-xs-8">{{ ($company->category) ? $company->category : '-' }}</div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>GST Registered</b></div>
-                                                <div class="col-xs-8">@if($company->gst) Yes @elseif($company->gst == '0') No @else - @endif</div>
-                                            </div>
-                                            @if (Auth::user()->allowed2('view.company.accounting', $company))
-
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Payroll Tax</b></div>
-                                                    <div class="col-xs-8">
-                                                        @if($company->payroll_tax)
-                                                            {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }}
-                                                        @else
-                                                            -
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Creditor Code</b></div>
-                                                    <div class="col-xs-8">{{ $company->creditor_code }} </div>
-                                                </div>
-                                            @endif
-                                        </div>
+                                </div>
+                            @else
+                                <div class="col-md-3">Status:</div>
+                                <div class="col-xs-9">{!! $company->status_text !!}</div>
+                            @endif
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Name --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('name', $errors) !!}">
+                                {!! Form::label('name', 'Name:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('name', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Preferred Name --}}
+                        @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                            <div class="row">
+                                <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
+                                    {!! Form::label('nickname', 'Preferred Name:', ['class' => 'col-md-3 control-label']) !!}
+                                    <div class="col-md-9">
+                                        {!! Form::text('nickname', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('nickname', $errors) !!}
                                     </div>
-                                @endif
+                                </div>
+                            </div>
+                            <hr class="field-hr">
+                        @endif
+                        {{-- Phone --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('phone', $errors) !!}">
+                                {!! Form::label('phone', 'Phone:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('phone', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('phone', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Email --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('email', $errors) !!}">
+                                {!! Form::label('email', 'Email:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('email', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('email', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Adddress --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('address', $errors) !!}">
+                                {!! Form::label('address', 'Address:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('address', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('address', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Suburb --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('suburb', $errors) !!}">
+                                {!! Form::label('suburb', 'Suburb:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('suburb', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('suburb', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- State --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('state', $errors) !!}">
+                                {!! Form::label('state', 'State:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::select('state', $ozstates::all(), 'NSW', ['class' => 'form-control bs-select', 'required']) !!}
+                                    {!! fieldErrorMessage('state', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Postcode --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('postcode', $errors) !!}">
+                                {!! Form::label('postcode', 'Postcode:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::text('postcode', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! fieldErrorMessage('postcode', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Primary Contact --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('primary_user', $errors) !!}">
+                                {!! Form::label('primary_user', 'Primary Contact:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::select('primary_user', $company->usersSelect('prompt'),null, ['class' => 'form-control bs-select', 'required']) !!}
+                                    {!! fieldErrorMessage('primary_user', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="field-hr">
+                        {{-- Seconday Contact --}}
+                        <div class="row">
+                            <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
+                                {!! Form::label('secondary_user', 'Secondary Contact:', ['class' => 'col-md-3 control-label']) !!}
+                                <div class="col-md-9">
+                                    {!! Form::select('secondary_user',  array_merge(['0' => 'None'], $company->usersSelect()), null, ['class' => 'form-control bs-select', 'required']) !!}
+                                    {!! fieldErrorMessage('secondary_user', $errors) !!}
+                                </div>
+                            </div>
+                        </div>
 
-                                {{-- Insurance & Contracts --}}
-                                @if(Auth::user()->allowed2('show.company.doc.ics', $company))
-                                    <h3 class="font-green form-section">Insurance & Contracts
-                                        <button class="btn btn-xs default pull-right" id="but_show_ic_expired">Show Expired</button>
-                                        <button class="btn btn-xs default pull-right" style="display:none" id="but_show_ic_current">Show Current</button>
-                                    </h3>
-                                    <div id="ic_current">
-                                        {{-- Public Liabilty --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('1'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('1')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></a>
-                                                    @if (($company->activeCompanyDoc('1')->status == 2))
-                                                        <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('1')->status == 3))
-                                                        <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('1')->expiry) !!}</div>
-                                                <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('1')->ref_no }}</div>
-                                                <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('1')->ref_name }}</div>
-                                                <div class="col-md-1">
+                        <div class="form-actions right">
+                            @if ($company->status == 2)
+                                <button type="submit" class="btn green"> Continue</button>
+                            @else
+                                <button class="btn default" id="cancel_company"> Cancel</button>
+                                <button type="submit" class="btn green" id="save_company"> Save</button>
+                            @endif
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- Business Details --}}
+            <div class="col-lg-6 col-xs-12 col-sm-12">
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span class="caption-subject font-dark bold uppercase">Business Details</span>
+                        </div>
+                        <div class="actions">
+                            @if (Auth::user()->allowed2('sig.company', $company) && !$company->approved_by)
+                                <a href="/company/{{ $company->id }}/approve" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve</a>
+                            @endif
+                            <a href="/company/{{ $company->id }}/edit" class="btn btn-circle green btn-outline btn-sm">Edit</a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-3">Business Entity:</div>
+                            <div class="col-xs-9">{{ ($company->business_entity) ? $companyEntityTypes::name($company->business_entity) : '-' }}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Category:</div>
+                            <div class="col-xs-9">{{ $companyTypes::name($company->category) }}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">ABN:</div>
+                            <div class="col-xs-9">{{ ($company->abn) ? $company->abn : '-' }}</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">GST:</div>
+                            <div class="col-xs-9">@if($company->gst) Yes @elseif($company->gst == '0') No @else - @endif</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Payroll Tax:</div>
+                            <div class="col-xs-9">@if($company->payroll_tax) {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }} @else
+                                    - @endif</div>
+                        </div>
+                        <hr class="field-hr">
+                        <div class="row">
+                            <div class="col-md-3">Creditor Code:</div>
+                            <div class="col-xs-9">{{ ($company->creditor_code) ? $company->creditor_code : '-' }}</div>
+                        </div>
+                        <hr class="field-hr">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- --}}
+
+        <div class="row">
+            <div class="col-lg-6 col-xs-12 col-sm-12">
+                <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class="icon-bubbles font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">Insurance & Contracts</span>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#portlet_comments_1" data-toggle="tab"> Pending </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_comments_2" data-toggle="tab"> Approved </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="portlet_comments_1">
+                                <!-- BEGIN: Comments -->
+                                <div class="mt-comments">
+                                    <div class="mt-comment">
+                                        <div class="mt-comment-img"><a href="#"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a></div>
+                                        <div class="mt-comment-body">
+                                            <div class="mt-comment-info">
+                                                <span class="mt-comment-author">Public Liabilty</span>
+                                                <span class="mt-comment-date">19 Dec,09:50 AM</span>
+                                            </div>
+                                            <div class="mt-comment-text"> Policy No: GPM00034075 &nbsp; &nbsp; &nbsp; Insurer: GIO</div>
+                                            <div class="mt-comment-details">
+                                                @if (($company->activeCompanyDoc('1')->status == 2))
+                                                    <span class="label label-warning">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('1')->status == 3))
+                                                    <span class="label label-danger">Not approved</span> @endif
+                                                <ul class="mt-comment-actions">
                                                     @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('1')->id }}"
-                                                           data-ref_no="{{ $company->activeCompanyDoc('1')->ref_no }}"
-                                                           data-ref_name="{{ $company->activeCompanyDoc('1')->ref_name }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('1')->expiry) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('1')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('1')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('1')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('1')->status }}">Edit</a>
+                                                        <li>
+                                                            <a class="edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="edit"
+                                                               data-doc_id="{{ $company->activeCompanyDoc('1')->id }}"
+                                                               data-ref_no="{{ $company->activeCompanyDoc('1')->ref_no }}"
+                                                               data-ref_name="{{ $company->activeCompanyDoc('1')->ref_name }}"
+                                                               data-expiry="{{ ($company->activeCompanyDoc('1')->expiry) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' }}"
+                                                               data-notes="{{ $company->activeCompanyDoc('1')->notes }}"
+                                                               data-doc_name="{{ $company->activeCompanyDoc('1')->attachment }}"
+                                                               data-doc_url="{{ $company->activeCompanyDoc('1')->attachment_url }}"
+                                                               data-doc_status="{{ $company->activeCompanyDoc('1')->status }}">Edit</a>
+                                                        </li>
                                                     @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></div>
-                                                <div class="col-md-8">@if ($company->category == 'On Site Trade') <span class="font-red">Required</span> @endif</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                        {{-- Workers Comp --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('2'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('2')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></a>
-                                                    @if (($company->activeCompanyDoc('2')->status == 2))
-                                                        <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('2')->status == 3))
-                                                        <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : '-' !!}</div>
-                                                <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('2')->ref_no }}</div>
-                                                <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('2')->ref_name }}</div>
-                                                <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('2')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('2')->id }}"
-                                                           data-ref_no="{{ $company->activeCompanyDoc('2')->ref_no }}"
-                                                           data-ref_name="{{ $company->activeCompanyDoc('2')->ref_name }}"
-                                                           data-ref_type="{{ $company->activeCompanyDoc('2')->ref_type }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('2')->expiry) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('2')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('2')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('2')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('2')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></div>
-                                                <div class="col-md-8">{!! ($company->requiresWCinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                            @if ($company->activeCompanyDoc('2'))
-                                                <div class="col-md-7 hidden-sm hidden-xs pull-right"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                            @endif
-                                        </div>
 
-                                        {{-- Sickness & Accident Insurance --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('3'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('3')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></a>
-                                                    @if (($company->activeCompanyDoc('3')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
-                                                                                                               style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : '-' !!}</div>
-                                                <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
-                                                <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
-                                                <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('3')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('3')->id }}"
-                                                           data-ref_no="{{ $company->activeCompanyDoc('3')->ref_no }}"
-                                                           data-ref_name="{{ $company->activeCompanyDoc('3')->ref_name }}"
-                                                           data-ref_type="{{ $company->activeCompanyDoc('3')->ref_type }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('3')->expiry) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('3')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('3')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('3')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('3')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></div>
-                                                <div class="col-md-8">{!! ($company->requiresSAinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                            @if ($company->activeCompanyDoc('3'))
-                                                <div class="col-md-5 hidden-sm hidden-xs">&nbsp;</div>
-                                                <div class="col-md-7 hidden-sm hidden-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                            @endif
-                                        </div>
-
-
-                                        {{-- Subcontractor Statement --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('4'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('4')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></a>
-                                                    @if (($company->activeCompanyDoc('4')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('4')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('4')->id }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('4')->expiry) ? $company->activeCompanyDoc('4')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('4')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('4')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('4')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('4')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
-                                                <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif{{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
-                                                                    class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a>--}}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        {{-- Trade Contract --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('5'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('5')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></a>
-                                                    @if (($company->activeCompanyDoc('5')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('5')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('5')->id }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('5')->expiry) ? $company->activeCompanyDoc('5')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('5')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('5')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('5')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('5')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
-                                                <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
-                                                                                                                                                                         style="padding-left: 20px"></i>
-                                                            Pre-filled form</a>--}}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <!--<div>Downloadable Pre-filled Forms:  <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/current" target="_blank">Subcontractors Statement</a> &nbsp; -  &nbsp; <a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank">Period Trade Contract</a></div>-->
-                                    </div> {{-- end ic_current --}}
-
-                                    {{-- Expired Insurance + Contracts --}}
-                                    <div class="row" id="ic_expired" style="display:none">
-                                        <div class="col-md-12">
-                                            <table class="table table-striped table-bordered table-hover order-column" id="table_ic_expired">
-                                                <thead>
-                                                <tr class="mytable-header">
-                                                    <th> Document</th>
-                                                    <th width="10%"> Expired</th>
-                                                </tr>
-                                                </thead>
-                                            </table>
+                                                    <li><a href="#">Approve</a></li>
+                                                    <li><a href="#">Delete</a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                @endif {{-- end Insurance + Contracts--}}
-
-                                {{-- WHS --}}
-                                @if(Auth::user()->allowed2('show.company.doc.lic', $company))
-                                    {{-- Licences --}}
-                                    <h3 class="font-green form-section">WHS Compliance
-                                        <button class="btn btn-xs default pull-right" id="but_show_whs_expired">Show Expired</button>
-                                    </h3>
-                                    @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                                        <div class="row" style="line-height: 2">
-                                            <div class="col-md-3"><b>Requires a Contractor Licence</b></div>
-                                            <div class="col-md-9">
-                                                {!! ($company->licence_required) ? 'Yes' : 'No' !!}
-                                                    {!! ($company->licence_required != $company->requiresContractorsLicence()) ? ' &nbsp; <span class="font-red">OVERRIDDEN DEFAULT</span>' : '' !!}</div>
-                                        </div>
-                                    @endif
-                                    <div id="whs_current">
-                                        {{-- Contractor Licence --}}
-                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                            @if ($company->activeCompanyDoc('7'))
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('7')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></a>
-                                                    @if (($company->activeCompanyDoc('7')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('7')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('7')->expiry) !!}</div>
-                                                <div class="col-md-2"><b>Lic:</b> {{ $company->activeCompanyDoc('7')->ref_no }}</div>
-                                                <div class="col-md-4"><b>Class:</b> {!! $company->contractorLicenceSBC() !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.lic', $company->activeCompanyDoc('7')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('7')->id }}"
-                                                           data-ref_no="{{ $company->activeCompanyDoc('7')->ref_no }}"
-                                                           data-ref_name="{{ $company->activeCompanyDoc('7')->ref_name }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('7')->notes }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('7')->expiry) ? $company->activeCompanyDoc('7')->expiry->format('d/m/Y') : '' }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('7')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('7')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('7')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></div>
-                                                <div class="col-md-8">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('add.company.doc.lic'))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="add">Add</a>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        {{-- Asbestos Licence --}}
-                                        @if ($company->activeCompanyDoc('8'))
-                                            <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                                <div class="col-md-3">
-                                                    <a href="{{ $company->activeCompanyDoc('8')->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $company->activeCompanyDoc('8')->name }}</b></a>
-                                                    @if (($company->activeCompanyDoc('8')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($company->activeCompanyDoc('8')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('8')->expiry) !!}</div>
-                                                <div class="col-md-6"><b>Class:</b> {!! $company->activeCompanyDoc('8')->ref_type !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.lic', $company->activeCompanyDoc('8')))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='8' data-action="edit"
-                                                           data-doc_id="{{ $company->activeCompanyDoc('8')->id }}"
-                                                           data-extra_lic_type='8'
-                                                           data-extra_lic_class="{{ $company->activeCompanyDoc('8')->ref_type }}"
-                                                           data-expiry="{{ ($company->activeCompanyDoc('8')->expiry) ? $company->activeCompanyDoc('8')->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $company->activeCompanyDoc('8')->notes }}"
-                                                           data-doc_name="{{ $company->activeCompanyDoc('8')->attachment }}"
-                                                           data-doc_url="{{ $company->activeCompanyDoc('8')->attachment_url }}"
-                                                           data-doc_status="{{ $company->activeCompanyDoc('8')->status }}">Edit</a>
-                                                    @endif
-                                                </div>
+                                    <div class="mt-comment">
+                                        <div class="mt-comment-img"><a href="#"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a></div>
+                                        <div class="mt-comment-body">
+                                            <div class="mt-comment-info">
+                                                <span class="mt-comment-author">Worker's Compensation</span>
+                                                <span class="mt-comment-date">19 Dec,09:50 AM</span>
                                             </div>
-                                        @endif
-
-                                        {{-- Additional Licence --}}
-                                        @foreach ($company->companyDocs('9', '1') as $extra)
-                                            <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                                <div class="col-md-3">
-                                                    <a href="{{ $extra->attachment_url }}" style="color:#333; display: block">
-                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $extra->name }}</b></a>
-                                                    @if (($extra->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                    @if (($extra->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                                </div>
-                                                <div class="col-md-8">{!! format_expiry_field($extra->expiry) !!}</div>
-                                                <div class="col-md-1">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.lic', $extra))
-                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='9' data-action="edit"
-                                                           data-doc_id="{{ $extra->id }}"
-                                                           data-extra_lic_type='9'
-                                                           data-extra_lic_name="{{ $extra->name }}"
-                                                           data-expiry="{{ ($extra->expiry) ? $extra->expiry->format('d/m/Y') : '' }}"
-                                                           data-notes="{{ $extra->notes }}"
-                                                           data-doc_name="{{ $extra->attachment }}"
-                                                           data-doc_url="{{ $extra->attachment_url }}"
-                                                           data-doc_status="{{ $extra->status }}">Edit</a>
-                                                    @endif
-                                                </div>
+                                            <div class="mt-comment-text"> Policy No: GPM00034075 &nbsp; &nbsp; &nbsp; Insurer: GIO<br>Category: a. Is a Propriety Limited Company (Pty Ltd)</div>
+                                            <div class="mt-comment-details">
+                                                <span class="mt-comment-status mt-comment-status-pending">Pending</span>
+                                                <ul class="mt-comment-actions">
+                                                    <li><a href="#">Quick Edit</a></li>
+                                                    <li><a href="#">View</a></li>
+                                                    <li><a href="#">Delete</a></li>
+                                                </ul>
                                             </div>
-                                        @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END: Comments -->
+                            </div>
+                            <div class="tab-pane" id="portlet_comments_2">
+                                <!-- BEGIN: Comments -->
+                                <div class="mt-comments">
+                                    <div class="mt-comment">
+                                        <div class="mt-comment-img">
+                                            <img src="../assets/pages/media/users/avatar1.jpg"/></div>
+                                        <div class="mt-comment-body">
+                                            <div class="mt-comment-info">
+                                                <span class="mt-comment-author">Sebastian Davidson</span>
+                                                <span class="mt-comment-date">10 Dec, 09:20 AM</span>
+                                            </div>
+                                            <div class="mt-comment-text"> The standard chunk of Lorem Ipsum used since the 1500s</div>
+                                            <div class="mt-comment-details">
+                                                <span class="mt-comment-status mt-comment-status-approved">Approved</span>
+                                                <ul class="mt-comment-actions">
+                                                    <li><a href="#">Quick Edit</a></li>
+                                                    <li><a href="#">View</a></li>
+                                                    <li><a href="#">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END: Comments -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                                        @if(Auth::user()->allowed2('show.company.doc.whs', $company))
-                                            <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                                @if ($company->activeCompanyDoc('6'))
-                                                    <div class="col-md-3">
-                                                        <a href="{{ $company->activeCompanyDoc('6')->attachment_url }}" style="color:#333; display: block">
-                                                            <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></a>
-                                                        @if (($company->activeCompanyDoc('6')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                        @if (($company->activeCompanyDoc('6')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+
+            <div class="col-lg-6 col-xs-12 col-sm-12">
+                <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class=" icon-social-twitter font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">Quick Actions</span>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab_actions_pending" data-toggle="tab"> Pending </a>
+                            </li>
+                            <li>
+                                <a href="#tab_actions_completed" data-toggle="tab"> Completed </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_actions_pending">
+                                <!-- BEGIN: Actions -->
+                                <div class="mt-actions">
+                                    <div class="mt-action">
+                                        <div class="mt-action-img"></div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-magnet"></i>
                                                     </div>
-                                                    <div class="col-md-8">{!! format_expiry_field($company->activeCompanyDoc('6')->expiry) !!}</div>
-                                                    <div class="col-md-1">
-                                                        @if (Auth::user()->allowed2('edit.company.doc.whs', $company->activeCompanyDoc('6')))
-                                                            <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="edit"
-                                                               data-doc_id="{{ $company->activeCompanyDoc('6')->id }}"
-                                                               data-ref_no="{{ $company->activeCompanyDoc('6')->ref_no }}"
-                                                               data-ref_name="{{ $company->activeCompanyDoc('6')->ref_name }}"
-                                                               data-notes="{{ $company->activeCompanyDoc('6')->notes }}"
-                                                               data-expiry="{{ ($company->activeCompanyDoc('6')->expiry) ? $company->activeCompanyDoc('6')->expiry->format('d/m/Y') : '' }}"
-                                                               data-doc_name="{{ $company->activeCompanyDoc('6')->attachment }}"
-                                                               data-doc_url="{{ $company->activeCompanyDoc('6')->attachment_url }}"
-                                                               data-doc_status="{{ $company->activeCompanyDoc('6')->status }}">Edit</a>
-                                                        @endif
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Natasha Kim</span>
+                                                        <p class="mt-action-desc">Dummy text of the printing</p>
                                                     </div>
-                                                @else
-                                                    <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></div>
-                                                    <div class="col-md-8">-</div>
-                                                    <div class="col-md-1">
-                                                        @if (Auth::user()->allowed2('add.company.doc.whs'))
-                                                            <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="add">Add</a>
-                                                        @endif
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                        <div class="col-md-12" style="margin: 0px; padding: 0px">
-                                            <div class="col-md-8" style="margin: 0px;">
-                                            </div>
-                                            <div class="col-md-4"><i class="fa" style="font-size: 20px; min-width: 35px"></i>
-                                                @if (Auth::user()->allowed2('add.company.doc.lic'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence other then
-                                                        Contractors Licence</a>
-                                                @endif</div>
-                                        </div>
-                                    </div>
-
-
-                                    {{-- Expired Licences --}}
-                                    <div class="row" id="whs_expired" style="display:none">
-                                        <div class="col-md-12">
-                                            <table class="table table-striped table-bordered table-hover order-column" id="table_whs_expired">
-                                                <thead>
-                                                <tr class="mytable-header">
-                                                    <th> Document</th>
-                                                    <th width="10%"> Expired</th>
-                                                </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endif  {{-- End Licences --}}
-
-
-                                @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
-                                    {{-- Trade + Planner Details --}}
-                                    @if(Auth::user()->company->subscription > 1 && $company->id != Auth::user()->company->id)
-                                        <h3 class="font-green form-section">Trade @if(Auth::user()->company->addon('planner'))& Planner @endif Details (Construction)
-                                            @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-                                                <a href="/company/{{ $company->id }}/edit/trade" class="btn btn-xs default pull-right">Edit</a>
-                                            @endif
-                                        </h3>
-                                        <div class="row">
-                                            <div class="col-md-6" style="line-height: 2">
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
-                                                    <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
                                                 </div>
-                                                @if (Auth::user()->isCC())
-                                                    <div class="row" style="margin: 0px">
-                                                        <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
-                                                        <div class="col-xs-8">{{ $company->maxjobs }}</div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            @if (Auth::user()->isCC())
-                                                <div class="col-md-6" style="line-height: 2">
-                                                    @if(Auth::user()->isCC())
-                                                        <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
-                                                        <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
-                                                    @endif
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
                                                 </div>
-                                            @endif
-                                        </div>
-                                    @endif
-
-
-                                    {{-- Staff --}}
-                                    <h3 class="form-section font-green">Staff</h3>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
-                                                <thead>
-                                                <tr class="mytable-header">
-                                                    <th width="5%"> #</th>
-                                                    <th> Name</th>
-                                                    <th> Phone</th>
-                                                    <th> Email</th>
-                                                </tr>
-                                                </thead>
-                                            </table>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    {{-- Notes --}}
-                                    @if($company->notes && Auth::user()->company_id == $company->parent_company)
-                                        <h3 class="font-green form-section">Notes</h3>
-                                        <div class="row">
-                                            <div class="col-md-12">{{ $company->notes }}</div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar9.jpg"/></div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-magnet"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Tom Larson</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy text</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    @endif
-                                @endif
-
-                                @if (Auth::user()->isCompany($company->id) && $company->signup_step)
-                                    <br>
-                                    <div class="form-actions right">
-                                        <a href="/company/{{ $company->id }}/signup/6" class="btn green pull-right">Complete Signup</a>
                                     </div>
-                                @endif
+                                </div>
+                                <!-- END: Actions -->
+                            </div>
+                            <div class="tab-pane" id="tab_actions_completed">
+                                <!-- BEGIN:Completed-->
+                                <div class="mt-actions">
+
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar5.jpg"/></div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class=" icon-graduation"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Jason Dickens </span>
+                                                        <p class="mt-action-desc">Dummy text of the printing and typesetting industry</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-red"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar2.jpg"/></div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-badge"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Jan Kim</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END: Completed -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
+
+                            @endif
+
+                            {{-- Insurance & Contracts --}}
+                            @if(Auth::user()->allowed2('show.company.doc.ics', $company))
+                                <h3 class="font-green form-section">Insurance & Contracts
+                                    <button class="btn btn-xs default pull-right" id="but_show_ic_expired">Show Expired</button>
+                                    <button class="btn btn-xs default pull-right" style="display:none" id="but_show_ic_current">Show Current</button>
+                                </h3>
+                                <div id="ic_current">
+                                    {{-- Public Liabilty --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('1'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('1')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></a>
+                                                @if (($company->activeCompanyDoc('1')->status == 2))
+                                                    <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('1')->status == 3))
+                                                    <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('1')->expiry) !!}</div>
+                                            <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('1')->ref_no }}</div>
+                                            <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('1')->ref_name }}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('1')->id }}"
+                                                       data-ref_no="{{ $company->activeCompanyDoc('1')->ref_no }}"
+                                                       data-ref_name="{{ $company->activeCompanyDoc('1')->ref_name }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('1')->expiry) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('1')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('1')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('1')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('1')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></div>
+                                            <div class="col-md-8">@if ($company->category == 'On Site Trade') <span class="font-red">Required</span> @endif</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+                                    {{-- Workers Comp --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('2'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('2')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></a>
+                                                @if (($company->activeCompanyDoc('2')->status == 2))
+                                                    <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('2')->status == 3))
+                                                    <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : '-' !!}</div>
+                                            <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('2')->ref_no }}</div>
+                                            <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('2')->ref_name }}</div>
+                                            <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('2')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('2')->id }}"
+                                                       data-ref_no="{{ $company->activeCompanyDoc('2')->ref_no }}"
+                                                       data-ref_name="{{ $company->activeCompanyDoc('2')->ref_name }}"
+                                                       data-ref_type="{{ $company->activeCompanyDoc('2')->ref_type }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('2')->expiry) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('2')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('2')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('2')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('2')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></div>
+                                            <div class="col-md-8">{!! ($company->requiresWCinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        @if ($company->activeCompanyDoc('2'))
+                                            <div class="col-md-7 hidden-sm hidden-xs pull-right"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Sickness & Accident Insurance --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('3'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('3')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></a>
+                                                @if (($company->activeCompanyDoc('3')->status == 2)) <span class="label label-warning"
+                                                                                                           style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
+                                                                                                           style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : '-' !!}</div>
+                                            <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
+                                            <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
+                                            <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('3')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('3')->id }}"
+                                                       data-ref_no="{{ $company->activeCompanyDoc('3')->ref_no }}"
+                                                       data-ref_name="{{ $company->activeCompanyDoc('3')->ref_name }}"
+                                                       data-ref_type="{{ $company->activeCompanyDoc('3')->ref_type }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('3')->expiry) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('3')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('3')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('3')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('3')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></div>
+                                            <div class="col-md-8">{!! ($company->requiresSAinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        @if ($company->activeCompanyDoc('3'))
+                                            <div class="col-md-5 hidden-sm hidden-xs">&nbsp;</div>
+                                            <div class="col-md-7 hidden-sm hidden-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
+                                        @endif
+                                    </div>
+
+
+                                    {{-- Subcontractor Statement --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('4'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('4')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></a>
+                                                @if (($company->activeCompanyDoc('4')->status == 2)) <span class="label label-warning"
+                                                                                                           style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('4')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('4')->id }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('4')->expiry) ? $company->activeCompanyDoc('4')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('4')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('4')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('4')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('4')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
+                                            <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif{{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
+                                                                    class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a>--}}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Trade Contract --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('5'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('5')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></a>
+                                                @if (($company->activeCompanyDoc('5')->status == 2)) <span class="label label-warning"
+                                                                                                           style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('5')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('5')->id }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('5')->expiry) ? $company->activeCompanyDoc('5')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('5')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('5')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('5')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('5')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
+                                            <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
+                                                                                                                                                                         style="padding-left: 20px"></i>
+                                                            Pre-filled form</a>--}}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <!--<div>Downloadable Pre-filled Forms:  <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/current" target="_blank">Subcontractors Statement</a> &nbsp; -  &nbsp; <a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank">Period Trade Contract</a></div>-->
+                                </div> {{-- end ic_current --}}
+
+                                {{-- Expired Insurance + Contracts --}}
+                                <div class="row" id="ic_expired" style="display:none">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered table-hover order-column" id="table_ic_expired">
+                                            <thead>
+                                            <tr class="mytable-header">
+                                                <th> Document</th>
+                                                <th width="10%"> Expired</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            @endif {{-- end Insurance + Contracts--}}
+
+                            {{-- WHS --}}
+                            @if(Auth::user()->allowed2('show.company.doc.lic', $company))
+                                {{-- Licences --}}
+                                <h3 class="font-green form-section">WHS Compliance
+                                    <button class="btn btn-xs default pull-right" id="but_show_whs_expired">Show Expired</button>
+                                </h3>
+                                @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
+                                    <div class="row" style="line-height: 2">
+                                        <div class="col-md-3"><b>Requires a Contractor Licence</b></div>
+                                        <div class="col-md-9">
+                                            {!! ($company->licence_required) ? 'Yes' : 'No' !!}
+                                            {!! ($company->licence_required != $company->requiresContractorsLicence()) ? ' &nbsp; <span class="font-red">OVERRIDDEN DEFAULT</span>' : '' !!}</div>
+                                    </div>
+                                @endif
+                                <div id="whs_current">
+                                    {{-- Contractor Licence --}}
+                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                        @if ($company->activeCompanyDoc('7'))
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('7')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></a>
+                                                @if (($company->activeCompanyDoc('7')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('7')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('7')->expiry) !!}</div>
+                                            <div class="col-md-2"><b>Lic:</b> {{ $company->activeCompanyDoc('7')->ref_no }}</div>
+                                            <div class="col-md-4"><b>Class:</b> {!! $company->contractorLicenceSBC() !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.lic', $company->activeCompanyDoc('7')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('7')->id }}"
+                                                       data-ref_no="{{ $company->activeCompanyDoc('7')->ref_no }}"
+                                                       data-ref_name="{{ $company->activeCompanyDoc('7')->ref_name }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('7')->notes }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('7')->expiry) ? $company->activeCompanyDoc('7')->expiry->format('d/m/Y') : '' }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('7')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('7')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('7')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></div>
+                                            <div class="col-md-8">{!! ($company->licence_required) ? '<span class="font-red">Required</span>' : '-' !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('add.company.doc.lic'))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='7' data-action="add">Add</a>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Asbestos Licence --}}
+                                    @if ($company->activeCompanyDoc('8'))
+                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                            <div class="col-md-3">
+                                                <a href="{{ $company->activeCompanyDoc('8')->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $company->activeCompanyDoc('8')->name }}</b></a>
+                                                @if (($company->activeCompanyDoc('8')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($company->activeCompanyDoc('8')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('8')->expiry) !!}</div>
+                                            <div class="col-md-6"><b>Class:</b> {!! $company->activeCompanyDoc('8')->ref_type !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.lic', $company->activeCompanyDoc('8')))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='8' data-action="edit"
+                                                       data-doc_id="{{ $company->activeCompanyDoc('8')->id }}"
+                                                       data-extra_lic_type='8'
+                                                       data-extra_lic_class="{{ $company->activeCompanyDoc('8')->ref_type }}"
+                                                       data-expiry="{{ ($company->activeCompanyDoc('8')->expiry) ? $company->activeCompanyDoc('8')->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $company->activeCompanyDoc('8')->notes }}"
+                                                       data-doc_name="{{ $company->activeCompanyDoc('8')->attachment }}"
+                                                       data-doc_url="{{ $company->activeCompanyDoc('8')->attachment_url }}"
+                                                       data-doc_status="{{ $company->activeCompanyDoc('8')->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    {{-- Additional Licence --}}
+                                    @foreach ($company->companyDocs('9', '1') as $extra)
+                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                            <div class="col-md-3">
+                                                <a href="{{ $extra->attachment_url }}" style="color:#333; display: block">
+                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $extra->name }}</b></a>
+                                                @if (($extra->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                @if (($extra->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                            </div>
+                                            <div class="col-md-8">{!! format_expiry_field($extra->expiry) !!}</div>
+                                            <div class="col-md-1">
+                                                @if (Auth::user()->allowed2('edit.company.doc.lic', $extra))
+                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='9' data-action="edit"
+                                                       data-doc_id="{{ $extra->id }}"
+                                                       data-extra_lic_type='9'
+                                                       data-extra_lic_name="{{ $extra->name }}"
+                                                       data-expiry="{{ ($extra->expiry) ? $extra->expiry->format('d/m/Y') : '' }}"
+                                                       data-notes="{{ $extra->notes }}"
+                                                       data-doc_name="{{ $extra->attachment }}"
+                                                       data-doc_url="{{ $extra->attachment_url }}"
+                                                       data-doc_status="{{ $extra->status }}">Edit</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    @if(Auth::user()->allowed2('show.company.doc.whs', $company))
+                                        <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
+                                            @if ($company->activeCompanyDoc('6'))
+                                                <div class="col-md-3">
+                                                    <a href="{{ $company->activeCompanyDoc('6')->attachment_url }}" style="color:#333; display: block">
+                                                        <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></a>
+                                                    @if (($company->activeCompanyDoc('6')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                    @if (($company->activeCompanyDoc('6')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
+                                                </div>
+                                                <div class="col-md-8">{!! format_expiry_field($company->activeCompanyDoc('6')->expiry) !!}</div>
+                                                <div class="col-md-1">
+                                                    @if (Auth::user()->allowed2('edit.company.doc.whs', $company->activeCompanyDoc('6')))
+                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="edit"
+                                                           data-doc_id="{{ $company->activeCompanyDoc('6')->id }}"
+                                                           data-ref_no="{{ $company->activeCompanyDoc('6')->ref_no }}"
+                                                           data-ref_name="{{ $company->activeCompanyDoc('6')->ref_name }}"
+                                                           data-notes="{{ $company->activeCompanyDoc('6')->notes }}"
+                                                           data-expiry="{{ ($company->activeCompanyDoc('6')->expiry) ? $company->activeCompanyDoc('6')->expiry->format('d/m/Y') : '' }}"
+                                                           data-doc_name="{{ $company->activeCompanyDoc('6')->attachment }}"
+                                                           data-doc_url="{{ $company->activeCompanyDoc('6')->attachment_url }}"
+                                                           data-doc_status="{{ $company->activeCompanyDoc('6')->status }}">Edit</a>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></div>
+                                                <div class="col-md-8">-</div>
+                                                <div class="col-md-1">
+                                                    @if (Auth::user()->allowed2('add.company.doc.whs'))
+                                                        <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='6' data-action="add">Add</a>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                    <div class="col-md-12" style="margin: 0px; padding: 0px">
+                                        <div class="col-md-8" style="margin: 0px;">
+                                        </div>
+                                        <div class="col-md-4"><i class="fa" style="font-size: 20px; min-width: 35px"></i>
+                                            @if (Auth::user()->allowed2('add.company.doc.lic'))
+                                                <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='89' data-action="add">Add additional Licence other then
+                                                    Contractors Licence</a>
+                                            @endif</div>
+                                    </div>
+                                </div>
+
+
+                                {{-- Expired Licences --}}
+                                <div class="row" id="whs_expired" style="display:none">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered table-hover order-column" id="table_whs_expired">
+                                            <thead>
+                                            <tr class="mytable-header">
+                                                <th> Document</th>
+                                                <th width="10%"> Expired</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            @endif  {{-- End Licences --}}
+
+
+                            @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
+                                {{-- Trade + Planner Details --}}
+                                @if(Auth::user()->company->subscription > 1 && $company->id != Auth::user()->company->id)
+                                    <h3 class="font-green form-section">Trade @if(Auth::user()->company->addon('planner'))& Planner @endif Details (Construction)
+                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
+                                            <a href="/company/{{ $company->id }}/edit/trade" class="btn btn-xs default pull-right">Edit</a>
+                                        @endif
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-6" style="line-height: 2">
+                                            <div class="row" style="margin: 0px">
+                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
+                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
+                                            </div>
+                                            @if (Auth::user()->isCC())
+                                                <div class="row" style="margin: 0px">
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
+                                                    <div class="col-xs-8">{{ $company->maxjobs }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        @if (Auth::user()->isCC())
+                                            <div class="col-md-6" style="line-height: 2">
+                                                @if(Auth::user()->isCC())
+                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
+                                                    <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+
+
+                                {{-- Staff --}}
+                                <h3 class="form-section font-green">Staff</h3>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
+                                            <thead>
+                                            <tr class="mytable-header">
+                                                <th width="5%"> #</th>
+                                                <th> Name</th>
+                                                <th> Phone</th>
+                                                <th> Email</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {{-- Notes --}}
+                                @if($company->notes && Auth::user()->company_id == $company->parent_company)
+                                    <h3 class="font-green form-section">Notes</h3>
+                                    <div class="row">
+                                        <div class="col-md-12">{{ $company->notes }}</div>
+                                    </div>
+                                @endif
+                            @endif
+
+                            @if (Auth::user()->isCompany($company->id) && $company->signup_step)
+                                <br>
+                                <div class="form-actions right">
+                                    <a href="/company/{{ $company->id }}/signup/6" class="btn green pull-right">Complete Signup</a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <div>
         <div class="pull-right" style="font-size: 12px; font-weight: 200; padding: 10px 10px 0 0">
@@ -898,6 +1323,21 @@
         });
     });
 
+    $('#update_company').click(function (e) {
+        $('#show_company').hide();
+        $('#edit_company').show();
+    });
+    $('#cancel_company').click(function (e) {
+        e.preventDefault();
+        $('#show_company').show();
+        $('#edit_company').hide();
+    });
+    $('#save_company').click(function (e) {
+        //e.preventDefault();
+        //alert('saving');
+        //$('#show_company').show();
+        //$('#edit_company').hide();
+    });
 
     $('.edit-file').click(function (e) {
         // Reset Form Errors
@@ -1157,7 +1597,16 @@
         ]
     });
 
+            @if (count($errors) > 0)
+    var errors = {!! $errors !!};
+    if (errors.FORM == 'company') {
+        $('#show_company').hide();
+        $('#edit_company').show();
+    }
 
+    console.log(errors)
+    @endif
+    {{--
     // Show Modal on errors
     @if (count($errors) > 0)
       display_fields({{ old('category_id') }})
@@ -1183,5 +1632,6 @@
     $("#del_doc").hide();
     @endif
     @endif
+    --}}
 </script>
 @stop

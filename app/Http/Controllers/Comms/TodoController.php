@@ -110,7 +110,7 @@ class TodoController extends Controller {
         if ($assign_to == 'company') {
             foreach ($request->get('company_list') as $id) {
                 if ($id == 'all') {
-                    $assign_list = Auth::user()->company->companies('1')->pluck('id')->toArray();
+                    $assign_list = Auth::user()->company->companies(1)->pluck('id')->toArray();
                     break;
                 } else
                     $assign_list[] = $id;
@@ -142,7 +142,7 @@ class TodoController extends Controller {
                 $user_list = [];
                 $users = DB::table('role_user')->select('user_id')->whereIn('role_id', $assign_list)->distinct('user_id')->orderBy('user_id')->get();
                 foreach ($users as $u) {
-                    if (in_array($u->user_id, Auth::user()->company->users()->pluck('id')->toArray()))
+                    if (in_array($u->user_id, Auth::user()->company->users(1)->pluck('id')->toArray()))
                         $user_list[] = $u->user_id;
                 }
                 foreach ($user_list as $id) {

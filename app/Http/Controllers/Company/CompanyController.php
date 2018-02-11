@@ -197,9 +197,28 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(CompanyRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $company = Company::findorFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name'            => 'required',
+            'phone'           => 'required',
+            'email'           => 'required|email|max:255',
+            'address'         => 'required',
+            'suburb'          => 'required',
+            'state'           => 'required',
+            'postcode'        => 'required',
+            'primary_user'    => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'company');
+            return redirect("company/$company->id")
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         /// Check authorisation and throw 404 if not
         // User must be able to edit company or has subscription 2+ with ability to edit trades
@@ -209,6 +228,8 @@ class CompanyController extends Controller {
             return view('errors/404');
 
         $company_request = $request->except('supervisors', 'trades', 'slug');
+
+        //dd($company_request);
 
         //$company_request['licence_expiry'] = ($request->get('licence_expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('licence_expiry') . '00:00')->toDateTimeString() : null;
 

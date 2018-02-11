@@ -26,6 +26,9 @@ class CompanyEntityTypes {
      */
     public static function name($id)
     {
-        return static::$companyEntityTypes[$id];
+        if (preg_match('/[0-9]/', $id))
+            return static::$companyEntityTypes[$id];
+
+        return $id;
     }
 }

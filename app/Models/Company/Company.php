@@ -1390,6 +1390,23 @@ class Company extends Model {
     }
 
     /**
+     * Get the Status Text Both  (getter)
+     */
+    public function getStatusTextAttribute()
+    {
+
+        if ($this->status == 1)
+            return '<span class="font-green">ACTIVE</span>';
+
+        if ($this->status == 1)
+            return '<span class="font-yellow">PENDING</span>';
+
+        if ($this->status == 0)
+            return '<span class="font-red">INACTIVE</span>';
+
+    }
+
+    /**
      * Get the Name Alias  (getter)
      */
     public function getSubscriptionNameAttribute()
@@ -1424,6 +1441,27 @@ class Company extends Model {
             $string .= ' ' . $this->attributes['postcode'];
 
         return $string;
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getAddressFormattedAttribute()
+    {
+        $string = '';
+
+        if ($this->attributes['address'])
+            $string = strtoupper($this->attributes['address']) . '<br>';
+
+        $string .= strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return ($string) ? $string : '-';
     }
 
     /**
