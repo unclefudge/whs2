@@ -104,28 +104,6 @@ $dis = Auth::user()->security ? false : true;
         @endif
     </tr>
     @if ($sub1)
-        <tr>
-            <td>Insurance & Contracts</td>
-            <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
-            @if ($sub2)
-                <td width="30%" colspan="2"></td>
-                <td width="15%">{!! permSelect('sig.company.ics', 'sig', $user, $cid, $dis) !!}</td>
-            @else
-                <td width="45%" colspan="3"></td>
-            @endif
-        </tr>
-        <tr>
-            <td>WHS Compliance</td>
-            <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
-            @if ($sub2)
-                <td width="30%" colspan="2"></td>
-                <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
-            @else
-                <td width="45%" colspan="3"></td>
-            @endif
-        </tr>
         @if($plan)
             <tr>
                 <td>Construction</td>
@@ -139,6 +117,30 @@ $dis = Auth::user()->security ? false : true;
                 @endif
             </tr>
         @endif
+        <tr>
+            <td>Insurance & Contracts</td>
+            <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            @if ($sub2)
+                <td width="15%">{!! permSelect('add.company.ics', 'add', $user, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('del.company.ics', 'arc', $user, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('sig.company.ics', 'sig', $user, $cid, $dis) !!}</td>
+            @else
+                <td width="45%" colspan="3"></td>
+            @endif
+        </tr>
+        <tr>
+            <td>WHS Compliance</td>
+            <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+            @if ($sub2)
+                <td width="15%">{!! permSelect('add.company.whs', 'add', $user, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('del.company.whs', 'arc', $user, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
+            @else
+                <td width="45%" colspan="3"></td>
+            @endif
+        </tr>
     @endif
 </table>
 
