@@ -100,385 +100,79 @@
             </div>
         </div>
         <div class="row">
-            {{-- Company Details --}}
             <div class="col-lg-6 col-xs-12 col-sm-12">
-                {{-- Show Company Details --}}
-                <div class="portlet light" id="show_company">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <span class="caption-subject font-dark bold uppercase">Company Details</span>
-                            @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                <span class="label label-warning">Pending approval</span>
-                            @endif
-                        </div>
-                        <div class="actions">
-                            @if (Auth::user()->allowed2('sig.company', $company) && !$company->approved_by)
-                                <a href="/company/{{ $company->id }}/approve" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve</a>
-                            @endif
-                            <a href="#" class="btn btn-circle green btn-outline btn-sm" id="update_company">Edit</a>
-                        </div>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-3">Status:</div>
-                            <div class="col-xs-9">{!! $company->status_text !!}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Name:</div>
-                            <div class="col-xs-9">{{ $company->name }}</div>
-                        </div>
-                        <hr class="field-hr">
-                        @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                            <div class="row">
-                                <div class="col-md-3">Preferred Name:</div>
-                                <div class="col-md-9">@if($company->nickname) {{ $company->nickname }} @else - @endif</div>
-                            </div>
-                            <hr class="field-hr">
-                        @endif
-                        <div class="row">
-                            <div class="col-md-3">Phone:</div>
-                            <div class="col-xs-9">{!! ($company->phone) ? "<a href='tel:'".preg_replace("/[^0-9]/", "", $company->phone)."> $company->phone </a>" : '-' !!}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Email:</div>
-                            <div class="col-xs-9">{!! ($company->email) ? "<a href='mailto:$company->email'> $company->email</a>" : '-' !!}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Address:</div>
-                            <div class="col-xs-9">{!! $company->address_formatted !!}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Primary Contact:</div>
-                            <div class="col-xs-9">@if($company->primary_user)<a href="/user/{{ $company->primary_contact()->id }}">{{ $company->primary_contact()->fullname }}</a>@else - @endif</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Secondary Contact:</div>
-                            <div class="col-xs-9">@if($company->secondary_user)<a href="/user/{{ $company->secondary_contact()->id }}">{{ $company->secondary_contact()->fullname }}</a>@else - @endif
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                    </div>
-                </div>
+                {{-- Company Details --}}
+                @if (Auth::user()->allowed2('view.company.acc', $company))
+                    @include('company/_show-company')
+                    @include('company/_edit-company')
+                @endif
 
-                {{-- Edit Company Details --}}
-                <div class="portlet light" style="display: none;" id="edit_company">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <span class="caption-subject font-dark bold uppercase">Company Details</span>
-                            @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                <span class="label label-warning">Pending approval</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="portlet-body form">
-                        {!! Form::model($company, ['method' => 'PATCH', 'action' => ['Company\CompanyController@update', $company->id]]) !!}
-                        {{-- Status --}}
-                        <div class="row">
-                            @if(Auth::user()->allowed2('del.company', $company))
-                                <div class="form-group {!! fieldHasError('status', $errors) !!}">
-                                    {!! Form::label('status', 'Status:', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-9">
-                                        {!! Form::select('status', ['1' => 'Active', '0' => 'Inactive'], null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('status', $errors) !!}
-                                    </div>
-                                </div>
-                            @else
-                                <div class="col-md-3">Status:</div>
-                                <div class="col-xs-9">{!! $company->status_text !!}</div>
-                            @endif
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Name --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('name', $errors) !!}">
-                                {!! Form::label('name', 'Name:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('name', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Preferred Name --}}
-                        @if (Auth::user()->isCompany($company->reportsTo()->id) && !Auth::user()->isCompany($company->id))
-                            <div class="row">
-                                <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
-                                    {!! Form::label('nickname', 'Preferred Name:', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-9">
-                                        {!! Form::text('nickname', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('nickname', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="field-hr">
-                        @endif
-                        {{-- Phone --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('phone', $errors) !!}">
-                                {!! Form::label('phone', 'Phone:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('phone', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('phone', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Email --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('email', $errors) !!}">
-                                {!! Form::label('email', 'Email:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('email', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('email', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Adddress --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('address', $errors) !!}">
-                                {!! Form::label('address', 'Address:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('address', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('address', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Suburb --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('suburb', $errors) !!}">
-                                {!! Form::label('suburb', 'Suburb:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('suburb', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('suburb', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- State --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('state', $errors) !!}">
-                                {!! Form::label('state', 'State:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::select('state', $ozstates::all(), 'NSW', ['class' => 'form-control bs-select', 'required']) !!}
-                                    {!! fieldErrorMessage('state', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Postcode --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('postcode', $errors) !!}">
-                                {!! Form::label('postcode', 'Postcode:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::text('postcode', null, ['class' => 'form-control', 'required']) !!}
-                                    {!! fieldErrorMessage('postcode', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Primary Contact --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('primary_user', $errors) !!}">
-                                {!! Form::label('primary_user', 'Primary Contact:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::select('primary_user', $company->usersSelect('prompt'),null, ['class' => 'form-control bs-select', 'required']) !!}
-                                    {!! fieldErrorMessage('primary_user', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="field-hr">
-                        {{-- Seconday Contact --}}
-                        <div class="row">
-                            <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
-                                {!! Form::label('secondary_user', 'Secondary Contact:', ['class' => 'col-md-3 control-label']) !!}
-                                <div class="col-md-9">
-                                    {!! Form::select('secondary_user',  array_merge(['0' => 'None'], $company->usersSelect()), null, ['class' => 'form-control bs-select', 'required']) !!}
-                                    {!! fieldErrorMessage('secondary_user', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
+                {{-- Business Details --}}
+                @if (Auth::user()->allowed2('view.company.acc', $company))
+                    @include('company/_show-business')
+                    @include('company/_edit-business')
+                @endif
 
-                        <div class="form-actions right">
-                            @if ($company->status == 2)
-                                <button type="submit" class="btn green"> Continue</button>
-                            @else
-                                <button class="btn default" id="cancel_company"> Cancel</button>
-                                <button type="submit" class="btn green" id="save_company"> Save</button>
-                            @endif
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
-                </div>
+                {{-- Construction --}}
+                @if (Auth::user()->allowed2('view.company.con', $company))
+                    @include('company/_show-construction')
+                    @include('company/_edit-construction')
+                @endif
             </div>
 
 
-            {{-- Business Details --}}
             <div class="col-lg-6 col-xs-12 col-sm-12">
-                <div class="portlet light ">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <span class="caption-subject font-dark bold uppercase">Business Details</span>
-                        </div>
-                        <div class="actions">
-                            @if (Auth::user()->allowed2('sig.company', $company) && !$company->approved_by)
-                                <a href="/company/{{ $company->id }}/approve" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve</a>
-                            @endif
-                            <a href="/company/{{ $company->id }}/edit" class="btn btn-circle green btn-outline btn-sm">Edit</a>
-                        </div>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-3">Business Entity:</div>
-                            <div class="col-xs-9">{{ ($company->business_entity) ? $companyEntityTypes::name($company->business_entity) : '-' }}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Category:</div>
-                            <div class="col-xs-9">{{ $companyTypes::name($company->category) }}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">ABN:</div>
-                            <div class="col-xs-9">{{ ($company->abn) ? $company->abn : '-' }}</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">GST:</div>
-                            <div class="col-xs-9">@if($company->gst) Yes @elseif($company->gst == '0') No @else - @endif</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Payroll Tax:</div>
-                            <div class="col-xs-9">@if($company->payroll_tax) {{ ($company->payroll_tax > 0 && $company->payroll_tax < 8) ? 'Exempt (' . $company->payroll_tax . ')' : 'Liable' }} @else
-                                    - @endif</div>
-                        </div>
-                        <hr class="field-hr">
-                        <div class="row">
-                            <div class="col-md-3">Creditor Code:</div>
-                            <div class="col-xs-9">{{ ($company->creditor_code) ? $company->creditor_code : '-' }}</div>
-                        </div>
-                        <hr class="field-hr">
-                    </div>
-                </div>
-            </div>
+                {{-- Insurance & Contracts --}}
+                @if (Auth::user()->allowed2('view.company.ics', $company))
+                    @include('company/_show-ics')
+                @endif
 
+                {{-- WHS --}}
+                @if (Auth::user()->allowed2('view.company.whs', $company))
+                    @include('company/_show-whs')
+                @endif
+
+            </div>
         </div>
 
-        {{-- --}}
+        {{-- Staff --}}
         <div class="row">
-            <div class="col-lg-6 col-xs-12 col-sm-12">
+            <div class="col-md-12">
                 <div class="portlet light ">
                     <div class="portlet-title tabbable-line">
                         <div class="caption">
                             <i class="icon-bubbles font-dark hide"></i>
-                            <span class="caption-subject font-dark bold uppercase">Insurance & Contracts</span>
+                            <span class="caption-subject font-dark bold uppercase">Staff</span>
                         </div>
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#portlet_comments_1" data-toggle="tab"> Pending </a>
-                            </li>
-                            <li>
-                                <a href="#portlet_comments_2" data-toggle="tab"> Approved </a>
-                            </li>
-                        </ul>
                     </div>
                     <div class="portlet-body">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="portlet_comments_1">
-                                <!-- BEGIN: Comments -->
-                                <div class="mt-comments">
-                                    <div class="mt-comment">
-                                        <div class="mt-comment-img"><a href="#"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a></div>
-                                        <div class="mt-comment-body">
-                                            <div class="mt-comment-info">
-                                                <span class="mt-comment-author">Public Liabilty</span>
-                                                <span class="mt-comment-date">19 Dec,09:50 AM</span>
-                                            </div>
-                                            <div class="mt-comment-text"> Policy No: GPM00034075 &nbsp; &nbsp; &nbsp; Insurer: GIO</div>
-                                            <div class="mt-comment-details">
-                                                @if (($company->activeCompanyDoc('1')->status == 2))
-                                                    <span class="label label-warning">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('1')->status == 3))
-                                                    <span class="label label-danger">Not approved</span> @endif
-                                                <ul class="mt-comment-actions">
-                                                    @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
-                                                        <li>
-                                                            <a class="edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="edit"
-                                                               data-doc_id="{{ $company->activeCompanyDoc('1')->id }}"
-                                                               data-ref_no="{{ $company->activeCompanyDoc('1')->ref_no }}"
-                                                               data-ref_name="{{ $company->activeCompanyDoc('1')->ref_name }}"
-                                                               data-expiry="{{ ($company->activeCompanyDoc('1')->expiry) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' }}"
-                                                               data-notes="{{ $company->activeCompanyDoc('1')->notes }}"
-                                                               data-doc_name="{{ $company->activeCompanyDoc('1')->attachment }}"
-                                                               data-doc_url="{{ $company->activeCompanyDoc('1')->attachment_url }}"
-                                                               data-doc_status="{{ $company->activeCompanyDoc('1')->status }}">Edit</a>
-                                                        </li>
-                                                    @endif
 
-                                                    <li><a href="#">Approve</a></li>
-                                                    <li><a href="#">Delete</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-comment">
-                                        <div class="mt-comment-img"><a href="#"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a></div>
-                                        <div class="mt-comment-body">
-                                            <div class="mt-comment-info">
-                                                <span class="mt-comment-author">Worker's Compensation</span>
-                                                <span class="mt-comment-date">19 Dec,09:50 AM</span>
-                                            </div>
-                                            <div class="mt-comment-text"> Policy No: GPM00034075 &nbsp; &nbsp; &nbsp; Insurer: GIO<br>Category: a. Is a Propriety Limited Company (Pty Ltd)</div>
-                                            <div class="mt-comment-details">
-                                                <span class="mt-comment-status mt-comment-status-pending">Pending</span>
-                                                <ul class="mt-comment-actions">
-                                                    <li><a href="#">Quick Edit</a></li>
-                                                    <li><a href="#">View</a></li>
-                                                    <li><a href="#">Delete</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END: Comments -->
-                            </div>
-                            <div class="tab-pane" id="portlet_comments_2">
-                                <!-- BEGIN: Comments -->
-                                <div class="mt-comments">
-                                    <div class="mt-comment">
-                                        <div class="mt-comment-img">
-                                            <img src="../assets/pages/media/users/avatar1.jpg"/></div>
-                                        <div class="mt-comment-body">
-                                            <div class="mt-comment-info">
-                                                <span class="mt-comment-author">Sebastian Davidson</span>
-                                                <span class="mt-comment-date">10 Dec, 09:20 AM</span>
-                                            </div>
-                                            <div class="mt-comment-text"> The standard chunk of Lorem Ipsum used since the 1500s</div>
-                                            <div class="mt-comment-details">
-                                                <span class="mt-comment-status mt-comment-status-approved">Approved</span>
-                                                <ul class="mt-comment-actions">
-                                                    <li><a href="#">Quick Edit</a></li>
-                                                    <li><a href="#">View</a></li>
-                                                    <li><a href="#">Delete</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END: Comments -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
+                                    <thead>
+                                    <tr class="mytable-header">
+                                        <th width="5%"> #</th>
+                                        <th> Name</th>
+                                        <th> Phone</th>
+                                        <th> Email</th>
+                                    </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
+
+                        {{-- Notes --}}
+                        @if($company->notes && Auth::user()->company_id == $company->parent_company)
+                            <h3 class="font-green form-section">Notes</h3>
+                            <div class="row">
+                                <div class="col-md-12">{{ $company->notes }}</div>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -489,227 +183,6 @@
                 <div class="portlet-body form">
                     <div class="row">
                         <div class="col-md-12">
-                            @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
-
-                            @endif
-
-                            {{-- Insurance & Contracts --}}
-                            @if(Auth::user()->allowed2('show.company.doc.ics', $company))
-                                <h3 class="font-green form-section">Insurance & Contracts
-                                    <button class="btn btn-xs default pull-right" id="but_show_ic_expired">Show Expired</button>
-                                    <button class="btn btn-xs default pull-right" style="display:none" id="but_show_ic_current">Show Current</button>
-                                </h3>
-                                <div id="ic_current">
-                                    {{-- Public Liabilty --}}
-                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                        @if ($company->activeCompanyDoc('1'))
-                                            <div class="col-md-3">
-                                                <a href="{{ $company->activeCompanyDoc('1')->attachment_url }}" style="color:#333; display: block">
-                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></a>
-                                                @if (($company->activeCompanyDoc('1')->status == 2))
-                                                    <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('1')->status == 3))
-                                                    <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                            </div>
-                                            <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('1')->expiry) !!}</div>
-                                            <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('1')->ref_no }}</div>
-                                            <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('1')->ref_name }}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('1')))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="edit"
-                                                       data-doc_id="{{ $company->activeCompanyDoc('1')->id }}"
-                                                       data-ref_no="{{ $company->activeCompanyDoc('1')->ref_no }}"
-                                                       data-ref_name="{{ $company->activeCompanyDoc('1')->ref_name }}"
-                                                       data-expiry="{{ ($company->activeCompanyDoc('1')->expiry) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' }}"
-                                                       data-notes="{{ $company->activeCompanyDoc('1')->notes }}"
-                                                       data-doc_name="{{ $company->activeCompanyDoc('1')->attachment }}"
-                                                       data-doc_url="{{ $company->activeCompanyDoc('1')->attachment_url }}"
-                                                       data-doc_status="{{ $company->activeCompanyDoc('1')->status }}">Edit</a>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></div>
-                                            <div class="col-md-8">@if ($company->category == 'On Site Trade') <span class="font-red">Required</span> @endif</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='1' data-action="add">Add</a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                    {{-- Workers Comp --}}
-                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                        @if ($company->activeCompanyDoc('2'))
-                                            <div class="col-md-3">
-                                                <a href="{{ $company->activeCompanyDoc('2')->attachment_url }}" style="color:#333; display: block">
-                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></a>
-                                                @if (($company->activeCompanyDoc('2')->status == 2))
-                                                    <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('2')->status == 3))
-                                                    <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                            </div>
-                                            <div class="col-md-2">{!! ($company->activeCompanyDoc('2')) ? format_expiry_field($company->activeCompanyDoc('2')->expiry) : '-' !!}</div>
-                                            <div class="col-md-2"><b>Policy No:</b> {{ $company->activeCompanyDoc('2')->ref_no }}</div>
-                                            <div class="col-md-4"><b>Insurer:</b> {{ $company->activeCompanyDoc('2')->ref_name }}</div>
-                                            <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('2')))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="edit"
-                                                       data-doc_id="{{ $company->activeCompanyDoc('2')->id }}"
-                                                       data-ref_no="{{ $company->activeCompanyDoc('2')->ref_no }}"
-                                                       data-ref_name="{{ $company->activeCompanyDoc('2')->ref_name }}"
-                                                       data-ref_type="{{ $company->activeCompanyDoc('2')->ref_type }}"
-                                                       data-expiry="{{ ($company->activeCompanyDoc('2')->expiry) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') : '' }}"
-                                                       data-notes="{{ $company->activeCompanyDoc('2')->notes }}"
-                                                       data-doc_name="{{ $company->activeCompanyDoc('2')->attachment }}"
-                                                       data-doc_url="{{ $company->activeCompanyDoc('2')->attachment_url }}"
-                                                       data-doc_status="{{ $company->activeCompanyDoc('2')->status }}">Edit</a>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></div>
-                                            <div class="col-md-8">{!! ($company->requiresWCinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='2' data-action="add">Add</a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                        @if ($company->activeCompanyDoc('2'))
-                                            <div class="col-md-7 hidden-sm hidden-xs pull-right"><b>Category:</b> {{ $company->activeCompanyDoc('2')->ref_type }}</div>
-                                        @endif
-                                    </div>
-
-                                    {{-- Sickness & Accident Insurance --}}
-                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                        @if ($company->activeCompanyDoc('3'))
-                                            <div class="col-md-3">
-                                                <a href="{{ $company->activeCompanyDoc('3')->attachment_url }}" style="color:#333; display: block">
-                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></a>
-                                                @if (($company->activeCompanyDoc('3')->status == 2)) <span class="label label-warning"
-                                                                                                           style="margin-left:30px">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
-                                                                                                           style="margin-left:30px">Not approved</span> @endif
-                                            </div>
-                                            <div class="col-md-2">{!! ($company->activeCompanyDoc('3')) ? format_expiry_field($company->activeCompanyDoc('3')->expiry) : '-' !!}</div>
-                                            <div class="col-md-3"><b>Policy No:</b> {{ $company->activeCompanyDoc('3')->ref_no }}</div>
-                                            <div class="col-md-3"><b>Insurer:</b> {{ $company->activeCompanyDoc('3')->ref_name }}</div>
-                                            <div class="col-md-7 visible-sm visible-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('3')))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="edit"
-                                                       data-doc_id="{{ $company->activeCompanyDoc('3')->id }}"
-                                                       data-ref_no="{{ $company->activeCompanyDoc('3')->ref_no }}"
-                                                       data-ref_name="{{ $company->activeCompanyDoc('3')->ref_name }}"
-                                                       data-ref_type="{{ $company->activeCompanyDoc('3')->ref_type }}"
-                                                       data-expiry="{{ ($company->activeCompanyDoc('3')->expiry) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') : '' }}"
-                                                       data-notes="{{ $company->activeCompanyDoc('3')->notes }}"
-                                                       data-doc_name="{{ $company->activeCompanyDoc('3')->attachment }}"
-                                                       data-doc_url="{{ $company->activeCompanyDoc('3')->attachment_url }}"
-                                                       data-doc_status="{{ $company->activeCompanyDoc('3')->status }}">Edit</a>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></div>
-                                            <div class="col-md-8">{!! ($company->requiresSAinsurance()) ? '<span class="font-red">Required</span>' : '-' !!}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='3' data-action="add">Add</a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                        @if ($company->activeCompanyDoc('3'))
-                                            <div class="col-md-5 hidden-sm hidden-xs">&nbsp;</div>
-                                            <div class="col-md-7 hidden-sm hidden-xs"><b>Category:</b> {{ $company->activeCompanyDoc('3')->ref_type }}</div>
-                                        @endif
-                                    </div>
-
-
-                                    {{-- Subcontractor Statement --}}
-                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                        @if ($company->activeCompanyDoc('4'))
-                                            <div class="col-md-3">
-                                                <a href="{{ $company->activeCompanyDoc('4')->attachment_url }}" style="color:#333; display: block">
-                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></a>
-                                                @if (($company->activeCompanyDoc('4')->status == 2)) <span class="label label-warning"
-                                                                                                           style="margin-left:30px">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                            </div>
-                                            <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('4')))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="edit"
-                                                       data-doc_id="{{ $company->activeCompanyDoc('4')->id }}"
-                                                       data-expiry="{{ ($company->activeCompanyDoc('4')->expiry) ? $company->activeCompanyDoc('4')->expiry->format('d/m/Y') : '' }}"
-                                                       data-notes="{{ $company->activeCompanyDoc('4')->notes }}"
-                                                       data-doc_name="{{ $company->activeCompanyDoc('4')->attachment }}"
-                                                       data-doc_url="{{ $company->activeCompanyDoc('4')->attachment_url }}"
-                                                       data-doc_status="{{ $company->activeCompanyDoc('4')->status }}">Edit</a>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></div>
-                                            <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif{{--<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i
-                                                                    class="fa fa-download" style="padding-left: 20px"></i> Pre-filled form</a>--}}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='4' data-action="add">Add</a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    {{-- Trade Contract --}}
-                                    <div class="row" style="background:#fafafa; margin-bottom: 3px; line-height: 2">
-                                        @if ($company->activeCompanyDoc('5'))
-                                            <div class="col-md-3">
-                                                <a href="{{ $company->activeCompanyDoc('5')->attachment_url }}" style="color:#333; display: block">
-                                                    <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></a>
-                                                @if (($company->activeCompanyDoc('5')->status == 2)) <span class="label label-warning"
-                                                                                                           style="margin-left:30px">Pending approval</span> @endif
-                                                @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
-                                            </div>
-                                            <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('edit.company.doc.ics', $company->activeCompanyDoc('5')))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="edit"
-                                                       data-doc_id="{{ $company->activeCompanyDoc('5')->id }}"
-                                                       data-expiry="{{ ($company->activeCompanyDoc('5')->expiry) ? $company->activeCompanyDoc('5')->expiry->format('d/m/Y') : '' }}"
-                                                       data-notes="{{ $company->activeCompanyDoc('5')->notes }}"
-                                                       data-doc_name="{{ $company->activeCompanyDoc('5')->attachment }}"
-                                                       data-doc_url="{{ $company->activeCompanyDoc('5')->attachment_url }}"
-                                                       data-doc_status="{{ $company->activeCompanyDoc('5')->status }}">Edit</a>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-3"><i class="fa" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></div>
-                                            <div class="col-md-8">@if ($company->category == 'On Site Trade')<span class="font-red">Required</span> @endif {{--<a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank"><i class="fa fa-download"
-                                                                                                                                                                         style="padding-left: 20px"></i>
-                                                            Pre-filled form</a>--}}</div>
-                                            <div class="col-md-1">
-                                                @if (Auth::user()->allowed2('add.company.doc.ics'))
-                                                    <a class="btn btn-xs default edit-file" href="#file-modal" data-toggle="modal" data-cat='5' data-action="add">Add</a>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <!--<div>Downloadable Pre-filled Forms:  <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/current" target="_blank">Subcontractors Statement</a> &nbsp; -  &nbsp; <a href="/company/doc/create/tradecontract/{{ $company->id  }}/current" target="_blank">Period Trade Contract</a></div>-->
-                                </div> {{-- end ic_current --}}
-
-                                {{-- Expired Insurance + Contracts --}}
-                                <div class="row" id="ic_expired" style="display:none">
-                                    <div class="col-md-12">
-                                        <table class="table table-striped table-bordered table-hover order-column" id="table_ic_expired">
-                                            <thead>
-                                            <tr class="mytable-header">
-                                                <th> Document</th>
-                                                <th width="10%"> Expired</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                            @endif {{-- end Insurance + Contracts--}}
 
                             {{-- WHS --}}
                             @if(Auth::user()->allowed2('show.company.doc.lic', $company))
@@ -879,62 +352,7 @@
 
 
                             @if ($company->status != 2 && !(Auth::user()->isCompany($company->id) && $company->signup_step))
-                                {{-- Trade + Planner Details --}}
-                                @if(Auth::user()->company->subscription > 1 && $company->id != Auth::user()->company->id)
-                                    <h3 class="font-green form-section">Trade @if(Auth::user()->company->addon('planner'))& Planner @endif Details (Construction)
-                                        @if((Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-                                            <a href="/company/{{ $company->id }}/edit/trade" class="btn btn-xs default pull-right">Edit</a>
-                                        @endif
-                                    </h3>
-                                    <div class="row">
-                                        <div class="col-md-6" style="line-height: 2">
-                                            <div class="row" style="margin: 0px">
-                                                <div class="col-xs-4" style="padding-left: 0px"><b>Trade(s):</b></div>
-                                                <div class="col-xs-8">{{ $company->tradesSkilledInSBC() }} &nbsp;</div>
-                                            </div>
-                                            @if (Auth::user()->isCC())
-                                                <div class="row" style="margin: 0px">
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Max Jobs:</b></div>
-                                                    <div class="col-xs-8">{{ $company->maxjobs }}</div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        @if (Auth::user()->isCC())
-                                            <div class="col-md-6" style="line-height: 2">
-                                                @if(Auth::user()->isCC())
-                                                    <div class="col-xs-4" style="padding-left: 0px"><b>Transient:</b></div>
-                                                    <div class="col-xs-8">@if($company->transient) Supervised by {{ $company->supervisedBySBC() }} @else No @endif</div>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
 
-
-                                {{-- Staff --}}
-                                <h3 class="form-section font-green">Staff</h3>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
-                                            <thead>
-                                            <tr class="mytable-header">
-                                                <th width="5%"> #</th>
-                                                <th> Name</th>
-                                                <th> Phone</th>
-                                                <th> Email</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                {{-- Notes --}}
-                                @if($company->notes && Auth::user()->company_id == $company->parent_company)
-                                    <h3 class="font-green form-section">Notes</h3>
-                                    <div class="row">
-                                        <div class="col-md-12">{{ $company->notes }}</div>
-                                    </div>
-                                @endif
                             @endif
 
                             @if (Auth::user()->isCompany($company->id) && $company->signup_step)
@@ -965,7 +383,7 @@
                     <h4 class="modal-title" id="modal-title"></h4>
                 </div>
                 <div class="modal-body form">
-                    {!! Form::model('company_doc', ['action' => ['Company\CompanyDocController@profile'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
+                    {!! Form::model('company_doc', ['action' => ['Company\CompanyDocController@profileICS'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
                     {{-- @include('form-error') --}}
                     {!! Form::hidden('for_company_id', $company->id, ['class' => 'form-control']) !!}
                     {!! Form::hidden('company_id', $company->reportsTo()->id, ['class' => 'form-control']) !!}
@@ -1110,7 +528,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
                     @if($company->id == Auth::user()->company_id)
-                        <a href="" class="btn dark" id="del_doc">Delete Document</a>
+                        <a href="" class="btn dark" id="delete_doc">Delete Document</a>
                     @endif
                     @if (Auth::user()->allowed2('sig.company', $company))
                         <button class="btn dark" id="reject_doc" name="reject_doc" value="reject">Reject Document</button>
@@ -1173,134 +591,238 @@
             placeholder: "Select one or more",
             width: '100%',
         });
+
+        /* Select2 */
+        $("#trades").select2({placeholder: "Select one or more", width: '100%'});
+        $("#supervisors").select2({placeholder: "Select one or more", width: '100%'});
+
+        if ($('#transient').val() == 1)
+            $('#super-div').show();
+        else
+            $('#supervisors').val('');
+
+        $('#transient').change(function (e) {
+            $('#super-div').toggle();
+        });
+
+        /* Over Ride Licence */
+        $('#licence_required').change(function () {
+            overide();
+        });
+
+        overide();
+
+        function overide() {
+            $('#req_yes').hide();
+            $('#req_no').hide();
+            //alert($('#licence_required').val());
+            if ($('#licence_required').val() != $('#requiresContractorsLicence').val()) {
+                //alert('over');
+                $('#overide_div').show();
+                if ($('#licence_required').val() == 1)
+                    $('#req_yes').show();
+                else
+                    $('#req_no').show();
+            } else
+                $('#overide_div').hide();
+        }
+
     });
 
-    $('#update_company').click(function (e) {
-        $('#show_company').hide();
-        $('#edit_company').show();
-    });
-    $('#cancel_company').click(function (e) {
+
+    /*
+     $('#save_company').click(function (e) {
+     //e.preventDefault();
+     //alert('saving');
+     //$('#show_company').show();
+     //$('#edit_company').hide();
+     });*/
+
+    function editForm(name) {
+        if (name.match(/[0-9]$/)) {
+            for (i = 1; i < 9; i++) {
+                $('#edit_doc' + i).hide();
+                $('#show_doc' + i).show();
+            }
+        }
+        $('#show_' + name).hide();
+        $('#edit_' + name).show();
+    }
+
+    function cancelForm(e, name) {
         e.preventDefault();
-        $('#show_company').show();
-        $('#edit_company').hide();
-    });
-    $('#save_company').click(function (e) {
-        //e.preventDefault();
-        //alert('saving');
-        //$('#show_company').show();
-        //$('#edit_company').hide();
+        $('#show_' + name).show();
+        $('#edit_' + name).hide();
+    }
+
+    $.ajaxSetup({
+        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
     });
 
-    $('.edit-file').click(function (e) {
-        // Reset Form Errors
-        var $fileform = document.getElementById('file-form');
-        $(".has-error").removeClass('has-error');
-        $(".help-block").text('');
 
-        display_fields($(this).data('cat'));
-
-        var cat_names = ['0', 'Public Liability', "Worker's Compensation", 'Sickness & Accident', 'Subcontractors Statement',
-            'Period Trade Contract', 'Test & Tagging', 'Contractor Licence', 'Asbestos Licence', 'Additional Licence'];
-
-        $(".modal-body #name").val(cat_names[$(this).data('cat')]);
-        if ($(this).data('cat') == '89')
-            $(".modal-body #name").val(cat_names[9]);
-        $(".modal-body #expiry").val($(this).data('expiry'));
-        $(".modal-body #action").val($(this).data('action'));
-        $(".modal-body #category_id").val($(this).data('cat'));
-        $(".modal-body #doc_status").val($(this).data('doc_status'));
-        $(".modal-body #notes").val($(this).data('notes'));
-        $(".modal-title").html('<b>' + $("#name").val() + '</b>');
-
-        if ($(this).data('action') == 'add')
-            $("#doc_id").val('');
-
-
-        // Set Doc_id
-        if ($(this).data('action') == 'edit') {
-            $("#doc_id").val($(this).data('doc_id'));
-            $("#doc_name").val($(this).data('doc_name'));
-            $("#doc_url").val($(this).data('doc_url'));
-            $("#notes_field").val($(this).data('doc_notes'));
-            $("#del_doc").show();
-            $("#del_doc").attr('href', '/company/doc/profile-destroy/' + $(this).data('doc_id'));
-            $("#file_field").hide();
-            $("#file_div").show();
-            $(".modal-body #doc_link").html($(this).data('doc_name'));
-            $(".modal-body #doc_link").attr('href', $(this).data('doc_url'));
-            if ($(this).data('doc_status') == 1) {
-                $("#rejected_div").hide();
-                $("#reject_doc").hide();
-                $("#pending_div").hide();
-                $("#archive_doc").show();
+    $('#app_doc').click(function (e) {
+        e.preventDefault();
+        var id = $(this).data('doc_id');
+        alert('app'+id)
+        $.ajax({
+            type: 'POST',
+            url: '/company/doc/profile-approve',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                toastr.success('Accepted document');
+                window.location.href = "/company/" + {{ $company->id }};
             }
-            if ($(this).data('doc_status') == 2) {
-                $("#reject_doc").show();
-                $("#pending_div").show();
-                $("#rejected_div").hide();
-                $("#archive_doc").hide();
-            }
-            if ($(this).data('doc_status') == 3) {
-                $("#rejected_div").show();
-                $("#reject_doc").hide();
-                $("#pending_div").hide();
-                $("#archive_doc").hide();
-            }
-        } else {
-            $("#file_field").show();
-            $("#pending_div").hide();
-            $("#rejected_div").hide();
-            $("#del_doc").hide();
-            $("#reject_doc").hide();
-            $("#file_div").hide();
-        }
+        });
+    });
 
-        if ($(this).data('action') == 'del')
-            $("#del_id").val($(this).data('doc_id'));
+/*
+    $('#del_doc').click(function (e) {
+        e.preventDefault();
+        var id = $(this).data('doc_id');
+        $.ajax({
+            type: 'GET',
+            url: '/company/doc/profile-destroy/'+id,
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                toastr.error('Deleted document');
+                window.location.href = "/company/" + {{ $company->id }};
+            }
+        });
+    });*/
 
-        if ($(this).data('cat') == '1') {
-            $("#ref_no").val($(this).data('ref_no'));
-            $("#ref_name").val($(this).data('ref_name'));
-        }
-        if ($(this).data('cat') == '2') {
-            $("#ref_no").val($(this).data('ref_no'));
-            $("#ref_name").val($(this).data('ref_name'));
-            $('#ref_type').val($(this).data('ref_type')).prop('selected', true);
-        }
-        if ($(this).data('cat') == '3') {
-            $("#ref_no").val($(this).data('ref_no'));
-            $("#ref_name").val($(this).data('ref_name'));
-            $('#ref_type').val($(this).data('ref_type')).prop('selected', true);
-        }
-        if ($(this).data('cat') == '7') {
-            $("#lic_no").val($(this).data('ref_no'));
-        }
-        if ($(this).data('cat') < 6) { // Doc type ICS
-            $("#type").val('ics');
-        }
-        if ($(this).data('cat') == 6) { // Doc type WHS
-            $("#type").val('whs');
-        }
-        if (($(this).data('cat') > 6 && $(this).data('cat') < 10) || $(this).data('cat') == 89) { // Doc type LIC
-            $("#type").val('lic');
-        }
-        if ($(this).data('cat') < 8) {
-            $("#extra_lic_type").val('');
-        }
-        if ($(this).data('cat') == '8') {
-            $('#extra_lic_type').val($(this).data('extra_lic_type')).prop('selected', true);
-            $("#extra_lic_class").val($(this).data('extra_lic_class'));
-        }
-        if ($(this).data('cat') == '9') {
-            $('#extra_lic_type').val($(this).data('extra_lic_type')).prop('selected', true);
-            $("#extra_lic_name").val($(this).data('extra_lic_name'));
-        }
+
+    $('#del_doc').click(function (e) {
+        e.preventDefault();
+        var id = $(this).data('doc_id');
+        $.ajax({
+            url: '/company/doc/'+id,
+            type: 'DELETE',
+            dataType: 'json',
+            data: {method: '_DELETE', submit: true},
+            success: function (data) {
+                toastr.error('Deleted document');
+                window.location.href = "/company/" + {{ $company->id }};
+            },
+        });
     });
 
     $('#del_cross').click(function (e) {
+        alert('j');
         $("#file_field").show();
         $("#file_div").hide();
     });
+
+    /*
+     $('.edit-file').click(function (e) {
+     // Reset Form Errors
+     var $fileform = document.getElementById('file-form');
+     $(".has-error").removeClass('has-error');
+     $(".help-block").text('');
+
+     display_fields($(this).data('cat'));
+
+     var cat_names = ['0', 'Public Liability', "Worker's Compensation", 'Sickness & Accident', 'Subcontractors Statement',
+     'Period Trade Contract', 'Test & Tagging', 'Contractor Licence', 'Asbestos Licence', 'Additional Licence'];
+
+     $(".modal-body #name").val(cat_names[$(this).data('cat')]);
+     if ($(this).data('cat') == '89')
+     $(".modal-body #name").val(cat_names[9]);
+     $(".modal-body #expiry").val($(this).data('expiry'));
+     $(".modal-body #action").val($(this).data('action'));
+     $(".modal-body #category_id").val($(this).data('cat'));
+     $(".modal-body #doc_status").val($(this).data('doc_status'));
+     $(".modal-body #notes").val($(this).data('notes'));
+     $(".modal-title").html('<b>' + $("#name").val() + '</b>');
+
+     if ($(this).data('action') == 'add')
+     $("#doc_id").val('');
+
+
+     // Set Doc_id
+     if ($(this).data('action') == 'edit') {
+     $("#doc_id").val($(this).data('doc_id'));
+     $("#doc_name").val($(this).data('doc_name'));
+     $("#doc_url").val($(this).data('doc_url'));
+     $("#notes_field").val($(this).data('doc_notes'));
+     $("#del_doc").show();
+     $("#del_doc").attr('href', '/company/doc/profile-destroy/' + $(this).data('doc_id'));
+     $("#file_field").hide();
+     $("#file_div").show();
+     $(".modal-body #doc_link").html($(this).data('doc_name'));
+     $(".modal-body #doc_link").attr('href', $(this).data('doc_url'));
+     if ($(this).data('doc_status') == 1) {
+     $("#rejected_div").hide();
+     $("#reject_doc").hide();
+     $("#pending_div").hide();
+     $("#archive_doc").show();
+     }
+     if ($(this).data('doc_status') == 2) {
+     $("#reject_doc").show();
+     $("#pending_div").show();
+     $("#rejected_div").hide();
+     $("#archive_doc").hide();
+     }
+     if ($(this).data('doc_status') == 3) {
+     $("#rejected_div").show();
+     $("#reject_doc").hide();
+     $("#pending_div").hide();
+     $("#archive_doc").hide();
+     }
+     } else {
+     $("#file_field").show();
+     $("#pending_div").hide();
+     $("#rejected_div").hide();
+     $("#del_doc").hide();
+     $("#reject_doc").hide();
+     $("#file_div").hide();
+     }
+
+     if ($(this).data('action') == 'del')
+     $("#del_id").val($(this).data('doc_id'));
+
+     if ($(this).data('cat') == '1') {
+     $("#ref_no").val($(this).data('ref_no'));
+     $("#ref_name").val($(this).data('ref_name'));
+     }
+     if ($(this).data('cat') == '2') {
+     $("#ref_no").val($(this).data('ref_no'));
+     $("#ref_name").val($(this).data('ref_name'));
+     $('#ref_type').val($(this).data('ref_type')).prop('selected', true);
+     }
+     if ($(this).data('cat') == '3') {
+     $("#ref_no").val($(this).data('ref_no'));
+     $("#ref_name").val($(this).data('ref_name'));
+     $('#ref_type').val($(this).data('ref_type')).prop('selected', true);
+     }
+     if ($(this).data('cat') == '7') {
+     $("#lic_no").val($(this).data('ref_no'));
+     }
+     if ($(this).data('cat') < 6) { // Doc type ICS
+     $("#type").val('ics');
+     }
+     if ($(this).data('cat') == 6) { // Doc type WHS
+     $("#type").val('whs');
+     }
+     if (($(this).data('cat') > 6 && $(this).data('cat') < 10) || $(this).data('cat') == 89) { // Doc type LIC
+     $("#type").val('lic');
+     }
+     if ($(this).data('cat') < 8) {
+     $("#extra_lic_type").val('');
+     }
+     if ($(this).data('cat') == '8') {
+     $('#extra_lic_type').val($(this).data('extra_lic_type')).prop('selected', true);
+     $("#extra_lic_class").val($(this).data('extra_lic_class'));
+     }
+     if ($(this).data('cat') == '9') {
+     $('#extra_lic_type').val($(this).data('extra_lic_type')).prop('selected', true);
+     $("#extra_lic_name").val($(this).data('extra_lic_name'));
+     }
+     });
+     */
+
+
 
     // Expired Licence button
     $('#but_show_whs_expired').click(function (e) {
@@ -1346,43 +868,44 @@
         }
     });
 
+    /*
+     function display_fields(cat) {
+     //alert(cat);
+     $('#ref_no_field').hide();
+     $("#ref_name_field").hide();
+     $("#ref_type_field").hide();
+     $("#lic_no_field").hide();
+     $("#lic_type_field").hide();
+     $("#extra_lic_field").hide();
+     $("#extra_lic_class_field").hide();
+     $("#extra_lic_name_field").hide();
 
-    function display_fields(cat) {
-        //alert(cat);
-        $('#ref_no_field').hide();
-        $("#ref_name_field").hide();
-        $("#ref_type_field").hide();
-        $("#lic_no_field").hide();
-        $("#lic_type_field").hide();
-        $("#extra_lic_field").hide();
-        $("#extra_lic_class_field").hide();
-        $("#extra_lic_name_field").hide();
-
-        if (cat == '1') { // Public Liability
-            $('#ref_no_field').show();
-            $("#ref_name_field").show();
-        }
-        if (cat == '2' || cat == '3') { // Worker's Compensation, Sickness & Accident
-            $('#ref_no_field').show();
-            $("#ref_name_field").show();
-            $("#ref_type_field").show();
-        }
-        if (cat == '7') { // Contractor Licence
-            $("#lic_no_field").show();
-            $("#lic_type_field").show();
-        }
-        if (cat == '8') { // Asbestos Licence
-            $("#extra_lic_field").show();
-            $("#extra_lic_class_field").show();
-        }
-        if (cat == '9') { // Additional Licence
-            $("#extra_lic_field").show();
-            $("#extra_lic_name_field").show();
-        }
-        if (cat == '89') { // New Additional Licence
-            $("#extra_lic_field").show();
-        }
-    }
+     if (cat == '1') { // Public Liability
+     $('#ref_no_field').show();
+     $("#ref_name_field").show();
+     }
+     if (cat == '2' || cat == '3') { // Worker's Compensation, Sickness & Accident
+     $('#ref_no_field').show();
+     $("#ref_name_field").show();
+     $("#ref_type_field").show();
+     }
+     if (cat == '7') { // Contractor Licence
+     $("#lic_no_field").show();
+     $("#lic_type_field").show();
+     }
+     if (cat == '8') { // Asbestos Licence
+     $("#extra_lic_field").show();
+     $("#extra_lic_class_field").show();
+     }
+     if (cat == '9') { // Additional Licence
+     $("#extra_lic_field").show();
+     $("#extra_lic_name_field").show();
+     }
+     if (cat == '89') { // New Additional Licence
+     $("#extra_lic_field").show();
+     }
+     }
+     */
 
     var table_staff = $('#table_staff').DataTable({
         processing: true,
@@ -1454,6 +977,14 @@
     if (errors.FORM == 'company') {
         $('#show_company').hide();
         $('#edit_company').show();
+    }
+    if (errors.FORM == 'ics') {
+        $('#show_doc' + errors.TYPE).hide();
+        $('#edit_doc' + errors.TYPE).show();
+    }
+    if (errors.FORM == 'construction') {
+        $('#show_construction').hide();
+        $('#edit_construction').show();
     }
 
     console.log(errors)

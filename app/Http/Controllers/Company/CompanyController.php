@@ -201,37 +201,32 @@ class CompanyController extends Controller {
     {
         $company = Company::findorFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'name'            => 'required',
-            'phone'           => 'required',
-            'email'           => 'required|email|max:255',
-            'address'         => 'required',
-            'suburb'          => 'required',
-            'state'           => 'required',
-            'postcode'        => 'required',
-            'primary_user'    => 'required',
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.company', $company))
+            return view('errors/404');
+
+        $validator = Validator::make(request()->all(), [
+            'name'         => 'required',
+            'phone'        => 'required',
+            'email'        => 'required|email|max:255',
+            'address'      => 'required',
+            'suburb'       => 'required',
+            'state'        => 'required',
+            'postcode'     => 'required',
+            'primary_user' => 'required',
         ]);
 
 
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'company');
-            return redirect("company/$company->id")
-                ->withErrors($validator)
-                ->withInput();
+
+            //return redirect("company/$company->id")->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
-        /// Check authorisation and throw 404 if not
-        // User must be able to edit company or has subscription 2+ with ability to edit trades
-        if (!(Auth::user()->allowed2('edit.company', $company) || (Auth::user()->company->subscription > 1 &&
-                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)))
-        )
-            return view('errors/404');
-
-        $company_request = $request->except('supervisors', 'trades', 'slug');
+        $company_request = request()->all();
 
         //dd($company_request);
-
-        //$company_request['licence_expiry'] = ($request->get('licence_expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('licence_expiry') . '00:00')->toDateTimeString() : null;
 
         // If updated by Parent Company with 'authorise' permissions update approved fields else reset
         if (Auth::user()->allowed2('sig.company', $company)) {
@@ -266,18 +261,70 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function editTrade($id)
+    public function updateBusiness(Request $request, $id)
     {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        // User must be able to edit company or has subscription 3+ with ability to edit trades
-        if (!(Auth::user()->allowed2('edit.company', $company) || Auth::user()->company->subscription > 2 &&
-            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-        )
+        if (!Auth::user()->allowed2('edit.company.acc', $company))
             return view('errors/404');
 
-        return view('company/edit-trade', compact('company'));
+        $validator = Validator::make(request()->all(), ['abn' => 'required',]);
+
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'business');
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $company_request = request()->all();
+
+        //dd($company_request);
+
+        // If updated by Parent Company with 'authorise' permissions update approved fields else reset
+        if (Auth::user()->allowed2('sig.company.acc', $company)) {
+            $company_request['approved_by'] = Auth::user()->id;
+            $company_request['approved_at'] = Carbon::now()->toDateTimeString();
+        } else {
+            $company_request['approved_by'] = 0;
+            $company_request['approved_at'] = null;
+        }
+
+        $company->update($company_request);
+
+
+        Toastr::success("Saved changes");
+
+        return redirect("company/$company->id");
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateWHS($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.company.whs', $company))
+            return view('errors/404');
+
+        $validator = Validator::make(request()->all(), []);
+
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'whs');
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        //dd(request()->all());
+        $company->update(request()->all());
+
+        Toastr::success("Saved changes");
+
+        return back();
     }
 
     /**
@@ -287,46 +334,58 @@ class CompanyController extends Controller {
      */
     public function updateTrade(Request $request, $id)
     {
-        $this->validate(request(), ['supervisors' => 'required_with:transient',]);
-
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        // User must be able to edit company or has subscription 2+ with ability to edit trades
-        if (!(Auth::user()->allowed2('edit.company', $company) || (Auth::user()->company->subscription > 1 &&
-                (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id)))
-        )
+        if (!Auth::user()->allowed2('edit.company.con', $company))
             return view('errors/404');
 
-        // Update trades + supervisors for company
-        // Only updatable by 'parent' company
-        if ($company->reportsTo()->id == Auth::user()->company_id) {
+        $validator = Validator::make(request()->all(), ['supervisors' => 'required_if:transient,1'], ['supervisors.required_if' => 'The supervisor name field is required.']);
 
-            // Trades
-            $old_trades = $company->tradesSkilledIn;
-            $new_trades = $request->get('trades');
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'construction');
+            Toastr::error("Failed to save changes");
 
-            $planned_trades = '';
-            foreach ($old_trades as $old_trade) {
-                if (!$new_trades || !in_array($old_trade->id, $new_trades)) {
-                    echo "checking trade $old_trade->id<br>";
-                    // Determine if company on planner for this trade
-                    $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $company->id)
-                        ->whereIn('task_id', Trade::find($old_trade->id)->tasks->pluck('id')->toArray())
-                        ->where('to', '>', Carbon::today()->format('Y-m-d'))->get();
-
-                    if ($planner->count()) {
-                        $planned_trades .= "'" . Trade::find($old_trade->id)->name . "', ";
-                        continue;
-                    }
-                }
-            }
-            $planned_trades = rtrim($planned_trades, ', ');
+            return back()->withErrors($validator)->withInput();
         }
 
-        if ($planned_trades)
-            return back()->withErrors(['planned_trades' => "This company is currently on the planner for $planned_trades and MUST be removed first."]);
+        // Update trades for company
+        $old_trades = $company->tradesSkilledIn;
+        $new_trades = $request->get('trades');
 
+        $planned_trades = '';
+        foreach ($old_trades as $old_trade) {
+            if (!$new_trades || !in_array($old_trade->id, $new_trades)) {
+                echo "checking trade $old_trade->id<br>";
+                // Determine if company on planner for this trade
+                $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $company->id)
+                    ->whereIn('task_id', Trade::find($old_trade->id)->tasks->pluck('id')->toArray())
+                    ->where('to', '>', Carbon::today()->format('Y-m-d'))->get();
+
+                if ($planner->count()) {
+                    $planned_trades .= "'" . Trade::find($old_trade->id)->name . "', ";
+                    continue;
+                }
+            }
+        }
+        $planned_trades = rtrim($planned_trades, ', ');
+
+        if ($planned_trades) {
+            Toastr::error("Company is on planner for removed trade");
+
+            return back()->withErrors(['FORM' => 'construction', 'planned_trades' => "This company is currently on the planner for $planned_trades and MUST be removed first."])->withInput();
+        }
+
+        $company->update(request()->all());
+
+        // Attach Supervisors if Transient
+        if ($request->get('transient')) {
+            $company->supervisedBy()->sync($request->get('supervisors'));
+        } else {
+            $company->supervisedBy()->detach();
+        }
+
+        // Determine if Licence is required
         $old_licence_overide = ($company->licence_required != $company->requiresContractorsLicence()) ? true : false;
         $old_trades_skilled_in = $company->tradesSkilledInSBC();
         if ($request->get('trades')) {
@@ -345,16 +404,8 @@ class CompanyController extends Controller {
         } else
             $company->tradesSkilledIn()->detach();
 
-        if ($request->has('transient')) {
-
-            $company->supervisedBy()->sync($request->get('supervisors'));
-            $company->transient = 1;
-        } else {
-            $company->supervisedBy()->detach();
-            $company->transient = 0;
-        }
         $company->save();
-
+        Toastr::success("Saved changes");
 
         return redirect("company/$company->id");
 
@@ -365,12 +416,14 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function approveCompany($id)
+    public function approveCompany($id, $type)
     {
         $company = Company::findorFail($id);
 
+        $type = ($type == 'com') ? '' : ".$type";
+
         /// Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('sig.company', $company))
+        if (!Auth::user()->allowed2("sig.company$type", $company))
             return view('errors/404');
 
         $company->approved_by = Auth::user()->id;
@@ -467,7 +520,7 @@ class CompanyController extends Controller {
             })
             ->addColumn('trade', function ($company) {
                 if (preg_match('/[0-9]/', $company->category))
-                    return "<b>" .CompanyTypes::name($company->category) . ":</b></span> " . $company->tradesSkilledInSBC();
+                    return "<b>" . CompanyTypes::name($company->category) . ":</b></span> " . $company->tradesSkilledInSBC();
 
                 return "<b>" . $company->category . ":</b></span> " . $company->tradesSkilledInSBC();
                 //return "<b>".CompanyTypes::name($company->category).":</b></span> " . $company->tradesSkilledInSBC();

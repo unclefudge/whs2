@@ -472,6 +472,35 @@ trait UserRolesPermissions {
                 return false;
             }
 
+            // Company Accounting + WHS + Construction
+            if ($permissiontype == 'company.acc' || $permissiontype == 'company.con') {
+                if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
+
+                return false;
+            }
+
+            // Company ICS + WHS Documents
+            if ($permissiontype == 'company.ics' || $permissiontype == 'company.whs') {
+                // determine if Record is Company or Document
+                if (isset($record->slug)) {
+                    // Company Record
+                    if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
+                } else {
+                    // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
+                    if ($action == 'view' || $record->status == '2' || $record->status == '3') {
+                        if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                        if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                    } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
+                        // User requires 'Sign Off' at Document Owner level to update an active document
+                        if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                        if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                    }
+
+                }
+                return false;
+            }
+
+
             // Company Documents
             if ($permissiontype == 'company.doc.gen' || $permissiontype == 'company.doc.lic' || $permissiontype == 'company.doc.whs' || $permissiontype == 'company.doc.ics') {
                 // User can View or Update document if status is 2 or 3 ie. Pending/Rejected

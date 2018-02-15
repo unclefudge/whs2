@@ -77,9 +77,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/doc/dt/expired', 'Company\CompanyDocController@getExpiredDocs');
     Route::any('company/doc/create', 'Company\CompanyDocController@create');
     Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
-    Route::post('company/doc/profile', 'Company\CompanyDocController@profile');
+    Route::post('company/doc/profileICS', 'Company\CompanyDocController@profileICS');
     //Route::get('company/doc/profile-reject/{id}', 'Company\CompanyDocController@profileReject');
-    Route::get('company/doc/profile-destroy/{id}', 'Company\CompanyDocController@profileDestroy');
+    //Route::get('company/doc/profile-destroy/{id}', 'Company\CompanyDocController@profileDestroy');
+    //Route::post('company/doc/profile-approve', 'Company\CompanyDocController@profileApprove');
+    //Route::post('company/doc/profile-reject', 'Company\CompanyDocController@profileReject');
     Route::any('company/doc/export', 'Company\CompanyExportController@exportDocs');
     Route::post('company/doc/export/pdf', 'Company\CompanyExportController@docsPDF');
     Route::get('company/doc/create/tradecontract/{id}/{version}', 'Company\CompanyExportController@tradecontractPDF');
@@ -90,9 +92,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/dt/companies', 'Company\CompanyController@getCompanies');
     Route::get('company/dt/staff', 'Company\CompanyController@getStaff');
     Route::get('company/{id}/name', 'Company\CompanyController@getCompanyName');
-    Route::get('company/{id}/approve', 'Company\CompanyController@approveCompany');
+    Route::get('company/{id}/approve/{type}', 'Company\CompanyController@approveCompany');
     Route::get('company/{id}/signup/{step}', 'Company\CompanyController@signupProcess');
+    Route::post('company/{id}/business', 'Company\CompanyController@updateBusiness');
     Route::post('company/{id}/trade', 'Company\CompanyController@updateTrade');
+    Route::post('company/{id}/whs', 'Company\CompanyController@updateWHS');
     Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
     //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');
     //Route::post('company/{id}/edit/logo', 'Company\CompanyController@updateLogo');

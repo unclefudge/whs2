@@ -43,40 +43,71 @@ $dis = false;
                data-original-title="Sign Off"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
     </tr>
 </table>
-<h5 class="font-green-haze" style="font-size: 16px">Accounts
+
+<h5 class="font-green-haze" style="font-size: 16px">User
     <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-       data-content="Grants ability to view or modify users, companies, clients that belong to the users own company or any 'child' company."
-       data-original-title="Accounts"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
+       data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
+       data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
 <table class="table table-bordered table-striped">
     <tr>
         <td>User</td>
-        <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $user, $cid) !!}</td>
-        <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $user, $cid) !!}</td>
-        <td width="15%">{!! permSelect('add.user', 'add', $user, $cid) !!}</td>
-        <td width="15%">{!! permSelect('del.user', 'arc', $user, $cid) !!}</td>
-        <td width="15%">{!! permSelect('sig.user', 'sig', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('add.user', 'add', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('del.user', 'arc', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('sig.user', 'sig', $user, $cid, $dis) !!}</td>
     </tr>
+</table>
+
+<h5 class="font-green-haze" style="font-size: 16px">Company
+    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+       data-content="Grants ability to view or modify your company information or any 'child' company."
+       data-original-title="Company"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
+<table class="table table-bordered table-striped">
     <tr>
         <td>Company</td>
-        <td width="15%">{!! permSelect('view.company', 'all', $user, $cid) !!}</td>
-        <td width="15%">{!! permSelect('edit.company', 'all', $user, $cid) !!}</td>
+        <td width="15%">{!! permSelect('view.company', 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company', 'all', $user, $cid, $dis) !!}</td>
         @if ($sub2)
-            <td width="15%">{!! permSelect('add.company', 'add', $user, $cid) !!}</td>
-            <td width="15%">{!! permSelect('del.company', 'arc', $user, $cid) !!}</td>
-            <td width="15%">{!! permSelect('sig.company', 'sig', $user, $cid) !!}</td>
+            <td width="15%">{!! permSelect('add.company', 'add', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('del.company', 'arc', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('sig.company', 'sig', $user, $cid, $dis) !!}</td>
         @else
             <td width="45%" colspan="3"></td>
         @endif
     </tr>
-    @if($cc)
+    <tr>
+        <td>Business Details</td>
+        <td width="15%">{!! permSelect('view.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        <td width="30%" colspan="2"></td>
+        <td width="15%">{!! permSelect('sig.company.acc', 'sig', $user, $cid, $dis) !!}</td>
+    </tr>
+    <tr>
+        <td>Insurance & Contracts</td>
+        <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="30%" colspan="2"></td>
+        <td width="15%">{!! permSelect('sig.company.ics', 'sig', $user, $cid, $dis) !!}</td>
+    </tr>
+    <tr>
+        <td>WHS Compliance</td>
+        <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
+        <td width="30%" colspan="2"></td>
+        <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
+    </tr>
+    @if($plan)
         <tr>
-            <td>Company Acounting</td>
-            <td width="15%">{!! permSelect('view.company.accounting', 'all', $user, $cid) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.accounting', 'all', $user, $cid) !!}</td>
-            <td width="45%" colspan="3"></td>
+            <td>Construction</td>
+            <td width="15%">{!! permSelect('view.company.con', 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.con', 'all', $user, $cid, $dis) !!}</td>
+            <td width="30%" colspan="2"></td>
+            <td width="15%">{!! permSelect('sig.company.con', 'sig', $user, $cid, $dis) !!}</td>
         </tr>
     @endif
 </table>
+
 @if ($sub1)
     <h5 class="font-green-haze" style="font-size: 16px">Work Site
         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"

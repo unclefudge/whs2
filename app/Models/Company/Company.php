@@ -846,14 +846,38 @@ class Company extends Model {
      */
     public function requiresCompanyDoc($type)
     {
-        if ($this->category == 'On Site Trade') {
-            if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
-                return true;
+        // 1 PL
+        // 2 WC
+        // 3 SA
+        // 4 Sub
+        // 5 PTC
+        // 7 CC
 
-            foreach ($this->staff as $staff) {
-                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
-                    return true;
-            }
+        // '1' => 'Subcontractor (On Site Trade)',
+        //'2' => 'Service Provider (On Site trade',
+        //'3' => 'Service Provider (Off Site)',
+        //'4' => 'Supply & Fit',
+        //'5' => 'Supply Only',
+        //'6' => 'Consultant',
+
+        // Subcontractor (On Site Trade)
+        if ($this->category == 1 ) {
+            if (in_array($type, [1, 4, 5, 7]))
+                return true;
+            elseif ($type == 2 && ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust'))
+                return true;
+            elseif ($type == 3 && ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader'))
+                return true;
+        }
+
+        // Service Provider (On Site Trades)
+        if ($this->category == 1 ) {
+            if (in_array($type, [1, 4, 5, 7]))
+                return true;
+            elseif ($type == 2 && ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust'))
+                return true;
+            elseif ($type == 3 && ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader'))
+                return true;
         }
 
         return false;

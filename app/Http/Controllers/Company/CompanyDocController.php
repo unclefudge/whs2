@@ -323,6 +323,7 @@ class CompanyDocController extends Controller {
     /*
      * A request made by Company Profile page to store / update company document
      */
+    /*
     public function profile(CompanyProfileDocRequest $request)
     {
         $doc_request = $request->all();
@@ -420,6 +421,134 @@ class CompanyDocController extends Controller {
         }
 
         return redirect('/company/' . $doc->for_company_id);
+    }*/
+
+    /*
+    * A request made by Company Profile page to store / update company document
+    */
+    public function profileICS()
+    {
+        $rules = [
+            'expiry'     => 'required',
+            'ref_no'     => 'required_if:category_id,1,2',
+            'ref_name'   => 'required_if:category_id,1,2',
+            'ref_type'   => 'required_if:category_id,2,3,8',
+            'singlefile' => 'required_if:doc_id,new',
+        ];
+
+        $messages = [
+            'ref_no.required_if'          => 'The policy no. field is required',
+            'ref_name.required_if'        => 'The insurer field is required',
+            'ref_type.required_if'        => 'The category field is required',
+            'lic_no.required_if'          => 'The licence no. field is required',
+            'lic_type.required_if'        => 'The class field is required',
+            'extra_lic_type.required_if'  => 'The type field is required',
+            'extra_lic_class.required_if' => 'The class field is required',
+            'extra_lic_name.required_if'  => 'The licence name field is required',
+            'singlefile.required_if'      => 'The document field is required'
+        ];
+
+        $validator = Validator::make(request()->all(), $rules, $messages);
+
+
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'ics');
+            $validator->errors()->add('TYPE', request('category_id'));
+            Toastr::error("Failed to save document");
+
+            return back()->withErrors($validator)->withInput();
+            //return redirect("company/".request('for_company_id'))->withErrors($validator)->withInput();
+        }
+        $doc_request = request()->all();
+
+        if (request()->has('reject_doc')) {
+            $doc = CompanyDoc::findOrFail(request('doc_id'));
+            $doc->status = 3;
+            $doc->notes = request('notes');
+            $doc->closeToDo();
+            $doc->emailReject();
+            $doc->save();
+
+            Toastr::success("Document rejected");
+
+            return back();
+        }
+        //dd($doc_request);
+        $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString();
+        $type = request('type');
+
+        /*
+        // Convert licence type into CSV
+        if ($request->get('category_id') == '7') {
+            $doc_request['ref_no'] = $request->get('lic_no');
+            $doc_request['ref_type'] = implode(',', $request->get('lic_type'));
+        }
+
+        // Reassign Asbestos Licence to correct category + name
+        if ($request->get('extra_lic_type') == '8') {
+            $doc_request['category_id'] = '8';
+            $doc_request['name'] = 'Asbestos Removal';
+            $doc_request['ref_type'] = $request->get('extra_lic_class');
+        }
+        // Reassign Additional Licences to correct category + name
+        if ($request->get('extra_lic_type') == '9') {
+            $doc_request['category_id'] = '9';
+            $doc_request['name'] = $request->get('extra_lic_name'); //'Additional Licence';
+        }
+        */
+
+        //dd($doc_request);
+        // Determine if its a new or existing document
+        if (request('doc_id') == 'new') {
+            // Create Company Doc
+            $doc_request['type'] = 'ics';
+            $doc = CompanyDoc::create($doc_request);
+            Toastr::success("Uploaded document");
+        } else {
+            // Update Company Doc
+            $doc = CompanyDoc::findOrFail(request('doc_id'));
+            $type = $doc->type;
+
+            // Check authorisation and throw 404 if not
+            if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
+                return view('errors/404');
+
+            $doc->update($doc_request);
+            Toastr::success("Updated document");
+        }
+
+        // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
+        $doc->closeToDo();
+        $doc->status = 2;
+        if (Auth::user()->allowed2("sig.company.ics", $doc)) {
+            $doc->approved_by = Auth::user()->id;
+            $doc->approved_at = Carbon::now()->toDateTimeString();
+            $doc->status = 1;
+        } else
+            $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc')); // Need to update with real user emails
+
+        $doc->save();
+
+
+        // Handle attached file
+        if (request()->hasFile('singlefile')) {
+            // Delete previous file
+            if ($doc->attachment && file_exists(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment)))
+                unlink(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment));
+
+            $file = request()->file('singlefile');
+            $path = "filebank/company/" . $doc->for_company_id . '/docs';
+            $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
+            // Ensure filename is unique by adding counter to similiar filenames
+            $count = 1;
+            while (file_exists(public_path("$path/$name")))
+                $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
+            $file->move($path, $name);
+            $doc->attachment = $name;
+            $doc->save();
+        }
+
+        return redirect('/company/' . $doc->for_company_id);
     }
 
     /**
@@ -446,19 +575,67 @@ class CompanyDocController extends Controller {
     }*/
 
     /**
-     * Delete the specified company document in storage.
+     * Approve the specified company document in storage.
      *
      * @return \Illuminate\Http\Response
+     */
+    public function profileApprove()
+    {
+        $doc = CompanyDoc::findOrFail(request('id'));
+        $type = $doc->type;
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2("sig.company.$type", $doc))
+            return view('errors/404');
+
+        $doc->approved_by = Auth::user()->id;
+        $doc->approved_at = Carbon::now()->toDateTimeString();
+        $doc->status = 1;
+        $doc->save();
+        $doc->closeToDo();
+
+        Toastr::success("Document approved");
+
+        return response()->json(['success' => 'success']);
+    }
+
+    /**
+     * Approve the specified company document in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function profileReject()
+    {
+        $doc = CompanyDoc::findOrFail(request('id'));
+        $type = $doc->type;
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2("sig.company.$type", $doc))
+            return (request()->ajax()) ? json_encode("failed") : view('errors/404');
+
+        $doc->status = 3;
+        $doc->notes = request('notes');
+        $doc->closeToDo();
+        $doc->emailReject();
+        $doc->save();
+
+        Toastr::success("Document rejected");
+
+        return (request()->ajax()) ? json_encode("success") : redirect('/company/' . $doc->for_company_id);
+    }
+
+    /**
+     * Delete the specified company document in storage.
+     *
      */
     public function profileDestroy($id)
     {
         $doc = CompanyDoc::findOrFail($id);
-        $company = Company::findOrFail($doc->for_company_id);
-        $for_company_id = $doc->for_company_id;
+        $type = $doc->type;
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.company', $company))
-            return view('errors/404');
+        if (!Auth::user()->allowed2("edit.company.$type", $doc))
+            return (request()->ajax()) ? json_encode("failed") : view('errors/404');
 
         // Delete attached file
         if (file_exists(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment)))
@@ -469,9 +646,8 @@ class CompanyDocController extends Controller {
 
         Toastr::error("Document deleted");
 
-        //$company = Company::findOrFail($doc->for_company_id);
-
-        return redirect('/company/' . $for_company_id);
+        return (request()->ajax()) ? json_encode("success") : redirect('/company/' . $doc->for_company_id);
+        //return (request()->ajax()) ? response()->json(['success' => true]) : redirect('/company/' . $doc->for_company_id);
     }
 
 
