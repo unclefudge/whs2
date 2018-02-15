@@ -21,14 +21,14 @@
                         <div class="mt-comment" style="padding: 5px" id="show_doc{{ $cat_type }}">
                             <div class="mt-comment-img">
                                 @if ($doc)
-                                    <a href="href={{ $doc->attachment_url }}" target="_blank"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a>
+                                    <a href="{{ $doc->attachment_url }}" target="_blank"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a>
                                 @else
                                     <i class="fa fa-ban fa-2x" style="color: #ccc; padding-top: 5px"></i>
                                 @endif</div>
                             <div class="mt-comment-body">
                                 <div class="mt-comment-info">
                                     <span class="mt-comment-author">
-                                        {{ $doc_name }}
+                                        {!! ($doc) ? "<a href='$doc->attachment_url' target='_blank' style='color:#000'>$doc_name</a>" : $doc_name !!}
                                         {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
                                         {!! ($doc && $doc->status == 3) ?  '<span class="label label-danger label-sm">Not approved</span>' : '' !!}
                                     </span>
@@ -46,14 +46,14 @@
                                                 <button class="btn btn-sm dark" id="del_doc" data-doc_id="{{ $doc->id }}">Delete</button>
                                             </li>
                                         @endif
+                                        @if (!$doc && Auth::user()->allowed2('add.company.ics', $company))
+                                            <li>
+                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
+                                            </li>
+                                        @endif
                                         @if ($doc && Auth::user()->allowed2('edit.company.ics', $doc))
                                             <li>
                                                 <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Edit</button>
-                                            </li>
-                                        @endif
-                                        @if (!$doc && Auth::user()->allowed2('edit.company.ics', $company))
-                                            <li>
-                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
                                             </li>
                                         @endif
 
@@ -159,7 +159,7 @@
                                     <button type="submit" class="btn green">Approve</button>
                                 @else
                                     @if ($doc && $doc->status == '1' && Auth::user()->allowed2('del.company.ics', $doc))
-                                        <button type="submit" class="btn red" name="archive_doc">Archive</button>
+                                        <button type="submit" class="btn dark" name="archive_doc">Archive</button>
                                     @endif
                                     <button type="submit" class="btn green"> Save</button>
                                 @endif

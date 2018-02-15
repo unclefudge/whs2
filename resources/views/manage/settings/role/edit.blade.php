@@ -146,22 +146,6 @@ $cc = 1;*/
                                             @endif
                                         </tr>
                                         <tr>
-                                            <td>Business Details</td>
-                                            <td width="15%">{!! permSelect('view.company.acc', 'all', $role, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company.acc', 'all', $role, $cid, $dis) !!}</td>
-                                            <td width="30%" colspan="2"></td>
-                                            <td width="15%">{!! permSelect('sig.company.acc', 'sig', $role, $cid, $dis) !!}</td>
-                                        </tr>
-                                        @if($plan)
-                                            <tr>
-                                                <td>Construction</td>
-                                                <td width="15%">{!! permSelect('view.company.con', 'all', $role, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.con', 'all', $role, $cid, $dis) !!}</td>
-                                                <td width="30%" colspan="2"></td>
-                                                <td width="15%">{!! permSelect('sig.company.con', 'sig', $role, $cid, $dis) !!}</td>
-                                            </tr>
-                                        @endif
-                                        <tr>
                                             <td>Insurance & Contracts</td>
                                             <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
                                             <td width="15%">{!! permSelect('edit.company.ics', ($sub2) ? 'own' : 'all', $role, $cid, $dis) !!}</td>
@@ -177,6 +161,22 @@ $cc = 1;*/
                                             <td width="15%">{!! permSelect('del.company.whs', 'arc', $role, $cid, $dis) !!}</td>
                                             <td width="15%">{!! permSelect('sig.company.whs', 'sig', $role, $cid, $dis) !!}</td>
                                         </tr>
+                                        <tr>
+                                            <td>Business Details</td>
+                                            <td width="15%">{!! permSelect('view.company.acc', 'all', $role, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.company.acc', 'all', $role, $cid, $dis) !!}</td>
+                                            <td width="30%" colspan="2"></td>
+                                            <td width="15%">{!! permSelect('sig.company.acc', 'sig', $role, $cid, $dis) !!}</td>
+                                        </tr>
+                                        @if($plan)
+                                            <tr>
+                                                <td>Construction</td>
+                                                <td width="15%">{!! permSelect('view.company.con', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.con', 'all', $role, $cid, $dis) !!}</td>
+                                                <td width="30%" colspan="2"></td>
+                                                <td width="15%">{!! permSelect('sig.company.con', 'sig', $role, $cid, $dis) !!}</td>
+                                            </tr>
+                                        @endif
                                     </table>
                                     @if ($sub1)
                                         <h5 class="font-green-haze" style="font-size: 16px">Work Site

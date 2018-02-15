@@ -77,22 +77,6 @@ $dis = false;
         @endif
     </tr>
     <tr>
-        <td>Business Details</td>
-        <td width="15%">{!! permSelect('view.company.acc', 'all', $user, $cid, $dis) !!}</td>
-        <td width="15%">{!! permSelect('edit.company.acc', 'all', $user, $cid, $dis) !!}</td>
-        <td width="30%" colspan="2"></td>
-        <td width="15%">{!! permSelect('sig.company.acc', 'sig', $user, $cid, $dis) !!}</td>
-    </tr>
-    @if($plan)
-        <tr>
-            <td>Construction</td>
-            <td width="15%">{!! permSelect('view.company.con', 'all', $user, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.con', 'all', $user, $cid, $dis) !!}</td>
-            <td width="30%" colspan="2"></td>
-            <td width="15%">{!! permSelect('sig.company.con', 'sig', $user, $cid, $dis) !!}</td>
-        </tr>
-    @endif
-    <tr>
         <td>Insurance & Contracts</td>
         <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
         <td width="15%">{!! permSelect('edit.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
@@ -112,6 +96,22 @@ $dis = false;
             <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
         @else
     </tr>
+    <tr>
+        <td>Business Details</td>
+        <td width="15%">{!! permSelect('view.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        <td width="30%" colspan="2"></td>
+        <td width="15%">{!! permSelect('sig.company.acc', 'sig', $user, $cid, $dis) !!}</td>
+    </tr>
+    @if($plan)
+        <tr>
+            <td>Construction</td>
+            <td width="15%">{!! permSelect('view.company.con', 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.con', 'all', $user, $cid, $dis) !!}</td>
+            <td width="30%" colspan="2"></td>
+            <td width="15%">{!! permSelect('sig.company.con', 'sig', $user, $cid, $dis) !!}</td>
+        </tr>
+    @endif
 </table>
 
 @if ($sub1)

@@ -92,31 +92,7 @@ $dis = Auth::user()->security ? false : true;
             <td width="45%" colspan="3"></td>
         @endif
     </tr>
-    <tr>
-        <td>Business Details</td>
-        <td width="15%">{!! permSelect('view.company.acc', 'all', $user, $cid, $dis) !!}</td>
-        <td width="15%">{!! permSelect('edit.company.acc', 'all', $user, $cid, $dis) !!}</td>
-        @if ($sub2)
-            <td width="30%" colspan="2"></td>
-            <td width="15%">{!! permSelect('sig.company.acc', 'sig', $user, $cid, $dis) !!}</td>
-        @else
-            <td width="45%" colspan="3"></td>
-        @endif
-    </tr>
     @if ($sub1)
-        @if($plan)
-            <tr>
-                <td>Construction</td>
-                <td width="15%">{!! permSelect('view.company.con', 'all', $user, $cid, $dis) !!}</td>
-                <td width="15%">{!! permSelect('edit.company.con', 'all', $user, $cid, $dis) !!}</td>
-                @if ($sub2)
-                    <td width="30%" colspan="2"></td>
-                    <td width="15%">{!! permSelect('sig.company.con', 'sig', $user, $cid, $dis) !!}</td>
-                @else
-                    <td width="45%" colspan="3"></td>
-                @endif
-            </tr>
-        @endif
         <tr>
             <td>Insurance & Contracts</td>
             <td width="15%">{!! permSelect('view.company.ics', ($sub2) ? 'own' : 'all', $user, $cid, $dis) !!}</td>
@@ -137,6 +113,30 @@ $dis = Auth::user()->security ? false : true;
                 <td width="15%">{!! permSelect('add.company.whs', 'add', $user, $cid, $dis) !!}</td>
                 <td width="15%">{!! permSelect('del.company.whs', 'arc', $user, $cid, $dis) !!}</td>
                 <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
+            @else
+                <td width="45%" colspan="3"></td>
+            @endif
+        </tr>
+    @endif
+    <tr>
+        <td>Business Details</td>
+        <td width="15%">{!! permSelect('view.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.acc', 'all', $user, $cid, $dis) !!}</td>
+        @if ($sub2)
+            <td width="30%" colspan="2"></td>
+            <td width="15%">{!! permSelect('sig.company.acc', 'sig', $user, $cid, $dis) !!}</td>
+        @else
+            <td width="45%" colspan="3"></td>
+        @endif
+    </tr>
+    @if($plan)
+        <tr>
+            <td>Construction</td>
+            <td width="15%">{!! permSelect('view.company.con', 'all', $user, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.con', 'all', $user, $cid, $dis) !!}</td>
+            @if ($sub2)
+                <td width="30%" colspan="2"></td>
+                <td width="15%">{!! permSelect('sig.company.con', 'sig', $user, $cid, $dis) !!}</td>
             @else
                 <td width="45%" colspan="3"></td>
             @endif

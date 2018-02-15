@@ -461,6 +461,7 @@ class CompanyDocController extends Controller {
         }
         $doc_request = request()->all();
 
+        // Reject Document
         if (request()->has('reject_doc')) {
             $doc = CompanyDoc::findOrFail(request('doc_id'));
             $doc->status = 3;
@@ -470,6 +471,18 @@ class CompanyDocController extends Controller {
             $doc->save();
 
             Toastr::success("Document rejected");
+
+            return back();
+        }
+
+        // Archive
+        if (request()->has('archive_doc')) {
+            $doc = CompanyDoc::findOrFail(request('doc_id'));
+            $doc->status = 0;
+            $doc->notes = request('notes');
+            $doc->save();
+
+            Toastr::success("Document archived");
 
             return back();
         }
