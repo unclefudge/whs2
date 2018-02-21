@@ -965,18 +965,8 @@ class Company extends Model {
                 return  false;
         }
 
-        if ($this->licence_required && !$this->activeCompanyDoc(7))
-            return false;
-
-        /*
-        if ($this->category == '1') {
-            if (!$this->activeCompanyDoc('1') || $this->activeCompanyDoc('1')->status != 1) return false;   // Public Liabilty
-            if ($this->requiresWCinsurance() && (!$this->activeCompanyDoc('2') || $this->activeCompanyDoc('2')->status != 1)) return false;  // WC Insurance
-            if ($this->requiresSAinsurance() && (!$this->activeCompanyDoc('3') || $this->activeCompanyDoc('3')->status != 1)) return false;  // SA Insurance
-            if (!$this->activeCompanyDoc('4') || $this->activeCompanyDoc('4')->status != 1) return false;  // Subcontractors Statement
-            if (!$this->activeCompanyDoc('5') || $this->activeCompanyDoc('5')->status != 1) return false;  // Period Trade
-            if ($this->licence_required && (!$this->activeCompanyDoc('7') || $this->activeCompanyDoc('7')->status != 1)) return false;  // Contractors Licence
-        }*/
+        if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
+            return  false;
 
         return true;
     }

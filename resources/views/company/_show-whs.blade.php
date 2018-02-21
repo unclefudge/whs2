@@ -71,13 +71,13 @@
             <div class="tab-pane active" id="portlet_comments_1">
                 <div class="mt-comments">
                     {{-- WHS Compliance --}}
-                    <?php $cat_types = ['7' => 'Contractors Licence', '8' => "Test & Tagging",] ?>
+                    <?php $cat_types = ['7' => 'Contractors Licence', '8' => "Test & Tagging"] ?>
                     @foreach ($cat_types as $cat_type => $doc_name)
                         <?php $doc = $company->activeCompanyDoc($cat_type) ?>
                         <div class="mt-comment" style="padding: 5px" id="show_doc{{ $cat_type }}">
                             <div class="mt-comment-img">
                                 @if ($doc)
-                                    <a href="href={{ $doc->attachment_url }}" target="_blank"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a>
+                                    <a href="{{ $doc->attachment_url }}" target="_blank"><i class="fa fa-file-pdf-o fa-2x" style="padding-top: 10px"></i></a>
                                 @else
                                     <i class="fa fa-ban fa-2x" style="color: #ccc; padding-top: 5px"></i>
                                 @endif</div>
@@ -87,8 +87,8 @@
                                     <span class="mt-comment-date">{!! ($doc) ?  $doc->expiry->format('d/m/Y'): '' !!}</span>
                                 </div>
                                 <div class="mt-comment-text">
-                                    @if ($doc && in_array($cat_type, [1, 2, 3]))
-                                        Policy No: {{ $doc->ref_no }} &nbsp; &nbsp; &nbsp; Insurer:  {{ $doc->ref_name }}
+                                    @if ($doc && in_array($cat_type, [7]))
+                                        Lic: {{ $doc->ref_no }} &nbsp; &nbsp; &nbsp; Class:  {!! $company->contractorLicenceSBC() !!}
                                     @endif
                                 </div>
                                 <div class="mt-comment-details">
@@ -97,28 +97,28 @@
                                     @if ($doc && $doc->status == 3)
                                         <span class="label label-danger">Not approved</span> @endif
                                     <ul class="mt-comment-actions">
-                                        @if ($doc && Auth::user()->allowed2('edit.company.ics', $doc))
+                                        @if ($doc && Auth::user()->allowed2('edit.company.whs', $doc))
                                             <li>
-                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Edit</button>
+                                                <button class="btn btn-xs btn-primary" onclick="editForm('doc{{ $cat_type }}')">Edit</button>
                                             </li>
                                         @endif
-                                        @if (!$doc && Auth::user()->allowed2('edit.company.ics', $company))
+                                        @if (!$doc && Auth::user()->allowed2('edit.company.whs', $company))
                                             <li>
-                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
+                                                <button class="btn btn-xs btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
                                             </li>
                                         @endif
 
                                         @if ($doc && $doc->status == '2' && Auth::user()->allowed2('sig.company.ics', $doc))
                                             <li>
-                                                <button class="btn btn-sm btn-danger" id="rej_doc" data-doc_id="{{ $doc->id }}">Reject</button>
+                                                <button class="btn btn-xs btn-danger" id="rej_doc" data-doc_id="{{ $doc->id }}">Reject</button>
                                             </li>
                                             <li>
-                                                <button class="btn btn-sm btn-success" id="app_doc" data-doc_id="{{ $doc->id }}">Approve</button>
+                                                <button class="btn btn-xs btn-success" id="app_doc" data-doc_id="{{ $doc->id }}">Approve</button>
                                             </li>
                                         @endif
                                         @if ($doc && $doc->status == 2 && Auth::user()->allowed2('edit.company.ics', $doc) && $company->id == Auth::user()->company_id)
                                             <li>
-                                                <button class="btn btn-sm dark" id="del_doc">Delete</button>
+                                                <button class="btn btn-xs dark" id="del_doc">Delete</button>
                                             </li>
                                         @endif
 
