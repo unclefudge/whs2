@@ -386,9 +386,9 @@ class Company extends Model {
             ->whereIn('task_id', Trade::find($trade_id)->tasks->pluck('id')->toArray())
             ->where('to', '>', Carbon::today()->format('Y-m-d'))->get();
         foreach ($planner as $plan) {
-            echo "plan:".$plan->date." task:".$plan->task_id."<br>";
-            if (Task::find($plan->task_id)->trade->id == $old_trade->id ) {
-                $planned_trades[] =  $old_trade->id;
+            echo "plan:" . $plan->date . " task:" . $plan->task_id . "<br>";
+            if (Task::find($plan->task_id)->trade->id == $old_trade->id) {
+                $planned_trades[] = $old_trade->id;
             }
 
         }
@@ -554,13 +554,18 @@ class Company extends Model {
     public function rolesSelect($type = 'all')
     {
         switch ($type) {
-            case 'ext' : $array = Role2::where('company_id', $this->id)->where('external', 1)->orderBy('name')->pluck('name', 'id')->toArray(); break;
-            case 'int' : $array = Role2::where('company_id', $this->id)->where('external', 0)->orderBy('name')->pluck('name', 'id')->toArray(); break;
-            case 'all' : $array = Role2::where('company_id', $this->id)->orderBy('name')->pluck('name', 'id')->toArray();
+            case 'ext' :
+                $array = Role2::where('company_id', $this->id)->where('external', 1)->orderBy('name')->pluck('name', 'id')->toArray();
+                break;
+            case 'int' :
+                $array = Role2::where('company_id', $this->id)->where('external', 0)->orderBy('name')->pluck('name', 'id')->toArray();
+                break;
+            case 'all' :
+                $array = Role2::where('company_id', $this->id)->orderBy('name')->pluck('name', 'id')->toArray();
         }
 
         //return ($prompt && count($array) > 1) ? $array = array('' => 'Select Role') + $array : $array;
-        return  $array;
+        return $array;
     }
 
     /**
@@ -633,6 +638,7 @@ class Company extends Model {
     public function supervisors()
     {
         $super_ids = DB::table('company_supervisors')->where('company_id', $this->id)->pluck('user_id')->toArray();
+
         return (User::find($super_ids));
 
         return DB::table('company_supervisors AS s')->select('s.id', 's.user_id',
@@ -851,7 +857,7 @@ class Company extends Model {
         // 3 SA
         // 4 Sub
         // 5 PTC
-        // 7 CC
+        // 7 CL
 
         // '1' => 'Subcontractor (On Site Trade)',
         //'2' => 'Service Provider (On Site trade',
@@ -860,28 +866,35 @@ class Company extends Model {
         //'5' => 'Supply Only',
         //'6' => 'Consultant',
 
-        // Subcontractor (On Site Trade)
-        if ($this->category == 1 ) {
-            if (in_array($type, [1, 4, 5, 7]))
-                return true;
-            elseif ($type == 2 && ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust'))
-                return true;
-            elseif ($type == 3 && ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader'))
-                return true;
+
+        // Determine WC or SA
+        if (in_array($this->category, [1, 2, 3, 4, 6])) {  // All but 'Supply Only'
+            if ($type == 2 && in_array($this->business_entity, ['1', 'Company', '4', 'Trading Trust'])) return true;
+            if ($type == 3 && in_array($this->business_entity, ['2', 'Partnership', '3', 'Sole Trader']))  return true;
         }
 
-        // Service Provider (On Site Trades)
-        if ($this->category == 1 ) {
-            if (in_array($type, [1, 4, 5, 7]))
-                return true;
-            elseif ($type == 2 && ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust'))
-                return true;
-            elseif ($type == 3 && ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader'))
-                return true;
-        }
+        // Subcontractor (On Site Trade)
+        if ($this->category == 1 && in_array($type, [1, 4, 5, 7])) return true; // Requires PL, Sub, PTC, CL
+
+        // Service Provider (On Site Trades) or Supply & Fit
+        if (in_array($this->category, [2, 4]) && (in_array($type, [1, 7]))) return true; // Requires PL, CL
+
+        // Supply Only
+        if ($this->category == 5 && $type == 1) return true; // Requires PL
 
         return false;
     }
+
+    /**
+     * Determine if a certain document type is Required
+     *
+     * @return boolean
+     */
+    public function requiresCompanyDocText($type)
+    {
+        return ($this->requiresCompanyDoc($type) ? '<span class="font-red">Required</span>' : '');
+    }
+
     /**
      * Determine if Workers Comp is Required
      *
@@ -929,7 +942,7 @@ class Company extends Model {
      */
     public function requiresContractorsLicence()
     {
-        if ($this->category == '1' || $this->category == '2' || $this->category == '4' ) {
+        if ($this->category == '1' || $this->category == '2' || $this->category == '4') {
             foreach ($this->tradesSkilledIn as $trade) {
                 if ($trade->licence_req)
                     return 1;
@@ -946,14 +959,24 @@ class Company extends Model {
      */
     public function compliantDocs()
     {
-        if ($this->category == 'On Site Trade') {
+        $doc_types = [1, 2, 3, 4, 5];
+        foreach ($doc_types as $type) {
+            if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
+                return  false;
+        }
+
+        if ($this->licence_required && !$this->activeCompanyDoc(7))
+            return false;
+
+        /*
+        if ($this->category == '1') {
             if (!$this->activeCompanyDoc('1') || $this->activeCompanyDoc('1')->status != 1) return false;   // Public Liabilty
             if ($this->requiresWCinsurance() && (!$this->activeCompanyDoc('2') || $this->activeCompanyDoc('2')->status != 1)) return false;  // WC Insurance
             if ($this->requiresSAinsurance() && (!$this->activeCompanyDoc('3') || $this->activeCompanyDoc('3')->status != 1)) return false;  // SA Insurance
             if (!$this->activeCompanyDoc('4') || $this->activeCompanyDoc('4')->status != 1) return false;  // Subcontractors Statement
             if (!$this->activeCompanyDoc('5') || $this->activeCompanyDoc('5')->status != 1) return false;  // Period Trade
             if ($this->licence_required && (!$this->activeCompanyDoc('7') || $this->activeCompanyDoc('7')->status != 1)) return false;  // Contractors Licence
-        }
+        }*/
 
         return true;
     }

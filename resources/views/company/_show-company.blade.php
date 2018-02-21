@@ -2,7 +2,7 @@
 <div class="portlet light" id="show_company">
     <div class="portlet-title">
         <div class="caption">
-            <span class="caption-subject font-dark bold uppercase">Construction Details</span>
+            <span class="caption-subject font-dark bold uppercase">Company Details</span>
             @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
                 <span class="label label-warning">Pending approval</span>
             @endif
@@ -56,7 +56,7 @@
         @if (Auth::user()->isCompany($company->reportsTo()))
             <div class="row">
                 <div class="col-md-3">Private Notes:</div>
-                <div class="col-xs-9">@if($company->notes){{ $company->notes }}</a>@else - @endif
+                <div class="col-xs-9">@if($company->notes){!! nl2br($company->notes) !!} </a>@else - @endif
                 </div>
             </div>
             <hr class="field-hr">

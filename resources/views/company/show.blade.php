@@ -70,7 +70,7 @@
                     <i class="icon-users-member-bar"></i>
                     <div class="member-name">
                         <div class="full-name-wrap">
-                            <a href="/reseller/member/member_account_details/?member_id=8013759" class="status-update">{{ $company->name }}</a>
+                            <a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a>
                         </div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
@@ -137,7 +137,7 @@
 
         {{-- Staff --}}
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="portlet light ">
                     <div class="portlet-title tabbable-line">
                         <div class="caption">
@@ -155,21 +155,12 @@
                                         <th width="5%"> #</th>
                                         <th> Name</th>
                                         <th> Phone</th>
-                                        <th> Email</th>
+                                        <th> </th>
                                     </tr>
                                     </thead>
                                 </table>
                             </div>
                         </div>
-
-                        {{-- Notes --}}
-                        @if($company->notes && Auth::user()->company_id == $company->parent_company)
-                            <h3 class="font-green form-section">Notes</h3>
-                            <div class="row">
-                                <div class="col-md-12">{{ $company->notes }}</div>
-                            </div>
-                        @endif
-
                     </div>
                 </div>
             </div>
@@ -177,6 +168,7 @@
     </div>
 
 
+    <!--
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
@@ -368,6 +360,7 @@
         </div>
     </div>
     </div>
+    -->
     <div>
         <div class="pull-right" style="font-size: 12px; font-weight: 200; padding: 10px 10px 0 0">
             {!! $company->displayUpdatedBy() !!}

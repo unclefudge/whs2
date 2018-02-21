@@ -21,11 +21,13 @@
             <div class="col-xs-9">{{ ($company->business_entity) ? $companyEntityTypes::name($company->business_entity) : '-' }}</div>
         </div>
         <hr class="field-hr">
-        <div class="row">
-            <div class="col-md-3">Category:</div>
-            <div class="col-xs-9">{{ $companyTypes::name($company->category) }}</div>
-        </div>
-        <hr class="field-hr">
+        @if(Auth::user()->isCompany($company->reportsTo()->id))
+            <div class="row">
+                <div class="col-md-3">Category:</div>
+                <div class="col-xs-9">{{ $companyTypes::name($company->category) }}</div>
+            </div>
+            <hr class="field-hr">
+        @endif
         <div class="row">
             <div class="col-md-3">ABN:</div>
             <div class="col-xs-9">{{ ($company->abn) ? $company->abn : '-' }}</div>

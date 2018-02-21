@@ -564,7 +564,7 @@ class CompanyController extends Controller {
                 return '<a href="tel:' . preg_replace("/[^0-9]/", "", $user->phone) . '">' . $user->phone . '</a>';
             })
             ->editColumn('email', function ($user) {
-                return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
+                return '<a href="mailto:' . $user->email . '">' . '<i class="fa fa-envelope-o"></i>' . '</a>';
             })
             ->addColumn('action', function ($user) {
                 if (Auth::user()->allowed2('view.user', $user))

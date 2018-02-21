@@ -32,7 +32,7 @@
                                         {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
                                         {!! ($doc && $doc->status == 3) ?  '<span class="label label-danger label-sm">Not approved</span>' : '' !!}
                                     </span>
-                                    <span class="mt-comment-date">{!! ($doc) ?  $doc->expiry->format('d/m/Y'): '' !!}</span>
+                                    <span class="mt-comment-date">{!! ($doc) ?  $doc->expiry->format('d/m/Y'): $company->requiresCompanyDocText($cat_type) !!}</span>
                                 </div>
                                 <div class="mt-comment-text">
                                     @if ($doc && in_array($cat_type, [1, 2, 3]))
@@ -43,17 +43,17 @@
                                     <ul class="mt-comment-actions">
                                         @if ($doc && in_array($doc->status, [2,3]) && Auth::user()->allowed2('edit.company.ics', $doc) && $company->id == Auth::user()->company_id)
                                             <li>
-                                                <button class="btn btn-sm dark" id="del_doc" data-doc_id="{{ $doc->id }}">Delete</button>
+                                                <button class="btn btn-xs dark" id="del_doc" data-doc_id="{{ $doc->id }}">Delete</button>
                                             </li>
                                         @endif
                                         @if (!$doc && Auth::user()->allowed2('add.company.ics', $company))
                                             <li>
-                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
+                                                <button class="btn btn-xs btn-primary" onclick="editForm('doc{{ $cat_type }}')">Add</button>
                                             </li>
                                         @endif
                                         @if ($doc && Auth::user()->allowed2('edit.company.ics', $doc))
                                             <li>
-                                                <button class="btn btn-sm btn-primary" onclick="editForm('doc{{ $cat_type }}')">Edit</button>
+                                                <button class="btn btn-xs btn-primary" onclick="editForm('doc{{ $cat_type }}')">Edit</button>
                                             </li>
                                         @endif
 

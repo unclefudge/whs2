@@ -85,6 +85,8 @@ $dis = false;
             <td width="15%">{!! permSelect('del.company.ics', 'arc', $user, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('sig.company.ics', 'sig', $user, $cid, $dis) !!}</td>
         @else
+            <td width="45%" colspan="3"></td>
+        @endif
     </tr>
     <tr>
         <td>WHS Compliance</td>
@@ -95,6 +97,8 @@ $dis = false;
             <td width="15%">{!! permSelect('del.company.whs', 'arc', $user, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('sig.company.whs', 'sig', $user, $cid, $dis) !!}</td>
         @else
+            <td width="45%" colspan="3"></td>
+        @endif
     </tr>
     <tr>
         <td>Business Details</td>
