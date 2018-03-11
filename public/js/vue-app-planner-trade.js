@@ -698,7 +698,7 @@ Vue.component('app-weekly', {
 });
 
 Vue.component('app-company', {
-    props: ['etype', 'eid', 'ename'],
+    props: ['etype', 'eid', 'ename', 'ecompliant'],
     template: '#company-template',
 
     data: function () {
@@ -720,6 +720,14 @@ Vue.component('app-company', {
                 return this.xx.leave[this.eid]['summary'];
             return false;
         },
+        compliant: function () {
+            // Determine if Company is compliant
+            //if (this.etype === 'c' && this.xx.leave[this.eid])
+                //return this.xx.leave[this.eid]['summary'];
+            //return false;
+            //return 'PP'+this.ecompliant+'LL'+this.eid;
+            return false;
+        },
         cellBG: function (date, days) {
             var str = '';
             var date = moment(date).add(days, 'days').format('YYYY-MM-DD');
@@ -738,7 +746,7 @@ Vue.component('app-company', {
 });
 
 Vue.component('app-dayplan', {
-    props: ['date', 'etype', 'eid', 'ename'],
+    props: ['date', 'etype', 'eid', 'ename', 'ecompliant'],
     template: '#dayplan-template',
 
     created: function () {

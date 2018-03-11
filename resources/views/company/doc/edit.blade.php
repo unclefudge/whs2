@@ -57,7 +57,7 @@
                                 </ul>
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                @if(Auth::user()->isCompany($company->id) && Auth::user()->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri'))
+                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
                                     <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
                                 @endif
                             </div>

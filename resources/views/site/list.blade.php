@@ -35,15 +35,17 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2 pull-right">
-                            <div class="form-group">
-                                <select name="status" id="status" class="form-control bs-select">
-                                    <option value="1" selected>Active</option>
-                                    <option value="-1">Upcoming</option>
-                                    <option value="0">Completed</option>
-                                </select>
+                        @if (Auth::user()->company->subscription)
+                            <div class="col-md-2 pull-right">
+                                <div class="form-group">
+                                    <select name="status" id="status" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        <option value="-1">Upcoming</option>
+                                        <option value="0">Completed</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">

@@ -18,6 +18,7 @@
                     <div class="col-md-9">
                         {!! Form::select('status', ['1' => 'Active', '0' => 'Inactive'], null, ['class' => 'form-control bs-select']) !!}
                         {!! fieldErrorMessage('status', $errors) !!}
+                        <span class="help-block"> Only editable by parent company</span>
                     </div>
                 </div>
             @else

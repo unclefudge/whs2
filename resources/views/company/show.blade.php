@@ -66,14 +66,11 @@
                     <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
                     <i class="icon-users-member-bar hidden-xs"></i>
                     <div class="member-name">
-                        <div class="full-name-wrap">
-                            <a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a>
-                        </div>
+                        <div class="full-name-wrap"><a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a></div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
                         <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
-
                     </div>
 
                     <ul class="member-bar-menu">
@@ -104,8 +101,9 @@
                                 </ul>
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                <br>
-                                <a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -931,7 +931,7 @@ class SitePlannerController extends Controller {
         // Create array in specific Vuejs 'select' format.
         foreach ($companies as $company) {
             $c = Company::find($company->id);
-            $array[] = ['entity' => 'c.' . $company->id, 'type' => 'c', 'id' => $company->id, 'name' => $c->name_alias];
+            $array[] = ['entity' => 'c.' . $company->id, 'type' => 'c', 'id' => $company->id, 'name' => $c->name_alias, 'compliant' => ($c->compliantDocs()) ? 1 : 0];
         }
 
         //dd($array);

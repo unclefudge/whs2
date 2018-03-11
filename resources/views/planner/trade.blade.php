@@ -161,7 +161,7 @@
                                     <div class="col-xs-2 ">Fri @{{ weekDateHeader(xx.mon_now, 4) }}</div>
                                 </div>
                                 <template v-for="company in xx.companies">
-                                    <app-company :etype="company.type" :eid="company.id" :ename="company.name"></app-company>
+                                    <app-company :etype="company.type" :eid="company.id" :ename="company.name" :ecompliant="company.compliant"></app-company>
                                 </template>
 
                             </div>
@@ -565,6 +565,7 @@
         <div class="row row-striped" style="border-bottom: 1px solid lightgrey;  overflow: hidden;">
             <div class="col-xs-2 sideColBG">
                 <small class="text-uppercase" :class="{ 'font-yellow-gold': etype == 't' }">@{{ ename }}</small>
+                <small v-if="ecompliant == 0" class="font-red"><br><span class="badge badge-danger badge-roundless">NON COMPLIANT</span></small>
                 <small v-if="leaveSummary()" class="font-blue"><br>Leave: @{{ leaveSummary() }}</small>
             </div>
             <div class="col-xs-2 @{{ cellBG(xx.mon_now, 0)}}">
@@ -583,6 +584,8 @@
                 <app-dayplan :date="weekDate(xx.mon_now, 4)" :etype="etype" :eid="eid" :ename="ename"></app-dayplan>
             </div>
         </div>
+        <!--<pre v-if="xx.dev">@{{ date }}<br>@{{ etype }}.@{{ eid }}<br>@{{ ename }}<br>@{{ ecompliant }}<br></pre>
+        -->
     </template>
 
     <!-- Day plan for each entity on planner -->

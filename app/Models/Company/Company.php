@@ -980,6 +980,8 @@ class Company extends Model {
 
         if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
             return false;
+
+        return true;
     }
 
     /**
