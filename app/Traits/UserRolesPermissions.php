@@ -500,7 +500,6 @@ trait UserRolesPermissions {
                 return false;
             }
 
-
             // Company Documents
             if ($permissiontype == 'company.doc.gen' || $permissiontype == 'company.doc.lic' || $permissiontype == 'company.doc.whs' || $permissiontype == 'company.doc.ics') {
                 // User can View or Update document if status is 2 or 3 ie. Pending/Rejected

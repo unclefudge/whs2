@@ -159,7 +159,7 @@
         $("#multifile").fileinput({
             uploadUrl: "/safety/doc/sds/upload/", // server upload action
             uploadAsync: true,
-            //allowedFileExtensions: ["pdf"],
+            allowedFileExtensions: ["pdf"],
             browseClass: "btn blue",
             browseLabel: "Browse",
             browseIcon: "<i class=\"fa fa-folder-open\"></i> ",

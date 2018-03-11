@@ -2,18 +2,15 @@
 
 @section('pagetitle')
     <div class="page-title">
-        <h1><i class="fa fa-files-o"></i> Site Document</h1>
+        <h1><i class="fa fa-files-o"></i> Company Document</h1>
     </div>
 @stop
 
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        @if (Auth::user()->hasAnyPermissionType('site'))
-            <li><a href="/site">Sites</a><i class="fa fa-circle"></i></li>
-        @endif
-        <li><a href="/site/doc">Documents</a><i class="fa fa-circle"></i></li>
-        <li><span>Create Document</span></li>
+        <li><a href="/company/doc">Company Documents</a><i class="fa fa-circle"></i></li>
+        <li><span>Upload</span></li>
     </ul>
 @stop
 
@@ -25,7 +22,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-pencil "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Create Document </span>
+                            <span class="caption-subject font-green-haze bold uppercase">Upload Document </span>
                         </div>
                         <div class="actions">
                             <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
@@ -34,35 +31,28 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('sitedoc', ['action' => 'Site\SiteDocController@store', 'class' => 'horizontal-form', 'files' => true]) !!}
+                        {!! Form::model('companydoc', ['action' => 'Company\CompanyDocController@store', 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
                         {!! Form::hidden('create', 'true') !!}
                         {!! Form::hidden('company_id', Auth::user()->company_id) !!}
+                        {!! Form::hidden('for_company_id', Auth::user()->company_id) !!}
 
                         <div class="alert alert-danger alert-dismissable" style="display: none;" id="multifile-error">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
                             <i class="fa fa-warning"></i><strong> Error(s) have occured</strong>
                             <ul>
-                                <li>Before you can upload multiple files both the Site + Type fields are required</li>
+                                <li>Before you can upload multiple files you are required to select Category</li>
                             </ul>
                         </div>
 
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group {!! fieldHasError('site_id', $errors) !!}" id="site_id_form">
-                                        {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
-                                        {!! Form::select('site_id', Auth::user()->company->sitesSelect('prompt'),
-                                             $site_id, ['class' => 'form-control select2']) !!}
-                                        {!! fieldErrorMessage('site_id', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group {!! fieldHasError('type', $errors) !!}" id="type_form">
-                                        {!! Form::label('type', 'Type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('type',Auth::user()->siteDocTypeSelect('add', 'prompt'),
-                                             $type, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('type', $errors) !!}
+                                    <div class="form-group {!! fieldHasError('category_id', $errors) !!}" id="category_id_form">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('category_id',Auth::user()->companyDocTypeSelect('edit', 'prompt'),
+                                             $category_id, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-2 pull-right">
@@ -101,6 +91,22 @@
                                             {!! Form::text('name', null, ['class' => 'form-control']) !!}
                                         </div>
                                     </div>
+
+                                    {{-- Expiry --}}
+                                    <div class="col-md-3">
+                                        <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
+                                            {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
+                                            <div class="input-group date date-picker">
+                                                {!! Form::text('expiry', '', ['class' => 'form-control form-control-inline',
+                                                'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                            </div>
+                                            {!! fieldErrorMessage('expiry', $errors) !!}
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -108,18 +114,6 @@
                                             <label class="control-label">Select File</label>
                                             <input id="singlefile" name="singlefile" type="file" class="file-loading">
                                             {!! fieldErrorMessage('singlefile', $errors) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <h3 class="form-section"></h3>
-                                <!-- Notes -->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                            {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                            {!! Form::textarea('notes', '', ['rows' => '2', 'class' => 'form-control']) !!}
-                                            {!! fieldErrorMessage('notes', $errors) !!}
-                                            <span class="help-block"> For internal use only </span>
                                         </div>
                                     </div>
                                 </div>
@@ -142,28 +136,26 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"/>
     <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/js/libs/fileinput.min.js"></script>
     <!--<script src="/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>-->
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script>
     $.ajaxSetup({
         headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
     });
 
     $(document).ready(function () {
-        /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
-        });
-
         /* Bootstrap Fileinput */
         $("#singlefile").fileinput({
             showUpload: false,
@@ -179,7 +171,7 @@
 
         /* Bootstrap Fileinput */
         $("#multifile").fileinput({
-            uploadUrl: "/site/doc/upload/", // server upload action
+            uploadUrl: "/company/doc/upload/", // server upload action
             uploadAsync: true,
             allowedFileExtensions: ["pdf"],
             browseClass: "btn blue",
@@ -191,8 +183,7 @@
             uploadClass: "btn dark",
             uploadIcon: "<i class=\"fa fa-upload\"></i> ",
             uploadExtraData: {
-                "site_id": site_id,
-                "type": type,
+                "category_id": category_id,
             },
             layoutTemplates: {
                 main1: '<div class="input-group {class}">\n' +
@@ -209,8 +200,7 @@
         });
 
         $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
-            data.form.append("site_id", $("#site_id").val());
-            data.form.append("type", $("#type").val());
+            data.form.append("category_id", $("#category_id").val());
         });
 
         // Toggle between Single + Multi file upload inputs
@@ -218,17 +208,13 @@
             $('#singlefile-div').toggle();
             $('#multifile-div').toggle();
 
-            // If Multi verify Site + Type fields are completed
+            // If Multi verify Category fields are completed
             if ($("#files").val() == 'multi') {
                 $('#singlefile-div').hide();
                 $('#save').hide();
-                $("#typeform").removeClass('has-error');
-                $("#site_id_form").removeClass('has-error');
-                if ($("#type").val() == '')
-                    $("#type_form").addClass('has-error');
-                if ($("#site_id").val() == '')
-                    $("#site_id_form").addClass('has-error');
-                if ($("#site_id").val() == '' || $("#type").val() == '') {
+                $("#catform").removeClass('has-error');
+                if ($("#category_id").val() == '') {
+                    $("#category_form").addClass('has-error');
                     $('#multifile-div').hide();
                     $('#multifile-error').show();
                 }
@@ -241,8 +227,8 @@
         });
 
 
-        // On load verify Site ID + Type fields are set otherwise hide multi upload
-        if ($("#files").val() == 'multi' && ($("#site_id").val() == '' || $("#type").val() == '')) {
+        // On load verify Category fields are set otherwise hide multi upload
+        if ($("#files").val() == 'multi' && $("#category_id").val() == '') {
             $('#multifile-div').hide();
         }
         // On load verify File upload type and show right div
@@ -253,34 +239,15 @@
         }
 
 
-        // On Change determine if Site ID + Type fields are valid for multi file upload
-        $("#site_id").change(function () {
+        // On Change determine if Category fields are valid for multi file upload
+        $("#category_id").change(function () {
             if ($("#files").val() == 'multi') {
-                if ($("#site_id").val() == '') {
-                    $("#site_id_form").addClass('has-error');
-                    if ($("#files").val() == 'multi') {
-                        $('#multifile-div').hide();
-                        $('#multifile-error').show();
-                    }
-                } else {
-                    $("#site_id_form").removeClass('has-error');
-                    if ($("#type").val() != '') {
-                        $('#multifile-div').show();
-                        $('#multifile-error').hide();
-                    }
-                }
-            }
-        });
-
-        // On Change determine if Site ID + Type fields are valid for multi file upload
-        $("#type").change(function () {
-            if ($("#files").val() == 'multi') {
-                if ($("#type").val() == '') {
-                    $("type_form").addClass('has-error');
+                if ($("#category_id").val() == '') {
+                    $("category_form").addClass('has-error');
                     $('#multifile-div').hide();
                     $('#multifile-error').show();
                 } else {
-                    $("#type_form").removeClass('has-error');
+                    $("#category_form").removeClass('has-error');
                     if ($("#site_id").val() != '') {
                         $('#multifile-div').show();
                         $('#multifile-error').hide();
@@ -289,6 +256,12 @@
             }
         });
 
+    });
+
+    $('.date-picker').datepicker({
+        autoclose: true,
+        clearBtn: true,
+        format: 'dd/mm/yyyy',
     });
 
 </script>

@@ -15,6 +15,7 @@ Route::get('/', 'HomeController@index');
 
 // Site Login
 Route::get('/login/site/{site_id}', function ($site_id) {
+    Auth::logout();
     Session::put('siteID', $site_id);
     $worksite = \App\Models\Site\Site::where(['code' => $site_id])->first();
 
@@ -74,10 +75,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Company Docs
     Route::get('company/doc/dt/docs', 'Company\CompanyDocController@getDocs');
-    Route::get('company/doc/dt/expired', 'Company\CompanyDocController@getExpiredDocs');
+    //Route::get('company/doc/dt/profiledocs', 'Company\CompanyDocController@getProfileDocs');
+    //Route::get('company/doc/dt/expired', 'Company\CompanyDocController@getExpiredDocs');
     Route::any('company/doc/create', 'Company\CompanyDocController@create');
     Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
     Route::post('company/doc/profileICS', 'Company\CompanyDocController@profileICS');
+    Route::post('company/doc/profileWHS', 'Company\CompanyDocController@profileWHS');
     //Route::get('company/doc/profile-reject/{id}', 'Company\CompanyDocController@profileReject');
     //Route::get('company/doc/profile-destroy/{id}', 'Company\CompanyDocController@profileDestroy');
     //Route::post('company/doc/profile-approve', 'Company\CompanyDocController@profileApprove');
@@ -88,6 +91,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/doc/create/subcontractorstatement/{id}/{version}', 'Company\CompanyExportController@subcontractorstatementPDF');
     Route::resource('company/doc', 'Company\CompanyDocController');
 
+
+
+    // Company Docs
+    Route::get('company/{cid}/doc/dt/docs', 'Company\CompanyDocController@getDocs');
+    Route::get('company/{cid}/doc/upload', 'Company\CompanyDocController@create');
+    Route::resource('company/{cid}/doc', 'Company\CompanyDocController');
+
+
     // Company Routes
     Route::get('company/dt/companies', 'Company\CompanyController@getCompanies');
     Route::get('company/dt/staff', 'Company\CompanyController@getStaff');
@@ -97,7 +108,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('company/{id}/business', 'Company\CompanyController@updateBusiness');
     Route::post('company/{id}/trade', 'Company\CompanyController@updateTrade');
     Route::post('company/{id}/whs', 'Company\CompanyController@updateWHS');
-    Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
+    Route::get('company/{id}/staff', 'Company\CompanyController@staff');
+    //Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
     //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');
     //Route::post('company/{id}/edit/logo', 'Company\CompanyController@updateLogo');
     Route::resource('company', 'Company\CompanyController');

@@ -65,7 +65,7 @@
 
                         {{-- Edit Doc --}}
                         <div class="mt-comment" style="display: none" id="edit_doc{{ $cat_type }}">
-                            {!! Form::model($doc, ['action' => ['Company\CompanyDocController@profileICS'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
+                            {!! Form::model($doc, ['action' => ['Company\CompanyDocController@profileWHS'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
                             {!! Form::hidden('doc_id', ($doc) ? $doc->id : 'new', ['class' => 'form-control', 'id' => 'doc_id']) !!}
                             {!! Form::hidden('category_id', $cat_type, ['class' => 'form-control', 'id' => 'category_id']) !!}
                             {!! Form::hidden('name', $doc_name, ['class' => 'form-control', 'id' => 'doc_name']) !!}
@@ -98,9 +98,9 @@
                                         @endif
                                         @if (in_array($cat_type, [2,3]))
                                             <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" id="ref_type_field">
-                                                {!! Form::label('ref_type', 'Category:', ['class' => 'col-md-3 control-label', 'required']) !!}
+                                                {!! Form::label('ref_type', 'Category:', ['class' => 'col-md-3 control-label']) !!}
                                                 <div class="col-md-9">
-                                                    {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control']) !!}
+                                                    {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control', 'required']) !!}
                                                     {!! fieldErrorMessage('ref_type', $errors) !!}
                                                 </div>
                                             </div>
@@ -135,7 +135,7 @@
                                                 {!! fieldErrorMessage('singlefile', $errors) !!}
                                             @else
                                                 <div class="col-md-9" style="padding-top: 7px;" id="file_div">
-                                                    <input id="singlefile" name="singlefile" type="file" class="file-loading">
+                                                    <input id="singlefile" name="singlefile" type="file" class="file-loading uploadfile">
                                                     {!! fieldErrorMessage('singlefile', $errors) !!}
                                                 </div>
                                             @endif

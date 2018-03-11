@@ -36,6 +36,7 @@ class SessionController extends Controller {
                 Session::forget('siteID');
         }*/
 
+        Auth::logout();
         Session::forget('siteID');
 
         return view('auth/login', compact('worksite'));

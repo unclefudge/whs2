@@ -30,9 +30,26 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($cid)
+    public function index(Request $request)
     {
-        $company = Company::findorFail($cid);
+        if (!(Auth::user()->company->subscription || Auth::user()->hasAnyPermissionType('company.doc.gen') || Auth::user()->hasAnyPermissionType('company.doc.lic')
+            || Auth::user()->hasAnyPermissionType('company.doc.whs') || Auth::user()->hasAnyPermissionType('company.doc.ics'))
+        )
+            return view('errors/404');
+
+        $category_id = '';
+
+        return view('company/doc/list', compact('category_id'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function docs($id)
+    {
+        $company = Company::findorFail($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.company', $company))
@@ -70,17 +87,17 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create(Request $request)
     {
-        $company = Company::findorFail($id);
-
         // Check authorisation and throw 404 if not
-        if (!(Auth::user()->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')))
+        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
+            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
+        )
             return view('errors/404');
 
-        $category_id = request('category_id');
+        $category_id = $request->get('category_id');
 
-        return view('company/doc/create', compact('company', 'category_id'));
+        return view('company/doc/create', compact('category_id'));
     }
 
     /**
@@ -88,17 +105,16 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($cid, $id)
+    public function edit(Request $request, $id)
     {
-        $company = Company::findOrFail($cid);
         $doc = CompanyDoc::findOrFail($id);
         $type = $doc->type;
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
+            return view('errors/404');
 
-        return view('company/doc/edit', compact('company', 'doc'));
+        return view('company/doc/edit', compact('doc'));
     }
 
     /**
@@ -128,33 +144,38 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyDocRequest $request, $cid)
+    public function store(CompanyDocRequest $request)
     {
-        $company = Company::find($cid);
-
         // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
+            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
+        )
+            return view('errors/404');
 
         $category_id = $request->get('category_id');
 
+        // Redirect on 'back' button
+        if ($request->has('back'))
+            return view('/company/doc/list', compact('category_id'));
 
-        $doc_request = request()->all();
-        $doc_request['for_company_id'] = $company->id;
-        $doc_request['company_id'] = $company->reportsTo()->id;
-        $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
+        $doc_request = $request->all();
+        $doc_request['expiry'] = ($request->get('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('expiry') . '00:00')->toDateTimeString() : null;
 
-        // Convert licence type into CSV
-        if (request('category_id') == '7') {
-            $doc_request['ref_no'] = request('lic_no');
-            $doc_request['ref_type'] = implode(',', request('lic_type'));
-        }
+        // Set Type
+        if ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
+            $doc_request['type'] = 'lic';
+        elseif ($doc_request['category_id'] > 20)
+            $doc_request['type'] = 'gen';
 
-        // Reassign Asbestos Licence to correct category
-        if (request('category_id') == '8')
-            $doc_request['ref_type'] = request('asb_type');
-
-        // Reassign Additional Licences to correct name
-        if (request('category_id') == '9')
-            $doc_request['name'] = request('name'); //'Additional Licence';
+        // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
+        /*
+        if (Auth::user()->hasPermission2('del.company.doc'.$doc_request['type'])) {
+            $doc_request['approved_by'] = Auth::user()->id;
+            $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
+            $doc_request['status'] = 1;
+        } else {
+            $doc_request['status'] = 2;
+        }*/
 
         // Create Company Doc
         $doc = CompanyDoc::create($doc_request);
@@ -163,7 +184,7 @@ class CompanyDocController extends Controller {
         if ($request->hasFile('singlefile')) {
             $file = $request->file('singlefile');
 
-            $path = "filebank/company/" . $company->id. '/docs';
+            $path = "filebank/company/" . Auth::user()->company_id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
             // Ensure filename is unique by adding counter to similiar filenames
             $count = 1;
@@ -173,128 +194,9 @@ class CompanyDocController extends Controller {
             $doc->attachment = $name;
             $doc->save();
         }
-        Toastr::success("Uploaded document");
+        Toastr::success("Created document");
 
-        // If uploaded by User with 'authorise' permissions set to active other set pending
-        $doc->status = 2;
-        $category = CompanyDocCategory::find($doc->category_id);
-        $pub_pri = ($category->private) ? 'pri' : 'pub';
-        if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $company->reportsTo()->id)) {
-            $doc->approved_by = Auth::user()->id;
-            $doc->approved_at = Carbon::now()->toDateTimeString();
-            $doc->status = 1;
-        } else
-            $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc')); // Need to update with real user emails
-
-        $doc->save();
-
-        return redirect("company/$company->id/doc/upload");
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(CompanyDocRequest $request, $cid, $id)
-    {
-        $company = Company::find($cid);
-        $category_id = request('category_id');
-
-        $doc = CompanyDoc::findOrFail($id);
-        $type = $doc->type;
-
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
-            return view('errors/404');
-
-        $doc_request = request()->all();
-        $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
-
-        // Convert licence type into CSV
-        if (request('category_id') == '7') {
-            $doc_request['ref_no'] = request('lic_no');
-            $doc_request['ref_type'] = implode(',', request('lic_type'));
-        }
-
-        // Reassign Asbestos Licence to correct category
-        if (request('category_id') == '8')
-            $doc_request['ref_type'] = request('asb_type');
-
-        // Reassign Additional Licences to correct name
-        if (request('category_id') == '9')
-            $doc_request['name'] = request('name'); //'Additional Licence';
-
-        // Verify if document is rejected
-        if ($request->has('reject_doc')) {
-            $doc->status = 3;
-            $doc->save();
-            $doc->closeToDo();
-            $doc->emailReject();
-            Toastr::error("Document rejected");
-
-            return redirect("company/$company->id/doc/$doc->id/edit");
-        }
-
-        if ($doc->category_id < 21) {
-            // Determine Status of Doc
-            // If uploaded by User with 'authorise' permissions set to active otherwise set pending
-            $company = Company::findOrFail($doc->for_company_id);
-            $category = CompanyDocCategory::find($doc->category_id);
-            $pub_pri = ($category->private) ? 'pri' : 'pub';
-            if (request()->has('status') && request('status') == 0)
-                $doc_request['status'] = 0;
-            else if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $company->reportsTo()->id)) {
-                $doc_request['approved_by'] = Auth::user()->id;
-                $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
-                $doc_request['status'] = 1;
-            } else {
-                $doc_request['status'] = 2;
-            }
-        }
-
-        // Set Type
-        /*
-        if ($doc_request['category_id'] < 6)
-            $doc_request['type'] = 'ics';
-        elseif ($doc_request['category_id'] == 6)
-            $doc_request['type'] = 'whs';
-        elseif ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
-            $doc_request['type'] = 'lic';
-        elseif ($doc_request['category_id'] > 20)
-            $doc_request['type'] = 'gen';
-        */
-
-        //dd($doc_request);
-        $doc->update($doc_request);
-
-        // Close any ToDoo and create new one
-        if ($doc->category_id < 21) {
-            $doc->closeToDo();
-            if ($doc->status == 2)
-                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc'));
-        }
-
-        // Handle attached file
-        if (request()->hasFile('singlefile')) {
-            // Delete previous file
-            if ($doc->attachment && file_exists(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment)))
-                unlink(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment));
-
-            $file = $request->file('singlefile');
-            $path = "filebank/company/" . $doc->for_company_id . '/docs';
-            $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
-            // Ensure filename is unique by adding counter to similiar filenames
-            $count = 1;
-            while (file_exists(public_path("$path/$name")))
-                $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
-            $file->move($path, $name);
-            $doc->attachment = $name;
-            $doc->save();
-        }
-        Toastr::success("Updated document");
-
-        return redirect("company/$company->id/doc/$doc->id/edit");
+        return view('company/doc/list', compact('category_id'));
     }
 
     /**
@@ -302,7 +204,7 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function upload($id)
+    public function upload(Request $request)
     {
         // Check authorisation and throw 404 if not
         if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
@@ -311,8 +213,8 @@ class CompanyDocController extends Controller {
             return json_encode("failed");
 
         // Handle file upload
-        if (request()->hasFile('multifile')) {
-            $files = request()->file('multifile');
+        if ($request->hasFile('multifile')) {
+            $files = $request->file('multifile');
             foreach ($files as $file) {
                 $path = "filebank/company/" . Auth::user()->company_id . '/docs';
                 $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
@@ -345,6 +247,95 @@ class CompanyDocController extends Controller {
         return json_encode("success");
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CompanyDocRequest $request, $id)
+    {
+        $category_id = $request->get('category_id');
+
+        // Redirect on 'back' button
+        if ($request->has('back'))
+            return view('/company/doc/list', compact('category_id'));
+
+        $doc = CompanyDoc::findOrFail($id);
+        $type = $doc->type;
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2("edit.company.doc.$type", $doc))
+            return view('errors/404');
+
+        $doc_request = $request->all();
+        $doc_request['expiry'] = ($request->get('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', $request->get('expiry') . '00:00')->toDateTimeString() : null;
+
+        // Verify if document is rejected
+        if ($request->has('reject_doc')) {
+            $doc->status = 3;
+            $doc->save();
+            $doc->closeToDo();
+            $doc->emailReject();
+            Toastr::error("Document rejected");
+
+            return view('company/doc/edit', compact('doc', 'category_id'));
+        }
+
+        if ($doc->category_id < 21) {
+            // Determine Status of Doc
+            // If uploaded by Parent Company with 'authorise' permissions set to active other set pending
+            $company = Company::findOrFail($doc->for_company_id);
+            if ($request->has('status') && $request->get('status') == 0)
+                $doc_request['status'] = 0;
+            else if (Auth::user()->allowed2('del.company', $company)) {
+                $doc_request['approved_by'] = Auth::user()->id;
+                $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
+                $doc_request['status'] = 1;
+            } else {
+                $doc_request['status'] = 2;
+            }
+        }
+
+        // Set Type
+        if ($doc_request['category_id'] < 6)
+            $doc_request['type'] = 'ics';
+        elseif ($doc_request['category_id'] == 6)
+            $doc_request['type'] = 'whs';
+        elseif ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
+            $doc_request['type'] = 'lic';
+        elseif ($doc_request['category_id'] > 20)
+            $doc_request['type'] = 'gen';
+
+        $doc->update($doc_request);
+
+        // Close any ToDoo and create new one
+        if ($doc->category_id < 21) {
+            $doc->closeToDo();
+            if ($doc->status == 2)
+                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc'));
+        }
+
+        // Handle attached file
+        if ($request->hasFile('singlefile')) {
+            // Delete previous file
+            if ($doc->attachment && file_exists(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment)))
+                unlink(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment));
+
+            $file = $request->file('singlefile');
+            $path = "filebank/company/" . $doc->for_company_id . '/docs';
+            $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
+            // Ensure filename is unique by adding counter to similiar filenames
+            $count = 1;
+            while (file_exists(public_path("$path/$name")))
+                $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
+            $file->move($path, $name);
+            $doc->attachment = $name;
+            $doc->save();
+        }
+        Toastr::success("Updated document");
+
+        return view('company/doc/edit', compact('doc', 'category_id'));
+    }
 
 
     /*
@@ -836,62 +827,136 @@ class CompanyDocController extends Controller {
     /**
      * Get Site Docs current user is authorised to manage + Process datatables ajax request.
      */
-    public function getDocs($cid)
+    public function getDocs(Request $request)
     {
-        $categories = (request('category_id') == 'ALL') ? CompanyDocCategory::all()->sortBy('name')->pluck('id')->toArray() : [request('category_id')];
-        $status = (request('status') == 0) ? [0] : [1, 2, 3];
-        $records = CompanyDoc::where('for_company_id', $cid)
-            ->whereIn('category_id', $categories)
-            ->whereIn('status', $status)->orderBy('category_id')->get();
+        $categories = ($request->get('category_id') == 'ALL') ? CompanyDocCategory::all()->sortBy('name')->pluck('id')->toArray() : [$request->get('category_id')];
+        $records = DB::table('company_docs as d')
+            ->select(['d.id', 'd.category_id', 'd.attachment', 'd.name', 'd.ref_no', 'd.ref_name', 'd.expiry', 'd.attachment',
+                'd.for_company_id', 'd.company_id', 'd.status', 'c.id as cid', 'c.name as category_name', 'comp.name as company_name',
+                DB::raw('DATE_FORMAT(d.expiry, "%d/%m/%y") AS nicedate'),])
+            ->join('company_docs_categories as c', 'd.category_id', '=', 'c.id')
+            ->join('companys as comp', 'd.for_company_id', '=', 'comp.id')
+            ->whereIn('d.category_id', $categories)
+            ->where('d.company_id', Auth::user()->company_id)
+            ->where('d.status', $request->get('status'));
 
-
+        //dd($request->all());
         $dt = Datatables::of($records)
             ->editColumn('id', function ($doc) {
-                return '<div class="text-center"><a href="'.$doc->attachment_url.'" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
-                //return '<div class="text-center"><a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
-
-            })
-            ->addColumn('details', function ($doc) {
-                $details = '';
-
-                if (in_array($doc->category_id, [1, 2, 3])) // PL + WC + SA
-                    $details .= "Policy No: $doc->ref_no &nbsp; Insurer: $doc->ref_name";
-                if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
-                    $details .= "<br>Type: $doc->ref_type";
-                if (in_array($doc->category_id, [7])) // CL + Asb
-                    $details = "Lic no: $doc->ref_no  &nbsp; Class: ".$doc->company->contractorLicenceSBC();
-                if (in_array($doc->category_id, [8])) // CL + Asb
-                    $details = "Class: $doc->ref_type";
-
-                return ($details == '') ? '-' : $details;
-            })
-            ->editColumn('name', function ($doc) {
-                if ($doc->status == 2)
-                    return $doc->name . " <span class='badge badge-warning badge-roundless'>Pending approval</span>";
-                if ($doc->status == 3)
-                    return $doc->name . " <span class='badge badge-danger badge-roundless'>Rejected</span>";
-                return $doc->name;
-            })
-            ->editColumn('expiry', function ($doc) {
-                return ($doc->expiry) ? $doc->expiry->format('d/m/Y') : 'none';
+                return '<div class="text-center"><a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
             })
             ->addColumn('action', function ($doc) {
+                $rec = CompanyDoc::find($doc->id);
+                $type = $rec->type;
+                $company = ($rec->for_company_id) ? Company::find($rec->for_company_id) : Company::find($rec->company_id);
                 $actions = '';
-                $type = $doc->type;
-                $company = ($doc->for_company_id) ? Company::find($doc->for_company_id) : Company::find($doc->company_id);
-                $expiry = ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '';
+                $expiry = ($rec->expiry) ? $rec->expiry->format('d/m/Y') : '';
 
-                if (($doc->category_id > 20 && Auth::user()->allowed2("edit.company.doc.$type", $doc)) ||
-                    ($doc->status == 2 || $doc->status == 3 || ($doc->status == 1 && Auth::user()->allowed2('del.company', $company)))
+                if (($rec->category_id > 20 && Auth::user()->allowed2("edit.company.doc.$type", $rec)) ||
+                    ($rec->status == 2 || $rec->status == 3 || ($rec->status == 1 && Auth::user()->allowed2('del.company', $company)))
                 )
-                    $actions .= '<a href="/company/'.$company->id.'/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                    $actions .= '<a href="/company/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
-                if (Auth::user()->allowed2("del.company.doc.$type", $doc) && $doc->category_id > 20)
+                if (Auth::user()->allowed2("del.company.doc.$type", $rec) && $doc->category_id > 20)
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
                 return $actions;
             })
-            ->rawColumns(['id', 'name', 'details', 'action'])
+            ->rawColumns(['id', 'action'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Site Docs current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getExpiredDocs(Request $request)
+    {
+        if ($request->get('type') == 'insurance_contract')
+            $categories = ['1', '2', '3', '4', '5'];
+        elseif ($request->get('type') == 'whs')
+            $categories = ['6', '7', '8', '9'];
+
+        $records = DB::table('company_docs as d')
+            ->select(['d.id', 'd.category_id', 'd.attachment', 'd.name', 'd.ref_no', 'd.ref_name', 'd.expiry', 'd.attachment',
+                'd.for_company_id', 'd.company_id', 'd.status',
+                DB::raw('DATE_FORMAT(d.expiry, "%d/%m/%y") AS nicedate'),])
+            ->join('company_docs_categories as c', 'd.category_id', '=', 'c.id')
+            ->whereIn('d.category_id', $categories)
+            ->where('d.for_company_id', $request->get('for_company_id'))
+            ->where('d.status', '0');
+
+        $dt = Datatables::of($records)
+            ->editColumn('name', function ($doc) {
+                return '<a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o" style="min-width: 25px"></i>' . $doc->name . '</a>';
+            })
+            ->rawColumns(['id', 'name', 'action'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Site Docs current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getProfileDocs(Request $request)
+    {
+        $categories = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $status = (request('status') == 0) ? [0] : [1, 2, 3];
+        /*
+        $records = DB::table('company_docs as d')
+            ->select(['d.id', 'd.category_id', 'd.attachment', 'd.name', 'd.ref_no', 'd.ref_name', 'd.expiry', 'd.attachment',
+                'd.for_company_id', 'd.company_id', 'd.status', 'c.id as cid', 'c.name as category_name', 'comp.name as company_name',
+                DB::raw('DATE_FORMAT(d.expiry, "%d/%m/%y") AS nicedate'),])
+            ->join('company_docs_categories as c', 'd.category_id', '=', 'c.id')
+            ->join('companys as comp', 'd.for_company_id', '=', 'comp.id')
+            ->whereIn('d.category_id', $categories)
+            ->where('d.for_company_id', request('for_company_id'))
+            ->whereIn('d.status', $status);*/
+
+        $records = CompanyDoc::where('for_company_id', request('for_company_id'))
+            ->whereIn('category_id', $categories)
+            ->whereIn('status', $status)->orderBy('category_id')->get();
+
+        //dd($request->all());
+        $dt = Datatables::of($records)
+            ->editColumn('id', function ($doc) {
+                return '<div class="text-center"><a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
+            })
+            /*
+            ->addColumn('details', function ($doc) {
+                $details = '';
+
+                if (in_array($doc->category_id, [1, 2, 3])) // PL + WC + SA
+                    $details = "Policy No: $doc->ref_no &nbsp; Insurer: $doc->ref_name";
+
+                return $details;
+            })*/
+            ->editColumn('expiry', function ($doc) {
+                return ($doc->expiry) ? $doc->expiry->format('d/m/Y') : 'none';
+            })
+            ->addColumn('action', function ($doc) {
+                /*
+                $rec = CompanyDoc::find($doc->id);
+                $type = $rec->type;
+                $company = ($rec->for_company_id) ? Company::find($rec->for_company_id) : Company::find($rec->company_id);
+                $actions = '';
+                $expiry = ($rec->expiry) ? $rec->expiry->format('d/m/Y') : '';
+
+                if (($rec->category_id > 20 && Auth::user()->allowed2("edit.company.doc.$type", $rec)) ||
+                    ($rec->status == 2 || $rec->status == 3 || ($rec->status == 1 && Auth::user()->allowed2('del.company', $company)))
+                )
+                    $actions .= '<a href="/company/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+
+                if (Auth::user()->allowed2("del.company.doc.$type", $rec) && $doc->category_id > 20)
+                    $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
+
+                return $actions;
+                */
+                return 'edit';
+            })
+            ->rawColumns(['id', 'action'])
             ->make(true);
 
         return $dt;

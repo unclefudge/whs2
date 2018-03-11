@@ -755,18 +755,6 @@ class Company extends Model {
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Site') + $array : $array;
     }
 
-
-    /**
-     * A Company may have many CompanyDocs
-     *
-     * @return Collection
-     */
-    public function companyDocs($category_id, $status = '')
-    {
-        return ($status) ? CompanyDoc::where('category_id', $category_id)->where('for_company_id', $this->id)->get() :
-            CompanyDoc::where('status', $status)->where('category_id', $category_id)->where('for_company_id', $this->id)->get();
-    }
-
     /**
      * A dropdown list of users that have the role 'supervisor' for company.
      *
@@ -786,6 +774,31 @@ class Company extends Model {
 
         return ($prompt) ? $array = array('' => 'Select category') + $array : $array;
     }
+
+    /**
+     * A Company may have many CompanyDocs
+     *
+     * @return Collection
+     */
+    public function companyDocs($category_id = '', $status = '')
+    {
+        if ($category_id)
+            return ($status == '') ? CompanyDoc::where('category_id', $category_id)->where('for_company_id', $this->id)->get() :
+                CompanyDoc::where('status', $status)->where('category_id', $category_id)->where('for_company_id', $this->id)->get();
+        else
+            return ($status == '') ? CompanyDoc::where('for_company_id', $this->id)->get() : CompanyDoc::where('status', $status)->where('for_company_id', $this->id)->get();
+    }
+
+    /**
+     * Current CompanyDocs ie status > 0
+     *
+     * @return collection
+     */
+    /*
+    public function currentCompanyDocs($status = '')
+    {
+        return CompanyDoc::where('for_company_id', $this->id)->where('status', '>', '0')->get();
+    }*/
 
     /**
      * First active CompanyDoc of a specific type
@@ -870,7 +883,7 @@ class Company extends Model {
         // Determine WC or SA
         if (in_array($this->category, [1, 2, 3, 4, 6])) {  // All but 'Supply Only'
             if ($type == 2 && in_array($this->business_entity, ['1', 'Company', '4', 'Trading Trust'])) return true;
-            if ($type == 3 && in_array($this->business_entity, ['2', 'Partnership', '3', 'Sole Trader']))  return true;
+            if ($type == 3 && in_array($this->business_entity, ['2', 'Partnership', '3', 'Sole Trader'])) return true;
         }
 
         // Subcontractor (On Site Trade)
@@ -953,22 +966,50 @@ class Company extends Model {
     }
 
     /**
-     * Determine if a company is WHS compliant ie. uploaded required document
+     * Determine if Company is compliant ie. has required docs.
      *
-     * @return Array
+     * @return booleen
      */
     public function compliantDocs()
     {
         $doc_types = [1, 2, 3, 4, 5];
         foreach ($doc_types as $type) {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
-                return  false;
+                return false;
         }
 
         if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
-            return  false;
+            return false;
+    }
 
-        return true;
+    /**
+     * Missing Company Info
+     *
+     * @return Text or Array
+     */
+    public function missingDocs($format = 'html')
+    {
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract'];
+        $missing_docs = [];
+        $missing_html = '';
+
+        foreach ($doc_types as $type => $name) {
+            if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1)) {
+                $missing_docs[$type] = $name;
+                $missing_html .= "$name, ";
+            }
+
+        }
+
+        if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1)) {
+            $missing_docs[7] = 'Contractor Licence';
+            $missing_html .= 'Contractor Licence, ';
+        }
+
+        $missing_html = rtrim($missing_html, ', ');
+
+        return ($format == 'html') ? $missing_html : $missing_docs;
+
     }
 
     /**
@@ -1165,14 +1206,14 @@ class Company extends Model {
     {
         $array = [];
         foreach ($this->sites($status) as $site) {
-            $record = Site::findOrFail($site->id);
+            //$record = Site::findOrFail($site->id);
 
-            if ($record->qaReports->count()) {
+            if ($site->qaReports->count()) {
                 if ($status) {
-                    if ($record->status == $status)
-                        $array[$site->id] = $record->name;
+                    if ($site->status == $status)
+                        $array[$site->id] = $site->name;
                 } else
-                    $array[$site->id] = $record->name;
+                    $array[$site->id] = $site->name;
             }
         }
         asort($array);

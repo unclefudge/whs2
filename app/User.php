@@ -21,6 +21,7 @@ use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
 use App\Models\Safety\ToolboxTalk;
 use App\Http\Utilities\CompanyEntityTypes;
+use App\Http\Utilities\CompanyDocTypes;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use nilsenj\Toastr\Facades\Toastr;
@@ -202,19 +203,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return array
      */
-    public function companyDocTypeSelect($action, $prompt = '')
+    public function companyDocTypeSelect($action, $company, $prompt = '')
     {
         $array = [];
-        //$array = CompanyDocCategory::where('company_id', $this->company->id);
-        if ($action == 'edit')
-            $array = CompanyDocCategory::where('id', '>', '6')->where('status', '1')->orderBy('name')->pluck('name', 'id')->toArray();
-        else
-            $array = CompanyDocCategory::where('status', '1')->orderBy('name')->pluck('name', 'id')->toArray();
+
+        foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
+            if ($this->hasPermission2("$action.docs.$doc_type.pub")) {
+                foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
+                    if (!($action == 'add' && $company->activeCompanyDoc($id)))
+                        $array[$id] = $name;
+                }
+
+            }
+        }
+
+        asort($array);
 
         if ($prompt == 'all')
             return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
 
-        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Category') + $array : $array;
+        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
     }
 
     /**
@@ -420,7 +428,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $user = User::find($this->updated_by);
 
         return ($user) ? '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
-        '<span style="font-weight: 400">By:</span> ' . $user->fullname : "$this->updated_by";
+            '<span style="font-weight: 400">By:</span> ' . $user->fullname : "$this->updated_by";
     }
 
     /**

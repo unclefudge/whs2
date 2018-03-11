@@ -63,6 +63,7 @@ class CompanyDoc extends Model {
     }
 
 
+
     /**
      * Create ToDoo for Company Doc to be approved and assign to given user(s)
      */
@@ -209,7 +210,7 @@ class CompanyDoc extends Model {
     public function getAttachmentUrlAttribute()
     {
         //$url = URL::to('/filebank') . '/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
-        if ($this->attributes['attachment'] && file_exists(public_path('/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'])))
+        if ($this->attributes['attachment'])// && file_exists(public_path('/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'])))
             return '/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
 
         return '';

@@ -116,6 +116,22 @@ class CompanyController extends Controller {
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function staff($id)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('view.company', $company))
+            return view('errors/404');
+
+        return view('company/staff', compact('company'));
+    }
+
+    /**
      * Edit the resource.
      *
      * @return \Illuminate\Http\Response
@@ -564,7 +580,8 @@ class CompanyController extends Controller {
                 return '<a href="tel:' . preg_replace("/[^0-9]/", "", $user->phone) . '">' . $user->phone . '</a>';
             })
             ->editColumn('email', function ($user) {
-                return '<a href="mailto:' . $user->email . '">' . '<i class="fa fa-envelope-o"></i>' . '</a>';
+                //return '<a href="mailto:' . $user->email . '">' . '<i class="fa fa-envelope-o"></i>' . '</a>';
+                return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
             })
             ->addColumn('action', function ($user) {
                 if (Auth::user()->allowed2('view.user', $user))

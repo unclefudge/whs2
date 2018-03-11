@@ -1,39 +1,82 @@
 @extends('layout')
-
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-files-o"></i> Company Documents</h1>
-    </div>
-@stop
-
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        <li><a href="/company/doc">Company Documents</a><i class="fa fa-circle"></i></li>
-        <li><span>Edit Document</span></li>
+        @if (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company'))
+            <li><a href="/company">Companies</a><i class="fa fa-circle"></i></li>
+        @endif
+        <li><a href="/company/{{ $company->id }}/doc">Documents</a><i class="fa fa-circle"></i></li>
+        <li><span>Upload</span></li>
     </ul>
 @stop
 
 @section('content')
     <div class="page-content-inner">
+        {{-- Company Header --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="member-bar">
+                    <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
+                    <i class="icon-users-member-bar hidden-xs"></i>
+                    <div class="member-name">
+                        <div class="full-name-wrap">
+                            <a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a>
+                        </div>
+                        <span class="member-number">Company ID #{{ $company->id }}</span>
+                        <span class="member-split">&nbsp;|&nbsp;</span>
+                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : 'INACTIVE' !!}</span>
+                        <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
+
+                    </div>
+
+                    <ul class="member-bar-menu">
+                        <li class="member-bar-item"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
+                        <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
+                                <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
+                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">STAFF</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{-- Missing Documents --}}
+        @if ($company->missingDocs())
+            <div class="row">
+                <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
+                    <div class="portlet light" style="background: #ed6b75; color: #ffffff">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h2 style="margin-top: 0px">NON COMPLIANT</h2>
+                                <div>The following documents are required to be compliant:</div>
+                                <ul>
+                                    @foreach ($company->missingDocs('array') as $type => $name)
+                                        <li>
+                                            {{ $name }}
+                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
+                                @if(Auth::user()->isCompany($company->id) && Auth::user()->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri'))
+                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-pencil "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Edit Document </span>
-                        </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
+                            <span class="caption-subject font-dark bold uppercase"> Edit Document</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        {!! Form::model('companydoc', ['method' => 'PATCH', 'action' => ['Company\CompanyDocController@update', $doc->id], 'class' => 'horizontal-form', 'files' => true]) !!}
-                        {!! Form::hidden('company_id', $doc->company_id) !!}
-                        {!! Form::hidden('for_company_id', $doc->for_company_id) !!}
-
+                        {!! Form::model($doc, ['method' => 'PATCH', 'action' => ['Company\CompanyDocController@update',$company->id, $doc->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
 
                         <div class="form-body">
@@ -47,14 +90,107 @@
                                     <div class="col-md-12"><h2 style="margin: 0 0"><span class="label label-danger pull-right">Not approved</span></h2></div>
                                 </div>
                             @endif
-                            {{-- Name + Category --}}
+
+
                             <div class="row">
                                 <div class="col-md-6">
+                                    {{-- Name --}}
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('name', $doc->name, ['class' => 'form-control', ($doc->category_id < 7) ? 'readonly' : '']) !!}
+                                        {!! Form::text('name', null, ['class' => 'form-control', ($doc->category_id < 10) ? 'readonly' : '']) !!}
+                                    </div>
+                                    @if (in_array($doc->category_id, [1, 2, 3]))
+                                        {{-- Policy --}}
+                                        <div class="form-group {!! fieldHasError('ref_no', $errors) !!}">
+                                            {!! Form::label('ref_no', 'Policy No', ['class' => 'control-label']) !!}
+                                            {!! Form::text('ref_no', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('ref_no', $errors) !!}
+                                        </div>
+                                        {{-- Insurer --}}
+                                        <div class="form-group {!! fieldHasError('ref_name', $errors) !!}">
+                                            {!! Form::label('ref_name', 'Insurer', ['class' => 'control-label']) !!}
+                                            {!! Form::text('ref_name', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('ref_name', $errors) !!}
+                                        </div>
+                                        @if (in_array($doc->category_id, [2, 3]))
+                                            {{-- Category --}}
+                                            <div class="form-group {!! fieldHasError('ref_type', $errors) !!}">
+                                                {!! Form::label('ref_type', 'Category', ['class' => 'control-label']) !!}
+                                                {!! Form::select('ref_type', $doc->company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
+                                                {!! fieldErrorMessage('ref_type', $errors) !!}
+                                            </div>
+                                        @endif
+                                    @endif
+                                    {{-- Lic No + Lic Class--}}
+                                    @if ($doc->category_id == 7)
+                                        <div class="form-group {!! fieldHasError('lic_no', $errors) !!}">
+                                            {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
+                                            {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('lic_no', $errors) !!}
+                                        </div>
+                                        <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
+                                            {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                            <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
+                                                {!! $company->contractorLicenceOptions() !!}
+                                            </select>
+                                            {!! fieldErrorMessage('lic_type', $errors) !!}
+                                        </div>
+                                    @endif
+                                    {{-- Asbestos Class --}}
+                                    <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
+                                        {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                        {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('asb_type', $errors) !!}
+                                    </div>
+                                    {{-- Expiry --}}
+                                    <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
+                                        {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
+                                        <div class="input-group date date-picker">
+                                            {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
+                                            'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                        </div>
+                                        {!! fieldErrorMessage('expiry', $errors) !!}
+                                    </div>
+
+                                    {{-- Notes --}}
+                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
+                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
+                                        {!! Form::textarea('notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('notes', $errors) !!}
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    {{-- Attachment --}}
+                                    <div class="form-group" id="attachment-div">
+                                        <div class="col-md-9">
+                                            {!! Form::label('filename', 'Filename', ['class' => 'control-label']) !!}
+                                            {!! Form::text('filename', $doc->attachment, ['class' => 'form-control', 'readonly']) !!}
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
+                                        </div>
+                                        @if($doc->for_company_id == Auth::user()->company_id)
+                                            <div class="col-md-3 col-md-offset-9">
+                                                <button type="button" class="btn blue" style="margin-top: 25px;" id="change_file"> Change File</button>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- File upload -->
+                                    <div class="form-group {!! fieldHasError('singlefile', $errors) !!}" style="display: none" id="singlefile-div">
+                                        <label class="control-label">Select File</label>
+                                        <input id="singlefile" name="singlefile" type="file" class="file-loading">
+                                        {!! fieldErrorMessage('singlefile', $errors) !!}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            {{-- Name + Category --}}
+                            <div class="row">
                                 @if ($doc->category_id > 20)
                                     <div class="col-md-4">
                                         <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
@@ -65,113 +201,12 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('name', $errors) !!}">
-                                            {!! Form::label('company_name', 'Company', ['class' => 'control-label']) !!}
-                                            {!! Form::text('company_name', $doc->company->name_alias, ['class' => 'form-control', 'readonly']) !!}
-                                        </div>
-                                    </div>
                                     {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control']) !!}
                                 @endif
                             </div>
-                            {{-- Workers Comp or Sickness fields --}}
-                            @if ($doc->category_id < 4)
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group {!! fieldHasError('ref_no', $errors) !!}">
-                                            {!! Form::label('ref_no', 'Policy No.', ['class' => 'control-label']) !!}
-                                            {!! Form::text('ref_no', $doc->ref_no, ['class' => 'form-control']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group {!! fieldHasError('ref_name', $errors) !!}">
-                                            {!! Form::label('ref_name', 'Insurer', ['class' => 'control-label']) !!}
-                                            {!! Form::text('ref_name', $doc->ref_name, ['class' => 'form-control']) !!}
-                                        </div>
-                                    </div>
-                                    @if ($doc->category_id == 2 || $doc->category_id == 3 )
-                                        <div class="col-md-6">
-                                            <div class="form-group {!! fieldHasError('ref_type', $errors) !!}">
-                                                {!! Form::label('ref_type', 'Policy Category', ['class' => 'control-label']) !!}
-                                                {!! Form::select('ref_type', $doc->company->workersCompCategorySelect('prompt'),
-                                                     $doc->ref_type, ['class' => 'form-control bs-select']) !!}
-                                                {!! fieldErrorMessage('ref_type', $errors) !!}
-                                            </div>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endif
-                            {{-- Asbestos Licence fields --}}
-                            @if ($doc->category_id == 8)
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group {!! fieldHasError('ref_type', $errors) !!}">
-                                            {!! Form::label('ref_type', 'Class', ['class' => 'control-label']) !!}
-                                            {!! Form::select('ref_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'],
-                                                 $doc->ref_type, ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('ref_type', $errors) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
 
-                            {{-- Expiry --}}
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
-                                        {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
-                                        <div class="input-group date date-picker">
-                                            {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
-                                            'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
-                                            <span class="input-group-btn">
-                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                                        </span>
-                                        </div>
-                                        {!! fieldErrorMessage('expiry', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Attachment --}}
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group" id="attachment-div">
-                                        <div style="padding-top: 7px;">
-                                            <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link">
-                                                <i class="fa fa-bold fa-4x fa-file-text-o" style="margin-top: 25px"></i><br><br>{{ $doc->attachment }}</a>
-                                            @if($doc->for_company_id == Auth::user()->company_id)
-                                                <br>
-                                                <button type="button" class="btn blue" style="margin-top: 25px" id="change_file"> Change File</button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- File upload -->
-                            <div class="row" style="display: none" id="singlefile-div">
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('singlefile', $errors) !!}">
-                                        <label class="control-label">Select File</label>
-                                        <input id="singlefile" name="singlefile" type="file" class="file-loading">
-                                        {!! fieldErrorMessage('singlefile', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="form-section"></h3>
-                            <!-- Notes -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('notes', $doc->notes, ['rows' => '2', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
-                                        <span class="help-block"> For internal use only </span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="form-actions right">
-                                <button type="submit" name="back" value="back" class="btn default"> Back</button>
+                                <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
                                 @if ($doc->status == 2 && Auth::user()->hasPermission2('del.company') && $doc->company->reportsTo()->id == Auth::user()->company_id)
                                     <button type="submit" class="btn dark" name="reject_doc" value="reject">Reject Document</button>
                                     <button type="submit" class="btn green">Approve and Save</button>

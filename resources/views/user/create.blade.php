@@ -141,8 +141,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
-                                        {!! Form::label('firstname', 'First Name 8', ['class' => 'control-label']) !!}
-                                        {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
+                                        {!! Form::label('firstname', 'First Name * => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('firstname', $errors) !!}
                                     </div>
                                 </div>

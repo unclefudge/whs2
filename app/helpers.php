@@ -106,6 +106,7 @@ function permOptions($action, $type = '')
     $array = [];
 
     if ($action == 'add') $array = ['0' => 'No', '1' => 'Create'];
+    if ($type == 'up') $array = ['0' => 'No', '1' => 'Upload'];
     if ($action == 'del') {
         if ($type == 'del') $array = ['0' => 'No', '1' => 'Delete'];
         if ($type == 'arc') $array = ['0' => 'No', '1' => 'Archive'];

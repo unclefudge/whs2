@@ -93,7 +93,7 @@ class RoleController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $role = Role2::findorFail($id);
 
@@ -101,9 +101,9 @@ class RoleController extends Controller {
         if (!Auth::user()->allowed2('edit.settings', $role))
             return view('errors/404');
 
-        $role_request = $request->only('name', 'description');
+        $role_request = request()->only('name', 'description');
 
-        //dd($role_request);
+        //dd(request()->all());
         $role->update($role_request);
 
         $permissions = Permission2::all();
@@ -111,8 +111,8 @@ class RoleController extends Controller {
         // Update Permissions
         $role->detachAllPermissions();
         foreach ($permissions as $permission) {
-            if ($request->get("p$permission->id") != 0)
-                $role->attachPermission($permission->id, $request->get("p$permission->id"), Auth::user()->company_id);
+            if (request("p$permission->id") != 0)
+                $role->attachPermission($permission->id, request("p$permission->id"), Auth::user()->company_id);
         }
 
         Toastr::success("Saved changes");

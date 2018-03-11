@@ -1,5 +1,6 @@
 @inject('ozstates', 'App\Http\Utilities\Ozstates')
 @inject('companyEntity', 'App\Http\Utilities\CompanyEntityTypes')
+@inject('companyDocTypes', 'App\Http\Utilities\CompanyDocTypes')
 @extends('layout')
 
 @section('pagetitle')

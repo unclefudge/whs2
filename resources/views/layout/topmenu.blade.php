@@ -23,7 +23,7 @@
                             @foreach(Auth::user()->todoType($type, 1) as $todo)
                                 <li>
                                     <a href="{{ $todo->url() }}">
-                                        <span class="time">{{ $todo->due_at->format('d/m/Y') }}</span>
+                                        <span class="time">{!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '' !!}</span>
                                     <span class="details">
                                         <span class="badge badge-success badge-roundless"><i class="fa fa-plus"></i></span>
                                     <span style="line-height: 25px">&nbsp; {{ $todo->name }}</span>

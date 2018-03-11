@@ -4,7 +4,7 @@
     <div class="page-title">
         <h1><i class="fa fa-sign-in"></i> Site Checkin</h1>
     </div>
-    <div class="pull-right" style="padding: 20px;"><a href="auth/logout">logout</a></div>
+    <div class="pull-right" style="padding: 20px;"><a href="/logout">logout</a></div>
 @stop
 
 @section('content')
@@ -127,7 +127,7 @@
                                                                             @if ($worksite->docsOfType('RISK')->first())
                                                                                 @foreach($worksite->docsOfType('RISK') as $doc)
                                                                                     <li class="mt-list-item" style="padding: 10px 0px">
-                                                                                        <div class="list-icon-container"><a href="/filebank/site/{{$worksite->id}}/risk/{{ $doc->attachment }}"><i
+                                                                                        <div class="list-icon-container"><a href="/filebank/site/{{$worksite->id}}/docs/{{ $doc->attachment }}"><i
                                                                                                         class="fa fa-file-text-o"></i></a></div>
                                                                                         <div class="list-item-content">{{ $doc->name }}</div>
                                                                                     </li>
@@ -159,7 +159,7 @@
                                                                             @if ($worksite->docsOfType('HAZ')->first())
                                                                                 @foreach($worksite->docsOfType('HAZ') as $doc)
                                                                                     <li class="mt-list-item" style="padding: 10px 0px">
-                                                                                        <div class="list-icon-container"><a href="/filebank/site/{{$worksite->id}}/hazard/{{ $doc->attachment }}"><i
+                                                                                        <div class="list-icon-container"><a href="/filebank/site/{{$worksite->id}}/docs/{{ $doc->attachment }}"><i
                                                                                                         class="fa fa-file-text-o"></i></a></div>
                                                                                         <div class="list-item-content">{{ $doc->name }}</div>
                                                                                     </li>

@@ -429,8 +429,8 @@ class PagesController extends Controller {
         //
         // Creating Permission
         //
-        $name = 'Company Insurance & Contracts ';
-        $slug = 'company.ics';
+        $name = 'Private WHS Documents';
+        $slug = 'docs.whs.pri';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);
@@ -449,7 +449,7 @@ class PagesController extends Controller {
         $p->model = 'c';
         $p->save();
         // Sig
-        $p = Permission2::create(['name' => "Sing Off $name", 'slug' => "sig.$slug"]);
+        $p = Permission2::create(['name' => "Sign Off $name", 'slug' => "sig.$slug"]);
         $p->model = 'c';
         $p->save();
         echo "<br><br>Completed<br>-------------<br>";

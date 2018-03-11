@@ -4,7 +4,7 @@
     <div class="page-title">
         <h1><i class="fa fa-sign-in"></i> Site Checkin</h1>
     </div>
-    <div class="pull-right" style="padding: 20px;"><a href="auth/logout">logout</a></div>
+    <div class="pull-right" style="padding: 20px;"><a href="/logout">logout</a></div>
 @stop
 
 @section('content')

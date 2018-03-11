@@ -119,7 +119,7 @@
             <div class="form-group {!! fieldHasError('secondary_user', $errors) !!}">
                 {!! Form::label('secondary_user', 'Secondary Contact:', ['class' => 'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('secondary_user',  array_merge(['0' => 'None'], $company->usersSelect()), null, ['class' => 'form-control bs-select', 'required']) !!}
+                    {!! Form::select('secondary_user',  ['0' => 'None'] + $company->usersSelect(), null, ['class' => 'form-control bs-select', 'required']) !!}
                     {!! fieldErrorMessage('secondary_user', $errors) !!}
                 </div>
             </div>
