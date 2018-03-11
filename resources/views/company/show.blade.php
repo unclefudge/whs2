@@ -120,12 +120,15 @@
                                 <span style="font-size:50px">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', '0')->count() !!}<br></span>
                                 <span style="font-size:20px">Documents</span>
                             </div>
+                            <div class="col-xs-6 doc-summary">
+                                <div class="doc-summary-subtotal">Required <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</span>
+                                </div>
+                                <div class="doc-summary-subtotal">Pending <span
+                                            class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span></div>
+                                <div class="doc-summary-subtotal">Rejected <span
+                                            class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->count() !!}</span></div>
+                            </div>
                         </a>
-                        <div class="col-xs-6 doc-summary">
-                            <div class="doc-summary-subtotal">Required <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</span></div>
-                            <div class="doc-summary-subtotal">Pending <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span></div>
-                            <div class="doc-summary-subtotal">Rejected <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->count() !!}</span></div>
-                        </div>
                     </div>
                 </div>
             </div>
