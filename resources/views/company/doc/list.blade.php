@@ -75,18 +75,25 @@
                             <span class="caption-subject font-dark bold uppercase"> Company Documents</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->isCompany($company->id) && Auth::user()->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri'))
+                            @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/company/{{ $company->id }}/doc/upload" data-original-title="Upload">Upload</a>
                             @endif
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                {!! Form::label('category_id', '&nbsp;', ['class' => 'control-label']) !!}
-                                {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('view', $company, 'all'), $category_id, ['class' => 'form-control bs-select']) !!}
-                            </div>
+                            @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
+                                <div class="form-group">
+                                    {!! Form::label('category_id', '&nbsp;', ['class' => 'control-label']) !!}
+                                    {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('view', $company, 'all'), $category_id, ['class' => 'form-control bs-select']) !!}
+                                </div>
+                            @else
+                                <br>
+                                <div class="alert alert-danger">You don't have permission to view any documents</div>
+                            @endif
                         </div>
+
+
                         <div class="col-md-2 pull-right">
                             {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
                             {!! Form::select('status', ['1' => 'Current', '0' => 'Expired'], null, ['class' => 'form-control bs-select', 'id' => 'status',]) !!}

@@ -26,10 +26,11 @@
             <hr class="field-hr">
             <div class="row">
                 <div class="form-group {!! fieldHasError('category', $errors) !!}">
-                    {!! Form::label('category', 'Category:', ['class' => 'col-md-3 control-label']) !!}
+                    {!! Form::label('category', "Category:", ['class' => 'col-md-3 control-label']) !!}
                     <div class="col-md-9">
                         {!! Form::select('category',$companyTypes::all(), $company->category, ['class' => 'form-control bs-select', 'required']) !!}
                         {!! fieldErrorMessage('category', $errors) !!}
+                        <span class="help-block"> Only viewable by parent company</span>
                     </div>
                 </div>
             </div>
@@ -65,6 +66,7 @@
                     <div class="col-md-9">
                         {!! Form::select('payroll_tax',$payrollTaxTypes::all(), $company->payroll_tax, ['class' => 'form-control bs-select']) !!}
                         {!! fieldErrorMessage('payroll_tax', $errors) !!}
+                        <span class="help-block"> Only viewable by parent company</span>
                     </div>
                 </div>
             </div>
@@ -75,6 +77,7 @@
                     <div class="col-md-9">
                         {!! Form::text('creditor_code', null, ['class' => 'form-control', 'required']) !!}
                         {!! fieldErrorMessage('creditor_code', $errors) !!}
+                        <span class="help-block"> Only viewable by parent company</span>
                     </div>
                 </div>
             </div>

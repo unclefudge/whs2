@@ -96,6 +96,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Company Docs
     Route::get('company/{cid}/doc/dt/docs', 'Company\CompanyDocController@getDocs');
     Route::get('company/{cid}/doc/upload', 'Company\CompanyDocController@create');
+    Route::post('company/{cid}/doc/reject/{id}', 'Company\CompanyDocController@reject');
+    Route::get('company/{cid}/doc/archive/{id}', 'Company\CompanyDocController@archive');
     Route::resource('company/{cid}/doc', 'Company\CompanyDocController');
 
 

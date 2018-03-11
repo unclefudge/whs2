@@ -240,7 +240,7 @@
                                             </div>
                                         </div>
 
-                                        @if (Auth::user()->allowed2('edit.company.accounting', $company))
+                                        @if (Auth::user()->allowed2('edit.company.acc', $company)) <!-- && Auth::user()->isCompany($company->reportsTo())->id)-->
                                             <div class="row">
                                                 {{--
                                                 <div class="col-md-3">

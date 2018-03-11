@@ -206,14 +206,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function companyDocTypeSelect($action, $company, $prompt = '')
     {
         $array = [];
-
         foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
             if ($this->hasPermission2("$action.docs.$doc_type.pub")) {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
-
             }
         }
 

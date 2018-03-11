@@ -68,12 +68,45 @@
             </div>
         @endif
 
+        {{-- Document Bar --}}
+        <div class="row" style="display: none;">
+            <div class="col-md-12">
+                <div class="portlet light doc-bar">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="doc-bar-count text-center"
+                                  style="background: #000000">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', '0')->count() !!}</span>
+                            <span class="doc-bar-item">Documents</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="doc-bar-count text-center" style="background: #659be0">3</span>
+                            <span class="doc-bar-item">Required</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="doc-bar-count text-center" style="background: #F1C40F">3</span>
+                            <span class="doc-bar-item">Pending</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="doc-bar-count text-center" style="background: #ed6b75">3</span>
+                            <span class="doc-bar-item">Rejected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-dark bold uppercase"> Upload Documents</span>
+                        </div>
+                        <div class="actions">
+                            <a href="/company/{{ $company->id }}/doc">Documents: {!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', '0')->count() !!}</a>
+                            &nbsp; | &nbsp;
+                            <a href="/company/{{ $company->id }}/doc">Required: {!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</a> &nbsp; | &nbsp;
+                            <a href="/company/{{ $company->id }}/doc">Pending: {!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</a>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -389,7 +422,6 @@
             $('#singlefile-div').show();
             $('#multifile-div').hide();
         }
-
 
 
     });

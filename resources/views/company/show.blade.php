@@ -160,34 +160,6 @@
                     @include('company/_edit-whs')
                 @endif
 
-                {{-- Staff --}}
-                {{--
-                <div class="portlet light">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption">
-                            <i class="icon-bubbles font-dark hide"></i>
-                            <span class="caption-subject font-dark bold uppercase">Staff</span>
-                        </div>
-                    </div>
-                    <div class="portlet-body">
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
-                                    <thead>
-                                    <tr class="mytable-header">
-                                        <th width="5%"> #</th>
-                                        <th> Name</th>
-                                        <th> Phone</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                --}}
             </div>
         </div>
     </div>

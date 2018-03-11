@@ -73,6 +73,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-dark bold uppercase"> Edit Document</span>
+                            <span class="caption-helper"> ID: {{ $doc->id }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -80,16 +81,26 @@
                         @include('form-error')
 
                         <div class="form-body">
-                            @if ($doc->status == 2 && $doc->company_id == Auth::user()->company_id)
-                                <div class="row">
-                                    <div class="col-md-12"><h2 style="margin: 0 0"><span class="label label-warning pull-right">Pending approval</span></h2></div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @if ($doc->status == 2 && $doc->company_id == Auth::user()->company_id)
+                                        <h2 style="margin: 0 0"><span class="label label-warning">Pending approval</span></h2>
+                                    @endif
+                                    @if ($doc->status == 3)
+                                        <div class="alert alert-danger">
+                                            The document was not approved for following reason:
+                                            <ul>
+                                                <li>{{ $doc->reject }}</li>
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
-                            @if ($doc->status == 3)
-                                <div class="row">
-                                    <div class="col-md-12"><h2 style="margin: 0 0"><span class="label label-danger pull-right">Not approved</span></h2></div>
+                                <div class="col-md-3">
+                                    @if(!$doc->status)
+                                        <h3 class="font-red uppercase pull-right" style="margin:0 0 10px;">Inactive</h3>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
 
 
                             <div class="row">
@@ -207,20 +218,78 @@
 
                             <div class="form-actions right">
                                 <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
-                                @if ($doc->status == 2 && Auth::user()->hasPermission2('del.company') && $doc->company->reportsTo()->id == Auth::user()->company_id)
-                                    <button type="submit" class="btn dark" name="reject_doc" value="reject">Reject Document</button>
-                                    <button type="submit" class="btn green">Approve and Save</button>
-                                @else
-                                    <button type="submit" class="btn green">Save</button>
+                                {{-- Achive - only 'live' docs status = 1 --}}
+                                @if ($doc->status == 1 && Auth::user()->allowed2('del.company.doc', $doc))
+                                    <a class="btn dark" data-toggle="modal" href="#modal_archive"> Archive </a>
+                                @endif
+                                {{-- Reject / Approve - only pending/rejected docs --}}
+                                @if (in_array($doc->status, [2,3]) && Auth::user()->allowed2('sig.company.doc', $doc))
+                                    @if ($doc->status == 2)
+                                        <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
+                                    @endif
+                                    <button type="submit" class="btn green">Approve</button>
+                                @endif
+                                {{-- Save / Upload - only 'current' docs status > 0 --}}
+                                @if ($doc->status != 0)
+                                    <button type="submit" class="btn green" id="but_save">Save</button>
+                                    <button type="submit" class="btn green" id="but_upload" style="display: none">Upload</button>
+                                @elseif (!$doc->status && Auth::user()->allowed2('del.company.doc', $doc))
+                                    <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn red" id="but_save">Re-activate</a>
                                 @endif
                             </div>
-                        </div> <!--/form-body-->
+                        </div>
                         {!! Form::close() !!}
-                                <!-- END FORM-->
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- Reject Modal --}}
+        <div id="modal_reject" class="modal fade" id="basic" tabindex="-1" role="modal_reject" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Reject Document</h4>
+                    </div>
+                    <div class="modal-body">
+                        {!! Form::model($doc, ['method' => 'POST', 'action' => ['Company\CompanyDocController@reject',$company->id, $doc->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                        <div class="form-group {!! fieldHasError('reject', $errors) !!}">
+                            {!! Form::label('reject', 'Reason for rejecting document', ['class' => 'control-label']) !!}
+                            {!! Form::textarea('reject', null, ['rows' => '3', 'class' => 'form-control']) !!}
+                            {!! fieldErrorMessage('reject', $errors) !!}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn green" name="reject_doc" value="reject">Reject</button>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+
+        <!-- Archive Modal -->
+        <div id="modal_archive" class="modal fade bs-modal-sm" tabindex="-1" role="modal_arcive" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title text-center"><b>Archive Document</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">You are about to make this document no longer <span style="text-decoration: underline">active</span> and archive it.</p>
+                        <p class="font-red text-center"><i class="fa fa-exclamation-triangle"></i> Once archived only {{ $doc->owned_by->name }} can reactivite it.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn green">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div>
             <div class="pull-right" style="font-size: 12px; font-weight: 200; padding: 10px 10px 0 0">
                 {!! $doc->displayUpdatedBy() !!}
@@ -264,6 +333,8 @@
         $("#change_file").click(function () {
             $('#attachment-div').hide();
             $('#singlefile-div').show();
+            $('#but_upload').show();
+            $('#but_save').hide();
         });
 
     });

@@ -530,6 +530,7 @@ Custom color buttons
 
 .doc-summary-subtotal {
     background: #ACE8EE;
+    color: #212121;
     line-height: 35px;
     min-height: 35px;
     padding: 10px 30px 10px 20px;
@@ -561,98 +562,36 @@ Custom color buttons
     text-decoration: none;
 }
 
-/*****************************************************
-* Products Overview
-*****************************************************/
-
-
-@media screen and (max-width: 1024px) and (min-width: 769px) {
-    .products-overview {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
+.doc-bar {
+    padding: 0px !important;
+    background: #ffffff !important;
 }
 
-.products-overview .total-status, .products-overview .total-products {
-    height: 150px;
-}
-
-@media screen and (min-width: 1025px) {
-    .products-overview .total-status, .products-overview .total-products {
-        padding: 0;
-    }
-}
-
-.products-overview .total {
-    height: 100%;
-    background-color: #fff;
+.doc-bar-item {
     color: #212121;
+    /*background: #D6F3F6;*/
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 35px;
+    width: 60%;
+    height:35px;
+    padding: 10px 20px;
+    vertical-align: middle;
+    display: inline-block
 }
 
-.products-overview .total:hover, .products-overview .total:focus, .products-overview .total:active {
-    text-decoration: none;
-    color: inherit;
-    background-color: #e1f6fd;
-}
-
-.products-overview .total [class*="total-"] {
-    display: inline-block;
-}
-
-.products-overview .total .total-count {
-    font-size: 40px;
-    line-height: 50px;
-}
-
-@media screen and (max-width: 768px) {
-    .products-overview .total .total-count {
-        font-size: 35px;
-        line-height: 32px;
-    }
-}
-
-.products-overview .total .total-title {
-    font-size: 16px;
-    line-height: 35px;
-}
-
-@media screen and (max-width: 768px) {
-    .products-overview .total .total-title {
-        font-size: 14px;
-        line-height: 12px;
-    }
-}
-
-.products-overview .total-status-row {
-    background-color: #b1e8fa;
-    color: #212121;
-    height: 50px;
-}
-
-.products-overview .total-status-caption {
-    font-size: 14px;
-}
-
-.products-overview .total-status-amount {
+.doc-bar-count {
+    color: #FFFFFF;
+    /*background: #82DCE5;*/
     font-size: 20px;
+    font-weight: 700;
+    min-height: 40px;
+    height:40px;
+    width: 30%;
+    padding: 5px 10px;
+    vertical-align: middle;
+    display: inline-block
 }
-
-.products-overview .total-status-link {
-    color: inherit;
-    padding: 0 20px;
-}
-
-.products-overview .total-status-link:hover, .products-overview .total-status-link:active, .products-overview .total-status-link:focus {
-    background-color: #8fdef8;
-}
-
-@media screen and (min-width: 1025px) {
-    .products-overview .saved-credit-cards, .products-overview .add-credit-card {
-        padding: 0;
-    }
-}
-
-
 
 /*****************************************************
 *  Icons

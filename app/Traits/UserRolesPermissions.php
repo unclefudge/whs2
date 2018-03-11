@@ -8,6 +8,8 @@ use App\Models\Site\Site;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
+use App\Models\Company\CompanyDocCategory;
+use App\Http\Utilities\CompanyDocTypes;
 
 
 trait UserRolesPermissions {
@@ -413,10 +415,25 @@ trait UserRolesPermissions {
             return false;
         }
 
-        // Company Docs - Show
-        if ($permission == 'show.company.doc.gen' || $permission == 'show.company.doc.lic' || $permission == 'show.company.doc.ics' || $permission == 'show.company.doc.whs') {
-            if ($this->permissionLevel("view.$permissiontype", $record->id) || $this->permissionLevel("view.$permissiontype", $record->reportsTo()->id))
-                return true;
+        // Company Documents
+        if ($permissiontype == 'company.doc') {
+            if ($action == 'add') {
+                if ($this->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')) return true;
+            } else {
+                //$allowed_cats = array_keys(Auth::user()->companyDocTypeSelect($action, $record->owned_by));
+                $category = CompanyDocCategory::find($record->category_id);
+                $doc_permission = ($category->private) ? "$action.docs.$category->type.pri" : "$action.docs.$category->type.pub";
+                // User has 'All' permission to this record
+                if ($this->permissionLevel($doc_permission, $record->company_id) == 99 || $this->permissionLevel($doc_permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+
+                // Document is For User Company but isn't the owner of it
+                // Only allowed to edit/delete documents with status pending/rejected ie. 2 or 3
+                if ($record->for_company_id == $this->company_id && $record->company_id != $this->company_id) {
+                    if ($action == 'view' || $record->status == '2' || $record->status == '3') {
+                        if ($this->permissionLevel($doc_permission, $record->company_id) == 20) return true; // User has 'Own Company' permission so record must be 'for' their company
+                    }
+                }
+            }
 
             return false;
         }
@@ -432,6 +449,7 @@ trait UserRolesPermissions {
         if ($action == 'add') // Don't need any further checking because 'add' doesn't affect any specific record.
             return true;      //  - also we know they must have 'add' permission if they reached this far.
         else {
+
             // -user, -company, client,
             // -site, -site.accident, -site.hazard, -site.doc, -site.qa, -site.asbestos, -site.doc.manager, -site.export
             // -weekly.planner, -trade.planner, -site.planner, -area.super, trade,
@@ -449,6 +467,7 @@ trait UserRolesPermissions {
 
             // Users
             if ($permissiontype == 'user') {
+
                 if ($record->id == $this->id && ($action == 'view' || $action == 'edit')) return true;  // User can always view/edit own profile
                 if ($this->authUsers($permission)->contains('id', $record->id)) return true;
 
@@ -463,23 +482,31 @@ trait UserRolesPermissions {
                 return false;
             }
 
-            // Company Accounting
-            if ($permissiontype == 'company.accounting') {
-                //if ($this->hasPermission2($permission) && $record->id == $this->company_id) // User belong to same company record
-                //    return true;
-                if ($this->authCompanies($permission)->contains('id', $record->id) && $record->id != $this->company_id) return true;
-
-                return false;
-            }
-
             // Company Accounting + WHS + Construction
-            if ($permissiontype == 'company.acc' || $permissiontype == 'company.con') {
+            if ($permissiontype == 'company.acc' || $permissiontype == 'company.con' || $permissiontype == 'company.whs') {
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
 
                 return false;
             }
 
+            // Company Documents
+            /*
+            if ($permissiontype == 'docs.acc' || $permissiontype == 'docs.adm' || $permissiontype == 'company.whs') {
+                // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
+                if ($action == 'view' || $record->status == '2' || $record->status == '3') {
+                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
+                    // User requires 'Sign Off' at Document Owner level to update an active document
+                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
+                }
+
+                return false;
+            }*/
+
             // Company ICS + WHS Documents
+            /*
             if ($permissiontype == 'company.ics' || $permissiontype == 'company.whs') {
                 // determine if Record is Company or Document
                 if (isset($record->slug)) {
@@ -498,9 +525,10 @@ trait UserRolesPermissions {
 
                 }
                 return false;
-            }
+            }*/
 
             // Company Documents
+            /*
             if ($permissiontype == 'company.doc.gen' || $permissiontype == 'company.doc.lic' || $permissiontype == 'company.doc.whs' || $permissiontype == 'company.doc.ics') {
                 // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
                 if ($action == 'view' || $record->status == '2' || $record->status == '3') {
@@ -513,7 +541,7 @@ trait UserRolesPermissions {
                 }
 
                 return false;
-            }
+            }*/
 
 
             // Sites + Planners (Weekly/Site/Trade)
