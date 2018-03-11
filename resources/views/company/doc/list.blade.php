@@ -25,7 +25,7 @@
                         </div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
-                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : 'INACTIVE' !!}</span>
+                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
                         <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
 
                     </div>

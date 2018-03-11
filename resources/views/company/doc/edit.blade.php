@@ -24,7 +24,7 @@
                         </div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
-                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : 'INACTIVE' !!}</span>
+                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
                         <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
 
                     </div>
@@ -84,11 +84,11 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     @if ($doc->status == 2 && $doc->company_id == Auth::user()->company_id)
-                                        <h2 style="margin: 0 0"><span class="label label-warning">Pending approval</span></h2>
+                                        <h2 style="margin: 0 0"><span class="label label-warning">Pending approval</span></h2><br><br>
                                     @endif
                                     @if ($doc->status == 3)
                                         <div class="alert alert-danger">
-                                            The document was not approved for following reason:
+                                            The document was not approved for the following reason:
                                             <ul>
                                                 <li>{{ $doc->reject }}</li>
                                             </ul>
@@ -228,13 +228,14 @@
                                         <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
                                     @endif
                                     <button type="submit" class="btn green">Approve</button>
-                                @endif
-                                {{-- Save / Upload - only 'current' docs status > 0 --}}
-                                @if ($doc->status != 0)
-                                    <button type="submit" class="btn green" id="but_save">Save</button>
-                                    <button type="submit" class="btn green" id="but_upload" style="display: none">Upload</button>
-                                @elseif (!$doc->status && Auth::user()->allowed2('del.company.doc', $doc))
-                                    <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn red" id="but_save">Re-activate</a>
+                                @else
+                                    {{-- Save / Upload - only 'current' docs status > 0 --}}
+                                    @if ($doc->status != 0)
+                                        <button type="submit" class="btn green" id="but_save">Save</button>
+                                        <button type="submit" class="btn green" id="but_upload" style="display: none">Upload</button>
+                                    @elseif (!$doc->status && Auth::user()->allowed2('del.company.doc', $doc))
+                                        <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn red" id="but_save">Re-activate</a>
+                                    @endif
                                 @endif
                             </div>
                         </div>
