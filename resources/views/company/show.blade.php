@@ -208,18 +208,18 @@
                 $('#overide_div').hide();
         }
 
-        function editForm(name) {
-            $('#show_' + name).hide();
-            $('#edit_' + name).show();
-        }
-
-        function cancelForm(e, name) {
-            e.preventDefault();
-            $('#show_' + name).show();
-            $('#edit_' + name).hide();
-        }
-
     });
+
+    function editForm(name) {
+        $('#show_' + name).hide();
+        $('#edit_' + name).show();
+    }
+
+    function cancelForm(e, name) {
+        e.preventDefault();
+        $('#show_' + name).show();
+        $('#edit_' + name).hide();
+    }
 
 
             @if (count($errors) > 0)

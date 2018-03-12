@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('manage/report/users_extra_permissions', 'Misc\PagesController@usersExtraPermissions');
     Route::get('manage/report/missing_company_info', 'Misc\PagesController@missingCompanyInfo');
     Route::get('manage/report/company_users', 'Misc\PagesController@companyUsers');
+    Route::get('manage/report/licence_override', 'Misc\PagesController@licenceOverride');
     Route::get('/manage/quick', 'Misc\PagesController@quick');
     Route::get('/manage/fixplanner', 'Misc\PagesController@fixplanner');
     Route::get('/manage/importcompany', 'Misc\PagesController@importCompany');

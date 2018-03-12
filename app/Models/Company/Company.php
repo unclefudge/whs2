@@ -865,6 +865,7 @@ class Company extends Model {
      */
     public function requiresCompanyDoc($type)
     {
+        // Doc types
         // 1 PL
         // 2 WC
         // 3 SA
@@ -872,12 +873,13 @@ class Company extends Model {
         // 5 PTC
         // 7 CL
 
+        // Categories
         // '1' => 'Subcontractor (On Site Trade)',
-        //'2' => 'Service Provider (On Site trade',
-        //'3' => 'Service Provider (Off Site)',
-        //'4' => 'Supply & Fit',
-        //'5' => 'Supply Only',
-        //'6' => 'Consultant',
+        // '2' => 'Service Provider (On Site trade',
+        // '3' => 'Service Provider (Off Site)',
+        // '4' => 'Supply & Fit',
+        // '5' => 'Supply Only',
+        // '6' => 'Consultant',
 
 
         // Determine WC or SA
@@ -887,10 +889,12 @@ class Company extends Model {
         }
 
         // Subcontractor (On Site Trade)
-        if ($this->category == 1 && in_array($type, [1, 4, 5, 7])) return true; // Requires PL, Sub, PTC, CL
+        if ($this->category == 1 && in_array($type, [1, 4, 5])) return true; // Requires PL, Sub, PTC
+        if ($this->category == 1 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // Requires CL
 
         // Service Provider (On Site Trades) or Supply & Fit
-        if (in_array($this->category, [2, 4]) && (in_array($type, [1, 7]))) return true; // Requires PL, CL
+        if (in_array($this->category, [2, 4]) && $type == 1) return true; // Requires PL
+        if (in_array($this->category, [2, 4]) && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // Requires CL
 
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
@@ -909,43 +913,13 @@ class Company extends Model {
     }
 
     /**
-     * Determine if Workers Comp is Required
+     * Determine if Contractors Licence is Required for any of their trades
      *
      * @return boolean
      */
-    public function requiresWCinsurance()
+    public function requiresContractorsLicence()
     {
-        if ($this->category == 'On Site Trade') {
-            if ($this->business_entity == 'Company' || $this->business_entity == 'Trading Trust')
-                return true;
-
-            foreach ($this->staff as $staff) {
-                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 1 || $staff->subcontractor_type == 4))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Determine if Workers Comp is Required
-     *
-     * @return boolean
-     */
-    public function requiresSAinsurance()
-    {
-        if ($this->category == 'On Site Trade') {
-            if ($this->business_entity == 'Partnership' || $this->business_entity == 'Sole Trader')
-                return true;
-
-            foreach ($this->staff as $staff) {
-                if ($staff->employment_type == 3 && ($staff->subcontractor_type == 2 || $staff->subcontractor_type == 3))
-                    return true;
-            }
-        }
-
-        return false;
+        return $this->requiresCompanyDoc(7);
     }
 
     /**
@@ -953,7 +927,7 @@ class Company extends Model {
      *
      * @return boolean
      */
-    public function requiresContractorsLicence()
+    public function tradeRequiresContractorsLicence()
     {
         if ($this->category == '1' || $this->category == '2' || $this->category == '4') {
             foreach ($this->tradesSkilledIn as $trade) {
