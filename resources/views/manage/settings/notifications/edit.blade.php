@@ -35,12 +35,33 @@
 
                         {{-- Notifications --}}
                         <h3 class="font-green form-section">Company Notifications</h3>
+                        {{-- Company Created (Type 9) --}}
                         <div class="row">
                             <div class="col-md-12">
-                                {{-- Company Signup (Type 7) --}}
+                                <div class="form-group {!! fieldHasError('type9', $errors) !!}">
+                                    <div class="col-md-3">
+                                        Signup Sent
+                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                           data-content="Company signup request sent" data-original-title="Company Signup">
+                                            <i class="fa fa-question-circle font-grey-silver"></i>
+                                        </a>
+                                        {!! Form::label('type9', "&nbsp;", ['class' => 'control-label']) !!}
+                                    </div>
+                                    <div class="col-md-9">
+                                        {!! Form::select('type9', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(7),
+                                              ['class' => 'form-control select2', 'name' => 'type7[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
+                                        {!! fieldErrorMessage('type9', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        {{-- Company Signup (Type 7) --}}
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group {!! fieldHasError('type7', $errors) !!}">
                                     <div class="col-md-3">
-                                        Company Signup Completion
+                                        Signup Completed
                                         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                                            data-content="Child company has completed the signup process" data-original-title="Company Signup">
                                             <i class="fa fa-question-circle font-grey-silver"></i>
@@ -56,14 +77,14 @@
                             </div>
                         </div>
                         <br>
+                        {{-- Company Documents (Type 1) --}}
                         <div class="row">
                             <div class="col-md-12">
-                                {{-- Company Documents (Type 1) --}}
                                 <div class="form-group {!! fieldHasError('type1', $errors) !!}">
                                     <div class="col-md-3">
-                                        Company Documents
+                                        Document Upload / Expired
                                         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Licences, Insurance & Contracts, Electrical Test & Tagging - expired, require sign off" data-original-title="Company Documents">
+                                           data-content="Licences, Insurance & Contracts, Electrical Test & Tagging - expired, require sign off" data-original-title="Document Upload / Expired">
                                             <i class="fa fa-question-circle font-grey-silver"></i>
                                         </a>
                                         {!! Form::label('type1', "&nbsp;", ['class' => 'control-label']) !!}

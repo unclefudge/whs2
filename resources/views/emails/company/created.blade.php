@@ -1,31 +1,18 @@
+@inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
 @component('mail::message')
-# New Company
+# New Company Created
 
-{{ $company->name }} has joined SafeWorksite and completed the sign up process.
+{{ $company->name }} has been sent a request to join SafeWorksite.
 
 |        |        |
 | ------:|--------|
-| **Name**  | {{ $company->name  }} |
-| **Phone**  | {{ $company->phone  }} |
+| **Company Name**  | {{ $company->name  }} |
+| **Persons Name**  | {{ $company->nickname  }} |
 | **Email**  | {{ $company->email  }} |
-| **Address**  | {{ $company->address  }} {{ $company->SuburbStatePostcode }} |
-| **Primary Contact**  | {{ $company->primary_contact()->fullname  }} @if ($company->phone){{ $company->primary_contact()->phone  }}) @endif |
+| **Category**  | {{ $companyTypes::name($company->category) }} |
+| **Trades**  | {{ $company->tradesSkilledInSBC()  }} |
 | **Created By** | {{ $company->createdBy->name  }} |
 
-----
-
-The following users were created:
-
-|  Username  | Name  | Email  | Phone
-| -----------|-------|--------|--------|
-@foreach ($company->staffStatus(1) as $staff)
-| {{ $staff->username }}  | {{ $staff->fullname }} | {{ $staff->email }} | {{ $staff->phone }}
-@endforeach
-
-
-@component('mail::button', ['url' => config('app.url').'/company/'.$company->id])
-View Company
-@endcomponent
 
 Regards,<br>
 {{ config('app.name') }}

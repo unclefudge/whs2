@@ -75,7 +75,7 @@ class PagesController extends Controller {
         // If primary user and incompleted company Signup - redirect to correct step
         if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {
             if (Auth::user()->company->signup_step == 2)
-                return redirect('/company/' . Auth::user()->company->id . '/edit');
+                return redirect('/signup/company/' . Auth::user()->company->id);
             if (Auth::user()->company->signup_step == 3)
                 return redirect('company/' . Auth::user()->company->id . '/signup/3');
             if (Auth::user()->company->signup_step == 4)
@@ -429,8 +429,8 @@ class PagesController extends Controller {
         //
         // Creating Permission
         //
-        $name = 'Private WHS Documents';
-        $slug = 'docs.whs.pri';
+        $name = 'Company Leave';
+        $slug = 'company.leave';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);

@@ -7,7 +7,7 @@
 
 @section('pagetitle')
     <div class="page-title">
-        <h1><i class="fa fa-users"></i> Company Info</h1>
+        <h1><i class="fa fa-users"></i> Company Information</h1>
     </div>
 @stop
 
@@ -28,38 +28,37 @@
 @section('content')
     {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
-        @if ($company->status == 2)
-            {{-- Company Signup Progress --}}
-            <div class="mt-element-step">
-                <div class="row step-line" id="steps">
-                    <div class="col-sm-3 mt-step-col first active">
-                        <a href="/signup/user/{{ Auth::user()->company->primary_user }}">
-                            <div class="mt-step-number bg-white font-grey">1</div>
-                        </a>
-                        <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
-                        <div class="mt-step-content font-grey-cascade">Add primary user</div>
-                    </div>
-                    <div class="col-sm-3 mt-step-col">
-                        <div class="mt-step-number bg-white font-grey">2</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
-                        <div class="mt-step-content font-grey-cascade">Add company info</div>
-                    </div>
-                    <div class="col-sm-3 mt-step-col">
-                        <div class="mt-step-number bg-white font-grey">3</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
-                        <div class="mt-step-content font-grey-cascade">Add workers</div>
-                    </div>
-                    <div class="col-sm-3 mt-step-col last">
-                        <div class="mt-step-number bg-white font-grey">4</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
-                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
-                    </div>
+
+        {{-- Company Signup Progress --}}
+        <div class="mt-element-step">
+            <div class="row step-line" id="steps">
+                <div class="col-sm-3 mt-step-col first active">
+                    <a href="/signup/user/{{ Auth::user()->company->primary_user }}">
+                        <div class="mt-step-number bg-white font-grey">1</div>
+                    </a>
+                    <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
+                    <div class="mt-step-content font-grey-cascade">Add primary user</div>
+                </div>
+                <div class="col-sm-3 mt-step-col">
+                    <div class="mt-step-number bg-white font-grey">2</div>
+                    <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
+                    <div class="mt-step-content font-grey-cascade">Add company info</div>
+                </div>
+                <div class="col-sm-3 mt-step-col">
+                    <div class="mt-step-number bg-white font-grey">3</div>
+                    <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
+                    <div class="mt-step-content font-grey-cascade">Add workers</div>
+                </div>
+                <div class="col-sm-3 mt-step-col last">
+                    <div class="mt-step-number bg-white font-grey">4</div>
+                    <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                    <div class="mt-step-content font-grey-cascade">Upload documents</div>
                 </div>
             </div>
-            <div class="note note-warning">
-                <p><b>Step 2: Add information relating to your company.</b></p>
-            </div>
-        @endif
+        </div>
+        <div class="note note-warning">
+            <p><b>Step 2: Add information relating to your company.</b></p>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -241,95 +240,95 @@
                                         </div>
 
                                         @if (Auth::user()->allowed2('edit.company.acc', $company)) <!-- && Auth::user()->isCompany($company->reportsTo())->id)-->
-                                            <div class="row">
-                                                {{--
-                                                <div class="col-md-3">
-                                                    <div class="form-group {!! fieldHasError('sub_group', $errors) !!}">
-                                                        {!! Form::label('sub_group', 'Subgroup', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('sub_group',['' => 'Select group', 'Subcontractor' => 'Subcontractor', 'Contractor' => 'Contractor',
-                                                         'Consultant' => 'Consultant', 'Service Provider' => 'Service Provider'],
-                                                         $company->sub_group, ['class' => 'form-control bs-select']) !!}
-                                                        {!! fieldErrorMessage('sub_group', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                --}}
-                                                <div class="col-md-3">
-                                                    <div class="form-group {!! fieldHasError('category', $errors) !!}">
-                                                        {!! Form::label('category', 'Category *', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('category',$companyTypes::all(),
-                                                         $company->category, ['class' => 'form-control bs-select', 'required']) !!}
-                                                        {!! fieldErrorMessage('category', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group {!! fieldHasError('creditor_code', $errors) !!}">
-                                                        {!! Form::label('creditor_code', 'Creditor Code', ['class' => 'control-label']) !!}
-                                                        {!! Form::text('creditor_code', $company->creditor_code, ['class' => 'form-control']) !!}
-                                                        {!! fieldErrorMessage('creditor_code', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                {{-- Payroll Tax --}}
-                                                <div class="col-md-12">
-                                                    <div class="form-group {!! fieldHasError('payroll_tax', $errors) !!}">
-                                                        {!! Form::label('payroll_tax', 'Payroll Tax Exemptions', ['class' => 'control-label']) !!}
-                                                        {!! Form::select('payroll_tax',$payrollTaxTypes::all(),
-                                                         $company->payroll_tax, ['class' => 'form-control bs-select']) !!}
-                                                        {!! fieldErrorMessage('payroll_tax', $errors) !!}
-                                                    </div>
-                                                </div>
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                        {{-- WHS Compliance --}}
-                                        @if ((Auth::user()->isCompany(3) && Auth::user()->security) || Auth::user()->id == 351)
-                                            <h3 class="font-green form-section">WHS Compliance</h3>
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="form-group {!! fieldHasError('licence_required', $errors) !!}">
-                                                        <label for="licence_required" class="control-label">Requires a Contractor Licence</label>
-                                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                                           data-content="A Contractors Licence is required if the company performs any of the following trades: {!! $licenceTypes::allSBC()  !!}"
-                                                           data-original-title="Contractors Licence"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
-                                                        {!! Form::select('licence_required',['0' => 'No', '1' => 'Yes'],
-                                                         $company->licence_required, ['class' => 'form-control bs-select', 'id' => 'licence_required']) !!}
-                                                        {!! fieldErrorMessage('licence_required', $errors) !!}
-                                                    </div>
-                                                    {!! Form::hidden('requiresContractorsLicence', $company->requiresContractorsLicence(), ['id' => 'requiresContractorsLicence']) !!}
-                                                </div>
-                                                <div class="col-md-6" style="display: none" id="overide_div">
-                                                    <br>
-                                                    <div class="note note-warning">
-                                                        <p id="req_yes">Company <span style="text-decoration: underline">doesn't</span> require a licence but you have set to <b>REQUIRED</b></p>
-                                                        <p id="req_no">Company requires a licence but you have set to <b>NOT REQUIRED</b></p>
-                                                    </div>
+                                        <div class="row">
+                                            {{--
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('sub_group', $errors) !!}">
+                                                    {!! Form::label('sub_group', 'Subgroup', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('sub_group',['' => 'Select group', 'Subcontractor' => 'Subcontractor', 'Contractor' => 'Contractor',
+                                                     'Consultant' => 'Consultant', 'Service Provider' => 'Service Provider'],
+                                                     $company->sub_group, ['class' => 'form-control bs-select']) !!}
+                                                    {!! fieldErrorMessage('sub_group', $errors) !!}
                                                 </div>
                                             </div>
-                                        @endif
-
-                                        @if (Auth::user()->allowed2('edit.company', $company) && Auth::user()->company_id == $company->reportsTo()->id)
-                                            <hr>
-                                            <!-- Notes -->
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                                        {!! Form::textarea('notes', null, ['rows' => '2', 'class' => 'form-control']) !!}
-                                                        {!! fieldErrorMessage('notes', $errors) !!}
-                                                        <span class="help-block"> For internal use only </span>
-                                                    </div>
+                                            --}}
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('category', $errors) !!}">
+                                                    {!! Form::label('category', 'Category *', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('category',$companyTypes::all(),
+                                                     $company->category, ['class' => 'form-control bs-select', 'required']) !!}
+                                                    {!! fieldErrorMessage('category', $errors) !!}
                                                 </div>
                                             </div>
-                                        @endif
-
-                                        <div class="form-actions right">
-                                            @if ($company->status == 2)
-                                                <button type="submit" class="btn green"> Continue</button>
-                                            @else
-                                                <a href="{{ URL::previous() }}" class="btn default"> Back</a>
-                                                <button type="submit" class="btn green"> Save</button>
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('creditor_code', $errors) !!}">
+                                                    {!! Form::label('creditor_code', 'Creditor Code', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('creditor_code', $company->creditor_code, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('creditor_code', $errors) !!}
+                                                </div>
+                                            </div>
+                                            {{-- Payroll Tax --}}
+                                            <div class="col-md-12">
+                                                <div class="form-group {!! fieldHasError('payroll_tax', $errors) !!}">
+                                                    {!! Form::label('payroll_tax', 'Payroll Tax Exemptions', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('payroll_tax',$payrollTaxTypes::all(),
+                                                     $company->payroll_tax, ['class' => 'form-control bs-select']) !!}
+                                                    {!! fieldErrorMessage('payroll_tax', $errors) !!}
+                                                </div>
+                                            </div>
                                             @endif
                                         </div>
+                                    @endif
+
+                                    {{-- WHS Compliance --}}
+                                    @if ((Auth::user()->isCompany(3) && Auth::user()->security) || Auth::user()->id == 351)
+                                        <h3 class="font-green form-section">WHS Compliance</h3>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('licence_required', $errors) !!}">
+                                                    <label for="licence_required" class="control-label">Requires a Contractor Licence</label>
+                                                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                                       data-content="A Contractors Licence is required if the company performs any of the following trades: {!! $licenceTypes::allSBC()  !!}"
+                                                       data-original-title="Contractors Licence"> <i class="fa fa-question-circle font-grey-silver"></i> </a>
+                                                    {!! Form::select('licence_required',['0' => 'No', '1' => 'Yes'],
+                                                     $company->licence_required, ['class' => 'form-control bs-select', 'id' => 'licence_required']) !!}
+                                                    {!! fieldErrorMessage('licence_required', $errors) !!}
+                                                </div>
+                                                {!! Form::hidden('requiresContractorsLicence', $company->requiresContractorsLicence(), ['id' => 'requiresContractorsLicence']) !!}
+                                            </div>
+                                            <div class="col-md-6" style="display: none" id="overide_div">
+                                                <br>
+                                                <div class="note note-warning">
+                                                    <p id="req_yes">Company <span style="text-decoration: underline">doesn't</span> require a licence but you have set to <b>REQUIRED</b></p>
+                                                    <p id="req_no">Company requires a licence but you have set to <b>NOT REQUIRED</b></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if (Auth::user()->allowed2('edit.company', $company) && Auth::user()->company_id == $company->reportsTo()->id)
+                                        <hr>
+                                        <!-- Notes -->
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group {!! fieldHasError('notes', $errors) !!}">
+                                                    {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
+                                                    {!! Form::textarea('notes', null, ['rows' => '2', 'class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('notes', $errors) !!}
+                                                    <span class="help-block"> For internal use only </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="form-actions right">
+                                        @if ($company->status == 2)
+                                            <button type="submit" class="btn green"> Continue</button>
+                                        @else
+                                            <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+                                            <button type="submit" class="btn green"> Save</button>
+                                        @endif
+                                    </div>
                                 </div>
                                 {!! Form::close() !!}
                             </div>

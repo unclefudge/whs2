@@ -52,7 +52,7 @@
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->fullname }}</td>
                                     <td>{{ $user->company->name_alias }}</td>
-                                    <td>{{ $p->name }}</td>
+                                    <td>{!! ($p) ? $p->name : '<span class="font-red">Deleted Legacy Permission</span>' !!}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

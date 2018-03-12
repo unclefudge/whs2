@@ -28,7 +28,7 @@
                     <div class="portlet-body form">
                         <div class="form-body">
                             <p>Your company {{ $company->name }} has been invited to join SafeWorksite by <b>{{ $company->reportsTo()->name }}</b>.</p>
-                            <p>You wil be guided through the following steps to set up your company.</p>
+                            <p>You will be guided through the following steps to set up your company.</p>
                             {{-- Company Signup Progress --}}
                             <div class="mt-element-step">
                                 <div class="row step-line" id="steps">

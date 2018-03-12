@@ -119,12 +119,15 @@
                                 <span style="font-size:20px">Documents</span>
                             </div>
                             <div class="col-xs-6 doc-summary">
-                                <div class="doc-summary-subtotal">Required <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</span>
+                                <div class="doc-summary-subtotal">Required
+                                    <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</span>
                                 </div>
-                                <div class="doc-summary-subtotal">Pending <span
-                                            class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span></div>
-                                <div class="doc-summary-subtotal">Rejected <span
-                                            class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->count() !!}</span></div>
+                                <div class="doc-summary-subtotal">Pending
+                                    <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span>
+                                </div>
+                                <div class="doc-summary-subtotal">Rejected
+                                    <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->count() !!}</span>
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -133,7 +136,7 @@
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Company Details --}}
-                @if (Auth::user()->allowed2('view.company.acc', $company))
+                @if (Auth::user()->allowed2('view.company', $company))
                     @include('company/_show-company')
                     @include('company/_edit-company')
                 @endif
@@ -146,6 +149,14 @@
             </div>
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
+                {{-- Company Leave --}}
+                {{--}}
+                @if (Auth::user()->allowed2('view.company.leave', $company))
+                    @include('company/_show-leave')
+                    @include('company/_edit-leave')
+                @endif
+                --}}
+
                 {{-- Construction --}}
                 @if (Auth::user()->allowed2('view.company.con', $company))
                     @include('company/_show-construction')
@@ -168,178 +179,6 @@
         </div>
     </div>
 
-    {{-- Edit File Modal --}}
-    <div class="modal fade" id="file-modal" tabindex="-1" role="basic" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title" id="modal-title"></h4>
-                </div>
-                <div class="modal-body form">
-                    {!! Form::model('company_doc', ['action' => ['Company\CompanyDocController@profileICS'], 'files' => true, 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'file-form']) !!}
-                    {{-- @include('form-error') --}}
-                    {!! Form::hidden('for_company_id', $company->id, ['class' => 'form-control']) !!}
-                    {!! Form::hidden('company_id', $company->reportsTo()->id, ['class' => 'form-control']) !!}
-                    {!! Form::hidden('category_id', null, ['class' => 'form-control', 'id' => 'category_id']) !!}
-                    {!! Form::hidden('doc_id', null, ['class' => 'form-control', 'id' => 'doc_id']) !!}
-                    {!! Form::hidden('type', null, ['class' => 'form-control', 'id' => 'type']) !!}
-                    {!! Form::hidden('doc_name', null, ['class' => 'form-control', 'id' => 'doc_name']) !!}
-                    {!! Form::hidden('doc_url', null, ['class' => 'form-control', 'id' => 'doc_url']) !!}
-                    {!! Form::hidden('doc_status', null, ['class' => 'form-control', 'id' => 'doc_status']) !!}
-                    {!! Form::hidden('name', '', ['class' => 'form-control', 'id' => 'name']) !!}
-                    {!! Form::hidden('action', '', ['class' => 'form-control', 'id' => 'action']) !!}
-                    <div class="row" style="margin:0px">
-                        <div class="col-md-12">
-                            <div class="form-body">
-                                {{-- Document reference fields --}}
-                                <div class="form-group {!! fieldHasError('ref_no', $errors) !!}" id="ref_no_field">
-                                    {!! Form::label('ref_no', 'Policy No.', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::text('ref_no', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('ref_no', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('ref_name', $errors) !!}" id="ref_name_field">
-                                    {!! Form::label('ref_name', 'Insurer', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::text('ref_name', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('ref_name', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" id="ref_type_field">
-                                    {!! Form::label('ref_type', 'Category', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('ref_type', $errors) !!}
-                                    </div>
-                                </div>
-                                {{-- Contractor licence --}}
-                                <div class="form-group {!! fieldHasError('lic_no', $errors) !!}" id="lic_no_field">
-                                    @if ($company->business_entity == 'Company' || $company->business_entity == 'Partnership' || $company->business_entity == 'Trading Trust')
-                                        <div class="note note-warning">Licence required to be in the name of company</div>
-                                    @endif
-                                    {!! Form::label('lic_no', 'Licence No.', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::text('lic_no', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('lic_no', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" id="lic_type_field">
-                                    {!! Form::label('lic_type', 'Class(s)', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
-                                            {!! $company->contractorLicenceOptions() !!}
-                                        </select>
-                                        {!! fieldErrorMessage('lic_type', $errors) !!}
-                                    </div>
-                                </div>
-                                {{-- Additional licences --}}
-                                <div class="form-group {!! fieldHasError('extra_lic_type', $errors) !!}" id="extra_lic_field">
-                                    {!! Form::label('extra_lic_type', 'Type', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::select('extra_lic_type', ['' => 'Select type', '8' => 'Asbestos Removal', '9' => 'Other'], null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('extra_lic_type', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('extra_lic_class', $errors) !!}" id="extra_lic_class_field">
-                                    {!! Form::label('extra_lic_class', 'Class', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::select('extra_lic_class', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('extra_lic_class', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('extra_lic_name', $errors) !!}" id="extra_lic_name_field">
-                                    {!! Form::label('extra_lic_name', 'Licence Name', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::text('extra_lic_name', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('extra_lic_name', $errors) !!}
-                                    </div>
-                                </div>
-                                {{-- Expiry --}}
-                                <div class="form-group {!! fieldHasError('expiry', $errors) !!}" id="expiry_field">
-                                    {!! Form::label('expiry', 'Expiry', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-5">
-                                        <div class="input-group date date-picker" data-date-orientation="top right" data-date-format="dd/mm/yyyy"> <!-- data-date-start-date="+0d">-->
-                                            {!! Form::text('expiry', null, ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'readonly']) !!}
-                                            <span class="input-group-btn">
-                                                <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                                            </span>
-                                        </div>
-                                        {!! fieldErrorMessage('expiry', $errors) !!}
-                                    </div>
-                                </div>
-                                {{-- File attachment --}}
-                                <div class="form-group" id="file_div">
-                                    {!! Form::label('document', 'Document', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7" style="padding-top: 7px;">
-                                        <a href="#" target="_blank" id="doc_link"></a>
-                                        @if($company->id == Auth::user()->company_id)
-                                            <a href="#" id="del_cross"><i class="fa fa-times font-red" style="font-size: 15px; padding-left: 20px"></i></a>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('singlefile', $errors) !!}" id="file_field">
-                                    {!! Form::label('singlefile', 'Document', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        <input id="singlefile" name="singlefile" type="file" class="file-loading">
-                                        {!! fieldErrorMessage('singlefile', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group {!! fieldHasError('notes', $errors) !!}" id="notes_field">
-                                    {!! Form::label('notes', 'Notes', ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-7">
-                                        {!! Form::textarea('notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
-                                    </div>
-                                </div>
-
-                                {{-- Messages --}}
-                                <div id="pending_div">
-                                    @if($company->id == Auth::user()->company_id)
-                                        This document is <span class="label label-warning">Pending approval</span> and can be <span style="text-decoration: underline;">deleted</span> or modified
-                                        if
-                                        required.
-                                    @endif
-                                    @if (Auth::user()->allowed2('sig.company', $company))
-                                        This document is <span class="label label-warning">Pending approval</span> and can be <span style="text-decoration: underline;">rejected</span> or modified
-                                        if
-                                        required.
-                                    @endif
-                                </div>
-                                <div id="rejected_div">
-                                    @if($company->id == Auth::user()->company_id)
-                                        This document was <span class="label label-danger">Not approved</span> and can be <span style="text-decoration: underline;">deleted</span> or modified if
-                                        required.
-                                    @endif
-                                    @if (Auth::user()->allowed2('sig.company', $company))
-                                        This document was <span class="label label-danger">Not approved</span> but can still be <span style="text-decoration: underline;">accepted</span> or
-                                        modified if
-                                        required.
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
-                    @if($company->id == Auth::user()->company_id)
-                        <a href="" class="btn dark" id="delete_doc">Delete Document</a>
-                    @endif
-                    @if (Auth::user()->allowed2('sig.company', $company))
-                        <button class="btn dark" id="reject_doc" name="reject_doc" value="reject">Reject Document</button>
-                        <button class="btn dark" id="archive_doc" name="archive_doc" value="archive">Archive</button>
-                        <button type="submit" class="btn green">Approve and Save</button>
-                    @else
-                        <button type="submit" class="btn green">Save</button>
-                    @endif
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <!-- END PAGE CONTENT INNER -->
 @stop
 
 @section('page-level-plugins-head')
@@ -347,10 +186,9 @@
     <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" tytype="text/css"/>
-    @stop
+@stop
 
-    @section('page-level-styles-head')
-            <!--<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>-->
+@section('page-level-styles-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop
@@ -371,12 +209,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         /* Select2 */
-        $("#lic_type").select2({
-            placeholder: "Select one or more",
-            width: '100%',
-        });
-
-        /* Select2 */
+        $("#lic_type").select2({placeholder: "Select one or more", width: '100%',});
         $("#trades").select2({placeholder: "Select one or more", width: '100%'});
         $("#supervisors").select2({placeholder: "Select one or more", width: '100%'});
 
@@ -414,12 +247,6 @@
     });
 
     function editForm(name) {
-        if (name.match(/[0-9]$/)) {
-            for (i = 1; i < 9; i++) {
-                $('#edit_doc' + i).hide();
-                $('#show_doc' + i).show();
-            }
-        }
         $('#show_' + name).hide();
         $('#edit_' + name).show();
     }
@@ -449,29 +276,6 @@
                 window.location.href = "/company/" + {{ $company->id }};
             }
         });
-    });
-
-    var table_staff = $('#table_staff').DataTable({
-        processing: true,
-        serverSide: true,
-        //bFilter: false,
-        //bLengthChange: false,
-        ajax: {
-            'url': '/company/dt/staff',
-            'type': 'GET',
-            'data': function (d) {
-                d.company_id = {{ $company->id }};
-            }
-        },
-        columns: [
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-            {data: 'full_name', name: 'full_name'},
-            {data: 'phone', name: 'phone', orderable: false},
-            {data: 'email', name: 'email', orderable: false},
-        ],
-        order: [
-            [1, "asc"]
-        ]
     });
             @if (count($errors) > 0)
     var errors = {!! $errors !!};

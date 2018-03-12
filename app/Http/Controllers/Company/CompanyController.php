@@ -93,6 +93,10 @@ class CompanyController extends Controller {
 
         // Mail request to new company
         Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
+        // Mail notification to parent company
+        $email_to = (\App::environment('prod')) ? $newCompany->reportsTo()->notificationsUsersType('company.created') : env('EMAIL_ME');
+        if ($newCompany->parent_company && $email_to)
+            Mail::to($email_to)->send(new \App\Mail\Company\CompanyCreated($newCompany));
 
         Toastr::success("Company signup sent");
 
@@ -142,9 +146,7 @@ class CompanyController extends Controller {
 
         /// Check authorisation and throw 404 if not
         // User must be able to edit company or has subscription 3+ with ability to edit trades
-        if (!(Auth::user()->allowed2('edit.company', $company) || Auth::user()->company->subscription > 2 &&
-            (Auth::user()->hasAnyPermission2('add.trade|edit.trade') && $company->reportsTo()->id == Auth::user()->company_id))
-        )
+        if (!(Auth::user()->allowed2('edit.company', $company)))
             return view('errors/404');
 
         return view('company/edit', compact('company'));

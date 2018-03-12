@@ -1023,42 +1023,28 @@ class Company extends Model {
     {
         $today = Carbon::today();
         $str = '';
-        $contact = '<b>Missing Contact Info:</b> ';
+        $contact = '<b>Company Details:</b> ';
         if (!$this->email) $contact .= '<span class="font-red">email</span>, ';
         if (!$this->phone) $contact .= 'phone, ';
         if (!$this->address) $contact .= 'address, ';
         if (!$this->suburb) $contact .= 'suburb, ';
         if (!$this->state) $contact .= 'state, ';
         if (!$this->postcode) $contact .= 'postcode, ';
-        if ($contact != '<b>Missing Contact Info:</b> ')
+        if (!$this->primary_user) $contact .= '<span class="font-red">primary contact</span>, ';
+        if ($contact != '<b>Company Details:</b> ')
             $str .= rtrim($contact, ', ') . '<br>';
 
-        $details = '<b>Missing Company Details:</b> ';
+        $details = '<b>Business Details:</b> ';
         if (!$this->abn) $details .= 'ABN, ';
         if (!$this->business_entity) $details .= 'Business Entity, ';
-        if (!$this->sub_group) $details .= 'Subgroup, ';
         if (!$this->gst) $details .= 'GST, ';
         if (!$this->creditor_code) $details .= 'Creditor Code, ';
-        /*if (!$this->licence_no) $details .= '<span class="font-red">Licence No,</span> ';
-        if (!$this->licence_type) $details .= 'Licence Type, ';
-        if (!$this->licence_expiry) $details .= '<span class="font-red">Licence Expiry</span>, ';
-        if ($this->licence_expiry && $this->licence_expiry->lt($today)) $details .= '<span class="font-red">Licence Expired (' . $this->licence_expiry->format('d/m/Y') . ')</span>, ';
-        */
-        if ($details != '<b>Missing Company Details:</b> ')
+        if ($details != '<b>Business Details:</b> ')
             $str .= rtrim($details, ', ') . '<br>';
 
 
-        $docs = "<b>Missing Documents:</b> ";
-        if ($this->expiredCompanyDoc('1')) $docs .= '<span class="font-red">Public Liability ' . $this->expiredCompanyDoc('1') . '</span>, ';
-        if ($this->business_entity != 'Partnership' && $this->business_entity != 'Sole Trader' && $this->expiredCompanyDoc('2'))
-            $docs .= "<span class='font-red'>Worker's Compensation " . $this->expiredCompanyDoc('2') . '</span> , ';
-        if ($this->business_entity != 'Company' && $this->business_entity != 'Trading Trust' && $this->expiredCompanyDoc('3'))
-            $docs .= "<span class='font-red'>Sickness & Accident " . $this->expiredCompanyDoc('3') . '</span> , ';
-        if ($this->expiredCompanyDoc('4')) $docs .= 'Subcontractors Statement ' . $this->expiredCompanyDoc('4') . ', ';
-        if ($this->expiredCompanyDoc('5')) $docs .= 'Period Trade Contract ' . $this->expiredCompanyDoc('5') . ', ';
-        if ($this->expiredCompanyDoc('6')) $docs .= 'Electrical Test & Tagging ' . $this->expiredCompanyDoc('6') . ', ';
-        if ($details != '<b>Missing Documents:</b> ')
-            $str .= rtrim($docs, ', ') . '<br>';
+        if ($this->missingDocs())
+            $str .= "<b>Documents:</b> " . $this->missingDocs();
 
         return ($str) ? $str : null;
 

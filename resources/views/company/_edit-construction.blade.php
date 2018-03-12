@@ -2,10 +2,7 @@
 <div class="portlet light" style="display: none;" id="edit_construction">
     <div class="portlet-title">
         <div class="caption">
-            <span class="caption-subject font-dark bold uppercase">Construction Details</span>
-            @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                <span class="label label-warning">Pending approval</span>
-            @endif
+            <span class="caption-subject font-dark bold uppercase">Construction</span>
         </div>
     </div>
     <div class="portlet-body form">

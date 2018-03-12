@@ -83,8 +83,8 @@ $rec = $user;
     @endif
     <tr>
         <td>Company Details</td>
-        <td width="15%">{!! permSelect('view.company', 'all', $rec, $cid, $dis) !!}</td>
-        <td width="15%">{!! permSelect('edit.company', 'all', $rec, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         @if ($sub2)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
@@ -95,8 +95,8 @@ $rec = $user;
     </tr>
     <tr>
         <td>Business Details</td>
-        <td width="15%">{!! permSelect('view.company.acc', 'all', $rec, $cid, $dis) !!}</td>
-        <td width="15%">{!! permSelect('edit.company.acc', 'all', $rec, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+        <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         @if ($sub2)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
@@ -107,8 +107,8 @@ $rec = $user;
     @if($plan)
         <tr>
             <td>Construction</td>
-            <td width="15%">{!! permSelect('view.company.con', 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.con', 'all', $rec, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
         </tr>
@@ -116,66 +116,73 @@ $rec = $user;
     @if ($sub2)
         <tr>
             <td>WHS Compliance</td>
-            <td width="15%">{!! permSelect('view.company.whs', 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.whs', 'all', $rec, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
         </tr>
+        <tr>
+            <td>Company Leave</td>
+            <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+            <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+            <td width="45%" colspan="3"></td>
+        </tr>
     @endif
+
 </table>
 <hr>
 
 {{-- Documents --}}
 @if ($sub1)
-<h3>Documents</h3>
-<table class="table table-striped">
-    <tr>
-        <td style="background: #FFF; border: 0px #e7ecf1; font-size: 18px; font-weight: 300; padding: 0;"></td>
-        <td width="15%" style="border: 1px solid; border-color:#e7ecf1">View</td>
-        <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Edit</td>
-        <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Create</td>
-        <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Delete
-            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-               data-content="For record integrity most data can't be deleted but users may be given access to archive / resolve it instead. For data that is actually deleted you will be asked to 'confirm'"
-               data-original-title="Delete"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
-        <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Sign Off
-            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-               data-content="Certain actions or updates to the record are required to be 'Signed Off' by an authorised user."
-               data-original-title="Sign Off"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
-    </tr>
-</table>
-<h5 class="font-green-haze" style="font-size: 16px">Public Documents</h5>
-<table class="table table-bordered table-striped">
-    @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
+    <h3>Documents</h3>
+    <table class="table table-striped">
         <tr>
-            <td>{{ $doc_name }}
+            <td style="background: #FFF; border: 0px #e7ecf1; font-size: 18px; font-weight: 300; padding: 0;"></td>
+            <td width="15%" style="border: 1px solid; border-color:#e7ecf1">View</td>
+            <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Edit</td>
+            <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Create</td>
+            <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Delete
                 <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                   data-content="{!! $companyDocTypes::docNames($doc_type, 0) !!}" data-original-title="Documents"> <i
-                            class="fa fa-question-circle font-grey-silver"></i> </a></td>
-            <td width="15%">{!! permSelect("view.docs.$doc_type.pub", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("edit.docs.$doc_type.pub", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("add.docs.$doc_type.pub", 'up', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("del.docs.$doc_type.pub", 'arc', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("sig.docs.$doc_type.pub", 'sig', $rec, $cid, $dis) !!}</td>
-        </tr>
-    @endforeach
-</table>
-<h5 class="font-green-haze" style="font-size: 16px">Private Documents</h5>
-<table class="table table-bordered table-striped">
-    @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
-        <tr>
-            <td>{{ $doc_name }}
+                   data-content="For record integrity most data can't be deleted but users may be given access to archive / resolve it instead. For data that is actually deleted you will be asked to 'confirm'"
+                   data-original-title="Delete"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
+            <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Sign Off
                 <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                   data-content="{!! $companyDocTypes::docNames('acc', 1) !!}" data-original-title="Documents"> <i
-                            class="fa fa-question-circle font-grey-silver"></i> </a></td>
-            <td width="15%">{!! permSelect("view.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("edit.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("add.docs.$doc_type.pri", 'up', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("del.docs.$doc_type.pri", 'arc', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect("sig.docs.$doc_type.pri", 'sig', $rec, $cid, $dis) !!}</td>
+                   data-content="Certain actions or updates to the record are required to be 'Signed Off' by an authorised user."
+                   data-original-title="Sign Off"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
         </tr>
-    @endforeach
-</table>
+    </table>
+    <h5 class="font-green-haze" style="font-size: 16px">Public Documents</h5>
+    <table class="table table-bordered table-striped">
+        @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
+            <tr>
+                <td>{{ $doc_name }}
+                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                       data-content="{!! $companyDocTypes::docNames($doc_type, 0) !!}" data-original-title="Documents"> <i
+                                class="fa fa-question-circle font-grey-silver"></i> </a></td>
+                <td width="15%">{!! permSelect("view.docs.$doc_type.pub", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("edit.docs.$doc_type.pub", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("add.docs.$doc_type.pub", 'up', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("del.docs.$doc_type.pub", 'arc', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("sig.docs.$doc_type.pub", 'sig', $rec, $cid, $dis) !!}</td>
+            </tr>
+        @endforeach
+    </table>
+    <h5 class="font-green-haze" style="font-size: 16px">Private Documents</h5>
+    <table class="table table-bordered table-striped">
+        @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
+            <tr>
+                <td>{{ $doc_name }}
+                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                       data-content="{!! $companyDocTypes::docNames('acc', 1) !!}" data-original-title="Documents"> <i
+                                class="fa fa-question-circle font-grey-silver"></i> </a></td>
+                <td width="15%">{!! permSelect("view.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("edit.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("add.docs.$doc_type.pri", 'up', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("del.docs.$doc_type.pri", 'arc', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect("sig.docs.$doc_type.pri", 'sig', $rec, $cid, $dis) !!}</td>
+            </tr>
+        @endforeach
+    </table>
 @endif
 
 {{-- Legacy --}}
@@ -378,48 +385,6 @@ $rec = $user;
                 <td width="15%"></td>
             </tr>
         @endif
-    </table>
-
-
-    <h5 class="font-green-haze" style="font-size: 16px">Company Documents
-        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-           data-content="Grants ability to view or modify documents which belong to your company."
-           data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
-        </a>
-    </h5>
-    <table class="table table-bordered table-striped">
-        <tr>
-            <td>General</td>
-            <td width="15%">{!! permSelect('view.company.doc.gen', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.doc.gen', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('add.company.doc.gen', 'add', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('del.company.doc.gen', 'del', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('sig.company.doc.gen', 'sig', $rec, $cid, $dis) !!}</td>
-        </tr>
-        <tr>
-            <td>Licences</td>
-            <td width="15%">{!! permSelect('view.company.doc.lic', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.doc.lic', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('add.company.doc.lic', 'add', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('del.company.doc.lic', 'arc', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('sig.company.doc.lic', 'sig', $rec, $cid, $dis) !!}</td>
-        </tr>
-        <tr>
-            <td>Insurance & Contracts</td>
-            <td width="15%">{!! permSelect('view.company.doc.ics', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.doc.ics', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('add.company.doc.ics', 'add', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('del.company.doc.ics', 'arc', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('sig.company.doc.ics', 'sig', $rec, $cid, $dis) !!}</td>
-        </tr>
-        <tr>
-            <td>WHS (Test & Tag)</td>
-            <td width="15%">{!! permSelect('view.company.doc.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.doc.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('add.company.doc.whs', 'add', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('del.company.doc.whs', 'arc', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('sig.company.doc.whs', 'sig', $rec, $cid, $dis) !!}</td>
-        </tr>
     </table>
 
     <h5 class="font-green-haze" style="font-size: 16px">Other Documents

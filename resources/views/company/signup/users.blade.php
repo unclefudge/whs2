@@ -30,7 +30,7 @@
         <div class="mt-element-step">
             <div class="row step-line" id="steps">
                 <div class="col-sm-3 mt-step-col first active">
-                    <a href="/user/{{ Auth::user()->company->primary_user }}/edit">
+                    <a href="/signup/user/{{ Auth::user()->company->primary_user }}">
                         <div class="mt-step-number bg-white font-grey">1</div>
                     </a>
                     <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>

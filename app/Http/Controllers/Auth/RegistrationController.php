@@ -48,7 +48,7 @@ class RegistrationController extends Controller {
     }
 
     /**
-     * Create a new registration - Signup form
+     * Create a new registration - Primary User
      *
      */
     protected function primaryCreate($key)
@@ -56,25 +56,17 @@ class RegistrationController extends Controller {
         list($company_id, $rest) = explode('-', $key, 2);
         $company = Company::find($company_id);
         if ($company && $company->signup_key == $key) {
-            return view('company/signup/primary', compact('company'));
+            return view('company/signup/primary-create', compact('company'));
         }
 
         return view('errors/404');
     }
 
-    /**
-     * Store new registration - create company/user
-     *
-     */
-    protected function store()
-    {
-        //
-    }
 
     /**
-     * Store new Referred Registration - create user
+     * Store new registration - Primary user
      */
-    protected function refStore(Request $request)
+    protected function primaryStore()
     {
         $this->validate(request(), [
             'username'           => 'required|min:3|max:50|unique:users,username,',
@@ -89,15 +81,17 @@ class RegistrationController extends Controller {
         list($company_id, $rest) = explode('-', request('signup_key'), 2);
         $company = Company::find($company_id);
 
-        $user_request = removeNullValues($request->all());
+        $user_request = removeNullValues(request()->all());
         $user_request['company_id'] = $company->id;
         $user_request['security'] = 1;
         $user_request['password'] = bcrypt($user_request['password']);  // encrypt password from form
         $user_request['password_reset'] = 0;
 
         // Empty State field if rest of address fields are empty
-        if (!$request->filled('address') && !$request->filled('suburb') && !$request->filled('postcode'))
+        if (!request()->filled('address') && !request()->filled('suburb') && !request()->filled('postcode'))
             $user_request['state'] = null;
+
+        //dd($user_request);
 
         // Create user
         $user = User::create($user_request);
@@ -136,7 +130,17 @@ class RegistrationController extends Controller {
 
         Toastr::success("Signed Up");
 
-        return redirect("company/$company->id/edit");
+        return redirect("/signup/company/$company->id");
     }
+
+    /**
+     * Store new registration - create company/user
+     *
+     */
+    protected function store()
+    {
+        //
+    }
+
 
 }

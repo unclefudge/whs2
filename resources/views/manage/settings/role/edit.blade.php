@@ -163,35 +163,43 @@ $cc = 1;*/
                                         @endif
                                         <tr>
                                             <td>Company Details</td>
-                                            <td width="15%">{!! permSelect('view.company', 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company', 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                             <td width="30%" colspan="2"></td>
                                             <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
 
                                         </tr>
                                         <tr>
                                             <td>Business Details</td>
-                                            <td width="15%">{!! permSelect('view.company.acc', 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company.acc', 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                             <td width="30%" colspan="2"></td>
                                             <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
                                         </tr>
                                         @if($plan)
                                             <tr>
                                                 <td>Construction</td>
-                                                <td width="15%">{!! permSelect('view.company.con', 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.con', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                                 <td width="30%" colspan="2"></td>
                                                 <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
                                             </tr>
                                         @endif
-                                        <tr>
-                                            <td>WHS Compliance</td>
-                                            <td width="15%">{!! permSelect('view.company.whs', 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company.whs', 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="30%" colspan="2"></td>
-                                            <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
-                                        </tr>
+                                        @if ($sub2)
+                                            <tr>
+                                                <td>WHS Compliance</td>
+                                                <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="30%" colspan="2"></td>
+                                                <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Company Leave</td>
+                                                <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="45%" colspan="3"></td>
+                                            </tr>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -510,47 +518,6 @@ $cc = 1;*/
                                             @endif
                                         </table>
 
-
-                                        <h5 class="font-green-haze" style="font-size: 16px">Company Documents
-                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                               data-content="Grants ability to view or modify documents which belong to your company."
-                                               data-original-title="General Documents"> <i class="fa fa-question-circle font-grey-silver"></i>
-                                            </a>
-                                        </h5>
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                <td>General</td>
-                                                <td width="15%">{!! permSelect('view.company.doc.gen', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc.gen', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc.gen', 'add', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc.gen', 'del', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.company.doc.gen', 'sig', $rec, $cid, $dis) !!}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Licences</td>
-                                                <td width="15%">{!! permSelect('view.company.doc.lic', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc.lic', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc.lic', 'add', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc.lic', 'arc', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.company.doc.lic', 'sig', $rec, $cid, $dis) !!}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Insurance & Contracts</td>
-                                                <td width="15%">{!! permSelect('view.company.doc.ics', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc.ics', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc.ics', 'add', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc.ics', 'arc', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.company.doc.ics', 'sig', $rec, $cid, $dis) !!}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>WHS (Test & Tag)</td>
-                                                <td width="15%">{!! permSelect('view.company.doc.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.doc.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('add.company.doc.whs', 'add', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('del.company.doc.whs', 'arc', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('sig.company.doc.whs', 'sig', $rec, $cid, $dis) !!}</td>
-                                            </tr>
-                                        </table>
 
                                         <h5 class="font-green-haze" style="font-size: 16px">Other Documents
                                             <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"

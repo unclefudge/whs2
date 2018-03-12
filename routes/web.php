@@ -27,11 +27,11 @@ Route::get('/login', 'Auth\SessionController@create')->name('login');
 Route::post('/login', 'Auth\SessionController@store');
 Route::get('/logout', 'Auth\SessionController@destroy')->name('logout');
 
-// Signup routes..
+// Signup routes.. Pre Login
 Route::get('/signup', 'Auth\RegistrationController@create')->name('register');
 Route::get('/signup/ref/{key}', 'Auth\RegistrationController@refCreate');
 Route::get('/signup/primary/{key}', 'Auth\RegistrationController@primaryCreate');
-Route::post('/signup/primary', 'Auth\RegistrationController@refStore');
+Route::post('/signup/primary', 'Auth\RegistrationController@primaryStore');
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
@@ -41,6 +41,13 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 // Logged in Routes
 Route::group(['middleware' => 'auth'], function () {
+    // Signup routes.. Post Login
+    Route::get('/signup/user/{id}', 'Company\CompanySignupController@userEdit');
+    Route::post('/signup/user/{id}', 'Company\CompanySignupController@userUpdate');
+    Route::get('/signup/company/{id}', 'Company\CompanySignupController@companyEdit');
+
+
+
     // Pages
     //Route::get('/', 'Misc\PagesController@index');
     Route::get('/home', 'Misc\PagesController@index');

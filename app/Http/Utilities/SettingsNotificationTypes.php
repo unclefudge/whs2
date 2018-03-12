@@ -13,6 +13,7 @@ class SettingsNotificationTypes {
         '6' => 'site.qa',
         '7' => 'company.signup',
         '8' => 'user.created',
+        '9' => 'company.created',
     ];
 
 
