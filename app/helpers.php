@@ -211,6 +211,34 @@ function getPermissionTypes()
     return $array;
 }
 
+/*
+ * Create Select field for Notifications
+ *
+ * @return string
+ */
+function notificationSelect($id, $name, $pop_head = '', $pop_info = '') {
+    $str = '<div class="row"><div class="col-md-12"><div class="form-group"><div class="col-md-3">';
+    $str .= '<label for="type1" class="control-label">'.$name;
+    if ($pop_head) {
+        $str .= ' <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+        data-original-title="'.$pop_head.'" data-content="'.$pop_info.'"><i class="fa fa-question-circle font-grey-silver"></i></a>';
+    }
+    $str .= '</label></div><div class="col-md-9">';
+
+    // Select Options
+    $options = '';
+    $selected = Auth::user()->company->notificationsUsersTypeArray($id);
+    foreach (Auth::user()->company->staffSelect() as $value => $text) {
+            $options .= (in_array($value, $selected)) ? "<option value='$value' selected='selected'>$text</option>" : "<option value='$value'>$text</option>";
+    }
+
+    $str .= '<select class="form-control select2" name="type'.$id.'[]" width="100%" multiple>';
+    $str .= $options;
+    $str .= '</select>';
+    $str .= '</div></div></div></div><br>';
+
+    return $str;
+}
 
 /**
  * Create a array of all user emails with specific role

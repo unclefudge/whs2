@@ -46,7 +46,7 @@ class SiteAccident extends Model {
         $site = Site::findOrFail($this->site_id);
 
         if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('site.accident');
+            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.accident');
             $email_supers = $site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
         } else

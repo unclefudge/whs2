@@ -24,41 +24,6 @@
 @section('content')
     {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
-        @if (Auth::user()->isCompany($company->id) && $company->signup_step)
-            {{-- Company Signup Progress --}}
-            <div class="mt-element-step">
-                <div class="row step-line" id="steps">
-                    <div class="col-md-3 mt-step-col first active">
-                        <div class="mt-step-number bg-white font-grey">1</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
-                        <div class="mt-step-content font-grey-cascade">Add primary user</div>
-                    </div>
-                    <div class="col-md-3 mt-step-col active">
-                        <div class="mt-step-number bg-white font-grey">2</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
-                        <div class="mt-step-content font-grey-cascade">Add company info</div>
-                    </div>
-                    <div class="col-md-3 mt-step-col active">
-                        <div class="mt-step-number bg-white font-grey">3</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
-                        <div class="mt-step-content font-grey-cascade">Add workers</div>
-                    </div>
-                    <div class="col-md-3 mt-step-col last">
-                        <div class="mt-step-number bg-white font-grey">4</div>
-                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
-                        <div class="mt-step-content font-grey-cascade">Upload documents</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="note note-warning">
-                <b>Step 4 : Upload required documents for your company.</b><br><br>
-                Documents required are determined by the information you have provided to us. Required documents have be marked 'Required'<br><br>
-                Once you've added all your documents please click
-                <button class="btn dark btn-outline btn-xs" href="javascript:;"> Completed Signup</button>
-            </div>
-        @endif
-
         {{-- Company Header --}}
         <div class="row">
             <div class="col-md-12">
@@ -232,7 +197,6 @@
         function overide() {
             $('#req_yes').hide();
             $('#req_no').hide();
-            //alert($('#licence_required').val());
             if ($('#licence_required').val() != $('#requiresContractorsLicence').val()) {
                 //alert('over');
                 $('#overide_div').show();
@@ -244,39 +208,20 @@
                 $('#overide_div').hide();
         }
 
-    });
+        function editForm(name) {
+            $('#show_' + name).hide();
+            $('#edit_' + name).show();
+        }
 
-    function editForm(name) {
-        $('#show_' + name).hide();
-        $('#edit_' + name).show();
-    }
+        function cancelForm(e, name) {
+            e.preventDefault();
+            $('#show_' + name).show();
+            $('#edit_' + name).hide();
+        }
 
-    function cancelForm(e, name) {
-        e.preventDefault();
-        $('#show_' + name).show();
-        $('#edit_' + name).hide();
-    }
-
-    $.ajaxSetup({
-        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
     });
 
 
-    $('#app_doc').click(function (e) {
-        e.preventDefault();
-        var id = $(this).data('doc_id');
-        alert('app' + id)
-        $.ajax({
-            type: 'POST',
-            url: '/company/doc/profile-approve',
-            dataType: 'json',
-            data: {id: id},
-            success: function (data) {
-                toastr.success('Accepted document');
-                window.location.href = "/company/" + {{ $company->id }};
-            }
-        });
-    });
             @if (count($errors) > 0)
     var errors = {!! $errors !!};
     if (errors.FORM == 'company' || errors.FORM == 'construction') {

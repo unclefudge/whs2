@@ -94,7 +94,7 @@ class CompanyController extends Controller {
         // Mail request to new company
         Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
         // Mail notification to parent company
-        $email_to = (\App::environment('prod')) ? $newCompany->reportsTo()->notificationsUsersType('company.created') : env('EMAIL_ME');
+        $email_to = (\App::environment('prod')) ? $newCompany->reportsTo()->notificationsUsersType('n.company.created') : env('EMAIL_ME');
         if ($newCompany->parent_company && $email_to)
             Mail::to($email_to)->send(new \App\Mail\Company\CompanyCreated($newCompany));
 
@@ -145,68 +145,11 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        // User must be able to edit company or has subscription 3+ with ability to edit trades
         if (!(Auth::user()->allowed2('edit.company', $company)))
             return view('errors/404');
 
         return view('company/edit', compact('company'));
 
-    }
-
-    /**
-     * Show the form for sign up process step x
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function signupProcess($id, $step)
-    {
-        $company = Company::findorFail($id);
-
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.company', $company))
-            return view('errors/404');
-
-        // Resend Welcome Email
-        if ($step == 1) {
-            Mail::to($company)->send(new \App\Mail\Company\CompanyWelcome($company, Auth::user()->company, $company->nickname));
-
-            return view('company/list');
-        }
-
-        // Add Users
-        if ($step == 3)
-            return view('company/signup/users', compact('company'));
-
-        // Summary
-        if ($step == 4) {
-            $company->signup_step = 4;
-            $company->save();
-
-            //dd('here');
-            return view("company/signup/summary", compact('company'));
-        }
-
-        // Add Documents
-        if ($step == 5) {
-            $company->signup_step = 5;
-            $company->status = 1;
-            $email_to = (\App::environment('prod')) ? $company->reportsTo()->notificationsUsersType('company.signup') : env('EMAIL_ME');
-            if ($company->parent_company && $email_to)
-                Mail::to($email_to)->send(new \App\Mail\Company\CompanyCreated($company));
-
-            $company->save();
-
-            return redirect("company/$company->id");
-        }
-
-        // Signup complete
-        if ($step == 6) {
-            $company->signup_step = 0;
-            $company->save();
-            Toastr::success("Congratulations! Signup Complete");
-
-            return redirect("company/$company->id");
-        }
     }
 
 
@@ -243,7 +186,6 @@ class CompanyController extends Controller {
         }
 
         $company_request = request()->all();
-
         //dd($company_request);
 
         // If updated by Parent Company with 'authorise' permissions update approved fields else reset
@@ -256,6 +198,7 @@ class CompanyController extends Controller {
         }
 
         $company->update($company_request);
+        Toastr::success("Saved changes");
 
         // Actions for making company inactive
         // delete future leave
@@ -264,12 +207,6 @@ class CompanyController extends Controller {
             $company->deleteFromPlanner(Carbon::today());
             Toastr::error("Deactivated Company");
         }
-
-        Toastr::success("Saved changes");
-
-        // Signup Process - Initial update
-        if ($company->status == 2 && $company->signup_step)
-            return redirect("company/$company->id/signup/3");   // Adding users
 
         return redirect("company/$company->id");
     }
@@ -296,7 +233,6 @@ class CompanyController extends Controller {
         }
 
         $company_request = request()->all();
-
         //dd($company_request);
 
         // If updated by Parent Company with 'authorise' permissions update approved fields else reset
@@ -309,8 +245,6 @@ class CompanyController extends Controller {
         }
 
         $company->update($company_request);
-
-
         Toastr::success("Saved changes");
 
         return redirect("company/$company->id");
@@ -339,7 +273,6 @@ class CompanyController extends Controller {
 
         //dd(request()->all());
         $company->update(request()->all());
-
         Toastr::success("Saved changes");
 
         return back();
@@ -516,7 +449,7 @@ class CompanyController extends Controller {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
                 if ($company->status == 2) {
                     if ($company->signup_step == 1)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/company/' . $company->id . '/signup/1" class="btn btn-outline btn-xs dark">Resend Email ' . $company->email . '</a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/signup/welcome/'.$company->id.'" class="btn btn-outline btn-xs dark">Resend Email ' . $company->email . '</a>';
                     if ($company->signup_step == 2)
                         $name .= ' &nbsp; <span class="label label-sm label-info">Adding company info</span></a>';
                     if ($company->signup_step == 3)
@@ -541,7 +474,6 @@ class CompanyController extends Controller {
                     return "<b>" . CompanyTypes::name($company->category) . ":</b></span> " . $company->tradesSkilledInSBC();
 
                 return "<b>" . $company->category . ":</b></span> " . $company->tradesSkilledInSBC();
-                //return "<b>".CompanyTypes::name($company->category).":</b></span> " . $company->tradesSkilledInSBC();
             })
             ->addColumn('manager', function ($company) {
                 return $company->seniorUsersSBC();

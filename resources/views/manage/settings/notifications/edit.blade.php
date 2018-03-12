@@ -1,3 +1,5 @@
+@inject('notificationTypes', 'App\Http\Utilities\SettingsNotificationTypes')
+@inject('companyDocTypes', 'App\Http\Utilities\CompanyDocTypes')
 @extends('layout')
 
 @section('pagetitle')
@@ -33,184 +35,32 @@
                     <div class="portlet-body form">
                         {!! Form::model('settings_notification', ['method' => 'PATCH', 'action' => ['Misc\SettingsNotificationController@update', Auth::user()->company->id]]) !!}
 
-                        {{-- Notifications --}}
+                        {{-- Company --}}
                         <h3 class="font-green form-section">Company Notifications</h3>
-                        {{-- Company Created (Type 9) --}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('type9', $errors) !!}">
-                                    <div class="col-md-3">
-                                        Signup Sent
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Company signup request sent" data-original-title="Company Signup">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type9', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-                                        {!! Form::select('type9', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(7),
-                                              ['class' => 'form-control select2', 'name' => 'type7[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type9', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        {{-- Company Signup (Type 7) --}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('type7', $errors) !!}">
-                                    <div class="col-md-3">
-                                        Signup Completed
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Child company has completed the signup process" data-original-title="Company Signup">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type7', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-                                        {!! Form::select('type7', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(7),
-                                              ['class' => 'form-control select2', 'name' => 'type7[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type7', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        {{-- Company Documents (Type 1) --}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('type1', $errors) !!}">
-                                    <div class="col-md-3">
-                                        Document Upload / Expired
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Licences, Insurance & Contracts, Electrical Test & Tagging - expired, require sign off" data-original-title="Document Upload / Expired">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type1', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-                                        {!! Form::select('type1', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(1),
-                                           ['class' => 'form-control select2', 'name' => 'type1[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type1', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
+                        {!! notificationSelect($notificationTypes::type('n.company.created'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.signup'), 'Signup Completed', 'Company Signup', 'Company has completed the signup process') !!}
+
+                        {{-- Site --}}
                         <h3 class="font-green form-section">Site Notifications</h3>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{-- Site Accidents (Type 3) --}}
-                                <div class="form-group {!! fieldHasError('type3', $errors) !!}">
-                                    <div class="col-md-3">
-                                        Accident Reports
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="lodgement, updated" data-original-title="Site Accidents">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type3', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-
-                                        {!! Form::select('type3', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(3),
-                                              ['class' => 'form-control select2', 'name' => 'type3[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type3', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{-- Site Hazards (Type 4) --}}
-                                <div class="form-group {!! fieldHasError('type4', $errors) !!}">
-                                    <div class="col-md-3">
-                                        Hazard Reports
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="lodgement, updated" data-original-title="Site Hazards">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type4', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-                                        {!! Form::select('type4', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(4),
-                                               ['class' => 'form-control select2', 'name' => 'type4[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type4', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
+                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated') !!}
+                        {!! notificationSelect($notificationTypes::type('n.site.hazard'), 'Hazard Reports', 'Site Hazard', 'lodgement, updated') !!}
                         @if (Auth::user()->isCC())
-                            <div class="row">
-                                <div class="col-md-12">
-                                    {{-- Site Asbestos (Type 5) --}}
-                                    <div class="form-group {!! fieldHasError('type5', $errors) !!}">
-                                        <div class="col-md-3">
-                                            Asbestos Notification
-                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                               data-content="lodgement, updated" data-original-title="Site Asbestos">
-                                                <i class="fa fa-question-circle font-grey-silver"></i>
-                                            </a>
-                                            {!! Form::label('type5', "&nbsp;", ['class' => 'control-label']) !!}
-                                        </div>
-                                        <div class="col-md-9">
-                                            {!! Form::select('type5', Auth::user()->company->staffSelect(),
-                                                  Auth::user()->company->notificationsUsersTypeArray(5),
-                                                   ['class' => 'form-control select2', 'name' => 'type5[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                            {!! fieldErrorMessage('type5', $errors) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                        @endif
-                        @if (Auth::user()->isCC())
-                            <div class="row">
-                                <div class="col-md-12">
-                                    {{-- Site QA (Type 6) --}}
-                                    <div class="form-group {!! fieldHasError('type6', $errors) !!}">
-                                        <div class="col-md-3">
-                                            QA Handover Completion
-                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                               data-content="Handover Completion" data-original-title="Site Quality Assurance">
-                                                <i class="fa fa-question-circle font-grey-silver"></i>
-                                            </a>
-                                            {!! Form::label('type6', "&nbsp;", ['class' => 'control-label']) !!}
-                                        </div>
-                                        <div class="col-md-9">
-                                            {!! Form::select('type6', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(6),
-                                                   ['class' => 'form-control select2', 'name' => 'type6[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                            {!! fieldErrorMessage('type6', $errors) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><br>
+                            {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.qa'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
                         @endif
 
-                        <h3 class="font-green form-section">Other Notifications</h3>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{-- WHS (Type 2) --}}
-                                <div class="form-group {!! fieldHasError('type2', $errors) !!}">
-                                    <div class="col-md-3">
-                                        WHS Documents
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="SWMS & ToolBox Talks - expired, require sign off, archived" data-original-title="WHS Documents">
-                                            <i class="fa fa-question-circle font-grey-silver"></i>
-                                        </a>
-                                        {!! Form::label('type2', "&nbsp;", ['class' => 'control-label']) !!}
-                                    </div>
-                                    <div class="col-md-9">
-                                        {!! Form::select('type2', Auth::user()->company->staffSelect(), Auth::user()->company->notificationsUsersTypeArray(2),
-                                               ['class' => 'form-control select2', 'name' => 'type2[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
-                                        {!! fieldErrorMessage('type2', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
+                        {{-- Document --}}
+                        <h3 class="font-green form-section">Document Notifications</h3>
+                        {!! notificationSelect($notificationTypes::type('n.docs.acc.pub'), 'Accounts Public', 'Accounts Upload/Update', $companyDocTypes::docNames('acc', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.acc.pri'), 'Accounts Private', 'Accounts Upload/Update', $companyDocTypes::docNames('acc', 1)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.adm.pub'), 'Administration Public', 'Administration Upload/Update', $companyDocTypes::docNames('adm', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.adm.pri'), 'Administration Private', 'Administration Upload/Update', $companyDocTypes::docNames('adm', 1)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.con.pub'), 'Construction Public', 'Construction Upload/Update', $companyDocTypes::docNames('con', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.con.pri'), 'Construction Private', 'Construction Upload/Update', $companyDocTypes::docNames('con', 1)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.whs.pub'), 'WHS Public', 'WHS Upload/Update', $companyDocTypes::docNames('whs', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.docs.whs.pri'), 'WHS Private', 'WHS Upload/Update', $companyDocTypes::docNames('whs', 1)) !!}
+
+
                         <div class="form-actions right">
                             <a href="/settings" class="btn default"> Back</a>
                             <button type="submit" class="btn green">Save</button>

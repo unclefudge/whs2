@@ -42,9 +42,15 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 // Logged in Routes
 Route::group(['middleware' => 'auth'], function () {
     // Signup routes.. Post Login
-    Route::get('/signup/user/{id}', 'Company\CompanySignupController@userEdit');
+    Route::get('/signup/user/{id}', 'Company\CompanySignupController@userEdit');         // Step 1
     Route::post('/signup/user/{id}', 'Company\CompanySignupController@userUpdate');
-    Route::get('/signup/company/{id}', 'Company\CompanySignupController@companyEdit');
+    Route::get('/signup/company/{id}', 'Company\CompanySignupController@companyEdit');   // Step 2
+    Route::post('/signup/company/{id}', 'Company\CompanySignupController@companyUpdate');
+    Route::get('/signup/workers/{id}', 'Company\CompanySignupController@workersEdit');   // Step 3
+    Route::post('/signup/workers/{id}', 'Company\CompanySignupController@workersUpdate');
+    Route::get('/signup/summary/{id}', 'Company\CompanySignupController@summary');       // Step 4
+    Route::get('/signup/documents/{id}', 'Company\CompanySignupController@documents');   // Step 5
+    Route::get('/signup/welcome/{id}', 'Company\CompanySignupController@welcome');       // Resend welcome email
 
 
 
@@ -81,13 +87,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('company/leave', 'Company\CompanyLeaveController');
 
     // Company Docs
-    Route::get('company/doc/dt/docs', 'Company\CompanyDocController@getDocs');
+    //Route::get('company/doc/dt/docs', 'Company\CompanyDocController@getDocs');
     //Route::get('company/doc/dt/profiledocs', 'Company\CompanyDocController@getProfileDocs');
     //Route::get('company/doc/dt/expired', 'Company\CompanyDocController@getExpiredDocs');
     Route::any('company/doc/create', 'Company\CompanyDocController@create');
     Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
-    Route::post('company/doc/profileICS', 'Company\CompanyDocController@profileICS');
-    Route::post('company/doc/profileWHS', 'Company\CompanyDocController@profileWHS');
+    //Route::post('company/doc/profileICS', 'Company\CompanyDocController@profileICS');
+    //Route::post('company/doc/profileWHS', 'Company\CompanyDocController@profileWHS');
     //Route::get('company/doc/profile-reject/{id}', 'Company\CompanyDocController@profileReject');
     //Route::get('company/doc/profile-destroy/{id}', 'Company\CompanyDocController@profileDestroy');
     //Route::post('company/doc/profile-approve', 'Company\CompanyDocController@profileApprove');
@@ -113,7 +119,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/dt/staff', 'Company\CompanyController@getStaff');
     Route::get('company/{id}/name', 'Company\CompanyController@getCompanyName');
     Route::get('company/{id}/approve/{type}', 'Company\CompanyController@approveCompany');
-    Route::get('company/{id}/signup/{step}', 'Company\CompanyController@signupProcess');
     Route::post('company/{id}/business', 'Company\CompanyController@updateBusiness');
     Route::post('company/{id}/trade', 'Company\CompanyController@updateTrade');
     Route::post('company/{id}/whs', 'Company\CompanyController@updateWHS');

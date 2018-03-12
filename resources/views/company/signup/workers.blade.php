@@ -1,6 +1,6 @@
 @inject('licenceTypes', 'App\Http\Utilities\LicenceTypes')
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
-@extends('layout')
+@extends('layout-guest')
 
 @section('pagetitle')
     <div class="page-title">
@@ -37,7 +37,7 @@
                     <div class="mt-step-content font-grey-cascade">Add primary user</div>
                 </div>
                 <div class="col-sm-3 mt-step-col active">
-                    <a href="/company/{{ Auth::user()->company_id }}/edit">
+                    <a href="/signup/company/{{ Auth::user()->company_id }}">
                         <div class="mt-step-number bg-white font-grey">2</div>
                     </a>
                     <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
@@ -72,19 +72,12 @@
                         <div class="caption">
                             <i class="fa fa-users "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Workers</span>
-                            <span class="caption-helper"> ID: {{ $company->id }}</span>
-                        </div>
-                        <div class="actions">
-                            @if (Auth::user()->allowed2('sig.company', $company) && !$company->approved_by)
-                                <a href="/company/{{ $company->id }}/approve" class="btn btn-round green btn-outline btn-sm" id="but_approve">Approve Company & Business Details</a>
-                            @endif
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="row">
                             <div class="col-md-12">
-                                <h1 class="sbold hidden-sm hidden-xs" style="{!! ($company->nickname) ? 'margin: 0px' : 'margin: 0 0 15px 0' !!}}">{{ $company->name }}</h1>
+                                <h1 class="sbold hidden-sm hidden-xs" style="margin: 0 0 15px 0">{{ $company->name }}</h1>
 
                                 <a href="/user/create" class="btn dark pull-right">Add User</a>
 
@@ -106,7 +99,7 @@
                                 </div>
 
                                 <div class="form-actions right">
-                                    <a href="/company/{{ $company->id }}/signup/4" class="btn green pull-right" style="margin-left: 20px">Continue</a>
+                                    <a href="/signup/summary/{{ $company->id }}" class="btn green pull-right" style="margin-left: 20px">Continue</a>
                                 </div>
                             </div>
                         </div>

@@ -35,7 +35,7 @@
                         <div class="mt-step-content font-grey-cascade">Add primary user</div>
                     </div>
                     <div class="col-sm-3 mt-step-col active">
-                        <a href="/company/{{ Auth::user()->company_id }}/edit">
+                        <a href="/signup/company/{{ Auth::user()->company_id }}">
                             <div class="mt-step-number bg-white font-grey">2</div>
                         </a>
                         <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
@@ -72,10 +72,6 @@
                             <i class="fa fa-pencil "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Create New User</span>
                             <span class="caption-helper"></span>
-                        </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -141,7 +137,8 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
-                                        {!! Form::label('firstname', 'First Name * => 'form-control', 'required']) !!}
+                                        {!! Form::label('firstname', 'First Name *', ['form-control', 'required']) !!}
+                                        {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
                                         {!! fieldErrorMessage('firstname', $errors) !!}
                                     </div>
                                 </div>
@@ -251,13 +248,15 @@
                                 </div>
                             </div>
                             <div class="form-actions right">
-                                <a href="/user" class="btn default"> Back</a>
-                                <button type="submit" class="btn green"> Save
-                                </button>
+                                @if (Auth::user()->company->status == 2)
+                                    <a href="/signup/workers/{{ Auth::user()->company_id }}" class="btn default"> Back</a>
+                                @else
+                                    <a href="/user" class="btn default"> Back</a>
+                                @endif
+                                <button type="submit" class="btn green"> Save</button>
                             </div>
-                        </div> <!--/form-body-->
+                        </div>
                         {!! Form::close() !!}
-                                <!-- END FORM-->
                     </div>
                 </div>
             </div>

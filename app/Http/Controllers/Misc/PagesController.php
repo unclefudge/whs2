@@ -34,13 +34,6 @@ class PagesController extends Controller {
      */
     public function index(Request $request)
     {
-        /*foreach (Auth::user()->notify() as $notify) {
-            $mesg = ($notify->isOpenedBy(Auth::user())) ? '[1]' : '[0]';
-            $mesg = $notify->info . $mesg;
-            alert()->message($mesg, $notify->name)->persistent('Ok');
-            $notify->markOpenedBy(Auth::user());
-        }*/
-
         $worksite = '';
 
         // If Site login show check-in form
@@ -53,11 +46,9 @@ class PagesController extends Controller {
                     if (Auth::user()->company->tradesSkilledIn->count() == 1) {
                         // User only has 1 trade which is classified as a 'special' trade
                         return view('site/checkinTrade', compact('worksite'));
-
                     } else {
                         // User has multiple trades so determine what trade they are loggin as today
                     }
-
                 }
 
                 if ($worksite->id == 254) // Truck
@@ -74,14 +65,11 @@ class PagesController extends Controller {
 
         // If primary user and incompleted company Signup - redirect to correct step
         if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {
-            if (Auth::user()->company->signup_step == 2)
-                return redirect('/signup/company/' . Auth::user()->company->id);
-            if (Auth::user()->company->signup_step == 3)
-                return redirect('company/' . Auth::user()->company->id . '/signup/3');
-            if (Auth::user()->company->signup_step == 4)
-                return redirect('company/' . Auth::user()->company->id);
-            if (Auth::user()->company->signup_step == 5)
-                return redirect('company/' . Auth::user()->company->id . '/signup/5');
+            if (Auth::user()->company->signup_step == 2) $url = '/signup/company/';
+            if (Auth::user()->company->signup_step == 3) $url = '/signup/workers/';
+            if (Auth::user()->company->signup_step == 4) $url = '/signup/summary/';
+
+            return redirect($url . Auth::user()->company->id);
         }
 
         return view('pages/home', compact('worksite'));

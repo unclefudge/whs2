@@ -233,7 +233,7 @@ class SiteQa extends Model {
     public function emailOverdue()
     {
         if (\App::environment('prod')) {
-            $email_roles = $this->site->owned_by->notificationsUsersEmailType('site.qa');
+            $email_roles = $this->site->owned_by->notificationsUsersEmailType('n.site.qa');
             $email_seniors = $this->site->areaSupervisorsEmails();
             $email_to = array_unique(array_merge($email_roles, $email_seniors), SORT_REGULAR);
         } else if (\App::environment('local', 'dev')) {
@@ -297,7 +297,7 @@ class SiteQa extends Model {
     public function emailAction($action, $important = false)
     {
         if (\App::environment('prod')) {
-            $email_roles = ($important) ? $this->site->owned_by->notificationsUsersEmailType('site.qa') : $this->site->owned_by->notificationsUsersEmailType('site.qa');
+            $email_roles = ($important) ? $this->site->owned_by->notificationsUsersEmailType('n.site.qa') : $this->site->owned_by->notificationsUsersEmailType('n.site.qa');
             $email_supers = $this->site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
         } else

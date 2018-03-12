@@ -1276,7 +1276,7 @@ class Company extends Model {
      */
     public function notificationsUsersType($type)
     {
-        if (\App::environment('prod')) {
+        if (true || \App::environment('prod')) {
             if (!is_int($type))
                 $type = SettingsNotificationTypes::type($type);
 
@@ -1296,7 +1296,7 @@ class Company extends Model {
      */
     public function notificationsUsersTypeArray($type)
     {
-        if (\App::environment('prod')) {
+        if (true || \App::environment('prod')) {
             if (!is_int($type))
                 $type = SettingsNotificationTypes::type($type);
 
@@ -1305,7 +1305,7 @@ class Company extends Model {
             return ($users) ? User::find($users)->pluck('id')->toArray() : [];
         }
 
-        return User::find(1);
+        return [1];
     }
 
     /**

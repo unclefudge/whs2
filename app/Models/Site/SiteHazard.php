@@ -127,7 +127,7 @@ class SiteHazard extends Model {
         $site = Site::findOrFail($this->site_id);
 
         if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('site.hazard');   // GM, WHS Mgr, Con Mgr
+            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.hazard');   // GM, WHS Mgr, Con Mgr
             $email_supers = $site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
         } else
@@ -169,7 +169,7 @@ class SiteHazard extends Model {
         $site = Site::findOrFail($this->site_id);
 
         if (\App::environment('prod')) {
-            $email_roles = ($important) ? $site->owned_by->notificationsUsersEmailType('site.hazard') : $site->owned_by->notificationsUsersEmailType('site.hazard'); 
+            $email_roles = ($important) ? $site->owned_by->notificationsUsersEmailType('n.site.hazard') : $site->owned_by->notificationsUsersEmailType('n.site.hazard'); 
             $email_supers = $site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
         } else

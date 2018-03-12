@@ -10,8 +10,8 @@ use Mail;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Misc\SettingsNotification;
+use App\Http\Utilities\SettingsNotificationTypes;
 use App\Http\Requests;
-use App\Http\Requests\Misc\RoleRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
@@ -38,12 +38,14 @@ class SettingsNotificationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        for ($i = 1; $i < 8; $i ++) {
-            $users = $request->get("type$i");
-            $this->syncUsers($id, $i, $users);
+        //for ($i = 1; $i < 8; $i ++) {
+        foreach (SettingsNotificationTypes::all() as $key => $slug) {
+            $users = request("type$key");
+            $this->syncUsers($id, $key, $users);
         }
+        //dd(request()->all());
 
         Toastr::success('Saved notifications');
 

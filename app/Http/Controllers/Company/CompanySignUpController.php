@@ -58,6 +58,10 @@ class CompanySignUpController extends Controller {
     {
         $user = User::find($id);
 
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
         // Validate
         $rules = [
             'username'           => 'required|min:3|max:50|unique:users,username,' . $user->id,
@@ -67,7 +71,6 @@ class CompanySignUpController extends Controller {
             'employment_type'    => 'required',
             'subcontractor_type' => 'required_if:employment_type,3',
         ];
-
         $mesgs = [
             'email.required_if'              => 'The email field is required if user active ie. Login Enabled.',
             'subcontractor_type.required_if' => 'The subcontractor entity is required',
@@ -80,19 +83,11 @@ class CompanySignUpController extends Controller {
             ]);
         }
 
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.user', $user))
-            return view('errors/404');
-
         $user_request = removeNullValues(request()->all());
 
         // Empty State field if rest of address fields are empty
         if (!request()->filled('address') && !request()->filled('suburb') && !request()->filled('postcode'))
             $user_request['state'] = null;
-
-        // Null email field if empty  - for unique validation
-        if (!$user_request['email'])
-            $user_request['email'] = null;
 
         // Zero Subcontractor_type field if empty
         if (!request('subcontractor_type'))
@@ -104,7 +99,6 @@ class CompanySignUpController extends Controller {
 
         // Update User
         $user->update($user_request);
-
         Toastr::success("Saved changes");
 
         return redirect("/signup/company/" . Auth::user()->company_id);   // Adding company info
@@ -126,5 +120,100 @@ class CompanySignUpController extends Controller {
 
     }
 
+    /**
+     * Update Company
+     *
+     */
+    public function companyUpdate($id)
+    {
+        $company = Company::findorFail($id);
 
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.company', $company))
+            return view('errors/404');
+
+        // Validate
+        $rules = [
+            'name'     => 'required',
+            'phone'    => 'required',
+            'email'    => 'required|email|max:255',
+            'address'  => 'required',
+            'suburb'   => 'required',
+            'state'    => 'required',
+            'postcode' => 'required',
+            'abn'      => 'required',
+        ];
+
+        $this->validate(request(), $rules);
+
+        //dd(request()->all());
+        $company->update(request()->all());
+        Toastr::success("Saved changes");
+
+        return redirect("/signup/workers/$company->id");   // Adding users
+    }
+
+    /**
+     * Edit Workers
+     */
+    public function workersEdit($id)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('edit.company', $company)))
+            return view('errors/404');
+
+        return view('company/signup/workers', compact('company'));
+
+    }
+
+    /**
+     * Show Summary
+     */
+    public function summary($id)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('edit.company', $company)))
+            return view('errors/404');
+
+        $company->signup_step = 4;
+        $company->save();
+
+        return view("company/signup/summary", compact('company'));
+    }
+
+    /**
+     * Add Documents
+     */
+    public function documents($id)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('edit.company', $company)))
+            return view('errors/404');
+
+        $company->signup_step = 0;
+        $company->status = 1;
+        $email_to = (\App::environment('prod')) ? $company->reportsTo()->notificationsUsersType('n.company.signup') : env('EMAIL_ME');
+        if ($company->parent_company && $email_to)
+            Mail::to($email_to)->send(new \App\Mail\Company\CompanySignup($company));
+
+        $company->save();
+
+        return redirect("company/$company->id/doc");
+    }
+    /**
+     * Resend Signup Email
+     */
+    public function welcome($id)
+    {
+        $company = Company::findorFail($id);
+        Mail::to($company)->send(new \App\Mail\Company\CompanyWelcome($company, Auth::user()->company, $company->nickname));
+
+        return view('company/list');
+    }
 }

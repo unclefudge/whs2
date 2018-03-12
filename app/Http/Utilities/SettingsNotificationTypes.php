@@ -5,15 +5,23 @@ namespace App\Http\Utilities;
 class SettingsNotificationTypes {
 
     protected static $settingsNotificationTypes = [
-        '1' => 'company.doc',
-        '2' => 'whs',
-        '3' => 'site.accident',
-        '4' => 'site.hazard',
-        '5' => 'site.asbestos',
-        '6' => 'site.qa',
-        '7' => 'company.signup',
-        '8' => 'user.created',
-        '9' => 'company.created',
+        '1' => 'spare',
+        '2' => 'spare',
+        '3' => 'n.site.accident',
+        '4' => 'n.site.hazard',
+        '5' => 'n.site.asbestos',
+        '6' => 'n.site.qa',
+        '7' => 'n.company.signup',
+        '8' => 'n.user.created',
+        '9' => 'n.company.created',
+        '10' => 'n.docs.acc.pub',
+        '11' => 'n.docs.adm.pub',
+        '12' => 'n.docs.con.pub',
+        '13' => 'n.doc.whs.pub',
+        '14' => 'n.docs.acc.pri',
+        '15' => 'n.docs.adm.pri',
+        '16' => 'n.docs.con.pri',
+        '17' => 'n.doc.whs.pri',
     ];
 
 

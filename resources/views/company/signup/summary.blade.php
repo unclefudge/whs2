@@ -1,7 +1,7 @@
 @inject('ozstates', 'App\Http\Utilities\Ozstates')
 @inject('companyEntity', 'App\Http\Utilities\CompanyEntityTypes')
 
-@extends('layout')
+@extends('layout-guest')
 
 @section('pagetitle')
     <div class="page-title">
@@ -15,21 +15,21 @@
         <div class="mt-element-step">
             <div class="row step-line" id="steps">
                 <div class="col-md-3 mt-step-col first active">
-                    <a href="/user/{{ $company->primary_user }}/edit">
+                    <a href="/signup/user/{{ Auth::user()->company->primary_user }}">
                         <div class="mt-step-number bg-white font-grey">1</div>
                     </a>
                     <div class="mt-step-title uppercase font-grey-cascade">Business Owner</div>
                     <div class="mt-step-content font-grey-cascade">Add primary user</div>
                 </div>
                 <div class="col-md-3 mt-step-col active">
-                    <a href="/company/{{ $company->id }}/edit">
+                    <<a href="/signup/company/{{ Auth::user()->company_id }}">
                         <div class="mt-step-number bg-white font-grey">2</div>
                     </a>
                     <div class="mt-step-title uppercase font-grey-cascade">Company Info</div>
                     <div class="mt-step-content font-grey-cascade">Add company info</div>
                 </div>
                 <div class="col-md-3 mt-step-col active">
-                    <a href="/company/{{ $company->id }}/signup/3">
+                    <a href="/signup/workers/{{ $company->id }}">
                         <div class="mt-step-number bg-white font-grey">3</div>
                     </a>
                     <div class="mt-step-title uppercase font-grey-cascade">Workers</div>
@@ -60,15 +60,11 @@
                             <span class="caption-subject font-green-haze bold uppercase">Summary</span>
                             <span class="caption-helper"></span>
                         </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
-                        </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="form-body">
                             {{-- Primary User --}}
-                            <h3 class="font-green form-section">1. Business Owner (Primary User) <a href="/user/{{ $company->primary_user }}/edit" class="btn btn-xs default pull-right">Edit</a></h3>
+                            <h3 class="font-green form-section">1. Business Owner (Primary User) <a href="/signup/user/{{ $company->primary_user }}" class="btn btn-xs default pull-right">Edit</a></h3>
                             <div class="row" style="line-height: 2">
                                 <div class="col-md-6">
                                     <div class="col-xs-3" style="padding-left: 0px"><b>Name</b></div>
@@ -95,7 +91,7 @@
                             </div>
 
                             {{-- Company Info --}}
-                            <h3 class="font-green form-section">2. Company Info <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a></h3>
+                            <h3 class="font-green form-section">2. Company Info <a href="/signup/company/{{ $company->id }}" class="btn btn-xs default pull-right">Edit</a></h3>
                             <div class="row" style="line-height: 2">
                                 <div class="col-md-6">
                                     <div class="col-xs-3" style="padding-left: 0px"><b>Name</b></div>
@@ -129,7 +125,7 @@
                             </div>
 
                             {{-- Workers --}}
-                            <h3 class="font-green form-section">3. Workers <a href="/company/{{ $company->id }}/signup/3" class="btn btn-xs default pull-right">Edit</a></h3>
+                            <h3 class="font-green form-section">3. Workers <a href="/signup/workers/{{ $company->id }}" class="btn btn-xs default pull-right">Edit</a></h3>
                             <div class="row">
                                 <div class="col-md-12">
                                     <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
@@ -145,7 +141,7 @@
                             </div>
 
                             <div class="form-actions right">
-                                <a href="/company/{{ $company->id }}/signup/5" class="btn green">Continue</a>
+                                <a href="/signup/documents/{{ $company->id }}" class="btn green">Continue</a>
                             </div>
                         </div>
                         {!! Form::close() !!}
