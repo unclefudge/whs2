@@ -866,20 +866,21 @@ class Company extends Model {
     public function requiresCompanyDoc($type)
     {
         // Doc types
-        // 1 PL
-        // 2 WC
-        // 3 SA
-        // 4 Sub
-        // 5 PTC
-        // 7 CL
-
-        // Categories
-        // '1' => 'Subcontractor (On Site Trade)',
-        // '2' => 'Service Provider (On Site trade',
-        // '3' => 'Service Provider (Off Site)',
-        // '4' => 'Supply & Fit',
-        // '5' => 'Supply Only',
-        // '6' => 'Consultant',
+        // 1  PL - Public Liabilty
+        // 2  WC - Workers Comp
+        // 3  SA - Sickness & Accident
+        // 4  Sub - Subcontractors Statement
+        // 5  PTC - Period Trade Contract
+        // 7  CL - Contractors Licence
+        //
+        // Categories                          | PL  |WC/SA| SUB | PTC | CL  |
+        // 0  Unallocated                      |_____|_____|_____|_____|_____|
+        // 1  Subcontractor (On Site Trade)    |__X__|__X__|__X__|__X__|__X__|
+        // 2  Service Provider (On Site trade  |__X__|__X__|_____|_____|__X__|
+        // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|
+        // 4  Supply & Fit'                    |__X__|__X__|_____|_____|__X__|
+        // 5  Supply Only'                     |__X__|_____|_____|_____|_____|
+        // 6  Consultant'                      |_____|__X__|_____|_____|_____|
 
 
         // Determine WC or SA
