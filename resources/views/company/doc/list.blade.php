@@ -84,13 +84,13 @@
                         @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('category_id', '&nbsp;', ['class' => 'control-label']) !!}
+                                    {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
                                     {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('view', $company, 'all'), $category_id, ['class' => 'form-control bs-select']) !!}
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('department', '&nbsp;', ['class' => 'control-label']) !!}
+                                    {!! Form::label('department', 'Department', ['class' => 'control-label']) !!}
                                     {!! Form::select('department', ['all' => 'All departments', 'acc' => 'Accounts', 'adm' => 'Administration', 'con' =>  'Contruction', 'whs' => 'WHS'], null, ['class' => 'form-control bs-select']) !!}
                                 </div>
                             </div>
