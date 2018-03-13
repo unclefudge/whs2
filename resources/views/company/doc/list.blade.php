@@ -91,7 +91,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     {!! Form::label('department', 'Department', ['class' => 'control-label']) !!}
-                                    {!! Form::select('department', ['all' => 'All departments', 'acc' => 'Accounts', 'adm' => 'Administration', 'con' =>  'Contruction', 'whs' => 'WHS'], null, ['class' => 'form-control bs-select']) !!}
+                                    {!! Form::select('department', ['all' => 'All departments', 'acc' => 'Accounts', 'adm' => 'Administration', 'con' =>  'Construction', 'whs' => 'WHS'], null, ['class' => 'form-control bs-select']) !!}
                                 </div>
                             </div>
                         @else
