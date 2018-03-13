@@ -64,6 +64,7 @@ class RoleController extends Controller {
         // Create Role
         $role_request = $request->all();
         $role_request['company_id'] = Auth::user()->company_id;
+        //dd($role_request);
         Role2::create($role_request);
         Toastr::success("Created new role");
 

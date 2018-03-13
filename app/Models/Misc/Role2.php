@@ -79,5 +79,14 @@ class Role2 extends Model {
         return ($permssion_role) ? $permssion_role->level : 0;
     }
 
+    /**
+     * Set the name + create slug attributes  (mutator)
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = getUniqueSlug($this, $value);
+    }
+
 
 }
