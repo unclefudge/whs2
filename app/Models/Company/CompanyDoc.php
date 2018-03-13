@@ -63,7 +63,6 @@ class CompanyDoc extends Model {
     }
 
 
-
     /**
      * Create ToDoo for Company Doc to be approved and assign to given user(s)
      */

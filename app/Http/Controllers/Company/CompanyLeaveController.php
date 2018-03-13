@@ -25,7 +25,7 @@ class CompanyLeaveController extends Controller {
      */
     public function index()
     {
-        if (!(Auth::user()->hasPermission2('edit.company') || Auth::user()->isSupervisor()))
+        if (!Auth::user()->hasAnyPermissionType('company.leave'))
             return view('errors/404');
 
         return view('company/leave/list');
@@ -38,7 +38,7 @@ class CompanyLeaveController extends Controller {
      */
     public function create()
     {
-        if (!(Auth::user()->hasPermission2('edit.company') || Auth::user()->isAreaSupervisor()))
+        if (!Auth::user()->hasPermission2('edit.company.leave'))
             return view('errors/404');
 
         return view('company/leave/create');
@@ -52,7 +52,7 @@ class CompanyLeaveController extends Controller {
      */
     public function store(CompanyLeaveRequest $request)
     {
-        if (!(Auth::user()->hasPermission2('edit.company') || Auth::user()->isAreaSupervisor()))
+        if (!Auth::user()->hasPermission2('edit.company.leave'))
             return view('errors/404');
 
         // Format date from daterange picker to mysql format
@@ -79,7 +79,7 @@ class CompanyLeaveController extends Controller {
         $leave = CompanyLeave::findorFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!(Auth::user()->allowed2('edit.company', $leave->company) || Auth::user()->isAreaSupervisor()))
+        if (!Auth::user()->allowed2('edit.company.leave', $leave->company))
             return view('errors/404');
 
         return view('company/leave/edit', compact('leave'));
@@ -95,7 +95,7 @@ class CompanyLeaveController extends Controller {
         $leave = CompanyLeave::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!(Auth::user()->allowed2('edit.company', $leave->company) || Auth::user()->isAreaSupervisor()))
+        if (!Auth::user()->allowed2('edit.company.leave', $leave->company))
             return view('errors/404');
 
         // Format date from daterange picker to mysql format
@@ -120,8 +120,8 @@ class CompanyLeaveController extends Controller {
     {
         $leave = CompanyLeave::findOrFail($id);
 
-        // Check authorisation and throw 404 if not
-        if (Auth::user()->allowed2('edit.company', $leave->company) || Auth::user()->isAreaSupervisor()) {
+        // Check authorisation
+        if (Auth::user()->allowed2('edit.company.leave', $leave->company)){
             $leave->delete();
 
             return json_encode('success');
@@ -140,10 +140,10 @@ class CompanyLeaveController extends Controller {
             $sign = '>=';
 
         $companies = [];
-        if (Auth::user()->hasPermission2('edit.company') || Auth::user()->isSupervisor())
+        if (Auth::user()->hasAnyPermissionType('company.leave'))
             $company_list = Auth::user()->company->companies()->pluck('id')->toArray();
         $leave_records = CompanyLeave::select([
-            'company_leave.id', 'company_leave.notes', 'company_leave.from',
+            'company_leave.id', 'company_leave.notes', 'company_leave.from', 'company_leave.company_id',
             DB::raw('DATE_FORMAT(company_leave.from, "%d/%m/%y") AS datefrom'),
             DB::raw('DATE_FORMAT(company_leave.to, "%d/%m/%y") AS dateto'),
             'companys.name',])
@@ -153,11 +153,13 @@ class CompanyLeaveController extends Controller {
             ->orderBy('company_leave.from');
         $dt = Datatables::of($leave_records)
             ->editColumn('id', function ($leave) {
-                if (Auth::user()->hasPermission2('edit.company') || Auth::user()->isAreaSupervisor())
+                $company = Company::find($leave->company_id);
+                if (Auth::user()->allowed2('edit.company.leave', $company))
                     return "<div class='text-center'><a href='/company/leave/".$leave->id."/edit'><i class='fa fa-search'></i></a></div>";
             })
             ->addColumn('action', function ($leave) {
-                if ($leave->from > Carbon::today()->toDateTimeString() && (Auth::user()->hasPermission2('edit.company') || Auth::user()->isAreaSupervisor()))
+                $company = Company::find($leave->company_id);
+                if ($leave->from > Carbon::today()->toDateTimeString() && Auth::user()->allowed2('edit.company.leave', $company))
                     return '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/leave/' . $leave->id . '" data-name="' . $leave->name . '"><i class="fa fa-trash"></i></button>';
                 else
                     return '';

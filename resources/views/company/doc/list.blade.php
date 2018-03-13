@@ -81,17 +81,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
+                        @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     {!! Form::label('category_id', '&nbsp;', ['class' => 'control-label']) !!}
                                     {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('view', $company, 'all'), $category_id, ['class' => 'form-control bs-select']) !!}
                                 </div>
-                            @else
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('department', '&nbsp;', ['class' => 'control-label']) !!}
+                                    {!! Form::select('department', ['all' => 'All departments', 'acc' => 'Accounts', 'adm' => 'Administration', 'con' =>  'Contruction', 'whs' => 'WHS'], null, ['class' => 'form-control bs-select']) !!}
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-md-4">
                                 <br>
                                 <div class="alert alert-danger">You don't have permission to view any documents</div>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
 
 
                         <div class="col-md-2 pull-right">
@@ -105,6 +113,7 @@
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
                                 <th> Document</th>
+                                <th> Dept.</th>
                                 <th> Details</th>
                                 <th width="10%"> Expiry</th>
                                 <th width="10%"> Action</th>
@@ -151,12 +160,14 @@
             'type': 'GET',
             'data': function (d) {
                 d.category_id = $('#category_id').val();
+                d.department = $('#department').val();
                 d.status = $('#status').val();
             }
         },
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'name', name: 'name'},
+            {data: 'category_id', name: 'category_id'},
             {data: 'details', name: 'details'},
             {data: 'expiry', name: 'expiry'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -197,6 +208,10 @@
 
 
     $('#category_id').change(function () {
+        table1.ajax.reload();
+    });
+
+    $('#department').change(function () {
         table1.ajax.reload();
     });
 

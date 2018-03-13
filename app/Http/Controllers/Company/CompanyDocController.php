@@ -10,6 +10,7 @@ use Session;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
+use App\Http\Utilities\CompanyDocTypes;
 use App\Http\Requests;
 use App\Http\Requests\Company\CompanyDocRequest;
 use App\Http\Requests\Company\CompanyProfileDocRequest;
@@ -396,8 +397,19 @@ class CompanyDocController extends Controller {
     public function getDocs($cid)
     {
         $company = Company::find($cid);
-        //$categories = (request('category_id') == 'ALL') ? CompanyDocCategory::all()->sortBy('name')->pluck('id')->toArray() : [request('category_id')];
         $categories = (request('category_id') == 'ALL') ? array_keys(Auth::user()->companyDocTypeSelect('view', $company)) : [request('category_id')];
+
+        if (request('department') != 'all') {
+            $filtered = [];
+            if ($categories) {
+                foreach ($categories as $cat) {
+                    $category = CompanyDocCategory::find($cat);
+                    if ($category && $category->type == request('department'))
+                        $filtered[] = $cat;
+                }
+                $categories = $filtered;
+            }
+        }
 
         $status = (request('status') == 0) ? [0] : [1, 2, 3];
         $records = CompanyDoc::where('for_company_id', $cid)
@@ -408,9 +420,12 @@ class CompanyDocController extends Controller {
         $dt = Datatables::of($records)
             ->editColumn('id', function ($doc) {
                 return '<div class="text-center"><a href="'.$doc->attachment_url.'" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
-                //return '<div class="text-center"><a href="/filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
-
             })
+            ->editColumn('category_id', function ($doc) {
+
+                return strtoupper($doc->category->type);
+            })
+
             ->addColumn('details', function ($doc) {
                 $details = '';
 

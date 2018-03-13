@@ -482,7 +482,7 @@ trait UserRolesPermissions {
                 return false;
             }
 
-            // Company Accounting + WHS + Construction
+            // Company Accounting + WHS + Construction + Leave
             if ($permissiontype == 'company.acc' || $permissiontype == 'company.con' || $permissiontype == 'company.whs' || $permissiontype == 'company.leave') {
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
 
