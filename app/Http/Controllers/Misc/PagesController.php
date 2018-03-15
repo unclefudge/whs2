@@ -60,8 +60,9 @@ class PagesController extends Controller {
             }
         }
 
+        // Auto redirect to password reset if flagged
         if (Auth::user()->password_reset)
-            return redirect('/user/' . Auth::user()->username . '/settings/password');
+            return redirect('/user/' . Auth::user()->id . '/edit');
 
         // If primary user and incompleted company Signup - redirect to correct step
         if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {

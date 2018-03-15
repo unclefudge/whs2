@@ -554,13 +554,11 @@ Custom color buttons
 }
 
 .doc-missing {
-    background: #ed6b75;
-    color: #ffffff
+    color: #333;
 }
 
 .doc-missing-link {
-    background: #ed6b75;
-    color: #ffffff
+    color: #333;
 }
 
 .doc-missing-link:hover {

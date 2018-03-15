@@ -25,7 +25,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Safety Data Sheets</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->hasPermission2('add.sds'))
+                            @if(in_array(Auth::user()->id, ['3', '109', '351'])) {{-- Fudge, Jo, Tara --}}
                                 <button type="submit" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">
                                     <i class="fa fa-plus"></i> Add
                                 </button>

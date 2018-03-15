@@ -40,11 +40,9 @@
                             <tr>
                                 <td><a href="/site/doc"> Site Specific Documents (Risk Assessments, Hazardous Materials, Plans) </a></td>
                             </tr>
-                            {{--
                             <tr>
-                                <td><a href="/company/doc"> Company Documents (Policies & Procedures, Standards)</a></td>
+                                <td><a href="/company/{{ Auth::user()->company_id }}/doc"> Company Documents (Policies & Procedures, Standards)</a></td>
                             </tr>
-                            --}}
                             <tr>
                                 <td><a href="/safety/doc/sds">Safety Data Sheets</a></td>
                             </tr>

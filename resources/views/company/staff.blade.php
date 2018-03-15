@@ -61,8 +61,10 @@
                                 </ul>
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                <br>
-                                <a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                    <br>
+                                    <a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -112,9 +114,9 @@
     <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" tytype="text/css"/>
-    @stop
+@stop
 
-    @section('page-level-styles-head')
+@section('page-level-styles-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop
