@@ -464,7 +464,7 @@ class CompanyController extends Controller {
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
                 if (!$company->approved_by && $company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id)
                     $name .= ' &nbsp; <span class="label label-sm label-warning">Pending approval</span>';
-                if (!$company->compliantDocs() && $company->status == 1)
+                if (!$company->isCompliant() && $company->status == 1)
                     $name .= ' &nbsp; <span class="label label-sm label-danger">Non Compliant</span>';
 
                 return $name;

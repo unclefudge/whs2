@@ -20,9 +20,7 @@
                     <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
                     <i class="icon-users-member-bar hidden-xs"></i>
                     <div class="member-name">
-                        <div class="full-name-wrap">
-                            <a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a>
-                        </div>
+                        <div class="full-name-wrap">{{ $company->name }}</div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
@@ -34,7 +32,7 @@
                         <li class="member-bar-item"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
                         <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
                                 <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">STAFF</a></li>
+                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
                     </ul>
                 </div>
             </div>
@@ -49,7 +47,7 @@
                                 <h2 style="margin-top: 0px">NON COMPLIANT</h2>
                                 <div>The following documents are required to be compliant:</div>
                                 <ul>
-                                    @foreach ($company->missingDocs('array') as $type => $name)
+                                    @foreach ($company->missingDocs() as $type => $name)
                                         <li>
                                             {{ $name }}
                                             {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
@@ -82,16 +80,20 @@
                     </div>
                     <div class="row">
                         @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                    {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('view', $company, 'all'), $category_id, ['class' => 'form-control bs-select']) !!}
-                                </div>
-                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     {!! Form::label('department', 'Department', ['class' => 'control-label']) !!}
-                                    {!! Form::select('department', ['all' => 'All departments', 'acc' => 'Accounts', 'adm' => 'Administration', 'con' =>  'Construction', 'whs' => 'WHS'], null, ['class' => 'form-control bs-select']) !!}
+                                    {!! Form::select('department', Auth::user()->companyDocDeptSelect('view', $company, 'all'), null, ['class' => 'form-control bs-select']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="category_id" class="control-label">Category <span id="loader" style="visibility: hidden"><i class="fa fa-spinner fa-spin"></i></span></label>
+                                    <select name="category_id" class="form-control select2" id="category_id">
+                                        @foreach (Auth::user()->companyDocTypeSelect('view', $company, 'all') as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         @else
@@ -151,6 +153,42 @@
     });
 
 
+    $(document).ready(function () {
+        /* Dynamic Category dropdown from Departmeny */
+        $("#category_id").select2({width: '100%', minimumResultsForSearch: -1});
+        $("#department").on('change', function () {
+            var dept_id = $(this).val();
+            //alert(deptId);
+            if (dept_id) {
+                $.ajax({
+                    url: '/company/' + {{ Auth::user()->company_id }} +'/doc/cats/' + dept_id,
+                    type: "GET",
+                    dataType: "json",
+                    beforeSend: function () {
+                        $('#loader').css("visibility", "visible");
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        $("#category_id").empty();
+                        $("#category_id").append('<option value="ALL">All categories</option>');
+                        $.each(data, function (key, value) {
+                            console.log('k:' + key + ' v:' + value);
+                            $("#category_id").append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                    complete: function () {
+                        $('#loader').css("visibility", "hidden");
+                        table1.ajax.reload();
+                    }
+                });
+            } else {
+                $('select[name="state"]').empty();
+            }
+
+        });
+
+    });
     var table1 = $('#table1').DataTable({
         processing: true,
         serverSide: true,

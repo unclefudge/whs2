@@ -19,9 +19,7 @@
                     <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
                     <i class="icon-users-member-bar hidden-xs"></i>
                     <div class="member-name">
-                        <div class="full-name-wrap">
-                            <a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a>
-                        </div>
+                        <div class="full-name-wrap">{{ $company->name }}</div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
@@ -33,7 +31,7 @@
                         <li class="member-bar-item"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
                         <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
                                 <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">STAFF</a></li>
+                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,7 +46,7 @@
                                 <h2 style="margin-top: 0px">NON COMPLIANT</h2>
                                 <div>The following documents are required to be compliant:</div>
                                 <ul>
-                                    @foreach ($company->missingDocs('array') as $type => $name)
+                                    @foreach ($company->missingDocs() as $type => $name)
                                         <li>
                                             {{ $name }}
                                             {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}

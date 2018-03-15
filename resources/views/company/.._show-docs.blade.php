@@ -34,7 +34,7 @@
                 <div class="alert alert-danger">
                     <div>Missing documents required to be compliant:</div>
                     <ul>
-                        @foreach ($company->missingDocs('array') as $type => $name)
+                        @foreach ($company->missingDocs() as $type => $name)
                             <li>
                                 {{ $name }}
                                 {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}

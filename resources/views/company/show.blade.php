@@ -31,7 +31,7 @@
                     <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
                     <i class="icon-users-member-bar hidden-xs"></i>
                     <div class="member-name">
-                        <div class="full-name-wrap"><a href="/company/{{ $company->id }}" class="status-update">{{ $company->name }}</a></div>
+                        <div class="full-name-wrap">{{ $company->name }}</div>
                         <span class="member-number">Company ID #{{ $company->id }}</span>
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
@@ -42,37 +42,49 @@
                         <li class="member-bar-item active"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
                         <li class="member-bar-item "><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
                                 <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">STAFF</a></li>
+                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
-                {{-- Missing Documents --}}
-                @if ($company->missingDocs())
-                    <div class="portlet light" style="background: #ed6b75; color: #ffffff">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h2 style="margin-top: 0px">NON COMPLIANT</h2>
-                                <div>The following documents are required to be compliant:</div>
-                                <ul>
-                                    @foreach ($company->missingDocs('array') as $type => $name)
-                                        <li>
-                                            {{ $name }}
-                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                {{-- Compliance Documents --}}
+                <div class="portlet light" style="background: {!! ($company->isCompliant()) ? '#abe7ed' : '#fbe1e3' !!}">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : 'MISSING DOCUMENTS' !!} </h2>
+                            <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
+                            @foreach ($company->compliantDocs() as $type => $name)
+                                {{-- Accepted --}}
+                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
+                                    <i class="fa fa-check" style="width:35px; padding: 2px 15px"></i>
+                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a><br>
                                 @endif
-                            </div>
+                                {{-- Pending --}}
+                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
+                                    <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-warning label-sm">Pending approval</span><br>
+                                @endif
+                                {{-- Rejected --}}
+                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
+                                    <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span><br>
+                                @endif
+                                {{-- Missing --}}
+                                @if (!$company->activeCompanyDoc($type))
+                                    <i class="fa fa-times" style="width:35px; padding: 2px 15px"></i> {{ $name }}<br>
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
+                            @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                            @endif
                         </div>
                     </div>
-                @endif
+                </div>
+
 
                 {{-- Document Summary --}}
                 <div class="portlet light" style="padding: 0px;">
@@ -85,7 +97,7 @@
                             </div>
                             <div class="col-xs-6 doc-summary">
                                 <div class="doc-summary-subtotal">Required
-                                    <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs('array')) : 0 !!}</span>
+                                    <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs()) : 0 !!}</span>
                                 </div>
                                 <div class="doc-summary-subtotal">Pending
                                     <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span>

@@ -1,4 +1,4 @@
-{{-- Edit Contruction --}}
+{{-- Edit Construction --}}
 <div class="portlet light" style="display: none;" id="edit_construction">
     <div class="portlet-title">
         <div class="caption">

@@ -199,7 +199,32 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * A dropdown list of types of General Document user can access
+     * A dropdown list of types of Company Document Departments user can access
+     *
+     * @return array
+     */
+    public function companyDocDeptSelect($action, $company, $prompt = '')
+    {
+        $array = [];
+        foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
+            // Public Docs
+            if ($this->hasPermission2("$action.docs.$doc_type.pub"))
+                $array[$doc_type] = $doc_name;
+            // Private Docs
+            if ($this->hasPermission2("$action.docs.$doc_type.pri"))
+                $array[$doc_type] = $doc_name;
+        }
+
+        asort($array);
+
+        if ($prompt == 'all')
+            return ($prompt && count($array) > 1) ? $array = array('all' => 'All departments') + $array : $array;
+
+        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
+    }
+
+    /**
+     * A dropdown list of types of Company Document Types user can access
      *
      * @return array
      */
@@ -207,8 +232,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $array = [];
         foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
-            if ($this->hasPermission2("$action.docs.$doc_type.pub")) {
+            // Public Docs
+            if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
+                    if (!($action == 'add' && $company->activeCompanyDoc($id)))
+                        $array[$id] = $name;
+                }
+            }
+            // Private Docs
+            if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
+                foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }

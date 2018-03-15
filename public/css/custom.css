@@ -10,6 +10,14 @@
     cursor: pointer;
 }
 
+.linkDark {
+    color: #333;
+}
+
+.linkDark:hover {
+    color: #333;
+}
+
 /* bootstrap no border table class */
 .table.no-border tr td, .table.no-border tr th {
     border-width: 0;
@@ -118,7 +126,6 @@ span.select2.select2-container.select2-container--bootstrap {
     cursor: pointer;
     cursor: hand;
 }
-
 
 .hoverDiv0 {
     /*background: #fff;*/
@@ -252,7 +259,6 @@ Custom color buttons
     background-color: #ff0000;
     color: #ff0000;
 }
-
 
 .field-hr {
     margin: 10px 0px;
@@ -511,7 +517,7 @@ Custom color buttons
 .doc-summary-total {
     color: #212121;
     min-height: 165px;
-    height:165px;
+    height: 165px;
     padding: 10px;
     vertical-align: middle;
     display: inline-block
@@ -524,7 +530,7 @@ Custom color buttons
 }
 
 .doc-summary-total-link {
-    height:165px;
+    height: 165px;
     vertical-align: middle;
 }
 
@@ -574,7 +580,7 @@ Custom color buttons
     font-weight: 700;
     min-height: 35px;
     width: 60%;
-    height:35px;
+    height: 35px;
     padding: 10px 20px;
     vertical-align: middle;
     display: inline-block
@@ -586,7 +592,7 @@ Custom color buttons
     font-size: 20px;
     font-weight: 700;
     min-height: 40px;
-    height:40px;
+    height: 40px;
     width: 30%;
     padding: 5px 10px;
     vertical-align: middle;
@@ -631,6 +637,7 @@ Custom color buttons
     margin-left: -10px;
     z-index: 1;
 }
+
 .icon-profile:before {
     background: url("/img/icon-profile.png") no-repeat;
 }
@@ -642,7 +649,6 @@ Custom color buttons
 .icon-staff:before {
     background: url("/img/icon-staff.png") no-repeat;
 }
-
 
 .tabs .tabs-item {
     display: inline-block;
@@ -664,8 +670,6 @@ Custom color buttons
     text-transform: uppercase;
     display: block;
 }
-
-
 
 /*
 .btn.grey-cararra:not(.btn-outline) {
@@ -739,8 +743,6 @@ fieldset[disabled] .btn.grey-cararra:not(.btn-outline).focus {
 .btn.grey-cararra.btn-no-border:not(.active) {
     border-color: transparent;
 }*/
-
-
 
 /************************************************
 

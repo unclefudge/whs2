@@ -389,10 +389,31 @@ class CompanyDocController extends Controller {
 
 
 
+    /**
+     * Get Categories Users is allowed to access filtered by Department.
+     */
+    public function getCategories($cid, $department)
+    {
+        $company = Company::find($cid);
+        $categories = array_keys(Auth::user()->companyDocTypeSelect('view', $company));
 
+        if ($department != 'all') {
+            $filtered = []; //['ALL' => 'All categories'];
+            if ($categories) {
+                foreach ($categories as $cat) {
+                    $category = CompanyDocCategory::find($cat);
+                    if ($category && $category->type == $department)
+                        $filtered[$cat] = $category->name;
+                }
+                $categories = $filtered;
+            }
+        }
+
+        return json_encode($categories);
+    }
 
     /**
-     * Get Site Docs current user is authorised to manage + Process datatables ajax request.
+     * Get Docs current user is authorised to manage + Process datatables ajax request.
      */
     public function getDocs($cid)
     {

@@ -790,17 +790,6 @@ class Company extends Model {
     }
 
     /**
-     * Current CompanyDocs ie status > 0
-     *
-     * @return collection
-     */
-    /*
-    public function currentCompanyDocs($status = '')
-    {
-        return CompanyDoc::where('for_company_id', $this->id)->where('status', '>', '0')->get();
-    }*/
-
-    /**
      * First active CompanyDoc of a specific type
      *
      * @return CompanyDoc record
@@ -945,7 +934,7 @@ class Company extends Model {
      *
      * @return booleen
      */
-    public function compliantDocs()
+    public function isCompliant()
     {
         $doc_types = [1, 2, 3, 4, 5];
         foreach ($doc_types as $type) {
@@ -960,11 +949,41 @@ class Company extends Model {
     }
 
     /**
-     * Missing Company Info
+     * Documents required for a company to be compliant
      *
      * @return Text or Array
      */
-    public function missingDocs($format = 'html')
+    public function compliantDocs($format = 'array')
+    {
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract'];
+        $compliant_docs = [];
+        $compliant_html = '';
+
+        foreach ($doc_types as $type => $name) {
+            if ($this->requiresCompanyDoc($type)) {
+                $compliant_docs[$type] = $name;
+                $compliant_html .= "$name, ";
+            }
+        }
+
+        if ($this->licence_required) {
+            $compliant_docs[7] = 'Contractor Licence';
+            $compliant_html .= 'Contractor Licence, ';
+        }
+
+        $compliant_html = rtrim($compliant_html, ', ');
+
+        return ($format == 'csv') ? $compliant_html : $compliant_docs;
+
+    }
+
+
+    /**
+     * Missing Company Documents to be compliant
+     *
+     * @return Text or Array
+     */
+    public function missingDocs($format = 'array')
     {
         $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract'];
         $missing_docs = [];
@@ -985,7 +1004,7 @@ class Company extends Model {
 
         $missing_html = rtrim($missing_html, ', ');
 
-        return ($format == 'html') ? $missing_html : $missing_docs;
+        return ($format == 'csv') ? $missing_html : $missing_docs;
 
     }
 
@@ -1019,7 +1038,7 @@ class Company extends Model {
 
 
         if ($this->missingDocs())
-            $str .= "<b>Documents:</b> " . $this->missingDocs();
+            $str .= "<b>Documents:</b> " . $this->missingDocs('csv');
 
         return ($str) ? $str : null;
 

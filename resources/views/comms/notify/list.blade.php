@@ -26,9 +26,11 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Alert Notifications</span>
                         </div>
                         <div class="actions">
-                            <a class="btn btn-circle green btn-outline btn-sm" href="/comms/notify/create" data-original-title="Add">
-                                <i class="fa fa-plus"></i> Add
-                            </a>
+                            @if (Auth::user()->allowed2('add.notify'))
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/comms/notify/create" data-original-title="Add">
+                                    <i class="fa fa-plus"></i> Add
+                                </a>
+                            @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>

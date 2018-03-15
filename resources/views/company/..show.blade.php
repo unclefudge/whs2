@@ -139,7 +139,7 @@
                                 <h3 class="sbold visible-sm visible-xs">{{ $company->name }}
                                     <small class='font-grey-cascade' style="margin:0px"> {{ $company->nickname }}</small>
                                 </h3>
-                                @if (!$company->compliantDocs() )
+                                @if (!$company->isCompliant() )
                                     <span class='label label-danger'>Non Compliant</span>
                                 @endif
 

@@ -24,7 +24,9 @@
                 </li>
 
                 @if (Auth::user()->company->status == 1)
-                    {{-- Job Site Info --}}
+                    {{-----------------------------------------------------------------------------------
+                       Job Site Info
+                     -----------------------------------------------------------------------------------}}
                     @if (Auth::user()->hasAnyPermissionType('site.hazard|site.accident|safety.doc|site.doc|site'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-wrench"></i> Job Site Info
@@ -103,7 +105,9 @@
                         </li>
                     @endif
 
-                    {{-- Job Site Info --}}
+                    {{-----------------------------------------------------------------------------------
+                       General Info
+                     -----------------------------------------------------------------------------------}}
                     @if (Auth::user()->hasAnyPermissionType('wms|toolbox|sds'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-file-text-o"></i> General Info
@@ -152,6 +156,9 @@
                         </li>
                     @endif
 
+                    {{-----------------------------------------------------------------------------------
+                       Planners
+                     -----------------------------------------------------------------------------------}}
                     @if (Auth::user()->hasAnyPermissionType('weekly.planner|site.planner|trade.planner|attendance'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-calendar"></i> Planners
@@ -200,8 +207,11 @@
                         </li>
                     @endif
 
-                    @if (Auth::user()->hasAnyPermissionType('user|client|trade|compliance|contractor|site.doc.manager|site.export|safetytip|settings|') ||
-                    (Auth::user()->company->subscription > 1 &&  Auth::user()->hasAnyPermissionType('company')))
+                    {{-----------------------------------------------------------------------------------
+                       Management
+                     -----------------------------------------------------------------------------------}}
+                    @if (Auth::user()->hasAnyPermissionType('user|client|trade|compliance|contractor|site.export|safetytip|settings|') ||
+                    (Auth::user()->company->subscription > 1 &&  Auth::user()->hasAnyPermissionType('company')) || Auth::user()->allowed2('add.company.doc'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-crosshairs"></i> Management
                                 <span class="arrow"></span>

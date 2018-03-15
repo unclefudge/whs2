@@ -3,13 +3,14 @@
 namespace App\Http\Utilities;
 
 use DB;
+use Auth;
 
 class CompanyDocTypes {
 
     protected static $companyDocTypes = [
         'acc' => 'Accounting',
-        'adm' => 'Administation',
-        'con' => 'Contruction',
+        'adm' => 'Administration',
+        'con' => 'Construction',
         'whs' => 'WHS',
     ];
 
@@ -35,6 +36,9 @@ class CompanyDocTypes {
      */
     public static function docs($type, $private = 0)
     {
+        if (Auth::check())
+            return DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('type', $type)->where('private', $private)->get();
+
         return DB::table('company_docs_categories')->where('type', $type)->where('private', $private)->get();
     }
 
@@ -44,7 +48,11 @@ class CompanyDocTypes {
     public static function docCats($type, $private = 0)
     {
         $ids = [];
-        $docs = DB::table('company_docs_categories')->where('type', $type)->where('private', $private)->get();
+        if (Auth::check())
+            $docs = DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('type', $type)->where('private', $private)->get();
+        else
+            $docs = DB::table('company_docs_categories')->where('type', $type)->where('private', $private)->get();
+
         foreach ($docs as $doc) {
             $ids[] = $doc->id;
         }
@@ -58,7 +66,10 @@ class CompanyDocTypes {
     public static function docNames($type, $private = 0)
     {
         $names = '';
-        $docs = DB::table('company_docs_categories')->where('type', $type)->where('private', $private)->get();
+        if (Auth::check())
+            $docs = DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('type', $type)->where('private', $private)->get();
+        else
+            $docs = DB::table('company_docs_categories')->where('type', $type)->where('private', $private)->get();
         foreach ($docs as $doc) {
             $names .= "$doc->name, ";
         }
