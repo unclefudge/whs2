@@ -48,42 +48,47 @@
             </div>
         </div>
         <div class="row">
+
             <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
                 {{-- Compliance Documents --}}
-                <div class="portlet light" style="background: {!! ($company->isCompliant()) ? '#abe7ed' : '#fbe1e3' !!}">
-                    <div class="row">
-                        <div class="col-xs-10">
-                            <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : 'MISSING DOCUMENTS' !!} </h2>
-                            <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
-                            @foreach ($company->compliantDocs() as $type => $name)
-                                {{-- Accepted --}}
-                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
-                                    <i class="fa fa-check" style="width:35px; padding: 2px 15px"></i>
-                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a><br>
+                @if (Auth::user()->allowed2('view.company.acc', $company))
+                    <div class="portlet light" style="background: {!! ($company->isCompliant()) ? '#abe7ed' : '#fbe1e3' !!}">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : 'MISSING DOCUMENTS' !!} </h2>
+                                <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
+                                @foreach ($company->compliantDocs() as $type => $name)
+                                    {{-- Accepted --}}
+                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
+                                        <i class="fa fa-check" style="width:35px; padding: 2px 15px"></i>
+                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a><br>
+                                    @endif
+                                    {{-- Pending --}}
+                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
+                                        <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span
+                                                class="label label-warning label-sm">Pending approval</span><br>
+                                    @endif
+                                    {{-- Rejected --}}
+                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
+                                        <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span>
+                                        <br>
+                                    @endif
+                                    {{-- Missing --}}
+                                    @if (!$company->activeCompanyDoc($type))
+                                        <i class="fa fa-times" style="width:35px; padding: 2px 15px"></i> {{ $name }}<br>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
+                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
                                 @endif
-                                {{-- Pending --}}
-                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
-                                    <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
-                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-warning label-sm">Pending approval</span><br>
-                                @endif
-                                {{-- Rejected --}}
-                                @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
-                                    <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
-                                    <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span><br>
-                                @endif
-                                {{-- Missing --}}
-                                @if (!$company->activeCompanyDoc($type))
-                                    <i class="fa fa-times" style="width:35px; padding: 2px 15px"></i> {{ $name }}<br>
-                                @endif
-                            @endforeach
-                        </div>
-                        <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                            @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
-                            @endif
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
 
                 {{-- Document Summary --}}

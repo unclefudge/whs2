@@ -81,7 +81,7 @@
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-9">
-                                    @if ($doc->status == 2 && $doc->company_id == Auth::user()->company_id)
+                                    @if ($doc->status == 2)
                                         <h2 style="margin: 0 0"><span class="label label-warning">Pending approval</span></h2><br><br>
                                     @endif
                                     @if ($doc->status == 3)
