@@ -53,7 +53,7 @@
                             <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
                             <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.qa', $qa) }}">
                             <input v-model="xx.user_manager" type="hidden" id="user_manager"
-                                   value="{!! (in_array(Auth::user()->id, $qa->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
+                                   value="{!! (!$qa->master && in_array(Auth::user()->id, $qa->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
                             <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('del.site.qa') }}">
                             <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.qa', $qa) }}">
 
@@ -303,10 +303,7 @@
                     <h3>Notes
                         {{-- Show add if user has permission to edit hazard --}}
                         @if (Auth::user()->allowed2('edit.site.qa', $qa))
-                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right"
-                                    data-original-title="Add">
-                                <i class="fa fa-plus"></i> Add
-                            </button>
+                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
                         @endif
                     </h3>
                     <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">

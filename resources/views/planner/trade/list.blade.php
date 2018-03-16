@@ -45,10 +45,7 @@
                             </div>
                             <div class="actions">
                                 @if (Auth::user()->hasPermission2('add.trade') && Auth::user()->id == 2)
-                                    <a v-on:click="$root.$broadcast('add-trade-modal')" class="btn btn-circle green btn-outline btn-sm"
-                                       data-original-title="Add">
-                                        <i class="fa fa-plus"></i> Add
-                                    </a>
+                                    <a v-on:click="$root.$broadcast('add-trade-modal')" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">Add</a>
                                 @endif
                                 <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                             </div>
@@ -136,7 +133,7 @@
         <h4 class="font-white" style="margin-top: 5px"><i class="icon-layers"></i> Tasks &nbsp; - &nbsp; @{{ trade_name }}
             @if (Auth::user()->hasPermission2('add.trade'))
                 <button v-on:click="$root.$broadcast('add-task-modal', trade_id)" class="btn green btn-outline btn-sm pull-right" data-original-title="Add" style="margin-top: -7px">
-                    <i class="fa fa-plus"></i> Add
+                    Add
                 </button>
             @endif
         </h4>

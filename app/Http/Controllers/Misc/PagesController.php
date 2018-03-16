@@ -180,6 +180,13 @@ class PagesController extends Controller {
                 }
             }
         }
+
+        echo "<br>Reset Company Licence Override to 0<br><br>";
+        $docs = \App\Models\Company\Company::all();
+        foreach ($docs as $doc) {
+            $doc->lic_override = 0;
+            $doc->save();
+        }
         /*echo "Child Company LH default permissions<br><br>";
         $lh =  DB::table('role_user')->where('role_id', 12)->get();
         foreach ($lh as $u) {
@@ -360,7 +367,7 @@ class PagesController extends Controller {
                     $company->business_entity = $data[13];
                     $company->sub_group = $data[14];
                     $company->category = $data[15];
-                    $company->licence_required = $data[16];
+                    $company->lic_override = $data[16];
                     $company->maxjobs = $data[17];
                     $company->transient = $data[18];
                     $company->primary_user = $data[19];

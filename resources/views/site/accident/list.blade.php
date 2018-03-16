@@ -30,9 +30,7 @@
                         </div>
                         <div class="actions">
                             @if(Auth::user()->allowed2('add.site.accident'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/accident/create" data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/accident/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>

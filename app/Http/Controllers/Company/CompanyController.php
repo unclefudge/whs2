@@ -80,16 +80,9 @@ class CompanyController extends Controller {
         $newCompany->nickname = request('person_name');
         $newCompany->save();
 
-        if (request('trades')) {
+        if (request('trades'))
             $newCompany->tradesSkilledIn()->sync(request('trades'));
-            foreach (request('trades') as $trade) {
-                if (Trade::find($trade)->licence_req) {
-                    $newCompany->licence_required = 1;
-                    $newCompany->save();
-                    break;
-                }
-            }
-        }
+
 
         // Mail request to new company
         Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
@@ -124,7 +117,7 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function staff($id)
+    public function users($id)
     {
         $company = Company::findorFail($id);
 
@@ -132,7 +125,7 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('view.company', $company))
             return view('errors/404');
 
-        return view('company/staff', compact('company'));
+        return view('company/users', compact('company'));
     }
 
     /**
@@ -337,18 +330,13 @@ class CompanyController extends Controller {
         }
 
         // Determine if Licence is required
-        $old_licence_overide = ($company->licence_required != $company->requiresContractorsLicence()) ? true : false;
+        $old_licence_overide = $company->lic_override;
         $old_trades_skilled_in = $company->tradesSkilledInSBC();
         if ($request->get('trades')) {
             $company->tradesSkilledIn()->sync($request->get('trades'));
-            $company->licence_required = 0;
-            foreach (request('trades') as $trade) {
-                if (Trade::find($trade)->licence_req) {
-                    $company->licence_required = 1;
-                    break;
-                }
-            }
-            // Licence Required field was previous overridden and trades have now changed
+            $company->lic_override = 0;
+
+            // Licence Override field was previous set and trades have now changed
             if ($old_licence_overide && $old_trades_skilled_in != $company->tradesSkilledInSBC()) {
                 // email tara
             }
@@ -449,7 +437,7 @@ class CompanyController extends Controller {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
                 if ($company->status == 2) {
                     if ($company->signup_step == 1)
-                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/signup/welcome/'.$company->id.'" class="btn btn-outline btn-xs dark">Resend Email ' . $company->email . '</a>';
+                        $name .= ' &nbsp; <span class="label label-sm label-info">Email sent</span> <a href="/signup/welcome/' . $company->id . '" class="btn btn-outline btn-xs dark">Resend Email ' . $company->email . '</a>';
                     if ($company->signup_step == 2)
                         $name .= ' &nbsp; <span class="label label-sm label-info">Adding company info</span></a>';
                     if ($company->signup_step == 3)
@@ -463,7 +451,7 @@ class CompanyController extends Controller {
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
                 if (!$company->approved_by && $company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id)
-                    $name .= ' &nbsp; <span class="label label-sm label-warning">Pending approval</span>';
+                    $name .= ' &nbsp; <span class="label label-sm label-warning">Pending Approval</span>';
                 if (!$company->isCompliant() && $company->status == 1)
                     $name .= ' &nbsp; <span class="label label-sm label-danger">Non Compliant</span>';
 
@@ -487,28 +475,50 @@ class CompanyController extends Controller {
     /**
      * Get Staff for specific company + Process datatables ajax request.
      */
-    public function getStaff(Request $request)
+    public function getUsers()
     {
-        $company_id = $request->get('company_id');
-
+        $company_ids = (request('staff') == 'staff') ? [request('company_id')] : Auth::user()->authCompanies('view.company', 1)->pluck('id')->toArray();
         $staff = User::select([
-            'id', 'username', 'firstname', 'lastname', 'phone', 'email', 'status', 'company_id',
-            DB::raw('CONCAT(firstname, " ", lastname) AS full_name')])
-            ->where('company_id', '=', $company_id)
-            ->where('status', '=', '1');
+            'id', 'username', 'firstname', 'lastname', 'phone', 'email', 'status', 'company_id', 'last_login', 'security',
+            DB::raw('CONCAT(firstname, " ", lastname) AS full_name_search')])
+            ->whereIn('company_id', $company_ids)
+            ->where('status', '=', request('status'));
 
-        $dt = Datatables::of($staff)
+        $company = Company::find(request('company_id'));
+        $user_list = $company->staff->pluck('id')->toArray();
+        if (request('staff') == 'all' && Auth::user()->isCompany($company->id))
+            $user_list = Auth::user()->authUsers('view.user')->pluck('id')->toArray();
+
+        $users = User::select([
+            'users.id', 'users.username', 'users.firstname', 'users.lastname', 'users.phone', 'users.email', 'users.company_id', 'users.security', 'users.company_id',
+            DB::raw('CONCAT(users.firstname, " ", users.lastname) AS full_name'),
+            'companys.name', 'users.address', 'users.last_login', 'users.status'])
+            ->join('companys', 'users.company_id', '=', 'companys.id')
+            ->whereIn('users.id', $user_list)
+            ->where('users.status', request('status'));
+            //->orderBy('users.firstname');
+
+        $dt = Datatables::of($users)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
+            ->editColumn('id', function ($user) {
+                if (Auth::user()->allowed2('view.user', $user))
+                    return '<div class="text-center"><a href="/user/'.$user->id.'"><i class="fa fa-search"></i></a></div>';
+                return '';
+            })
             ->editColumn('full_name', function ($user) {
-                $string = $user->fullname;
+                $string = $user->firstname . ' ' . $user->lastname;
+
                 if ($user->id == $user->company->primary_user)
-                    $string .= " <span class='badge badge-info badge-roundless'>P</span> ";
+                    $string .= " <span class='badge badge-info badge-roundless'>P</span>";
                 if ($user->id == $user->company->secondary_user)
-                    $string .= " <span class='badge badge-info badge-roundless'>S</span> ";
+                    $string .= " <span class='badge badge-info badge-roundless'>S</span>";
                 if ($user->security)
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
 
                 return $string;
+            })
+            ->editColumn('name', function ($user) {
+                return '<a href="/company/' . $user->company_id . '">' . $user->company->name . '</a>';
             })
             ->editColumn('phone', function ($user) {
                 return '<a href="tel:' . preg_replace("/[^0-9]/", "", $user->phone) . '">' . $user->phone . '</a>';
@@ -517,11 +527,14 @@ class CompanyController extends Controller {
                 //return '<a href="mailto:' . $user->email . '">' . '<i class="fa fa-envelope-o"></i>' . '</a>';
                 return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
             })
+            ->editColumn('last_login', function ($user) {
+                return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';
+            })
             ->addColumn('action', function ($user) {
                 if (Auth::user()->allowed2('view.user', $user))
                     return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
             })
-            ->rawColumns(['full_name', 'phone', 'email', 'action'])
+            ->rawColumns(['id', 'full_name', 'name', 'phone', 'email', 'action'])
             ->make(true);
 
         return $dt;

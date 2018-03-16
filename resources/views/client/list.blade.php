@@ -26,9 +26,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Client List</span>
                         </div>
                         <div class="actions">
-                            <a class="btn btn-circle green btn-outline btn-sm" href="/client/create" data-original-title="Add">
-                                <i class="fa fa-plus"></i> Add
-                            </a>
+                            <a class="btn btn-circle green btn-outline btn-sm" href="/client/create" data-original-title="Add">Add</a>
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>

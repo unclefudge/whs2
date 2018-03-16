@@ -46,7 +46,7 @@
                             <div class="actions">
                                 <div class="actions">
                                     @if (Auth::user()->hasPermission2('edit.area.super'))
-                                        <a class="btn btn-circle green btn-outline btn-sm" href="javascript:;" v-on:click="openSidebar(0)"><i class="fa fa-plus"></i> Add</a>
+                                        <a class="btn btn-circle green btn-outline btn-sm" href="javascript:;" v-on:click="openSidebar(0)">Add</a>
                                     @endif
                                     <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen" style="margin: 3px"></a>
                                 </div>

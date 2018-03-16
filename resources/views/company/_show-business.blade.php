@@ -3,14 +3,14 @@
         <div class="caption">
             <span class="caption-subject font-dark bold uppercase">Business Details</span>
             @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                <span class="label label-warning">Pending approval</span>
+                <span class="label label-warning">Pending Approval</span>
             @endif
         </div>
         <div class="actions">
-            @if (Auth::user()->allowed2('sig.company.acc', $company) && !$company->approved_by)
+            @if (Auth::user()->allowed2('sig.company.acc', $company) && !$company->approved_by  && $company->status)
                 <a href="/company/{{ $company->id }}/approve/acc" class="btn btn-circle green btn-outline btn-sm" id="but_approve">Approve</a>
             @endif
-            @if (Auth::user()->allowed2('edit.company.acc', $company))
+            @if (Auth::user()->allowed2('edit.company.acc', $company) && $company->status)
                 <button class="btn btn-circle green btn-outline btn-sm" onclick="editForm('business')">Edit</button>
             @endif
         </div>

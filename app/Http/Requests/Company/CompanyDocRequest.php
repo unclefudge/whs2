@@ -32,7 +32,8 @@ class CompanyDocRequest extends Request {
             'lic_no'      => 'required_if:category_id,7',
             'lic_type'    => 'required_if:category_id,7',
             'asb_type'    => 'required_if:category_id,8',
-            'expiry'      => 'required_if:category_id,1,2,3,4,5,6,7,8',
+            //'expiry'      => 'required_if:category_id,1,2,3,4,5,6,7,8',
+            'expiry'      => 'required',
             'singlefile'  => 'required_with_all:save,create',
         ];
     }
@@ -43,6 +44,7 @@ class CompanyDocRequest extends Request {
             'category_id.required_with'    => 'The category field is required',
             'name.required_with'           => 'The name field is required',
             'expiry.required_if'           => 'The expiry field is required',
+            'expiry.required'              => 'The expiry field is required',
             'ref_no.required_if'           => 'The policy no. field is required',
             'ref_name.required_if'         => 'The insurer field is required',
             'ref_type.required_if'         => 'The category field is required',

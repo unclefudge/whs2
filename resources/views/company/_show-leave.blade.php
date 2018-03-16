@@ -5,7 +5,7 @@
             <span class="caption-subject font-dark bold uppercase">Company Leave</span>
         </div>
         <div class="actions">
-            @if (Auth::user()->allowed2('add.company.leave', $company))
+            @if (Auth::user()->allowed2('add.company.leave', $company) && $company->status)
                 <button class="btn btn-circle green btn-outline btn-sm" onclick="editForm('leave')">Edit</button>
             @endif
         </div>
@@ -50,7 +50,7 @@
                             <div class="col-md-12">
                                 <h3>
                                     {{ $doc_name }}
-                                    {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                    {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
                                     {!! ($doc && $doc->status == 3) ?  '<span class="label label-danger label-sm">Not approved</span>' : '' !!}
                                 </h3>
                                 <div class="form-body">

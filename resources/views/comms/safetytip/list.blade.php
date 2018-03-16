@@ -24,10 +24,7 @@
                         </div>
                         <div class="actions">
                             @if(Auth::user()->hasPermission2('add.safetytip'))
-                                <a v-on:click="$root.$broadcast('add-tip-modal')" class="btn btn-circle green btn-outline btn-sm"
-                                   data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a v-on:click="$root.$broadcast('add-tip-modal')" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">Add</a>
                             @endif
                             <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>

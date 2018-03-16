@@ -443,7 +443,7 @@
             <small class="label label-sm label-warning" style="font-size: 11px;">ON LEAVE &nbsp;<br></small>
         </div>
         <!-- Past Events - disable sidebar and dim entry -->
-        <div v-show="pastDate(date) == true" style="padding: 10px; opacity: 0.4">
+        <div v-show="pastDateTrade(date) == true" style="padding: 10px; opacity: 0.4">
             <div v-if="entity_sites.length">
                 <template v-for="entity in entity_sites">
                     <div class="@{{ entityClass(entity) }}">

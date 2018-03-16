@@ -36,13 +36,13 @@
                             </thead>
                             <tbody>
                             @foreach($companies as $company)
-                                @if ($company->licence_required != $company->requiresContractorsLicence())
+                                @if ($company->lic_override)
                                     <tr>
                                         <td>
                                             <div class="text-center"><a href="/company/{{ $company->id }}"><i class="fa fa-search"></i></a></div>
                                         </td>
                                         <td>{{ $company->name }} {!! ($company->nickname) ? "<span class='font-grey-cascade'><br>$company->nickname</span>" : '' !!}</td>
-                                        <td>{!! ($company->licence_required) ? 'No' : '<span class="font-red">Yes</span>' !!}</td>
+                                        <td>{!! ($company->requiresContractorsLicence()) ? '<span class="font-red">Yes</span>' : 'No' !!}</td>
                                         <td>{!! $company->updated_at->format('d/m/Y')!!}</td>
                                     </tr>
                                 @endif

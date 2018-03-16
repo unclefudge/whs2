@@ -176,7 +176,7 @@
             bFilter: false,
             bLengthChange: false,
             ajax: {
-                'url': '/company/dt/staff',
+                'url': '/company/dt/users',
                 'type': 'GET',
                 'data': function (d) {
                     d.company_id = {{ $company->id }};

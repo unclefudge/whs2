@@ -30,7 +30,7 @@ class Company extends Model {
         'name', 'nickname', 'slug', 'email', 'phone', 'logo_banner', 'logo_profile',
         'address', 'address2', 'suburb', 'state', 'postcode', 'country', 'primary_user', 'secondary_user',
         'abn', 'gst', 'business_entity', 'sub_group', 'payroll_tax', 'creditor_code', 'category',
-        'licence_required', 'licence_no', 'licence_type', 'licence_expiry',
+        'lic_override', 'licence_no', 'licence_type', 'licence_expiry',
         'transient', 'maxjobs', 'notes', 'parent_company', 'subscription', 'signup_key', 'signup_step',
         'status', 'created_by', 'updated_by', 'approved_by', 'approved_at'];
 
@@ -941,8 +941,9 @@ class Company extends Model {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
                 return false;
         }
-
-        if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
+        
+				// Contractors Licence
+        if ($this->requiresCompanyDoc(7) && !$this->lic_override && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
             return false;
 
         return true;
@@ -955,7 +956,7 @@ class Company extends Model {
      */
     public function compliantDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $compliant_docs = [];
         $compliant_html = '';
 
@@ -964,11 +965,6 @@ class Company extends Model {
                 $compliant_docs[$type] = $name;
                 $compliant_html .= "$name, ";
             }
-        }
-
-        if ($this->licence_required) {
-            $compliant_docs[7] = 'Contractor Licence';
-            $compliant_html .= 'Contractor Licence, ';
         }
 
         $compliant_html = rtrim($compliant_html, ', ');
@@ -985,7 +981,7 @@ class Company extends Model {
      */
     public function missingDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $missing_docs = [];
         $missing_html = '';
 
@@ -996,12 +992,7 @@ class Company extends Model {
             }
 
         }
-
-        if ($this->licence_required && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1)) {
-            $missing_docs[7] = 'Contractor Licence';
-            $missing_html .= 'Contractor Licence, ';
-        }
-
+				
         $missing_html = rtrim($missing_html, ', ');
 
         return ($format == 'csv') ? $missing_html : $missing_docs;

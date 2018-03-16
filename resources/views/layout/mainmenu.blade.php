@@ -210,8 +210,7 @@
                     {{-----------------------------------------------------------------------------------
                        Management
                      -----------------------------------------------------------------------------------}}
-                    @if (Auth::user()->hasAnyPermissionType('user|client|trade|compliance|contractor|site.export|safetytip|settings|') ||
-                    (Auth::user()->company->subscription > 1 &&  Auth::user()->hasAnyPermissionType('company')) || Auth::user()->allowed2('add.company.doc'))
+                    @if (Auth::user()->hasAnyPermissionType('user|company|client|trade|compliance|site.export|safetytip|settings|') || Auth::user()->allowed2('add.company.doc'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-crosshairs"></i> Management
                                 <span class="arrow"></span>
@@ -226,11 +225,13 @@
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">User / Company</h3></li>
                                                         @if (Auth::user()->hasAnyPermissionType('user'))
-                                                            <li><a href="/user" class="nav-link"> Users </a></li>
+                                                            <li><a href="/company/{{ Auth::user()->company_id }}/user" class="nav-link"> Users </a></li>
                                                         @endif
+                                                        {{--
                                                         @if (Auth::user()->hasAnyPermissionType('contractor'))
                                                             <li><a href="/contractor" class="nav-link"> Contractors </a></li>
                                                         @endif
+                                                        --}}
                                                         {{--
                                                         @if(Auth::user()->company->subscription && Auth::user()->hasAnyPermissionType('client'))
                                                              <li><a href="/client" class="nav-link"> Clients </a></li>

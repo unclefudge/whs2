@@ -161,21 +161,23 @@ $cc = 1;*/
 
                                             </tr>
                                         @endif
-                                        <tr>
-                                            <td>Company Details</td>
-                                            <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="30%" colspan="2"></td>
-                                            <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
+                                        @if (!$role->external)
+                                            <tr>
+                                                <td>Company Details<br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="30%" colspan="2"></td>
+                                                <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
 
-                                        </tr>
-                                        <tr>
-                                            <td>Business Details</td>
-                                            <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="30%" colspan="2"></td>
-                                            <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
-                                        </tr>
+                                            </tr>
+                                            <tr>
+                                                <td>Business Details<br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="30%" colspan="2"></td>
+                                                <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
+                                            </tr>
+                                        @endif
                                         @if($plan)
                                             <tr>
                                                 <td>Construction</td>

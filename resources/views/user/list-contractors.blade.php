@@ -26,9 +26,7 @@
                         </div>
                         <div class="actions">
                             @if(Auth::user()->hasPermission2('add.user'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/user/create" data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/user/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>

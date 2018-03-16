@@ -5,7 +5,7 @@
             <span class="caption-subject font-dark bold uppercase">Construction</span>
         </div>
         <div class="actions">
-            @if (Auth::user()->allowed2('edit.company.con', $company))
+            @if (Auth::user()->allowed2('edit.company.con', $company) && $company->status)
                 <button class="btn btn-circle green btn-outline btn-sm" onclick="editForm('construction')">Edit</button>
             @endif
         </div>

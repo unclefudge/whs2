@@ -156,7 +156,7 @@
                                         @else
                                             @if (Auth::user()->password_reset)
                                                 <div class="note note-warning">
-                                                    Your password has been reset and you are required to change it.
+                                                    <br><br><b>Your password has been reset and you are required to change it.</b><br><br><br>
                                                 </div>
                                             @endif
                                             <div class="col-md-6">

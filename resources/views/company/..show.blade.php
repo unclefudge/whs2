@@ -147,7 +147,7 @@
                                     {{-- Company details --}}
                                     <h3 class="font-green form-section">Company Details
                                         @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                            <span class="label label-warning">Pending approval</span>
+                                            <span class="label label-warning">Pending Approval</span>
                                         @endif
                                         @if(Auth::user()->allowed2('edit.company', $company))
                                             <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
@@ -193,7 +193,7 @@
                                     {{-- Busines Details --}}
                                     <h3 class="font-green form-section">Business Details
                                         @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                            <span class="label label-warning">Pending approval</span>
+                                            <span class="label label-warning">Pending Approval</span>
                                         @endif
                                         @if(Auth::user()->allowed2('edit.company', $company))
                                             <a href="/company/{{ $company->id }}/edit" class="btn btn-xs default pull-right">Edit</a>
@@ -260,7 +260,7 @@
                                                     <a href="{{ $company->activeCompanyDoc('1')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Public Liability</b></a>
                                                     @if (($company->activeCompanyDoc('1')->status == 2))
-                                                        <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                        <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('1')->status == 3))
                                                         <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
@@ -297,7 +297,7 @@
                                                     <a href="{{ $company->activeCompanyDoc('2')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Worker's Compensation</b></a>
                                                     @if (($company->activeCompanyDoc('2')->status == 2))
-                                                        <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                        <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('2')->status == 3))
                                                         <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
@@ -340,7 +340,7 @@
                                                     <a href="{{ $company->activeCompanyDoc('3')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Sickness & Accident</b></a>
                                                     @if (($company->activeCompanyDoc('3')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
+                                                                                                               style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('3')->status == 3)) <span class="label label-danger"
                                                                                                                style="margin-left:30px">Not approved</span> @endif
                                                 </div>
@@ -385,7 +385,7 @@
                                                     <a href="{{ $company->activeCompanyDoc('4')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Subcontractors Statement</b></a>
                                                     @if (($company->activeCompanyDoc('4')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
+                                                                                                               style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('4')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
                                                 <div class="col-md-8">{!! ($company->activeCompanyDoc('4')) ? format_expiry_field($company->activeCompanyDoc('4')->expiry) : '-' !!}</div>
@@ -419,7 +419,7 @@
                                                     <a href="{{ $company->activeCompanyDoc('5')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Period Trade Contract</b></a>
                                                     @if (($company->activeCompanyDoc('5')->status == 2)) <span class="label label-warning"
-                                                                                                               style="margin-left:30px">Pending approval</span> @endif
+                                                                                                               style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('5')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
                                                 <div class="col-md-8">{!! ($company->activeCompanyDoc('5')) ? format_expiry_field($company->activeCompanyDoc('5')->expiry) : '-' !!}</div>
@@ -485,7 +485,7 @@
                                                 <div class="col-md-3">
                                                     <a href="{{ $company->activeCompanyDoc('7')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Contractors Licence</b></a>
-                                                    @if (($company->activeCompanyDoc('7')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                    @if (($company->activeCompanyDoc('7')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('7')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
                                                 <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('7')->expiry) !!}</div>
@@ -521,7 +521,7 @@
                                                 <div class="col-md-3">
                                                     <a href="{{ $company->activeCompanyDoc('8')->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $company->activeCompanyDoc('8')->name }}</b></a>
-                                                    @if (($company->activeCompanyDoc('8')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                    @if (($company->activeCompanyDoc('8')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($company->activeCompanyDoc('8')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
                                                 <div class="col-md-2">{!! format_expiry_field($company->activeCompanyDoc('8')->expiry) !!}</div>
@@ -548,7 +548,7 @@
                                                 <div class="col-md-3">
                                                     <a href="{{ $extra->attachment_url }}" style="color:#333; display: block">
                                                         <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>{{ $extra->name }}</b></a>
-                                                    @if (($extra->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                    @if (($extra->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                     @if (($extra->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                 </div>
                                                 <div class="col-md-8">{!! format_expiry_field($extra->expiry) !!}</div>
@@ -574,7 +574,7 @@
                                                     <div class="col-md-3">
                                                         <a href="{{ $company->activeCompanyDoc('6')->attachment_url }}" style="color:#333; display: block">
                                                             <i class="fa fa-file-pdf-o" style="font-size: 20px; min-width: 35px"></i><b>Test & Tagging</b></a>
-                                                        @if (($company->activeCompanyDoc('6')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending approval</span> @endif
+                                                        @if (($company->activeCompanyDoc('6')->status == 2)) <span class="label label-warning" style="margin-left:30px">Pending Approval</span> @endif
                                                         @if (($company->activeCompanyDoc('6')->status == 3)) <span class="label label-danger" style="margin-left:30px">Not approved</span> @endif
                                                     </div>
                                                     <div class="col-md-8">{!! format_expiry_field($company->activeCompanyDoc('6')->expiry) !!}</div>
@@ -838,11 +838,11 @@
                                 {{-- Messages --}}
                                 <div id="pending_div">
                                     @if($company->id == Auth::user()->company_id)
-                                        This document is <span class="label label-warning">Pending approval</span> and can be <span style="text-decoration: underline;">deleted</span> or modified if
+                                        This document is <span class="label label-warning">Pending Approval</span> and can be <span style="text-decoration: underline;">deleted</span> or modified if
                                         required.
                                     @endif
                                     @if (Auth::user()->allowed2('sig.company', $company))
-                                        This document is <span class="label label-warning">Pending approval</span> and can be <span style="text-decoration: underline;">rejected</span> or modified if
+                                        This document is <span class="label label-warning">Pending Approval</span> and can be <span style="text-decoration: underline;">rejected</span> or modified if
                                         required.
                                     @endif
                                 </div>
@@ -1128,7 +1128,7 @@
         //bFilter: false,
         //bLengthChange: false,
         ajax: {
-            'url': '/company/dt/staff',
+            'url': '/company/dt/users',
             'type': 'GET',
             'data': function (d) {
                 d.company_id = {{ $company->id }};

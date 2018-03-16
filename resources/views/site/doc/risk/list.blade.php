@@ -29,9 +29,7 @@
                         </div>
                         <div class="actions">
                             @if(false && Auth::user()->hasPermission2('add.safety.doc'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/create" data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>

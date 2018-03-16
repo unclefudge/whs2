@@ -27,31 +27,31 @@
                         </div>
                         <div class="actions">
                             @if (Auth::user()->allowed2('add.site'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/create" data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>
                     <div class="row">
-                        @if (Auth::user()->company->subscription)
-                            <div class="col-md-2 pull-right">
-                                <div class="form-group">
-                                    <select name="status" id="status" class="form-control bs-select">
-                                        <option value="1" selected>Active</option>
+                        <div class="col-md-2 pull-right">
+                            <div class="form-group">
+                                <select name="status" id="status" class="form-control bs-select">
+                                    <option value="1" selected>Active</option>
+                                    @if (Auth::user()->company->subscription)
                                         <option value="-1">Upcoming</option>
                                         <option value="0">Completed</option>
-                                    </select>
-                                </div>
+                                    @endif
+                                </select>
                             </div>
-                        @endif
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
-                                <th width="5%"> #</th>
+                                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96')
+                                    <th width="5%"> #</th>
+                                @endif
                                 <th width="5%"> No.</th>
                                 <th> Suburb</th>
                                 <th> Name</th>
@@ -100,8 +100,10 @@
             }
         },
         columns: [
-            {data: 'id', name: 'sites.id', orderable: false, searchable: false},
-            {data: 'code', name: 'code'},
+                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96'){data: 'id', name: 'sites.id', orderable: false, searchable: false}, @endif
+            {
+                data: 'code', name: 'code'
+            },
             {data: 'suburb', name: 'suburb'},
             {data: 'name', name: 'name'},
                 @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96') {data: 'client_phone', name: 'client_phone'}, @endif

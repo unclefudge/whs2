@@ -81,10 +81,8 @@
 
     <template id="tasks-template">
         <h3 class="font-white" style="margin-top: 5px"><i class="icon-layers"></i> Tasks &nbsp; - &nbsp; @{{ trade_name }}
-            <button @click="$root.$broadcast('add-task-modal', trade_id)" class="btn btn-circlek green btn-outline btn-sm pull-right"
-            data-original-title="Add">
-            <i class="fa fa-plus"></i> Add
-            </button></h3>
+            <button @click="$root.$broadcast('add-task-modal', trade_id)" class="btn btn-circlek green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+            </h3>
         <table v-show="taskList.length" class="table table-striped table-bordered table-hover order-column"
                style="margin-bottom: 0px">
             <thead>

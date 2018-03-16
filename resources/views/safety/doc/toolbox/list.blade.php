@@ -80,9 +80,7 @@
                             @if(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')
                                 <div class="actions">
                                     @if(Auth::user()->hasPermission2('add.toolbox'))
-                                        <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/toolbox2/create" data-original-title="Add">
-                                            <i class="fa fa-plus"></i> Add
-                                        </a>
+                                        <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/toolbox2/create" data-original-title="Add">Add</a>
                                     @endif
                                     <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                                 </div>

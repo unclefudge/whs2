@@ -24,14 +24,18 @@
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
                         <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
-
                     </div>
 
                     <ul class="member-bar-menu">
                         <li class="member-bar-item"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
-                        <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
-                                <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
+                        @if (!empty(Auth::user()->companyDocTypeSelect('view', $company)))
+                            <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
+                                    <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->authCompanies('view.user')->contains('id', $company->id))
+                            <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Staff">USERS</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -49,7 +53,7 @@
                                     @foreach ($company->missingDocs() as $type => $name)
                                         <li>
                                             {{ $name }}
-                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
                                         </li>
                                     @endforeach
                                 </ul>
@@ -82,7 +86,7 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     @if ($doc->status == 2)
-                                        <h2 style="margin: 0 0"><span class="label label-warning">Pending approval</span></h2><br><br>
+                                        <h2 style="margin: 0 0"><span class="label label-warning">Pending Approval</span></h2><br><br>
                                     @endif
                                     @if ($doc->status == 3)
                                         <div class="alert alert-danger">
@@ -103,6 +107,15 @@
 
                             <div class="row">
                                 <div class="col-md-6">
+                                    {{-- Category --}}
+                                    {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control']) !!}
+                                    @if ($doc->category_id > 9)
+                                        <div class="form-group">
+                                            {!! Form::label('category_id_text', 'Category', ['class' => 'control-label']) !!}
+                                            {!! Form::text('category_id_text', \App\Models\Company\CompanyDocCategory::find($doc->category_id)->name, ['class' => 'form-control bs-select', 'disabled']) !!}
+                                        </div>
+                                    @endif
+
                                     {{-- Name --}}
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
@@ -195,23 +208,6 @@
 
                                 </div>
 
-                            </div>
-
-
-                            {{-- Name + Category --}}
-                            <div class="row">
-                                @if ($doc->category_id > 20)
-                                    <div class="col-md-4">
-                                        <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
-                                            {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                            {!! Form::select('category_id', Auth::user()->companyDocTypeSelect('edit', 'prompt'),
-                                                 $doc->category_id, ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('category_id', $errors) !!}
-                                        </div>
-                                    </div>
-                                @else
-                                    {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control']) !!}
-                                @endif
                             </div>
 
                             <div class="form-actions right">

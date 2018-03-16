@@ -71,9 +71,7 @@
                         </div>
                         <div class="actions">
                             @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/wms/create" data-original-title="Add">
-                                    <i class="fa fa-plus"></i> Add
-                                </a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/wms/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>

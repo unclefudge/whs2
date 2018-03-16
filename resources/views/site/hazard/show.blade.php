@@ -120,9 +120,7 @@
                                 <h3>Assigned Tasks
                                     {{-- Show add if user has permission to edit hazard --}}
                                     @if ($hazard->status && Auth::user()->allowed2('edit.site.hazard', $hazard) && Auth::user()->isCompany($hazard->owned_by->id))
-                                        <a href="/todo/create/hazard/{{ $hazard->id}}" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">
-                                            <i class="fa fa-plus"></i> Add
-                                        </a>
+                                        <a href="/todo/create/hazard/{{ $hazard->id}}" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</a>
                                     @endif
                                 </h3>
                                 @if ($hazard->todos()->count())
@@ -186,10 +184,7 @@
                 <div class="col-md-12">
                     <h3>Notes
                         {{-- Show add if user has permission to edit hazard --}}
-                        <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right"
-                                data-original-title="Add">
-                            <i class="fa fa-plus"></i> Add
-                        </button>
+                        <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
                     </h3>
                     <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">
                         <thead>

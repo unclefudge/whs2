@@ -67,6 +67,7 @@ $rec = $user;
 
         </tr>
     @endif
+    {{--
     <tr>
         <td>Company Details</td>
         <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
@@ -89,7 +90,7 @@ $rec = $user;
         @else
             <td width="45%" colspan="3"></td>
         @endif
-    </tr>
+    </tr>--}}
     @if($plan)
         <tr>
             <td>Construction</td>

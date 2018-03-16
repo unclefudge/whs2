@@ -235,14 +235,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             // Public Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && $company->activeCompanyDoc($id)))
+                    if (!($action == 'add' && $id < 9 && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
             }
             // Private Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && $company->activeCompanyDoc($id)))
+                    if (!($action == 'add' && $id < 9  && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
             }

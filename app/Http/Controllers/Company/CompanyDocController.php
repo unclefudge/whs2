@@ -463,7 +463,7 @@ class CompanyDocController extends Controller {
             })
             ->editColumn('name', function ($doc) {
                 if ($doc->status == 2)
-                    return $doc->name . " <span class='badge badge-warning badge-roundless'>Pending approval</span>";
+                    return $doc->name . " <span class='badge badge-warning badge-roundless'>Pending Approval</span>";
                 if ($doc->status == 3)
                     return $doc->name . " <span class='badge badge-danger badge-roundless'>Rejected</span>";
                 return $doc->name;

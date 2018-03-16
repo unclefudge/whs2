@@ -88,7 +88,7 @@
                                     @endif
                                     {{-- Company details pending --}}
                                     @if(!$company->approved_by && $company->reportsTo()->id == Auth::user()->company_id)
-                                        <h3 class="pull-right" style="margin:-10px 0 0px;"><span class="label label-warning">Pending approval</span></h3>
+                                        <h3 class="pull-right" style="margin:-10px 0 0px;"><span class="label label-warning">Pending Approval</span></h3>
                                     @endif
                                     <h1 class="sbold hidden-sm hidden-xs" style="margin: -20px 0 15px 0">{{ $company->name }}</h1>
                                     <h3 class="sbold visible-sm visible-xs">{{ $company->name }}</h3>

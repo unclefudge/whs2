@@ -40,49 +40,54 @@
 
                     <ul class="member-bar-menu">
                         <li class="member-bar-item active"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
-                        <li class="member-bar-item "><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
-                                <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
+                        @if (!empty(Auth::user()->companyDocTypeSelect('view', $company)))
+                            <li class="member-bar-item "><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
+                                    <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->authCompanies('view.user')->contains('id', $company->id))
+                            <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Staff">USERS</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>
         </div>
         <div class="row">
-
             <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
                 {{-- Compliance Documents --}}
                 @if (Auth::user()->allowed2('view.company.acc', $company))
-                    <div class="portlet light" style="background: {!! ($company->isCompliant()) ? '#abe7ed' : '#fbe1e3' !!}">
+                    <div class="portlet light"> {{--}} style="background: {!! ($company->isCompliant()) ? '#D6F3F6' : '#fbe1e3' !!}">--}}
                         <div class="row">
                             <div class="col-xs-10">
-                                <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : 'MISSING DOCUMENTS' !!} </h2>
+                                <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : '<span class="font-red">MISSING DOCUMENTS</span>' !!} </h2>
+                                <hr style="margin: 15px 0px">
                                 <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
                                 @foreach ($company->compliantDocs() as $type => $name)
                                     {{-- Accepted --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
-                                        <i class="fa fa-check" style="width:35px; padding: 2px 15px"></i>
+                                        <i class="fa fa-check" style="width:35px; padding: 4px 15px; color: #26C281"></i>
                                         <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a><br>
                                     @endif
                                     {{-- Pending --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
-                                        <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                        <i class="fa fa-question" style="width:35px; padding: 4px 15px; border: 1px #fff"></i>
                                         <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span
-                                                class="label label-warning label-sm">Pending approval</span><br>
+                                                class="label label-warning label-sm">Pending Approval</span><br>
                                     @endif
                                     {{-- Rejected --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
-                                        <i class="fa fa-question" style="width:35px; padding: 2px 15px"></i>
+                                        <i class="fa fa-times font-red" style="width:35px; padding: 4px 15px"></i>
                                         <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span>
                                         <br>
                                     @endif
                                     {{-- Missing --}}
                                     @if (!$company->activeCompanyDoc($type))
-                                        <i class="fa fa-times" style="width:35px; padding: 2px 15px"></i> {{ $name }}<br>
+                                        <i class="fa fa-square-o font-red" style="width:35px; padding: 4px 15px"></i> {{ $name }}<br>
                                     @endif
                                 @endforeach
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
                                     <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
                                 @endif
                             </div>
@@ -205,7 +210,7 @@
         });
 
         /* Over Ride Licence */
-        $('#licence_required').change(function () {
+        $('#lic_override').change(function () {
             overide();
         });
 
@@ -214,10 +219,10 @@
         function overide() {
             $('#req_yes').hide();
             $('#req_no').hide();
-            if ($('#licence_required').val() != $('#requiresContractorsLicence').val()) {
+            if ($('#lic_override').val() == 1) {
                 //alert('over');
                 $('#overide_div').show();
-                if ($('#licence_required').val() == 1)
+                if ($('#requiresContractorsLicence').val() == 1)
                     $('#req_yes').show();
                 else
                     $('#req_no').show();

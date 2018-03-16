@@ -467,7 +467,6 @@ trait UserRolesPermissions {
 
             // Users
             if ($permissiontype == 'user') {
-
                 if ($record->id == $this->id && ($action == 'view' || $action == 'edit')) return true;  // User can always view/edit own profile
                 if ($this->authUsers($permission)->contains('id', $record->id)) return true;
 
@@ -569,6 +568,9 @@ trait UserRolesPermissions {
                 $permissiontype == 'attendance' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
             ) {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
+
+                // Site QA Master templates - Only Fudge, Jo, Tara
+                if ($permissiontype == 'site.qa' && $record->master && in_array($this->id, ['3', '109', '351'])) return true;
 
                 return false;
             }

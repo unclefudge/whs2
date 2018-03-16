@@ -29,7 +29,7 @@
                                 <div class="mt-comment-info">
                                     <span class="mt-comment-author">
                                         {!! ($doc) ? "<a href='$doc->attachment_url' target='_blank' style='color:#000'>$doc_name</a>" : $doc_name !!}
-                                        {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                        {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
                                         {!! ($doc && $doc->status == 3) ?  '<span class="label label-danger label-sm">Not approved</span>' : '' !!}
                                     </span>
                                     <span class="mt-comment-date">{!! ($doc) ?  $doc->expiry->format('d/m/Y'): $company->requiresCompanyDocText($cat_type) !!}</span>
@@ -75,7 +75,7 @@
                                 <div class="col-md-12">
                                     <h3>
                                         {{ $doc_name }}
-                                        {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                        {!! ($doc && $doc->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
                                         {!! ($doc && $doc->status == 3) ?  '<span class="label label-danger label-sm">Not approved</span>' : '' !!}
                                     </h3>
                                     <div class="form-body">

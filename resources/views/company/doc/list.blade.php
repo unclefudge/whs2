@@ -25,14 +25,18 @@
                         <span class="member-split">&nbsp;|&nbsp;</span>
                         <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
                         <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
-
                     </div>
 
                     <ul class="member-bar-menu">
                         <li class="member-bar-item"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
-                        <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
-                                <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                        <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/staff" title="Staff">USERS</a></li>
+                        @if (!empty(Auth::user()->companyDocTypeSelect('view', $company)))
+                            <li class="member-bar-item active"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
+                                    <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->authCompanies('view.user')->contains('id', $company->id))
+                            <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Staff">USERS</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -50,13 +54,13 @@
                                     @foreach ($company->missingDocs() as $type => $name)
                                         <li>
                                             {{ $name }}
-                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending approval</span>' : '' !!}
+                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
                                         </li>
                                     @endforeach
                                 </ul>
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                                @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
                                     <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
                                 @endif
                             </div>
