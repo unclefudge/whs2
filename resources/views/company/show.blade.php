@@ -64,7 +64,7 @@
                             </div>
                             <div class="actions">
                                 @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-upload"></i>Upload</a>
+                                    <a href="/company/{{ $company->id }}/doc/upload" class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-upload"></i>Upload</a>
                                 @endif
                             </div>
                         </div>
