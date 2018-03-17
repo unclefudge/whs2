@@ -61,12 +61,13 @@
                             <div class="col-xs-10">
                                 <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : '<span class="font-red">MISSING DOCUMENTS</span>' !!} </h2>
                                 <hr style="margin: 15px 0px">
+                                @if (count($company->compliantDocs()))
                                 <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
                                 @foreach ($company->compliantDocs() as $type => $name)
                                     {{-- Accepted --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
                                         <i class="fa fa-check" style="width:35px; padding: 4px 15px; color: #26C281"></i>
-                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a><br>
+                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="{!! ($company->isCompliant()) ?  'linkDark' : 'linkGreen' !!}">{{ $name }}</a><br>
                                     @endif
                                     {{-- Pending --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
@@ -76,15 +77,18 @@
                                     @endif
                                     {{-- Rejected --}}
                                     @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
-                                        <i class="fa fa-times font-red" style="width:35px; padding: 4px 15px"></i>
+                                        <i class="fa fa-times" style="width:35px; padding: 4px 15px"></i>
                                         <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span>
                                         <br>
                                     @endif
                                     {{-- Missing --}}
                                     @if (!$company->activeCompanyDoc($type))
-                                        <i class="fa fa-square-o font-red" style="width:35px; padding: 4px 15px"></i> {{ $name }}<br>
+                                        <i class="fa fa-square-o font-red" style="width:35px; padding: 4px 15px"></i> <span class="font-red">{{ $name }}</span><br>
                                     @endif
                                 @endforeach
+                                    @else
+                                    No documents are required to be compliant.
+                                    @endif
                             </div>
                             <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
                                 @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
@@ -102,17 +106,20 @@
                         <a href="/company/{{ $company->id }}/doc" class="doc-summary-total-link">
                             <div class="col-xs-6 text-center doc-summary-total">
                                 <span style="font-size:15px"><br></span>
-                                <span style="font-size:50px">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', '0')->count() !!}<br></span>
-                                <span style="font-size:20px">Documents</span>
+                                <span style="font-size:50px">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '1')->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}<br></span>
+                                <span style="font-size:20px">Submitted & Approved<br>Documents</span>
                             </div>
                             <div class="col-xs-6 doc-summary">
-                                <div class="doc-summary-subtotal">Required
-                                    <span class="doc-summary-subtotal-count">{!! ($company->missingDocs()) ? count($company->missingDocs()) : 0 !!}</span>
+                                <div class="doc-summary-subtotal">Absent
+                                    <span class="doc-summary-subtotal-count">{!! count($company->compliantDocs()) - App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', 0)->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}</span>
                                 </div>
                                 <div class="doc-summary-subtotal">Pending
-                                    <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</span>
+                                    <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}</span>
                                 </div>
                                 <div class="doc-summary-subtotal">Rejected
+                                    <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}</span>
+                                </div>
+                                <div class="doc-summary-subtotal" style="background: #525E64; color: #fff">Additional Documents
                                     <span class="doc-summary-subtotal-count">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 3)->count() !!}</span>
                                 </div>
                             </div>

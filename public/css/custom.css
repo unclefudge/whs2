@@ -18,6 +18,15 @@
     color: #333;
 }
 
+.linkGreen {
+    color: #26C281;
+}
+
+.linkGreen:hover {
+    color: #26C281;
+}
+
+
 /* bootstrap no border table class */
 .table.no-border tr td, .table.no-border tr th {
     border-width: 0;
@@ -516,8 +525,8 @@ Custom color buttons
 
 .doc-summary-total {
     color: #212121;
-    min-height: 165px;
-    height: 165px;
+    min-height: 180px;
+    height: 180px;
     padding: 10px;
     vertical-align: middle;
     display: inline-block
@@ -530,15 +539,15 @@ Custom color buttons
 }
 
 .doc-summary-total-link {
-    height: 165px;
+    height: 180px;
     vertical-align: middle;
 }
 
 .doc-summary-subtotal {
     background: #ACE8EE;
     color: #212121;
-    line-height: 35px;
-    min-height: 35px;
+    line-height: 25px;
+    min-height: 25px;
     padding: 10px 30px 10px 20px;
 }
 
