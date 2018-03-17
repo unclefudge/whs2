@@ -46,35 +46,7 @@
                 </div>
             </div>
         </div>
-        {{-- Missing Documents --}}
-        @if ($company->missingDocs())
-            <div class="row">
-                <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
-                    <div class="portlet light" style="background: #ed6b75; color: #ffffff">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h2 style="margin-top: 0px">NON COMPLIANT</h2>
-                                <div>The following documents are required to be compliant:</div>
-                                <ul>
-                                    @foreach ($company->missingDocs() as $type => $name)
-                                        <li>
-                                            {{ $name }}
-                                            {!! ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2) ?  '<span class="label label-warning label-sm">Pending Approval</span>' : '' !!}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
-                                @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                    <br>
-                                    <a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+
         <div class="row">
             <div class="col-md-12">
                 {{-- Staff --}}
