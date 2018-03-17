@@ -510,3 +510,10 @@ $rec = $user;
         --}}
     </table>
 @endif
+
+@if (Auth::user()->isCompany($user->company->parent_company))
+    <div class="form-actions right">
+        <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+        <button type="submit" class="btn green">Save</button>
+    </div>
+@endif

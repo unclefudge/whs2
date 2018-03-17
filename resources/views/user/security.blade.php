@@ -107,11 +107,6 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div class="form-actions right">
-                                        <a href="{{ URL::previous() }}" class="btn default"> Back</a>
-                                        <button type="submit" class="btn green">Save</button>
-                                    </div>
                                 </div>
                                 {!! Form::close() !!}
                             </div>

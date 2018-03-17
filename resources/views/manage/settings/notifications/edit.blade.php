@@ -42,10 +42,10 @@
 
                         {{-- Site --}}
                         <h3 class="font-green form-section">Site Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated') !!}
-                        {!! notificationSelect($notificationTypes::type('n.site.hazard'), 'Hazard Reports', 'Site Hazard', 'lodgement, updated') !!}
+                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
+                        {!! notificationSelect($notificationTypes::type('n.site.hazard'), 'Hazard Reports', 'Site Hazard', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
                         @if (Auth::user()->isCC())
-                            {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.qa'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
                         @endif
 

@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-md-6 pull-right">
                     @if (Auth::user()->allowed2('view.company.acc', $company))
-                        <div class="portlet light" id="show_business">
+                        <div class="portlet light">
                             <div class="portlet-title">
                                 <div class="caption">
                                     <span class="caption-subject font-dark bold uppercase">Compliance Documents</span>

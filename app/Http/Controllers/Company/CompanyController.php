@@ -10,6 +10,7 @@ use Mail;
 use Carbon\Carbon;
 use App\User;
 use App\Models\Company\Company;
+use App\Models\Company\CompanyDoc;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\Trade;
 use App\Models\Site\Planner\Task;
@@ -450,10 +451,10 @@ class CompanyController extends Controller {
                 }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
-                if (!$company->approved_by && $company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id)
-                    $name .= ' &nbsp; <span class="label label-sm label-warning">Pending Approval</span>';
                 if (!$company->isCompliant() && $company->status == 1)
                     $name .= ' &nbsp; <span class="label label-sm label-danger">Non Compliant</span>';
+                if ($company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id && (!$company->approved_by || CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count()))
+                    $name .= ' &nbsp; <span class="label label-sm label-warning">Pending Approval</span>';
 
                 return $name;
             })
