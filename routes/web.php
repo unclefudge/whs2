@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/dt/contractors', 'UserController@getContractors');
     Route::get('user/{id}/security', 'UserController@showSecurity');
     Route::post('user/{id}/security', 'UserController@updateSecurity');
+    Route::get('user/{id}/resetpermissions', 'UserController@resetPermissions');
     Route::get('contractor', 'UserController@contractorList');
     Route::resource('user', 'UserController');
 

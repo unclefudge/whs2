@@ -81,26 +81,26 @@ class PagesController extends Controller {
         return view('pages/testcal');
     }
 
-    public function reports(Request $request)
+    public function reports()
     {
         return view('manage/report/list');
     }
 
-    public function newusers(Request $request)
+    public function newusers()
     {
         $users = \App\User::where('created_at', '>', '2016-08-27 12:00:00')->orderBy('created_at', 'DESC')->get();
 
         return view('manage/report/newusers', compact('users'));
     }
 
-    public function newcompanies(Request $request)
+    public function newcompanies()
     {
         $companies = \App\Models\Company\Company::where('created_at', '>', '2016-08-27 12:00:00')->orderBy('created_at', 'DESC')->get();
 
         return view('manage/report/newcompanies', compact('companies'));
     }
 
-    public function users_noemail(Request $request)
+    public function users_noemail()
     {
         $users = \App\User::where('email', null)->where('status', 1)->orderBy('company_id', 'ASC')->get();
 
@@ -108,21 +108,21 @@ class PagesController extends Controller {
     }
 
 
-    public function roleusers(Request $request)
+    public function roleusers()
     {
         $users = DB::table('role_user')->orderBy('role_id')->get();
 
         return view('manage/report/roleusers', compact('users'));
     }
 
-    public function usersExtraPermissions(Request $request)
+    public function usersExtraPermissions()
     {
-        $permissions = DB::table('permission_user')->orderBy('user_id')->get();
+        $permissions = DB::table('permission_user')->where('company_id', Auth::user()->company_id)->orderBy('user_id')->get();
 
         return view('manage/report/users_extra_permissions', compact('permissions'));
     }
 
-    public function missingCompanyInfo(Request $request)
+    public function missingCompanyInfo()
     {
         $companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
 

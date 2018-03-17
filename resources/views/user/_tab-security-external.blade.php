@@ -28,6 +28,18 @@ $rec = $user;
     </div>
 @endif
 
+{{-- Extra Permissions --}}
+@if (Auth::user()->isCompany($cid) && Auth::user()->company->subscription && $user->extraUserPermissionsText($cid))
+    <div class="row">
+        <div class="col-md-12">
+            <div class="note note-warning">
+                {!! $user->extraUserPermissionsText($cid) !!}
+                <a href="/user/{{ $user->id }}/resetpermissions" class="btn dark">Remove additional permissions</a>
+            </div>
+        </div>
+    </div>
+@endif
+
 <h1>Permissions</h1>
 <hr>
 

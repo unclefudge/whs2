@@ -326,6 +326,25 @@ class UserController extends Controller {
     }
 
     /**
+     * Reset permission back to ones given by user roles only
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPermissions($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->security || !Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        $user->detachAllPermissions2(Auth::user()->company_id);
+        Toastr::success("Saved changes");
+
+        return redirect('/user/' . $user->id . '/security');
+    }
+
+        /**
      * Get the security permissions for user resource in storage.
      *
      * @return \Illuminate\Http\Response

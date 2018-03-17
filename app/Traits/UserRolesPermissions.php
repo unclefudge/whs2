@@ -202,6 +202,40 @@ trait UserRolesPermissions {
         return false;
     }
 
+    /**
+     * Additional permissions given to a user 'on top' granted by their role
+     *
+     * @return collection
+     */
+    public function extraUserPermissions($company_id)
+    {
+        return DB::table('permission_user')->where(['user_id' => $this->id, 'company_id' => $company_id])->get();
+    }
+
+    /**
+     * Additional permissions given to a user 'on top' granted by their role - HTML
+     *
+     * @return string
+     */
+    public function extraUserPermissionsText($company_id)
+    {
+        $extra = $this->extraUserPermissions($company_id);
+
+        $levels = ['0' => 'No', '1' => "All", '99' => "All", '50' => "Our Company", '40' => 'Supervisor for', '30' => 'Planned for', '20' => 'Own Company', '10' => "Individual Only"];
+        if (count($extra)) {
+            $str = 'The following <b>additional permissions</b> have been granted to the user on top of ones granted by their role(s):<ul>';
+            foreach ($extra as $e) {
+                $permission = Permission2::find($e->permission_id);
+                $str .= "<li>$permission->name (" . $levels[$e->level] . ")</li>";
+            }
+            $str .= '</ul>';
+
+            return $str;
+        }
+
+        return '';
+    }
+
 
     /**
      * Determine level of a permission for a 'company'
