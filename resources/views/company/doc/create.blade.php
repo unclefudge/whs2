@@ -124,12 +124,6 @@
                         <div class="caption">
                             <span class="caption-subject font-dark bold uppercase"> Upload Documents</span>
                         </div>
-                        <div class="actions">
-                            <a href="/company/{{ $company->id }}/doc">Documents: {!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '>', '0')->count() !!}</a>
-                            &nbsp; | &nbsp;
-                            <a href="/company/{{ $company->id }}/doc">Required: {!! ($company->missingDocs()) ? count($company->missingDocs()) : 0 !!}</a> &nbsp; | &nbsp;
-                            <a href="/company/{{ $company->id }}/doc">Pending: {!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count() !!}</a>
-                        </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
