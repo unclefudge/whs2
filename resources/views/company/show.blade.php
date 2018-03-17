@@ -56,57 +56,89 @@
             <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
                 {{-- Compliance Documents --}}
                 @if (Auth::user()->allowed2('view.company.acc', $company))
-                    <div class="portlet light"> {{--}} style="background: {!! ($company->isCompliant()) ? '#D6F3F6' : '#fbe1e3' !!}">--}}
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h2 style="margin-top: 0px">{!! ($company->isCompliant()) ? 'COMPLIANT' : '<span class="font-red">MISSING DOCUMENTS</span>' !!} </h2>
-                                <hr style="margin: 15px 0px">
-                                @if (count($company->compliantDocs()))
-                                <div>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</div>
-                                @foreach ($company->compliantDocs() as $type => $name)
-                                    {{-- Accepted --}}
-                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 1)
-                                        <i class="fa fa-check" style="width:35px; padding: 4px 15px; color: #26C281"></i>
-                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="{!! ($company->isCompliant()) ?  'linkDark' : 'linkGreen' !!}">{{ $name }}</a><br>
-                                    @endif
-                                    {{-- Pending --}}
-                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 2)
-                                        <i class="fa fa-question" style="width:35px; padding: 4px 15px; border: 1px #fff"></i>
-                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span
-                                                class="label label-warning label-sm">Pending Approval</span><br>
-                                    @endif
-                                    {{-- Rejected --}}
-                                    @if ($company->activeCompanyDoc($type) &&  $company->activeCompanyDoc($type)->status == 3)
-                                        <i class="fa fa-times" style="width:35px; padding: 4px 15px"></i>
-                                        <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a> <span class="label label-danger label-sm">Rejected</span>
-                                        <br>
-                                    @endif
-                                    {{-- Missing --}}
-                                    @if (!$company->activeCompanyDoc($type))
-                                        <i class="fa fa-square-o font-red" style="width:35px; padding: 4px 15px"></i> <span class="font-red">{{ $name }}</span><br>
-                                    @endif
-                                @endforeach
-                                    @else
-                                    No documents are required to be compliant.
-                                    @endif
+
+                    <div class="portlet light" id="show_business">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <span class="caption-subject font-dark bold uppercase">Compliance Documents</span>
                             </div>
-                            <div class="col-xs-2" style=" vertical-align: middle; display: inline-block">
+                            <div class="actions">
                                 @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="doc-missing-link"><i class="fa fa-upload" style="font-size:40px"></i><br>Upload</a>
+                                    <br><a href="/company/{{ $company->id }}/doc/upload" class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-upload"></i><br>Upload</a>
                                 @endif
                             </div>
+                        </div>
+                        <div class="portlet-body">
+                            @if (count($company->compliantDocs()))
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if ($company->isCompliant())
+                                            <b>All compliance documents have been submited and approved:</b>
+                                        @else
+                                            <b>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</b>
+                                        @endif
+                                    </div>
+
+                                    @foreach ($company->compliantDocs() as $type => $name)
+                                        {{-- Accepted --}}
+                                        @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 1)
+                                            <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($company->isCompliant()) ? 'color: #26C281' : '' !!}"></i>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                @if (!$company->isCompliant())
+                                                    <span class="label label-success label-sm">Accepted</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        {{-- Pending --}}
+                                        @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2)
+                                            <div class="col-xs-8"><i class="fa fa-question" style="width:35px; padding: 4px 15px"></i>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                @if (!$company->isCompliant())
+                                                    <span class="label label-warning label-sm">Pending Approval</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        {{-- Rejected --}}
+                                        @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 3)
+                                            <div class="col-xs-8"><i class="fa fa-question" style="width:35px; padding: 4px 15px"></i>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                @if (!$company->isCompliant())
+                                                    <span class="label label-danger label-sm">Rejected</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        {{-- Missing --}}
+                                        @if (!$company->activeCompanyDoc($type))
+                                            <div class="col-xs-8"><i class="fa fa-times" style="width:35px; padding: 4px 15px"></i> {{ $name }}</div>
+                                            <div class="col-xs-4 font-red">{!! (!$company->isCompliant()) ? 'Not uploaded' : '' !!}</div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="row">
+                                    <div class="col-md-12">No documents are required to be compliant.</div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endif
 
 
                 {{-- Document Summary --}}
+                {{--
                 <div class="portlet light" style="padding: 0px;">
                     <div class="row doc-summary">
                         <a href="/company/{{ $company->id }}/doc" class="doc-summary-total-link">
                             <div class="col-xs-6 text-center doc-summary-total">
                                 <span style="font-size:15px"><br></span>
-                                <span style="font-size:50px">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '1')->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}<br></span>
+                                <span style="font-size:50px">{!! App\Models\Company\CompanyDoc::where('for_company_id', $company->id)->where('status', '1')->whereIn('category_id', array_keys($company->compliantDocs()))->count() !!}
+                                    <br></span>
                                 <span style="font-size:20px">Submitted & Approved<br>Documents</span>
                             </div>
                             <div class="col-xs-6 doc-summary">
@@ -125,7 +157,7 @@
                             </div>
                         </a>
                     </div>
-                </div>
+                </div>--}}
             </div>
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
