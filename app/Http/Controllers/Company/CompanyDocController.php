@@ -186,7 +186,7 @@ class CompanyDocController extends Controller {
         } else {
             // Create approval ToDoo
             if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
-                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $this->category->type . '.approval'));
+                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
         }
 
 
