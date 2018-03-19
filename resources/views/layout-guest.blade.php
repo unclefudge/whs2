@@ -62,7 +62,7 @@
             <!-- BEGIN LOGO -->
             <div class="page-logo">
                 <a href="/">
-                    <img src="/img/logo-capecod2.png" alt="logo" class="logo-default" style="margin-top:15px">
+                    <img src="/img/logo-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
                 </a>
             </div>
             <!-- END LOGO -->
