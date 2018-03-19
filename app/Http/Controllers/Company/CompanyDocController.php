@@ -188,8 +188,6 @@ class CompanyDocController extends Controller {
             if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
                 $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
         }
-
-
         $doc->save();
 
         return redirect("company/$company->id/doc/upload");

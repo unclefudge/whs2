@@ -5,7 +5,7 @@ A task has been sent to you with the following details:
 
 {{ $todo->name  }}
 
-{!! ($todo->due_at) ? 'Due at '.$todo->due_at->format('d/m/Y') : '' !!}
+{!! ($todo->due_at) ? 'Task due: '.$todo->due_at->format('d/m/Y') : '' !!}
 
 {{ $todo->info }}
 
