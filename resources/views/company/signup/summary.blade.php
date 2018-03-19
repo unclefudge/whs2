@@ -180,6 +180,8 @@
                 'type': 'GET',
                 'data': function (d) {
                     d.company_id = {{ $company->id }};
+                    d.staff = 'staff';
+                    d.status = 1;
                 }
             },
             columns: [

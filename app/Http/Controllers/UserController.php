@@ -110,7 +110,7 @@ class UserController extends Controller {
 
         // Signup Process - Initial update
         if ($user->company->signup_step == 3) {
-            return redirect("company/" . $user->company->id . "/signup/3");
+            return redirect("/signup/workers/" . $user->company_id);
         }
 
         return redirect('/company/'.$user->company_id.'/user');
