@@ -1,7 +1,7 @@
 @component('mail::message')
 # Company Document Not Approved
 
-{{ $doc->owned_by->name }} has not approved your document {{ $doc->name }} for the following reason:
+{{ $doc->owned_by->name }} has not approved your document **{{ $doc->name }}** for the following reason:
 
 {!! nl2br($doc->reject) !!}
 
