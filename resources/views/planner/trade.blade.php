@@ -141,9 +141,7 @@
                                                         </small>
                                                         <small v-else class="font-grey-silver">@{{ task.from | formatDate3 }} @{{ task.site_name | max10chars }} (@{{ task.days }})</small>
                                                     </div>
-
                                                 </div>
-
                                             </template>
                                         </div>
                                     </template>

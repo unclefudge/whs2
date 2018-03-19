@@ -61,9 +61,11 @@
         <div class="container">
             <!-- BEGIN LOGO -->
             <div class="page-logo">
-                <a href="/">
-                    <img src="/img/logo-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
-                </a>
+                @if (!Request::is('/'))
+                    <a href="/">
+                        <img src="/img/logo-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
+                    </a>
+                @endif
             </div>
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -92,7 +94,7 @@
 
                 </ul>
             </div>--}}
-            <!-- END TOP NAVIGATION MENU -->
+                    <!-- END TOP NAVIGATION MENU -->
 
         </div>
     </div>
@@ -134,7 +136,7 @@
             <div class="container">
                 <!-- BEGIN PAGE BREADCRUMBS -->
                 @yield('breadcrumbs')
-                <!-- END PAGE BREADCRUMBS -->
+                        <!-- END PAGE BREADCRUMBS -->
 
                 <!-- BEGIN PAGE CONTENT INNER -->
                 <div class="page-content-inner">
@@ -223,7 +225,7 @@
 <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 @yield('page-level-plugins')
 
-<!-- END PAGE LEVEL PLUGINS -->
+        <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN THEME GLOBAL SCRIPTS -->
 <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
@@ -233,7 +235,7 @@
 <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
 <script src="/js/libs.js" type="text/javascript"></script>
 @yield('page-level-scripts')
-<!-- END PAGE LEVEL SCRIPTS -->
+        <!-- END PAGE LEVEL SCRIPTS -->
 
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
 <script src="/assets/layouts/layout3/scripts/layout.min.js" type="text/javascript"></script>

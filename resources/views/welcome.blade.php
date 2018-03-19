@@ -10,13 +10,13 @@
     <div class="page-content-inner" style="background: #ffffff; max-width: 940px">
         <div class="row">
             <div class="col-md-12">
-                <img src="/img/logo-sws-large.png" class="img-responsive center-block" align="middle" style="margin: 0 auto;">
+                <img src="/img/logo-sws-med.png" class="img-responsive center-block" align="middle" style="margin: 0 auto;" heigh>
             </div>
             <div class="col-md-12">
-                <video class="img-responsive center-block" src="/img/sws-video.mp4" controls>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/-seurriz9Xc"></iframe>
+                </div>
             </div>
-
-
         </div>
 
         <div class="row">
