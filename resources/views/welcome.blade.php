@@ -7,13 +7,13 @@
 @stop
 
 @section('content')
-    <div class="page-content-inner" style="background: #ffffff">
+    <div class="page-content-inner" style="background: #ffffff; max-width: 940px">
         <div class="row">
             <div class="col-md-12">
-                <img src="/img/logo-sws-large.png" class="img-responsive" align="middle" style="margin: 0 auto;">
+                <img src="/img/logo-sws-large.png" class="img-responsive center-block" align="middle" style="margin: 0 auto;">
             </div>
             <div class="col-md-12">
-                <video class="img-responsive" src="/img/sws-video.mp4" controls>
+                <video class="img-responsive center-block" src="/img/sws-video.mp4" controls>
             </div>
 
 
