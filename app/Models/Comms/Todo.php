@@ -112,11 +112,7 @@ class Todo extends Model {
                 return '/todo/' . $this->id;
             case 'company doc':
                 $doc = CompanyDoc::find($this->type_id);
-                if ($doc) {
-                    $company = Company::find($doc->for_company_id);
-
-                    return '/company/' . $company->id;
-                }
+                return ($doc) ? '/company/' . $doc->for_company_id . '/doc/' . $doc->id . '/edit': '';
             case 'general':
                 return '/todo/' . $this->id;
         }
@@ -244,42 +240,12 @@ class Todo extends Model {
         } else if (\App::environment('local', 'dev'))
             $email_list = [env('EMAIL_ME')];
 
-
         $email_user = (\App::environment('prod')) ? Auth::user()->email : '';
-        $user_fullname = 'Safeworksite';
-        $user_company_name = 'Safeworksite';
-        if (Auth::check()) {
-            $user_fullname = Auth::user()->fullname;
-            $user_company_name = Auth::user()->company->name;
-        }
 
-        $due_at = 'N/A';
-        if ($this->due_at)
-            $due_at = $this->due_at->format('d/m/Y');
-
-        // Determine if overdue
-        $overdue = '';
-        if ($due_at != 'N/A' && $this->due_at->lt(Carbon::today())) {
-            $overdue = ' - OVERDUE';
-        }
-        $data = [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'info'              => $this->info,
-            'url'               => URL::to('/') . $this->url(),
-            'due_at'            => $due_at,
-            'overdue'           => $overdue,
-            'user_fullname'     => $user_fullname,
-            'user_company_name' => $user_company_name,
-        ];
-
-        Mail::send('emails/todo', $data, function ($m) use ($email_list, $email_user, $overdue) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_list);
-            if (validEmail($email_user))
-                $m->cc($email_user);
-            $m->subject('ToDo Task Notification' . $overdue);
-        });
+        if ($email_list && $email_user)
+            Mail::to($email_list)->cc([$email_user])->send(new \App\Mail\Comms\TodoCreated($this));
+        elseif ($email_list)
+            Mail::to($email_list)->send(new \App\Mail\Comms\TodoCreated($this));
     }
 
     /**
@@ -287,45 +253,23 @@ class Todo extends Model {
      */
     public function emailToDoCompleted($email_list = '')
     {
-        //$email_list = env('EMAIL_ME');
-        if (!$email_list) {
-            $email_list = [];
-            if (\App::environment('prod')) {
+        if (\App::environment('prod')) {
+            if (!$email_list) {
+                $email_list = [];
                 foreach ($this->assignedTo() as $user) {
                     if (validEmail($user->email))
                         $email_list[] = $user->email;
                 }
-            } else if (\App::environment('local', 'dev')) {
-                $email_list = [env('EMAIL_ME')];
             }
-        }
+        } else if (\App::environment('local', 'dev'))
+            $email_list = [env('EMAIL_ME')];
 
-        $email_user = (\App::environment('prod', 'dev')) ? Auth::user()->email : '';
-        $user_fullname = 'Safeworksite';
-        $user_company_name = 'Safeworksite';
-        if (Auth::check()) {
-            $user_fullname = Auth::user()->fullname;
-            $user_company_name = Auth::user()->company->name;
-        }
+        $email_user = (\App::environment('prod')) ? Auth::user()->email : '';
 
-        $data = [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'info'              => $this->info,
-            'url'               => URL::to('/') . $this->url(),
-            'done_at'           => $this->done_at->format('d/m/Y'),
-            'done_by'           => User::find($this->done_by)->fullname,
-            'user_fullname'     => $user_fullname,
-            'user_company_name' => $user_company_name,
-        ];
-
-        Mail::send('emails/todo-completed', $data, function ($m) use ($email_list, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_list);
-            if (validEmail($email_user))
-                $m->cc($email_user);
-            $m->subject('ToDo Task Completed');
-        });
+        if ($email_list && $email_user)
+            Mail::to($email_list)->cc([$email_user])->send(new \App\Mail\Comms\TodoCompleted($this));
+        elseif ($email_list)
+            Mail::to($email_list)->send(new \App\Mail\Comms\TodoCompleted($this));
     }
 
 

@@ -229,8 +229,8 @@ class SiteQaController extends Controller {
             if ($qa->supervisor_sign_by && $qa->manager_sign_by) {
                 $qa->status = 0;
                 $qa->save();
-                if ($qa->master_id == '74')  // Only email if QA is Handover template  ie. final QA on site
-                    $qa->emailCompleted();
+                if ($qa->master_id == '74' && $qa->owned_by->notificationsUsersType('n.site.qa.handover')) // Only email if QA is Handover template  ie. final QA on site
+                    Mail::to($qa->owned_by->notificationsUsersType('n.site.qa.handover'))->send(new \App\Mail\Site\SiteQaHandover($qa));
             }
             Toastr::success("Updated Report");
 
@@ -307,6 +307,7 @@ class SiteQaController extends Controller {
             })
             ->editColumn('name', function ($doc) {
                 $name = $doc->name . ' &nbsp;<span class="font-grey-silver">v' . $doc->version . '</span>';
+
                 /*if ($doc->status == 1) {
                     $now = Carbon::now();
                     $weekago = $now->subWeek()->toDateTimeString();
@@ -473,12 +474,12 @@ class SiteQaController extends Controller {
         $address = $site->address;
         $pdf = PDF::loadView('pdf/site-qa', compact('site', 'data'));
         $pdf->setPaper('a4');
-            //->setOption('cover', View::make('pdf/site-qa-cover', compact('site')))
-            //->setOption('footer-font-size', '8')
-            //->setOption('footer-center', " blah blah<br><br>\n\n")
-            //->setOption('footer-left', utf8_decode('Document created ' . date('\ d/m/Y\ ')))
-            //->setOption('footer-html', view('pdf/site-qa-footer'), compact('site', 'data'))
-            //->setOption('footer-right', utf8_decode('Page [page] / [topage]'));
+        //->setOption('cover', View::make('pdf/site-qa-cover', compact('site')))
+        //->setOption('footer-font-size', '8')
+        //->setOption('footer-center', " blah blah<br><br>\n\n")
+        //->setOption('footer-left', utf8_decode('Document created ' . date('\ d/m/Y\ ')))
+        //->setOption('footer-html', view('pdf/site-qa-footer'), compact('site', 'data'))
+        //->setOption('footer-right', utf8_decode('Page [page] / [topage]'));
 
         if ($request->has('view_pdf'))
             return $pdf->stream();

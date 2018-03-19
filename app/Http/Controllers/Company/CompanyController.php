@@ -88,9 +88,8 @@ class CompanyController extends Controller {
         // Mail request to new company
         Mail::to(request('email'))->send(new \App\Mail\Company\CompanyWelcome($newCompany, Auth::user()->company, request('person_name')));
         // Mail notification to parent company
-        $email_to = (\App::environment('prod')) ? $newCompany->reportsTo()->notificationsUsersType('n.company.created') : env('EMAIL_ME');
-        if ($newCompany->parent_company && $email_to)
-            Mail::to($email_to)->send(new \App\Mail\Company\CompanyCreated($newCompany));
+        if ($newCompany->parent_company && $newCompany->reportsTo()->notificationsUsersType('n.company.signup.sent'))
+            Mail::to($newCompany->reportsTo()->notificationsUsersType('n.company.signup.sent'))->send(new \App\Mail\Company\CompanyCreated($newCompany));
 
         Toastr::success("Company signup sent");
 
@@ -189,6 +188,9 @@ class CompanyController extends Controller {
         } else {
             $company_request['approved_by'] = 0;
             $company_request['approved_at'] = null;
+            // Email Parent if updated
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.updated.details'))
+                Mail::to($company->reportsTo()->notificationsUsersType('n.company.updated.details'))->send(new \App\Mail\Company\CompanyUpdatedDetails($company));
         }
 
         $company->update($company_request);
@@ -236,6 +238,9 @@ class CompanyController extends Controller {
         } else {
             $company_request['approved_by'] = 0;
             $company_request['approved_at'] = null;
+            // Email Parent if updated
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.updated.business'))
+                Mail::to($company->reportsTo()->notificationsUsersType('n.company.updated.business'))->send(new \App\Mail\Company\CompanyUpdatedBusiness($company));
         }
 
         $company->update($company_request);
@@ -277,7 +282,7 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateTrade(Request $request, $id)
+    public function updateConstruction(Request $request, $id)
     {
         $company = Company::findorFail($id);
 
@@ -336,16 +341,20 @@ class CompanyController extends Controller {
         if ($request->get('trades')) {
             $company->tradesSkilledIn()->sync($request->get('trades'));
             $company->lic_override = 0;
-
-            // Licence Override field was previous set and trades have now changed
-            if ($old_licence_overide && $old_trades_skilled_in != $company->tradesSkilledInSBC()) {
-                // email tara
-            }
         } else
             $company->tradesSkilledIn()->detach();
 
         $company->save();
         Toastr::success("Saved changes");
+
+        // Licence Override field was previous set and trades have now changed
+        $company = Company::findorFail($id);
+        $new_trades_skilled_in = $company->tradesSkilledInSBC();
+        if ($old_licence_overide && $old_trades_skilled_in != $new_trades_skilled_in) {
+            // Email Parent if updated
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.updated.trades'))
+                Mail::to($company->reportsTo()->notificationsUsersType('n.company.updated.trades'))->send(new \App\Mail\Company\CompanyUpdatedTrades($company));
+        }
 
         return redirect("company/$company->id");
 
@@ -478,17 +487,11 @@ class CompanyController extends Controller {
      */
     public function getUsers()
     {
-        $company_ids = (request('staff') == 'staff') ? [request('company_id')] : Auth::user()->authCompanies('view.company', 1)->pluck('id')->toArray();
-        $staff = User::select([
-            'id', 'username', 'firstname', 'lastname', 'phone', 'email', 'status', 'company_id', 'last_login', 'security',
-            DB::raw('CONCAT(firstname, " ", lastname) AS full_name_search')])
-            ->whereIn('company_id', $company_ids)
-            ->where('status', '=', request('status'));
-
         $company = Company::find(request('company_id'));
-        $user_list = $company->staff->pluck('id')->toArray();
         if (request('staff') == 'all' && Auth::user()->isCompany($company->id))
             $user_list = Auth::user()->authUsers('view.user')->pluck('id')->toArray();
+        else
+            $user_list = $company->staff->pluck('id')->toArray();
 
         $users = User::select([
             'users.id', 'users.username', 'users.firstname', 'users.lastname', 'users.phone', 'users.email', 'users.company_id', 'users.security', 'users.company_id',
@@ -497,7 +500,6 @@ class CompanyController extends Controller {
             ->join('companys', 'users.company_id', '=', 'companys.id')
             ->whereIn('users.id', $user_list)
             ->where('users.status', request('status'));
-            //->orderBy('users.firstname');
 
         $dt = Datatables::of($users)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])

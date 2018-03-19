@@ -92,7 +92,7 @@
                                         <div class="alert alert-danger">
                                             The document was not approved for the following reason:
                                             <ul>
-                                                <li>{{ $doc->reject }}</li>
+                                                <li>{!! nl2br($doc->reject) !!}</li>
                                             </ul>
                                         </div>
                                     @endif

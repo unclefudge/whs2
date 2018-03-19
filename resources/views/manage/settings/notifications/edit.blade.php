@@ -37,28 +37,25 @@
 
                         {{-- Company --}}
                         <h3 class="font-green form-section">Company Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.company.created'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.signup'), 'Signup Completed', 'Company Signup', 'Company has completed the signup process') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.signup.sent'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Signup Completed', 'Company Signup', 'Company has completed the signup process') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.updated.details'), 'Company Details updated', 'Company updated', 'Company details have been updated') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.updated.business'), 'Business Details updated', 'Company updated', 'Business details have been updated') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.updated.trades'), 'Company Trades updated (WHS)', 'Company updated', 'Company trades have been updated but also licence required was previously overridden') !!}
 
                         {{-- Site --}}
                         <h3 class="font-green form-section">Site Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
+                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}
                         {!! notificationSelect($notificationTypes::type('n.site.hazard'), 'Hazard Reports', 'Site Hazard', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
                         @if (Auth::user()->isCC())
-                            {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
-                            {!! notificationSelect($notificationTypes::type('n.site.qa'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.qa.handover'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
                         @endif
 
                         {{-- Document --}}
                         <h3 class="font-green form-section">Document Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.docs.acc.pub'), 'Accounts Public', 'Accounts Upload/Update', $companyDocTypes::docNames('acc', 0)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.acc.pri'), 'Accounts Private', 'Accounts Upload/Update', $companyDocTypes::docNames('acc', 1)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.adm.pub'), 'Administration Public', 'Administration Upload/Update', $companyDocTypes::docNames('adm', 0)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.adm.pri'), 'Administration Private', 'Administration Upload/Update', $companyDocTypes::docNames('adm', 1)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.con.pub'), 'Construction Public', 'Construction Upload/Update', $companyDocTypes::docNames('con', 0)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.con.pri'), 'Construction Private', 'Construction Upload/Update', $companyDocTypes::docNames('con', 1)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.whs.pub'), 'WHS Public', 'WHS Upload/Update', $companyDocTypes::docNames('whs', 0)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.docs.whs.pri'), 'WHS Private', 'WHS Upload/Update', $companyDocTypes::docNames('whs', 1)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.doc.acc.approval'), 'Accounts Approval', 'Accounts document requires approval', $companyDocTypes::docNames('acc', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.doc.whs.approval'), 'WHS Approval', 'WHS document requires approval', $companyDocTypes::docNames('whs', 0)) !!}
 
 
                         <div class="form-actions right">

@@ -147,8 +147,7 @@ class SiteAsbestosController extends Controller {
         if ($newAsb) {
             $action = Action::create(['action' => 'Created Notification', 'table' => 'site_asbestos', 'table_id' => $newAsb->id]);
             $newAsb->touch(); // update timestamp
-            // Email notification
-            $newAsb->emailNotification();
+            $newAsb->emailNotification(); // Email notification
         }
 
         Toastr::success("Created notification");

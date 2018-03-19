@@ -198,9 +198,8 @@ class CompanySignUpController extends Controller {
 
         $company->signup_step = 0;
         $company->status = 1;
-        $email_to = (\App::environment('prod')) ? $company->reportsTo()->notificationsUsersType('n.company.signup') : env('EMAIL_ME');
-        if ($company->parent_company && $email_to)
-            Mail::to($email_to)->send(new \App\Mail\Company\CompanySignup($company));
+        if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.signup.completed'))
+            Mail::to($company->reportsTo()->notificationsUsersType('n.company.signup.completed'))->send(new \App\Mail\Company\CompanySignup($company));
 
         $company->save();
 

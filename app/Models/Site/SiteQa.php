@@ -230,6 +230,7 @@ class SiteQa extends Model {
     /**
      * Email Overdue
      */
+    /*
     public function emailOverdue()
     {
         if (\App::environment('prod')) {
@@ -258,72 +259,28 @@ class SiteQa extends Model {
             $m->to($email_to);
             $m->subject('Quality Assurance Overdue Notification');
         });
-    }
+    }*/
 
-    /**
-     * Email Completed
-     */
-    public function emailCompleted()
-    {
-        $email_to = [env('EMAIL_ME')];
-        if (\App::environment('prod'))
-            $email_to = [User::find(325)->email];  // Michelle Metselaar - Admin
-        else if (\App::environment('local', 'dev'))
-            $email_to = [env('EMAIL_ME')];
-
-        $user_fullname = 'Safeworksite';
-        $user_company_name = 'Safeworksite';
-
-        $data = [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'site_name'         => $this->site->name,
-            'supers'            => $this->site->supervisorsSBC(),
-            'url'               => URL::to('/') . '/site/qa/' . $this->id,
-            'user_fullname'     => $user_fullname,
-            'user_company_name' => $user_company_name,
-        ];
-
-        Mail::send('emails/siteQA-completed', $data, function ($m) use ($email_to) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            $m->subject('Quality Assurance Completed Notification');
-        });
-    }
 
     /**
      * Email Action Notification
      */
     public function emailAction($action, $important = false)
     {
-        if (\App::environment('prod')) {
-            $email_roles = ($important) ? $this->site->owned_by->notificationsUsersEmailType('n.site.qa') : $this->site->owned_by->notificationsUsersEmailType('n.site.qa');
-            $email_supers = $this->site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_ME')];
-
+        $email_to = [env('EMAIL_DEV')];
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
-        $data = [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'site_name'         => $this->site->name . ' (' . $this->site->code . ')',
-            'supers'            => $this->site->supervisorsSBC(),
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'url'               => URL::to('/') . '/site/qa/' . $this->id,
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'action'            => $action->action,
-            'site_owner'        => $this->site->client->clientOfCompany->name,
-        ];
 
-        Mail::send('emails/siteQA-action', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Quality Assurance Update Notification');
-        });
+        if (\App::environment('prod')) {
+            //$email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.qa');
+            //$email_supers = $this->site->supervisorsEmails();
+            //$email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+            $email_to = $this->site->supervisorsEmails();
+        }
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteQaAction($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteQaAction($this, $action));
     }
 
 

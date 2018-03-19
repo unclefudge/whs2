@@ -312,7 +312,9 @@ class CronController extends Controller {
                 $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]\n";
                 $todo->emailToDo();
                 $qa = SiteQa::find($todo->type_id);
-                $qa->emailOverdue();
+                if ($qa->site->areaSupervisorsEmails())
+                    Mail::to($qa->site->areaSupervisorsEmails())->send(new \App\Mail\Site\SiteQaOverdue($qa));
+                //$qa->emailOverdue();
             }
 
             // Toolbox Talk

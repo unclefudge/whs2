@@ -132,39 +132,19 @@ class SiteAsbestos extends Model {
      */
     public function emailNotification()
     {
-        $site = Site::findOrFail($this->site_id);
-
-        if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.asbestos'); 
-            $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_ME')];
+        $email_to = [env('EMAIL_DEV')];
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
-        $data = [
-            'id'                => $this->id,
-            'site'              => $site->name . ' (' . $site->code . ')',
-            'address'           => $site->address . ', ' . $site->SuburbStatePostcode,
-            'dates'             => $this->date_from->format('d/m/Y') . ' to ' . $this->date_to->format('d/m/Y'),
-            'amount'            => $this->amount,
-            'class'             => ($this->friable) ? 'Class A (Friable)' : 'Class B (Non-Friable)',
-            'type'              => $this->type,
-            'location'          => $this->location,
-            'url'               => URL::to('/site/asbestos/' . $this->id),
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'reason'            => $this->reason,
-            'site_owner'        => $site->client->clientOfCompany->name,
-        ];
+        if (\App::environment('prod')) {
+            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.asbestos');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
 
-        Mail::send('emails/siteAsbestos', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Asbestos Notification');
-        });
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteAsbestosCreated($this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteAsbestosCreated($this));
     }
 
     /**
@@ -172,34 +152,19 @@ class SiteAsbestos extends Model {
      */
     public function emailAction($action)
     {
-        $site = Site::findOrFail($this->site_id);
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.asbestos');
-            $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_ME')];
+            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.asbestos');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
 
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
-        $data = [
-            'id'                => $this->id,
-            'site'              => $site->name . ' (' . $site->code . ')',
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'action'            => $action->action,
-            'url'               => URL::to('/site/asbestos/' . $this->id),
-            'site_owner'        => $site->client->clientOfCompany->name,
-        ];
-
-        Mail::send('emails/siteAsbestosAction', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Asbestos Update Notification');
-        });
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteAsbestosAction($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteAsbestosAction($this, $action));
     }
 
     /**

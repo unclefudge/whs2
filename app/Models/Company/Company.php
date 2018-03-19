@@ -89,6 +89,16 @@ class Company extends Model {
     }
 
     /**
+     * A Company was updated by a User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'updated_by');
+    }
+
+    /**
      * A Company has many CompanyLeave.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -1261,7 +1271,7 @@ class Company extends Model {
      */
     public function notificationsUsersType($type)
     {
-        if (true || \App::environment('prod')) {
+        if (\App::environment('prod', 'dev')) {
             if (!is_int($type))
                 $type = SettingsNotificationTypes::type($type);
 
@@ -1270,7 +1280,7 @@ class Company extends Model {
             return ($users) ? User::find($users) : null;
         }
 
-        return User::find(1);
+        return User::find(3); // Fudge
 
     }
 
@@ -1281,7 +1291,7 @@ class Company extends Model {
      */
     public function notificationsUsersTypeArray($type)
     {
-        if (true || \App::environment('prod')) {
+        if (\App::environment('prod', 'dev')) {
             if (!is_int($type))
                 $type = SettingsNotificationTypes::type($type);
 
@@ -1290,7 +1300,7 @@ class Company extends Model {
             return ($users) ? User::find($users)->pluck('id')->toArray() : [];
         }
 
-        return [1];
+        return [3]; // Fudge
     }
 
     /**

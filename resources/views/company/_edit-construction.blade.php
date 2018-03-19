@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateTrade', $company->id]]) !!}
+        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateConstruction', $company->id]]) !!}
         {{-- Trades --}}
         <div class="row">
             <div class="form-group {!! fieldHasError('trades', $errors) !!} {!! fieldHasError('planned_trades', $errors) !!}">

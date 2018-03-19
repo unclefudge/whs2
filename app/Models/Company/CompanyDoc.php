@@ -73,18 +73,17 @@ class CompanyDoc extends Model {
             'type'       => 'company doc',
             'type_id'    => $this->id,
             'name'       => 'Company Document Approval Request - ' . $company->name_alias . ' (' . $this->name . ')',
-            'info'       => 'Please approve uploaded document',
+            'info'       => 'Please approve/reject uploaded document',
             'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
             'company_id' => $this->company_id,
         ];
 
-        // Create ToDoo and assign to Site Supervisors
-        /*
+        // Create ToDoo and assign to Userlist
         if ($user_list) {
             $todo = Todo::create($todo_request);
             $todo->assignUsers($user_list);
             $todo->emailToDo();
-        }*/
+        }
 
     }
 
@@ -137,34 +136,47 @@ class CompanyDoc extends Model {
     /**
      * Email document as Rejected
      */
-    public function emailReject($email_list = '')
+    public function emailReject()
     {
-        $email_to = [];
-        // Send to User who created
-        if (\App::environment('prod')) {
-            if (validEmail($this->createdBy->email))
-                $email_to[] = $this->createdBy->email;
-        } else
-            $email_to[] = env('EMAIL_ME');
-
+        $email_to = [env('EMAIL_DEV')];
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
-        $data = [
-            'user_email'        => Auth::user()->email,
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'doc_name'          => $this->name,
-            'doc_attachment'    => $this->attachment,
-            'url'               => URL::to('/company') . '/' . $this->for_company_id,
-        ];
-        $doc = $this;
+        if (\App::environment('prod')) {
+            // Send to User who uploaded doc & Company senior users
+            $email_created = (validEmail($this->createdBy->email)) ? [$this->createdBy->email] : [];
+            $email_seniors = []; //$this->company->seniorUsersEmail();
+            $email_to = array_unique(array_merge($email_created, $email_seniors), SORT_REGULAR);
+        }
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Company\CompanyDocRejected($this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocRejected($this));
     }
 
     /**
-     * Email document as Rejected
+     * Email document as Expired
      */
     public function emailExpired($email_to = '', $expired)
     {
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = '';
+        if (\App::environment('prod')) {
+            // Send to Company Senior Users
+            $email_to = $this->company->seniorUsersEmail();
+            // Send CC to Parent Company if doc type acc or whs
+            if ($this->category->type == 'acc' || $this->category->type == 'whs')
+                $email_user = $this->owned_by->notificationsUsersEmailType('n.doc.' . $this->category->type . '.approval');
+        }
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
+
+
+        /*
+
         $company = Company::find($this->for_company_id);
         if (\App::environment('prod')) {
             if (!$email_to) {
@@ -192,6 +204,7 @@ class CompanyDoc extends Model {
             'url'               => URL::to('/company') . '/' . $this->for_company_id,
         ];
         $doc = $this;
+        */
         /*
         Mail::send('emails/company-doc-expired', $data, function ($m) use ($email_to, $email_user, $doc, $mesg, $data) {
             $m->from('do-not-reply@safeworksite.com.au');
@@ -215,15 +228,6 @@ class CompanyDoc extends Model {
         return '';
     }
 
-    /**
-     * Get the owner of record   (getter)
-     *
-     * @return string;
-     */
-    /*public function getOwnedByAttribute()
-    {
-        return $this->company;
-    }*/
 
     /**
      * Display records last update_by + date

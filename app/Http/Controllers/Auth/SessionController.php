@@ -69,7 +69,8 @@ class SessionController extends Controller {
             if (Auth::user()->password_reset)
                 return redirect('/user/' . Auth::user()->id . '/edit');
 
-            return redirect('/dashboard');
+            return redirect()->intended('home');
+            //return redirect('/dashboard');
         }
 
         return back()->withErrors(['message' => 'These credentials do not match our records.']);

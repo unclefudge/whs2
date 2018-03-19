@@ -44,7 +44,7 @@
                     <div class="portlet-body form">
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($company, ['method' => 'POST', 'action' => ['Company\CompanyController@updateTrade', $company->id]]) !!}
+                                {!! Form::model($company, ['method' => 'POST', 'action' => ['Company\CompanyController@updateConstruction', $company->id]]) !!}
                                 @if ($company->status == 2 && $company->signup_step == 2)
                                     {!! Form::hidden('signup_step', 3) !!}
                                 @endif

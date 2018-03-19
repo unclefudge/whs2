@@ -124,41 +124,20 @@ class SiteHazard extends Model {
      */
     public function emailHazard($action)
     {
-        $site = Site::findOrFail($this->site_id);
-
-        if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.hazard');   // GM, WHS Mgr, Con Mgr
-            $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_ME')];
-
+        $email_to = [env('EMAIL_DEV')];
         $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
-        $data = [
-            'id'                => $this->id,
-            'site'              => $site->name . ' (' . $site->code . ')',
-            'address'           => $site->address . ', ' . $site->SuburbStatePostcode,
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'url'               => URL::to('/site/hazard/' . $this->id),
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'reason'            => $this->reason,
-            'action'            => $action->action,
-            'site_owner'        => $site->client->clientOfCompany->name,
-        ];
-        $filename = $this->attachment;
+        if (\App::environment('prod')) {
+            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.hazard');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
 
-        Mail::send('emails/siteHazard', $data, function ($m) use ($email_to, $email_user, $site, $filename, $action) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('WHS Hazard Notification');
-            $file_path = public_path('filebank/site/' . $site->id . '/issue/' . $filename);
-            if ($filename && file_exists($file_path))
-                $m->attach($file_path);
-        });
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteHazardCreated($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteHazardCreated($this, $action));
+
     }
 
     /**
@@ -166,34 +145,19 @@ class SiteHazard extends Model {
      */
     public function emailAction($action, $important = false)
     {
-        $site = Site::findOrFail($this->site_id);
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
-            $email_roles = ($important) ? $site->owned_by->notificationsUsersEmailType('n.site.hazard') : $site->owned_by->notificationsUsersEmailType('n.site.hazard'); 
-            $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_ME')];
+            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.hazard');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
 
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
-        $data = [
-            'id'                => $this->id,
-            'site'              => $site->name . ' (' . $site->code . ')',
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'url'               => URL::to('/site/hazard/' . $this->id),
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-            'action'            => $action->action,
-            'site_owner'        => $site->client->clientOfCompany->name,
-        ];
-        $filename = $this->attachment;
-        Mail::send('emails/siteHazardAction', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('WHS Hazard Update Notification');
-        });
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteHazardAction($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteHazardAction($this, $action));
     }
 
     /**
@@ -213,6 +177,21 @@ class SiteHazard extends Model {
     public function getFailureTypeAttribute()
     {
         return ($this->attributes['failure'] == 0) ? '' : FailureTypes::name($this->attributes['failure']);
+    }
+
+    /**
+     * Get the Risk Rating Text (setter)
+     */
+    public function getRatingTextAttribute()
+    {
+        if ($this->attributes['rating'] == '1')
+            return 'Low';
+        if ($this->attributes['rating'] == '2')
+            return 'Medium';
+        if ($this->attributes['rating'] == '3')
+            return 'High';
+        if ($this->attributes['rating'] == '4')
+            return 'Extreme';
     }
 
     /**

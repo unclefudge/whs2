@@ -123,7 +123,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/{id}/name', 'Company\CompanyController@getCompanyName');
     Route::get('company/{id}/approve/{type}', 'Company\CompanyController@approveCompany');
     Route::post('company/{id}/business', 'Company\CompanyController@updateBusiness');
-    Route::post('company/{id}/trade', 'Company\CompanyController@updateTrade');
+    Route::post('company/{id}/construction', 'Company\CompanyController@updateConstruction');
     Route::post('company/{id}/whs', 'Company\CompanyController@updateWHS');
     Route::get('company/{id}/user', 'Company\CompanyController@users');
     //Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');

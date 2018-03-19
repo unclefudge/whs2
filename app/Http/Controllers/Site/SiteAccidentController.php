@@ -73,8 +73,7 @@ class SiteAccidentController extends Controller {
 
         // Create Site Accident
         $accident = SiteAccident::create($accident_request);
-        // Email accident
-        $accident->emailAccident();
+        $accident->emailAccident(); // Email accident
 
         Toastr::success("Lodged accident report");
 

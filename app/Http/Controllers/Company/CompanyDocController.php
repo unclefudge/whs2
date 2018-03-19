@@ -163,7 +163,7 @@ class CompanyDocController extends Controller {
         if ($request->hasFile('singlefile')) {
             $file = $request->file('singlefile');
 
-            $path = "filebank/company/" . $company->id. '/docs';
+            $path = "filebank/company/" . $company->id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
             // Ensure filename is unique by adding counter to similiar filenames
             $count = 1;
@@ -183,8 +183,12 @@ class CompanyDocController extends Controller {
             $doc->approved_by = Auth::user()->id;
             $doc->approved_at = Carbon::now()->toDateTimeString();
             $doc->status = 1;
-        } else
-            $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc')); // Need to update with real user emails
+        } else {
+            // Create approval ToDoo
+            if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
+                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $this->category->type . '.approval'));
+        }
+
 
         $doc->save();
 
@@ -258,8 +262,9 @@ class CompanyDocController extends Controller {
         // Close any ToDoo and create new one
         if ($doc->category_id < 21) {
             $doc->closeToDo();
-            if ($doc->status == 2)
-                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('company.doc'));
+            // Create approval ToDoo
+            if ($doc->status == 2 && ($doc->category->type == 'acc' || $doc->category->type == 'whs'))
+                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
         }
 
         // Handle attached file
@@ -388,7 +393,6 @@ class CompanyDocController extends Controller {
     }
 
 
-
     /**
      * Get Categories Users is allowed to access filtered by Department.
      */
@@ -440,13 +444,12 @@ class CompanyDocController extends Controller {
 
         $dt = Datatables::of($records)
             ->editColumn('id', function ($doc) {
-                return '<div class="text-center"><a href="'.$doc->attachment_url.'" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
+                return '<div class="text-center"><a href="' . $doc->attachment_url . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
             })
             ->editColumn('category_id', function ($doc) {
 
                 return strtoupper($doc->category->type);
             })
-
             ->addColumn('details', function ($doc) {
                 $details = '';
 
@@ -455,7 +458,7 @@ class CompanyDocController extends Controller {
                 if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
                     $details .= "<br>Type: $doc->ref_type";
                 if (in_array($doc->category_id, [7])) // CL + Asb
-                    $details = "Lic no: $doc->ref_no  &nbsp; Class: ".$doc->company->contractorLicenceSBC();
+                    $details = "Lic no: $doc->ref_no  &nbsp; Class: " . $doc->company->contractorLicenceSBC();
                 if (in_array($doc->category_id, [8])) // CL + Asb
                     $details = "Class: $doc->ref_type";
 
@@ -466,6 +469,7 @@ class CompanyDocController extends Controller {
                     return $doc->name . " <span class='badge badge-warning badge-roundless'>Pending Approval</span>";
                 if ($doc->status == 3)
                     return $doc->name . " <span class='badge badge-danger badge-roundless'>Rejected</span>";
+
                 return $doc->name;
             })
             ->editColumn('expiry', function ($doc) {
@@ -478,9 +482,9 @@ class CompanyDocController extends Controller {
                 $expiry = ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '';
 
                 if (Auth::user()->allowed2("edit.company.doc", $doc))
-                    $actions .= '<a href="/company/'.$company->id.'/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                    $actions .= '<a href="/company/' . $company->id . '/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
-                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2,3])) && Auth::user()->company_id == $doc->for_company_id))
+                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
                 return $actions;
@@ -723,6 +727,7 @@ class CompanyDocController extends Controller {
     /*
     * A request made by Company Profile page to store / update company document
     */
+    /*
     public function profileICS()
     {
         $rules = [
@@ -730,7 +735,7 @@ class CompanyDocController extends Controller {
             'ref_no'     => 'required_if:category_id,1,2',
             'ref_name'   => 'required_if:category_id,1,2',
             'ref_type'   => 'required_if:category_id,2,3,8',
-            'lic_no'   => 'required_if:category_id,7',
+            'lic_no'     => 'required_if:category_id,7',
             'lic_type'   => 'required_if:category_id,7',
             'singlefile' => 'required_if:doc_id,new',
         ];
@@ -861,10 +866,10 @@ class CompanyDocController extends Controller {
 
         return redirect('/company/' . $doc->for_company_id);
     }
-
+*/
     /*
     * A request made by Company Profile page to store / update company document
-    */
+    *//*
     public function profileWHS()
     {
         $rules = [
@@ -872,7 +877,7 @@ class CompanyDocController extends Controller {
             'ref_no'     => 'required_if:category_id,1,2',
             'ref_name'   => 'required_if:category_id,1,2',
             'ref_type'   => 'required_if:category_id,2,3,8',
-            'lic_no'   => 'required_if:category_id,7',
+            'lic_no'     => 'required_if:category_id,7',
             'lic_type'   => 'required_if:category_id,7',
             'singlefile' => 'required_if:doc_id,new',
         ];
@@ -1031,6 +1036,7 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    /*
     public function profileApprove()
     {
         $doc = CompanyDoc::findOrFail(request('id'));
@@ -1056,6 +1062,7 @@ class CompanyDocController extends Controller {
      * Delete the specified company document in storage.
      *
      */
+    /*
     public function profileDestroy($id)
     {
         $doc = CompanyDoc::findOrFail($id);
@@ -1077,4 +1084,6 @@ class CompanyDocController extends Controller {
         return (request()->ajax()) ? json_encode("success") : redirect('/company/' . $doc->for_company_id);
         //return (request()->ajax()) ? response()->json(['success' => true]) : redirect('/company/' . $doc->for_company_id);
     }
+    */
+
 }

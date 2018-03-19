@@ -217,7 +217,7 @@
                         </div>
                         <br>
 
-                        {!! notificationSelect($notificationTypes::type('n.company.signup'), 'Accounts', 'Company Signup', 'Company signup request sent') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Accounts', 'Company Signup', 'Company signup request sent') !!}
 
 
                         <div class="form-actions right">

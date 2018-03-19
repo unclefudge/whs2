@@ -43,41 +43,19 @@ class SiteAccident extends Model {
      */
     public function emailAccident()
     {
-        $site = Site::findOrFail($this->site_id);
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
-            $email_roles = $site->owned_by->notificationsUsersEmailType('n.site.accident');
-            $email_supers = $site->supervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_supers), SORT_REGULAR);
-        } else
-            $email_to = [env('EMAIL_DEV')];
+            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.accident');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
 
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
-        $data = [
-            'id'                => $this->id,
-            'site'              => $site->name . ' (' . $site->code . ')',
-            'address'           => $site->address . ', ' . $site->SuburbStatePostcode,
-            'date'              => $this->date->format('d/m/Y g:i a'),
-            'worker'            => $this->name . ' (age: ' . $this->age . ')',
-            'occupation'        => $this->occupation,
-            'location'          => $this->location,
-            'nature'            => $this->nature,
-            'referred'          => $this->referred,
-            'damage'            => $this->damage,
-            'description'       => $this->info,
-            'user_fullname'     => User::find($this->created_by)->fullname,
-            'user_company_name' => User::find($this->created_by)->company->name,
-            'submit_date'       => $this->created_at->format('d/m/Y g:i a'),
-            'site_owner'        => $site->client->clientOfCompany->name,
-        ];
-
-        Mail::send('emails.siteAccident', $data, function ($m) use ($email_to, $email_user) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('WHS Accident Notification');
-        });
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteAccidentCreated($this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteAccidentCreated($this));
     }
 
     /**

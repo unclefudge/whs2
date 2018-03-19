@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateTrade', $company->id]]) !!}
+        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateConstruction', $company->id]]) !!}
 
         {{-- Leave --}}
         @if ($company->leave()->whereDate('to', '>', date('Y-m-d'))->first())
