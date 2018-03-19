@@ -23,10 +23,10 @@ use Yajra\Datatables\Datatables;
 use nilsenj\Toastr\Facades\Toastr;
 
 /**
- * Class CompanySignUpController
+ * Class CompanySignupController
  * @package App\Http\Controllers
  */
-class CompanySignUpController extends Controller {
+class CompanySignupController extends Controller {
 
     /**
      * Display a listing of the resource.
