@@ -187,6 +187,22 @@ class PagesController extends Controller {
             $doc->lic_override = 0;
             $doc->save();
         }
+
+        echo "<br>Give LH access to view/edit Business details<br><br>";
+        $users = \App\User::all();
+        foreach ($users as $user) {
+            if ($user->company_id != 3) {
+                $view_bus_parent = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 308, 'company_id' => 3])->first();
+                if ($view_bus_parent) {
+                    echo $user->fullname.' ('.$user->company->name.') - view Business Details (CC)<br>';
+                }
+                $edit_bus_parent = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 309, 'company_id' => 3])->first();
+                if ($view_bus_parent) {
+                    echo $user->fullname.' ('.$user->company->name.') - edit Business Details (CC)<br>';
+                }
+                //if ($user->security && !($user->hasPermission2('view.company.'))
+            }
+        }
         /*echo "Child Company LH default permissions<br><br>";
         $lh =  DB::table('role_user')->where('role_id', 12)->get();
         foreach ($lh as $u) {
