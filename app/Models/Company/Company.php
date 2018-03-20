@@ -966,7 +966,7 @@ class Company extends Model {
      */
     public function compliantDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $compliant_docs = [];
         $compliant_html = '';
 
@@ -991,7 +991,7 @@ class Company extends Model {
      */
     public function missingDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontactors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $missing_docs = [];
         $missing_html = '';
 

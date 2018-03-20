@@ -15,7 +15,7 @@
             <div class="tab-pane active" id="portlet_comments_1">
                 <div class="mt-comments">
                     {{-- Insurance & Contracts --}}
-                    <?php $cat_types = ['1' => 'Public Liability', '2' => "Worker's Compensation", '3' => 'Sickness & Accident', '4' => 'Subcontactors Statement', '5' => 'Period Trade Contract'] ?>
+                    <?php $cat_types = ['1' => 'Public Liability', '2' => "Worker's Compensation", '3' => 'Sickness & Accident', '4' => 'Subcontractors Statement', '5' => 'Period Trade Contract'] ?>
                     @foreach ($cat_types as $cat_type => $doc_name)
                         <?php $doc = $company->activeCompanyDoc($cat_type) ?>
                         <div class="mt-comment" style="padding: 5px" id="show_doc{{ $cat_type }}">

@@ -618,6 +618,31 @@ class CompanyDocController extends Controller {
         return $dt;
     }
 
+    /**
+     * Show CC Standard Details
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showStandard()
+    {
+        return view('company/doc/list-standard');
+    }
+
+    /**
+     * Get CC Standard Details
+     */
+    public function getStandard()
+    {
+        $records = CompanyDoc::where('company_id', 3)->where('category_id', 22)->where('status', '1');
+
+        $dt = Datatables::of($records)
+            ->editColumn('id', '<div class="text-center"><a href="/filebank/company/3/docs/{{$attachment}}"><i class="fa fa-file-text-o"></i></a></div>')
+            ->rawColumns(['id', 'name'])
+            ->make(true);
+
+        return $dt;
+    }
+
     /*
      * A request made by Company Profile page to store / update company document
      */

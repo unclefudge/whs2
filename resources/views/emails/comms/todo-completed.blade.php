@@ -1,7 +1,7 @@
 @component('mail::message')
 # ToDo Task Completed
 
-The task {{ $todo->name  }} has been completed by {{ $todo->doneBy->fullname }}
+The task **{{ $todo->name  }}** has been completed by **{{ $todo->doneBy->fullname }}**
 
 Task Details: {{ $todo->info }}
 

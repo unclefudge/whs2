@@ -88,25 +88,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/leave/dt/leave', 'Company\CompanyLeaveController@getCompanyLeave');
     Route::resource('company/leave', 'Company\CompanyLeaveController');
 
+
+    Route::get('company/doc/standard', 'Company\CompanyDocController@showStandard');
+    Route::get('company/doc/standard/dt/docs', 'Company\CompanyDocController@getStandard');
+
     // Company Docs
-    //Route::get('company/doc/dt/docs', 'Company\CompanyDocController@getDocs');
-    //Route::get('company/doc/dt/profiledocs', 'Company\CompanyDocController@getProfileDocs');
-    //Route::get('company/doc/dt/expired', 'Company\CompanyDocController@getExpiredDocs');
     Route::any('company/doc/create', 'Company\CompanyDocController@create');
     Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
-    //Route::post('company/doc/profileICS', 'Company\CompanyDocController@profileICS');
-    //Route::post('company/doc/profileWHS', 'Company\CompanyDocController@profileWHS');
-    //Route::get('company/doc/profile-reject/{id}', 'Company\CompanyDocController@profileReject');
-    //Route::get('company/doc/profile-destroy/{id}', 'Company\CompanyDocController@profileDestroy');
-    //Route::post('company/doc/profile-approve', 'Company\CompanyDocController@profileApprove');
-    //Route::post('company/doc/profile-reject', 'Company\CompanyDocController@profileReject');
     Route::any('company/doc/export', 'Company\CompanyExportController@exportDocs');
     Route::post('company/doc/export/pdf', 'Company\CompanyExportController@docsPDF');
     Route::get('company/doc/create/tradecontract/{id}/{version}', 'Company\CompanyExportController@tradecontractPDF');
     Route::get('company/doc/create/subcontractorstatement/{id}/{version}', 'Company\CompanyExportController@subcontractorstatementPDF');
     Route::resource('company/doc', 'Company\CompanyDocController');
-
-
 
     // Company Docs
     Route::get('company/{cid}/doc/dt/docs', 'Company\CompanyDocController@getDocs');
