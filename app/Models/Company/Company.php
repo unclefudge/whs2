@@ -951,8 +951,8 @@ class Company extends Model {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
                 return false;
         }
-        
-				// Contractors Licence
+
+        // Contractors Licence
         if ($this->requiresCompanyDoc(7) && !$this->lic_override && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
             return false;
 
@@ -998,11 +998,15 @@ class Company extends Model {
         foreach ($doc_types as $type => $name) {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1)) {
                 $missing_docs[$type] = $name;
-                $missing_html .= "$name, ";
+                if ($this->activeCompanyDoc($type)) {
+                    $missing_status = ($this->activeCompanyDoc($type)->status == 2) ? 'label-warning' : 'label-danger' ;
+                    $missing_html .= "<span class='label label-sm $missing_status'>$name</span>, ";
+                } else
+                    $missing_html .= "$name, ";
             }
 
         }
-				
+
         $missing_html = rtrim($missing_html, ', ');
 
         return ($format == 'csv') ? $missing_html : $missing_docs;
