@@ -211,6 +211,17 @@
                                         {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('asb_type', $errors) !!}
                                     </div>
+                                    {{-- Test date --}}
+                                    @if ($doc->category_id == 6)
+                                        <div class="form-group {!! fieldHasError('tag_date', $errors) !!}"  id="fields_tag_date">
+                                            {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
+                                            <div class="input-group date date-picker">
+                                                {!! Form::text('tag_date', $doc->expiry->subMonths(3)->format('d/m/Y'), ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                            </div>
+                                            {!! fieldErrorMessage('tag_date', $errors) !!}
+                                        </div>
+                                   @else
                                     {{-- Expiry --}}
                                     <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
                                         {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
@@ -221,7 +232,7 @@
                                         </div>
                                         {!! fieldErrorMessage('expiry', $errors) !!}
                                     </div>
-
+                                    @endif
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}">
                                         {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}

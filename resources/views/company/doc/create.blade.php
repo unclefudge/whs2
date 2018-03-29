@@ -201,7 +201,15 @@
                                         </div>
                                         {!! fieldErrorMessage('expiry', $errors) !!}
                                     </div>
-
+                                    {{-- Test date --}}
+                                    <div class="form-group {!! fieldHasError('tag_date', $errors) !!}" style="display: none" id="fields_tag_date">
+                                        {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
+                                        <div class="input-group date date-picker">
+                                            {!! Form::text('tag_date', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                        </div>
+                                        {!! fieldErrorMessage('tag_date', $errors) !!}
+                                    </div>
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}" style="display: none" id="fields_notes">
                                         {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
@@ -304,6 +312,7 @@
             $('#fields_lic_class').hide();
             $('#fields_asb_class').hide();
             $('#fields_expiry').hide();
+            $('#fields_tag_date').hide();
             $('#fields_notes').hide();
             $('#singlefile-div').hide();
             $('#upload').hide();
@@ -329,6 +338,13 @@
             if (cat == 2 || cat == 3) // WC & SA
                 $('#fields_category').show();
 
+            if (cat == 6) { // Test & Tag
+                $('#fields_tag_date').show();
+                $('#fields_expiry').hide();
+            } else {
+                $('#fields_tag_date').hide();
+                $('#fields_expiry').show();
+            }
             if (cat == 7) { // CL
                 $('#fields_lic_no').show();
                 $('#fields_lic_class').show();

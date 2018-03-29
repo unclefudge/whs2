@@ -142,6 +142,11 @@ class CompanyDocController extends Controller {
         $doc_request['company_id'] = $company->reportsTo()->id;
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
 
+        // Calculate Test & Tag expiry
+        if (request('category_id') == '6') {
+            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(3)->toDateTimeString();
+        }
+
         // Convert licence type into CSV
         if (request('category_id') == '7') {
             $doc_request['ref_no'] = request('lic_no');
@@ -157,6 +162,7 @@ class CompanyDocController extends Controller {
             $doc_request['name'] = request('name'); //'Additional Licence';
 
         // Create Company Doc
+        //dd($doc_request);
         $doc = CompanyDoc::create($doc_request);
 
         // Handle attached file
@@ -209,6 +215,11 @@ class CompanyDocController extends Controller {
 
         $doc_request = request()->all();
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
+
+        // Calculate Test & Tag expiry
+        if (request('category_id') == '6') {
+            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(3)->toDateTimeString();
+        }
 
         // Convert licence type into CSV
         if (request('category_id') == '7') {
@@ -455,6 +466,8 @@ class CompanyDocController extends Controller {
                     $details .= "Policy No: $doc->ref_no &nbsp; Insurer: $doc->ref_name";
                 if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
                     $details .= "<br>Type: $doc->ref_type";
+                if (in_array($doc->category_id, [6])) // Test&Tag
+                    $details = 'Test Date: '.$doc->expiry->subMonths(3)->format('d/m/Y');
                 if (in_array($doc->category_id, [7])) // CL + Asb
                     $details = "Lic no: $doc->ref_no  &nbsp; Class: " . $doc->company->contractorLicenceSBC();
                 if (in_array($doc->category_id, [8])) // CL + Asb
