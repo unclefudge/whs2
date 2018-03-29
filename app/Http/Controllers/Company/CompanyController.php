@@ -504,9 +504,9 @@ class CompanyController extends Controller {
         $dt = Datatables::of($users)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
             ->editColumn('id', function ($user) {
-                if (Auth::user()->allowed2('view.user', $user))
+                //if (Auth::user()->allowed2('view.user', $user))
                     return '<div class="text-center"><a href="/user/'.$user->id.'"><i class="fa fa-search"></i></a></div>';
-                return '';
+                //return '';
             })
             ->editColumn('full_name', function ($user) {
                 $string = $user->firstname . ' ' . $user->lastname;
@@ -532,10 +532,6 @@ class CompanyController extends Controller {
             })
             ->editColumn('last_login', function ($user) {
                 return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';
-            })
-            ->addColumn('action', function ($user) {
-                if (Auth::user()->allowed2('view.user', $user))
-                    return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
             })
             ->rawColumns(['id', 'full_name', 'name', 'phone', 'email', 'action'])
             ->make(true);
