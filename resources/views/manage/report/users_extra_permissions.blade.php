@@ -48,7 +48,7 @@
                                 <?php $user = App\User::find($permission->user_id) ?>
                                 <?php $p = DB::table('permissions')->where('id', $permission->permission_id)->first() ?>
                                 <tr @if(!$user->status) class="font-red" @endif>
-                                    <td><div class="text-center"><a href="/user/{{$user->username}}/settings/security"><i class="fa fa-search"></i></a></div></td>
+                                    <td><div class="text-center"><a href="/user/{{$user->id}}/security"><i class="fa fa-search"></i></a></div></td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->fullname }}</td>
                                     <td>{{ $user->company->name_alias }}</td>

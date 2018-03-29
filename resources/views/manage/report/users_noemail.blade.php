@@ -47,7 +47,7 @@
                             @foreach($users as $user)
                                 <tr @if(!$user->status) class="font-red" @endif>
                                     <td>
-                                        <div class="text-center"><a href="/user/{{$user->username}}"><i class="fa fa-search"></i></a></div>
+                                        <div class="text-center"><a href="/user/{{$user->id}}"><i class="fa fa-search"></i></a></div>
                                     </td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->fullname }}</td>
