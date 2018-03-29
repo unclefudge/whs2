@@ -43,7 +43,7 @@ class CronController extends Controller {
         CronController::nonattendees();
         CronController::roster();
         CronController::qa();
-        CronController::overdueToDo();
+        //CronController::overdueToDo();
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
         CronController::archiveToolbox();
@@ -334,9 +334,9 @@ class CronController extends Controller {
                 $todo->emailToDo();
                 $qa = SiteQa::find($todo->type_id);
                 $email_to = [env('EMAIL_DEV')];
-                /*if (App::environment('prod') && $qa->site->areaSupervisorsEmails())
+                if (App::environment('prod') && $qa->site->areaSupervisorsEmails())
                     $email_to = $qa->site->areaSupervisorsEmails();
-                Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));*/
+                Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));
                 //$qa->emailOverdue();
             }
 
