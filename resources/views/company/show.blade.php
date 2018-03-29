@@ -124,6 +124,19 @@
                                     <div class="col-md-12">No documents are required to be compliant.</div>
                                 </div>
                             @endif
+                            @if (in_array($company->category, [1,2]))
+                                <hr>
+                                    <b>Additional documents:</b>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if ($company->activeCompanyDoc(6)) {{-- Test & Tag --}}
+                                           <i class="fa fa-check" style="width:35px; padding: 4px 15px"></i> <a href="{!! $company->activeCompanyDoc(6)->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
+                                        @else
+                                            <i class="fa fa-times" style="width:35px; padding: 4px 15px"></i> Electrical Test & Tagging
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endif
