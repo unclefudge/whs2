@@ -130,28 +130,26 @@
                                 {{-- Test & Tag --}}
                                 <?php $tag_doc = $company->activeCompanyDoc(6) ?>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        @if ($tag_doc && $tag_doc->status == 1)
-                                            <div class="col-xs-8">
-                                                <i class="fa fa-check" style="width:35px; padding: 4px 15px; color: #26C281"></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
-                                            </div>
-                                        @endif
-                                        @if ($tag_doc && $tag_doc->status == 2)
-                                            <div class="col-xs-8">
-                                                <i class="fa fa-question" style="width:35px; padding: 4px 15px;"></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
-                                            </div>
-                                            <div class="col-xs-4"><span class="label label-warning label-sm">Pending Approval</span></div>
-                                        @endif
-                                        @if ($tag_doc && $tag_doc->status == 3)
-                                            <div class="col-xs-8">
-                                                <i class="fa fa-question" style="width:35px; padding: 4px 15px;></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
-                                            </div>
-                                            <div class="col-xs-4"><span class="label label-danger label-sm">Rejected</span></div>
-                                        @endif
-                                        @if (!$tag_doc)
-                                            <div class="col-xs-8"><i class="fa fa-times" style="width:35px; padding: 4px 15px;"></i> Electrical Test & Tagging</div>
-                                        @endif
-                                    </div>
+                                    @if ($tag_doc && $tag_doc->status == 1)
+                                        <div class="col-xs-8">
+                                            <i class="fa fa-check" style="width:35px; padding: 4px 15px; color: #26C281"></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
+                                        </div>
+                                    @endif
+                                    @if ($tag_doc && $tag_doc->status == 2)
+                                        <div class="col-xs-8">
+                                            <i class="fa fa-question" style="width:35px; padding: 4px 15px;"></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
+                                        </div>
+                                        <div class="col-xs-4"><span class="label label-warning label-sm">Pending Approval</span></div>
+                                    @endif
+                                    @if ($tag_doc && $tag_doc->status == 3)
+                                        <div class="col-xs-8">
+                                            <i class="fa fa-question" style="width:35px; padding: 4px 15px;></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
+                                        </div>
+                                        <div class="col-xs-4"><span class="label label-danger label-sm">Rejected</span></div>
+                                    @endif
+                                    @if (!$tag_doc)
+                                        <div class="col-xs-8"><i class="fa fa-times" style="width:35px; padding: 4px 15px;"></i> Electrical Test & Tagging</div>
+                                    @endif
                                 </div>
                             @endif
                         </div>
