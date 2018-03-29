@@ -326,6 +326,7 @@ Route::get('cron/qa', 'Misc\CronController@qa');
 Route::get('cron/overdue-todo', 'Misc\CronController@overdueToDo');
 Route::get('cron/expired-companydoc', 'Misc\CronController@expiredCompanyDoc');
 Route::get('cron/expired-swms', 'Misc\CronController@expiredSWMS');
+Route::get('cron/archive-toolbox', 'Misc\CronController@archiveToolbox');
 
 Route::get('test/cal', 'Misc\PagesController@testcal');
 Route::get('manage/updateroles', 'Misc\PagesController@updateRoles');

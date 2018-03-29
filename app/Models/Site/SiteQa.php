@@ -268,7 +268,7 @@ class SiteQa extends Model {
     public function emailAction($action, $important = false)
     {
         $email_to = [env('EMAIL_DEV')];
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
             //$email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.qa');

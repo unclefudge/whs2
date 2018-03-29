@@ -191,14 +191,16 @@ class PagesController extends Controller {
         echo "<br>Give LH access to view/edit Business details<br><br>";
         $users = \App\User::all();
         foreach ($users as $user) {
-            if ($user->company_id != 3) {
-                $view_bus_parent = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 308, 'company_id' => 3])->first();
-                if ($view_bus_parent) {
+            if ($user->company_id > 3 && $user->security) {
+                $view_bus = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 308, 'company_id' => $user->company_id])->first();
+                if (!$view_bus) {
                     echo $user->fullname.' ('.$user->company->name.') - view Business Details (CC)<br>';
+                    DB::table('permission_user')->insert(['user_id' => $user->id, 'permission_id' => 308, 'level' => 99, 'company_id' => $user->company_id]);
                 }
-                $edit_bus_parent = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 309, 'company_id' => 3])->first();
-                if ($view_bus_parent) {
+                $edit_bus = DB::table('permission_user')->where(['user_id' => $user->id, 'permission_id' => 309, 'company_id' => $user->company_id])->first();
+                if (!$edit_bus) {
                     echo $user->fullname.' ('.$user->company->name.') - edit Business Details (CC)<br>';
+                    DB::table('permission_user')->insert(['user_id' => $user->id, 'permission_id' => 309, 'level' => 99, 'company_id' => $user->company_id]);
                 }
                 //if ($user->security && !($user->hasPermission2('view.company.'))
             }

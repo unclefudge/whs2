@@ -112,7 +112,9 @@ class Todo extends Model {
                 return '/todo/' . $this->id;
             case 'company doc':
                 $doc = CompanyDoc::find($this->type_id);
-                return ($doc) ? '/company/' . $doc->for_company_id . '/doc/' . $doc->id . '/edit': '';
+                if ($doc) {
+                    return ($doc->expiry && $doc->expiry->gt(Carbon::today())) ? '/company/' . $doc->for_company_id . '/doc/' . $doc->id . '/edit' : '/company/' . $doc->for_company_id . '/doc';
+                }
             case 'general':
                 return '/todo/' . $this->id;
         }
@@ -240,7 +242,7 @@ class Todo extends Model {
         } else if (\App::environment('local', 'dev'))
             $email_list = [env('EMAIL_ME')];
 
-        $email_user = (\App::environment('prod')) ? Auth::user()->email : '';
+        $email_user = (\App::environment('prod') && Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if ($email_list && $email_user)
             Mail::to($email_list)->cc([$email_user])->send(new \App\Mail\Comms\TodoCreated($this));

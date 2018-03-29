@@ -1280,7 +1280,7 @@ class Company extends Model {
             return ($users) ? User::find($users) : null;
         }
 
-        return User::find(3); // Fudge
+        return User::find([3]); // Fudge
 
     }
 
@@ -1312,7 +1312,7 @@ class Company extends Model {
     {
         $email_array = [];
         foreach ($this->notificationsUsersType($type) as $user) {
-            if (validEmail($user->email))
+            if ($user && validEmail($user->email))
                 $email_array[] = $user->email;
         }
 

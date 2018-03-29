@@ -99,7 +99,6 @@ class WmsDoc extends Model {
         // Create ToDoo and assign to Site Supervisors
         if ($user_list) {
             $todo = Todo::create($todo_request);
-            echo "$todo->id - $user_list<br>";
             $todo->assignUsers($user_list);
             $todo->emailToDo();
         }
@@ -170,10 +169,10 @@ class WmsDoc extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to = $this->owned_by->notificationsUsersEmailType('whs');   // WHS Mgr
+            $email_to = $this->owned_by->notificationsUsersEmailType('n.doc.whs.approval');   // WHS Mgr
         else
             $email_to[] = env('EMAIL_ME');
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         $data = [
             'user_email'        => Auth::user()->email,
@@ -204,9 +203,9 @@ class WmsDoc extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to = $this->owned_by->notificationsUsersEmailType('whs'); 
+            $email_to = $this->owned_by->notificationsUsersEmailType('n.doc.whs.approval'); 
         //$email_to[] = env('EMAIL_ME');
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         $data = [
             'user_email'        => Auth::user()->email,
@@ -250,7 +249,7 @@ class WmsDoc extends Model {
                 $email_to[] = $company->seniorUsersEmail();
 
                 // Send CC to Parent Company Account
-                $email_user = $company->reportsTo()->notificationsUsersEmailType('whs');
+                $email_user = $company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval');
             }
         } else {
             $email_to = [env('EMAIL_ME')];

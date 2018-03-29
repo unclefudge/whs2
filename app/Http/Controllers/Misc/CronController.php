@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Misc;
 use Illuminate\Http\Request;
 
 use DB;
+use Mail;
 use File;
 use Carbon\Carbon;
 use App\User;
@@ -45,6 +46,8 @@ class CronController extends Controller {
         CronController::overdueToDo();
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
+        CronController::archiveToolbox();
+
         echo "<h1> ALL DONE </h1>";
         echo '<br>Logfile filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt';
     }
@@ -80,11 +83,11 @@ class CronController extends Controller {
                     echo $rost->date->format('d/m/Y') . " $site->name ($site->code) - <b>$user->fullname</b> (" . $user->company->name_alias . ") was absent<br>";
                     $log .= $rost->date->format('d/m/Y') . " $site->name ($site->code) - $user->fullname (" . $user->company->name_alias . ") was absent\n";
                     SiteCompliance::create(array(
-                        'site_id'       => $site->id,
-                        'user_id'       => $user->id,
-                        'date'          => $rost->date,
-                        'reason'        => null,
-                        'status'        => 0,
+                        'site_id'     => $site->id,
+                        'user_id'     => $user->id,
+                        'date'        => $rost->date,
+                        'reason'      => null,
+                        'status'      => 0,
                         'resolved_at' => '0000-00-00 00:00:00'
                     ));
                     $found = true;
@@ -289,6 +292,24 @@ class CronController extends Controller {
         echo "<h4>Completed</h4>";
         $log .= "\nCompleted\n\n\n";
 
+
+        echo "<h2>Closing completed QA ToDos</h2>";
+        $log .= "Closing completed QA ToDos\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $records = Todo::where('type', 'qa')->where('status', 1)->get();
+        foreach ($records as $rec) {
+            $qa = SiteQa::find($rec->type_id);
+            if ($qa->status == 0 || $qa->status == - 1) {
+                echo '[' . $rec->id . '] qaID:' . $rec->type_id . " - " . $qa->status . "<br>";
+                $rec->status = 0;
+                $rec->save();
+            }
+        }
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
         if ($bytes_written === false)
             die("Error writing to file");
@@ -312,8 +333,10 @@ class CronController extends Controller {
                 $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]\n";
                 $todo->emailToDo();
                 $qa = SiteQa::find($todo->type_id);
-                if ($qa->site->areaSupervisorsEmails())
-                    Mail::to($qa->site->areaSupervisorsEmails())->send(new \App\Mail\Site\SiteQaOverdue($qa));
+                $email_to = [env('EMAIL_DEV')];
+                /*if (App::environment('prod') && $qa->site->areaSupervisorsEmails())
+                    $email_to = $qa->site->areaSupervisorsEmails();
+                Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));*/
                 //$qa->emailOverdue();
             }
 
@@ -374,24 +397,29 @@ class CronController extends Controller {
 
                         if ($date == Carbon::today()->addDays(14)->format('Y-m-d')) {
                             // Due in 2 weeks
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers(), false);
-                            $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('company.doc'), false);
-                            echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "<br>";
-                            $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "\n";
+                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), false);
+
+                            // Email Parent Company
+                            if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
+                                $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval'), false);
+                                echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "<br>";
+                                $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "\n";
+                            }
                         } else {
                             // Expired
                             if ($doc->status != 0) {
-                                $doc->status == 0;
+                                $doc->status = 0;
                                 $doc->save();
                             }
                             $doc->closeToDo(User::find(1));
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers(), true);
-                            echo "Created ToDo for company<br>";
-                            $log .= "Created ToDo for company\n";
+                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
                             if ($date == Carbon::today()->subDays(14)->format('Y-m-d')) {
-                                $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('company.doc'), true);
-                                echo "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')). "<br>";
-                                $log .= "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('company.doc')) . "\n";
+                                // Email Parent Company
+                                if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
+                                    $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval'), true);
+                                    echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "<br>";
+                                    $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "\n";
+                                }
                             }
                         }
                     }
@@ -442,26 +470,28 @@ class CronController extends Controller {
             $docs = WmsDoc::where('master', '0')->whereDate('updated_at', '=', $date)->get();
             if ($docs->count()) {
                 foreach ($docs as $doc) {
-                    $company = Company::find($doc->for_company_id);
-                    if ($company->status) {
-                        echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->updated_at->format('d/m/Y') . "]<br>";
-                        $log .= "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->updated_at->format('d/m/Y') . "]\n";
+                    if ($doc->status == 1) {
+                        $company = Company::find($doc->for_company_id);
+                        if ($company->status) {
+                            echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->updated_at->format('d/m/Y') . "]<br>";
+                            $log .= "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->updated_at->format('d/m/Y') . "]\n";
 
-                        if ($date == Carbon::today()->addDays(14)->subYear()->format('Y-m-d')) {
-                            // Due in 2 weeks
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers(), false);
-                            $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('whs'), false);
-                            echo "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "<br>";
-                            $log .= "Created ToDo for company + emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "\n";
-                        } else {
-                            $doc->closeToDo(User::find(1));
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers(), true);
-                            echo "Created ToDo for company<br>";
-                            $log .= "Created ToDo for company\n";
-                            if ($date == Carbon::today()->subDays(28)->format('Y-m-d')) {
-                                $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('whs'), true);
-                                echo "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')). "<br>";
-                                $log .= "Emailed " . implode("; ",$company->reportsTo()->notificationsUsersEmailType('whs')) . "\n";
+                            if ($date == Carbon::today()->addDays(14)->subYear()->format('Y-m-d')) {
+                                // Due in 2 weeks
+                                if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), false);
+                                $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval'), false);
+                                echo "Created ToDo for company + emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval')) . "<br>";
+                                $log .= "Created ToDo for company + emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval')) . "\n";
+                            } else {
+                                $doc->closeToDo(User::find(1));
+                                //if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
+                                echo "Created ToDo for company<br>";
+                                $log .= "Created ToDo for company\n";
+                                if ($date == Carbon::today()->subDays(28)->format('Y-m-d')) {
+                                    $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval'), true);
+                                    echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval')) . "<br>";
+                                    $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.whs.approval')) . "\n";
+                                }
                             }
                         }
                     }
@@ -480,6 +510,41 @@ class CronController extends Controller {
         if ($bytes_written === false)
             die("Error writing to file");
 
+
+    }
+
+    /*
+     * Check for Expired SWMS
+     */
+    static public function archiveToolbox()
+    {
+        $log = '';
+        echo "<h2>Archive Completed Toolbox</h2>";
+        $log .= "Archive Completed Toolbox\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $talks = ToolboxTalk::where('master', 0)->where('status', 1)->get();
+        if ($talks->count()) {
+            foreach ($talks as $talk) {
+                if (!$talk->outstandingBy()->count()) {
+                    // Archive completed Toolbox
+                    echo "[$talk->id] $talk->name<br>";
+                    $log .= "[$talk->id] $talk->name\n";
+                    $talk->status = 0;
+                    $talk->save();
+                }
+            }
+        } else {
+            echo "No completed Toolbox<br>";
+            $log .= "No completed Toolbox\n";
+        }
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false)
+            die("Error writing to file");
 
     }
 

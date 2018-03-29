@@ -93,7 +93,6 @@ class CompanyDoc extends Model {
     public function createExpiredToDo($user_list, $expired)
     {
         $mesg = ($expired == true) ? "$this->name Expired " . $this->expiry->format('d/m/Y') : "$this->name due to expire " . $this->expiry->format('d/m/Y');
-        $company = Company::findOrFail($this->for_company_id);
         $todo_request = [
             'type'       => 'company doc',
             'type_id'    => $this->id,
@@ -139,7 +138,7 @@ class CompanyDoc extends Model {
     public function emailReject()
     {
         $email_to = [env('EMAIL_DEV')];
-        $email_user = (validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
             // Send to User who uploaded doc & Company senior users

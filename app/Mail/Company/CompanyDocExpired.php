@@ -3,6 +3,7 @@
 namespace App\Mail\Company;
 
 use App\Models\Company\CompanyDoc;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -31,7 +32,7 @@ class CompanyDocExpired extends Mailable {
      */
     public function build()
     {
-        $expired = ($this->doc->expiry->lt(Carbon::today)) ? "has Expired " . $this->doc->expiry->format('d/m/Y') : "due to expire " . $this->doc->expiry->format('d/m/Y');
+        $expired = ($this->doc->expiry->lt(Carbon::today())) ? "has Expired " . $this->doc->expiry->format('d/m/Y') : "due to expire " . $this->doc->expiry->format('d/m/Y');
         $file_path = public_path($this->doc->attachment_url);
         if ($this->doc->attachment && file_exists($file_path))
             return $this->markdown('emails/company/doc-expired')->subject("SafeWorksite - Document $expired")->attach($file_path);
