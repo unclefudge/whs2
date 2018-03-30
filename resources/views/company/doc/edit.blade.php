@@ -219,6 +219,7 @@
                                                 {!! Form::text('tag_date', $doc->expiry->subMonths(3)->format('d/m/Y'), ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
                                                 <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                             </div>
+                                            <span class="help-block">Expires 3 months from date of testing</span>
                                             {!! fieldErrorMessage('tag_date', $errors) !!}
                                         </div>
                                    @else
