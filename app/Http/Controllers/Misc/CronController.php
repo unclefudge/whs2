@@ -34,11 +34,10 @@ class CronController extends Controller {
 
     static public function nightly()
     {
-        echo "<h1> Nightly Update</h1>";
+        echo "<h1> Nightly Update - ".Carbon::now()->format('d/m/Y g:i a')."</h1>";
         $log = "Nightly Update\n--------------\n\n";
         $bytes_written = File::put(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
+        if ($bytes_written === false) die("Error writing to file");
 
         CronController::nonattendees();
         CronController::roster();
@@ -48,8 +47,11 @@ class CronController extends Controller {
         CronController::expiredSWMS();
         CronController::archiveToolbox();
 
-        echo "<h1> ALL DONE </h1>";
-        echo '<br>Logfile filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt';
+        echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
+        $log .= "\nALL DONE - NIGHTLY COMPLETE\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -102,8 +104,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -160,8 +161,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -311,8 +311,7 @@ class CronController extends Controller {
 
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -353,8 +352,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -435,9 +433,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
-
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -507,10 +503,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
-
-
+        if ($bytes_written === false) die("Error writing to file");
     }
 
     /*
@@ -543,9 +536,7 @@ class CronController extends Controller {
         $log .= "\nCompleted\n\n\n";
 
         $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false)
-            die("Error writing to file");
-
+        if ($bytes_written === false) die("Error writing to file");
     }
 
 }

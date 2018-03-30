@@ -58,20 +58,24 @@ Route::group(['middleware' => 'auth'], function () {
     //Route::get('/', 'Misc\PagesController@index');
     Route::get('/home', 'Misc\PagesController@index');
     Route::get('/dashboard', 'Misc\PagesController@index');
-    Route::get('/manage/report', 'Misc\PagesController@reports');
-    Route::get('/manage/report/newusers', 'Misc\PagesController@newusers');
-    Route::get('/manage/report/newcompanies', 'Misc\PagesController@newcompanies');
-    Route::get('/manage/report/users_noemail', 'Misc\PagesController@users_noemail');
-    Route::get('manage/report/roleusers', 'Misc\PagesController@roleusers');
-    Route::get('manage/report/users_extra_permissions', 'Misc\PagesController@usersExtraPermissions');
-    Route::get('manage/report/missing_company_info', 'Misc\PagesController@missingCompanyInfo');
-    Route::get('manage/report/company_users', 'Misc\PagesController@companyUsers');
-    Route::get('manage/report/licence_override', 'Misc\PagesController@licenceOverride');
     Route::get('/manage/quick', 'Misc\PagesController@quick');
     Route::get('/manage/fixplanner', 'Misc\PagesController@fixplanner');
     Route::get('/manage/importcompany', 'Misc\PagesController@importCompany');
     Route::get('/manage/completedqa', 'Misc\PagesController@completedQA');
     Route::get('/manage/create_permission', 'Misc\PagesController@createPermission');
+
+    // Reports
+    Route::get('/manage/report', 'Misc\ReportController@index');
+    Route::get('/manage/report/newusers', 'Misc\ReportController@newusers');
+    Route::get('/manage/report/newcompanies', 'Misc\ReportController@newcompanies');
+    Route::get('/manage/report/users_noemail', 'Misc\ReportController@users_noemail');
+    Route::get('/manage/report/roleusers', 'Misc\ReportController@roleusers');
+    Route::get('/manage/report/users_extra_permissions', 'Misc\ReportController@usersExtraPermissions');
+    Route::get('/manage/report/missing_company_info', 'Misc\ReportController@missingCompanyInfo');
+    Route::get('/manage/report/company_users', 'Misc\ReportController@companyUsers');
+    Route::get('/manage/report/licence_override', 'Misc\ReportController@licenceOverride');
+    Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
+
 
     // Site Check-in
 

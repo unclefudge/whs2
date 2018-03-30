@@ -60,6 +60,11 @@
                             <tr>
                                 <td><a href="/manage/report/licence_override">Company Licence Override</a></td>
                             </tr>
+                            @if (Auth::user()->hasRole2('web'))
+                                <tr>
+                                    <td><a href="/manage/report/nightly">Nightly Log</a></td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
