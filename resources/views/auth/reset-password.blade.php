@@ -7,39 +7,40 @@
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form method="POST" action="/login" id="login_form">
+                        <form method="POST" action="/password/reset">
+                            {!! Form::hidden('token', $token) !!}
                             {{ csrf_field() }}
 
                             <div class="form-body">
-                                {{-- Login Details --}}
-                                <h3 class="font-green form-section" style="margin: 0px 0px 10px 0px">Sign In</h3>
+                                <h3 class="font-green form-section" style="margin: 0px 0px 10px 0px">Reset Password</h3>
 
-                                <span class="help-block font-red">{!! $errors->first('message') !!}</span>
+                                @include('form-error')
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group {!! fieldHasError('username', $errors) !!}">
-                                            {!! Form::label('username', 'Username', ['class' => 'control-label']) !!}
-                                            {!! Form::text('username', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                                        <div class="form-group {!! fieldHasError('email', $errors) !!}">
+                                            {!! Form::label('email', 'Email', ['class' => 'control-label']) !!}
+                                            {!! Form::text('email', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                                            {!! fieldErrorMessage('email', $errors) !!}
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('password', $errors) !!}">
-                                            {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
-                                            <input type="password" class="form-control" name="password" value="{{ old('password') }}" required>
+                                            {!! Form::label('password', 'Password', ['class' => 'control-label', 'required']) !!}
+                                            <input type="password" name="password" value="{{ old('password') }}" id="password" class="form-control">
+                                            {!! fieldErrorMessage('password', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('password_confirmation', $errors) !!}">
+                                            {!! Form::label('password_confirmation', 'Re-type Password', ['class' => 'control-label', 'required']) !!}
+                                            <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" id="password_confirmation" class="form-control">
+                                            {!! fieldErrorMessage('password_confirmation', $errors) !!}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn green">Login</button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <br style="font-size: 3px"><a href="/password/email">Forgot your password?</a>
-                                    </div>
-                                </div>
+
+                                <button type="submit" class="btn btn-success" style="margin-left: 15px">Reset Password</button>
                             </div>
                         </form>
                     </div>
@@ -47,4 +48,4 @@
             </div>
         </div>
     </div>
-@stop {{-- END Content --}}
+@stop

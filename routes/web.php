@@ -34,10 +34,15 @@ Route::get('/signup/primary/{key}', 'Auth\RegistrationController@primaryCreate')
 Route::post('/signup/primary', 'Auth\RegistrationController@primaryStore');
 
 // Password Reset Routes...
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset.token');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::get('/password/reset', 'Auth\PasswordResetController@forgotForm');
+Route::post('/password/email', 'Auth\PasswordResetController@resetEmail');
+Route::get('/password/reset/{token}', 'Auth\PasswordResetController@resetForm');
+Route::post('/password/reset', 'Auth\PasswordResetController@reset');
+
+//Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+//Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+//Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset.token');
+//Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 // Logged in Routes
 Route::group(['middleware' => 'auth'], function () {

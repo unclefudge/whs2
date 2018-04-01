@@ -35,6 +35,7 @@ class ForgotPasswordController extends Controller
     /*
      * OVERRRIDE DEFAULT
      */
+
     /*
     public function sendResetLinkEmail(Request $request)
     {
@@ -46,6 +47,10 @@ class ForgotPasswordController extends Controller
             $message->subject($this->getEmailSubject());
         });
 
+        //echo $this->getEmailSubject();
+        //echo url(config('app.url').route('password.reset', $this->token, false));
+        echo url(config('app.url').route('password.reset', '$2y$10$6y0l8hc5dyarS2JMogPlyOnOl1H/GFMRLCHKADesblIxtaY08nbKa', false));
+
         dd($response);
         switch ($response) {
             case Password::RESET_LINK_SENT:
@@ -53,5 +58,12 @@ class ForgotPasswordController extends Controller
             case Password::INVALID_USER:
                 return redirect()->back()->withErrors(['email' => trans($response)]);
         }
+
+
+        //return (new MailMessage)
+        //    ->line('You are receiving this email because we received a password reset request for your account.')
+        //    ->action('Reset Password', url(config('app.url').route('password.reset', $this->token, false)))
+        //    ->line('If you did not request a password reset, no further action is required.');
+
     }*/
 }

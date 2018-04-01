@@ -96,7 +96,7 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'support@openhand.com.au',
+            'to' => 'support@openhands.com.au',
         ],
 
         'slack' => [

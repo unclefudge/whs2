@@ -41,7 +41,7 @@
                                         <button type="submit" class="btn green">Login</button>
                                     </div>
                                     <div class="col-md-9">
-                                        <br style="font-size: 3px"><!--<a href="/password/reset">Forgot your password?</a>-->
+                                        <br style="font-size: 3px"><a href="/password/reset">Forgot your password?</a>
                                     </div>
                                 </div>
                             </div>
