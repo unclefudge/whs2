@@ -26,6 +26,7 @@ A hazard has been updated for {{ $hazard->site->name }}.
 View Hazard
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

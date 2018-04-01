@@ -9,6 +9,7 @@ Please follow up with {{ $doc->company->name }} and ensure they upload a current
 View Documents
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

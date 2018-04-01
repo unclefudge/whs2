@@ -27,6 +27,7 @@ The following users were created:
 View Company
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

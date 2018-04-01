@@ -20,6 +20,7 @@ A QA Handover has been been completed for {{ $qa->site->name }}.
 Export QA
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

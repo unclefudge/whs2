@@ -16,6 +16,7 @@ A new support tiket has been created on {{ config('app.name') }} with the follow
 View Ticket
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

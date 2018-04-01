@@ -14,6 +14,7 @@ If you have any questions in regards to the document you may contact {{ $doc->ow
 View Document
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

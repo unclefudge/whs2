@@ -17,6 +17,7 @@ use App\Models\Comms\TodoUser;
 use App\Http\Requests;
 use App\Http\Requests\Safety\ToolboxRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Utilities\Diff2;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
 use nilsenj\Toastr\Facades\Toastr;
@@ -156,19 +157,25 @@ class ToolboxTalkController extends Controller {
     {
         $talk = ToolboxTalk::findOrFail($id);
 
-        if ($request->ajax()) {
+        if (request()->ajax()) {
             // Editing Talk Name / Info
-            $tool_request = $request->all();
+            $tool_request = request()->all();
             //dd($tool_request);
 
+            // Calculate if any differences in previous version of talk
+            $diff_overview = Diff2::toTable(Diff2::compare($talk->overview, request('overview')."\n"));
+            $diff_hazards = Diff2::toTable(Diff2::compare($talk->hazards, request('hazards')."\n"));
+            $diff_controls = Diff2::toTable(Diff2::compare($talk->controls, request('controls')."\n"));
+            $diff_further = Diff2::toTable(Diff2::compare($talk->further, request('further')."\n"));
+            $mod_overview = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_overview);
+            $mod_hazards = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_hazards);
+            $mod_controls = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_controls);
+            $mod_further = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_further);
+
             // Increment minor version if has been modified
-            if ($talk->name != $request->get('name') || $talk->overview != $request->get('overview') || $talk->hazards != $request->get('hazards')
-                || $talk->controls != $request->get('controls') || $talk->further != $request->get('further') || $talk->status != $request->get('status')
-            ) {
+            if ($talk->name != request('name') ||  $talk->status != request('status') || $mod_overview || $mod_hazards || $mod_controls || $mod_further) {
                 // Talk modified so increment version
-                if ($talk->name != $request->get('name') || $talk->overview != $request->get('overview') || $talk->hazards != $request->get('hazards')
-                    || $talk->controls != $request->get('controls') || $talk->further != $request->get('further')
-                ) {
+                if ($talk->name != request('name') || $mod_overview || $mod_hazards || $mod_controls || $mod_further) {
                     list($major, $minor) = explode('.', $talk->version);
                     $minor ++;
                     $tool_request['version'] = $major . '.' . $minor;
@@ -183,18 +190,34 @@ class ToolboxTalkController extends Controller {
                 }
                 if ($request->get('status') == 1 && Auth::user()->isCC() && !Auth::user()->hasPermission2('sig.toolbox') && (!$talk->master_id || $master_version != $tool_request['version'])) {
                     $tool_request['status'] = 2;
-                    $talk->emailSignOff();
+                    // Mail notification talk owner
+                    if ($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))
+                        Mail::to($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))->send(new \App\Mail\Safety\ToolboxTalkSignoff($talk));
+
                     Toastr::warning("Requesting Sign Off");
                 }
                 $talk->update($tool_request);
 
                 // If regular talk is made active + copy of template determine if template was modified
-                if ($request->get('status') == 1 && !$talk->master && $talk->master_id && $master_version != $tool_request['version'])
-                    $talk->emailModifiedTemplate();
+                if ($request->get('status') == 1 && !$talk->master && $talk->master_id && $master_version != $tool_request['version']) {
+                    $diffs = '';
+                    if ($mod_overview) $diffs .= "OVERVIEW<br>$diff_overview<br>";
+                    if ($mod_hazards) $diffs .= "HAZARDS<br>$diff_hazards<br>";
+                    if ($mod_controls) $diffs .= "CONTROLS<br>$diff_controls<br>";
+                    if ($mod_further) $diffs .= "FURTHER INFOMATION<br>$diff_further<br>";
+                    // Mail notification talk owner
+                    if ($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))
+                        Mail::to($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))->send(new \App\Mail\Safety\ToolboxTalkModifiedTemplate($talk, $diffs));
+                }
 
                 // If toolbox template is made Active email activeTemplate
-                if ($request->get('status') == 1 && $talk->master)
+                if (request('status') == 1 && $talk->master) {
                     $talk->emailActiveTemplate();
+                    // Mail notification talk owner
+                    if ($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))
+                        Mail::to($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))->send(new \App\Mail\Safety\ToolboxTalkActiveTemplate($talk));
+                }
+
 
                 Toastr::success("Saved changes");
             } else
@@ -365,8 +388,7 @@ class ToolboxTalkController extends Controller {
     /**
      * Sign off on the given talk.
      */
-    public
-    function signoff(Request $request, $id)
+    public function signoff(Request $request, $id)
     {
         $talk = ToolboxTalk::findOrFail($id);
         if (!Auth::user()->allowed2('sig.toolbox', $talk))
@@ -376,7 +398,8 @@ class ToolboxTalkController extends Controller {
         $talk->authorised_at = Carbon::now();
         $talk->status = 1;
         $talk->save();
-        $talk->emailReject();
+        if (validEmail($talk->createdBy->email))
+            Mail::to($talk->createdBy)->send(new \App\Mail\Safety\ToolboxTalkApproved($talk));
         Toastr::success("Talk signed off");
 
         return redirect('/safety/doc/toolbox2/' . $talk->id);
@@ -392,7 +415,11 @@ class ToolboxTalkController extends Controller {
             return view('errors/404');
         $talk->status = 0;
         $talk->save();
-        $talk->emailReject();
+        // Mail notification talk creator + cc: talk owner
+        if (validEmail($talk->createdBy->email) && $talk->owned_by->notificationsUsersType('n.doc.whs.approval'))
+            Mail::to($talk->createdBy)->cc($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))->send(new \App\Mail\Safety\ToolboxTalkRejected($talk));
+        elseif (validEmail($talk->createdBy->email))
+            Mail::to($talk->createdBy)->send(new \App\Mail\Safety\ToolboxTalkRejected($talk));
         Toastr::error("Rejected sign off");
 
         return redirect('/safety/doc/toolbox2/' . $talk->id);
@@ -554,5 +581,39 @@ class ToolboxTalkController extends Controller {
         $talk->controls = $master->controls;
         $talk->further = $master->further;
         $talk->save();
+    }
+
+    public function diffArray($old, $new){
+        $matrix = array();
+        $maxlen = 0;
+        foreach($old as $oindex => $ovalue){
+            $nkeys = array_keys($new, $ovalue);
+            foreach($nkeys as $nindex){
+                $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ? $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+                if($matrix[$oindex][$nindex] > $maxlen){
+                    $maxlen = $matrix[$oindex][$nindex];
+                    $omax = $oindex + 1 - $maxlen;
+                    $nmax = $nindex + 1 - $maxlen;
+                }
+            }
+        }
+        if($maxlen == 0) return array(array('d'=>$old, 'i'=>$new));
+        return array_merge(
+            $this->diffArray(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+            array_slice($new, $nmax, $maxlen),
+            $this->diffArray(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+    }
+
+    public function htmlDiff($old, $new){
+        $ret = '';
+        $diff = $this->diffArray(explode(' ', $old), explode(' ', $new));
+        foreach($diff as $k){
+            if(is_array($k)){
+                $ret .= (!empty($k['d'])?'<del>'.implode(' ',$k['d']).'</del> ':'').(!empty($k['i'])?'<ins>'.implode(' ',$k['i']).'</ins> ':'');
+            }else{
+                $ret .= $k . ' ';
+            }
+        }
+        return $ret;
     }
 }

@@ -159,7 +159,7 @@
             }
         },
         columns: [
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'full_name', name: 'full_name'},
             {data: 'phone', name: 'phone', orderable: false},
             {data: 'email', name: 'email', orderable: false},

@@ -236,6 +236,7 @@ class ToolboxTalk extends Model {
     /**
      * Email talk to someone for Sign Off
      */
+    /*
     public function emailSignOff()
     {
         $email_to = [];
@@ -261,11 +262,12 @@ class ToolboxTalk extends Model {
                 $m->cc($email_user);
             $m->subject('Toolbox Talk Sign Off Request - ' . $talk->name);
         });
-    }
+    }*/
 
     /**
      * Email talk as Rejected
      */
+    /*
     public function emailReject()
     {
         $email_to = [];
@@ -293,7 +295,7 @@ class ToolboxTalk extends Model {
                 $m->cc($email_user);
             $m->subject('Toolbox Talk Sign Off Request Rejected - ' . $talk->name);
         });
-    }
+    }*/
 
     /**
      * Email Overdue
@@ -329,6 +331,7 @@ class ToolboxTalk extends Model {
     /**
      * Email talk to notify it has modified a template
      */
+    /*
     public function emailModifiedTemplate()
     {
         $email_to = [];
@@ -355,11 +358,12 @@ class ToolboxTalk extends Model {
             $m->to($email_to);
             $m->subject('Toolbox Talk Created using Modified Template - ' . $talk->name);
         });
-    }
+    }*/
 
     /**
      * Email talk to notify it has modified a template
      */
+    /*
     public function emailActiveTemplate()
     {
         $email_to = [];
@@ -383,7 +387,7 @@ class ToolboxTalk extends Model {
             $m->to($email_to);
             $m->subject('New Toolbox Talk Template Created - ' . $talk->name);
         });
-    }
+    }*/
 
     /**
      * Email document to someone

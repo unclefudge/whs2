@@ -14,6 +14,7 @@ A task has been sent to you with the following details:
 View Task
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

@@ -10,6 +10,7 @@ Task Details: {{ $todo->info }}
 View Task
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

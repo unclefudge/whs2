@@ -26,6 +26,7 @@ An hazard report has been lodged for {{ $hazard->site->name }}.
 View Hazard
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

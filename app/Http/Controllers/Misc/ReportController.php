@@ -85,6 +85,12 @@ class ReportController extends Controller {
 
         return view('manage/report/licence_override', compact('companies'));
     }
+    public function nightly()
+    {
+        $files = array_reverse(array_diff(scandir(public_path('/filebank/log/nightly')), array('.', '..')));
+
+        return view('manage/report/nightly', compact('files'));
+    }
 
     public function companyUsers()
     {
@@ -106,10 +112,4 @@ class ReportController extends Controller {
         return view('manage/report/company_users', compact('all_companies', 'user_companies'));
     }
 
-    public function nightly()
-    {
-        $files = array_reverse(array_diff(scandir(public_path('/filebank/log/nightly')), array('.', '..')));
-
-        return view('manage/report/nightly', compact('files'));
-    }
 }

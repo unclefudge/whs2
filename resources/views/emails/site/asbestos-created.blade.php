@@ -27,6 +27,7 @@ An asbestos notification has been lodged for {{ $asbestos->site->name }}.
 View Notification
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

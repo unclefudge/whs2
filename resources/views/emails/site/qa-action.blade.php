@@ -24,6 +24,7 @@ A Quality Assurance has been updated for {{ $qa->name }} on site {{ $qa->site->n
 View QA
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

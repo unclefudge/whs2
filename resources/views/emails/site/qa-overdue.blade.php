@@ -21,6 +21,7 @@ A Quality Assurance is currently overdue for {{ $qa->name }} on site {{ $qa->sit
 View QA
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent

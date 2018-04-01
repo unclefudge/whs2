@@ -14,6 +14,7 @@ A new user has been created on {{ config('app.name') }} with the following detai
 View User
 @endcomponent
 
+
 Regards,<br>
 {{ config('app.name') }}
 @endcomponent
