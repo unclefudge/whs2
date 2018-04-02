@@ -186,8 +186,8 @@ class UserController extends Controller {
             'lastname'           => 'required',
             'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $user->id . ',id',
             'roles'              => 'required_if:subscription,1',
-            'employment_type'    => 'required',
-            'subcontractor_type' => 'required_if:employment_type,3',
+            //'employment_type'    => 'required',
+            //'subcontractor_type' => 'required_if:employment_type,3',
         ];
 
         $mesgs = [
