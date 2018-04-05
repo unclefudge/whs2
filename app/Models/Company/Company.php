@@ -1036,7 +1036,7 @@ class Company extends Model {
         $details = '<b>Business Details:</b> ';
         if (!$this->abn) $details .= 'ABN, ';
         if (!$this->business_entity) $details .= 'Business Entity, ';
-        if (!$this->gst) $details .= 'GST, ';
+        if ($this->gst === null) $details .= 'GST, ';
         if (!$this->creditor_code) $details .= 'Creditor Code, ';
         if ($details != '<b>Business Details:</b> ')
             $str .= rtrim($details, ', ') . '<br>';
