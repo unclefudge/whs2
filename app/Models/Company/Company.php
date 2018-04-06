@@ -999,7 +999,7 @@ class Company extends Model {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1)) {
                 $missing_docs[$type] = $name;
                 if ($this->activeCompanyDoc($type)) {
-                    $missing_status = ($this->activeCompanyDoc($type)->status == 2) ? 'label-warning' : 'label-danger' ;
+                    $missing_status = ($this->activeCompanyDoc($type)->status == 2) ? 'label-warning' : 'label-danger';
                     $missing_html .= "<span class='label label-sm $missing_status'>$name</span>, ";
                 } else
                     $missing_html .= "$name, ";
@@ -1022,31 +1022,33 @@ class Company extends Model {
     {
         $today = Carbon::today();
         $str = '';
-        $contact = '<b>Company Details:</b> ';
-        if (!$this->email) $contact .= '<span class="font-red">email</span>, ';
-        if (!$this->phone) $contact .= 'phone, ';
-        if (!$this->address) $contact .= 'address, ';
-        if (!$this->suburb) $contact .= 'suburb, ';
-        if (!$this->state) $contact .= 'state, ';
-        if (!$this->postcode) $contact .= 'postcode, ';
-        if (!$this->primary_user) $contact .= '<span class="font-red">primary contact</span>, ';
-        if ($contact != '<b>Company Details:</b> ')
-            $str .= rtrim($contact, ', ') . '<br>';
+        if ($this->category) {
+            $contact = '<b>Company Details:</b> ';
+            if (!$this->email) $contact .= '<span class="font-red">email</span>, ';
+            if (!$this->phone) $contact .= 'phone, ';
+            if (!$this->address) $contact .= 'address, ';
+            if (!$this->suburb) $contact .= 'suburb, ';
+            if (!$this->state) $contact .= 'state, ';
+            if (!$this->postcode) $contact .= 'postcode, ';
+            if (!$this->primary_user) $contact .= '<span class="font-red">primary contact</span>, ';
+            if ($contact != '<b>Company Details:</b> ')
+                $str .= rtrim($contact, ', ') . '<br>';
 
-        $details = '<b>Business Details:</b> ';
-        if (!$this->abn) $details .= 'ABN, ';
-        if (!$this->business_entity) $details .= 'Business Entity, ';
-        if ($this->gst === null) $details .= 'GST, ';
-        if (!$this->creditor_code) $details .= 'Creditor Code, ';
-        if ($details != '<b>Business Details:</b> ')
-            $str .= rtrim($details, ', ') . '<br>';
+            $details = '<b>Business Details:</b> ';
+            if (!$this->abn) $details .= 'ABN, ';
+            if (!$this->business_entity) $details .= 'Business Entity, ';
+            if ($this->gst === null) $details .= 'GST, ';
+            if (!$this->creditor_code) $details .= 'Creditor Code, ';
+            if ($details != '<b>Business Details:</b> ')
+                $str .= rtrim($details, ', ') . '<br>';
 
 
-        if ($this->missingDocs())
-            $str .= "<b>Documents:</b> " . $this->missingDocs('csv');
+            if ($this->missingDocs())
+                $str .= "<b>Documents:</b> " . $this->missingDocs('csv');
+        }
+
 
         return ($str) ? $str : null;
-
     }
 
 
