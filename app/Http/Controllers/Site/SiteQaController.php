@@ -421,15 +421,17 @@ class SiteQaController extends Controller {
     public function qaPDF(Request $request)
     {
         $site = Site::find(request('site_id'));
-        $output_file = public_path('filebank/tmp/qa/'.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('d-m-Y H-i-s').'.pdf');
-        touch($output_file);
+        if ($site) {
+            $output_file = public_path('filebank/tmp/qa/'.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('d-m-Y H-i-s').'.pdf');
+            touch($output_file);
 
-        // defer the processing of the image thumbnails
-        SiteQaPdf::dispatch(request('site_id'), $output_file);
+            // defer the processing of the image thumbnails
+            SiteQaPdf::dispatch(request('site_id'), $output_file);
+        }
 
         return redirect('/site/export/qa')->with('message', 'Generating PDF!');
 
-
+/*
         $site = Site::findOrFail(request('site_id'));
 
         $data = [];
@@ -522,6 +524,7 @@ class SiteQaController extends Controller {
         if ($request->has('view_pdf'))
             return $pdf->stream();
 
+*/
         /*$file_path = public_path('filebank/tmp/'.Auth::user()->id.'-'.$site->id.Carbon::now()->format('Ymd').'.pdf');
         if (file_exists($file_path))
             unlink($file_path);
@@ -531,6 +534,7 @@ class SiteQaController extends Controller {
         return redirect('/site/export/qa');*/
 
         return $pdf->stream();
+
 
         if ($request->has('email_pdf')) {
             /*$file = public_path('filebank/tmp/jobstart-' . Auth::user()->id  . '.pdf');
