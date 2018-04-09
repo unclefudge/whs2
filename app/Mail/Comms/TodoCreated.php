@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TodoCreated extends Mailable {
+class TodoCreated extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 

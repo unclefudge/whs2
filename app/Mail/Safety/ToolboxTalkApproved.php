@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ToolboxTalkApproved extends Mailable {
+class ToolboxTalkApproved extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 

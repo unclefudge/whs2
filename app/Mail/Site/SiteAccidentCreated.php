@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SiteAccidentCreated extends Mailable {
+class SiteAccidentCreated extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 
