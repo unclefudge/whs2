@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <hr>
-                        <h3>Reports created in the last 10 days <a href="/site/export/qa" class="btn dark pull-right">Refresh</a> </h3>
+                        <h3>Reports created in the last 10 days <a href="/site/export/qa" class="btn dark pull-right">Refresh</a></h3>
                         <?php $files = array_reverse(array_diff(scandir(public_path('/filebank/tmp/qa/')), array('.', '..'))); ?>
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
@@ -66,18 +66,23 @@
                                     if (filesize(public_path("/filebank/tmp/qa/$file")) > 0)
                                         $pass = true;
 
-                                    $date = Carbon\Carbon::createFromFormat('d/m/Y H:i:s', substr($file, -23, 2).'/'.substr($file, -20, 2).'/'.substr($file, -17, 4).' '.substr($file, -12, 2).':'.substr($file, -9, 2).':'.substr($file, -6, 2));
+                                    $date = Carbon\Carbon::createFromFormat('d/m/Y H:i:s', substr($file, - 23, 2) . '/' . substr($file, - 20, 2) . '/' . substr($file, - 17, 4) . ' ' . substr($file, - 12, 2) . ':' . substr($file, - 9, 2) . ':' . substr($file, - 6, 2));
+                                    preg_match('#\((.*?)\)#', $file, $match);
+                                    $site_id = $match[1];
+                                    $site = App\Models\Site\Site::find($site_id);
                                     ?>
-                                    @if ($pass)
-                                        <tr>
-                                            <td><a href="/filebank/tmp/qa/{{ $file }}" target="_blank">{!! substr($file, 0, -23) !!} </a></td>
-                                            <td>{!! $date->format('d/m/y H:i a') !!}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td>{!! substr($file, 0, -23) !!} </td>
-                                            <td><span class="label label-info"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
-                                        </tr>
+                                    @if ($site && Auth::user()->allowed2('view.site', $site))
+                                        @if ($pass)
+                                            <tr>
+                                                <td><a href="/filebank/tmp/qa/{{ $file }}" target="_blank">{!! substr($file, 0, -23) !!} </a></td>
+                                                <td>{!! $date->format('d/m/y H:i a') !!}</td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td>{!! substr($file, 0, -23) !!} </td>
+                                                <td><span class="label label-info"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
+                                            </tr>
+                                        @endif
                                     @endif
                                 @endif
                             @endforeach
