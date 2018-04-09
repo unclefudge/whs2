@@ -54,6 +54,7 @@
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
+                                <th width="5%"> #</th>
                                 <th> Site</th>
                                 <th width="20%"> Date</th>
                             </tr>
@@ -74,13 +75,17 @@
                                     @if ($site && Auth::user()->allowed2('view.site', $site))
                                         @if ($pass)
                                             <tr>
-                                                <td><a href="/filebank/tmp/qa/{{ $file }}" target="_blank">{!! substr($file, 0, -23) !!} </a></td>
+                                                <td>
+                                                    <div class="text-center"><a href="/filebank/tmp/qa/{{ $file }}" target="_blank"><i class="fa fa-file-text-o"></i></a></div>
+                                                </td>
+                                                <td>{!! substr($file, 0, -23) !!}</td>
                                                 <td>{!! $date->format('d/m/y H:i a') !!}</td>
                                             </tr>
                                         @else
                                             <tr>
+                                                <td>&nbsp;</td>
                                                 <td>{!! substr($file, 0, -23) !!} </td>
-                                                <td><span class="label label-info"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
+                                                <td><span class="font-red"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
                                             </tr>
                                         @endif
                                     @endif
