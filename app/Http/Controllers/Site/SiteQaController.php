@@ -20,6 +20,7 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Company\Company;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
+use App\Jobs\SiteQaPdf;
 use App\Http\Requests;
 use App\Http\Requests\Site\SiteQaRequest;
 use App\Http\Controllers\Controller;
@@ -419,9 +420,21 @@ class SiteQaController extends Controller {
 
     public function qaPDF(Request $request)
     {
-        $site = Site::findOrFail($request->get('site_id'));
+        $site = Site::find(request('site_id'));
+        $output_file = public_path('filebank/tmp/qa/'.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('d-m-Y H-i-s').'.pdf');
+        touch($output_file);
+
+        // defer the processing of the image thumbnails
+        SiteQaPdf::dispatch(request('site_id'), $output_file);
+
+        return redirect('/site/export/qa')->with('message', 'Generating PDF!');
+
+
+        $site = Site::findOrFail(request('site_id'));
 
         $data = [];
+        $users = [];
+        $companies = [];
         $site_qa = SiteQa::where('site_id', $site->id)->where('status', '<>', '-1')->where('company_id', '3')->get();
         foreach ($site_qa as $qa) {
             //echo $qa->status.' '.$qa->name."<br>";
@@ -430,9 +443,21 @@ class SiteQaController extends Controller {
             $obj_qa->id = $qa->id;
             $obj_qa->name = $qa->name;
             $obj_qa->status = $qa->status;
-            $obj_qa->super_sign_by = ($qa->supervisor_sign_by) ? User::find($qa->supervisor_sign_by)->fullname : '';
+            //$obj_qa->super_sign_by = ($qa->super_sign_by) ? User::find($qa->super_sign_by)->fullname : '';
+            $obj_qa->super_sign_by = '';
+            if ($qa->supervisor_sign_by) {
+                if (!isset($users[$qa->supervisor_sign_by]))
+                    $users[$qa->supervisor_sign_by] = User::find($qa->supervisor_sign_by);
+                $obj_qa->super_sign_by = $users[$qa->supervisor_sign_by]->fullname;
+            }
             $obj_qa->super_sign_at = ($qa->supervisor_sign_by) ? $qa->supervisor_sign_at->format('d/m/Y') : '';
-            $obj_qa->manager_sign_by = ($qa->manager_sign_by) ? User::find($qa->manager_sign_by)->fullname : '';
+            //$obj_qa->manager_sign_by = ($qa->manager_sign_by) ? User::find($qa->manager_sign_by)->fullname : '';
+            $obj_qa->manager_sign_by = '';
+            if ($qa->manager_sign_by) {
+                if (!isset($users[$qa->manager_sign_by]))
+                    $users[$qa->manager_sign_by] = User::find($qa->manager_sign_by);
+                $obj_qa->manager_sign_by = $users[$qa->manager_sign_by]->fullname;
+            }
             $obj_qa->manager_sign_at = ($qa->manager_sign_by) ? $qa->manager_sign_at->format('d/m/Y') : '';
             $obj_qa->items = [];
             $obj_qa->actions = [];
@@ -448,10 +473,20 @@ class SiteQaController extends Controller {
 
                 // Item Completed + Signed Off
                 if ($item->status == '1') {
-                    $user_signed = User::find($item->sign_by);
-                    $company = ($item->done_by) ? Company::find($item->done_by) : $user_signed->company;
+                    // Get User Signed
+                    if (!isset($users[$item->sign_by]))
+                        $users[$item->sign_by] = User::find($item->sign_by);
+                    $user_signed = $users[$item->sign_by];
+                    // Get Company
+                    //$company = ($item->done_by) ? Company::find($item->done_by) : $user_signed->company;
+                    $company = $user_signed->company;
+                    if ($item->done_by) {
+                        if (!isset($companies[$item->done_by]))
+                            $companies[$item->done_by] = Company::find($item->done_by);
+                        $company = $companies[$item->done_by];
+                    }
                     $obj_qa->items[$item->order]['done_by'] = $company->name_alias . " (lic. $company->licence_no)";
-                    $obj_qa->items[$item->order]['sign_by'] = User::find($item->sign_by)->fullname;
+                    $obj_qa->items[$item->order]['sign_by'] = $user_signed->fullname;
                     $obj_qa->items[$item->order]['sign_at'] = $item->sign_at->format('d/m/Y');
                 }
             }
@@ -460,7 +495,10 @@ class SiteQaController extends Controller {
             foreach ($qa->actions as $action) {
                 if (!preg_match('/^Moved report to/', $action->action)) {
                     $obj_qa->actions[$action->id]['action'] = $action->action;
-                    $obj_qa->actions[$action->id]['created_by'] = User::find($action->created_by)->fullname;
+                    //$obj_qa->actions[$action->id]['created_by'] = User::find($action->created_by)->fullname;
+                    if (!isset($users[$action->created_by]))
+                        $users[$action->created_by] = User::find($action->created_by);
+                    $obj_qa->actions[$action->id]['created_by'] = $users[$action->created_by]->fullname;
                     $obj_qa->actions[$action->id]['created_at'] = $action->created_at->format('d/m/Y');
                 }
             }
@@ -484,10 +522,14 @@ class SiteQaController extends Controller {
         if ($request->has('view_pdf'))
             return $pdf->stream();
 
-        //$file = public_path('filebank/company/' . $doc->for_company_id . '/wms/' . $doc->name . ' v' . $doc->version . ' ref-' . $doc->id . ' ' . '.pdf');
-        //if (file_exists($file))
-        //    unlink($file);
-        //$pdf->save($file);
+        /*$file_path = public_path('filebank/tmp/'.Auth::user()->id.'-'.$site->id.Carbon::now()->format('Ymd').'.pdf');
+        if (file_exists($file_path))
+            unlink($file_path);
+
+        $pdf->save($file_path);
+
+        return redirect('/site/export/qa');*/
+
         return $pdf->stream();
 
         if ($request->has('email_pdf')) {
@@ -500,24 +542,6 @@ class SiteQaController extends Controller {
                 $email_list = explode(';', $request->get('email_list'));
                 $email_list = array_map('trim', $email_list); // trim white spaces
 
-                $data = [
-                    'user_fullname'     => Auth::user()->fullname,
-                    'user_company_name' => Auth::user()->company->name,
-                    'startdata'         => $startdata
-                ];
-                Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
-                    $user_email = Auth::user()->email;
-                    ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
-
-                    $m->from($send_from, Auth::user()->fullname);
-                    $m->to($email_list);
-                    $m->subject('Upcoming Job Start Dates');
-                });
-                if (count(Mail::failures()) > 0) {
-                    foreach (Mail::failures as $email_address)
-                        Toastr::error("Failed to send to $email_address");
-                } else
-                    Toastr::success("Sent email");
 
                 return view('planner/export/qa');
             }

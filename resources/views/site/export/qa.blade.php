@@ -2,7 +2,7 @@
 
 @section('pagetitle')
     <div class="page-title">
-        <h1><i class="fa fa-download"></i> Quality Assurance Export</h1>
+        <h1><i class="fa fa-download"></i> Quality Assurance Report</h1>
     </div>
 @stop
 
@@ -29,7 +29,7 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Quality Assurance Export</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Quality Assurance Report</span>
                         </div>
                         <div class="actions">
                             <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen" style="margin: 3px"></a>
@@ -39,16 +39,51 @@
                         <!-- BEGIN FORM-->
                         {!! Form::model('SiteQaExport', ['action' => 'Site\SiteQaController@qaPDF', 'class' => 'horizontal-form']) !!}
                         <div class="row">
-                            <div class="col-md-3"><h4>Export QA by Site</h4></div>
+                            <div class="col-md-3"><h4>QA Report by Site</h4></div>
                             <div class="col-md-3">
                                 {!! Form::select('site_id', Auth::user()->company->sitesQaSelect('1', 'prompt'),
                                 null, ['class' => 'form-control select2" style="width:100%"', 'id' => 'site_id']) !!}
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" class="btn green" name="export_site" value="true"> View PDF</button>
+                                <button type="submit" class="btn green" name="export_site" value="true"> Generate PDF</button>
                             </div>
                         </div>
-                        <br>
+                        <hr>
+                        <h3>Reports created in the last 10 days <a href="/site/export/qa" class="btn dark pull-right">Refresh</a> </h3>
+                        <?php $files = array_reverse(array_diff(scandir(public_path('/filebank/tmp/qa/')), array('.', '..'))); ?>
+                        <table class="table table-striped table-bordered table-hover order-column" id="table_list">
+                            <thead>
+                            <tr class="mytable-header">
+                                <th> Site</th>
+                                <th width="20%"> Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($files as $file)
+                                @if (($file[0] != '.'))
+                                    <?php
+                                    $pass = false;
+                                    if (filesize(public_path("/filebank/tmp/qa/$file")) > 0)
+                                        $pass = true;
+
+                                    $date = Carbon\Carbon::createFromFormat('d/m/Y H:i:s', substr($file, -23, 2).'/'.substr($file, -20, 2).'/'.substr($file, -17, 4).' '.substr($file, -12, 2).':'.substr($file, -9, 2).':'.substr($file, -6, 2));
+                                    ?>
+                                    @if ($pass)
+                                        <tr>
+                                            <td><a href="/filebank/tmp/qa/{{ $file }}" target="_blank">{!! substr($file, 0, -23) !!} </a></td>
+                                            <td>{!! $date->format('d/m/y H:i a') !!}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td>{!! substr($file, 0, -23) !!} </td>
+                                            <td><span class="label label-info"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
+                                        </tr>
+                                    @endif
+                                @endif
+                            @endforeach
+                            </tbody>
+                        </table>
+
                         <div class="form-actions right">
                             <a href="/site/export" class="btn default"> Back</a>
                         </div>
