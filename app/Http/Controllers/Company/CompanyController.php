@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
+use App\Models\Company\CompanyLeave;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\Trade;
 use App\Models\Site\Planner\Task;
@@ -151,7 +152,7 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $company = Company::findorFail($id);
 
@@ -159,6 +160,7 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('edit.company', $company))
             return view('errors/404');
 
+        // Validate
         $validator = Validator::make(request()->all(), [
             'name'         => 'required',
             'phone'        => 'required',
@@ -170,11 +172,9 @@ class CompanyController extends Controller {
             'primary_user' => 'required',
         ]);
 
-
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'company');
 
-            //return redirect("company/$company->id")->withErrors($validator)->withInput();
             return back()->withErrors($validator)->withInput();
         }
 
@@ -212,7 +212,7 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateBusiness(Request $request, $id)
+    public function updateBusiness($id)
     {
         $company = Company::findorFail($id);
 
@@ -220,8 +220,8 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('edit.company.acc', $company))
             return view('errors/404');
 
+        // Validate
         $validator = Validator::make(request()->all(), ['abn' => 'required',]);
-
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'business');
 
@@ -262,8 +262,8 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('edit.company.whs', $company))
             return view('errors/404');
 
+        // Validate
         $validator = Validator::make(request()->all(), []);
-
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'whs');
 
@@ -282,7 +282,7 @@ class CompanyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateConstruction(Request $request, $id)
+    public function updateConstruction($id)
     {
         $company = Company::findorFail($id);
 
@@ -290,8 +290,8 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('edit.company.con', $company))
             return view('errors/404');
 
+        // Validate
         $validator = Validator::make(request()->all(), ['supervisors' => 'required_if:transient,1'], ['supervisors.required_if' => 'The supervisor name field is required.']);
-
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'construction');
             Toastr::error("Failed to save changes");
@@ -301,7 +301,7 @@ class CompanyController extends Controller {
 
         // Update trades for company
         $old_trades = $company->tradesSkilledIn;
-        $new_trades = $request->get('trades');
+        $new_trades = request('trades');
 
         $planned_trades = '';
         foreach ($old_trades as $old_trade) {
@@ -329,8 +329,8 @@ class CompanyController extends Controller {
         $company->update(request()->all());
 
         // Attach Supervisors if Transient
-        if ($request->get('transient')) {
-            $company->supervisedBy()->sync($request->get('supervisors'));
+        if (request('transient')) {
+            $company->supervisedBy()->sync(request('supervisors'));
         } else {
             $company->supervisedBy()->detach();
         }
@@ -338,8 +338,8 @@ class CompanyController extends Controller {
         // Determine if Licence is required
         $old_licence_overide = $company->lic_override;
         $old_trades_skilled_in = $company->tradesSkilledInSBC();
-        if ($request->get('trades')) {
-            $company->tradesSkilledIn()->sync($request->get('trades'));
+        if (request('trades')) {
+            $company->tradesSkilledIn()->sync(request('trades'));
             $company->lic_override = 0;
         } else
             $company->tradesSkilledIn()->detach();
@@ -359,6 +359,90 @@ class CompanyController extends Controller {
         return redirect("company/$company->id");
 
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeLeave($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.company.leave', $company))
+            return view('errors/404');
+
+        // Validate
+        $validator = Validator::make(request()->all(), ['from' => 'required', 'notes' => 'required'], ['from.required' => 'Please specify a date range']);
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'leave.add');
+            Toastr::error("Failed to save leave");
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Format date from daterange picker to mysql format
+        $leave_request = request()->all();
+        $leave_request['company_id'] = $company->id;
+        $leave_request['from'] = Carbon::createFromFormat('d/m/Y H:i', request('from') . '00:00')->toDateTimeString();
+        $leave_request['to'] = Carbon::createFromFormat('d/m/Y H:i', request('to') . '00:00')->toDateTimeString();
+
+        //dd($leave_request);
+        // Create Leave
+        CompanyLeave::create($leave_request);
+        Toastr::success("Created new leave");
+
+        return redirect("company/$company->id");
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateLeave($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.company.leave', $company))
+            return view('errors/404');
+
+        foreach (request()->all() as $key => $val) {
+            if (preg_match('/from-/', $key)) {
+                list($crap, $leave_id) = explode('-', $key);
+                $leave_request['from'] = Carbon::createFromFormat('d/m/Y H:i', request("from-$leave_id") . '00:00')->toDateTimeString();
+                $leave_request['to'] = Carbon::createFromFormat('d/m/Y H:i', request("to-$leave_id") . '00:00')->toDateTimeString();
+                $leave_request['notes'] = request("notes-$leave_id");
+                $leave = CompanyLeave::find($leave_id);
+                $leave->update($leave_request);
+                Toastr::success("Saved changes");
+            }
+        }
+
+        return redirect("company/$company->id");
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyLeave($id, $lid)
+    {
+        $leave = CompanyLeave::findOrFail($lid);
+
+        // Check authorisation
+        if (Auth::user()->allowed2('edit.company.leave', $leave->company)) {
+            $leave->delete();
+            Toastr::success("Deleted leave");
+        } else
+            Toastr::error("Failed to delete leave");
+
+        return redirect("company/$leave->company_id");
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -505,7 +589,7 @@ class CompanyController extends Controller {
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
             ->editColumn('id', function ($user) {
                 //if (Auth::user()->allowed2('view.user', $user))
-                    return '<div class="text-center"><a href="/user/'.$user->id.'"><i class="fa fa-search"></i></a></div>';
+                return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
                 //return '';
             })
             ->editColumn('full_name', function ($user) {

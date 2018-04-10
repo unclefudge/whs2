@@ -173,12 +173,11 @@
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Company Leave --}}
-                {{--}}
                 @if (Auth::user()->allowed2('view.company.leave', $company))
                     @include('company/_show-leave')
                     @include('company/_edit-leave')
+                    @include('company/_add-leave')
                 @endif
-                --}}
 
                 {{-- Construction --}}
                 @if (Auth::user()->allowed2('view.company.con', $company))
@@ -277,7 +276,33 @@
         e.preventDefault();
         $('#show_' + name).show();
         $('#edit_' + name).hide();
+        $('#add_' + name).hide();
     }
+
+    function addForm(name) {
+        $('#show_' + name).hide();
+        $('#add_' + name).show();
+    }
+
+    $('.delete_leave').click(function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var date = $(this).data('date');
+        var note = $(this).data('note');
+        
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to restore this leave!<br><b>" + date + ': ' + note + "</b>",
+            showCancelButton: true,
+            cancelButtonColor: "#555555",
+            confirmButtonColor: "#E7505A",
+            confirmButtonText: "Yes, delete it!",
+            allowOutsideClick: true,
+            html: true,
+        }, function () {
+            window.location = "/company/{{ $company->id }}/leave/"+id;
+        });
+    });
 
 
             @if (count($errors) > 0)
@@ -286,10 +311,10 @@
         $('#show_' + errors.FORM).hide();
         $('#edit_' + errors.FORM).show();
     }
-
-    if (errors.FORM == 'ics' || errors.FORM == 'whs') {
-        $('#show_doc' + errors.TYPE).hide();
-        $('#edit_doc' + errors.TYPE).show();
+    if (errors.FORM == 'leave.add') {
+        $('#show_leave').hide();
+        $('#edit_leave').hide();
+        $('#add_leave').show();
     }
 
     console.log(errors)

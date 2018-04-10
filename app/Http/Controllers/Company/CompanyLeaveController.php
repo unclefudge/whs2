@@ -116,10 +116,11 @@ class CompanyLeaveController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $leave = CompanyLeave::findOrFail($id);
 
+        dd($id);
         // Check authorisation
         if (Auth::user()->allowed2('edit.company.leave', $leave->company)){
             $leave->delete();

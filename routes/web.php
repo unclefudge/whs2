@@ -94,8 +94,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('user', 'UserController');
 
     // Company Leave Routes
-    Route::get('company/leave/dt/leave', 'Company\CompanyLeaveController@getCompanyLeave');
-    Route::resource('company/leave', 'Company\CompanyLeaveController');
+    Route::get('/company/leave/dt/leave', 'Company\CompanyLeaveController@getCompanyLeave');
+    Route::resource('/company/leave', 'Company\CompanyLeaveController');
 
 
     Route::get('company/doc/standard', 'Company\CompanyDocController@showStandard');
@@ -127,6 +127,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('company/{id}/business', 'Company\CompanyController@updateBusiness');
     Route::post('company/{id}/construction', 'Company\CompanyController@updateConstruction');
     Route::post('company/{id}/whs', 'Company\CompanyController@updateWHS');
+    Route::post('company/{id}/leave', 'Company\CompanyController@storeLeave');
+    Route::post('company/{id}/leave/update', 'Company\CompanyController@updateLeave');
+    Route::get('company/{id}/leave/{lid}', 'Company\CompanyController@destroyLeave');
     Route::get('company/{id}/user', 'Company\CompanyController@users');
     //Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
     //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');

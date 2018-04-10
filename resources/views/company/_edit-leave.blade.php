@@ -6,11 +6,10 @@
         </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateConstruction', $company->id]]) !!}
+        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateLeave', $company->id]]) !!}
 
         {{-- Leave --}}
         @if ($company->leave()->whereDate('to', '>', date('Y-m-d'))->first())
-
             @foreach($company->leave()->whereDate('to', '>', date('Y-m-d'))->get() as $leave)
                 <div class="row">
                     <div class="form-group {!! fieldHasError("from-$leave->id", $errors) !!}">
@@ -25,16 +24,19 @@
                         </div>
                     </div>
                 </div>
+                <br>
                 <div class="row">
                     <div class="form-group {!! fieldHasError("notes-$leave->id", $errors) !!}">
                         {!! Form::label("notes-$leave->id", 'Notes:', ['class' => 'col-md-3 control-label']) !!}
                         <div class="col-md-9">
-                            {!! Form::text("notes-$leave->id", $leave->notes, ['class' => 'form-control', 'required']) !!}
+                            {!! Form::textarea("notes-$leave->id", $leave->notes, ['rows' => '2', 'class' => 'form-control', 'required']) !!}
                             {!! fieldErrorMessage("notes-$leave->id", $errors) !!}
                         </div>
                     </div>
                 </div>
-                <hr class="field-hr">
+                @if(!$loop->last)
+                    <hr class="field-hr">
+                @endif
             @endforeach
         @else
             No scheduled leave
