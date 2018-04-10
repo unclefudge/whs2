@@ -63,28 +63,35 @@
                             @foreach($files as $file)
                                 @if (($file[0] != '.'))
                                     <?php
-                                    $pass = false;
+                                    $processed = false;
                                     if (filesize(public_path("/filebank/tmp/qa/$file")) > 0)
-                                        $pass = true;
+                                        $processed = true;
 
-                                    $date = Carbon\Carbon::createFromFormat('d/m/Y H:i:s', substr($file, - 23, 2) . '/' . substr($file, - 20, 2) . '/' . substr($file, - 17, 4) . ' ' . substr($file, - 12, 2) . ':' . substr($file, - 9, 2) . ':' . substr($file, - 6, 2));
+                                    $date = Carbon\Carbon::createFromFormat('YmdHis', substr($file, - 19, 4) . substr($file, - 15, 2) . substr($file, - 13, 2) . substr($file, - 11, 2) . substr($file, - 9, 2) . substr($file, - 7, 2));
+                                    $deleted = false;
+                                    if ($date->lt(Carbon\Carbon::today()->subDays(7))) {
+                                        unlink(public_path("/filebank/tmp/qa/$file"));
+                                        $deleted = true;
+                                    }
+
+                                    $done = substr($file, - 5, 1);
                                     preg_match('#\((.*?)\)#', $file, $match);
                                     $site_id = $match[1];
                                     $site = App\Models\Site\Site::find($site_id);
                                     ?>
-                                    @if ($site && Auth::user()->allowed2('view.site', $site))
-                                        @if ($pass)
+                                    @if (!$deleted && $site && Auth::user()->allowed2('view.site', $site))
+                                        @if ($processed)
                                             <tr>
                                                 <td>
                                                     <div class="text-center"><a href="/filebank/tmp/qa/{{ $file }}" target="_blank"><i class="fa fa-file-text-o"></i></a></div>
                                                 </td>
-                                                <td>{!! substr($file, 0, -23) !!}</td>
+                                                <td>{!! ($done) ? $site->name : $site->name . ' <span class="label label-warning">incomplete</span>' !!}</td>
                                                 <td>{!! $date->format('d/m/y H:i a') !!}</td>
                                             </tr>
                                         @else
                                             <tr>
                                                 <td>&nbsp;</td>
-                                                <td>{!! substr($file, 0, -23) !!} </td>
+                                                <td>{!! ($done) ? $site->name : $site->name . ' <span class="label label-warning">incomplete</span>' !!}</td>
                                                 <td><span class="font-red"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
                                             </tr>
                                         @endif

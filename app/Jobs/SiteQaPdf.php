@@ -21,16 +21,17 @@ class SiteQaPdf implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $site_id, $output_file;
+    protected $site_id, $data, $output_file;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($site_id, $output_file)
+    public function __construct($site_id, $data, $output_file)
     {
         $this->site_id = $site_id;
+        $this->data = $data;
         $this->output_file = $output_file;
     }
 
@@ -42,7 +43,9 @@ class SiteQaPdf implements ShouldQueue
     public function handle()
     {
         $site = Site::findOrFail($this->site_id);
+        $data = $this->data;
 
+        /*
         $data = [];
         $users = [];
         $companies = [];
@@ -110,17 +113,10 @@ class SiteQaPdf implements ShouldQueue
                 }
             }
             $data[] = $obj_qa;
-        }
+        }*/
 
         $pdf = PDF::loadView('pdf/site-qa', compact('site', 'data'));
         $pdf->setPaper('a4');
-
-        //$user_id = (Auth::check()) ? Auth::user()->id : 0;
-        //$file_path = public_path('filebank/tmp/'.$this->output_file.'.pdf');
-        //$file_path = public_path('filebank/tmp/'.$user_id.'-'.$site->id.'-'.Carbon::now()->format('YmdHis').'.pdf');
-        //if (file_exists($this->output_file))
-        //    unlink($this->output_file);
-
         $pdf->save($this->output_file);
     }
 }
