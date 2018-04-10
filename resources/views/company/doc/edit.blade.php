@@ -156,7 +156,7 @@
                                 <div class="col-md-6">
                                     {{-- Category --}}
                                     {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control']) !!}
-                                    @if ($doc->category_id > 9)
+                                    @if ($doc->category_id > 8)
                                         <div class="form-group">
                                             {!! Form::label('category_id_text', 'Category', ['class' => 'control-label']) !!}
                                             {!! Form::text('category_id_text', \App\Models\Company\CompanyDocCategory::find($doc->category_id)->name, ['class' => 'form-control bs-select', 'disabled']) !!}
@@ -166,7 +166,7 @@
                                     {{-- Name --}}
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('name', null, ['class' => 'form-control', ($doc->category_id < 10) ? 'readonly' : '']) !!}
+                                        {!! Form::text('name', null, ['class' => 'form-control', ($doc->category_id < 9) ? 'readonly' : '']) !!}
                                     </div>
                                     @if (in_array($doc->category_id, [1, 2, 3]))
                                         {{-- Policy --}}

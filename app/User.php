@@ -231,18 +231,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function companyDocTypeSelect($action, $company, $prompt = '')
     {
         $array = [];
+        $single = DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
         foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
             // Public Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && $id < 9 && $company->activeCompanyDoc($id)))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
             }
             // Private Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && $id < 9  && $company->activeCompanyDoc($id)))
+                    if (!($action == 'add' && in_array($id, $single)  && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
             }
