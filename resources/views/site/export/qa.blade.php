@@ -86,7 +86,7 @@
                                                     <div class="text-center"><a href="/filebank/tmp/qa/{{ $file }}" target="_blank"><i class="fa fa-file-text-o"></i></a></div>
                                                 </td>
                                                 <td>{!! ($done) ? $site->name : $site->name . ' <span class="label label-warning">incomplete</span>' !!}</td>
-                                                <td>{!! $date->format('d/m/y H:i a') !!}</td>
+                                                <td>{!! $date->format('d/m/y g:i a') !!}</td>
                                             </tr>
                                         @else
                                             <tr>
