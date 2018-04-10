@@ -890,11 +890,17 @@ class Company extends Model {
 
         // Subcontractor (On Site Trade)
         if ($this->category == 1 && in_array($type, [1, 4, 5])) return true; // Requires PL, Sub, PTC
-        if ($this->category == 1 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // Requires CL
+        if ($this->category == 1 && $type == 7) {
+            if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
+            if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
+        }
 
         // Service Provider (On Site Trades) or Supply & Fit
         if (in_array($this->category, [2, 4]) && $type == 1) return true; // Requires PL
-        if (in_array($this->category, [2, 4]) && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // Requires CL
+        if (in_array($this->category, [2, 4]) && $type == 7) {
+            if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
+            if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
+        }
 
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
