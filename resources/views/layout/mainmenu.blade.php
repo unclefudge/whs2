@@ -135,7 +135,7 @@
                                                     </ul>
                                                 </div>
                                             @endif
-                                            @if (true))
+                                            @if (true)
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Documents</h3></li>
