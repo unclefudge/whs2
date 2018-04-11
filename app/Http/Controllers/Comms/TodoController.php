@@ -189,14 +189,12 @@ class TodoController extends Controller {
     {
         $todo = Todo::findorFail($id);
 
-        if (!$todo->isOpenedBy(Auth::user())) {
-            $todo->markOpenedBy(Auth::user());
-        }
-
-
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('view.todo', $todo))
-        //   return view('errors/404');
+        if (!Auth::user()->allowed2('view.todo', $todo))
+           return view('errors/404');
+
+        if (!$todo->isOpenedBy(Auth::user()))
+            $todo->markOpenedBy(Auth::user());
 
         return view('comms/todo/show', compact('todo'));
     }

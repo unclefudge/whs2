@@ -209,7 +209,7 @@ class UserController extends Controller {
             return view('errors/404');
 
         //$user_request = removeNullValues($request->all());
-        $user_request = $request->all();
+        $user_request = request()->all();
         $password_reset = false;
 
         // Empty State field if rest of address fields are empty
@@ -225,13 +225,15 @@ class UserController extends Controller {
             $user_request['subcontractor_type'] = 0;
 
         // If user being made inactive then update email
-        if ($request->filled('status') && $request->get('status') == 0) {
+        if ($request->filled('status') && request('status') == 0) {
+            // Delete outstanding ToDoos (except Toolbox
+            $user->todoDeleteAllActive();
             // If user being made inactive and has email then append 'achived-userid' to front to allow
             // for the email to be potentially reused by another user
             if ($user->status && $user->email) {
                 Toastr::warning("Updated email");
                 $user_request['email'] = 'archived-' . $user->id . '-' . $user->email;
-                if ($request->get('notes'))
+                if (request('notes'))
                     $user_request['notes'] .= "\nupdated email to " . $user_request['email'] . ' due to archiving';
                 else
                     $user_request['notes'] = "updated email to " . $user_request['email'] . ' due to archiving';

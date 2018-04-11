@@ -241,7 +241,7 @@
                             </div>
                         </div>
 
-                        @if(Auth::user()->allowed2('edit.site.accident', $accident) && Auth::user()->isCC())
+                        @if(Auth::user()->allowed2('edit.site.accident', $accident))
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
@@ -250,8 +250,6 @@
                                         {!! Form::textarea('notes', $accident->notes, ['rows' => '3', 'class' => 'form-control',
                                         ($accident->status) ? '' : 'readonly']) !!}
                                         {!! fieldErrorMessage('notes', $errors) !!}
-                                        <span class="help-block"> For internal use only </span>
-
                                     </div>
                                 </div>
                             </div>

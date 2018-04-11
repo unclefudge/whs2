@@ -68,7 +68,7 @@
                             @if ($company->subscription > 1)
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        {!! Form::select('staff', ['staff' => 'Staff only', 'all' => 'All users' ], null, ['class' => 'form-control bs-select', 'id' => 'staff']) !!}
+                                        {!! Form::select('staff', ['staff' => 'Staff only', 'all' => 'All users' ], (Auth::user()->isCompany($company->id) ? 'all' : 'staff'), ['class' => 'form-control bs-select', 'id' => 'staff']) !!}
                                     </div>
                                 </div>
                             @else

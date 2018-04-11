@@ -435,9 +435,14 @@ trait UserRolesPermissions {
         if (($permission == 'view.user' || $permission == 'edit.user') && $record->id == $this->id)
             return true;
 
-        // User can always add.todoo
-        if ($permission == 'add.todo')
-            return true;
+        // ToDoo
+
+
+        if ($permissiontype == 'todo') {
+            if ($action == 'add') return true; // User can always add todoo
+            //dd($record->assignedTo());
+            if ($action == 'view' && $record->assignedTo()->contains('id', $this->id)) return true; // Todoo is assigned to user
+        }
 
         // Support Tickets
         if ($permission == 'view.support.ticket' || $permission == 'edit.support.ticket') {
@@ -483,21 +488,7 @@ trait UserRolesPermissions {
         if ($action == 'add') // Don't need any further checking because 'add' doesn't affect any specific record.
             return true;      //  - also we know they must have 'add' permission if they reached this far.
         else {
-
-            // -user, -company, client,
-            // -site, -site.accident, -site.hazard, -site.doc, -site.qa, -site.asbestos, -site.doc.manager, -site.export
-            // -weekly.planner, -trade.planner, -site.planner, -area.super, trade,
-            // -attendance, -compliance
-            // -safety.doc, general.doc, -company.doc, doc.pp, doc.stand, -sds, -toolbox, -wms, manage.report, -safetytip, -notify, -todo,
-            // role, settings, company.trades
-
-            // trade +  area.super relates to none record
-            //
             //  ['0' => 'No', '99' => "All", '50' => "Our Company", '40' => 'Supervisor for', '30' => 'Planned for', '20' => 'Own Company', '10' => "Individual Only"]
-
-            //$record_has_company_id = ['user', 'client', 'site.doc', 'site.qa', 'site.asbestos'];
-            //$record_has_for_company_id = ['site.doc'];
-            //$record_has_site_id = ['site.doc', 'site.accident', 'site.hazard', 'site.qa', 'site.asbestos', 'attendance', 'compliance'];
 
             // Users
             if ($permissiontype == 'user') {
@@ -521,61 +512,6 @@ trait UserRolesPermissions {
 
                 return false;
             }
-
-            // Company Documents
-            /*
-            if ($permissiontype == 'docs.acc' || $permissiontype == 'docs.adm' || $permissiontype == 'company.whs') {
-                // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
-                if ($action == 'view' || $record->status == '2' || $record->status == '3') {
-                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
-                    // User requires 'Sign Off' at Document Owner level to update an active document
-                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                }
-
-                return false;
-            }*/
-
-            // Company ICS + WHS Documents
-            /*
-            if ($permissiontype == 'company.ics' || $permissiontype == 'company.whs') {
-                // determine if Record is Company or Document
-                if (isset($record->slug)) {
-                    // Company Record
-                    if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
-                } else {
-                    // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
-                    if ($action == 'view' || $record->status == '2' || $record->status == '3') {
-                        if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                        if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                    } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
-                        // User requires 'Sign Off' at Document Owner level to update an active document
-                        if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                        if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                    }
-
-                }
-                return false;
-            }*/
-
-            // Company Documents
-            /*
-            if ($permissiontype == 'company.doc.gen' || $permissiontype == 'company.doc.lic' || $permissiontype == 'company.doc.whs' || $permissiontype == 'company.doc.ics') {
-                // User can View or Update document if status is 2 or 3 ie. Pending/Rejected
-                if ($action == 'view' || $record->status == '2' || $record->status == '3') {
-                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                } elseif ($this->permissionLevel("sig.$permissiontype", $record->company_id) == 1) {
-                    // User requires 'Sign Off' at Document Owner level to update an active document
-                    if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
-                    if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-                }
-
-                return false;
-            }*/
-
 
             // Sites + Planners (Weekly/Site/Trade)
             if ($permissiontype == 'site' || $permissiontype == 'site.admin' || $permissiontype == 'weekly.planner' || $permissiontype == 'site.planner' || $permissiontype == 'trade.planner') {
@@ -638,7 +574,6 @@ trait UserRolesPermissions {
                 if ($this->hasAnyPermission2($permission) && ($record->company_id == $this->company_id)) // User belong to same company record
                     return true;
             }
-
         }
     }
 }

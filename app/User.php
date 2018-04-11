@@ -243,7 +243,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             // Private Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && in_array($id, $single)  && $company->activeCompanyDoc($id)))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
                 }
             }
@@ -404,6 +404,24 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         return ($status != '') ? Todo::whereIn('id', $todo_ids)->where('type', $type)->where('status', $status)->orderBy('due_at')->get() : Todo::whereIn('id', $todo_ids)->orderBy('due_at')->get();
     }
+
+    /**
+     * Delete all ToDoo tasks (except Toolbox)
+     */
+    public function todoDeleteAllActive()
+    {
+        $todo_active = $this->todo(1);
+        foreach ($todo_active as $todo) {
+            if ($todo->type != 'toolbox') {
+                // If user is only one assigned the ToDoo delete whole ToDoo else only remove user from Todoo
+                if (TodoUser::where('todo_id', $todo->id)->count() == 1)
+                    Todo::find($todo->id)->delete();
+                else
+                    TodoUser::where('todo_id', $todo->id)->where('user_id', $this->id)->delete();
+            }
+        }
+    }
+
 
     /**
      * A User has multiple Toolbox Talks

@@ -245,7 +245,7 @@
         });
 
         /* Over Ride Licence */
-        $('#lic_override').change(function () {
+        $('#lic_override_tog').change(function () {
             overide();
         });
 
@@ -254,8 +254,7 @@
         function overide() {
             $('#req_yes').hide();
             $('#req_no').hide();
-            if ($('#lic_override').val() == 1) {
-                //alert('over');
+            if ($('#lic_override_tog').val() == 1) {
                 $('#overide_div').show();
                 if ($('#requiresContractorsLicence').val() == 1)
                     $('#req_yes').show();

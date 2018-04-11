@@ -340,7 +340,7 @@ class CompanyController extends Controller {
         $old_trades_skilled_in = $company->tradesSkilledInSBC();
         if (request('trades')) {
             $company->tradesSkilledIn()->sync(request('trades'));
-            $company->lic_override = 0;
+            $company->lic_override = null;
         } else
             $company->tradesSkilledIn()->detach();
 
