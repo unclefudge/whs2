@@ -523,6 +523,22 @@ function addStartTaskToPlanner(plan, site_id, date) {
     addTaskToPlanner(plan, catwalkUp);
     addTaskToPlanner(plan, frameInspect);
     addTaskToPlanner(plan, genClean);
+
+
+    // Email Jobstart
+    var data = {site_id: site_id, newdate: date};
+    $.ajax({
+        url: '/planner/data/trade/email-jobstart',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+            console.log('Emailed Jobstart');
+        },
+        error: function (result) {
+            alert("Failed to email Job Start");
+            console.log('Email of Job Start FAILED');
+        }
+    });
 }
 
 // Add Start task to planner. Only if added to DB successfully

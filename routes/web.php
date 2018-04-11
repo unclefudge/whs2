@@ -278,6 +278,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Planners
     Route::any('planner/weekly', 'Site\Planner\SitePlannerController@showWeekly');
     Route::any('planner/site', 'Site\Planner\SitePlannerController@showSite');
+    Route::any('planner/site/{site_id}', 'Site\Planner\SitePlannerController@showSite');
     Route::any('planner/trade', 'Site\Planner\SitePlannerController@showTrade');
     Route::any('planner/attendance', 'Site\Planner\SitePlannerController@showAttendance');
     Route::any('planner/transient', 'Site\Planner\SitePlannerController@showTransient');
@@ -301,6 +302,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('planner/data/trade/{trade_id}/tasks', 'Site\Planner\SitePlannerController@getTradeTasks');
     Route::get('planner/data/trade/jobstarts/{exists}', 'Site\Planner\SitePlannerController@getJobStarts');
     Route::get('planner/data/trade/joballocate', 'Site\Planner\SitePlannerController@getSitesWithoutSuper');
+    Route::any('planner/data/trade/email-jobstart', 'Site\Planner\SitePlannerController@emailJobstart');
     Route::resource('planner', 'Site\Planner\SitePlannerController');
 
     // Support Tickets

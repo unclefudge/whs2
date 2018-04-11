@@ -665,9 +665,25 @@ Vue.component('app-weekly', {
                                 }
                             }.bind(this));
                         }
-                    }.bind(this));
+                    }.bind(this));*/
                 } else
                     this.moveJobFromDate(this.xx.assign_site, old_first, direction, days);
+
+                // Email Jobstart
+                var data = {site_id: this.xx.assign_site, newdate: new_start, olddate: old_start};
+                $.ajax({
+                    url: '/planner/data/trade/email-jobstart',
+                    type: 'POST',
+                    data: data,
+                    success: function (result) {
+                        console.log('Emailed Jobstart');
+                        //console.log('Emailed Jobstart site_id:'+this.xx.assign_site+ 'newdate:'+new_start+ ' oldate:'+old_start);
+                    },
+                    error: function (result) {
+                        alert("Failed to email Job Start");
+                        console.log('Email of Job Start FAILED');
+                    }
+                });
             } else
                 toastr.warning('Selected date was same as old one');
 

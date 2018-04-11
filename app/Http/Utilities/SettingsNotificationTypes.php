@@ -17,6 +17,7 @@ class SettingsNotificationTypes {
         '10' => 'n.site.qa.handover',
         '11' => 'n.doc.whs.approval',
         '12' => 'n.doc.acc.approval',
+        '13' => 'n.site.jobstart',
     ];
 
 

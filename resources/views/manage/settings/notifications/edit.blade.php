@@ -50,6 +50,7 @@
                         @if (Auth::user()->isCC())
                             {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.qa.handover'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.jobstart'), 'Job Start', 'Job Start', 'Job Start created / updated') !!}
                         @endif
 
                         {{-- Document --}}

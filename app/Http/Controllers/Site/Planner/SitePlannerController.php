@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use DB;
+use Mail;
 use Session;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteRoster;
@@ -193,17 +194,17 @@ class SitePlannerController extends Controller {
     /**
      * Show Site Planner
      */
-    public function showSite(Request $request)
+    public function showSite($site_id = null)
     {
         // Check authorisation and throw 404 if not
         if (!Auth::user()->hasAnyPermissionType('site.planner'))
             return view('errors/404');
 
-        $date = $request->get('date');
-        $supervisor_id = $request->get('supervisor_id');
-        $site_id = $request->get('site_id');
-        if ($request->get('site_start'))
-            $site_start = $request->get('site_start');
+        $date = request('date');
+        $supervisor_id = request('supervisor_id');
+        $site_id = ($site_id) ? $site_id : request('site_id');
+        if (request('site_start'))
+            $site_start = request('site_start');
         else
             $site_start = 'week';
 
@@ -1054,7 +1055,7 @@ class SitePlannerController extends Controller {
      */
     public function getTrades(Request $request)
     {
-        $trades = Trade::where('status', '1')->where(function ($q)  {
+        $trades = Trade::where('status', '1')->where(function ($q) {
             $q->where('company_id', Auth::user()->company_id);
             $q->orWhere('company_id', 1);
         })->orderBy('name')->get();
@@ -1300,4 +1301,19 @@ class SitePlannerController extends Controller {
                 })
                 ->orderBy('from')->get();
     }
+
+    /**
+     * Email Jobstart
+     */
+    public function emailJobstart()
+    {
+        $site = Site::find(request('site_id'));
+        $newdate = Carbon::createFromFormat('Y-m-d H:i:s', request('newdate') . ' 00:00:00')->format('d/m/Y');
+        $olddate = (request('olddate')) ? Carbon::createFromFormat('Y-m-d H:i:s', request('olddate') . ' 00:00:00')->format('d/m/Y') : null;
+
+        if ($site->owned_by->notificationsUsersType('n.site.jobstart'))
+            Mail::to($site->owned_by->notificationsUsersType('n.site.jobstart'))->send(new \App\Mail\Site\Jobstart($site, $newdate, $olddate));
+
+    }
+
 }
