@@ -665,7 +665,7 @@ Vue.component('app-weekly', {
                                 }
                             }.bind(this));
                         }
-                    }.bind(this));*/
+                    }.bind(this));
                 } else
                     this.moveJobFromDate(this.xx.assign_site, old_first, direction, days);
 
