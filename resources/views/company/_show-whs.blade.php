@@ -17,6 +17,13 @@
                 {!! ($company->lic_override) ? ' &nbsp; <span class="font-red">OVERRIDDEN</span>' : '' !!}
             </div>
         </div>
+        @if ($company->lic_override)
+            <br>
+            <div class="row">
+                <div class="col-md-4">Reason for override:</div>
+                <div class="col-md-8">{!! nl2br($company->lic_override) !!}</div>
+            </div>
+        @endif
         <hr class="field-hr">
     </div>
 </div>

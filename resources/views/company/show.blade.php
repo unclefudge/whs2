@@ -82,7 +82,7 @@
                                         {{-- Accepted --}}
                                         @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 1)
                                             <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($company->isCompliant()) ? 'color: #26C281' : '' !!}"></i>
-                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                             </div>
                                             <div class="col-xs-4">
                                                 @if (!$company->isCompliant())
@@ -93,7 +93,7 @@
                                         {{-- Pending --}}
                                         @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 2)
                                             <div class="col-xs-8"><i class="fa fa-question" style="width:35px; padding: 4px 15px"></i>
-                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                             </div>
                                             <div class="col-xs-4">
                                                 @if (!$company->isCompliant())
@@ -104,7 +104,7 @@
                                         {{-- Rejected --}}
                                         @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 3)
                                             <div class="col-xs-8"><i class="fa fa-question" style="width:35px; padding: 4px 15px"></i>
-                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark">{{ $name }}</a>
+                                                <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                             </div>
                                             <div class="col-xs-4">
                                                 @if (!$company->isCompliant())
@@ -306,7 +306,7 @@
 
             @if (count($errors) > 0)
     var errors = {!! $errors !!};
-    if (errors.FORM == 'company' || errors.FORM == 'construction') {
+    if (errors.FORM == 'company' || errors.FORM == 'construction' || errors.FORM == 'whs') {
         $('#show_' + errors.FORM).hide();
         $('#edit_' + errors.FORM).show();
     }

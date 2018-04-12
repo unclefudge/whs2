@@ -262,10 +262,12 @@ class CompanyController extends Controller {
         if (!Auth::user()->allowed2('edit.company.whs', $company))
             return view('errors/404');
 
+
         // Validate
-        $validator = Validator::make(request()->all(), []);
+        $validator = Validator::make(request()->all(), ['lic_override' => 'required_if:lic_override_tog,1'], ['lic_override.required_if' => 'The reason field is required.']);
         if ($validator->fails()) {
             $validator->errors()->add('FORM', 'whs');
+            Toastr::error("Failed to save changes");
 
             return back()->withErrors($validator)->withInput();
         }
