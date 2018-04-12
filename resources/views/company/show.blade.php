@@ -118,6 +118,16 @@
                                             <div class="col-xs-4 font-red">{!! (!$company->isCompliant()) ? 'Not submitted' : '' !!}</div>
                                         @endif
                                     @endforeach
+
+                                    {{-- Pre-filled forms --}}
+                                    @if ($company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5))
+                                        <div class="col-md-12"><br>Pre-filled forms:
+                                            @if ($company->requiresCompanyDoc(4))<a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/next" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Subcontractors Statement</a> @endif
+
+                                            {{--}}@if ($company->requiresCompanyDoc(5))<a href="/company/doc/create/tradecontract/{{ $company->id  }}/next" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Period Trade Contract</a> @endif
+                                        --}}
+                                        </div>
+                                    @endif
                                 </div>
                             @else
                                 <div class="row">
@@ -283,12 +293,29 @@
         $('#add_' + name).show();
     }
 
+    // Warning Message for making company inactive
+    $('#status').change(function () {
+        if ($('#status').val() == '0') {
+            swal({
+                title: "Deactivating a Company",
+                text: "Once you make a company <b>Inactive</b> and save it will also:<br><br>" +
+                "<div style='text-align: left'><ul>" +
+                "<li>Make all users within this company 'Inactive'</li>" +
+                "<li>Remove company from planner for all future events</li>" +
+                "</ul></div>",
+                allowOutsideClick: true,
+                html: true,
+            });
+        }
+    });
+
+    // Warning message for deleting leave
     $('.delete_leave').click(function (e) {
         e.preventDefault();
         var id = $(this).data('id');
         var date = $(this).data('date');
         var note = $(this).data('note');
-        
+
         swal({
             title: "Are you sure?",
             text: "You will not be able to restore this leave!<br><b>" + date + ': ' + note + "</b>",
@@ -299,7 +326,7 @@
             allowOutsideClick: true,
             html: true,
         }, function () {
-            window.location = "/company/{{ $company->id }}/leave/"+id;
+            window.location = "/company/{{ $company->id }}/leave/" + id;
         });
     });
 

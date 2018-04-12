@@ -191,8 +191,8 @@ class CompanyExportController extends Controller {
         $last_year = $year - 1;
         $next_year = $year + 1;
 
-        $date_from = ($month > 6) ? Carbon::parse("July 1 $year") : Carbon::parse("June 1 $last_year");
-        $date_to = ($month > 6) ? Carbon::parse("June 30 $next_year") : Carbon::parse("June 1 $year");
+        $date_from = ($month > 6) ? Carbon::parse("July 1 $year") : Carbon::parse("July 1 $last_year");
+        $date_to = ($month > 6) ? Carbon::parse("June 30 $next_year") : Carbon::parse("June 30 $year");
 
         $data = ['date_from'             => $date_from, 'date_to' => $date_to,
                  'suburb_state_postcode' => $company->suburb_state_postcode,

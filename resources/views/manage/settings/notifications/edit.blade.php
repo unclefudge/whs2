@@ -38,7 +38,7 @@
                         {{-- Company --}}
                         <h3 class="font-green form-section">Company Notifications</h3>
                         {!! notificationSelect($notificationTypes::type('n.company.signup.sent'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Signup Completed', 'Company Signup', 'Company has completed the signup process') !!}
+                        {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Signup Completed / Archived', 'Company Signup/Archived', 'Company has completed the signup process or made inactive/active') !!}
                         {!! notificationSelect($notificationTypes::type('n.company.updated.details'), 'Company Details updated', 'Company updated', 'Company details have been updated') !!}
                         {!! notificationSelect($notificationTypes::type('n.company.updated.business'), 'Business Details updated', 'Company updated', 'Business details have been updated') !!}
                         {!! notificationSelect($notificationTypes::type('n.company.updated.trades'), 'Company Trades updated (WHS)', 'Company updated', 'Company trades have been updated but also licence required was previously overridden') !!}
@@ -55,8 +55,8 @@
 
                         {{-- Document --}}
                         <h3 class="font-green form-section">Document Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.doc.acc.approval'), 'Accounts Approval', 'Accounts document requires approval', $companyDocTypes::docNames('acc', 0)) !!}
-                        {!! notificationSelect($notificationTypes::type('n.doc.whs.approval'), 'WHS Approval', 'WHS document requires approval', $companyDocTypes::docNames('whs', 0)) !!}
+                        {!! notificationSelect($notificationTypes::type('n.doc.acc.approval'), 'Accounts Approval', 'Accounts document requires approval', $companyDocTypes::docNames('acc', 0), 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
+                        {!! notificationSelect($notificationTypes::type('n.doc.whs.approval'), 'WHS Approval', 'WHS document requires approval', $companyDocTypes::docNames('whs', 0), 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
 
 
                         <div class="form-actions right">

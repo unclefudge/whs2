@@ -521,10 +521,24 @@ class CronController extends Controller {
             foreach ($talks as $talk) {
                 if (!$talk->outstandingBy()->count()) {
                     // Archive completed Toolbox
-                    echo "[$talk->id] $talk->name<br>";
-                    $log .= "[$talk->id] $talk->name\n";
+                    echo "[$talk->id] All Completed - $talk->name<br>";
+                    $log .= "[$talk->id] All Completed - $talk->name\n";
                     $talk->status = 0;
                     $talk->save();
+                } else {
+                    $inactive = true;
+                    foreach ($talk->outstandingBy() as $user) {
+                        if ($user->status)
+                            $inactive = false;
+                    }
+                    // Archive completed Toolbox because all outstanding users are inactive
+                    if ($inactive){
+                        echo "**[$talk->id] Inactive Users - $talk->name<br>";
+                        $log .= "[$talk->id] Inactive Users - $talk->name\n";
+                        $talk->status = 0;
+                        $talk->save();
+                    }
+
                 }
             }
         } else {

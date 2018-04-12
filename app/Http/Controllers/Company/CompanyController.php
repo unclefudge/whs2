@@ -178,6 +178,7 @@ class CompanyController extends Controller {
             return back()->withErrors($validator)->withInput();
         }
 
+        $old_status = $company->status;
         $company_request = request()->all();
         //dd($company_request);
 
@@ -196,12 +197,26 @@ class CompanyController extends Controller {
         $company->update($company_request);
         Toastr::success("Saved changes");
 
-        // Actions for making company inactive
-        // delete future leave
-        if (!$company->status) {
+        if (!$company->status && $old_status) {
+            // Company made inactive
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.signup.completed'))
+                Mail::to($company->reportsTo()->notificationsUsersType('n.company.signup.completed'))->send(new \App\Mail\Company\CompanyArchived($company));
             $company->deactivateAllStaff();
             $company->deleteFromPlanner(Carbon::today());
+            CompanyLeave::where('from', '>=', Carbon::today()->toDateTimeString())->where('company_id', $company->id)->delete();  // delete future leave
             Toastr::error("Deactivated Company");
+        } elseif ($company->status && !$old_status) {
+            Toastr::success("Reactivated Company");
+            $primary_user = User::find($company->primary_user);
+            if ($primary_user) {
+                $primary_user->status = 1;
+                $primary_user->save();
+                Toastr::success("Reactivated Primary User");
+            }
+            // Company + Primary User reactivated
+            if ($company->parent_company && $company->reportsTo()->notificationsUsersType('n.company.signup.completed'))
+                Mail::to($company->reportsTo()->notificationsUsersType('n.company.signup.completed'))->send(new \App\Mail\Company\CompanyActive($company));
+
         }
 
         return redirect("company/$company->id");

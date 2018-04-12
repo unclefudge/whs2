@@ -46,7 +46,7 @@ class CreateCompanyTables extends Migration
             // Trade Details
             $table->string('trade', 250)->nullable();
             $table->string('trade_other', 250)->nullable();
-            $table->string('licence_required', 250)->nullable();
+            $table->text('licence_required')->nullable();
 
             // Planner details
             $table->tinyInteger('maxjobs')->default(1);
