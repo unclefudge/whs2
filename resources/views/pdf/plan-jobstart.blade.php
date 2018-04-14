@@ -96,54 +96,6 @@
         @endforeach
         </tbody>
     </table>
-    {{--
-    <div class="row" style="border: 1px solid lightgrey; background-color: #f0f6fa; font-weight: bold; overflow: hidden;">
-        <div class="col-xs-3" style="padding: 0px">
-            <div class="col-xs-3 border-right" style="padding-left: 3px">Start Date</div>
-            <div class="col-xs-2 border-right" style="padding-left: 3px">Job #</div>
-            <div class="col-xs-7 border-right" style="padding-left: 3px">Site</div>
-        </div>
-        <div class="col-xs-3" style="padding: 0px">
-            <div class="col-xs-4 border-right" style="padding-left: 3px;">Supervisor</div>
-            <div class="col-xs-8 border-right" style="padding-left: 3px">Company Allocated</div>
-        </div>
-        <div class="col-xs-3" style="padding: 0px">
-            <div class="col-xs-4 border-right" style="padding-left: 3px">Contract Sent</div>
-            <div class="col-xs-4 border-right" style="padding-left: 3px">Contract Signed</div>
-            <div class="col-xs-4 border-right" style="padding-left: 3px">Deposit Paid</div>
-        </div>
-        <div class="col-xs-3" style="padding: 0px">
-            <div class="col-xs-2 border-right" style="padding-left: 3px">ENG</div>
-            <div class="col-xs-2 border-right" style="padding-left: 3px">CC</div>
-            <div class="col-xs-2 border-right" style="padding-left: 3px">HBCF</div>
-            <div class="col-xs-6" style="padding-left: 3px">Consultant</div>
-        </div>
-    </div>
-    @foreach($startdata as $row)
-        <div class="row row-striped" style="border-style: none solid solid; border-width: 1px; border-color:  lightgrey; overflow: hidden;">
-            <div class="col-xs-3" style="padding: 0px">
-                <div class="col-xs-3 border-right" style="padding-left: 3px">{!! $row['date'] !!}</div>
-                <div class="col-xs-2 border-right" style="padding-left: 3px">{!! $row['code'] !!}</div>
-                <div class="col-xs-7 border-right" style="padding-left: 3px">{!! $row['name'] !!}</div>
-            </div>
-            <div class="col-xs-3" style="padding: 0px">
-                <div class="col-xs-4 border-right" style="padding-left: 3px">{!! $row['supervisor'] !!}</div>
-                <div class="col-xs-8 border-right" style="padding-left: 3px">{!! $row['company'] !!}</div>
-            </div>
-            <div class="col-xs-3" style="padding: 0px">
-                <div class="col-xs-4 border-right" style="padding-left: 3px">{!! $row['contract_sent'] !!}</div>
-                <div class="col-xs-4 border-right" style="padding-left: 3px">{!! $row['contract_signed'] !!}</div>
-                <div class="col-xs-4 border-right" style="padding-left: 3px">{!! $row['deposit_paid'] !!}</div>
-            </div>
-            <div class="col-xs-3" style="padding: 0px">
-                <div class="col-xs-2 border-right" style="padding-left: 3px">{!! $row['eng'] !!}</div>
-                <div class="col-xs-2 border-right" style="padding-left: 3px">{!! $row['cc'] !!}</div>
-                <div class="col-xs-2 border-right" style="padding-left: 3px">{!! $row['hbcf'] !!}</div>
-                <div class="col-xs-6" style="padding-left: 3px">{!! $row['consultant'] !!}</div>
-            </div>
-        </div>
-    @endforeach
-    --}}
 </div>
 </body>
 </html>

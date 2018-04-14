@@ -60,7 +60,7 @@
         </div>
 
         <!-- Upgrades -->
-        @if (Auth::user()->isCC() && Auth::user()->security)
+        @if (Auth::user()->isCC() && Auth::user()->hasPermission2('view.support.ticket.upgrade'))
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">
@@ -70,7 +70,9 @@
                                 <span class="caption-subject bold uppercase font-green-haze"> Development Upgrades</span>
                             </div>
                             <div class="actions">
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/support/ticket/create" data-original-title="Add">Add</a>
+                                @if (Auth::user()->isCC() && Auth::user()->hasPermission2('add.support.ticket.upgrade'))
+                                    <a class="btn btn-circle green btn-outline btn-sm" href="/support/ticket/create" data-original-title="Add">Add</a>
+                                @endif
                                 <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                             </div>
                         </div>

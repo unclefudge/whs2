@@ -157,12 +157,11 @@ class CompanyExportController extends Controller {
             return view('errors/404');
 
         $data[] = ['company_name' => 'cname', 'status' => 'status',];
-
         //return view('pdf/company-tradecontract', compact('data', 'company'));
         $pdf = PDF::loadView('pdf/company-tradecontract', compact('data', 'company'));
         $pdf->setPaper('a4');
-        //->setOption('page-width', 200)->setOption('page-height', 287)
-        //->setOption('margin-bottom', 10)
+        //$pdf->setOption('page-width', 200)->setOption('page-height', 287);
+        //$pdf->setOption('margin-bottom', 10);
         //->setOption('footer-font-size', '7')
         //->setOption('footer-left', utf8_decode('Document created ' . date('\ d/m/Y\ ')))
         //->setOption('footer-center', utf8_decode('Page [page] / [topage]'))

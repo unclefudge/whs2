@@ -1538,6 +1538,27 @@ class Company extends Model {
     }
 
     /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getAddressFormattedSingleAttribute()
+    {
+        $string = '';
+
+        if ($this->attributes['address'])
+            $string = strtoupper($this->attributes['address']) . ', ';
+
+        $string .= strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return ($string) ? $string : '-';
+    }
+
+    /**
      * Get the upcoming leave for company  (getter)
      */
     public function getLeaveUpcomingDatesAttribute()

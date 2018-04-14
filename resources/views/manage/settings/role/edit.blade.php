@@ -635,6 +635,16 @@ $cc = 1;*/
                                                 <td width="15%">{!! permSelect('edit.settings', 'all', $rec, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
+                                            @if ($cc)
+                                                <tr>
+                                                    <td>Support Ticket Upgrades</td>
+                                                    <td width="15%">{!! permSelect('view.support.ticket.upgrade', 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.support.ticket.upgrade', 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('add.support.ticket.upgrade', 'add', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('del.support.ticket.upgrade', 'del', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%"></td>
+                                                </tr>
+                                            @endif
                                             {{--
                                             <tr>
                                                 <td>Roles / Permissions</td>

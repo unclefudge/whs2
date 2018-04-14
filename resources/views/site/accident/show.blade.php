@@ -245,25 +245,38 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('notes', $accident->notes, ['rows' => '3', 'class' => 'form-control',
+                                    <div class="form-group {!! fieldHasError('extra_info', $errors) !!}">
+                                        {!! Form::label('extra_info', 'Additional Information', ['class' => 'control-label']) !!}
+                                        {!! Form::textarea('extra_info', $accident->extra_info, ['rows' => '3', 'class' => 'form-control',
                                         ($accident->status) ? '' : 'readonly']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
+                                        {!! fieldErrorMessage('extra_info', $errors) !!}
                                     </div>
                                 </div>
                             </div>
 
-                        @endif
-
-                        <div class="form-actions right">
-                            <a href="/site/accident" class="btn default"> Back</a>
-                            @if(Auth::user()->allowed2('edit.site.accident', $accident))
-                                @if($accident->status || Auth::user()->allowed2('del.site.accident', $accident))
-                                    <button type="submit" class="btn green"> Save</button>
-                                @endif
+                            @if (Auth::user()->isCompany($accident->site->owned_by->id))
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('notes', $errors) !!}">
+                                            {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('notes', $accident->notes, ['rows' => '3', 'class' => 'form-control',
+                                            ($accident->status) ? '' : 'readonly']) !!}
+                                            {!! fieldErrorMessage('notes', $errors) !!}
+                                            <span class="help-block"> Only viewable by parent company</span>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
-                        </div>
+
+                            <div class="form-actions right">
+                                <a href="/site/accident" class="btn default"> Back</a>
+                                @if(Auth::user()->allowed2('edit.site.accident', $accident))
+                                    @if($accident->status || Auth::user()->allowed2('del.site.accident', $accident))
+                                        <button type="submit" class="btn green"> Save</button>
+                                    @endif
+                                @endif
+                            </div>
+                        @endif
                     </div>
                     {!! Form::close() !!} <!-- END FORM-->
                 </div>

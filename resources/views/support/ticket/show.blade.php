@@ -33,18 +33,15 @@
                         @else
                             {!! Form::text('priority', $ticket->priority_text, ['class' => 'form-control', 'disabled']) !!}
                         @endif
-                        {!! fieldErrorMessage('site_id', $errors) !!}
                     </div>
                 </div>
                 <div class="col-md-1"></div>
-                @if ($ticket->type)
+                @if ($ticket->type )
                     <div class="col-md-1">ETA</div>
                     <div class="col-md-2">
-                        @if ($ticket->status)
-                            {!! Form::text('eta', ($ticket->eta) ? $ticket->eta->format('d/m/Y') : 'to be reviewed', ['class' => 'form-control', 'disabled']) !!}
-                        @endif
+                        {!! Form::text('eta', ($ticket->eta) ? $ticket->eta->format('d/m/Y') : 'to be reviewed', ['class' => 'form-control', 'disabled']) !!}
                     </div>
-                    @if (Auth::user()->id == '3')
+                    @if (Auth::user()->id == '3') {{-- Only Fudge to edit ETA --}}
                         <div class="col-md-3">
                             <div class="col-md-9">
                                 <div class="form-group">
@@ -105,7 +102,7 @@
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        @if ($ticket->status && Auth::user()->allowed2('edit.support.ticket', $ticket ))
+                        @if ($ticket->status && ((!$ticket->type && Auth::user()->allowed2('edit.support.ticket', $ticket )) || ($ticket->type && Auth::user()->hasPermission2('edit.support.ticket.upgrade')) ))
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group {!! fieldHasError('action', $errors) !!}">

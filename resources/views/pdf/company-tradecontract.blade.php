@@ -8,6 +8,10 @@
     <style>
         @import url(http://fonts.googleapis.com/css?family=PT+Sans);
 
+        @page {
+            margin: .7cm .7cm
+        }
+
         body, h1, h2, h3, h4, h5, h6 {
             font-family: 'PT Sans', serif;
         }
@@ -17,7 +21,13 @@
         }
 
         body {
-            font-size: 11px;
+            font-size: 10px;
+            line-height: 10px;
+        }
+
+        body.pdf {
+            font-size: 10px;
+            line-height: 10px;
         }
 
         div.page {
@@ -38,240 +48,317 @@
             margin-bottom: -999px;
             padding-bottom: 999px;
         }
+
+        td.pad5, th.pad5 {
+            padding: 5px !important;
+            line-height: 1em !important;
+        }
+
+        td.pad0, th.pad0 {
+            padding: 0px !important;
+            line-height: 1em !important;
+            border: 0px !important;
+        }
     </style>
 </head>
 
 <body>
 <div class="container">
-    <div class="page">
-        <div class="row">
-            <div class="col-xs-12">
-                <h4 style="margin: 0px">Period Trade Contract <span class="pull-right" style="font-size:18px">SCHEDULE</span></h4>
-                <hr style="margin: 5px 0px 10px 0px">
-            </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 style="margin: 0px">Period Trade Contract <span class="pull-right" style="font-size:18px"></span></h3>
+            <hr style="margin: 5px 0px 10px 0px">
+            <h5>SCHEDULE</h5><br>
         </div>
+    </div>
 
-        {{-- Schedule 1. Date --}}
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">1.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
-                <h5 style="margin: 0px">Date</h5>
-                <hr style="margin: 5px 0px 15px 0px">
-            </div>
-        </div>
+    {{-- Schedule 1. Date --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">1.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Date</h4>
+                <hr style="margin: 5px 0px 5px 0px">
+                AN AGREEMENT DATED
+            </td>
+        </tr>
+    </table>
 
-        {{-- Schedule 2. Principle Contractor --}}
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">2.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
-                <h5 style="margin: 0px">Principal contractor</h5>
-                <hr style="margin: 5px 0px 10px 0px">
-                <div class="col-xs-2">NAME</div>
-                <div class="col-xs-10">{{ $company->reportsTo()->name }}</div>
-                <div class="col-xs-2">ADDRESS</div>
-                <div class="col-xs-10">{{ $company->reportsTo()->address }}</div>
-                <div class="col-xs-2">SUBURB</div>
-                <div class="col-xs-4">{{ $company->reportsTo()->suburb }}</div>
-                <div class="col-xs-1">STATE</div>
-                <div class="col-xs-2">{{ $company->reportsTo()->state }}</div>
-                <div class="col-xs-3">POSTCODE &nbsp; &nbsp; {{ $company->reportsTo()->postcode }}</div>
-                <div class="col-xs-2">ABN</div>
-                <div class="col-xs-4">{{ $company->reportsTo()->abn }}</div>
-                <div class="col-xs-2">&nbsp;</div>
-                <div class="col-xs-4">&nbsp;</div>
-                <div class="col-xs-2">PHONE</div>
-                <div class="col-xs-4">{{ $company->reportsTo()->phone }}</div>
-                <div class="col-xs-1">EMAIL</div>
-                <div class="col-xs-5">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</div>
-                <div class="col-xs-4">HIA MEMBER NUMBER</div>
-                <div class="col-xs-6">&nbsp;</div>
-            </div>
-        </div>
+    {{-- Schedule 2. Principle Contractor --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">2.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Principal contractor</h4>
+                <hr style="margin: 5px 0px 0px 0px">
+            </td>
+        </tr>
+        <tr>
+            <td width="5%" class="pad0" style="border: 0px"><h5 style="margin: 0px">&nbsp;</h5></td>
+            <td class="pad5" style="border: 0px">
+                <div style="width: 100%; display: table; line-height: 1em">
+                    <span style="display: table-cell; width: 90px; line-height: 1em">NAME </span>
+                    <span style="display: table-cell; line-height: 1em">{{ $company->reportsTo()->name }}</span>
+                </div>
+                <div style="width: 100%; display: table; line-height: 1em; padding: 0px">
+                    <span style="display: table-cell; width: 90px; line-height: 1em; padding: 0px">ADDRESS </span>
+                    <span style="display: table-cell; line-height: 1em">{!! $company->reportsTo()->address_formatted !!}<br></span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">ABN </span>
+                    <span style="display: table-cell; width: 200px;">{{ $company->reportsTo()->abn }}</span>
+                    <span style="display: table-cell;">ACN </span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">PHONE </span>
+                    <span style="display: table-cell">{{ $company->reportsTo()->phone }}</span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">EMAIL </span>
+                    <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 190px;">HIA MEMBER NUMBER </span>
+                    <span style="display: table-cell">&nbsp;</span>
+                </div>
+            </td>
+        </tr>
+    </table>
 
-        {{-- Schedule 3. Tade Contractor --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">3.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
-                <h5 style="margin: 0px">Trade contractor</h5>
-                <hr style="margin: 5px 0px 10px 0px">
-                <div class="col-xs-2">NAME</div>
-                <div class="col-xs-10">{{ $company->name }}</div>
-                <div class="col-xs-2">ADDRESS</div>
-                <div class="col-xs-10">{{ $company->address }}</div>
-                <div class="col-xs-2">SUBURB</div>
-                <div class="col-xs-4">{{ $company->suburb }}</div>
-                <div class="col-xs-1">STATE</div>
-                <div class="col-xs-2">{{ $company->state }}</div>
-                <div class="col-xs-3">POSTCODE &nbsp; &nbsp; {{ $company->postcode }}</div>
-                <div class="col-xs-2">ABN</div>
-                <div class="col-xs-4">{{ $company->abn }}</div>
-                <div class="col-xs-2">&nbsp;</div>
-                <div class="col-xs-4">&nbsp;</div>
-                <div class="col-xs-2">PHONE</div>
-                <div class="col-xs-4">{{ $company->phone }}</div>
-                <div class="col-xs-1">EMAIL</div>
-                <div class="col-xs-5">{{ $company->email }}</div>
-            </div>
-        </div>
 
-        {{-- Schedule 4 --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">4.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
+    {{-- Schedule 3. Tade Contractor --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Trade contractor</h4>
+                <hr style="margin: 5px 0px 0px 0px">
+            </td>
+        </tr>
+        <tr>
+            <td width="5%" class="pad0" style="border: 0px"><h5 style="margin: 0px">&nbsp;</h5></td>
+            <td class="pad5" style="border: 0px">
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">NAME </span>
+                    <span style="display: table-cell">{{ $company->name }}</span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">ADDRESS </span>
+                    <span style="display: table-cell">{!! $company->address_formatted !!}<br></span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">ABN </span>
+                    <span style="display: table-cell; width: 200px;">{{ $company->abn }}</span>
+                    <span style="display: table-cell;">ACN </span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">PHONE </span>
+                    <span style="display: table-cell">{{ $company->phone }}</span>
+                </div>
+                <div style="width: 100%; display: table;">
+                    <span style="display: table-cell; width: 90px;">EMAIL </span>
+                    <span style="display: table-cell">{{ $company->email }}</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Schedule 4 --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0px 0px 0px; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">4.</h5></td>
+            <td class="pad0" style="border: 0px; line-height: 10px">
                 In consideration of:
-                <ol type="a" style="padding-left:15px; margin-bottom: 5px">
+                <ol type="a" style="padding:5px 0px 0px 25px; margin: 0px;">
                     <li>the <b>trade contractor</b> agreeing to quote for <b>trade works</b> whenever asked by the <b>principal contractor</b>, and</li>
                     <li>the <b>principal contractor</b> agreeing to pay, on demand by the <b>trade contractor</b>, the sum of $1,</li>
                 </ol>
                 the parties agree that the period trade contract conditions overleaf are deemed to be incorporated into each <b>trade contract</b> for a period of 12 months from the date of this agreement.
-            </div>
-        </div>
+            </td>
+        </tr>
+    </table>
 
-        {{-- Schedule 5 --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">5.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
+    {{-- Schedule 5 --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">5.</h5></td>
+            <td class="pad0" style="border: 0px">
                 The <b>trade contractor</b> acknowledges and agrees that:
-                <ol type="a" style="padding-left:15px; margin-bottom: 5px">
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
                     <li>the <b>principal contractor</b> has not made any representation, and</li>
                     <li>the <b>trade contractor</b> has not relied on any representation made by the <b>principal contractor</b>,</li>
                 </ol>
                 as to the availability of work or the number of work orders that will be issued by the <b>principal contractor</b>.
-            </div>
-        </div>
+            </td>
+        </tr>
+    </table>
 
-        {{-- Schedule 6 --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">6.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
+    {{-- Schedule 6 --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">6.</h5></td>
+            <td class="pad5" style="border: 0px">
                 The parties agree that for each <b>trade contract</b> the scope of the <b>trade works</b>, the commencement and completion dates of the <b>trade works</b> and the price of <b>trade
                     works</b> will be set out:
-                <ol type="a" style="padding-left:15px">
+                <ol type="a" style="padding-left:25px">
                     <li>in a quote from the <b>trade contractor</b> that is accepted by the <b>principal contractor</b>;</li>
                     <li>in a work order issued by the <b>principal contractor</b> that is accepted by the <b>trade contractor</b>; or</li>
                     <li>as otherwise evidenced in writing and signed by the parties.</li>
                 </ol>
-            </div>
-        </div>
+            </td>
+        </tr>
+    </table>
 
-        {{-- Schedule 7 --}}
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">7.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">The parties agree that this agreement does not form a contract to carry out work. The obligation to carry out work arises on the formation
-                of a <b>trade contract</b>
-                as described in paragraph 6 above.
-            </div>
-        </div>
+    {{-- Page 2 --}}
+    <div class="page"></div>
 
-        {{-- Schedule 8 --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">8.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;"><b>"Defects liability period"</b> in a <b>trade contract</b> means a period of 12 weeks from the practical completion of the work under the
-                <b>head contract</b>.
-            </div>
-        </div>
-
-        {{-- Schedule 9 --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-1"><h5 style="margin: 0px">9.</h5></div>
-            <div class="col-xs-11" style="padding-left:0px;">
-                <h5 style="margin: 0px">INFORMATION TO BE COMPLETED BY THE TRADE CONTRACTOR</h5>
-                <hr style="margin: 5px 0px 10px 0px">
-                <div class="col-xs-4" style="padding-left:0px; font-size:10px">LICENCE NO (if required)</div>
-                <div class="col-xs-5">{!! ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? $company->activeCompanyDoc('7')->ref_no : "&nbsp;<hr style='margin:0px'>" !!}</div>
-                <div class="col-xs-3">&nbsp;</div>
-            </div>
-            <div class="col-xs-1">&nbsp;</div>
-            <div class="col-xs-11" style="padding-left:0px; line-height:1.7em">
-                <div class="col-xs-4" style="padding-left:0px; font-size:10px">PUBLIC LIABILITY INSURANCE</div>
-                <div class="col-xs-8" style="padding:0px;">
-                    <div class="col-xs-7">Company: {!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? " &nbsp;".$company->activeCompanyDoc('1')->ref_name :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">Policy No: {!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? " &nbsp; ".$company->activeCompanyDoc('1')->ref_no :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>" !!}</div>
-                    <div class="col-xs-7">Current to: {!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') :
-                    "&nbsp; &nbsp;<span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">&nbsp;</div>
-                </div>
-            </div>
-            <div class="col-xs-1">&nbsp;</div>
-            <div class="col-xs-11" style="padding-left:0px; line-height:1.7em">
-                <div class="col-xs-4" style="padding-left:0px; font-size:10px">WORKERS COMPENSATION INSURANCE</div> {{-- Workers Compensation Insurance --}}
-                <div class="col-xs-8" style="padding:0px;">
-                    <div class="col-xs-7">Company: {!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? " &nbsp;".$company->activeCompanyDoc('2')->ref_name :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">Policy No: {!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? " &nbsp; ".$company->activeCompanyDoc('2')->ref_no :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>" !!}</div>
-                    <div class="col-xs-7">Current to: {!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') :
-                    "&nbsp; &nbsp;<span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">&nbsp;</div>
-                </div>
-            </div>
-            <div class="col-xs-1">&nbsp;</div>
-            <div class="col-xs-11" style="padding-left:0px; line-height:1.7em">
-                <div class="col-xs-4" style="padding-left:0px; font-size:10px">SICKNESS & ACCIDENT INSURANCE</div> {{-- Sickness & Accident Insurance --}}
-                <div class="col-xs-8" style="padding:0px;">
-                    <div class="col-xs-7">Company: {!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? " &nbsp;".$company->activeCompanyDoc('3')->ref_name :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">Policy No: {!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? " &nbsp; ".$company->activeCompanyDoc('3')->ref_no :
-                    "&nbsp; &nbsp; <span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>" !!}</div>
-                    <div class="col-xs-7">Current to: {!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') :
-                    "&nbsp; &nbsp;<span style='border-bottom: 1px solid #e9edef;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>" !!}</div>
-                    <div class="col-xs-5">&nbsp;</div>
-                </div>
-            </div>
-            <div class="col-xs-1">&nbsp;</div>
-            <div class="col-xs-11" style="padding-left:0px;">
-                <div class="col-xs-4" style="padding-left:0px;"><br>ABN: &nbsp; {{ $company->abn }}</div>
-                <div class="col-xs-8" style="padding-left:0px;">
-                    <div class="col-xs-12"><br>ARE YOU REGISTERED FOR GST? &nbsp; @if($company->gst) Yes @elseif($company->gst == '0') No @else YES / NO @endif</div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Signature --}}
-        <br>
-        <div class="row">
-            <div class="col-xs-12" style="font-size:10px">
-                THE PARTIES AGREE that the period trade contract conditions referred to above are those that appear on the next page (see conditions)
-            </div>
-            <div class="col-xs-5"><br><br><br>
-                <hr style="margin: 0px">
-                Principle Contractor's Signature
-            </div>
-            <div class="col-xs-2"></div>
-            <div class="col-xs-5"><br><br><br>
-                <hr style="margin: 0px">
-                Trade Contractor's Signature
-            </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 style="margin: 0px">Period Trade Contract
+                <small>continued</small>
+                <span class="pull-right" style="font-size:18px"></span></h3>
+            <hr style="margin: 5px 0px 10px 0px">
+            <h5>SCHEDULE</h5><br>
         </div>
     </div>
 
-    {{-- Page 2 --}}
-    <div class="page">
-        <div class="row">
-            <div class="col-xs-12">
-                <h4 style="margin: 0px">Period Trade Contract Conditions</h4>
-                <hr style="margin: 5px 0px 5px 0px">
-            </div>
-        </div>
-        <div class="row" style="font-size: 9px">
-            {{-- Column 1 --}}
-            <div class="col-xs-6">
-                <h6>1. TRADE WORKS</h6>
-                <ol type="a" style="padding-left:15px">
-                    <li>The <b>trade contractor</b> must carry out and complete the <b> trade works</b>:
-                        <ol type="i" style="padding-left:15px">
-                            <li>in a proper, skillful and tradesperson like manner to the satisfaction of the <b>principal contractor</b> acting reasonably;</li>
-                            <li>in accordance with the specifications and the law; and</li>
-                            <li>at the reasonable times directed by the <b> principal contractor</b>.</li>
+    {{-- Schedule 7 --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">7.</h5></td>
+            <td class="pad5" style="border: 0px">
+                The parties agree that this agreement does not form a contract to carry out work. The obligation to carry out work arises on the formation
+                of a <b>trade contract</b>
+                as described in paragraph 6 above.
+            </td>
+        </tr>
+    </table>
 
+    {{-- Schedule 8 --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">8.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <b>"Defects liability period"</b> in a <b>trade contract</b> means a period of 12 weeks from the practical completion of the work under the
+                <b>head contract</b>.
+            </td>
+        </tr>
+    </table>
+
+    {{-- Schedule 9 --}}
+    <hr style="margin: 5px 0px 5px 0px">
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">9.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h5 style="margin: 0px">INFORMATION TO BE COMPLETED BY THE TRADE CONTRACTOR</h5>
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 120px;">LICENCE NO (if required) </span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? $company->activeCompanyDoc('7')->ref_no : '' !!}</span>
+    </div>
+
+    <br><br>
+    <h6 style="margin-bottom: 3px">PUBLIC LIABILITY INSURANCE</h6>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">COMPANY</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
+    </div>
+    <br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">POLICY NO</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 20px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">CURRENT TO</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
+    </div>
+
+    <h6 style="margin-bottom: 3px">WORKERS COMPENSATION INSURANCE</h6>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">COMPANY</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
+    </div>
+    <br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">POLICY NO</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 20px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">CURRENT TO</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
+    </div>
+
+    <h6 style="margin-bottom: 3px">SICKNESS & ACCIDENT INSURANCE</h6>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">COMPANY</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
+    </div>
+    <br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">POLICY NO</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 20px;">&nbsp;</span>
+        <span style="display: table-cell; width: 70px;">CURRENT TO</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
+    </div>
+
+    {{-- ABN + GST --}}
+    <br><br><br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 30px;">ABN</span>
+        <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->abn }}</span>
+        <span style="display: table-cell; width: 50px;">&nbsp;</span>
+        <span style="display: table-cell; width: 150px;">ARE YOU REGISTERED FOR GST?</span>
+        <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">@if($company->gst) Yes @elseif($company->gst == '0') No @else "&nbsp;" @endif</span>
+        <span style="display: table-cell;">&nbsp;</span>
+    </div>
+
+    {{-- Signature --}}
+    <br><br><br><br>
+    THE PARTIES AGREE that the period trade contract conditions referred to above are those that appear on the next page (see conditions)<br><br><br><br><br>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 300px; border-bottom: 1px solid #eee; border-top: 0px">&nbsp;</span>
+        <span style="display: table-cell; width: 100px;">&nbsp;</span>
+        <span style="display: table-cell; width: 300px; border-bottom: 1px solid #eee; border-top: 0px">&nbsp;</span>
+        <span style="display: table-cell;">&nbsp;</span>
+    </div>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 300px; border-top: 0px">Principle Contractor's Signature</span>
+        <span style="display: table-cell; width: 100px;">&nbsp;</span>
+        <span style="display: table-cell; width: 300px; border-top: 0px">Trade Contractor's Signature</span>
+        <span style="display: table-cell;">&nbsp;</span>
+    </div>
+
+
+    {{-- Page 3 --}}
+    <div class="page"></div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h4 style="margin: 0px">Period Trade Contract Conditions</h4>
+            <hr style="margin: 5px 0px 5px 0px">
+        </div>
+    </div>
+    <table class="table" style="font-size: 8px">
+        <tr>
+            {{-- Column 1 --}}
+            <td width="50%" class="pad0" style="border: 0px">
+                <h6 style="margin-bottom: 1px">1. TRADE WORKS</h6>
+                <ol type="a" style="padding:0px 0px 0px 15px">
+                    <li>The <b>trade contractor</b> must carry out and complete the <b> trade works</b>:
+                        <ol type="i" style="padding:0px 0px 0px 15px; line-height: 4px; margin: 0px">
+                            <li style="line-height: 9px; padding: 0px; margin: 0px">in a proper, skillful and tradesperson like manner to the satisfaction of the <b>principal contractor</b> acting reasonably;</li>
+                            <li style="line-height: 9px; padding: 0px; margin: 0px">in accordance with the specifications and the law; and</li>
+                            <li style="line-height: 9px; padding: 0px; margin: 0px">at the reasonable times directed by the <b> principal contractor</b>.</li>
                         </ol>
                     </li>
                     <li>If the <b>trade contractor</b> discovers any inconsistency, ambiguity or discrepancy in or between the plans and the specifications, the <b>trade contractor</b> must
@@ -279,10 +366,10 @@
                     </li>
                     <li>The <b>trade contractor</b> must supply everything necessary to carry out the <b>trade works</b>.</li>
                     <li>The <b>trade contractor</b> may employ or engage others to carry out some or all of the <b>trade works</b>. Use of sub-contractors does not relieve the trade contractor from liability under
-                        this <b>trade contract</b>.
+                        this <b>trade contract.</b>
                     </li>
                 </ol>
-                <h6>2. VARIATIONS</h6>
+                <h6 style="margin-bottom: 1px">2. VARIATIONS</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>trade contractor</b> must not:
                         <ol type="i" style="padding-left:15px">
@@ -307,7 +394,7 @@
                     <li>The contract price is to be adjusted by the price of a <b>variation</b> at the next payment.</li>
                 </ol>
 
-                <h6>3. ACCEPTANCE OF BASE WORK</h6>
+                <h6 style="margin-bottom: 1px">3. ACCEPTANCE OF BASE WORK</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>Unless sub-clause 3(b) applies, on commencing to carry out the <b>trade works</b> the <b>trade contractor</b> is:
                         <ol type="i" style="padding-left:15px">
@@ -333,7 +420,7 @@
                     </li>
                 </ol>
 
-                <h6>4. WARRANTIES</h6>
+                <h6 style="margin-bottom: 1px">4. WARRANTIES</h6>
                 The <b>trade contractor</b> warrants that:
                 <ol type="a" style="padding-left:15px">
                     <li>the <b>trade works</b> will be carried out in a proper, skillful and tradesperson like manner and in accordance with the contract;</li>
@@ -346,23 +433,25 @@
                     <li>The <b>trade contractor</b> must, at its own cost, make good any work that does not conform with the requirements of this <b>trade contract</b> before the end of the <b>defects
                             liability period</b>.
                     </li>
-                    <li>The <b>principal contractor</b> may, in writing, direct the <b>trade contractor</b> to correct, remove or replace any non-conforming work before or during the defects liability
-                        period,
-                    </li>
-                    <li>If the <b>trade contractor</b> does not comply with such a direction, the principal contractor may have that work carried out by others and the cost is a debt due and payable
-                        by the <b>trade contractor</b> to the <b>principal contractor</b>.
-                    </li>
                 </ol>
-            </div>
+            </td>
+
+            <td width="5%" class="pad5" style="border: 0px">&nbsp;</td> {{-- Spacer --}}
 
             {{-- Column 2 --}}
-            <div class="col-xs-6">
+            <td class="pad5" style="border: 0px">
+                <div style="padding-top: 4px">b. &nbsp; The <b>principal contractor</b> may, in writing, direct the <b>trade contractor</b> to correct, remove or replace any non-conforming work before or during the defects liability
+                    period,
+                </div>
+                <div style="padding-top: 4px">c. &nbsp; If the <b>trade contractor</b> does not comply with such a direction, the principal contractor may have that work carried out by others and the cost is a debt due and payable
+                    by the <b>trade contractor</b> to the <b>principal contractor</b>.
+                </div>
                 <div style="padding-top: 4px">d. &nbsp; In addition to exercising other rights and remedies, the <b>principal contractor</b> may set-off such debt against a retention held and any
                     amount due or which becomes payable
                     to the <b>trade contractor</b> in connection with this <b>trade contract</b>.
                 </div>
 
-                <h6>6. INDEMNITY</h6>
+                <h6 style="margin-bottom: 1px">6. INDEMNITY</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>trade contractor</b> indemnifies the <b>principle contractor</b> against:
                         <ol type="i" style="padding-left:15px">
@@ -380,7 +469,7 @@
                     </li>
                 </ol>
 
-                <h6>7. INSURANCE</h6>
+                <h6 style="margin-bottom: 1px">7. INSURANCE</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>trade contractor</b> must take out prior to commencing, and maintain until completion of the <b>trade works</b>, the following:
                         <ol type="i" style="padding-left:15px">
@@ -400,7 +489,7 @@
                     <li>The <b>trade contractor</b> must, when asked by the <b>principal contractor</b>, produce evidence of the existence and currency of any insurances.</li>
                 </ol>
 
-                <h6>8. HEALTH AND SAFETY</h6>
+                <h6 style="margin-bottom: 1px">8. HEALTH AND SAFETY</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>In carrying out the <b>trade works</b>, the <b>trade contractor</b> and its agents and employees must observe all relevant workplace health and safety laws.</li>
                     <li>The <b>trade contractor</b> must, whenever carrying out the <b>trade works</b>, ensure that:
@@ -411,7 +500,7 @@
                     </li>
                 </ol>
 
-                <h6>9. DAMAGE AND SITE CLEANING</h6>
+                <h6 style="margin-bottom: 1px">9. DAMAGE AND SITE CLEANING</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>trade contractor</b> is responsible for:
                         <ol type="i" style="padding-left:15px">
@@ -425,8 +514,17 @@
                         noncompliance and this cost becomes a debt due and payable by the <b>trade contractor</b> to the <b>principal contractor</b>.
                     </li>
                 </ol>
+            </td>
+        </tr>
+    </table>
 
-                <h6>10. PAYMENT</h6>
+    <div class="page"></div>
+    {{-- Page 4 --}}
+    <table class="table" style="font-size: 8px">
+        <tr>
+            {{-- Column 1 --}}
+            <td width="50%" class="pad0" style="border: 0px">
+                <h6 style="margin-bottom: 1px">10. PAYMENT</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>principal contractor</b> may require from the <b>trade contractor</b>, as a precondition to payment:
                         <ol type="i" style="padding-left:15px">
@@ -439,16 +537,8 @@
                         satisfactorily carried out.
                     </li>
                 </ol>
-            </div>
-        </div>
-    </div>
 
-    {{-- Page 3 --}}
-    <div class="page">
-        <div class="row" style="font-size: 9px">
-            {{-- Column 1 --}}
-            <div class="col-xs-6">
-                <h6>11. EXTENSON OF TIME</h6>
+                <h6 style="margin-bottom: 1px">11. EXTENSON OF TIME</h6>
                 The <b>trade contractor</b> is entitled to an extension of time to complete the <b>trade works</b> as determined by the <b>principal contractor</b> acting reasonably if:
                 <ol type="a" style="padding-left:15px">
                     <li>the trade works are delayed by:
@@ -466,7 +556,7 @@
                     </li>
                 </ol>
 
-                <h6>11. FREEDOM OF ASSOCATION AND COMPLIANCE WITH INDUSTRIAL LAWS</h6>
+                <h6 style="margin-bottom: 1px">11. FREEDOM OF ASSOCATION AND COMPLIANCE WITH INDUSTRIAL LAWS</h6>
                 A party or its agent must not support an industrial organisation to:
                 <ol type="a" style="padding-left:15px">
                     <li>participate in any form of unauthorised industrial action or secondary boycott that affects the <b>trade works</b>, or</li>
@@ -479,7 +569,7 @@
                     </li>
                 </ol>
 
-                <h6>13. DEFAULT</h6>
+                <h6 style="margin-bottom: 1px">13. DEFAULT</h6>
                 <ol type="a" style="padding-left:15px">
                     A party is in default of this <b>trade contract</b> if it:
                     <li>is in substantial breach of this <b>trade contract</b>,</li>
@@ -488,7 +578,7 @@
                     <li>being a company, goes into liquidation.</li>
                 </ol>
 
-                <h6>14. SUSPENSION</h6>
+                <h6 style="margin-bottom: 1px">14. SUSPENSION</h6>
                 <ol type="a" style="padding-left:15px">
                     <li>If work under the <b>head contract</b> has been suspended, the <b>principal contractor</b> may, by giving written notice to the <b>trade contractor</b>, immediately suspend the
                         <b>trade works</b>.
@@ -498,22 +588,23 @@
                     </li>
                 </ol>
 
-                <h6>15. ENDING THS TRADE CONTRACT</h6>
+                <h6 style="margin-bottom: 1px">15. ENDING THS TRADE CONTRACT</h6>
                 If a party remains in default 3 working days after the other party has given it written notice requiring the default to be remedied then, without prejudice to any other rights or
-                remedies, the
-                other party may, by giving a further written notice, end this trade Contract.
+                remedies, the other party may, by giving a further written notice, end this trade Contract.<br><br>
 
-                <h6>16. HEAD CONTRACT ENDED</h6>
+                <h6 style="margin-bottom: 1px">16. HEAD CONTRACT ENDED</h6>
                 If the <b>head contract</b> is ended for any reason, the <b>principal contractor</b> may, by giving written notice to the <b>trade contractor</b>, end this <b>trade contract</b> and
                 the <b>trade contractor</b> is:
                 <ol type="a" style="padding-left:15px">
                     <li>entitled to be paid for work carried out prior and up to the date of termination plus reasonable costs incurred attributable to the termination; but</li>
                     <li>not entitled to make any claim for loss of profit.</li>
                 </ol>
-            </div>
+            </td>
+            <td width="5%" class="pad5" style="border: 0px">&nbsp;</td> {{-- Spacer --}}
+
             {{-- Column 2 --}}
-            <div class="col-xs-6">
-                <h6>17. ADMINISTRATION</h6>
+            <td class="pad5" style="border: 0px">
+                <h6 style="margin-bottom: 1px">17. ADMINISTRATION</h6>
                 The trade contractor or its representative must:
                 <ol type="a" style="padding-left:15px">
                     <li>attend site meetings if called on to do so,</li>
@@ -521,7 +612,7 @@
                     <li>co-operate with all workers and other contractors on the <b>site</b>.</li>
                 </ol>
 
-                <h6>18. INTELECTUAL PROPERTY RIGHTS</h6>
+                <h6 style="margin-bottom: 1px">18. INTELECTUAL PROPERTY RIGHTS</h6>
                 <ol type="a" style="padding-left:15px">
                     <li><b>Intellectual property rights</b> in any plans or designs supplied by the <b>principal contractor</b> to the <b>trade contractor</b> remains with the <b>principal
                             contractor</b>.
@@ -529,7 +620,7 @@
                     <li>The <b>trade contractor</b> must not reproduce or use any plans or designs, in whole or in part, other than for the purpose of completing the <b>trade works</b>.</li>
                 </ol>
 
-                <h6>19. DEFINITIONS</h6>
+                <h6 style="margin-bottom: 1px">19. DEFINITIONS</h6>
                 In this <b>trade contract</b>:<br><br>
                 <p>"<b>base work</b>" means the <b>site</b> conditions including work carried out by others on or over which the <b>trade contractor</b> is to carry out the <b>trade works</b>;</p>
                 <p>"<b>head contract</b>" means the contract between the <b>principal contractor</b> and its client which includes the <b>trade works</b> as part of its scope of work,</p>
@@ -557,9 +648,9 @@
                     <li>changing the scope of the <b>trade works</b>.</li>
                 </ol>
                 </p>
-            </div>
-        </div>
-    </div>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

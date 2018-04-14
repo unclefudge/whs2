@@ -12,7 +12,7 @@ class SiteAccident extends Model {
     protected $table = 'site_accidents';
     protected $fillable = [
         'site_id', 'date', 'supervisor', 'name', 'company', 'age', 'occupation', 'location', 'nature',
-        'referred', 'damage', 'info', 'action', 'notes', 'status',
+        'referred', 'damage', 'info', 'action', 'extra_info', 'notes', 'status',
         'resolved_at', 'created_by', 'updated_by', 'created_at', 'updated_at'
     ];
 

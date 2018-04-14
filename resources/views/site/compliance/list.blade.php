@@ -25,7 +25,7 @@
     <div class="page-content-inner">
         <div class="row">
             <div class="col-md-12">
-                <div class="portlet light bordered">
+                <div class="portlet light ">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-layers"></i>
@@ -54,80 +54,137 @@
         <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
         <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
 
-        <div class="page-content-inner">
-            <div class="row">
-                <div class="col-md-3">
-                    <select-picker :name.sync="xx.reason" :options.sync="xx.sel_reasons" :function="updateReason"></select-picker>
-                </div>
-                <div class="col-md-3">
-                    <div v-if="xx.reason == 1">
-                        <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 5px"> Resolved
-                            <input v-model="xx.status" type="checkbox" v-bind:true-value="1" v-bind:false-value="0"/>
-                            <span></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="col-xs-3 text-right" style="margin-top: 5px">Search</div>
-                    <div class="col-xs-9 "><input v-model="xx.search" type="text" class="form-control"></div>
+        <div class="row">
+            <div class="col-md-3">
+                <select-picker :name.sync="xx.reason" :options.sync="xx.sel_reasons" :function="updateReason"></select-picker>
+            </div>
+            <div class="col-md-3">
+                <div v-if="xx.reason == 1">
+                    <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 5px"> Resolved
+                        <input v-model="xx.status" type="checkbox" v-bind:true-value="1" v-bind:false-value="0"/>
+                        <span></span>
+                    </label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <table v-show="xx.list.length" class="table table-striped table-bordered table-nohover order-column">
-                        <thead>
-                        <tr class="mytable-header">
-                            <th width="10%"><a href="#" class="mytable-header-link" v-on:click="sortBy('date')"> Date</a>
-                                <i v-if="xx.sortKey == 'date' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
-                                <i v-if="xx.sortKey == 'date' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
-                            </th>
-                            <th width="20%"><a href="#" class="mytable-header-link" v-on:click="sortBy('site_name')"> Site</a>
-                                <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
-                                <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
-                            </th>
-                            <th><a href="#" class="mytable-header-link" v-on:click="sortBy('user_name')"> Name</a>
-                                <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
-                                <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
-                            </th>
-                            <th><a href="#" class="mytable-header-link" v-on:click="sortBy('user_company')"> Company</a>
-                                <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
-                                <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
-                            </th>
-                            <th width="20%"><a href="#" class="mytable-header-link" v-on:click="sortBy('site_supers')"> Supervisor</a>
-                                <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
-                                <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
-                            </th>
-                            <th> Actions</th>
-                        </tr>
-                        <br>
-                        </thead>
-                        <tbody>
-                        <h3 v-if="xx.reason == '' && !xx.status" class="font-red" style="margin-top: 0px;">Not Logged in Users</h3>
-                        <template v-for="comply in xx.list | filterReason xx.reason | filterStatus xx.status | filterBy xx.search | orderBy xx.sortKey xx.sortOrder">
-                            <tr class="@{{ textColour(comply)  }}">
-                                <td>@{{ comply.date | formatDate}}</td>
-                                <td>@{{ comply.site_name }}</td>
-                                <td>@{{ comply.user_name }}</td>
-                                <td>@{{ comply.user_company }}</td>
-                                <td>@{{ comply.site_supers }}</td>
-                                <td>
-                                    @if (Auth::user()->hasPermission2('edit.compliance'))
-                                        <button v-on:click="editRecord(comply)" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">
-                                            <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
-                                        </button>
-                                    @endif
-                                </td>
-                            </tr>
-                        </template>
-                        </tbody>
-                    </table>
-
-                    <!--<pre>@{{ $data | json }}</pre>
-                    -->
-
-                </div>
+            <div class="col-md-6">
+                <div class="col-xs-3 text-right" style="margin-top: 5px">Search</div>
+                <div class="col-xs-9 "><input v-model="xx.search" type="text" class="form-control"></div>
             </div>
         </div>
+
+        {{--}}
+        <div v-show="xx.list.length">
+            <br>
+            <div class="row" style="background-color: #f0f6fa; font-weight: bold; min-height: 40px; display: flex; align-items: center;">
+                <div class="col-xs-2">
+                    <a href="#" class="mytable-header-link" v-on:click="sortBy('date')"> Date</a>
+                    <i v-if="xx.sortKey == 'date' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                    <i v-if="xx.sortKey == 'date' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                </div>
+                <div class="col-xs-2">
+                    <a href="#" class="mytable-header-link" v-on:click="sortBy('site_name')"> Site</a>
+                    <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                    <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                </div>
+                <div class="col-xs-2">
+                    <a href="#" class="mytable-header-link" v-on:click="sortBy('user_name')"> Name</a>
+                    <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                    <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '-1'" class="fa fa-caret-up">
+                </div>
+                <div class="col-xs-2">
+                    <a href="#" class="mytable-header-link" v-on:click="sortBy('user_company')"> Company</a>
+                    <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                    <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                </div>
+                <div class="col-xs-2">
+                    <a href="#" class="mytable-header-link" v-on:click="sortBy('site_supers')"> Supervisor</a>
+                    <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                    <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                </div>
+                <div class="col-xs-2">Actions</div>
+            </div>
+
+
+            <h3 v-if="xx.reason == '' && !xx.status" class="font-red" style="margin-top: 0px;">Not Logged in Users</h3>
+
+      <template v-for="comply in xx.list | filterReason xx.reason | filterStatus xx.status | filterBy xx.search | orderBy xx.sortKey xx.sortOrder">
+
+          <div class="row @{{ textColour(comply)  }}">
+              <div class="col-xs-2">@{{ comply.date | formatDate}}</div>
+              <div class="col-xs-2">@{{ comply.site_name }}</div>
+              <div class="col-xs-2">@{{ comply.user_name }}</div>
+              <div class="col-xs-2">@{{ comply.user_company }}</div>
+              <div class="col-xs-2">@{{ comply.site_supers }}</div>
+              <div class="col-xs-2">
+                  @if (Auth::user()->hasPermission2('edit.compliance'))
+                      <button v-on:click="editRecord(comply)" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                          <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
+                      </button>
+                  @endif
+              </div>
+          </div>
+            </template>
+
+            <pre>@{{ $data | json }}</pre>
+        </div>--}}
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <table v-show="xx.list.length" class="table table-striped table-bordered table-nohover order-column">
+                    <thead>
+                    <tr class="mytable-header">
+                        <th width="10%"><a href="#" class="mytable-header-link" v-on:click="sortBy('date')"> Date</a>
+                            <i v-if="xx.sortKey == 'date' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                            <i v-if="xx.sortKey == 'date' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                        </th>
+                        <th width="20%"><a href="#" class="mytable-header-link" v-on:click="sortBy('site_name')"> Site</a>
+                            <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                            <i v-if="xx.sortKey == 'site_name' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                        </th>
+                        <th><a href="#" class="mytable-header-link" v-on:click="sortBy('user_name')"> Name</a>
+                            <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                            <i v-if="xx.sortKey == 'user_name' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                        </th>
+                        <th><a href="#" class="mytable-header-link" v-on:click="sortBy('user_company')"> Company</a>
+                            <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                            <i v-if="xx.sortKey == 'user_company' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                        </th>
+                        <th width="20%"><a href="#" class="mytable-header-link" v-on:click="sortBy('site_supers')"> Supervisor</a>
+                            <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '1'" class="fa fa-caret-down"></i>
+                            <i v-if="xx.sortKey == 'site_supers' && xx.sortOrder == '-1'" class="fa fa-caret-up"></i>
+                        </th>
+                        <th> Actions</th>
+                    </tr>
+                    <br>
+                    </thead>
+                    <tbody>
+                    <h3 v-if="xx.reason == '' && !xx.status" class="font-red" style="margin-top: 0px;">Not Logged in Users</h3>
+                    <template v-for="comply in xx.list | filterReason xx.reason | filterStatus xx.status | filterBy xx.search | orderBy xx.sortKey xx.sortOrder">
+                        <tr class="@{{ textColour(comply)  }}">
+                            <td>@{{ comply.date | formatDate}}</td>
+                            <td>@{{ comply.site_name }}</td>
+                            <td>@{{ comply.user_name }}</td>
+                            <td>@{{ comply.user_company }}</td>
+                            <td>@{{ comply.site_supers }}</td>
+                            <td>
+                                @if (Auth::user()->hasPermission2('edit.compliance'))
+                                    <button v-on:click="editRecord(comply)" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                                        <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
+                                    </button>
+                                @endif
+                            </td>
+                        </tr>
+                    </template>
+                    </tbody>
+                </table>
+
+                <!--<pre>@{{ $data | json }}</pre>
+                    -->
+
+            </div>
+        </div>
+
         <!--
             Sidebar for editing record
            -->
