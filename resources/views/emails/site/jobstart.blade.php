@@ -2,7 +2,7 @@
 
 # Job Start Notification
 
-{!! ($olddate) ? "An Job Start has been moved on **$site->name** from $olddate to $newdate." : "An Job Start has been created for **$site->name** on $newdate."!!}
+{!! ($olddate) ? "A Job Start has been moved on **$site->name** from $olddate to $newdate." : "A Job Start has been created for **$site->name** on $newdate."!!}
 
 @component('mail::button', ['url' => config('app.url').'/planner/site/'.$site->id])
 View Planner

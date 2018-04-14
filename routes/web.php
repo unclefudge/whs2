@@ -210,6 +210,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Routes
     Route::get('site/dt/sites', 'Site\SiteController@getSites');
+    Route::get('site/checkin', 'Site\SiteController@siteCheckin2');
+    Route::post('site/checkin', 'Site\SiteController@processCheckin2');
     Route::get('site/{slug}/checkin', 'Site\SiteController@siteCheckin');
     Route::post('site/{slug}/checkin', 'Site\SiteController@processCheckin');
     Route::get('site/{slug}/settings', 'Site\SiteController@showSettings');

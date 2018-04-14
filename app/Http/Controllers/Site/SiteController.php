@@ -221,17 +221,18 @@ class SiteController extends Controller {
                 if ($site->client_phone) {
                     $string = $site->client_phone;
                     if ($site->client_phone_desc)
-                        $string = $site->client_phone . ' ' .$site->client_phone_desc;
+                        $string = $site->client_phone . ' ' . $site->client_phone_desc;
                 }
                 if ($site->client_phone2) {
-                    $string .= '<br>'.$site->client_phone2;
+                    $string .= '<br>' . $site->client_phone2;
                     if ($site->client_phone2_desc)
-                        $string .= ' ' .$site->client_phone2_desc;
+                        $string .= ' ' . $site->client_phone2_desc;
                 }
+
                 return $string;
             })
             ->addColumn('supervisor', function ($site) {
-                    return $site->supervisorsSBC();
+                return $site->supervisorsSBC();
             })
             ->rawColumns(['id', 'client_phone'])
             ->make(true);
@@ -258,11 +259,33 @@ class SiteController extends Controller {
         return $site->client->clientOfCompany;
     }*/
 
+
+    /**
+     * Check-in to Site.
+     */
+    public function siteCheckin2()
+    {
+        return view('site/checkinSelect');
+    }
+
+    /**
+     * Process Site Check-in.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function processCheckin2(SiteCheckinRequest $request, $slug)
+    {
+        dd('here');
+    }
+
     /**
      * Check-in to Site.
      */
     public function siteCheckin($slug)
     {
+        if ($slug == 'SELECT')
+            return view('site/checkinSelect');
+
         $worksite = Site::where(compact('slug'))->firstOrFail();
 
         return view('site/checkin', compact(['worksite']));
@@ -282,6 +305,7 @@ class SiteController extends Controller {
         else {
             if ($request->has('checkinTrade')) {
                 $worksite = Site::find($site->id);
+
                 return view('site/checkinTradeFail', compact(['worksite']));
             }
 
