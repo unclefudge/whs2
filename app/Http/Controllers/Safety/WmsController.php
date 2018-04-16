@@ -524,8 +524,8 @@ class WmsController extends Controller {
                 if ($doc->status == 1) {
                     $now = Carbon::now();
                     $yearago = $now->subYear()->toDateTimeString();
-                    if ($doc->updated_at < $yearago && Auth::user()->isCC())
-                        $name .= ' <span class="badge badge-danger badge-roundless">Out of Date</span>';
+                    //if ($doc->updated_at < $yearago && Auth::user()->isCC())
+                    //    $name .= ' <span class="badge badge-danger badge-roundless">Out of Date</span>';
                 }
 
                 return $name;
