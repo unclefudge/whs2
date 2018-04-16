@@ -120,7 +120,6 @@
                                     @endforeach
                                 </div>
                                 {{-- Pre-filled forms --}}
-                            {{--}}
                                 @if ($company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5))
                                     <div class="row">
                                         <div class="col-md-12"><br>Pre-filled forms:
@@ -131,7 +130,7 @@
                                             @if ($company->requiresCompanyDoc(5))<a href="/company/doc/create/tradecontract/{{ $company->id  }}/next" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Period Trade Contract</a> @endif
                                         </div>
                                     </div>
-                                @endif --}}
+                                @endif
                             @else
                                 <div class="row">
                                     <div class="col-md-12">No documents are required to be compliant.</div>
