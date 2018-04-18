@@ -11,8 +11,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li class="external">
-                    <h3>You have
-                        <strong>{{ Auth::user()->todo('1')->count() }} outstanding</strong> tasks</h3>
+                    <h3>You have <strong>{{ Auth::user()->todo('1')->count() }} outstanding</strong> tasks</h3>
                     <a href="/todo">view all</a>
                 </li>
                 <li>

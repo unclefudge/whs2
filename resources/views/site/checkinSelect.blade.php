@@ -12,8 +12,8 @@
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
-                        <div class="caption">
-                            <i class="fa fa-sign-in "></i>
+                        <div class="caption font-dark">
+                            <i class="icon-layers"></i>
                             <span class="caption-subject font-green-haze bold uppercase">Site Checkin</span><br>
                             <span class="caption-helper">You must check into all sites you attend.</span>
                         </div>
@@ -28,20 +28,16 @@
                         <div class="form-body">
 
 
-
-
-
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn green" name="checkinTr" value="true">Submit</button>
-                            </div>
-                        </div> <!--/form-body-->
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn green" name="checkinTr" value="true">Submit</button>
+                        </div>
                         {!! Form::close() !!}
-                                <!-- END FORM-->
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     @stop <!-- END Content -->
 

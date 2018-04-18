@@ -870,6 +870,7 @@ class Company extends Model {
         // 3  SA - Sickness & Accident
         // 4  Sub - Subcontractors Statement
         // 5  PTC - Period Trade Contract
+        // 6  TT - Test & Tag
         // 7  CL - Contractors Licence
         //
         // Categories                          | PL  |WC/SA| SUB | PTC | CL  |
@@ -877,9 +878,9 @@ class Company extends Model {
         // 1  Subcontractor (On Site Trade)    |__X__|__X__|__X__|__X__|__X__|
         // 2  Service Provider (On Site trade  |__X__|__X__|_____|_____|__X__|
         // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|
-        // 4  Supply & Fit'                    |__X__|__X__|_____|_____|__X__|
-        // 5  Supply Only'                     |__X__|_____|_____|_____|_____|
-        // 6  Consultant'                      |_____|__X__|_____|_____|_____|
+        // 4  Supply & Fit                     |__X__|__X__|_____|_____|__X__|
+        // 5  Supply Only                      |__X__|_____|_____|_____|_____|
+        // 6  Consultant                       |_____|__X__|_____|_____|_____|
 
 
         // Determine WC or SA

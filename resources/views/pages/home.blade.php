@@ -80,7 +80,8 @@
             <div class="col-md-6 col-sm-6 visible-sm visible-xs">
                 <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                 <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
-            </div>--}}
+            </div>
+            --}}
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
             <div class="portlet light ">
@@ -206,28 +207,7 @@
                                 </li>
                             @endif
 
-                            {{-- Update company profile for admin --}}
-                            @if (Auth::user()->security && !Auth::user()->company->email)
-                                <li>
-                                    <a href="/company/{{ Auth::user()->company_id }}/edit" class="task-title">
-                                        <div class="col1">
-                                            <div class="cont">
-                                                <div class="cont-col1">
-                                                    <div class="label label-sm label-warning">
-                                                        <i class="fa fa-users"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc"> Please update your company details in profile</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col2">
-                                            <div class="date"></div>
-                                        </div>
-                                    </a>
-                                </li>
-                            @endif
+
                             {{-- Pending SWMS --}}
                             @if (Auth::user()->hasPermission2('del.wms'))
                                 @foreach(Auth::user()->company->wmsdocs as $doc)
@@ -284,6 +264,32 @@
                             @if (Auth::user()->todoType('toolbox', 1)->count())
                                 <h4>Toolbox Talks</h4>
                                 @foreach(Auth::user()->todoType('toolbox', 1) as $todo)
+                                    <li>
+                                        <a href="{{ $todo->url() }}" class="task-title">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="label label-sm label-success">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc"> {{ $todo->name }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+
+                            {{-- Company Docs --}}
+                            @if (Auth::user()->todoType('company doc', 1)->count())
+                                <h4>Company Documents</h4>
+                                @foreach(Auth::user()->todoType('company doc', 1) as $todo)
                                     <li>
                                         <a href="{{ $todo->url() }}" class="task-title">
                                             <div class="col1">

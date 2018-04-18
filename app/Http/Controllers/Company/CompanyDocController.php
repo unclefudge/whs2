@@ -116,6 +116,8 @@ class CompanyDocController extends Controller {
         // Delete attached file
         if (file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
             unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
+
+        $doc->closeToDo();
         $doc->delete();
 
         return json_encode('success');
