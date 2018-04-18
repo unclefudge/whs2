@@ -13,7 +13,6 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption font-dark">
-                            <i class="icon-layers"></i>
                             <span class="caption-subject font-green-haze bold uppercase">Site Checkin</span><br>
                             <span class="caption-helper">You must check into all sites you attend.</span>
                         </div>
@@ -24,13 +23,18 @@
                         <input type="hidden" name="checkin" value="true">
                         @include('form-error')
 
-                        <p>Please answer the following questions.</p>
                         <div class="form-body">
-
-
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        {!! Form::label('site_id', 'Please select site to log into', ['class' => 'control-label']) !!}
+                                        {!! Form::select('site_id', Auth::user()->company->sitesSelect('all'), (Auth::user()->rosteredSites() ? Auth::user()->rosteredSites()->first()->id : null), ['class' => 'form-control select2']) !!}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn green" name="checkinTr" value="true">Submit</button>
+                        <div class="form-actions" style="display: none" id="div_checkin">
+                            <button type="submit" class="btn green" name="checkinTr" value="true">Check-in</button>
                         </div>
                         {!! Form::close() !!}
                     </div>
@@ -43,21 +47,27 @@
 
 
 @section('page-level-plugins-head')
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
-    <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
-<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-<script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
-        //$('#safe_site').bootstrapSwitch('state', false);
-        //var state = $('#safe_site').bootstrapSwitch('state');
+        /* Select2 */
+        $("#site_id").select2({
+            placeholder: "Select Site",
+        });
+
+        // Reload table on change of site_id or type
+        $('#site_id').change(function () {
+            $('#div_checkin').show();
+        });
     });
 </script>
 @stop

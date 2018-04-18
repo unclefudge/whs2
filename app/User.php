@@ -7,6 +7,7 @@ use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Site\Planner\SiteCompliance;
 use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
 use App\Models\Company\Company;
@@ -157,23 +158,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $site_list = DB::table('site_supervisor')->whereIn('user_id', $user_list)->pluck('site_id')->toArray();
 
         return ($status) ? Site::where('status', $status)->whereIn('id', $site_list)->orderBy('name')->get() : Site::whereIn('id', $site_list)->orderBy('name')->get();
-    }
-
-    /**
-     * A list of Site this user is allowed to access
-     *
-     * @return array
-     */
-    public function siteListArray()
-    {
-        $site_list = [];
-        // Allow Supervisor + Construction Manager to access their sites
-        if ($this->is('con.manager'))
-            $site_list = $this->company->sites()->pluck('id')->toArray();
-        else if ($this->is('area.supervisor|supervisor'))
-            $site_list = $this->areaSites()->pluck('id')->toArray();
-
-        return $site_list;
     }
 
 
@@ -456,6 +440,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return Notify::find($notify_ids);
+    }
+
+    /**
+     * A list of sites user is roster for on specified date
+     */
+    public function rosteredSites($date = null)
+    {
+        if (!$date)
+            $date = Carbon::today();
+
+        $site_ids = SiteRoster::whereDate('date', $date)->where('user_id', $this->id)->pluck('site_id')->toArray();
+
+        return ($site_ids) ? Site::find($site_ids) : null;
     }
 
     /**

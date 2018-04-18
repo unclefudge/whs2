@@ -47,15 +47,14 @@
                             </div>
                             <div class="margin-bottom-10 visible-sm visible-xs"></div>
                             <div class="col-xs-4">
-                                <a href="{{ url('/auth/logout') }}" class="btn btn-lg default hidden-sm hidden-xs"></i> Log out </a>
-                                <a href="{{ url('/auth/logout') }}" class="btn btn-sm default visible-sm visible-xs" style="margin-top: -15px"></i> Log out </a>
+                                <a href="{{ url('/logout') }}" class="btn btn-lg default hidden-sm hidden-xs"></i> Log out </a>
+                                <a href="{{ url('/logout') }}" class="btn btn-sm default visible-sm visible-xs" style="margin-top: -15px"></i> Log out </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         @else
-            {{--}}
             <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
                 <div class="portlet light ">
                     <div class="portlet-title">
@@ -71,7 +70,7 @@
                                 <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                             </div>
                             <div class="col-xs-4">
-                                <a href="{{ url('/auth/logout') }}" class="btn btn-lg default"></i> Log out </a>
+                                <a href="{{ url('/logout') }}" class="btn btn-lg default"></i> Log out </a>
                             </div>
                         </div>
                     </div>
@@ -81,7 +80,6 @@
                 <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                 <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
             </div>
-            --}}
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
             <div class="portlet light ">

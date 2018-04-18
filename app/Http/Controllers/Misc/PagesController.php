@@ -38,8 +38,10 @@ class PagesController extends Controller {
 
         // If Site login show check-in form
         if (Session::has('siteID')) {
+            //echo 'ss:'.Session::get('siteID');
             $worksite = Site::where('code', Session::get('siteID'))->first();
-            if (!$worksite->isUserOnsite(Auth::user()->id)) {
+            //dd($worksite);
+            if ($worksite && !$worksite->isUserOnsite(Auth::user()->id)) {
                 // Check if User is of a special trade  ie Certifier
                 $special_trade_ids = ['19'];  // 19 - Certifier
                 if (count(array_intersect(Auth::user()->company->tradesSkilledIn->pluck('id')->toArray(), $special_trade_ids)) > 0) {

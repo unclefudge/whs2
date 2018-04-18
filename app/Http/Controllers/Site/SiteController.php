@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use DB;
+use Session;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\Planner\SiteAttendance;
@@ -273,9 +274,16 @@ class SiteController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function processCheckin2(SiteCheckinRequest $request, $slug)
+    public function processCheckin2()
     {
-        dd('here');
+        if (request('site_id')) {
+            $worksite = Site::where(['id' => request('site_id')])->firstOrFail();
+            Session::put('siteID', $worksite->code);
+
+            return view('site/checkin', compact(['worksite']));
+        }
+        return redirect('/site/checkin');
+
     }
 
     /**
@@ -283,9 +291,6 @@ class SiteController extends Controller {
      */
     public function siteCheckin($slug)
     {
-        if ($slug == 'SELECT')
-            return view('site/checkinSelect');
-
         $worksite = Site::where(compact('slug'))->firstOrFail();
 
         return view('site/checkin', compact(['worksite']));
@@ -345,6 +350,8 @@ class SiteController extends Controller {
 
         Toastr::success("Checked in");
 
+        //$worksite = $site;
+        //dd($site);
         return redirect('/dashboard');
     }
 
