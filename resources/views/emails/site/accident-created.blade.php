@@ -7,7 +7,7 @@
 
 # Accident Notification
 
-An accident report has been lodged for {{ $accident->site->name }}.
+A accident report has been lodged for {{ $accident->site->name }}.
 
 |                       |        |
 | ---------------------:|--------|

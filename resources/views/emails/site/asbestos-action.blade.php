@@ -7,7 +7,7 @@
 
 # Asbestos Notification Update
 
-An asbestos notification has been updated for {{ $asbestos->site->name }}.
+A asbestos notification has been updated for {{ $asbestos->site->name }}.
 
 |                       |        |
 | ---------------------:|--------|

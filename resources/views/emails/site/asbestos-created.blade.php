@@ -7,7 +7,7 @@
 
 # Asbestos Notification
 
-An asbestos notification has been lodged for {{ $asbestos->site->name }}.
+A asbestos notification has been lodged for {{ $asbestos->site->name }}.
 
 |                       |        |
 | ---------------------:|--------|

@@ -7,7 +7,7 @@
 
 # Hazard Notification
 
-An hazard report has been lodged for {{ $hazard->site->name }}.
+A hazard report has been lodged for {{ $hazard->site->name }}.
 
 |                       |        |
 | ---------------------:|--------|
