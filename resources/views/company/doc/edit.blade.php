@@ -217,7 +217,7 @@
                                         @if ($company->id == 3)
                                             <div class="form-group {!! fieldHasError('tag_type', $errors) !!}" id="fields_tag_type">
                                                 {!! Form::label('tag_type', 'Expiry', ['class' => 'control-label']) !!}
-                                                {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], null, ['class' => 'form-control bs-select']) !!}
+                                                {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], $company->ref_type, ['class' => 'form-control bs-select']) !!}
                                                 {!! fieldErrorMessage('tag_type', $errors) !!}
                                             </div>
                                         @else
