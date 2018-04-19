@@ -147,6 +147,7 @@ class CompanyDocController extends Controller {
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
             $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
+            $doc_request['ref_type'] = request('tag_type');
         }
 
         // Convert licence type into CSV
@@ -220,7 +221,8 @@ class CompanyDocController extends Controller {
 
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
-            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(3)->toDateTimeString();
+            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
+            $doc_request['ref_type'] = request('tag_type');
         }
 
         // Convert licence type into CSV

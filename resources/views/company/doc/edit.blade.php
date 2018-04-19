@@ -211,28 +211,43 @@
                                         {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('asb_type', $errors) !!}
                                     </div>
-                                    {{-- Test date --}}
+
                                     @if ($doc->category_id == 6)
-                                        <div class="form-group {!! fieldHasError('tag_date', $errors) !!}"  id="fields_tag_date">
+                                        {{-- Test Expire Type --}}
+                                        @if ($company->id == 3)
+                                            <div class="form-group {!! fieldHasError('tag_type', $errors) !!}" id="fields_tag_type">
+                                                {!! Form::label('tag_type', 'Expiry', ['class' => 'control-label']) !!}
+                                                {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], null, ['class' => 'form-control bs-select']) !!}
+                                                {!! fieldErrorMessage('tag_type', $errors) !!}
+                                            </div>
+                                        @else
+                                            {!! Form::hidden('tag_type', '3') !!}
+                                        @endif
+
+
+                                        {{-- Test date --}}
+                                        <div class="form-group {!! fieldHasError('tag_date', $errors) !!}" id="fields_tag_date">
                                             {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
                                             <div class="input-group date date-picker">
-                                                {!! Form::text('tag_date', $doc->expiry->subMonths(3)->format('d/m/Y'), ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                {!! Form::text('tag_date', $doc->expiry->subMonths($doc->ref_type)->format('d/m/Y'), ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
                                                 <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                             </div>
-                                            <span class="help-block">Expires 3 months from date of testing</span>
+                                            @if ($company->id != 3)
+                                                <span class="help-block">Expires 3 months from date of testing</span>
+                                            @endif
                                             {!! fieldErrorMessage('tag_date', $errors) !!}
                                         </div>
-                                   @else
-                                    {{-- Expiry --}}
-                                    <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
-                                        {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
-                                        <div class="input-group date date-picker">
-                                            {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
-                                            'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
-                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                    @else
+                                        {{-- Expiry --}}
+                                        <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
+                                            {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
+                                            <div class="input-group date date-picker">
+                                                {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
+                                                'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                            </div>
+                                            {!! fieldErrorMessage('expiry', $errors) !!}
                                         </div>
-                                        {!! fieldErrorMessage('expiry', $errors) !!}
-                                    </div>
                                     @endif
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}">
