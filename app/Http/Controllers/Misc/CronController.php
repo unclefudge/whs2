@@ -42,7 +42,7 @@ class CronController extends Controller {
         CronController::nonattendees();
         CronController::roster();
         CronController::qa();
-        //CronController::overdueToDo();
+        CronController::overdueToDo();
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
         CronController::archiveToolbox();
@@ -336,7 +336,6 @@ class CronController extends Controller {
                 if (App::environment('prod') && $qa->site->areaSupervisorsEmails())
                     $email_to = $qa->site->areaSupervisorsEmails();
                 Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));
-                //$qa->emailOverdue();
             }
 
             // Toolbox Talk
@@ -523,7 +522,7 @@ class CronController extends Controller {
                     // Archive completed Toolbox
                     echo "[$talk->id] All Completed - $talk->name<br>";
                     $log .= "[$talk->id] All Completed - $talk->name\n";
-                    $talk->status = 0;
+                    $talk->status = -1;
                     $talk->save();
                 } else {
                     $inactive = true;
@@ -535,7 +534,7 @@ class CronController extends Controller {
                     if ($inactive){
                         echo "**[$talk->id] Inactive Users - $talk->name<br>";
                         $log .= "[$talk->id] Inactive Users - $talk->name\n";
-                        $talk->status = 0;
+                        $talk->status = -1;
                         $talk->save();
                     }
 

@@ -201,6 +201,16 @@
                                         </div>
                                         {!! fieldErrorMessage('expiry', $errors) !!}
                                     </div>
+                                    {{-- Test Expire Type --}}
+                                    <div class="form-group {!! fieldHasError('tag_type', $errors) !!}" style="display: none" id="fields_tag_type">
+                                        @if ($company->id == 3)
+                                            {!! Form::label('tag_type', 'Expiry', ['class' => 'control-label']) !!}
+                                            {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], null, ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('tag_type', $errors) !!}
+                                        @else
+                                            {!! Form::hidden('tag_type', '3') !!}
+                                        @endif
+                                    </div>
                                     {{-- Test date --}}
                                     <div class="form-group {!! fieldHasError('tag_date', $errors) !!}" style="display: none" id="fields_tag_date">
                                         {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
@@ -208,7 +218,9 @@
                                             {!! Form::text('tag_date', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
                                             <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                         </div>
-                                        <span class="help-block">Expires 3 months from date of testing</span>
+                                        @if ($company->id != 3)
+                                            <span class="help-block">Expires 3 months from date of testing</span>
+                                        @endif
                                         {!! fieldErrorMessage('tag_date', $errors) !!}
                                     </div>
                                     {{-- Notes --}}
@@ -313,6 +325,7 @@
             $('#fields_lic_class').hide();
             $('#fields_asb_class').hide();
             $('#fields_expiry').hide();
+            $('#fields_tag_type').hide();
             $('#fields_tag_date').hide();
             $('#fields_notes').hide();
             $('#singlefile-div').hide();
@@ -340,6 +353,7 @@
                 $('#fields_category').show();
 
             if (cat == 6) { // Test & Tag
+                $('#fields_tag_type').show();
                 $('#fields_tag_date').show();
                 $('#fields_expiry').hide();
             } else {

@@ -1,4 +1,4 @@
-<h3>Suport Ticket Notification</h3>
+<h3>Support Ticket Notification</h3>
 <p>An support ticket has been lodged with the following details:</p>
 <table style="border: none">
     <tr>
