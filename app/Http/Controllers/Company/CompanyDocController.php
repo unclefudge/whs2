@@ -471,7 +471,7 @@ class CompanyDocController extends Controller {
                 if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
                     $details .= "<br>Type: $doc->ref_type";
                 if (in_array($doc->category_id, [6])) // Test&Tag
-                    $details = 'Test Date: '.$doc->expiry->subMonths(3)->format('d/m/Y');
+                    $details = 'Test Date: '.$doc->expiry->subMonths($doc->ref_type)->format('d/m/Y');
                 if (in_array($doc->category_id, [7])) // CL + Asb
                     $details = "Lic no: $doc->ref_no  &nbsp; Class: " . $doc->company->contractorLicenceSBC();
                 if (in_array($doc->category_id, [8])) // CL + Asb
