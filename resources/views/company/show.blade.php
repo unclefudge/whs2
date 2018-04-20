@@ -24,34 +24,9 @@
 @section('content')
     {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">
-        {{-- Company Header --}}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="member-bar">
-                    <!--<i class="fa fa-user ppicon-user-member-bar" style="font-size: 80px; opacity: .5; padding:5px"></i>-->
-                    <i class="icon-users-member-bar hidden-xs"></i>
-                    <div class="member-name">
-                        <div class="full-name-wrap">{{ $company->name }}</div>
-                        <span class="member-number">Company ID #{{ $company->id }}</span>
-                        <span class="member-split">&nbsp;|&nbsp;</span>
-                        <span class="member-number">{!! ($company->status == 1) ? 'ACTIVE' : '<span class="label label-sm label-danger">INACTIVE</span>' !!}</span>
-                        <!--<a href="/reseller/member/member_account_status/?member_id=8013759" class="member-status">Active</a>-->
-                    </div>
 
-                    <ul class="member-bar-menu">
-                        <li class="member-bar-item active"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
-                        @if (!empty(Auth::user()->companyDocTypeSelect('view', $company)))
-                            <li class="member-bar-item "><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
-                                    <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a>
-                            </li>
-                        @endif
-                        @if (Auth::user()->authCompanies('view.user')->contains('id', $company->id))
-                            <li class="member-bar-item "><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Staff">USERS</a></li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
-        </div>
+        @include('company/_header')
+
         <div class="row">
             {{-- Compliance Documents --}}
             <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
@@ -120,18 +95,19 @@
                                     @endforeach
                                 </div>
                                 {{-- Pre-filled forms --}}
-                            {{--}}
                                 @if ($company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5))
                                     <div class="row">
                                         <div class="col-md-12"><br>Pre-filled forms:
                                             @if ($company->requiresCompanyDoc(4))
-                                                <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/{!! ($company->activeCompanyDoc(4) && $company->activeCompanyDoc($type)->status == 1) ? 'next' : 'current'!!}" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Subcontractors Statement</a>
+                                                <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/{!! ($company->activeCompanyDoc(4) && $company->activeCompanyDoc($type)->status == 1) ? 'next' : 'current'!!}" target="_blank"><i class="fa fa-download"
+                                                                                                                                                                                                                                                          style="padding-left: 10px"></i> Subcontractors
+                                                    Statement</a>
                                             @endif
 
                                             @if ($company->requiresCompanyDoc(5))<a href="/company/doc/create/tradecontract/{{ $company->id  }}/next" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Period Trade Contract</a> @endif
                                         </div>
                                     </div>
-                                @endif --}}
+                                @endif
                             @else
                                 <div class="row">
                                     <div class="col-md-12">No documents are required to be compliant.</div>

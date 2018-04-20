@@ -101,6 +101,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/doc/standard', 'Company\CompanyDocController@showStandard');
     Route::get('company/doc/standard/dt/docs', 'Company\CompanyDocController@getStandard');
 
+    // Company Period Trade Contract
+    //Route::get('company/{cid}/doc/cats/{department}', 'Company\CompanyDocController@getCategories');
+    Route::resource('company/{cid}/doc/period-trade-contract', 'Company\CompanyPeriodTradeContractController');
+
     // Company Docs
     Route::any('company/doc/create', 'Company\CompanyDocController@create');
     Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
@@ -117,7 +121,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('company/{cid}/doc/archive/{id}', 'Company\CompanyDocController@archive');
     Route::get('company/{cid}/doc/cats/{department}', 'Company\CompanyDocController@getCategories');
     Route::resource('company/{cid}/doc', 'Company\CompanyDocController');
-
 
     // Company Routes
     Route::get('company/dt/companies', 'Company\CompanyController@getCompanies');
