@@ -46,8 +46,8 @@ class CronController extends Controller {
         CronController::expiredSWMS();
         CronController::archiveToolbox();
         // Only run on week days otherwise get same email multiple times over weekend
-        if (Carbon::today()->isWeekday())
-            CronController::overdueToDo();
+        //if (Carbon::today()->isWeekday())
+        //    CronController::overdueToDo();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
         $log .= "\nALL DONE - NIGHTLY COMPLETE\n\n\n";
