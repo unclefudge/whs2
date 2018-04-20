@@ -55,7 +55,7 @@
                 </div>
             </div>
         @else
-
+{{--}}
             <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
                 <div class="portlet light ">
                     <div class="portlet-title">
@@ -80,7 +80,7 @@
             <div class="col-md-6 col-sm-6 visible-sm visible-xs">
                 <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                 <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
-            </div>
+            </div>--}}
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
             <div class="portlet light ">

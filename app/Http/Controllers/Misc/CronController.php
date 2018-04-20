@@ -34,7 +34,7 @@ class CronController extends Controller {
 
     static public function nightly()
     {
-        echo "<h1> Nightly Update - ".Carbon::now()->format('d/m/Y g:i a')."</h1>";
+        echo "<h1> Nightly Update - " . Carbon::now()->format('d/m/Y g:i a') . "</h1>";
         $log = "Nightly Update\n--------------\n\n";
         $bytes_written = File::put(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
         if ($bytes_written === false) die("Error writing to file");
@@ -42,10 +42,12 @@ class CronController extends Controller {
         CronController::nonattendees();
         CronController::roster();
         CronController::qa();
-        CronController::overdueToDo();
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
         CronController::archiveToolbox();
+        // Only run on week days otherwise get same email multiple times over weekend
+        if (Carbon::today()->isWeekday())
+            CronController::overdueToDo();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
         $log .= "\nALL DONE - NIGHTLY COMPLETE\n\n\n";
@@ -315,46 +317,6 @@ class CronController extends Controller {
     }
 
     /*
-     * Check for overdue ToDoo
-     */
-    static public function overdueToDo()
-    {
-        $log = '';
-        echo "<h2>Checking for Overdue ToDo's</h2>";
-        $log .= "Checking for Overdue ToDo's\n";
-        $log .= "------------------------------------------------------------------------\n\n";
-
-        $todos = Todo::where('status', '1')->whereDate('due_at', '<', Carbon::today()->format('Y-m-d'))->where('due_at', '<>', '0000-00-00 00:00:00')->orderBy('due_at')->get();
-        foreach ($todos as $todo) {
-            // Quality Assurance
-            if ($todo->type == 'qa') {
-                echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]<br>";
-                $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]\n";
-                $todo->emailToDo();
-                $qa = SiteQa::find($todo->type_id);
-                $email_to = [env('EMAIL_DEV')];
-                if (App::environment('prod') && $qa->site->areaSupervisorsEmails())
-                    $email_to = $qa->site->areaSupervisorsEmails();
-                Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));
-            }
-
-            // Toolbox Talk
-            if ($todo->type == 'toolbox') {
-                echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]<br>";
-                $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]\n";
-                $todo->emailToDo();
-                $toolbox = ToolboxTalk::find($todo->type_id);
-                $toolbox->emailOverdue();
-            }
-        }
-        echo "<h4>Completed</h4>";
-        $log .= "\nCompleted\n\n\n";
-
-        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
-        if ($bytes_written === false) die("Error writing to file");
-    }
-
-    /*
      * Check for Expired Company Docs
      */
     static public function expiredCompanyDoc()
@@ -506,7 +468,7 @@ class CronController extends Controller {
     }
 
     /*
-     * Check for Expired SWMS
+     * Archive completed Toolbox
      */
     static public function archiveToolbox()
     {
@@ -522,7 +484,7 @@ class CronController extends Controller {
                     // Archive completed Toolbox
                     echo "[$talk->id] All Completed - $talk->name<br>";
                     $log .= "[$talk->id] All Completed - $talk->name\n";
-                    $talk->status = -1;
+                    $talk->status = - 1;
                     $talk->save();
                 } else {
                     $inactive = true;
@@ -531,10 +493,10 @@ class CronController extends Controller {
                             $inactive = false;
                     }
                     // Archive completed Toolbox because all outstanding users are inactive
-                    if ($inactive){
+                    if ($inactive) {
                         echo "**[$talk->id] Inactive Users - $talk->name<br>";
                         $log .= "[$talk->id] Inactive Users - $talk->name\n";
-                        $talk->status = -1;
+                        $talk->status = - 1;
                         $talk->save();
                     }
 
@@ -552,4 +514,57 @@ class CronController extends Controller {
         if ($bytes_written === false) die("Error writing to file");
     }
 
+    /*
+     * Check for overdue ToDoo
+     */
+    static public function overdueToDo()
+    {
+        $log = '';
+        echo "<h2>Checking for Overdue ToDo's</h2>";
+        $log .= "Checking for Overdue ToDo's\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $toolboxs_overdue = [];
+        $todos = Todo::where('status', '1')->whereDate('due_at', '<', Carbon::today()->format('Y-m-d'))->where('due_at', '<>', '0000-00-00 00:00:00')->orderBy('due_at')->get();
+        foreach ($todos as $todo) {
+            // Quality Assurance
+            if ($todo->type == 'qa') {
+                echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]<br>";
+                $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "]\n";
+                //$todo->emailToDo();
+                $qa = SiteQa::find($todo->type_id);
+                $email_to = [env('EMAIL_DEV')];
+                if (\App::environment('prod') && $qa->site->areaSupervisorsEmails())
+                    $email_to = $qa->site->areaSupervisorsEmails();
+                //Mail::to($email_to)->send(new \App\Mail\Site\SiteQaOverdue($qa));
+            }
+
+            // Toolbox Talk
+            if ($todo->type == 'toolbox') {
+                echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "<br>";
+                $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "\n";
+                //$todo->emailToDo();
+                if (!in_array($todo->type_id, $toolboxs_overdue))
+                    $toolboxs_overdue[] = $todo->type_id;
+            }
+        }
+
+        // Send single email to Parent company for each overdue Toolbox
+        if ($toolboxs_overdue) {
+            echo "<br><b>Sending email notification to parent company for following outstanding Toolbox Talks:</b><br>";
+            $log .= "\nSending email notification to parent company for following outstanding Toolbox Talks:\n";
+            foreach ($toolboxs_overdue as $toolbox_id) {
+                $toolbox = ToolboxTalk::find($toolbox_id);
+                echo "id[$toolbox->id] $toolbox->name<br>";
+                $log .= "id[$toolbox->id] $toolbox->name\n";
+                $toolbox->emailOverdue();
+            }
+        }
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
 }
