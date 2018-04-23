@@ -99,9 +99,7 @@
                                     <div class="row">
                                         <div class="col-md-12"><br>Pre-filled forms:
                                             @if ($company->requiresCompanyDoc(4))
-                                                <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/{!! ($company->activeCompanyDoc(4) && $company->activeCompanyDoc($type)->status == 1) ? 'next' : 'current'!!}" target="_blank"><i class="fa fa-download"
-                                                                                                                                                                                                                                                          style="padding-left: 10px"></i> Subcontractors
-                                                    Statement</a>
+                                                <a href="/company/doc/create/subcontractorstatement/{{ $company->id  }}/{!! ($company->activeCompanyDoc(4) && $company->activeCompanyDoc(4)->status == 1) ? 'next' : 'current'!!}" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Subcontractors Statement</a>
                                             @endif
 
                                             @if ($company->requiresCompanyDoc(5))<a href="/company/doc/create/tradecontract/{{ $company->id  }}/next" target="_blank"><i class="fa fa-download" style="padding-left: 10px"></i> Period Trade Contract</a> @endif
