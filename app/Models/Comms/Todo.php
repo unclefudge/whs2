@@ -244,6 +244,10 @@ class Todo extends Model {
 
         $email_user = (\App::environment('prod') && Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
+        // Don't cc email to user if Todoo is a Company Doc Approval
+        if (preg_match('/^Company Document Approval Request/', $this->name))
+            $email_user = '';
+
         if ($email_list && $email_user)
             Mail::to($email_list)->cc([$email_user])->send(new \App\Mail\Comms\TodoCreated($this));
         elseif ($email_list)
