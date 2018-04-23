@@ -95,7 +95,7 @@
                                     @endforeach
                                 </div>
                                 {{-- Pre-filled forms --}}
-                                @if (false && $company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5))
+                                @if (false (&& $company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5)))
                                     <div class="row">
                                         <div class="col-md-12"><br>Pre-filled forms:
                                             @if ($company->requiresCompanyDoc(4))
