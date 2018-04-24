@@ -63,9 +63,7 @@
             <!-- BEGIN LOGO -->
             <div class="page-logo">
                 @if (!Request::is('/'))
-                    <a href="/">
-                        <img src="/img/logo2-sws.png" alt="logo" class="logo-default visible-xs visible-sm" style="margin-top:15px">
-                    </a>
+                    <a href="/"><img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px"></a>
                 @endif
             </div>
             <!-- END LOGO -->
