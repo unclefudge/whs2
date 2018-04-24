@@ -723,12 +723,7 @@ class Company extends Model {
         if (!$this->parentCompany)
             return $collection;
 
-        $logged_site_id = '';
-        if (Session::has('siteID')) {
-            $site_code = Session::get('siteID');
-            $site = Site::where(['code' => $site_code])->first();
-            $logged_site_id = $site->id;
-        }
+        $logged_site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         // Otherwise return a filtered collection of sites that company is on b ber for
         $filteredCollection = [];
@@ -763,6 +758,51 @@ class Company extends Model {
         asort($array);
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Site') + $array : $array;
+    }
+
+
+    /**
+     * A dropdown list of sites this company has for Site Check-in
+     *
+     * @return string
+     */
+    public function siteCheckinSelectOptions($prompt = '')
+    {
+        $options = '<option></option>';
+
+        // Site planned for today
+        $sites_planned = [];
+        foreach ($this->sitesPlannedFor(1, Carbon::today(), Carbon::today()) as $site) {
+            $site = Site::findOrFail($site->id);
+            if ($site->status == 1 && $site->show_checkin)
+                $sites_planned[$site->id] = "$site->suburb - $site->address ($site->name)";
+        }
+        asort($sites_planned);
+
+        if (count($sites_planned)) {
+            $options .= '<optgroup label="Planned on for today">';
+            foreach ($sites_planned as $site_id => $text)
+                $options .= "<option value='$site_id' >$text</option>";
+            $options .= '</optgroup>';
+        }
+
+        // All Sites
+        $sites_all = [];
+        foreach (Auth::user()->authSitesSelect('view.site', 1) as $site_id => $name) {
+            $site = Site::findOrFail($site_id);
+            if ($site->status == 1 && $site->show_checkin)
+                $sites_all[$site->id] = "$site->suburb - $site->address ($site->name)";
+        }
+        asort($sites_all);
+
+        if (count($sites_all)) {
+            $options .= '<optgroup label="All Sites">';
+            foreach ($sites_all as $site_id => $text)
+                $options .= "<option value='$site_id' >$text</option>";
+            $options .= '</optgroup>';
+        }
+
+        return $options;
     }
 
     /**

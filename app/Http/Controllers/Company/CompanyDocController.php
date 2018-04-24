@@ -520,12 +520,7 @@ class CompanyDocController extends Controller {
         if (!Auth::user()->hasPermission2('view.safety.doc'))
             return view('errors/404');
 
-        $site_id = '';
-        if (Session::has('siteID')) {
-            $site_code = Session::get('siteID');
-            $site = Site::where(['code' => $site_code])->first();
-            $site_id = $site->id;
-        }
+        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         return view('site/doc/risk/list', compact('site_id'));
     }
@@ -562,12 +557,7 @@ class CompanyDocController extends Controller {
         if (!Auth::user()->hasPermission2('view.safety.doc'))
             return view('errors/404');
 
-        $site_id = '';
-        if (Session::has('siteID')) {
-            $site_code = Session::get('siteID');
-            $site = Site::where(['code' => $site_code])->first();
-            $site_id = $site->id;
-        }
+        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         return view('site/doc/hazard/list', compact('site_id'));
     }
@@ -605,12 +595,7 @@ class CompanyDocController extends Controller {
         if (!Auth::user()->hasPermission2('view.site.doc'))
             return view('errors/404');
 
-        $site_id = '';
-        if (Session::has('siteID')) {
-            $site_code = Session::get('siteID');
-            $site = Site::where(['code' => $site_code])->first();
-            $site_id = $site->id;
-        }
+        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         return view('site/doc/plan/list', compact('site_id'));
     }

@@ -589,7 +589,7 @@ class Site extends Model {
      */
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = strtoupper($value);
+        $this->attributes['name'] = trim(strtoupper($value));
         $this->attributes['slug'] = getUniqueSlug($this, $value);
     }
 

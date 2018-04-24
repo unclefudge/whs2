@@ -55,7 +55,6 @@
                 </div>
             </div>
         @else
-{{--}}
             <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
                 <div class="portlet light ">
                     <div class="portlet-title">
@@ -68,7 +67,7 @@
                     <div class="portlet-body">
                         <div class="row">
                             <div class="col-xs-8">
-                                <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
+                                <a href="/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                             </div>
                             <div class="col-xs-4">
                                 <a href="{{ url('/logout') }}" class="btn btn-lg default"></i> Log out </a>
@@ -78,9 +77,9 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-6 visible-sm visible-xs">
-                <a href="/site/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
+                <a href="/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
                 <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
-            </div> --}}
+            </div>
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
             <div class="portlet light ">

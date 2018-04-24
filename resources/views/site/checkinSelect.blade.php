@@ -1,9 +1,21 @@
-@extends('layout')
+@extends('layout-basic')
 
 @section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-sign-in"></i> Site Check-in</h1>
-    </div>
+    @if (Session::has('siteID') && $worksite->isUserOnsite(Auth::user()->id))
+        <a href="/"><img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px"></a>
+    @else
+        <img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
+    @endif
+    <div class="pull-right" style="padding: 20px;"><a href="/logout">logout</a></div>
+@stop
+
+@section('breadcrumbs')
+    @if (Session::has('siteID') && $worksite->isUserOnsite(Auth::user()->id))
+        <ul class="page-breadcrumb breadcrumb">
+            <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
+            <li><span>Check-in</span></li>
+        </ul>
+    @endif
 @stop
 
 @section('content')
@@ -13,35 +25,39 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption font-dark">
+                            <i class="fa fa-sign-in"></i>
                             <span class="caption-subject font-green-haze bold uppercase">Site Checkin</span><br>
                             <span class="caption-helper">You must check into all sites you attend.</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('site_attenance', ['action' => 'Site\SiteController@processCheckin2', 'files' => true]) !!}
+                        {!! Form::model('site_attenance', ['action' => 'Site\SiteCheckinController@checkinQuestions']) !!}
                         <input type="hidden" name="checkin" value="true">
                         @include('form-error')
 
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('site_id', 'Please select site to log into', ['class' => 'control-label']) !!}
-                                        {!! Form::select('site_id', Auth::user()->company->sitesSelect('all'), (Auth::user()->rosteredSites() ? Auth::user()->rosteredSites()->first()->id : null), ['class' => 'form-control select2']) !!}
+                                        <div class="form-group">
+                                            <label for="site_id" class="control-label">Please select site to log into</label>
+                                            <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
+                                                {!! Auth::user()->company->siteCheckinSelectOptions() !!}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-actions" style="display: none" id="div_checkin">
+                                <button type="submit" class="btn green">Check-in</button>
+                            </div>
+                            {!! Form::close() !!}
                         </div>
-                        <div class="form-actions" style="display: none" id="div_checkin">
-                            <button type="submit" class="btn green" name="checkinTr" value="true">Check-in</button>
-                        </div>
-                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     @stop <!-- END Content -->
 
@@ -60,9 +76,7 @@
 <script>
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
-        });
+        $("#site_id").select2({placeholder: "Select Site",});
 
         // Reload table on change of site_id or type
         $('#site_id').change(function () {

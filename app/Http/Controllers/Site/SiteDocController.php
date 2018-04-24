@@ -303,12 +303,7 @@ class SiteDocController extends Controller {
         if (!Auth::user()->hasPermission2('view.safety.doc') && !Auth::user()->hasPermission2('view.site.doc'))
             return view('errors/404');
 
-        $site_id = '';
-        if (Session::has('siteID')) {
-            $site_code = Session::get('siteID');
-            $site = Site::where(['code' => $site_code])->first();
-            $site_id = $site->id;
-        }
+        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         return view("site/doc/$type/list", compact('site_id'));
     }

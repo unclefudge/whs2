@@ -7,6 +7,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <!--<![endif]-->
 <!-- BEGIN HEAD -->
+
 <head>
     <meta charset="utf-8"/>
     <title>Cape Cod WHS</title>
@@ -63,7 +64,7 @@
             <div class="page-logo">
                 @if (!Request::is('/'))
                     <a href="/">
-                        <img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
+                        <img src="/img/logo2-sws.png" alt="logo" class="logo-default visible-xs visible-sm" style="margin-top:15px">
                     </a>
                 @endif
             </div>

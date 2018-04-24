@@ -113,7 +113,7 @@
             {data: 'supervisor', name: 'supervisor'},
         ],
         order: [
-            [2, "asc"], [3, 'asc']
+                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96') [2, "asc"], [3, 'asc']  @else [1, "asc"], [2, 'asc'] @endif
         ]
     });
 

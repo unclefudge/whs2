@@ -843,7 +843,6 @@ class SitePlannerController extends Controller {
             $this_mon_2 = new Carbon('monday this week');
             $this_mon_2->addDays(13);
             $allowedSites = Auth::user()->company->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
-            //$allowedSites = Auth::user()->company->sitesPlannedFor('1')->pluck('id')->toArray();
         }
         //$allowedSites = ['115'];
 

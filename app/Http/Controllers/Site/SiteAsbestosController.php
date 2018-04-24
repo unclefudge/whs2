@@ -58,9 +58,7 @@ class SiteAsbestosController extends Controller {
         if (!Auth::user()->allowed2('add.site.asbestos'))
             return view('errors/404');
 
-        $site_id = '';
-        if (Session::has('siteID'))
-            $site_id = Site::where('code', Session::get('siteID'))->first()->id;
+        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
 
         return view('site/asbestos/create', compact('site_id'));
     }

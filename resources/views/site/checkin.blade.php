@@ -1,37 +1,44 @@
 @extends('layout-basic')
 
 @section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-sign-in"></i> Site Checkin</h1>
-    </div>
+    @if (Session::has('siteID') && $worksite->isUserOnsite(Auth::user()->id))
+        <a href="/"><img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px"></a>
+    @else
+        <img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
+    @endif
     <div class="pull-right" style="padding: 20px;"><a href="/logout">logout</a></div>
+@stop
+
+@section('breadcrumbs')
+    @if (Session::has('siteID') && $worksite->isUserOnsite(Auth::user()->id))
+        <ul class="page-breadcrumb breadcrumb">
+            <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
+            <li><span>Check-in</span></li>
+        </ul>
+    @endif
 @stop
 
 @section('content')
     <div class="page-content-inner">
-        <div class="m-heading-1 border-green m-bordered" style="margin: 0 0 20px;">
-            <h3>{{ $worksite->name }}
-                <small>(Site: {{ $worksite->code }})</small>
-            </h3>
-            <p>{{ $worksite->address }}, {{ $worksite->suburb }}</p>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-sign-in "></i>
+                            <i class="fa fa-sign-in"></i>
                             <span class="caption-subject font-green-haze bold uppercase">Site Checkin</span><br>
                             <span class="caption-helper">You must check into all sites you attend.</span>
                         </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
-                        </div>
                     </div>
                     <div class="portlet-body form">
+                        <h2>{{ $worksite->name }}
+                            <small>(Site: {{ $worksite->code }})</small>
+                        </h2>
+                        <p>{{ $worksite->address }}, {{ $worksite->suburb }}</p>
+                        <hr>
+
                         <!-- BEGIN FORM-->
-                        {!! Form::model('site_attenance', ['action' => ['Site\SiteController@processCheckin', $worksite->slug], 'files' => true]) !!}
+                        {!! Form::model('site_attenance', ['action' => ['Site\SiteCheckinController@processCheckin', $worksite->id], 'files' => true]) !!}
                         <input type="hidden" name="checkin" value="true">
                         @include('form-error')
 

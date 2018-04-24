@@ -262,41 +262,6 @@ class SiteController extends Controller {
 
 
     /**
-     * Check-in to Site.
-     */
-    public function siteCheckin2()
-    {
-        return view('site/checkinSelect');
-    }
-
-    /**
-     * Process Site Check-in.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function processCheckin2()
-    {
-        if (request('site_id')) {
-            $worksite = Site::where(['id' => request('site_id')])->firstOrFail();
-            Session::put('siteID', $worksite->code);
-
-            return view('site/checkin', compact(['worksite']));
-        }
-        return redirect('/site/checkin');
-
-    }
-
-    /**
-     * Check-in to Site.
-     */
-    public function siteCheckin($slug)
-    {
-        $worksite = Site::where(compact('slug'))->firstOrFail();
-
-        return view('site/checkin', compact(['worksite']));
-    }
-
-    /**
      * Process Site Check-in.
      *
      * @return \Illuminate\Http\Response

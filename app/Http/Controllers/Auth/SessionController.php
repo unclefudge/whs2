@@ -29,13 +29,6 @@ class SessionController extends Controller {
     protected function create()
     {
         $worksite = '';
-        /*if (Session::has('siteID')) {
-            $site_id = Session::get('siteID');
-            $worksite = Site::where(['code' => $site_id])->first();
-            if (!$worksite)
-                Session::forget('siteID');
-        }*/
-
         Auth::logout();
         Session::forget('siteID');
 

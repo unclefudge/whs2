@@ -14,12 +14,15 @@
 Route::get('/', 'HomeController@index');
 
 // Site Login
-Route::get('/login/site/{site_id}', function ($site_id) {
+Route::get('/login/site/{site_code}', function ($site_code) {
     Auth::logout();
-    Session::put('siteID', $site_id);
-    $worksite = \App\Models\Site\Site::where(['code' => $site_id])->first();
+    return redirect('/checkin');
+    /*
+    $worksite = \App\Models\Site\Site::where(['code' => $site_code])->first();
+		Session::put('siteID', $worksite->id);
 
     return view('auth/login-site', compact('worksite'));
+    */
 });
 
 // Authentication routes...
@@ -57,6 +60,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/signup/documents/{id}', 'Company\CompanySignupController@documents');   // Step 5
     Route::get('/signup/welcome/{id}', 'Company\CompanySignupController@welcome');       // Resend welcome email
 
+    // Site Checkin
+    Route::get('checkin', 'Site\SiteCheckinController@checkin');
+    Route::post('checkin', 'Site\SiteCheckinController@checkinQuestions');
+    Route::post('checkin/site/{site_id}', 'Site\SiteCheckinController@processCheckin');
 
 
     // Pages
@@ -81,8 +88,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/licence_override', 'Misc\ReportController@licenceOverride');
     Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
 
-
-    // Site Check-in
 
     // User Routes
     Route::get('user/dt/users', 'UserController@getUsers');
@@ -213,10 +218,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Routes
     Route::get('site/dt/sites', 'Site\SiteController@getSites');
-    Route::get('site/checkin', 'Site\SiteController@siteCheckin2');
-    Route::post('site/checkin', 'Site\SiteController@processCheckin2');
-    Route::get('site/{slug}/checkin', 'Site\SiteController@siteCheckin');
-    Route::post('site/{slug}/checkin', 'Site\SiteController@processCheckin');
+    //Route::get('site/{slug}/checkin', 'Site\SiteController@siteCheckin');
+    //Route::post('site/{slug}/checkin', 'Site\SiteController@processCheckin');
     Route::get('site/{slug}/settings', 'Site\SiteController@showSettings');
     Route::post('site/{slug}/settings/admin', 'Site\SiteController@updateAdmin');
     Route::post('site/{slug}/settings/logo', 'Site\SiteController@updateLogo');

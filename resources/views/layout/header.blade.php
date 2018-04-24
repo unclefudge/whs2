@@ -4,9 +4,7 @@
         <div class="container">
             <!-- BEGIN LOGO -->
             <div class="page-logo">
-                <a href="/">
-                    <img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px">
-                </a>
+                <a href="/"><img src="/img/logo2-sws.png" alt="logo" class="logo-default" style="margin-top:15px"></a>
             </div>
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -17,12 +15,12 @@
 
             @include('layout.topmenu')
 
-            <!-- END TOP NAVIGATION MENU -->
+                    <!-- END TOP NAVIGATION MENU -->
 
         </div>
     </div>
     <!-- END HEADER TOP -->
     <!-- BEGIN HEADER MENU -->
     @include('layout.mainmenu')
-    <!-- END HEADER MENU -->
+            <!-- END HEADER MENU -->
 </div>
