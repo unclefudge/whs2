@@ -73,14 +73,14 @@
                                 Every worker MUST check in and acknowledge the work health and safety requirements before entering any worksite.<br><br>
                             </div>
                             <div class="col-xs-12 text-center">
-                                <a href="{{ url('/checkin') }}" class="btn btn-lg dark hidden-sm hidden-xs"></i> Site Check-in </a>
+                                <a href="/checkin" class="btn btn-lg dark hidden-sm hidden-xs"></i> Site Check-in </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-sm-6 visible-sm visible-xs">
-                <a href="//checkin" class="btn btn-lg dark center-block" style="margin-bottom: 5px"></i> Site Check-in </a>
+                <a href="/checkin" class="btn btn-lg dark center-block" style="margin-bottom: 5px"></i> Site Check-in </a>
                 <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
             </div>
 

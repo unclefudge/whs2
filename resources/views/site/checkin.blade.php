@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-10 col-xs-8">
-                                    <span class="" style="background-color: #f9e491; padding: 5px 10px"><b>I acknowledge that I am physically present on the above Worksite</b></span>
+                                    <div style="background-color: #f9e491; padding: 5px 10px"><b>I acknowledge that I am physically present on the above Worksite</b></div>
                                 </div>
                             </div>
                             <div class="row visible-xs">&nbsp;</div>
