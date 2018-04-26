@@ -32,7 +32,7 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('site_attenance', ['action' => 'Site\SiteCheckinController@checkinQuestions']) !!}
+                        {!! Form::model('site_attenance', ['action' => 'Site\SiteCheckinController@getQuestions']) !!}
                         <input type="hidden" name="checkin" value="true">
                         @include('form-error')
 

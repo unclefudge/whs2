@@ -6,6 +6,7 @@
             <div class="col-md-12">
                 <img src="/img/logo-sws-med.png" class="img-responsive center-block" align="middle" style="margin: 0 auto;">
             </div>
+            {{--
             <div class="col-md-8 col-md-offset-2">
                 <div class="text-center" style="border: 5px solid #e7505a; background-color: #eee; padding: 10px; margin: 30px 0px">
                     <h2 class="font-red">COMPULSORY SITE CHECK-IN</h2>
@@ -14,6 +15,7 @@
                     <br><br>
                 </div>
             </div>
+            --}}
             <div class="col-md-12">
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/-seurriz9Xc"></iframe>

@@ -39,11 +39,24 @@
 
                         <!-- BEGIN FORM-->
                         {!! Form::model('site_attenance', ['action' => ['Site\SiteCheckinController@processCheckin', $worksite->id], 'files' => true]) !!}
-                        <input type="hidden" name="checkin" value="true">
                         @include('form-error')
 
                         <p>Please answer the following questions.</p>
                         <div class="form-body">
+                            <div class="row">
+                                <div class="col-sm-2 col-xs-4 text-center">
+                                    <div class="form-group {!! fieldHasError('transient', $errors) !!}">
+                                        {!! Form::checkbox('question4', '1', false,
+                                         ['class' => 'make-switch', 'data-size' => 'small',
+                                         'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                         'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-sm-10 col-xs-8">
+                                    <span class="" style="background-color: #f9e491; padding: 5px 10px"><b>I acknowledge that I am physically present on the above Worksite</b></span>
+                                </div>
+                            </div>
+                            <div class="row visible-xs">&nbsp;</div>
                             <div class="row">
                                 <div class="col-sm-2 col-xs-4 text-center">
                                     <div class="form-group {!! fieldHasError('transient', $errors) !!}">
@@ -368,7 +381,7 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn green" name="checkinTr" value="true">Submit</button>
+                                <button type="submit" class="btn green" name="checkin" value="true">Submit</button>
                             </div>
                         </div> <!--/form-body-->
                         {!! Form::close() !!}

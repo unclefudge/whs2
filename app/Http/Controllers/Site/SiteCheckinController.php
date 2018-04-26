@@ -51,20 +51,44 @@ class SiteCheckinController extends Controller {
     }
 
     /**
-     * Process Site Check-in.
+     * Get Check-in Questions.
      *
      * @return \Illuminate\Http\Response
      */
-    public function checkinQuestions()
+    public function getQuestions()
     {
-        if (request('site_id')) {
-            $worksite = Site::findOrFail(request('site_id'));
-            Session::put('siteID', request('site_id'));
+        Session::put('siteID', request('site_id'));
 
-            return view('site/checkin', compact('worksite'));
-        }
+        return redirect('checkin/whs/' . request('site_id'));
+    }
 
-        return redirect('/site/checkin');
+    /**
+     * Show Check-in Questions.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showQuestions($site_id)
+    {
+        $worksite = Site::findOrFail($site_id);
+
+        // Check if User is of a special trade  ie Certifier
+        /*
+        $special_trade_ids = ['19'];  // 19 - Certifier
+        if (count(array_intersect(Auth::user()->company->tradesSkilledIn->pluck('id')->toArray(), $special_trade_ids)) > 0) {
+            if (Auth::user()->company->tradesSkilledIn->count() == 1) {
+                // User only has 1 trade which is classified as a 'special' trade
+                return view('site/checkinTrade', compact('worksite'));
+            } else {
+                // User has multiple trades so determine what trade they are loggin as today
+            }
+        }*/
+
+        if ($worksite->id == 254) // Truck
+            return view('site/checkinTruck', compact('worksite'));
+        if ($worksite->id == 25) // Store
+            return view('site/checkinStore', compact('worksite'));
+
+        return view('site/checkin', compact('worksite'));
 
     }
 

@@ -16,6 +16,7 @@ Route::get('/', 'HomeController@index');
 // Site Login
 Route::get('/login/site/{site_code}', function ($site_code) {
     Auth::logout();
+
     return redirect('/checkin');
     /*
     $worksite = \App\Models\Site\Site::where(['code' => $site_code])->first();
@@ -62,8 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Checkin
     Route::get('checkin', 'Site\SiteCheckinController@checkin');
-    Route::post('checkin', 'Site\SiteCheckinController@checkinQuestions');
-    Route::post('checkin/site/{site_id}', 'Site\SiteCheckinController@processCheckin');
+    Route::post('checkin', 'Site\SiteCheckinController@getQuestions');
+    Route::get('checkin/whs/{site_id}', 'Site\SiteCheckinController@showQuestions');
+    Route::post('checkin/whs/{site_id}', 'Site\SiteCheckinController@processCheckin');
 
 
     // Pages
