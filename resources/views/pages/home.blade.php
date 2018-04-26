@@ -57,8 +57,8 @@
                     </div>
                 </div>
             </div>
-            @else
-            <div class="col-md-6 col-sm-6">
+        @else
+            <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
                 <div class="portlet light ">
                     <div class="portlet-title">
                         <div class="caption">
@@ -78,6 +78,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6 col-sm-6 visible-sm visible-xs">
+                <a href="//checkin" class="btn btn-lg dark center-block" style="margin-bottom: 5px"></i> Site Check-in </a>
+                <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
             </div>
 
         @endif
