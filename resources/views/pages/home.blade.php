@@ -9,23 +9,6 @@
 @stop
 
 @section('content')
-    {{-- Not signed in --}}
-    @if (!Session::has('siteID'))
-        <div class="row">
-
-            <div class="col-md-8 col-md-offset-2">
-                <div class="text-center" style="border: 5px solid #e7505a; background-color: #FFFFFF; padding: 10px; margin: 30px 0px">
-                    <h2 class="font-red">COMPULSORY SITE CHECK-IN</h2>
-                    <h4>Every worker MUST check in and acknowledge the work health and safety requirements before entering any worksite</h4>
-                    <a href="/checkin" class="btn btn-lg dark">Check in</a>
-                    <br><br>
-                </div>
-            </div>
-
-        </div>
-
-    @endif
-
     {{-- Safety Tip --}}
     @if (Auth::user()->company->reportsTo()->currentSafetytip())
         <div class="row">
@@ -43,6 +26,8 @@
             </div>
         </div>
     @endif
+
+    {{-- Site Checkin --}}
     <div class="row">
         @if (Session::has('siteID'))
             <div class="col-md-6 col-sm-6">
@@ -72,6 +57,29 @@
                     </div>
                 </div>
             </div>
+            @else
+            <div class="col-md-6 col-sm-6">
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-map-marker font-dark"></i>
+                            <span class="caption-subject font-dark bold uppercase">Job SITE CHECK-IN</span>
+                            <span class="caption-helper">required for job site entry</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                Every worker MUST check in and acknowledge the work health and safety requirements before entering any worksite.<br><br>
+                            </div>
+                            <div class="col-xs-12 text-center">
+                                <a href="{{ url('/checkin') }}" class="btn btn-lg dark hidden-sm hidden-xs"></i> Site Check-in </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
             <div class="portlet light ">

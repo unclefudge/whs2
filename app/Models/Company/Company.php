@@ -766,7 +766,7 @@ class Company extends Model {
      *
      * @return string
      */
-    public function siteCheckinSelectOptions($prompt = '')
+    public function siteCheckinSelectOptions()
     {
         $options = '<option></option>';
 
@@ -780,7 +780,7 @@ class Company extends Model {
         asort($sites_planned);
 
         if (count($sites_planned)) {
-            $options .= '<optgroup label="Planned on for today">';
+            $options .= '<optgroup label="Planned for today">';
             foreach ($sites_planned as $site_id => $text)
                 $options .= "<option value='$site_id' >$text</option>";
             $options .= '</optgroup>';
