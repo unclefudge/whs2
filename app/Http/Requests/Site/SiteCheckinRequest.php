@@ -73,48 +73,4 @@ class SiteCheckinRequest extends Request {
             'action.required_without'  => 'Please provide the actions to have taken to make the site safe.',
         ];
     }
-
-
-    /**
-     * Overide the default return URL form failed validation request
-     * with custom site/{slug}/settings/info
-     *
-     * @param array $errors
-     * @return $this|JsonResponse
-     */
-    public
-    function response(array $errors)
-    {
-        // Optionally, send a custom response on authorize failure
-        // (default is to just redirect to initial page with errors)
-        //
-        // Can return a response, a view, a redirect, or whatever else
-
-        if ($this->ajax() || $this->wantsJson()) {
-            return new JsonResponse($errors, 422);
-        }
-
-        $slug = $this->get('slug');
-        $tabs = $this->get('tabs');
-
-        switch ($tabs) {
-            case 'settings:info':
-                return $this->redirector->to('site/' . $slug . '/settings/info')
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-            case 'settings:admin':
-                return $this->redirector->to('site/' . $slug . '/settings/admin')
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-            case 'settings:photo':
-                return $this->redirector->to('site/' . $slug . '/settings/photo')
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-            default:
-                return $this->redirector->to($this->getRedirectUrl())
-                    ->withInput($this->except($this->dontFlash))
-                    ->withErrors($errors, $this->errorBag);
-        }
-
-    }
 }

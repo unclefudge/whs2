@@ -9,6 +9,24 @@
 @stop
 
 @section('content')
+    {{-- Not signed in --}}
+    @if (!Session::has('siteID'))
+        <div class="row">
+
+            <div class="col-md-8 col-md-offset-2">
+                <div class="text-center" style="border: 5px solid #e7505a; background-color: #FFFFFF; padding: 10px; margin: 30px 0px">
+                    <h2 class="font-red">COMPULSORY SITE CHECK-IN</h2>
+                    <h4>Every worker MUST check in and acknowledge the work health and safety requirements before entering any worksite</h4>
+                    <a href="/checkin" class="btn btn-lg dark">Check in</a>
+                    <br><br>
+                </div>
+            </div>
+
+        </div>
+
+    @endif
+
+    {{-- Safety Tip --}}
     @if (Auth::user()->company->reportsTo()->currentSafetytip())
         <div class="row">
             <div class="col-md-12">
@@ -53,32 +71,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        @else
-            <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
-                <div class="portlet light ">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="fa fa-map-marker font-dark"></i>
-                            <span class="caption-subject font-dark bold uppercase">Site Check-in</span>
-                            <span class="caption-helper">onsite requirement</span>
-                        </div>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-xs-8">
-                                <a href="/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
-                            </div>
-                            <div class="col-xs-4">
-                                <a href="{{ url('/logout') }}" class="btn btn-lg default"></i> Log out </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 visible-sm visible-xs">
-                <a href="/checkin" class="btn btn-lg dark center-block"></i> Site Check-in </a>
-                <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
             </div>
         @endif
         <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">

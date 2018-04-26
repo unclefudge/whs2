@@ -266,6 +266,7 @@ class SiteController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    /*
     public function processCheckin(SiteCheckinRequest $request, $slug)
     {
         $site = Site::where(compact('slug'))->firstOrFail();
@@ -318,6 +319,6 @@ class SiteController extends Controller {
         //$worksite = $site;
         //dd($site);
         return redirect('/dashboard');
-    }
+    }*/
 
 }
