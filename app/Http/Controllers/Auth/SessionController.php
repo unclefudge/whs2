@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use DB;
+use File;
 use Auth;
 use Session;
 use App\User;
@@ -60,8 +61,8 @@ class SessionController extends Controller {
             Auth::user()->save();
 
             // Log Supervisors
-            //if (Auth::user()->isSupervisor())
-            //    File::append(public_path('filebank/log/users/supers_login.txt'), Carbon::now()->format('d/m/Y H:i:s') . ' ' . Auth::user()->fullname . ' (' . Auth::user()->username . ")\n");
+            if (Auth::user()->isSupervisor())
+                File::append(public_path('filebank/log/users/supers_login.txt'), Carbon::now()->format('d/m/Y H:i:s') . ' ' . Auth::user()->fullname . ' (' . Auth::user()->username . ")\n");
 
             // Display Site Specific Alerts
             /*
