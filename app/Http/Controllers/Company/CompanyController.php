@@ -542,7 +542,7 @@ class CompanyController extends Controller {
 
         $dt = Datatables::of($companies)
             ->editColumn('id', function ($company) {
-                return ($company->status == 2) ? '' : "<div class='text-center'><a href='/company/$company->id'><i class='fa fa-search'></i></a></div>";
+                return ($company->status == 2) ? "<div class='text-center'>$company->id</div>" : "<div class='text-center'><a href='/company/$company->id'><i class='fa fa-search'></i></a></div>";
             })
             ->editColumn('name', function ($company) {
                 $name = ($company->nickname) ? "$company->name<br><small class='font-grey-cascade'>$company->nickname</small>" : $company->name;
