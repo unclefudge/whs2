@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/signup/summary/{id}', 'Company\CompanySignupController@summary');       // Step 4
     Route::get('/signup/documents/{id}', 'Company\CompanySignupController@documents');   // Step 5
     Route::get('/signup/welcome/{id}', 'Company\CompanySignupController@welcome');       // Resend welcome email
+    Route::get('/signup/cancel/{id}', 'Company\CompanySignupController@cancel');       // Resend welcome email
 
     // Site Checkin
     Route::get('checkin', 'Site\SiteCheckinController@checkin');

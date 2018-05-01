@@ -109,7 +109,7 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [
-            [1, "desc"]
+            [1, "asc"]
         ]
     });
 

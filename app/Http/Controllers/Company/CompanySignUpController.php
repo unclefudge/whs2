@@ -205,6 +205,7 @@ class CompanySignupController extends Controller {
 
         return redirect("company/$company->id/doc");
     }
+
     /**
      * Resend Signup Email
      */
@@ -214,5 +215,25 @@ class CompanySignupController extends Controller {
         Mail::to($company)->send(new \App\Mail\Company\CompanyWelcome($company, Auth::user()->company, $company->nickname));
 
         return view('company/list');
+    }
+
+    /**
+     * Cancel Signup
+     */
+    public function cancel($id)
+    {
+        $company = Company::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('edit.company', $company) && $company->status == 2))
+            return view('errors/404');
+
+        if (count($company->staff))
+            foreach ($company->staff as $user)
+                $user->delete();
+
+        $company->delete();
+
+        return redirect()->back();
     }
 }

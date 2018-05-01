@@ -203,7 +203,7 @@ class NotifyController extends Controller {
             ->join('users', 'notify.created_by', '=', 'users.id')
             ->where('notify.company_id', Auth::user()->company_id)
             ->where('notify.to', $sign, Carbon::today()->toDateTimeString())
-            ->orderBy('notify.from');
+            ->orderBy('notify.from', 'desc');
 
         $dt = Datatables::of($records)
             ->addColumn('view', function ($notify) {

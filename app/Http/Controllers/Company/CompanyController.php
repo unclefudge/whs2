@@ -558,6 +558,10 @@ class CompanyController extends Controller {
                     if ($company->signup_step == 5)
                         $name .= ' &nbsp; <span class="label label-sm label-info">Uploading documents</span></a>';
 
+                    // Created info
+                    $name .= "<br><br>Created: ".$company->created_at->format('d/m/Y'). " (".User::find($company->created_by)->fullname.")";
+                    $name .= "<br><a href=/signup/cancel/$company->id' class='btn btn-xs dark'>Cancel Sign Up & Delete Company</a>";
+
                 }
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
