@@ -560,7 +560,7 @@ class CompanyController extends Controller {
 
                     // Created info
                     $name .= "<br><br>Created: ".$company->created_at->format('d/m/Y'). " (".User::find($company->created_by)->fullname.")";
-                    $name .= "<br><a href=/signup/cancel/$company->id' class='btn btn-xs dark'>Cancel Sign Up & Delete Company</a>";
+                    $name .= "<br><a href='/signup/cancel/$company->id' class='btn btn-xs dark'>Cancel Sign Up & Delete Company</a>";
 
                 }
                 if ($company->transient)

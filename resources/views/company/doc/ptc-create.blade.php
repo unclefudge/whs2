@@ -31,16 +31,22 @@
 
                         <div class="form-body">
                             <div class="row">
+                                <div class="col-md-12">
+                                    <h5 style="margin: -20px 0 0 0">SCHEDULE</h5><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6">
                                     {{-- Policy --}}
-                                    <div class="form-group {!! fieldHasError('ref_no', $errors) !!}" style="display: none" id="fields_policy">
+                                    <div class="form-group {!! fieldHasError('ref_no', $errors) !!}" id="fields_policy">
                                         {!! Form::label('ref_no', 'Policy No', ['class' => 'control-label']) !!}
                                         {!! Form::text('ref_no', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('ref_no', $errors) !!}
                                     </div>
 
                                     {{-- Category --}}
-                                    <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" style="display: none" id="fields_category">
+                                    <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" id="fields_category">
                                         {!! Form::label('ref_type', 'Category', ['class' => 'control-label']) !!}
                                         {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('ref_type', $errors) !!}
@@ -49,13 +55,6 @@
                             </div>
 
 
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5 style="margin: -20px 0 0 0">SCHEDULE</h5><br>
-                                </div>
-                            </div>
-
                             {{-- Schedule 1. Date --}}
                             <table class="table" style="padding: 0px; margin: 0px">
                                 <tr>
@@ -63,10 +62,15 @@
                                     <td class="pad5" style="border: 0px">
                                         <h4 style="margin: 0px">Date</h4>
                                         <hr style="margin: 5px 0px 5px 0px">
-                                        AN AGREEMENT DATED
+                                        AN AGREEMENT DATED &nbsp; <span class="font-grey-silver">(time of signing)</span>
                                     </td>
                                 </tr>
                             </table>
+
+                            <div class="row">
+                                <div class="col-xs-1">1.</div>
+                                <div class="col-xs-11">Date</div>
+                            </div>
 
                             {{-- Schedule 2. Principle Contractor --}}
                             <table class="table" style="padding: 0px; margin: 0px">
@@ -78,6 +82,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <div class="row">
+                                        <div class="col-md-2">hhh</div>
+                                        <div class="col-md-10">nnnn</div>
+                                    </div>
                                     <td width="5%" class="pad0" style="border: 0px"><h5 style="margin: 0px">&nbsp;</h5></td>
                                     <td class="pad5" style="border: 0px">
                                         <div style="width: 100%; display: table;">
@@ -192,9 +200,6 @@
                                     </td>
                                 </tr>
                             </table>
-
-
-
 
 
                             <div class="form-actions right">
