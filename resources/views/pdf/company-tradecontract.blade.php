@@ -267,48 +267,48 @@
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">COMPANY</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_name : '' !!}</span>
     </div>
     <br>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">POLICY NO</span>
-        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
         <span style="display: table-cell; width: 20px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">CURRENT TO</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' !!}</span>
     </div>
 
     <h6 style="margin-bottom: 3px">WORKERS COMPENSATION INSURANCE</h6>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">COMPANY</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_name : '' !!}</span>
     </div>
     <br>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">POLICY NO</span>
-        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
         <span style="display: table-cell; width: 20px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">CURRENT TO</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') : '' !!}</span>
     </div>
 
     <h6 style="margin-bottom: 3px">SICKNESS & ACCIDENT INSURANCE</h6>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">COMPANY</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_name : '' !!}</span>
     </div>
     <br>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 30px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">POLICY NO</span>
-        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_name : '' !!}</span>
+        <span style="display: table-cell; width: 240px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
         <span style="display: table-cell; width: 20px;">&nbsp;</span>
         <span style="display: table-cell; width: 70px;">CURRENT TO</span>
-        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
+        <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') : '' !!}</span>
     </div>
 
     {{-- ABN + GST --}}
