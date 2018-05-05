@@ -91,6 +91,7 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
+        /*
         echo "Todo assigned to inactive user<br><br>";
         $docs = \App\Models\Comms\Todo::all();
         foreach ($docs as $doc) {
@@ -115,7 +116,7 @@ class PagesController extends Controller {
                     echo "ToDo [$todo->id] - $todo->name (DELETED)<br>";
                 }
             }
-        }
+        }*/
 
 
         /*echo "Child Company LH default permissions<br><br>";
@@ -218,6 +219,32 @@ class PagesController extends Controller {
         }
         echo "<br><br>Completed<br>-------------<br>";
         */
+
+
+        echo "Company Primary Users<br><br>";
+        $companies = \App\Models\Company\Company::all();
+        foreach ($companies as $company) {
+            if ($company->status == 1) {
+                if ($company->staffStatus(1)->count() > 0) {
+                    echo "<br>$company->name " . count($company->staffStatus(1)) . "/" . count($company->staff) . "<br>---------------------------<br>";
+                    if ($company->primary_user) {
+                        $is_lh = ' ** NOT LH **';
+                        $no_perm = ' ** NO ADD USER PERMISSION **';
+                        if ($company->primary_contact()->hasRole2('ext-leading-hand'))
+                            $is_lh = '';
+                        if ($company->primary_contact()->hasPermission2('add.user'))
+                            $no_perm = '';
+                        echo "Primary: " . $company->primary_contact()->fullname . " (" . $company->primary_contact()->username . ")" . $is_lh . $no_perm . "<br>";
+                    }
+                } else {
+                    echo "<br>$company->name " . count($company->staffStatus(1)) . "/" . count($company->staff) . "<br>---------------------------<br>";
+                    echo "** No active users **<br>";
+                }
+            }
+
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+
     }
 
 

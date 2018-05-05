@@ -111,7 +111,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Company Period Trade Contract
     //Route::get('company/{cid}/doc/cats/{department}', 'Company\CompanyDocController@getCategories');
-    Route::resource('company/{cid}/doc/period-trade-contract', 'Company\CompanyPeriodTradeContractController');
+    Route::post('company/{cid}/doc/period-trade-contract/reject/{id}', 'Company\CompanyPeriodTradeController@reject');
+    Route::resource('company/{cid}/doc/period-trade-contract', 'Company\CompanyPeriodTradeController');
 
     // Company Docs
     Route::any('company/doc/create', 'Company\CompanyDocController@create');

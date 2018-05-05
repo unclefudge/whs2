@@ -303,7 +303,7 @@ class CompanyDocController extends Controller {
     }
 
     /**
-     * Approve the specified company document in storage.
+     * Reject the specified company document in storage.
      *
      * @return \Illuminate\Http\Response
      */

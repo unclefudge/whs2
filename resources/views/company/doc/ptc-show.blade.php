@@ -18,32 +18,31 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="note note-warning">
-                    This form have been created using details from your <a href="/company/{{ $company->id }}" target="_blank">Company Profile</a> as well as documents uploaded such as:
-                    <ul>
-                        <li>{!! ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? "<a href='".$company->activeCompanyDoc('7')->attachment_url."' target='_blank'>Contractors Licence</a>" : 'Contractors Licence' !!}</li>
-                        <li>{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? "<a href='".$company->activeCompanyDoc('1')->attachment_url."' target='_blank'>Public Liability</a>" : 'Public Liability' !!}</li>
-                        <li>{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? "<a href='".$company->activeCompanyDoc('2')->attachment_url."' target='_blank'>Workers Compensation</a>" : 'Workers Compensation' !!}</li>
-                        <li>{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? "<a href='".$company->activeCompanyDoc('3')->attachment_url."' target='_blank'>Sickness & Accident</a>" : 'Sickness & Accident' !!}</li>
-                    </ul>
-                    If any information within this contract are incorrect please update your above details / documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-dark bold uppercase"> Period Trade Contract </span>
+                            @if ($ptc->status == 2) <span class="label label-warning label">Pending Approval</span> @endif
+                            @if ($ptc->status == 3) <span class="label label-danger label">Rejected</span> @endif
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('CompanyDocPeriodTrade', ['action' => ['Company\CompanyPeriodTradeController@store', $company->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($ptc, ['method' => 'PATCH', 'action' => ['Company\CompanyPeriodTradeController@update', $company->id, $ptc->id], 'class' => 'horizontal-form']) !!}
+
                         @include('form-error')
 
                         <div class="form-body">
+                            @if ($ptc->status == 3)
+                                <div class="alert alert-danger">
+                                    The document was not approved for the following reason:
+                                    <ul>
+                                        <li>{!! nl2br($ptc->reject) !!}</li>
+                                    </ul>
+                                </div>
+                                <br>
+                            @endif
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5 style="margin: -20px 0 0 0">SCHEDULE</h5><br>
@@ -57,7 +56,7 @@
                                     <td class="pad5" style="border: 0px">
                                         <h4 style="margin: 0px">Date</h4>
                                         <hr style="margin: 5px 0px 5px 0px">
-                                        AN AGREEMENT DATED &nbsp; <span class="font-grey-silver">(time of signing)</span>
+                                        AN AGREEMENT DATED &nbsp; <b>{{ $ptc->date->format('d/m/Y') }}</b>
                                     </td>
                                 </tr>
                             </table>
@@ -76,24 +75,24 @@
                                     <td class="pad5" style="border: 0px">
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">NAME </span>
-                                            <span style="display: table-cell;">{{ $company->reportsTo()->name }}</span>
+                                            <span style="display: table-cell;">{{ $ptc->principle_name }}</span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">ADDRESS </span>
-                                            <span style="display: table-cell;">{!! $company->reportsTo()->address_formatted !!}<br></span>
+                                            <span style="display: table-cell;">{!! $ptc->principle_address !!}<br></span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">ABN </span>
-                                            <span style="display: table-cell; width: 200px;">{{ $company->reportsTo()->abn }}</span>
+                                            <span style="display: table-cell; width: 200px;">{{ $ptc->principle_abn }}</span>
                                             <span style="display: table-cell;">ACN </span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">PHONE </span>
-                                            <span style="display: table-cell">{{ $company->reportsTo()->phone }}</span>
+                                            <span style="display: table-cell">{{ $ptc->principle_phone }}</span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">EMAIL </span>
-                                            <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</span>
+                                            <span style="display: table-cell">{{ $ptc->principle_email }}</span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 190px;">HIA MEMBER NUMBER </span>
@@ -118,24 +117,24 @@
                                     <td class="pad5" style="border: 0px">
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">NAME </span>
-                                            <span style="display: table-cell">{{ $company->name }}</span>
+                                            <span style="display: table-cell">{{ $ptc->contractor_name }}</span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">ADDRESS </span>
-                                            <span style="display: table-cell">{!! $company->address_formatted !!}<br></span>
+                                            <span style="display: table-cell">{!! $ptc->contractor_address !!}<br></span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">ABN </span>
-                                            <span style="display: table-cell; width: 200px;">{{ $company->abn }}</span>
+                                            <span style="display: table-cell; width: 200px;">{{ $ptc->contractor_abn }}</span>
                                             <span style="display: table-cell;">ACN </span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">PHONE </span>
-                                            <span style="display: table-cell">{{ $company->phone }}</span>
+                                            <span style="display: table-cell">{{ $ptc->contractor_phone }}</span>
                                         </div>
                                         <div style="width: 100%; display: table;">
                                             <span style="display: table-cell; width: 90px;">EMAIL </span>
-                                            <span style="display: table-cell">{{ $company->email }}</span>
+                                            <span style="display: table-cell">{{ $ptc->contractor_email }}</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -225,7 +224,7 @@
                             <br><br>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 200px;">LICENCE NO (if required) </span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? $company->activeCompanyDoc('7')->ref_no : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_licence }}</span>
                             </div>
                             <br>
 
@@ -234,16 +233,16 @@
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">COMPANY</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_name : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_pl_name }}</span>
                             </div>
                             <br>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">POLICY NO</span>
-                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : '' !!}</span>
+                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_pl_ref }}</span>
                                 <span style="display: table-cell; width: 50px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">CURRENT TO</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->expiry->format('d/m/Y') : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ ($ptc->contractor_pl_expiry) ? $ptc->contractor_pl_expiry->format('d/m/Y') : '' }}</span>
                             </div>
                             <br>
 
@@ -252,16 +251,16 @@
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">COMPANY</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_name : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_wc_name }}</span>
                             </div>
                             <br>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">POLICY NO</span>
-                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : '' !!}</span>
+                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_wc_ref }}</span>
                                 <span style="display: table-cell; width: 50px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">CURRENT TO</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->expiry->format('d/m/Y') : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ ($ptc->contractor_wc_expiry) ? $ptc->contractor_wc_expiry->format('d/m/Y') : '' }}</span>
                             </div>
                             <br>
 
@@ -270,16 +269,16 @@
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">COMPANY</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_name : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_sa_name }}</span>
                             </div>
                             <br>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 30px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">POLICY NO</span>
-                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : '' !!}</span>
+                                <span style="display: table-cell; width: 340px; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_sa_ref }}</span>
                                 <span style="display: table-cell; width: 50px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 120px;">CURRENT TO</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->expiry->format('d/m/Y') : '' !!}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ ($ptc->contractor_sa_expiry) ? $ptc->contractor_sa_expiry->format('d/m/Y') : '' }}</span>
                             </div>
                             <br>
 
@@ -287,10 +286,10 @@
                             <br><br>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 60px;">ABN</span>
-                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->abn }}</span>
+                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_abn }}</span>
                                 <span style="display: table-cell; width: 50px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 250px;">ARE YOU REGISTERED FOR GST?</span>
-                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">@if($company->gst) Yes @elseif($company->gst == '0') No @else "&nbsp;" @endif</span>
+                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">@if($ptc->contractor_abn) Yes @elseif($ptc->contractor_abn == '0') No @else "&nbsp;" @endif</span>
                                 <span style="display: table-cell;">&nbsp;</span>
                             </div>
 
@@ -299,25 +298,47 @@
                             THE PARTIES AGREE that the period trade contract conditions referred to above are those that appear here (<a href="/filebank/period_trade_contract_conditions.pdf" target="_blank">see conditions</a>)<br><br><br><br><br>
 
                             <div class="row">
-                                <div class="form-group">
+                                <div class="form-group {!! fieldHasError('contractor_signed_name', $errors) !!}">
                                     {!! Form::label('contractor_signed_name', "Trade Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
                                     <div class="col-md-6">
-                                        {!! Form::textarea('contractor_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
+                                        {!! Form::textarea('contractor_signed_name', $ptc->contractor_signed_name, ['rows' => '3', 'class' => 'form-control', 'disabled']) !!}
+                                        {!! fieldErrorMessage('contractor_signed_name', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <a data-original-title="Assign Users" data-toggle="modal" href="#modal_sign_contractor">
-                                        <button type="button" class="btn green" id="sign_contractor"> Sign Contract</button>
-                                    </a>
+                            </div>
+                            <br>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    {!! Form::label('principle_signed_name', "Principle Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
+                                    <div class="col-md-6">
+                                        @if (($ptc->principle_signed_id && $ptc->status != 3) || (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2 ))
+                                            {!! Form::textarea('principle_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
+                                        @else
+                                            <span class="font-red">Waiting for principle contractor's signature</span>
+                                        @endif
+                                    </div>
                                 </div>
+                                @if (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2)
+                                    <div class="col-md-2">
+                                        <a data-original-title="Assign Users" data-toggle="modal" href="#modal_sign_contractor">
+                                            <button type="button" class="btn green" id="sign_contractor"> Sign Contract</button>
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
 
-                            <br><br>
-                            <div><b>Once you have signed this contact please click the "Submit" button to complete the submission.</b></div>
+                            @if (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2)
+                                <br><br>
+                                <div><b>Once you have signed this contact please click the "Submit" button to complete the submission.</b></div>
+                            @endif
 
                             <br><br>
                             <div class="form-actions right">
                                 <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
+                                @if (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2)
+                                    <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
+                                @endif
                                 <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
                             </div>
                         </div>
@@ -342,7 +363,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    {!! Form::label('signed_name', 'Enter your Full Name', ['class' => 'control-label']) !!}
+                                    {!! Form::label('signed_name', 'Enter your Name', ['class' => 'control-label']) !!}
                                     {!! Form::text('signed_name', null, ['class' => 'form-control']) !!}
                                 </div>
                             </div>
@@ -354,6 +375,31 @@
                         <button type="button" class="btn green" data-dismiss="modal" id="sign_contractor_accept">Sign</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Reject Modal --}}
+    <div id="modal_reject" class="modal fade" id="basic" tabindex="-1" role="modal_reject" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Reject Contract</h4>
+                </div>
+                <div class="modal-body">
+                    {!! Form::model($ptc, ['method' => 'POST', 'action' => ['Company\CompanyPeriodTradeController@reject', $company->id, $ptc->id], 'class' => 'horizontal-form']) !!}
+                    <div class="form-group {!! fieldHasError('reject', $errors) !!}">
+                        {!! Form::label('reject', 'Reason for rejecting contract', ['class' => 'control-label']) !!}
+                        {!! Form::textarea('reject', null, ['rows' => '3', 'class' => 'form-control']) !!}
+                        {!! fieldErrorMessage('reject', $errors) !!}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn green" name="reject_doc" value="reject">Reject</button>
+                </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
@@ -375,11 +421,11 @@
             var email = "{!! (Auth::user()->email) ?  ' ('.Auth::user()->email.')' : '' !!}";
             var date = moment().format('DD/MM/YYYY, h:mm:ss a');
             var signed_string = name + "\n" + 'Digitally signed by ' + user + email + "\nDate: " + date;
-            $('#contractor_signed_name').val(signed_string);
+            $('#principle_signed_name').val(signed_string);
             if (name != '')
                 $('#submit').show();
             else {
-                $('#contractor_signed_name').val('');
+                $('#principle_signed_name').val('');
                 $('#submit').hide();
             }
         });

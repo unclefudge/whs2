@@ -1,0 +1,203 @@
+<?php
+
+namespace App\Http\Controllers\Company;
+
+use Illuminate\Http\Request;
+use Validator;
+
+use DB;
+use PDF;
+use Mail;
+use Session;
+use App\User;
+use App\Models\Company\Company;
+use App\Models\Company\CompanyDocPeriodTrade;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use nilsenj\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+
+/**
+ * Class CompanyPeriodTradeContractController
+ * @package App\Http\Controllers
+ */
+class CompanyPeriodTradeController extends Controller {
+
+    public function index()
+    {
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->hasAnyPermissionType('site.export'))
+            return view('errors/404');
+
+        return view('site/export/list');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($cid, $id)
+    {
+        $company = Company::findOrFail($cid);
+        $ptc = CompanyDocPeriodTrade::find($id);
+
+        if ($ptc)
+            return view('company/doc/ptc-show', compact('company', 'ptc'));
+
+        return view('errors/404');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create($cid)
+    {
+        $company = Company::findOrFail($cid);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('add.company.doc'))
+        //    return view('errors/404');
+
+        return view('company/doc/ptc-create', compact('company'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store($cid)
+    {
+        $company = Company::findOrFail($cid);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('add.company.doc'))
+        //    return view('errors/404');
+
+        $ptc_request = request()->all();
+
+        $ptc_request['date'] = Carbon::now();
+        $ptc_request['period'] = '12';
+        $ptc_request['expiry'] = Carbon::today()->addMonths($ptc_request['period']);
+        $ptc_request['principle_id'] = $company->reportsTo()->id;
+        $ptc_request['principle_name'] = $company->reportsTo()->name;
+        $ptc_request['principle_address'] = $company->reportsTo()->address_formatted;
+        $ptc_request['principle_phone'] = $company->reportsTo()->phone;
+        $ptc_request['principle_email'] = ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email;
+        $ptc_request['principle_abn'] = $company->reportsTo()->abn;
+        $ptc_request['contractor_id'] = $company->id;
+        $ptc_request['contractor_name'] = $company->name;
+        $ptc_request['contractor_address'] = $company->address_formatted;
+        $ptc_request['contractor_phone'] = $company->phone;
+        $ptc_request['contractor_email'] = $company->email;
+        $ptc_request['contractor_abn'] = $company->abn;
+        $ptc_request['contractor_gst'] = $company->gst;
+        $ptc_request['contractor_licence'] = ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? $company->activeCompanyDoc('7')->ref_no : null;
+        $ptc_request['contractor_pl_name'] = ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_name : null;
+        $ptc_request['contractor_pl_ref'] = ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->ref_no : null;
+        $ptc_request['contractor_pl_expiry'] = ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? $company->activeCompanyDoc('1')->expiry : null;
+        $ptc_request['contractor_wc_name'] = ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_name : null;
+        $ptc_request['contractor_wc_ref'] = ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->ref_no : null;
+        $ptc_request['contractor_wc_expiry'] = ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? $company->activeCompanyDoc('2')->expiry : null;
+        $ptc_request['contractor_sa_name'] = ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_name : null;
+        $ptc_request['contractor_sa_ref'] = ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->ref_no : null;
+        $ptc_request['contractor_sa_expiry'] = ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? $company->activeCompanyDoc('3')->expiry : null;
+        $ptc_request['contractor_signed_id'] = Auth::user()->id;
+        $ptc_request['contractor_signed_at'] = Carbon::now();
+        $ptc_request['for_company_id'] = $company->id;
+        $ptc_request['company_id'] = $company->reportsTo()->id;
+        $ptc_request['status'] = 2;
+        //dd($ptc_request);
+
+        // Create PTC
+        $ptc = CompanyDocPeriodTrade::create($ptc_request);
+
+        // Create approval ToDoo
+        $ptc->createApprovalToDo($ptc->owned_by->notificationsUsersTypeArray('n.doc.acc.approval'));
+        Toastr::success("Signed contract");
+
+        return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");
+    }
+
+    /**
+     * Update the specified resource.
+     */
+    public function update($cid, $id)
+    {
+        $company = Company::findOrFail($cid);
+        $ptc = CompanyDocPeriodTrade::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('add.company.doc'))
+        //    return view('errors/404');
+
+        $ptc_request = request()->all();
+        $ptc_request['principle_signed_id'] = Auth::user()->id;
+        $ptc_request['principle_signed_at'] = Carbon::now();
+        $ptc_request['status'] = 1;
+
+        $ptc->update($ptc_request);
+        $ptc->closeToDo();
+
+        Toastr::success("Signed contract");
+
+        return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");
+    }
+
+    /**
+     * Reject the specified company document in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reject($cid, $id)
+    {
+        $company = Company::findOrFail($cid);
+        $ptc = CompanyDocPeriodTrade::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2("sig.company.doc", $doc))
+        //    return view('errors/404');
+
+        $ptc->status = 3;
+        $ptc->reject = request('reject');
+        $ptc->closeToDo();
+        $ptc->emailReject();
+        $ptc->save();
+        Toastr::success("Contract rejected");
+
+        return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");
+    }
+
+
+    /**
+     * Create PDF
+     */
+    public function tradecontractPDF($cid)
+    {
+        $company = Company::findOrFail($cid);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('view.company', $company))
+            return view('errors/404');
+
+        //$data[] = ['company_name' => 'cname', 'status' => 'status',];
+        //return view('pdf/company-tradecontract', compact('data', 'company'));
+        //$pdf = PDF::loadView('pdf/company-tradecontract', compact('data', 'company'));
+        $pdf = PDF::loadView('pdf/company-tradecontract', compact('company'));
+        $pdf->setPaper('a4');
+        //$pdf->setOption('page-width', 200)->setOption('page-height', 287);
+        //$pdf->setOption('margin-bottom', 10);
+        //->setOption('footer-font-size', '7')
+        //->setOption('footer-left', utf8_decode('Document created ' . date('\ d/m/Y\ ')))
+        //->setOption('footer-center', utf8_decode('Page [page] / [topage]'))
+        //->setOption('footer-right', utf8_decode("Initials:     "))
+        //->setOrientation('portrait');
+
+        //if ($request->has('view_pdf'))
+        return $pdf->stream();
+    }
+
+
+}

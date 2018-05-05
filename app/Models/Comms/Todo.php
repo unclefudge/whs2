@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Misc\Action;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
+use App\Models\Company\CompanyDocPeriodTrade;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -112,9 +113,12 @@ class Todo extends Model {
                 return '/todo/' . $this->id;
             case 'company doc':
                 $doc = CompanyDoc::find($this->type_id);
-                if ($doc) {
+                if ($doc)
                     return ($doc->expiry && $doc->expiry->gt(Carbon::today())) ? '/company/' . $doc->for_company_id . '/doc/' . $doc->id . '/edit' : '/company/' . $doc->for_company_id . '/doc';
-                }
+            case 'company ptc':
+                $ptc = CompanyDocPeriodTrade::find($this->type_id);
+                if ($ptc)
+                    return '/company/' . $ptc->for_company_id . '/doc/period-trade-contract/' . $this->type_id;
             case 'general':
                 return '/todo/' . $this->id;
         }
