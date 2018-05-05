@@ -1364,9 +1364,11 @@ class Company extends Model {
     public function notificationsUsersEmailType($type)
     {
         $email_array = [];
-        foreach ($this->notificationsUsersType($type) as $user) {
-            if ($user && validEmail($user->email))
-                $email_array[] = $user->email;
+        if ($this->notificationsUsersType($type)) {
+            foreach ($this->notificationsUsersType($type) as $user) {
+                if ($user && validEmail($user->email))
+                    $email_array[] = $user->email;
+            }
         }
 
         return $email_array;
