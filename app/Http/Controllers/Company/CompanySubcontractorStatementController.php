@@ -85,7 +85,7 @@ class CompanySubcontractorStatementController extends Controller {
     {
         $messages = [
             'contractor_signed_title.required' => 'The position/title field is required',
-            'clause_a.required' => 'The clause 1. field is required',
+            'clause_a.required' => 'The clause a. field is required',
         ];
 
         $this->validate(request(), [

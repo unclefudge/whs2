@@ -217,7 +217,7 @@
                                             {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
                                             <div class="input-group date date-picker">
                                                 {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
-                                                'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", ($doc->category_id == 4) ? 'readonly' : '']) !!}
                                                 <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                             </div>
                                             {!! fieldErrorMessage('expiry', $errors) !!}
