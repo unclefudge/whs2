@@ -539,7 +539,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getSubcontractorEntityTextAttribute()
     {
-        return CompanyEntityTypes::name($this->subcontractor_type);
+        return ($this->subcontractor_type) ? CompanyEntityTypes::name($this->subcontractor_type) : '';
     }
 
     /**

@@ -31,6 +31,19 @@
                             <span class="caption-subject font-dark bold uppercase"> Company Documents</span>
                         </div>
                         <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn green btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Generate
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li>
+                                        <a href="/company/{{ $company->id }}/doc/period-trade-contract/create">Period Trade Contract</a>
+                                    </li>
+                                    <li>
+                                        <a href="/company/{{ $company->id }}/doc/subcontractor-statement/create">Subcontractor's Statement</a>
+                                    </li>
+                                </ul>
+                            </div>
                             @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/company/{{ $company->id }}/doc/upload" data-original-title="Upload">Upload</a>
                             @endif

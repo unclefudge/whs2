@@ -240,7 +240,7 @@
                                         <div class="col-md-3">
                                             <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
                                         </div>
-                                        @if($doc->for_company_id == Auth::user()->company_id)
+                                        @if($doc->for_company_id == Auth::user()->company_id && $doc->category_id != 4) {{-- Cant edit SS --}}
                                             <div class="col-md-3 col-md-offset-9">
                                                 <button type="button" class="btn blue" style="margin-top: 25px;" id="change_file"> Change File</button>
                                             </div>

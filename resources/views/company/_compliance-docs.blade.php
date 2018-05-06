@@ -59,7 +59,15 @@
                             @endif
                             {{-- Missing --}}
                             @if (!$company->activeCompanyDoc($type))
-                                <div class="col-xs-8"><i class="fa fa-times" style="width:35px; padding: 4px 15px"></i> {{ $name }}</div>
+                                <div class="col-xs-8">
+                                    <i class="fa fa-times" style="width:35px; padding: 4px 15px"></i> {{ $name }}
+                                    @if ($type == 4)
+                                        <a href="/company/{{ $company->id  }}/doc/period-trade-contract/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
+                                    @endif
+                                    @if ($type == 5)
+                                        <a href="/company/{{ $company->id  }}/doc/subcontractor-statement/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
+                                    @endif
+                                </div>
                                 <div class="col-xs-4 font-red">{!! (!$company->isCompliant()) ? 'Not submitted' : '' !!}</div>
                             @endif
                         @endforeach

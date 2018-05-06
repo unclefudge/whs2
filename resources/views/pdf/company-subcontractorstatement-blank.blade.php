@@ -52,8 +52,7 @@
         td.pad0, th.pad0 {
             padding: 0px !important;
             line-height: 1em !important;
-            border: 0px;
-        !important;
+            border: 0px; !important;
         }
     </style>
 </head>
@@ -91,17 +90,17 @@
             <table class="table" style="padding: 0px; margin: 0px;">
                 <tr>
                     <td width="100px" class="pad0" style="border: 0px">Subcontractor:</td>
-                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $ss->contractor_name }}</td>
+                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $company->name }}</td>
                     <td width="20px" class="pad0" style="border: 0px">&nbsp;</td>
                     <td width="40px" class="pad0" style="border: 0px">ABN:</td>
-                    <td width="100px" class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $ss->contractor_abn }}</td>
+                    <td width="100px" class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $company->abn }}</td>
                 </tr>
             </table>
             <div style="color:#bfbfbf; padding-left: 250px">(Business name)</div>
 
             <div style="width: 100%; display: table;">
                 <span style="display: table-cell; width: 20px;">of: </span>
-                <span style="display: table-cell; border-bottom: 1px dotted #555555;">{!! preg_replace('/<br>/', ', ', $ss->contractor_address) !!} </span>
+                <span style="display: table-cell; border-bottom: 1px dotted #555555;">{{ $company->address }} {{  $company->suburb_state_postcode }} </span>
             </div>
             <div style="color:#bfbfbf; padding-left: 300px">(Address of subcontractor)</div>
 
@@ -109,10 +108,10 @@
             <table class="table" style="padding: 0px; margin: 0px;">
                 <tr>
                     <td width="210px" class="pad0" style="border: 0px">has entered into a contract with:</td>
-                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $ss->principle_name }}</td>
+                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $company->reportsTo()->name }}</td>
                     <td width="20px" class="pad0" style="border: 0px">&nbsp;</td>
                     <td width="40px" class="pad0" style="border: 0px">ABN:</td>
-                    <td width="100px" class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $ss->principle_abn }}</td>
+                    <td width="100px" class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $company->reportsTo()->abn }}</td>
                 </tr>
                 <tr>
                     <td width="210px" class="pad0" style="border: 0px">&nbsp;</td>
@@ -126,7 +125,7 @@
             {{-- Note 3 --}}
             <div style="width: 100%; display: table;">
                 <span style="display: table-cell; width: 170px;">Contract number/identifier </span>
-                <span style="display: table-cell; border-bottom: 1px dotted #555555;">{{ $ss->contract_no }}</span>
+                <span style="display: table-cell; border-bottom: 1px dotted #555555;"></span>
             </div>
             <div><span class="pull-right" style="padding-top: 3px"><b>(Note 3)</b></span></div>
             <br>
@@ -134,8 +133,22 @@
             {{-- Note 4 --}}
             <div style="width: 100%; display: table;">
                 <span style="display: table-cell; width: 260px;">This Statement applies for work between: </span>
-                <span style="display: table-cell;">{{ $ss->from->format('d / m / Y') }} &nbsp; and &nbsp; {{ $ss->to->format('d / m / Y') }} &nbsp; inclusive,</span>
-
+                @if ($data['date_from'])
+                    <span style="display: table-cell;">{{ $data['date_from']->format('d/m/Y') }} &nbsp; and &nbsp; {{ $data['date_to']->format('d/m/Y') }} &nbsp; inclusive,</span>
+                @else
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_from']->format('d') }}</span>
+                    <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_from']->format('m') }}</span>
+                    <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_from']->format('Y') }}</span>
+                    <span style="display: table-cell; width: 50px"> &nbsp; and  </span>
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_to']->format('d') }}</span>
+                    <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_to']->format('m') }}</span>
+                    <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                    <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;">{{ $data['date_to']->format('Y') }}</span>
+                    <span style="display: table-cell;"> &nbsp; inclusive,  </span>
+                @endif
                 <span class="pull-right"><b>(Note 4)</b></span>
             </div>
             <br>
@@ -143,17 +156,12 @@
             {{-- Note 5 --}}
             <div style="width: 100%; display: table;">
                 <span style="display: table-cell; width: 230px;">subject of the payment claim dated: </span>
-                @if ($ss->claim_payment)
-                    <span style="display: table-cell; width: 150px">  {!! $ss->claim_payment->format('d / m / Y') !!} </span>
-                    <span style="display: table-cell;"></span>
-                @else
-                    <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
-                    <span style="display: table-cell; width: 30px"> &nbsp; &nbsp;/ </span>
-                    <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
-                    <span style="display: table-cell; width: 30px"> &nbsp; &nbsp;/ </span>
-                    <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
-                    <span style="display: table-cell; width: 500px;"></span>
-                @endif
+                <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
+                <span style="display: table-cell; width: 30px"> &nbsp; &nbsp;/ </span>
+                <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
+                <span style="display: table-cell; width: 30px"> &nbsp; &nbsp;/ </span>
+                <span style="display: table-cell; width: 30px; border-bottom: 1px dotted #555555;"></span>
+                <span style="display: table-cell; width: 500px;"></span>
                 <span style="display: table-cell;"><span class="pull-right"><b>(Note 5)</b></span></span>
             </div>
             <br>
@@ -161,12 +169,12 @@
             {{-- Declaration --}}
             <table class="table" style="padding: 0px; margin: 0px;">
                 <tr>
-                    <td width="10px" class="pad0" style="border: 0px">I</td>
-                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> {{ $ss->contractor_full_name }}</td>
-                    <td width="390px" class="pad0" style="border: 0px"> &nbsp; <span class="pull-right">a Director or a person authorised by the Subcontractor on whose</span></td>
+                    <td width="10px" class="pad0" style="border: 0px">I </td>
+                    <td class="pad0" style="border-bottom: 1px dotted #555555; border-top: 0px"> &nbsp;</td>
+                    <td width="340px" class="pad0" style="border: 0px"> &nbsp; <span class="pull-right">a Director or a person authorised by the Subcontractor</span></td>
                 </tr>
             </table>
-            <div class="text-justify">behalf this declaration is made, hereby declare that I am in a position to know the truth of the matters which are contained in this Subcontractor’s
+            <div class="text-justify">on whose behalf this declaration is made, hereby declare that I am in a position to know the truth of the matters which are contained in this Subcontractor’s
                 Statement and declare the following to the best of my knowledge and belief:
             </div>
             <br>
@@ -174,16 +182,16 @@
             {{-- Dot points --}}
             <ol type="a" style="padding-left:15px">
                 {{-- Note 6 --}}
-                <li class="text-justify">The abovementioned Subcontractor has either employed or engaged workers or subcontractors during the above period of this contract. Tick <b>[ {!! ($ss->clause_a == 1) ? 'X' : "&nbsp;" !!} ]</b>
+                <li class="text-justify">The abovementioned Subcontractor has either employed or engaged workers or subcontractors during the above period of this contract. Tick <b>[ &nbsp; ]</b>
                     if true and comply with <b>(b)</b> to <b>(g)</b>
-                    below, as applicable. If it is not the case that workers or subcontractors are involved or you are an exempt employer for workers compensation purposes tick <b>[ {!! ($ss->clause_a == 2) ? 'X' : "&nbsp;" !!} ]</b>
+                    below, as applicable. If it is not the case that workers or subcontractors are involved or you are an exempt employer for workers compensation purposes tick <b>[ &nbsp; ]</b>
                     and only
                     complete <b>(f)</b> and <b>(g)</b> below. You must tick one box. <span class="pull-right"><b>(Note 6)</b></span>
                 </li>
                 {{-- Note 7 --}}
                 <li class="text-justify">All workers compensation insurance premiums payable by the Subcontractor in respect of the work done under the contract have been paid. The Certificate of
-                    Currency for that insurance is attached and is dated {!! ($ss->wc_date ) ? '<b>'.$ss->wc_date->format('d / m / Y').'</b>' :  '......../......../........' !!}
-                    <span class="pull-right"><b>(Note 7)</b></span>
+                    Currency for that insurance is attached and is dated {!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1 ) ? '<b>'.$company->activeCompanyDoc('2')->expiry->format('d / m / Y').'</b>' :  '......../......../........' !!}
+                   <span class="pull-right"><b>(Note 7)</b></span>
                 </li>
                 {{-- Note 8 --}}
                 <li class="text-justify">All remuneration payable to relevant employees for work under the contract for the above period has been
@@ -203,18 +211,23 @@
 
             {{-- Signature --}}
             <div style="width: 100%; display: table;">
-                <span style="display: table-cell; width: 120px;">f. &nbsp; Signature </span>
-                <span style="display: table-cell; width: 480px; border-bottom: 1px solid #eee; border-top: 0px; background-color: #eee; padding:10px;">{!! nl2br($ss->contractor_signed_name) !!}</span>
-                <span style="display: table-cell;"> &nbsp;</span>
+                <span style="display: table-cell; width: 80px;">f. &nbsp; Signature </span>
+                <span style="display: table-cell; border-bottom: 1px dotted #555555;"></span>
+                <span class="text-right" style="display: table-cell; width: 80px;"> &nbsp; Full name &nbsp; </span>
+                <span style="display: table-cell; width: 250px; border-bottom: 1px dotted #555555;"></span>
             </div>
             <br>
 
             {{-- Position --}}
             <div style="width: 100%; display: table;">
                 <span style="display: table-cell; width: 110px;">g. &nbsp;Position/Title </span>
-                <span style="display: table-cell; border-bottom: 1px dotted #555555;">{{ $ss->contractor_signed_title }}</span>
-                <span class="text-right" style="display: table-cell; width: 100px;"> &nbsp; Date: &nbsp;</span>
-                <span style="display: table-cell; width: 100px; border-bottom: 1px dotted #555555;">{{ $ss->contractor_signed_at->format('d/m/Y') }}</span>
+                <span style="display: table-cell; border-bottom: 1px dotted #555555;"></span>
+                <span class="text-right" style="display: table-cell; width: 50px;"> &nbsp; Date: &nbsp;</span>
+                <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;"></span>
+                <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;"></span>
+                <span style="display: table-cell; width: 20px"> &nbsp; &nbsp;/ </span>
+                <span style="display: table-cell; width: 20px; border-bottom: 1px dotted #555555;"></span>
             </div>
             <br>
 

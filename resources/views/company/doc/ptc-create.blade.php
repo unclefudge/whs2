@@ -19,14 +19,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="note note-warning">
-                    This form have been created using details from your <a href="/company/{{ $company->id }}" target="_blank">Company Profile</a> as well as documents uploaded such as:
+                    This contract has been created using details from your <a href="/company/{{ $company->id }}" target="_blank">Company Profile</a> as well as documents uploaded such as:
                     <ul>
                         <li>{!! ($company->activeCompanyDoc('7') && $company->activeCompanyDoc('7')->status == 1) ? "<a href='".$company->activeCompanyDoc('7')->attachment_url."' target='_blank'>Contractors Licence</a>" : 'Contractors Licence' !!}</li>
                         <li>{!! ($company->activeCompanyDoc('1') && $company->activeCompanyDoc('1')->status == 1) ? "<a href='".$company->activeCompanyDoc('1')->attachment_url."' target='_blank'>Public Liability</a>" : 'Public Liability' !!}</li>
                         <li>{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? "<a href='".$company->activeCompanyDoc('2')->attachment_url."' target='_blank'>Workers Compensation</a>" : 'Workers Compensation' !!}</li>
                         <li>{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? "<a href='".$company->activeCompanyDoc('3')->attachment_url."' target='_blank'>Sickness & Accident</a>" : 'Sickness & Accident' !!}</li>
                     </ul>
-                    If any information within this contract are incorrect please update your above details / documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
+                    If any information within this contract is incorrect please update your above details / documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
                 </div>
             </div>
         </div>
@@ -303,6 +303,7 @@
                                     {!! Form::label('contractor_signed_name', "Trade Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
                                     <div class="col-md-6">
                                         {!! Form::textarea('contractor_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
+                                        <span class="help-block">By signing this contract you accept the above as your digital signature.</span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">

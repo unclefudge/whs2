@@ -69,7 +69,7 @@ class UserController extends Controller {
         if (!Auth::user()->allowed2('add.user'))
             return view('errors/404');
 
-        $user_request = removeNullValues($request->all());
+        $user_request = removeNullValues(request()->all());
         $user_request['company_id'] = Auth::user()->company_id;
         $user_request['password'] = bcrypt($user_request['password']);  // encrypt password from form
         $user_request['password_reset'] = 1;

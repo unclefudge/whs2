@@ -19,7 +19,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('username', $errors) !!}">
-                                            {!! Form::label('username', 'Username', ['class' => 'control-label']) !!}
+                                            {!! Form::label('username', 'Username / Email', ['class' => 'control-label']) !!}
                                             {!! Form::text('username', null, ['class' => 'form-control', 'required' => 'required']) !!}
                                         </div>
                                     </div>

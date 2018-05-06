@@ -25,6 +25,11 @@
                             @if ($ptc->status == 2) <span class="label label-warning label">Pending Approval</span> @endif
                             @if ($ptc->status == 3) <span class="label label-danger label">Rejected</span> @endif
                         </div>
+                        @if ($ptc->status == 1)
+                            <div class="actions">
+                                <a class="btn btn-circle green btn-outline btn-sm" href="{{ $ptc->attachment_url }}" data-original-title="Upload">View PDF</a>
+                            </div>
+                        @endif
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
@@ -289,7 +294,7 @@
                                 <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">{{ $ptc->contractor_abn }}</span>
                                 <span style="display: table-cell; width: 50px;">&nbsp;</span>
                                 <span style="display: table-cell; width: 250px;">ARE YOU REGISTERED FOR GST?</span>
-                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">@if($ptc->contractor_abn) Yes @elseif($ptc->contractor_abn == '0') No @else "&nbsp;" @endif</span>
+                                <span style="display: table-cell; width: 150px; border-bottom: 1px solid #eee; border-top: 0px">@if($ptc->contractor_gst) Yes @elseif($ptc->contractor_gst == '0') No @else "&nbsp;" @endif</span>
                                 <span style="display: table-cell;">&nbsp;</span>
                             </div>
 
@@ -314,6 +319,7 @@
                                     <div class="col-md-6">
                                         @if (($ptc->principle_signed_id && $ptc->status != 3) || (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2 ))
                                             {!! Form::textarea('principle_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
+                                            <span class="help-block">By signing this contract you accept the above as your digital signature.</span>
                                         @else
                                             <span class="font-red">Waiting for principle contractor's signature</span>
                                         @endif
@@ -321,9 +327,7 @@
                                 </div>
                                 @if (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2)
                                     <div class="col-md-2">
-                                        <a data-original-title="Assign Users" data-toggle="modal" href="#modal_sign_contractor">
-                                            <button type="button" class="btn green" id="sign_contractor"> Sign Contract</button>
-                                        </a>
+                                        <a href="#modal_sign_contractor" class="btn green" data-toggle="modal" id="sign_contractor"> Sign Contract</a>
                                     </div>
                                 @endif
                             </div>
@@ -339,7 +343,11 @@
                                 @if (Auth::user()->isCompany($ptc->company_id) && $ptc->status == 2)
                                     <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
                                 @endif
-                                <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
+                                @if (($company->activeCompanyDoc('5') && $company->activeCompanyDoc('5')->status == 1))
+                                    <a href="#modal_archive" class="btn green" data-toggle="modal" id="sign_archive" style="display: none;">Submit</a>
+                                @else
+                                    <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -403,6 +411,39 @@
             </div>
         </div>
     </div>
+
+    {{-- Archive Modal --}}
+    @if (($company->activeCompanyDoc('5')))
+        <div id="modal_archive" class="modal fade bs-modal-sm" id="basic" tabindex="-1" role="modal_archive" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Replace Existing Contract</h4>
+                    </div>
+                    <div class="modal-body">
+                        {!! Form::model($ptc, ['method' => 'PATCH', 'action' => ['Company\CompanyPeriodTradeController@update', $company->id, $ptc->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::hidden('archive', $company->activeCompanyDoc('5')->id, ['class' => 'form-control']) !!}
+
+                        <textarea name="principle_signed_name2" id="principle_signed_name2" rows="3" class="form-control" readonly="" style="display:none"></textarea>
+
+                        <div class="text-center">
+                            <b>{{ $company->name }}</b> currently has the following valid contract<br><br>
+                            <a href="{!! $company->activeCompanyDoc('5')->attachment_url !!}" target="_blank">Period Trade Contract<br>
+                                expiry {!! ($company->activeCompanyDoc('5')) ? $company->activeCompanyDoc('5')->expiry->format('d/m/Y') : '' !!}</a><br><br>
+                            <span class="font-red"><b>By signing & accepting this contract it will archive the old one.</b></span><br><br>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn green" name="archive_doc" value="archive">Accept</button>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @stop
 
 @section('page-level-plugins-head')
@@ -422,12 +463,17 @@
             var date = moment().format('DD/MM/YYYY, h:mm:ss a');
             var signed_string = name + "\n" + 'Digitally signed by ' + user + email + "\nDate: " + date;
             $('#principle_signed_name').val(signed_string);
-            if (name != '')
+            if (name != '') {
                 $('#submit').show();
-            else {
+                $('#sign_archive').show();
+            } else {
                 $('#principle_signed_name').val('');
                 $('#submit').hide();
             }
+        });
+
+        $('#sign_archive').on('click', function () {
+            $('#principle_signed_name2').val($('#principle_signed_name').val())
         });
     });
 

@@ -81,9 +81,8 @@ class CreateCompanyPtcSsTables extends Migration {
             $table->integer('contractor_id')->unsigned();
             $table->string('contractor_name', 250)->nullable();
             $table->string('contractor_address', 250)->nullable();
-            $table->string('contractor_phone', 50)->nullable();
-            $table->string('contractor_email')->nullable();
             $table->string('contractor_abn', 20)->nullable();
+            $table->text('contractor_full_name')->nullable();
             $table->text('contractor_signed_name')->nullable();
             $table->string('contractor_signed_title', 250)->nullable();
             $table->integer('contractor_signed_id')->unsigned();
@@ -96,8 +95,7 @@ class CreateCompanyPtcSsTables extends Migration {
             $table->timestamp('principle_signed_at')->nullable();
             $table->string('contract_no', 250)->nullable();
             $table->dateTime('claim_payment')->nullable();
-            $table->tinyInteger('clause_a1')->default(0);
-            $table->tinyInteger('clause_a2')->default(0);
+            $table->tinyInteger('clause_a')->default(0);
             $table->dateTime('wc_date')->nullable();
             $table->text('reject')->nullable();
             $table->text('notes')->nullable();

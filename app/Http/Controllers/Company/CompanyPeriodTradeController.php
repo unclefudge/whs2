@@ -11,6 +11,7 @@ use Mail;
 use Session;
 use App\User;
 use App\Models\Company\Company;
+use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocPeriodTrade;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -38,6 +39,7 @@ class CompanyPeriodTradeController extends Controller {
      */
     public function show($cid, $id)
     {
+        //dd('here');
         $company = Company::findOrFail($cid);
         $ptc = CompanyDocPeriodTrade::find($id);
 
@@ -57,8 +59,8 @@ class CompanyPeriodTradeController extends Controller {
         $company = Company::findOrFail($cid);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('add.company.doc'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.company.doc'))
+            return view('errors/404');
 
         return view('company/doc/ptc-create', compact('company'));
     }
@@ -73,8 +75,8 @@ class CompanyPeriodTradeController extends Controller {
         $company = Company::findOrFail($cid);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('add.company.doc'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.company.doc'))
+            return view('errors/404');
 
         $ptc_request = request()->all();
 
@@ -130,16 +132,57 @@ class CompanyPeriodTradeController extends Controller {
         $ptc = CompanyDocPeriodTrade::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('add.company.doc'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.company.doc'))
+            return view('errors/404');
 
         $ptc_request = request()->all();
+        // Archive old contract if required
+        if (request('archive')) {
+            $ptc_request['principle_signed_name'] = request('principle_signed_name2');
+            $old_ptc = CompanyDoc::findOrFail(request('archive'));
+            $old_ptc->status = 0;
+            $old_ptc->save();
+        }
         $ptc_request['principle_signed_id'] = Auth::user()->id;
         $ptc_request['principle_signed_at'] = Carbon::now();
         $ptc_request['status'] = 1;
 
+        // Determine filename
+        $path = "filebank/company/$company->id/docs";
+        $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '.pdf';
+
+        // Ensure filename is unique by adding counter to similiar filenames
+        $count = 1;
+        while (file_exists(public_path("$path/$filename")))
+            $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '-' . $count ++ . '.pdf';
+
+        $ptc_request['attachment'] = $filename;
+
+        //dd($ptc_request);
         $ptc->update($ptc_request);
         $ptc->closeToDo();
+
+        //
+        // Generate PDF
+        //
+        //return view('pdf/company-tradecontract', compact('ptc', 'company'));
+        $pdf = PDF::loadView('pdf/company-tradecontract', compact('ptc', 'company'));
+        $pdf->setPaper('a4');
+        $pdf->save(public_path("$path/$filename"));
+        //return $pdf->stream();
+
+        // Create Site Doc
+        $doc = CompanyDoc::create([
+            'category_id'    => 5,
+            'name'           => 'Period Trade Contract',
+            'attachment'     => $filename,
+            'expiry'         => $ptc->expiry,
+            'status'         => 1,
+            'for_company_id' => $ptc->for_company_id,
+            'company_id'     => $ptc->company_id,
+            'approved_by'    => $ptc->principle_signed_id,
+            'approved_at'    => $ptc->principle_signed_at,
+        ]);
 
         Toastr::success("Signed contract");
 
