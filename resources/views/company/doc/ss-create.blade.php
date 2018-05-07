@@ -69,13 +69,12 @@
                             {{-- Contact Details --}}
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 120px;">Subcontractor:</span>
-                                <span style="display: table-cell; width: 700px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->name }}</span>
-                                <span style="display: table-cell; width: 50px;">&nbsp;</span>
-                                <span style="display: table-cell; width: 60px;">ABN:</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->abn }}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->name }}</span>
+                                <span style="display: table-cell; width: 30px;">&nbsp;</span>
+                                <span style="display: table-cell; width: 50px;">ABN:</span>
+                                <span style="display: table-cell; width: 130px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->abn }}</span>
                             </div>
                             <div style="color:#bfbfbf; padding-left: 250px">(Business name)</div>
-
 
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 20px;">of: </span>
@@ -86,10 +85,10 @@
                             {{-- Note 2 --}}
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 220px;">has entered into a contract with:</span>
-                                <span style="display: table-cell; width: 600px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->reportsTo()->name }}</span>
-                                <span style="display: table-cell; width: 50px;">&nbsp;</span>
-                                <span style="display: table-cell; width: 60px;">ABN:</span>
-                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->reportsTo()->abn }}</span>
+                                <span style="display: table-cell; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->reportsTo()->name }}</span>
+                                <span style="display: table-cell; width: 30px;">&nbsp;</span>
+                                <span style="display: table-cell; width: 50px;">ABN:</span>
+                                <span style="display: table-cell; width: 130px; border-bottom: 1px solid #eee; border-top: 0px">{{ $company->reportsTo()->abn }}</span>
                             </div>
                             <div style="width: 100%; display: table;">
                                 <span style="display: table-cell; width: 220px;">&nbsp;</span>
@@ -206,7 +205,7 @@
                             <div class="row">
                                 <div class="form-group">
                                     {!! Form::label('contractor_signed_name', "f. &nbsp; Signature", ['class' => 'col-md-2 control-label']) !!}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" style="display: none" id="contractor_signed_name_field">
                                         {!! Form::textarea('contractor_signed_name', '', ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
                                         <span class="help-block">By signing this contract you accept the above as your digital signature.</span>
                                     </div>
@@ -275,9 +274,10 @@
             var signed_string = name + "\n" + 'Digitally signed by ' + user + email + "\nDate: " + date;
             $('#contractor_signed_name').val(signed_string);
 
-            if (name != '')
+            if (name != '') {
                 $('#submit').show();
-            if (name == '') {
+                $('#contractor_signed_name_field').show();
+            } else {
                 swal({
                     title: 'Unable to Sign Contact',
                     text: '<b>Please enter your full name where requested</b>',
@@ -285,6 +285,7 @@
                 });
                 $('#contractor_signed_name').val('');
                 $('#contractor_full_name').val('');
+                $('#contractor_signed_name_field').hide();
                 $('#submit').hide();
             }
         });

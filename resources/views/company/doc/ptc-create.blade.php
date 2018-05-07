@@ -300,9 +300,9 @@
                             THE PARTIES AGREE that the period trade contract conditions referred to above are those that appear here (<a href="/filebank/period_trade_contract_conditions.pdf" target="_blank">see conditions</a>)<br><br><br><br><br>
 
                             <div class="row">
-                                <div class="form-group" style="display: none" id="contractor_signed_name_field">
+                                <div class="form-group">
                                     {!! Form::label('contractor_signed_name', "Trade Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" style="display: none" id="contractor_signed_name_field">
                                         {!! Form::textarea('contractor_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
                                         <span class="help-block">By signing this contract you accept the above as your digital signature.</span>
                                     </div>
