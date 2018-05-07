@@ -28,6 +28,6 @@ class CompanyTypes {
      */
     public static function name($id)
     {
-        return static::$companyTypes[$id];
+        return ($id != null) ? static::$companyTypes[$id] : '';
     }
 }

@@ -62,10 +62,10 @@
                                 <div class="col-xs-8">
                                     <i class="fa fa-times" style="width:35px; padding: 4px 15px"></i> {{ $name }}
                                     @if ($type == 4)
-                                        <a href="/company/{{ $company->id  }}/doc/period-trade-contract/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
+                                        <a href="/company/{{ $company->id  }}/doc/subcontractor-statement/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
                                     @endif
                                     @if ($type == 5)
-                                        <a href="/company/{{ $company->id  }}/doc/subcontractor-statement/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
+                                        <a href="/company/{{ $company->id  }}/doc/period-trade-contract/create"><i class="fa fa-pencil-square-o" style="padding-left: 10px"></i> Create</a>
                                     @endif
                                 </div>
                                 <div class="col-xs-4 font-red">{!! (!$company->isCompliant()) ? 'Not submitted' : '' !!}</div>
@@ -73,7 +73,7 @@
                         @endforeach
                     </div>
                     {{-- Pre-filled forms --}}
-                    @if (true && ($company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5)))
+                    @if (false && ($company->requiresCompanyDoc(4) || $company->requiresCompanyDoc(5)))
                         <div class="row">
                             <div class="col-md-12"><br>Pre-filled forms:
                                 @if ($company->requiresCompanyDoc(4))
@@ -108,7 +108,7 @@
                         @endif
                         @if ($tag_doc && $tag_doc->status == 3)
                             <div class="col-xs-8">
-                                <i class="fa fa-question" style="width:35px; padding: 4px 15px;></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
+                                <i class="fa fa-question" style="width:35px; padding: 4px 15px;"></i> <a href="{!! $tag_doc->attachment_url !!}" class="linkDark">Electrical Test & Tagging</a>
                             </div>
                             <div class="col-xs-4"><span class="label label-danger label-sm">Rejected</span></div>
                         @endif

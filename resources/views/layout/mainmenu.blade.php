@@ -139,7 +139,7 @@
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Documents</h3></li>
-                                                            <li><a href="/company/doc/standard" class="nav-link "> Standard Details</a></li>
+                                                        <li><a href="/company/doc/standard" class="nav-link "> Standard Details</a></li>
                                                     </ul>
                                                 </div>
                                             @endif
