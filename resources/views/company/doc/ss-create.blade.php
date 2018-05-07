@@ -279,7 +279,7 @@
                 $('#contractor_signed_name_field').show();
             } else {
                 swal({
-                    title: 'Unable to Sign Contact',
+                    title: 'Unable to Sign Contract',
                     text: '<b>Please enter your full name where requested</b>',
                     html: true
                 });
