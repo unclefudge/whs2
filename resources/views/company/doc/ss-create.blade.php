@@ -62,7 +62,7 @@
                                         any of s175B Workers Compensation Act 1987, Schedule 2 Part 5 Payroll Tax Act 2007, and s127 Industrial Relations Act 1996 where the “subcontractor” has employed or engaged workers
                                         or subcontractors during the period of the contract to which the form applies under the relevant Act(s). The signed Statement is to be submitted to the relevant principal
                                         contractor.</p>
-                                    <p style="font-size:14px; font-weight:700">SUBCONTRACTOR’S STATEMENT (Refer to the back of this form for Notes, period of Statement retention, and Offences under various Acts.</p>
+                                    <p style="font-size:14px; font-weight:700">SUBCONTRACTOR’S STATEMENT (Refer to the <a href="/filebank/subcontractor_statement_notes.pdf" target="_blank">Notes</a>, period of Statement retention, and Offences under various Acts.</p>
                                 </div>
                             </div>
 

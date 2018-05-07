@@ -215,11 +215,15 @@
                                         {{-- Expiry --}}
                                         <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
                                             {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
-                                            <div class="input-group date date-picker">
-                                                {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
-                                                'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", ($doc->category_id == 4) ? 'readonly' : '']) !!}
-                                                <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
-                                            </div>
+                                            @if ($doc->category_id == 4)
+                                                {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
+                                            @else
+                                                <div class="input-group date date-picker">
+                                                    {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control form-control-inline',
+                                                    'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                                    <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                                </div>
+                                            @endif
                                             {!! fieldErrorMessage('expiry', $errors) !!}
                                         </div>
                                     @endif
@@ -241,9 +245,9 @@
                                             <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
                                         </div>
                                         @if($doc->for_company_id == Auth::user()->company_id && $doc->category_id != 4) {{-- Cant edit SS --}}
-                                            <div class="col-md-3 col-md-offset-9">
-                                                <button type="button" class="btn blue" style="margin-top: 25px;" id="change_file"> Change File</button>
-                                            </div>
+                                        <div class="col-md-3 col-md-offset-9">
+                                            <button type="button" class="btn blue" style="margin-top: 25px;" id="change_file"> Change File</button>
+                                        </div>
                                         @endif
                                     </div>
 
