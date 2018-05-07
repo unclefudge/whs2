@@ -26,7 +26,8 @@
                         <li>{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? "<a href='".$company->activeCompanyDoc('2')->attachment_url."' target='_blank'>Workers Compensation</a>" : 'Workers Compensation' !!}</li>
                         <li>{!! ($company->activeCompanyDoc('3') && $company->activeCompanyDoc('3')->status == 1) ? "<a href='".$company->activeCompanyDoc('3')->attachment_url."' target='_blank'>Sickness & Accident</a>" : 'Sickness & Accident' !!}</li>
                     </ul>
-                    If any information within this contract is incorrect please update your above details / documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
+                    <b>Please ensure ALL of these items are uploaded and correct prior to generating this form.</b><br><br>
+                    If any information is incorrect please update your above details/documents or contact  <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
                 </div>
             </div>
         </div>
@@ -151,7 +152,7 @@
                                             <li>the <b>trade contractor</b> agreeing to quote for <b>trade works</b> whenever asked by the <b>principal contractor</b>, and</li>
                                             <li>the <b>principal contractor</b> agreeing to pay, on demand by the <b>trade contractor</b>, the sum of $1,</li>
                                         </ol>
-                                        the parties agree that the period trade contract conditions overleaf are deemed to be incorporated into each <b>trade contract</b> for a period of 12 months from the date of this agreement.
+                                        the parties agree that the period trade contract conditions <a href="/filebank/period_trade_contract_conditions.pdf" target="_blank">here</a> are deemed to be incorporated into each <b>trade contract</b> for a period of 12 months from the date of this agreement.
                                     </td>
                                 </tr>
                             </table>
@@ -299,7 +300,7 @@
                             THE PARTIES AGREE that the period trade contract conditions referred to above are those that appear here (<a href="/filebank/period_trade_contract_conditions.pdf" target="_blank">see conditions</a>)<br><br><br><br><br>
 
                             <div class="row">
-                                <div class="form-group">
+                                <div class="form-group" style="display: none" id="contractor_signed_name_field">
                                     {!! Form::label('contractor_signed_name', "Trade Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
                                     <div class="col-md-6">
                                         {!! Form::textarea('contractor_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
@@ -377,10 +378,12 @@
             var date = moment().format('DD/MM/YYYY, h:mm:ss a');
             var signed_string = name + "\n" + 'Digitally signed by ' + user + email + "\nDate: " + date;
             $('#contractor_signed_name').val(signed_string);
-            if (name != '')
+            if (name != '') {
                 $('#submit').show();
-            else {
+                $('#contractor_signed_name_field').show();
+            } else {
                 $('#contractor_signed_name').val('');
+                $('#contractor_signed_name_field').hide();
                 $('#submit').hide();
             }
         });

@@ -23,7 +23,8 @@
                     <ul>
                         <li>{!! ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1) ? "<a href='".$company->activeCompanyDoc('2')->attachment_url."' target='_blank'>Workers Compensation</a>" : 'Workers Compensation' !!}</li>
                     </ul>
-                    If any information within this contract is incorrect please update your above details / documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
+                    <b>Please ensure ALL of these items are uploaded and correct prior to generating this form.</b><br><br>
+                    If any information is incorrect please update your above details/documents or contact  <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
                 </div>
             </div>
         </div>
