@@ -118,6 +118,10 @@ class CompanyPeriodTradeController extends Controller {
 
         // Create approval ToDoo
         $ptc->createApprovalToDo($ptc->owned_by->notificationsUsersTypeArray('n.doc.acc.approval'));
+
+        // Delete any rejected docs
+        $deleted = CompanyDocPeriodTrade::where('for_company_id', $company->id)->where('status', 3)->delete();
+
         Toastr::success("Signed contract");
 
         return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");

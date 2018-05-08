@@ -172,6 +172,11 @@ class CompanySubcontractorStatementController extends Controller {
             'company_id'     => $ss->company_id,
         ]);
 
+        // Delete any rejected docs
+        $deleted1 = CompanyDocSubcontractorStatement::where('for_company_id', $company->id)->where('status', 2)->delete();
+        $deleted2 = CompanyDoc::where('category_id', 4)->where('for_company_id', $company->id)->where('status', 3)->delete();
+
+
 
         // Create approval ToDoo
         $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.acc.approval'));
