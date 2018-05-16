@@ -142,7 +142,7 @@ class CompanySubcontractorStatementController extends Controller {
         $ss_request['attachment'] = $filename;
         //dd($ss_request);
 
-        // Create PTC
+        // Create SS Doc
         $ss = CompanyDocSubcontractorStatement::create($ss_request);
 
         //
