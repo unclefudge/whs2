@@ -87,7 +87,7 @@
                     <li class="active">
                         <a href="#tab_attendance" data-toggle="tab"> Attendance </a>
                     </li>
-                    @if (Auth::user()->company_id == $site->owned_by->id && Auth::user()->allowed2('view.company.acc', $site->owned_by))
+                    @if (Auth::user()->company_id == $site->company_id && Auth::user()->allowed2('view.company.acc', $site->company))
                         <li>
                             <a href="#tab_admin" data-toggle="tab"> Admin </a>
                         </li>

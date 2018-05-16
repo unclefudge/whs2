@@ -128,7 +128,7 @@ class SiteHazard extends Model {
         $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
-            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.hazard');
+            $email_list = $this->site->company->notificationsUsersEmailType('n.site.hazard');
             $email_supers = $this->site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
         }
@@ -149,7 +149,7 @@ class SiteHazard extends Model {
         $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
         if (\App::environment('prod')) {
-            $email_list = $this->site->owned_by->notificationsUsersEmailType('n.site.hazard');
+            $email_list = $this->site->company->notificationsUsersEmailType('n.site.hazard');
             $email_supers = $this->site->supervisorsEmails();
             $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
         }
@@ -217,7 +217,7 @@ class SiteHazard extends Model {
      */
     public function getOwnedByAttribute()
     {
-        return $this->site->owned_by;
+        return $this->site->company;
     }
 
     /**

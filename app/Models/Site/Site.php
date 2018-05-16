@@ -564,15 +564,16 @@ class Site extends Model {
      *
      * @return string;
      */
+    /*
     public function getOwnedByAttribute()
     {
         return $this->client->owned_by;
-    }
-    /*
+    }*/
+
     public function owned_by()
     {
-        return $this->belongsTo('App\Models\Company\Company');
-    }*/
+        return $this->belongsTo('App\Models\Company\Company', 'company_id');
+    }
 
     /**
      * Return records last update_by + date

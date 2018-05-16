@@ -130,11 +130,13 @@ class CompanySubcontractorStatementController extends Controller {
         $ss_request['company_id'] = $company->reportsTo()->id;
         $ss_request['status'] = 2;
 
-        // Determine filename
+        // Set + create create directory if required
         $path = "filebank/company/$company->id/docs";
-        $filename = sanitizeFilename($company->name) . '-SS-' . Carbon::today()->format('d-m-Y') . '.pdf';
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
 
-        // Ensure filename is unique by adding counter to similiar filenames
+        // Determine filename + ensure filename is unique by adding counter to similiar filenames
+        $filename = sanitizeFilename($company->name) . '-SS-' . Carbon::today()->format('d-m-Y') . '.pdf';
         $count = 1;
         while (file_exists(public_path("$path/$filename")))
             $filename = sanitizeFilename($company->name) . '-SS-' . Carbon::today()->format('d-m-Y') . '-' . $count ++ . '.pdf';

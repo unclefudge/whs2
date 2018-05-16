@@ -254,7 +254,7 @@
                                 </div>
                             </div>
 
-                            @if (Auth::user()->isCompany($accident->site->owned_by->id))
+                            @if (Auth::user()->isCompany($accident->site->company_id))
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('notes', $errors) !!}">

@@ -57,7 +57,7 @@ class SiteAttendance extends Model {
      */
     public function getOwnedByAttribute()
     {
-        return $this->site->owned_by;
+        return $this->site->company;
     }
 
     /**

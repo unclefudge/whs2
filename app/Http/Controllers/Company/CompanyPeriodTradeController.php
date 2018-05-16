@@ -151,11 +151,13 @@ class CompanyPeriodTradeController extends Controller {
         $ptc_request['principle_signed_at'] = Carbon::now();
         $ptc_request['status'] = 1;
 
-        // Determine filename
+        // Set + create create directory if required
         $path = "filebank/company/$company->id/docs";
-        $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '.pdf';
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
 
         // Ensure filename is unique by adding counter to similiar filenames
+        $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '.pdf';
         $count = 1;
         while (file_exists(public_path("$path/$filename")))
             $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '-' . $count ++ . '.pdf';
