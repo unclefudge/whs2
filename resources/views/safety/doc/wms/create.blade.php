@@ -109,6 +109,7 @@
                                             {!! fieldErrorMessage('name', $errors) !!}
                                         </div>
                                     </div>
+                                    {{--}}
                                     @if(Auth::user()->company->subscription)
                                         <div class="col-md-6">
                                             <div class="form-group {!! fieldHasError('for_company_id', $errors) !!}">
@@ -123,31 +124,46 @@
                                             </div>
                                         </div>
                                     @else
-                                        <input type="hidden" name="for_company_id" value="{{ Auth::user()->company_id }}">
-                                    @endif
+                                    <input type="hidden" name="for_company_id" value="{{ Auth::user()->company_id }}">
+                                    @endif --}}
                                 </div>
                                 <!-- Principal Contractor -->
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <p class="myswitch-label">&nbsp; </p>
+                                @if(Auth::user()->company->subscription)
+                                    <?php
+                                    $principle_array = ['other' => 'Other'];
+                                    if (Auth::user()->permissionLevel('add.wms', Auth::user()->company->id))
+                                        $principle_array = [Auth::user()->company->id => Auth::user()->company->name]+$principle_array;
+                                    if (Auth::user()->permissionLevel('add.wms', Auth::user()->company->parent_company))
+                                        $principle_array = [Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name]+$principle_array;
+                                    ?>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! Form::label('principle_id', 'Principal Contractor', ['class' => 'control-label']) !!}
+                                            {!! Form::select('principle_id', $principle_array, null, ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('principle_id', $errors) !!}
+
+                                            {{--}}
+                                            <div class="form-group">
+                                                <p class="myswitch-label">&nbsp; </p>
                                          <span style="padding-right: 30px">Is {{ Auth::user()->company->reportsTo()->name }} the Principal
                                             Contractor?</span>
-                                            {!! Form::label('principle_switch', "&nbsp;", ['class' => 'control-label']) !!}
-                                            {!! Form::checkbox('principle_switch', '1', true, ['class' => 'make-switch',
-                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                                {!! Form::label('principle_switch', "&nbsp;", ['class' => 'control-label']) !!}
+                                                {!! Form::checkbox('principle_switch', '1', true, ['class' => 'make-switch',
+                                                 'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                                 'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                            </div>--}}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group {!! fieldHasError('principle', $errors) !!}" style="display: none" id="principle-div">
+                                                {!! Form::label('principle', 'Principal Contractor Name', ['class' => 'control-label']) !!}
+                                                {!! Form::text('principle', null, ['class' => 'form-control']) !!}
+                                                {!! fieldErrorMessage('principle', $errors) !!}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('principle', $errors) !!}" style="display: none" id="principle-div">
-                                            {!! Form::label('principle', 'Principal Contractor', ['class' => 'control-label']) !!}
-                                            {!! Form::text('principle', null, ['class' => 'form-control']) !!}
-                                            {!! fieldErrorMessage('principle', $errors) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Replacing Expired SWMS -->
+                                @endif
+
+                                {{-- Replacing Expired SWMS --}}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -254,17 +270,11 @@
         }
 
         /* Select2 */
-        $("#master_id").select2({
-            placeholder: "Select template",
-        });
+        $("#master_id").select2({placeholder: "Select template",});
 
-        $("#replace_id").select2({
-            placeholder: "Select previous SWMS",
-        });
+        $("#replace_id").select2({placeholder: "Select previous SWMS",});
 
-        $("#for_company_id").select2({
-            placeholder: "Select Company",
-        });
+        $("#for_company_id").select2({placeholder: "Select Company",});
 
         $('#master_id').change(function () {
             $('#name').val('');
@@ -273,6 +283,19 @@
             if ($(this).val())
                 $('#name').val(name);
         });
+
+        $('#principle_id').change(function () {
+            principle_name();
+        });
+
+        function principle_name() {
+            if ($('#principle_id').val() == 'other')
+                $('#principle-div').show();
+            else
+                $('#principle-div').hide();
+        }
+
+        principle_name();
 
         /* toggle Principle + set in on page load */
         if ($('#principle_switch').bootstrapSwitch('state') == false) {

@@ -45,7 +45,7 @@ $rec = $user;
 </div>
 
 {{-- Extra Permissions --}}
-@if (Auth::user()->isCompany($cid) && $user->extraUserPermissionsText($cid) && $user->company->subscription)
+@if (Auth::user()->isCompany($cid) && $user->extraUserPermissionsText($cid) && $user->company->subscription && $user->hasRoleCompany($cid))
     <div class="row">
         <div class="col-md-12">
             <div class="note note-warning">

@@ -338,7 +338,7 @@
                                         @if ($doc->master && Auth::user()->hasPermission2('edit.wms'))
                                             <button type="submit" class="btn green" v-on:click="saveActiveDB"> Make Active</button>
                                         @endif
-                                        @if (!$doc->master && Auth::user()->allowed2('del.wms', $doc))
+                                        @if (!$doc->master)
                                             <a v-on:click="showConfirmSignoff" type="button" class="btn green" data-dismiss="modal" id="continue"
                                                v-show="xx.company.id == xx.user.company_id && xx.doc.principle_id && xx.doc.principle == xx.company.parent_name">Request Sign Off</a>
                                             <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green"

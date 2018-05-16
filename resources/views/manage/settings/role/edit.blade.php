@@ -163,19 +163,28 @@ $cc = 1;*/
                                         @endif
                                         @if (!$role->external)
                                             <tr>
-                                                <td>Company Details<br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td>Company Details @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
                                                 <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="30%" colspan="2"></td>
-                                                <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
+                                                @if (Auth::user()->company->parent_company)
+                                                    <td width="45%" colspan="3"></td>
+                                                @else
+                                                    <td width="30%" colspan="2"></td>
+                                                    <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
+                                                @endif
+
 
                                             </tr>
                                             <tr>
-                                                <td>Business Details<br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td>Business Details @if ($sub2)<br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
                                                 <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="30%" colspan="2"></td>
-                                                <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
+                                                @if (Auth::user()->company->parent_company)
+                                                    <td width="45%" colspan="3"></td>
+                                                @else
+                                                    <td width="30%" colspan="2"></td>
+                                                    <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
+                                                @endif
                                             </tr>
                                         @endif
                                         @if($plan)

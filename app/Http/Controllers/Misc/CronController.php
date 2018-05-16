@@ -46,7 +46,7 @@ class CronController extends Controller {
         CronController::expiredSWMS();
         CronController::archiveToolbox();
         // Only run on week days otherwise get same email multiple times over weekend
-        if (Carbon::today()->isWeekday())
+        if (Carbon::today()->isMonday())
             CronController::overdueToDo();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
@@ -543,7 +543,7 @@ class CronController extends Controller {
             if ($todo->type == 'toolbox') {
                 echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "<br>";
                 $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "\n";
-                //$todo->emailToDo();
+                $todo->emailToDo();
                 if (!in_array($todo->type_id, $toolboxs_overdue))
                     $toolboxs_overdue[] = $todo->type_id;
             }

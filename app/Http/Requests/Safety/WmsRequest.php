@@ -24,13 +24,13 @@ class WmsRequest extends Request {
     public function rules()
     {
         return [
-            'swms_type'      => 'required',
-            'name'           => 'required',
-            'for_company_id' => 'required',
-            'principle'      => 'required_without:principle_switch',
-            'replace_id'     => 'required_with:replace_switch',
-            'master_id'      => 'required_if:swms_type,library',
-            'attachment'     => 'required_if:swms_type,upload',
+            'swms_type'  => 'required',
+            'name'       => 'required',
+            //'for_company_id' => 'required',
+            'principle'  => 'required_if:principle_id,other',
+            'replace_id' => 'required_with:replace_switch',
+            'master_id'  => 'required_if:swms_type,library',
+            'attachment' => 'required_if:swms_type,upload',
         ];
 
     }
@@ -38,12 +38,12 @@ class WmsRequest extends Request {
     public function messages()
     {
         return [
-            'swms_type.required'         => 'Select option to create SWMS is required.',
-            'for_company_id.required'    => 'The company field is required.',
-            'principle.required_without' => 'The principle contractor field is required.',
-            'replace_id.required_with'   => 'The SWMS to replace field is required.',
-            'master_id.required_if'      => 'The template field is required.',
-            'attachment.required_if'     => 'A file is required.',
+            'swms_type.required'       => 'Select option to create SWMS is required.',
+            'for_company_id.required'  => 'The company field is required.',
+            'principle.required_if'     => 'The principle contractor name field is required.',
+            'replace_id.required_with' => 'The SWMS to replace field is required.',
+            'master_id.required_if'    => 'The template field is required.',
+            'attachment.required_if'   => 'A file is required.',
         ];
     }
 

@@ -41,6 +41,17 @@ trait UserRolesPermissions {
     }
 
     /**
+     * Check if a user has a 'role' with a company
+     *
+     * @return boolean
+     */
+    public function hasRoleCompany($company_id)
+    {
+        $company_role_ids = Role2::where('company_id', $company_id)->pluck('id')->toArray();
+        return (DB::table('role_user')->where('user_id', $this->id)->whereIn('role_id', $company_role_ids)->first()) ? true : false;
+    }
+
+    /**
      * Attach role to a user for company 'company'
      *
      * @param  $permission

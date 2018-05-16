@@ -24,7 +24,7 @@
         @if(Auth::user()->isCompany($company->reportsTo()->id))
             <div class="row">
                 <div class="col-md-3">Category:</div>
-                <div class="col-xs-9">{{ ($company->category) ? $companyTypes::name($company->category) : '-' }}</div>
+                <div class="col-xs-9">{{ (is_int($company->category)) ? $companyTypes::name($company->category) : '-' }}</div>
             </div>
             <hr class="field-hr">
         @endif

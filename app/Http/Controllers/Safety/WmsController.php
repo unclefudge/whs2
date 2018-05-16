@@ -112,27 +112,43 @@ class WmsController extends Controller {
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
-        $wms_request = $request->all();
+        $wms_request = request()->all();
+        $wms_request['for_company_id'] = Auth::user()->company->id;
 
-        // If Principle checkbox Yes then assign principle fields + document owner
-        if ($request->get('principle_switch') && !$request->get('master')) {
-            $wms_request['company_id'] = Auth::user()->company->reportsTo()->id;
-            $wms_request['principle_id'] = Auth::user()->company->reportsTo()->id;
-            $wms_request['principle'] = Auth::user()->company->reportsTo()->name;
-        } else
-            $wms_request['company_id'] = $wms_request['for_company_id'];
+        // Defaults
+        $wms_request['company_id'] = Auth::user()->company->reportsTo()->id;
+        $wms_request['principle_id'] = Auth::user()->company->reportsTo()->id;
+        $wms_request['principle'] = Auth::user()->company->reportsTo()->name;
+
+        // Determine Principle contractor if subsciption otherwise assign parent company
+        if (Auth::user()->company->subscription) {
+            // If Principle checkbox Yes then assign principle fields + document owner
+            if (request('master')) {
+                $wms_request['company_id'] = 3;
+                $wms_request['principle'] = null;
+                $wms_request['principle'] = null;
+            } elseif (request('principle_id') != 'other' && !request('master')) {
+                $wms_request['company_id'] = request('principle_id');
+                $wms_request['principle_id'] = request('principle_id');
+                $wms_request['principle'] = Company::find(request('principle_id'))->name;
+            } else {
+                $wms_request['company_id'] = Auth::user()->company->id;
+                $wms_request['principle_id'] = null;
+                $wms_request['principle'] = request('principle');
+            }
+        }
 
         if ($request->get('swms_type') != 'upload') {
             $wms_request['builder'] = 1;
             $wms_request['project'] = 'All Jobs';
         }
 
-        if (!$request->get('master_id'))
+        if (!request('master_id'))
             $wms_request['master_id'] = null;
 
         // If Replace checkbox Yes then archive selected SWMS
-        if ($request->get('replace_switch') && $request->filled('replace_id')) {
-            $replace_wms = WmsDoc::findOrFail($request->get('replace_id'));
+        if (request('replace_switch') && $request->filled('replace_id')) {
+            $replace_wms = WmsDoc::findOrFail(request('replace_id'));
             $replace_wms->status = - 1;
             $replace_wms->save();
             $replace_wms->closeToDo();
@@ -140,19 +156,21 @@ class WmsController extends Controller {
                 $replace_wms->emailArchived();
         }
 
+        //dd($wms_request);
+
         // Create WMSdoc
         $newDoc = WmsDoc::create($wms_request);
 
         // Copy Steps / Hazards / Controls from Master Template
-        if ($request->get('master_id'))
-            $this->copyTemplate($request->get('master_id'), $newDoc->id);
+        if (request('master_id'))
+            $this->copyTemplate(request('master_id'), $newDoc->id);
 
 
         // Handle attached file
         if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
+            $file = request('attachment');
 
-            $path = "filebank/company/" . $request->get('for_company_id') . '/wms';
+            $path = "filebank/company/" . request('for_company_id') . '/wms';
             $name = sanitizeFilename($newDoc->name) . '-v1.0-' . $newDoc->id . '.' . strtolower($file->getClientOriginalExtension());
             $path_name = $path . '/' . $name;
             $file->move($path, $name);
@@ -187,7 +205,7 @@ class WmsController extends Controller {
             else
                 ($doc->principle_id) ? $doc->status = 2 : $doc->status = 1;
 
-            if ($doc->status == 2)
+            if ($doc->status == 2 && !($doc->principle_id && $doc->company_id == Auth::user()->company_id) && Auth::user()->allowed2('sig.wms', $doc))
                 $doc->emailSignOff();
         }
 
