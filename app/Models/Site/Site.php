@@ -21,8 +21,18 @@ class Site extends Model {
         'address', 'address2', 'suburb', 'state', 'postcode', 'country',
         'photo', 'notes', 'client_id', 'client_phone', 'client_phone2', 'client_phone_desc', 'client_phone2_desc',
         'contract_sent', 'contract_signed', 'deposit_paid', 'engineering', 'construction', 'hbcf', 'consultant_name',
-        'completion_signed', 'completed', 'status', 'created_by', 'updated_by'];
+        'completion_signed', 'completed', 'status', 'company_id', 'created_by', 'updated_by'];
     protected $dates = ['completed', 'contract_sent', 'contract_signed', 'deposit_paid', 'completion_signed'];
+
+    /**
+     * A Site belongs to a company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company\Company');
+    }
 
     /**
      * A Site belongs to a client
@@ -558,6 +568,11 @@ class Site extends Model {
     {
         return $this->client->owned_by;
     }
+    /*
+    public function owned_by()
+    {
+        return $this->belongsTo('App\Models\Company\Company');
+    }*/
 
     /**
      * Return records last update_by + date

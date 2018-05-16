@@ -36,13 +36,14 @@
                         {!! Form::model('settings_notification', ['method' => 'PATCH', 'action' => ['Misc\SettingsNotificationController@update', Auth::user()->company->id]]) !!}
 
                         {{-- Company --}}
-                        <h3 class="font-green form-section">Company Notifications</h3>
-                        {!! notificationSelect($notificationTypes::type('n.company.signup.sent'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Signup Completed / Archived', 'Company Signup/Archived', 'Company has completed the signup process or made inactive/active') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.updated.details'), 'Company Details updated', 'Company updated', 'Company details have been updated') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.updated.business'), 'Business Details updated', 'Company updated', 'Business details have been updated') !!}
-                        {!! notificationSelect($notificationTypes::type('n.company.updated.trades'), 'Company Trades updated (WHS)', 'Company updated', 'Company trades have been updated but also licence required was previously overridden') !!}
-
+                        @if (Auth::user()->company->subscription > 1)
+                            <h3 class="font-green form-section">Company Notifications</h3>
+                            {!! notificationSelect($notificationTypes::type('n.company.signup.sent'), 'Signup Sent', 'Company Signup', 'Company signup request sent') !!}
+                            {!! notificationSelect($notificationTypes::type('n.company.signup.completed'), 'Signup Completed / Archived', 'Company Signup/Archived', 'Company has completed the signup process or made inactive/active') !!}
+                            {!! notificationSelect($notificationTypes::type('n.company.updated.details'), 'Company Details updated', 'Company updated', 'Company details have been updated') !!}
+                            {!! notificationSelect($notificationTypes::type('n.company.updated.business'), 'Business Details updated', 'Company updated', 'Business details have been updated') !!}
+                            {!! notificationSelect($notificationTypes::type('n.company.updated.trades'), 'Company Trades updated (WHS)', 'Company updated', 'Company trades have been updated but also licence required was previously overridden') !!}
+                        @endif
                         {{-- Site --}}
                         <h3 class="font-green form-section">Site Notifications</h3>
                         {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}

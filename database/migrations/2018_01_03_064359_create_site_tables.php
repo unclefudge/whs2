@@ -53,7 +53,9 @@ class CreateSiteTables extends Migration
             $table->timestamp('completed')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->text('notes')->nullable();
+            //$table->integer('company_id')->unsigned()->index()->default(0);
 
+            //$table->foreign('company_id')->references('id')->on('companys')->onDelete('cascade');
 
             // Modify info
             $table->integer('created_by')->unsigned();

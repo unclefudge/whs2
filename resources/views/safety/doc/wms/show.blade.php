@@ -272,21 +272,18 @@
                                 <div class="col-xs-6">{{ $doc->res_review }}</div>
                             </div>
                             <hr>
-                            @if ($doc->status == 2 && (Auth::user()->allowed2('del.wms', $doc) || Auth::user()->allowed2('sig.wms', $doc)))
+                            @if ($doc->status == 2)
                                 <div class="row">
-                                    <div class="pull-right" style="min-height: 50px">
-                                        <br><br>
-                                        @if($doc->company_id == Auth::user()->company_id && Auth::user()->allowed2('sig.wms', $doc))
-                                            <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green"> Sign Off</a>
-                                            <a href="/safety/doc/wms/{{ $doc->id }}/reject" class="btn red"> Reject</a>
-                                        @endif
-                                        @if($doc->for_company_id == Auth::user()->company_id)
-                                            @if($doc->attachment && !$doc->user_signed_id)
+                                    <div class="col-md-12">
+                                        <div class="pull-right" style="min-height: 50px">
+                                            <br>
+                                            @if(Auth::user()->allowed2('sig.wms', $doc))
+                                                <a href="/safety/doc/wms/{{ $doc->id }}/reject" class="btn red"> Reject</a>
                                                 <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green"> Sign Off</a>
-                                            @else
+                                            @elseif ($doc->for_company_id == Auth::user()->company_id && Auth::user()->allowed2('edit.wms', $doc))
                                                 <a href="/safety/doc/wms/{{ $doc->id }}/reject" class="btn red"> Cancel Sign Off Request</a>
                                             @endif
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
                             @endif

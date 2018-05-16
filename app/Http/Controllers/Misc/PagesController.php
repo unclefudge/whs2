@@ -91,6 +91,12 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
+        echo "Assign all site to CC<br><br>";
+        $docs = \App\Models\Site\Site::all();
+        foreach ($docs as $doc) {
+            $doc->company_id = 3;
+            $doc->save();
+        }
         /*
         echo "Todo assigned to inactive user<br><br>";
         $docs = \App\Models\Comms\Todo::all();

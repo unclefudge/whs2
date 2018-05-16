@@ -43,9 +43,11 @@
                             <tr>
                                 <td><a href="/company/{{ Auth::user()->company_id }}/doc"> Company Documents (Policies & Procedures, Standards)</a></td>
                             </tr>
-                            <tr>
-                                <td><a href="/safety/doc/sds">Safety Data Sheets</a></td>
-                            </tr>
+                            @if (in_array(Auth::user()->id, [3, 109, 351])) {{-- Fudge, Jo, Tara --}}
+                                <tr>
+                                    <td><a href="/safety/doc/sds">Safety Data Sheets</a></td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>

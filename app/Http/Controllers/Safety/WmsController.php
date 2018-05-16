@@ -191,7 +191,7 @@ class WmsController extends Controller {
         $doc = WmsDoc::findOrFail($id);
 
         // Signed off by Company doc is For
-        if ($doc->for_company_id == Auth::user()->company_id) {
+        if (!$doc->user_signed_id && $doc->for_company_id == Auth::user()->company_id) {
             // Check authorisation and throw 404 if not
             if (!Auth::user()->allowed2('edit.wms', $doc))
                 return view('errors/404');
@@ -210,11 +210,7 @@ class WmsController extends Controller {
         }
 
         // Signed off by Principle doc
-        if ($doc->principle_id && $doc->company_id == Auth::user()->company_id) {
-            // Check authorisation and throw 404 if not
-            if (!Auth::user()->allowed2('sig.wms', $doc))
-                return view('errors/404');
-
+        if (!$doc->principle_signed_id && $doc->principle_id && $doc->company_id == Auth::user()->company_id && Auth::user()->allowed2('sig.wms', $doc)) {
             $doc->principle_signed_id = Auth::user()->id;
             $doc->principle_signed_at = Carbon::now();
             // Move doc to active if user signed else make pending
@@ -244,9 +240,9 @@ class WmsController extends Controller {
             return view('errors/404');
 
         $doc->principle_signed_id = null;
-        $doc->principle_signed_at = '0000-00-00 00:00:00';
+        $doc->principle_signed_at = null;
         $doc->user_signed_id = null;
-        $doc->user_signed_at = '0000-00-00 00:00:00';
+        $doc->user_signed_at = null;
         $doc->status = 0;
         $doc->save();
 

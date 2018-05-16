@@ -112,7 +112,7 @@ var xx = {
     docModified: false, showConfirmPrinciple: false, showConfirmSignoff: false, showIncomplete: false,
     //edit_action: '', edit_item: '', edit_name: '', edit_prin: '',
     edit: {item: '', name: '', prin: '', comp: '', work: ''},
-    user: {id: '', 'name': '', company_id: ''},
+    user: {id: '', 'name': '', company_id: '', signoff: ''},
     company: {id: '', 'name': '', parent_id: '', parent_name: ''},
     doc: {id: '', name: '', comp_name: '', prin_name: ''},
     steps: [], hazards: [], controls: [],

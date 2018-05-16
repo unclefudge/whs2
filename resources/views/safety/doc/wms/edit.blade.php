@@ -25,9 +25,9 @@
         <input v-model="xx.doc.master" type="hidden" id="doc_master" value="{{ $doc->master }}">
         <input v-model="xx.company.id" type="hidden" id="company_id" value="{{ $doc->for_company_id }}">
         @if ($doc->master)
-        <input v-model="xx.company.name" type="hidden" value="Company">
-        <input v-model="xx.company.parent_id" type="hidden" value="0">
-        <input v-model="xx.company.parent_name" type="hidden" value="Parent Company">
+            <input v-model="xx.company.name" type="hidden" value="Company">
+            <input v-model="xx.company.parent_id" type="hidden" value="0">
+            <input v-model="xx.company.parent_name" type="hidden" value="Parent Company">
         @else
             <input v-model="xx.company.name" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->name }}">
             <input v-model="xx.company.parent_id" type="hidden" value="{{ App\Models\Company\Company::find($doc->for_company_id)->reportsTo()->id }}">
@@ -35,6 +35,11 @@
         @endif
         <input v-model="xx.user.name" type="hidden" value="{{ Auth::user()->fullname }}">
         <input v-model="xx.user.company_id" type="hidden" value="{{ Auth::user()->company_id }}">
+        @if (! $doc->principle_id)
+            <input v-model="xx.user.signoff" type="hidden" value="manual">
+        @else
+            <input v-model="xx.user.signoff" type="hidden" value="{{ Auth::user()->allowed2('sig.wms', $doc) }}">
+        @endif
         <div class="page-content-inner">
             {{-- Progress Steps --}}
             <div class="mt-element-step">
@@ -339,17 +344,22 @@
                                             <button type="submit" class="btn green" v-on:click="saveActiveDB"> Make Active</button>
                                         @endif
                                         @if (!$doc->master)
+                                            {{--}}
                                             <a v-on:click="showConfirmSignoff" type="button" class="btn green" data-dismiss="modal" id="continue"
                                                v-show="xx.company.id == xx.user.company_id && xx.doc.principle_id && xx.doc.principle == xx.company.parent_name">Request Sign Off</a>
                                             <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green"
                                                v-show="! xx.docModified && xx.company.id == xx.user.company_id && (!xx.doc.principle_id || xx.doc.principle_id && xx.doc.principle != xx.company.parent_name)">
                                                 Manual Sign Off</a>
+                                                --}}
+                                            <a v-on:click="showConfirmSignoff" type="button" class="btn green" data-dismiss="modal" id="continue" v-show="!xx.user.signoff && xx.doc.res_compliance && xx.doc.res_review">Request Sign Off</a>
+                                            <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green" v-show="xx.user.signoff == 'manual' && xx.doc.res_compliance && xx.doc.res_review && !xx.docModified">Manual Sign Off</a>
+                                            <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green" v-show="xx.user.signoff == 1 && xx.doc.res_compliance && xx.doc.res_review && !xx.docModified">Sign Off</a>
                                         @endif
                                     </div>
                                     <br><br>
                                 </div>
 
-                                <!--<pre>@{{ $data | json }}</pre>
+                                <pre>@{{ $data | json }}</pre>
                                 -->
                             </div>
                         </div>
@@ -370,7 +380,7 @@
                     <h4 class="modal-title text-center"><b>Confirm Sign Off Request</b></h4>
                 </div>
                 <div slot="modal-body" class="modal-body">
-                    <p class="text-center">You are about leave DRAFT mode and request <b>@{{ xx.company.parent_name }}</b> to sign off.</p>
+                    <p class="text-center">You are about leave DRAFT mode and request<br><b>@{{ xx.doc.principle }}</b><br>to sign off.</p>
                     <p class="font-red text-center"><i class="fa fa-exclamation-triangle"></i> You will no longer be able to modify this SWMS anymore.</p>
                 </div>
                 <div class="modal-body">
