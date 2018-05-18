@@ -91,12 +91,6 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
-
-        $ss = \App\Models\Company\CompanyDocSubcontractorStatement::find(6);
-        $company = \App\Models\Company\Company::find(207);
-        $pdf = PDF::loadView('pdf/company-subcontractorstatement', compact('ss', 'company'));
-        $pdf->setPaper('a4');
-        return $pdf->stream();
         /*
         echo "Todo assigned to inactive user<br><br>";
         $docs = \App\Models\Comms\Todo::all();
