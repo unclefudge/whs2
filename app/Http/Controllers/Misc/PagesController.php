@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Misc;
 
 use DB;
+use PDF;
 use Session;
 use App\User;
 use App\Models\Site\Site;
@@ -91,12 +92,11 @@ class PagesController extends Controller {
     public function quick(Request $request)
     {
 
-        echo "Assign all site to CC<br><br>";
-        $docs = \App\Models\Site\Site::all();
-        foreach ($docs as $doc) {
-            $doc->company_id = 3;
-            $doc->save();
-        }
+        $ss = \App\Models\Company\CompanyDocSubcontractorStatement::find(6);
+        $company = \App\Models\Company\Company::find(207);
+        $pdf = PDF::loadView('pdf/company-subcontractorstatement', compact('ss', 'company'));
+        $pdf->setPaper('a4');
+        return $pdf->stream();
         /*
         echo "Todo assigned to inactive user<br><br>";
         $docs = \App\Models\Comms\Todo::all();

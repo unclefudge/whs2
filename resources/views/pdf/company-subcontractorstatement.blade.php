@@ -182,7 +182,7 @@
                 </li>
                 {{-- Note 7 --}}
                 <li class="text-justify">All workers compensation insurance premiums payable by the Subcontractor in respect of the work done under the contract have been paid. The Certificate of
-                    Currency for that insurance is attached and is dated {!! ($ss->wc_date ) ? '<b>'.$ss->wc_date->format('d / m / Y').'</b>' :  '......../......../........' !!}
+                    Currency for that insurance is attached and is dated {!! ($ss->wc_date ) ? '<b>'.$ss->wc_date->format('d/m/Y').'</b>' :  '......../......../........' !!}
                     <span class="pull-right"><b>(Note 7)</b></span>
                 </li>
                 {{-- Note 8 --}}

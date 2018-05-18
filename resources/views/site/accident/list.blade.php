@@ -36,6 +36,17 @@
                         </div>
                     </div>
                     <div class="row">
+                        @if (Auth::user()->company->subscription && Auth::user()->company->parent_company)
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    {!! Form::select('site_group', ['0' => 'All Sites', Auth::user()->company_id => Auth::user()->company->name.' sites',
+                                    Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name.' sites'], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
+                                </div>
+                            </div>
+                        @else
+                            {!! Form::hidden('site_group', '') !!}
+                        @endif
+
                         <div class="col-md-2 pull-right">
                             <div class="form-group">
                                 <select name="status" id="status" class="form-control bs-select">
@@ -94,6 +105,7 @@
             'url': '{!! url('site/accident/dt/accidents') !!}',
             'type': 'GET',
             'data': function (d) {
+                d.site_group = $('#site_group').val();
                 d.status = $('#status').val();
             }
         },
@@ -112,6 +124,8 @@
             [2, "desc"]
         ]
     });
+
+    $('select#site_group').change(function () {table_list.ajax.reload();});
 
     $('select#status').change(function () {
         if ($('#status').val() == 0)

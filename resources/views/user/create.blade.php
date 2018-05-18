@@ -124,8 +124,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                                             {!! Form::label('roles', 'Role(s)', ['class' => 'control-label']) !!}
-                                            {!! Form::select('roles', Auth::user()->company->rolesSelect('int'), null,
-                                            ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
+                                            {!! Form::select('roles', Auth::user()->company->rolesSelect('int'), null, ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
                                             {!! fieldErrorMessage('roles', $errors) !!}
                                         </div>
                                     </div>

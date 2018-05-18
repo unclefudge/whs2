@@ -156,6 +156,7 @@ class SiteHazardController extends Controller {
      */
     public function getHazards(Request $request)
     {
+        $company_ids = (request('site_group')) ? [request('site_group')] : [Auth::user()->company_id, Auth::user()->company->reportsTo()->id];
         $hazard_ids = Auth::user()->siteHazards($request->get('status'))->pluck('id')->toArray();
         $hazard_records = SiteHazard::select([
             'site_hazards.id', 'site_hazards.site_id', 'site_hazards.created_by',
@@ -164,12 +165,13 @@ class SiteHazardController extends Controller {
             DB::raw('CONCAT(users.firstname, " ", users.lastname) AS fullname'),
             'site_hazards.reason', 'site_hazards.action_required', 'site_hazards.attachment',
             'site_hazards.status',
-            'sites.name', 'sites.code',
+            'sites.name', 'sites.code', 'sites.company_id',
         ])
             ->join('sites', 'site_hazards.site_id', '=', 'sites.id')
             ->join('users', 'site_hazards.created_by', '=', 'users.id')
             ->where('site_hazards.status', '=', $request->get('status'))
-            ->whereIn('site_hazards.id', $hazard_ids);
+            ->whereIn('site_hazards.id', $hazard_ids)
+            ->whereIn('sites.company_id', $company_ids);
 
 
         //->orderBy('site_hazards.created_at', 'DESC');

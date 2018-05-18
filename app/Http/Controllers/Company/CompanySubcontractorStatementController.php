@@ -126,10 +126,12 @@ class CompanySubcontractorStatementController extends Controller {
         $ss_request['contractor_abn'] = $company->abn;
         $ss_request['contractor_signed_id'] = Auth::user()->id;
         $ss_request['contractor_signed_at'] = Carbon::now();
+        $ss_request['wc_date'] = ($company->activeCompanyDoc('2') && $company->activeCompanyDoc('2')->status == 1 ) ? $company->activeCompanyDoc('2')->expiry : null;
         $ss_request['for_company_id'] = $company->id;
         $ss_request['company_id'] = $company->reportsTo()->id;
         $ss_request['status'] = 2;
 
+        //dd($ss_request);
         // Set + create create directory if required
         $path = "filebank/company/$company->id/docs";
         if (!file_exists($path))
@@ -175,7 +177,7 @@ class CompanySubcontractorStatementController extends Controller {
         ]);
 
         // Delete any rejected docs
-        $deleted1 = CompanyDocSubcontractorStatement::where('for_company_id', $company->id)->where('status', 2)->delete();
+        $deleted1 = CompanyDocSubcontractorStatement::where('for_company_id', $company->id)->where('status', 3)->delete();
         $deleted2 = CompanyDoc::where('category_id', 4)->where('for_company_id', $company->id)->where('status', 3)->delete();
 
 

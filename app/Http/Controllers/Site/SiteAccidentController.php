@@ -134,18 +134,20 @@ class SiteAccidentController extends Controller {
      */
     public function getAccidents(Request $request)
     {
-        $accident_ids = Auth::user()->siteAccidents($request->get('status'))->pluck('id')->toArray();
+            $company_ids = (request('site_group')) ? [request('site_group')] : [Auth::user()->company_id, Auth::user()->company->reportsTo()->id];
+            $accident_ids = Auth::user()->siteAccidents($request->get('status'))->pluck('id')->toArray();
         $accident_records = SiteAccident::select([
             'site_accidents.id', 'site_accidents.site_id', 'site_accidents.name',
             'site_accidents.location', 'site_accidents.nature',
-            'site_accidents.status',
+            'site_accidents.status', 'sites.company_id',
             DB::raw('DATE_FORMAT(site_accidents.date, "%d/%m/%y") AS nicedate'),
             DB::raw('DATE_FORMAT(site_accidents.resolved_at, "%d/%m/%y") AS nicedate2'),
             DB::raw('sites.name AS sitename'), 'sites.code',
         ])
             ->join('sites', 'site_accidents.site_id', '=', 'sites.id')
             ->where('site_accidents.status', '=', $request->get('status'))
-            ->whereIn('site_accidents.id', $accident_ids);
+            ->whereIn('site_accidents.id', $accident_ids)
+            ->whereIn('sites.company_id', $company_ids);
 
         $dt = Datatables::of($accident_records)
             ->addColumn('view', function ($accident) {

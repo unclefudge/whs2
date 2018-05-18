@@ -210,9 +210,13 @@ class SiteController extends Controller {
     /**
      * Get Sites current user is authorised to manage + Process datatables ajax request.
      */
-    public function getSites(Request $request)
+    public function getSites()
     {
-        $site_records = Auth::user()->authSites('view.site', $request->get('status'));
+        if (request('site_group'))
+            $site_records = Auth::user()->authSites('view.site', request('status'))->where('company_id', request('site_group'));
+        else
+            $site_records = Auth::user()->authSites('view.site', request('status'));
+
         $dt = Datatables::of($site_records)
             ->editColumn('id', function ($site) {
                 return '<div class="text-center"><a href="/site/' . $site->slug . '"><i class="fa fa-search"></i></a></div>';
