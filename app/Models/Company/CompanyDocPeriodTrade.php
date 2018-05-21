@@ -22,7 +22,7 @@ class CompanyDocPeriodTrade extends Model {
         'contractor_pl_name', 'contractor_pl_ref', 'contractor_pl_expiry', 'contractor_wc_name', 'contractor_wc_ref', 'contractor_wc_expiry',
         'contractor_sa_name', 'contractor_sa_ref', 'contractor_sa_expiry', 'contractor_signed_id', 'contractor_signed_at', 'contractor_signed_name',
         'share', 'notes', 'for_company_id', 'company_id', 'status', 'created_by', 'updated_by'];
-    protected $dates = ['date', 'contractor_pl_expiry', 'contractor_sa_expiry', 'contractor_wc_name', 'principle_signed_at', 'contractor_signed_at'];
+    protected $dates = ['date', 'expiry', 'contractor_pl_expiry', 'contractor_sa_expiry', 'contractor_wc_expiry', 'principle_signed_at', 'contractor_signed_at'];
 
 
     /**

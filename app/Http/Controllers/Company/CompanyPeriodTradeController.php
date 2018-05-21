@@ -78,6 +78,7 @@ class CompanyPeriodTradeController extends Controller {
         if (!Auth::user()->allowed2('add.company.doc'))
             return view('errors/404');
 
+        $ptc_request = removeNullValues(request()->all());
         $ptc_request = request()->all();
 
         $ptc_request['date'] = Carbon::now();
