@@ -39,7 +39,6 @@ class SiteRequest extends Request {
                     'suburb'    => 'required',
                     'state'     => 'required',
                     'postcode'  => 'required',
-                    'client_id' => 'required',
                 ];
             }
         }

@@ -581,9 +581,10 @@ trait UserRolesPermissions {
             }
 
             // Area Super - Needs to be fixed for Multiple level 2 companies
-            if ($permission == 'area.super') {
-                if ($this->hasAnyPermission2($permission) && ($record->company_id == $this->company_id)) // User belong to same company record
+            if ($permissiontype == 'area.super') {
+                if ($this->permissionLevel($permission, $record->company_id) && $record->company_id == $this->company_id) // User belong to same company record
                     return true;
+                return false;
             }
         }
     }

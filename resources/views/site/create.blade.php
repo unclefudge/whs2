@@ -35,11 +35,24 @@
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
                         {!! Form::model('site', ['action' => 'Site\SiteController@store', 'class' => 'horizontal-form']) !!}
-                        {!! Form::hidden('client_id', '1' ) !!}
 
                         @include('form-error')
 
                         <div class="form-body">
+                            @if (Auth::user()->permissionLevel('add.site', Auth::user()->company_id) && (Auth::user()->company->parent_company && Auth::user()->permissionLevel('add.site', Auth::user()->company->reportsTo()->id)))
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            {!! Form::label('company_id', 'Site Owner', ['class' => 'control-label']) !!}
+                                            {!! Form::select('company_id', [Auth::user()->company_id => Auth::user()->company->name, Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif (Auth::user()->permissionLevel('add.site', Auth::user()->company_id))
+                                {!! Form::hidden('company_id', Auth::user()->company_id) !!}
+                            @elseif (Auth::user()->permissionLevel('add.site', Auth::user()->company->reportsTo()->id))
+                                {!! Form::hidden('company_id', Auth::user()->company->parent_company) !!}
+                            @endif
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">

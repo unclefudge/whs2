@@ -55,11 +55,13 @@
                         <div class="portlet-body">
                             <div class="note note-warning">
                                 <p>An Area Supervisor (ie. senior supervisor of another) is granted access to the sites of all the supervisors under them.</p>
-                                <p><br>In regards to Quality Assurance Reports they will be:</p>
-                                <ul>
-                                    <li>granted ability to Sign Off as Site Manager</li>
-                                    <li>notified of overdue QA tasks associated with their sites</li>
-                                </ul>
+                                @if (Auth::user()->isCC())
+                                    <p><br>In regards to Quality Assurance Reports they will be:</p>
+                                    <ul>
+                                        <li>granted ability to Sign Off as Site Manager</li>
+                                        <li>notified of overdue QA tasks associated with their sites</li>
+                                    </ul>
+                                @endif
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -77,8 +79,10 @@
                                             <tr v-if="!sup.parent_id">
                                                 <!-- Open / close Icon -->
                                                 <td class="text-center">
-                                                    <span v-if="sup.open" v-on:click="sup.open = ! sup.open" class="finger"><i class="fa fa-minus-circle" style="color: #e7505a;"></i></span>
-                                                    <span v-if="!sup.open" v-on:click="sup.open = ! sup.open" class="finger"><i class="fa fa-plus-circle" style="color: #32c5d2;"></i></span>
+                                                    <div v-if="hasSubSuper(sup.id)">
+                                                        <span v-if="sup.open" v-on:click="sup.open = ! sup.open" class="finger"><i class="fa fa-minus-circle" style="color: #e7505a;"></i></span>
+                                                        <span v-if="!sup.open" v-on:click="sup.open = ! sup.open" class="finger"><i class="fa fa-plus-circle" style="color: #32c5d2;"></i></span>
+                                                    </div>
                                                 </td>
                                                 <!-- Super Name -->
                                                 <td>@{{ sup.name }}</td>
@@ -89,7 +93,7 @@
                                                 </td>
                                             </tr>
                                             <!-- Hideable dropdown of Child Supers -->
-                                            <tr v-if="sup.open" style="background-color: #444D58" class="nohover">
+                                            <tr v-if="sup.open && hasSubSuper(sup.id)" style="background-color: #444D58" class="nohover">
                                                 <td colspan="3">
                                                     <table class="table table-striped table-hover order-column" style="margin-bottom: 10px; margin-top: 5px; width: 300px">
                                                         <tbody>
@@ -311,6 +315,13 @@
                         this.xx.sel_area_supers.push({value: this.xx.supers[i].id, text: this.xx.supers[i].name});
                     }
                 }
+            },
+            hasSubSuper: function (super_id) {
+                for (var i = 0; i < this.xx.supers.length; i++) {
+                    if (this.xx.supers[i].parent_id == super_id)
+                        return true;
+                }
+                return false;
             },
             doNothing: function () {
             },

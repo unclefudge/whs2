@@ -208,8 +208,7 @@ class UserController extends Controller {
         if (!Auth::user()->allowed2('edit.user', $user))
             return view('errors/404');
 
-        //$user_request = removeNullValues($request->all());
-        $user_request = request()->all();
+        $user_request = removeNullValues($request->all());
         $password_reset = false;
 
         // Empty State field if rest of address fields are empty
@@ -257,7 +256,7 @@ class UserController extends Controller {
             }
         }
 
-        //dd($user_request);
+        dd($user_request);
 
         // Update User
         $user->update($user_request);

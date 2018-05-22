@@ -64,7 +64,7 @@ class CompanySupervisorController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $super = CompanySupervisor::find($id);
 
