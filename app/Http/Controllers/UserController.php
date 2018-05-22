@@ -255,8 +255,7 @@ class UserController extends Controller {
                 $password_reset = true;
             }
         }
-
-        dd($user_request);
+        //dd($user_request);
 
         // Update User
         $user->update($user_request);
