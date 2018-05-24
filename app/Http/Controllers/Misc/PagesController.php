@@ -97,8 +97,14 @@ class PagesController extends Controller {
             if ($todo->status && $todo->type == 'company doc') {
                 $doc = \App\Models\Company\CompanyDoc::find($todo->type_id);
                 if ($doc) {
-                    if ($doc->status == 1)
+                    if ($doc->status == 1) {
                         echo "ToDo [$todo->id] - $todo->name (".$doc->company->name.")<br>";
+                        $todo->status = 0;
+                        $todo->done_at = Carbon::now();
+                        $todo->done_by = 1;
+                        $todo->save();
+                    }
+
                 } else {
                     echo "ToDo [$todo->id] - ".$todo->company->name." (DELETED)<br>";
                 }
