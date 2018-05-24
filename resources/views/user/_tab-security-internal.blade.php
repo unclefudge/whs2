@@ -259,7 +259,7 @@ $rec = $user;
             </tr>
         @endif
         <tr>
-            <td>Area Supervisors</td>
+            <td>Site Supervisors</td>
             <td width="15%">{!! permSelect('view.area.super', 'all', $rec, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.area.super', 'all', $rec, $cid, $dis) !!}</td>
             <td width="45%" colspan="3"></td>

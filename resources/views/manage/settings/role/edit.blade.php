@@ -371,30 +371,36 @@ $cc = 1;*/
                                                data-original-title="Work Sites"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
                                         <table class="table table-bordered table-striped">
                                             <tr>
-                                                <td>Site</td>
+                                                <td>Site @if ($sub2 && !$role->external) <br><span class="font-red">Edit/Create/Delete functions<br>Disabled for 'child' company roles</span>@endif</td>
                                                 <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $rec, $cid, $dis) !!}</td>
+                                                @if (!$role->external)
                                                 <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('add.site', 'add', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('del.site', 'arc', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
+                                                    @else
+                                                    <td width="60%" colspan="4"></td>
+                                                @endif
                                             </tr>
-                                            @if ($plan)
+                                            @if (!$role->external)
+                                                @if ($plan)
+                                                    <tr>
+                                                        <td>Trades / Tasks @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
+                                                        <td width="15%">{!! permSelect('view.trade', 'all', $rec, $cid, $dis) !!}</td>
+                                                        <td width="15%">{!! permSelect('edit.trade', 'all', $rec, $cid, $dis) !!}</td>
+                                                        <td width="15%">{!! permSelect('add.trade', 'add', $rec, $cid, $dis) !!}</td>
+                                                        <td width="15%">{!! permSelect('del.trade', 'arc', $rec, $cid, $dis) !!}</td>
+                                                        <td width="15%"></td>
+                                                    </tr>
+                                                @endif
                                                 <tr>
-                                                    <td>Trades / Tasks</td>
-                                                    <td width="15%">{!! permSelect('view.trade', 'all', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.trade', 'all', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.trade', 'add', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.trade', 'arc', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%"></td>
+                                                    <td>Site Supervisors @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
+                                                    <td width="15%">{!! permSelect('view.area.super', 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.area.super', 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="45%" colspan="3"></td>
                                                 </tr>
                                             @endif
-                                            <tr>
-                                                <td>Area Supervisors</td>
-                                                <td width="15%">{!! permSelect('view.area.super', 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.area.super', 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="45%" colspan="3"></td>
-                                            </tr>
-                                            @if ($cc)
+                                            @if ($cc && !$role->external)
                                                 <tr>
                                                     <td>Admin Info<br><span class="font-grey-silver">Cape Cod Only</span></td>
                                                     <td width="15%">{!! permSelect('view.site.admin', 'all', $rec, $cid, $dis) !!}</td>

@@ -37,8 +37,8 @@
                     </div>
 
                     <div class="row">
-                        @if (Auth::user()->company->subscription && Auth::user()->company->parent_company)
-                            <div class="col-md-5">
+                        @if (Auth::user()->permissionLevel('view.site.hazard', Auth::user()->company_id) && (Auth::user()->company->parent_company && Auth::user()->permissionLevel('view.site.hazard', Auth::user()->company->reportsTo()->id)))
+                        <div class="col-md-5">
                                 <div class="form-group">
                                     {!! Form::select('site_group', ['0' => 'All Sites', Auth::user()->company_id => Auth::user()->company->name.' sites',
                                     Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name.' sites'], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}

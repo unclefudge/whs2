@@ -65,6 +65,8 @@ class SiteController extends Controller {
             return view('errors/404');
 
         $site_request = $request->except('tabs', 'supervisors');
+        //$site_request['client_id'];
+        //dd($site_request);
 
         // Create Site
         $newSite = Site::create($site_request);

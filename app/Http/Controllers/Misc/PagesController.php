@@ -91,6 +91,36 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
+        echo "<br><br>Todo company doc completed but still active<br><br>";
+        $todos = \App\Models\Comms\Todo::all();
+        foreach ($todos as $todo) {
+            if ($todo->status && $todo->type == 'company doc') {
+                $doc = \App\Models\Company\CompanyDoc::find($todo->type_id);
+                if ($doc) {
+                    if ($doc->status == 1)
+                        echo "ToDo [$todo->id] - $todo->name ($doc->name)<br>";
+                } else {
+                    echo "ToDo [$todo->id] - $todo->name (DELETED)<br>";
+                }
+            }
+        }
+
+        /*
+        $company = \App\Models\Company\Company::find(125);
+        echo "Site attendance - $company->name<br><br>";
+        //print_r($company->staff->pluck('id')->toArray());
+        $attendance = \App\Models\Site\Planner\SiteAttendance::whereIn('user_id', $company->staff->pluck('id')->toArray())->orderBy('date')->get();
+        echo "<table>";
+        foreach ($attendance as $attend) {
+            echo "<tr>";
+            echo "<td>".$attend->date->format('d/m/Y g:i a')."</td>";
+            echo "<td>".$attend->user->fullname."</td>";
+            echo "<td>".$attend->user->username."</td>";
+            echo "<td>".$attend->site->name."</td>";
+            echo "</tr>";
+        }
+        echo "</table>";*/
+
         /*
         echo "Todo assigned to inactive user<br><br>";
         $docs = \App\Models\Comms\Todo::all();
@@ -219,31 +249,6 @@ class PagesController extends Controller {
         }
         echo "<br><br>Completed<br>-------------<br>";
         */
-
-
-        echo "Company Primary Users<br><br>";
-        $companies = \App\Models\Company\Company::all();
-        foreach ($companies as $company) {
-            if ($company->status == 1) {
-                if ($company->staffStatus(1)->count() > 0) {
-                    echo "<br>$company->name " . count($company->staffStatus(1)) . "/" . count($company->staff) . "<br>---------------------------<br>";
-                    if ($company->primary_user) {
-                        $is_lh = ' ** NOT LH **';
-                        $no_perm = ' ** NO ADD USER PERMISSION **';
-                        if ($company->primary_contact()->hasRole2('ext-leading-hand'))
-                            $is_lh = '';
-                        if ($company->primary_contact()->hasPermission2('add.user'))
-                            $no_perm = '';
-                        echo "Primary: " . $company->primary_contact()->fullname . " (" . $company->primary_contact()->username . ")" . $is_lh . $no_perm . "<br>";
-                    }
-                } else {
-                    echo "<br>$company->name " . count($company->staffStatus(1)) . "/" . count($company->staff) . "<br>---------------------------<br>";
-                    echo "** No active users **<br>";
-                }
-            }
-
-        }
-        echo "<br><br>Completed<br>-------------<br>";
 
     }
 

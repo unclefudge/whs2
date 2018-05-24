@@ -229,26 +229,7 @@ $rec = $user;
         <tr>
             <td>Site</td>
             <td width="15%">{!! permSelect('view.site', ($plan) ? 'super.plan' : 'super', $rec, $cid) !!}</td>
-            <td width="15%">{!! permSelect('edit.site', ($plan) ? 'super.plan' : 'super', $rec, $cid) !!}</td>
-            <td width="15%">{!! permSelect('add.site', 'add', $rec, $cid) !!}</td>
-            <td width="15%">{!! permSelect('del.site', 'arc', $rec, $cid) !!}</td>
-            <td width="15%"></td>
-        </tr>
-        @if ($plan)
-            <tr>
-                <td>Trades / Tasks</td>
-                <td width="15%">{!! permSelect('view.trade', 'all', $rec, $cid) !!}</td>
-                <td width="15%">{!! permSelect('edit.trade', 'all', $rec, $cid) !!}</td>
-                <td width="15%">{!! permSelect('add.trade', 'add', $rec, $cid) !!}</td>
-                <td width="15%">{!! permSelect('del.trade', 'arc', $rec, $cid) !!}</td>
-                <td width="15%"></td>
-            </tr>
-        @endif
-        <tr>
-            <td>Area Supervisors</td>
-            <td width="15%">{!! permSelect('view.area.super', 'all', $rec, $cid) !!}</td>
-            <td width="15%">{!! permSelect('edit.area.super', 'all', $rec, $cid) !!}</td>
-            <td width="45%" colspan="3"></td>
+            <td width="60%" colspan="4"></td>
         </tr>
     </table>
 

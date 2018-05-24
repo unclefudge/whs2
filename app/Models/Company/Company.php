@@ -680,9 +680,9 @@ class Company extends Model {
      */
     public function sites($status = '')
     {
-        $client_list = $this->clients->pluck('id')->toArray();
+        //$client_list = $this->clients->pluck('id')->toArray();
 
-        return ($status == '') ? Site::whereIn('client_id', $client_list)->get() : Site::where('status', $status)->whereIn('client_id', $client_list)->get();
+        return ($status == '') ? Site::where('company_id', $this->id)->get() : Site::where('status', $status)->where('company_id', $this->id)->get();
     }
 
     /**
