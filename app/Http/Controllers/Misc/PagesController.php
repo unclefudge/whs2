@@ -98,9 +98,9 @@ class PagesController extends Controller {
                 $doc = \App\Models\Company\CompanyDoc::find($todo->type_id);
                 if ($doc) {
                     if ($doc->status == 1)
-                        echo "ToDo [$todo->id] - $todo->name ($doc->name)<br>";
+                        echo "ToDo [$todo->id] - $todo->name (".$doc->company->name.")<br>";
                 } else {
-                    echo "ToDo [$todo->id] - $todo->name (DELETED)<br>";
+                    echo "ToDo [$todo->id] - ".$todo->company->name." (DELETED)<br>";
                 }
             }
         }
