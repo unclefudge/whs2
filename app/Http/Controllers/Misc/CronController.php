@@ -371,13 +371,16 @@ class CronController extends Controller {
                                 $doc->save();
                             }
                             $doc->closeToDo(User::find(1));
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
-                            if ($date == Carbon::today()->subDays(14)->format('Y-m-d')) {
-                                // Email Parent Company
-                                if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
-                                    $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval'), true);
-                                    echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "<br>";
-                                    $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "\n";
+                            // Determine if doc hasn't been replaced with newer version
+                            if (!$doc->company->activeCompanyDoc($doc->category_id)) {
+                                if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
+                                if ($date == Carbon::today()->subDays(14)->format('Y-m-d')) {
+                                    // Email Parent Company
+                                    if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
+                                        $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval'), true);
+                                        echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "<br>";
+                                        $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "\n";
+                                    }
                                 }
                             }
                         }
