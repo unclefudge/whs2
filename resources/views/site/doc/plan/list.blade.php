@@ -35,11 +35,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {!! Form::label('site_id', '&nbsp;', ['class' => 'control-label']) !!}
-                                {!! Form::select('site_id', Auth::user()->company->sitesPlannedForSelect('prompt'),
-                                     $site_id, ['class' => 'form-control select2']) !!}
+                                <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
+                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id')) !!}
+                                </select>
                             </div>
                         </div>
                     </div>

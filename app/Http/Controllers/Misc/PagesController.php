@@ -98,15 +98,26 @@ class PagesController extends Controller {
                 $doc = \App\Models\Company\CompanyDoc::find($todo->type_id);
                 if ($doc) {
                     if ($doc->status == 1) {
-                        echo "ToDo [$todo->id] - $todo->name (".$doc->company->name.")<br>";
-                        $todo->status = 0;
-                        $todo->done_at = Carbon::now();
-                        $todo->done_by = 1;
-                        $todo->save();
+                        //echo "ToDo [$todo->id] - $todo->name (".$doc->company->name.") ACTIVE DOC<br>";
+                        //$todo->status = 0;
+                        //$todo->done_at = Carbon::now();
+                        //$todo->done_by = 1;
+                        //$todo->save();
+                    }
+                    if ($doc->status == 0) {
+                        if ($doc->company->activeCompanyDoc($doc->category_id)) {
+                            echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC<br>";
+                            $todo->status = 0;
+                            $todo->done_at = Carbon::now();
+                            $todo->done_by = 1;
+                            $todo->save();
+                        } else
+                            echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
+
                     }
 
                 } else {
-                    echo "ToDo [$todo->id] - ".$todo->company->name." (DELETED)<br>";
+                    echo "ToDo [$todo->id] - " . $todo->company->name . " (DELETED)<br>";
                 }
             }
         }

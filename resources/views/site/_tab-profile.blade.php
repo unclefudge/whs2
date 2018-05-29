@@ -55,7 +55,7 @@
                         </p>
                     @endif
 
-                    @if(Auth::user()->company_id == $site->client->clientOfCompany->id)
+                    @if(Auth::user()->company_id == $site->company_id)
                         <p>{{ $site->notes }}</p>
                     @endif
 

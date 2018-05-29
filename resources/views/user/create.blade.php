@@ -14,7 +14,7 @@
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
         @if (Auth::user()->hasAnyPermissionType('user'))
-            <li><a href="/user">Users</a><i class="fa fa-circle"></i></li>
+            <li><a href="/company/{{ Auth::user()->company->id}}/user">Users</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>Create new user</span></li>
     </ul>

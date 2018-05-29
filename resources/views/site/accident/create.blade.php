@@ -48,8 +48,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
                                         {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
-                                        {!! Form::select('site_id', Auth::user()->company->sitesPlannedForSelect('prompt'),
-                                         null, ['class' => 'form-control select2']) !!}
+                                        <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
+                                            {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id')) !!}
+                                        </select>
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
                                 </div>
@@ -174,9 +175,9 @@
     @stop <!-- END Content -->
 
 
-@section('page-level-plugins-head')
+    @section('page-level-plugins-head')
 
-    <!--<link href="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+            <!--<link href="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />-->
@@ -188,10 +189,10 @@
 
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
-@stop
+    @stop
 
-@section('page-level-plugins')
-    <!--<script src="../assets/global/plugins/moment.min.js" type="text/javascript"></script>
+    @section('page-level-plugins')
+            <!--<script src="../assets/global/plugins/moment.min.js" type="text/javascript"></script>
     <script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
     <script src="../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="../assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
@@ -212,9 +213,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
-        });
+        $("#site_id").select2({placeholder: "Select Site"});
 
     });
 </script>

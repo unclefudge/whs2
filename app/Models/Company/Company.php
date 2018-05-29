@@ -715,8 +715,8 @@ class Company extends Model {
      */
     public function sitesPlannedFor($status = '', $date_from = '', $date_to = '')
     {
-        $client_list = $this->reportsTo()->clients->pluck('id')->toArray();
-        $collection = ($status != '') ? Site::where('status', $status)->whereIn('client_id', $client_list)->get() : Site::whereIn('client_id', $client_list)->get();
+        $collection = ($status != '') ? Site::where('status', $status)->where('company_id', $this->id)->orWhere('company_id', $this->reportsTo()->id)->get() :
+            Site::where('company_id', $this->id)->orWhere('company_id', $this->reportsTo()->id)->get();
 
         // If Company has no Parent then return full collection
         // ie. a list of all sites of all their own clients
@@ -747,6 +747,7 @@ class Company extends Model {
      *
      * @return array
      */
+    /*
     public function sitesPlannedForSelect($prompt = '', $status = '1')
     {
         $array = [];
@@ -758,8 +759,7 @@ class Company extends Model {
         asort($array);
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Site') + $array : $array;
-    }
-
+    }*/
 
     /**
      * A dropdown list of sites this company has for Site Check-in

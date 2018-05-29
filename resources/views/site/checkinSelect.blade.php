@@ -43,7 +43,8 @@
                                         <div class="form-group">
                                             <label for="site_id" class="control-label">Please select site to log into</label>
                                             <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
-                                                {!! Auth::user()->company->siteCheckinSelectOptions() !!}
+                                                {{--}}{!! Auth::user()->company->siteCheckinSelectOptions() !!} --}}
+                                                {!! Auth::user()->authSitesSelect2Options('checkin') !!}
                                             </select>
                                         </div>
                                     </div>

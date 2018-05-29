@@ -241,14 +241,13 @@ class SiteDocController extends Controller {
     /**
      * Get Site Docs current user is authorised to manage + Process datatables ajax request.
      */
-    public function getDocs(Request $request)
+    public function getDocs()
     {
 
-        $type = $request->get('type');
-        if ($request->get('site_id'))
-            $allowedSites = [$request->get('site_id')];
+        $type = request('type');
+        if (request('site_id'))
+            $allowedSites = [request('site_id')];
         else
-            //$allowedSites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
             $allowedSites = Auth::user()->authSites('view.site.doc', 1)->pluck('id')->toArray();
 
 

@@ -2,6 +2,7 @@
 namespace App\Traits;
 
 use DB;
+use Session;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
@@ -10,6 +11,7 @@ use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
 use App\Models\Company\CompanyDocCategory;
 use App\Http\Utilities\CompanyDocTypes;
+use Carbon\Carbon;
 
 
 trait UserRolesPermissions {
@@ -48,6 +50,7 @@ trait UserRolesPermissions {
     public function hasRoleCompany($company_id)
     {
         $company_role_ids = Role2::where('company_id', $company_id)->pluck('id')->toArray();
+
         return (DB::table('role_user')->where('user_id', $this->id)->whereIn('role_id', $company_role_ids)->first()) ? true : false;
     }
 
@@ -398,7 +401,7 @@ trait UserRolesPermissions {
         if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // All
         if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
         if ($parent_level == '30') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
-        if ($parent_level == '20') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+        if ($parent_level == '20') $parent_ids = []; // Own Company
         if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
 
         $merged_ids = array_merge($company_ids, $parent_ids);
@@ -430,6 +433,103 @@ trait UserRolesPermissions {
             return ($prompt && count($array) > 1) ? $array = array('' => 'All Sites') + $array : $array;
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Site') + $array : $array;
+    }
+
+    /**
+     * A dropdown list of sites this user has authority over
+     *
+     * @parms Permission, Status (site), Prompt, Started (whether Site has tasks on it)
+     * @return array
+     */
+    public function authSitesSelect2Options($permission, $selected = null, $status = 1)
+    {
+        $options = '<option></option>';
+
+
+        if ($permission == 'checkin') {
+            $permission = 'view.site';
+            if ($this->company->parent_company && $this->company->reportsTo()->addon('planner')) {
+                // Site Checkin and either Company or Parent Company has Planner
+                $sites_planned = [];
+                foreach ($this->company->sitesPlannedFor(1, Carbon::today(), Carbon::today()) as $site) {
+                    $site = Site::findOrFail($site->id);
+                    if ($site->status == 1 && $site->show_checkin)
+                        $sites_planned[$site->id] = "$site->suburb - $site->address ($site->name)";
+                }
+                asort($sites_planned);
+
+                if (count($sites_planned)) {
+                    $options .= '<optgroup label="Planned for today">';
+                    foreach ($sites_planned as $site_id => $text)
+                        $options .= "<option value='$site_id' >$text</option>";
+                    $options .= '</optgroup>';
+                }
+            }
+        } elseif (Session::has('siteID')) {
+            // Current Site logged into
+            $site = Site::findOrFail(Session::get('siteID'));
+            $options .= '<optgroup label="Current Site Logged In">';
+            $sel_tag = ($selected == $site->id) ? ' selected ' : '';
+            $options .= "<option value='$site->id' $sel_tag>$site->suburb - $site->address ($site->name)</option>";
+            $options .= '</optgroup>';
+        }
+
+
+        // Company
+        $company_level = $this->permissionLevel($permission, $this->company_id);
+        $company_ids = [];
+        if ($company_level == '99') $company_ids = $this->company->sites()->pluck('id')->toArray(); // All
+        if ($company_level == '50') $company_ids = $this->company->sites()->pluck('id')->toArray(); // Our Company
+        if ($company_level == '40') $company_ids = $this->areaSites()->pluck('id')->toArray(); // Supervisor for
+        if ($company_level == '30') $company_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+        if ($company_level == '1') $company_ids = $this->company->sites()->pluck('id')->toArray(); // Delete / Sign Off All
+        $sites_company = Site::where('status', $status)->whereIn('id', $company_ids)->get();
+
+        $sites_company_array = [];
+        foreach ($sites_company as $site)
+            $sites_company_array[$site->id] = "$site->suburb - $site->address ($site->name)";
+        asort($sites_company_array);
+
+        if (count($sites_company_array)) {
+            if ($this->company->parent_company)
+                $options .= '<optgroup label="' . $this->company->name . '">';
+            foreach ($sites_company_array as $site_id => $text) {
+                $sel_tag = ($selected == $site_id) ? ' selected ' : '';
+                $options .= "<option value='$site_id' $sel_tag>$text</option>";
+            }
+            if ($this->company->parent_company)
+                $options .= '</optgroup>';
+        }
+
+        // Parent Company
+        if ($this->company->parent_company) {
+            $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
+            $parent_ids = [];
+            if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // All
+            if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
+            if ($parent_level == '30') $parent_ids = $this->company->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+            if ($parent_level == '20') $parent_ids = []; // Own Company
+            if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
+            $sites_parent = Site::where('status', $status)->whereIn('id', $parent_ids)->get();
+
+            $sites_parent_array = [];
+            if ($sites_parent) {
+                foreach ($sites_parent as $site)
+                    $sites_parent_array[$site->id] = "$site->suburb - $site->address ($site->name)";
+            }
+            asort($sites_parent_array);
+
+            if (count($sites_parent_array)) {
+                $options .= '<optgroup label="' . $this->company->reportsTo()->name . '">';
+                foreach ($sites_parent_array as $site_id => $text) {
+                    $sel_tag = ($selected == $site_id) ? ' selected ' : '';
+                    $options .= "<option value='$site_id' $sel_tag>$text</option>";
+                }
+                $options .= '</optgroup>';
+            }
+        }
+
+        return $options;
     }
 
 
@@ -584,6 +684,7 @@ trait UserRolesPermissions {
             if ($permissiontype == 'area.super') {
                 if ($this->permissionLevel($permission, $record->company_id) && $record->company_id == $this->company_id) // User belong to same company record
                     return true;
+
                 return false;
             }
         }

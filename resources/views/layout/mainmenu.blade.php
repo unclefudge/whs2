@@ -328,7 +328,7 @@
                     @endif
                 @endif {{-- End - Company status == 1 --}}
 
-                @if(Auth::user()->isCC())
+                @if(Auth::user()->company->subscription)
                     <li class="menu-dropdown classic-menu-dropdown {{ (Request::is('dashboard') ? 'active' : '') }}">
                         <a href="/support/ticket"><i class="fa fa-tag"></i> Support </a>
                     </li>

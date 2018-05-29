@@ -214,14 +214,21 @@ class SiteController extends Controller {
      */
     public function getSites()
     {
+        $status = request('status');
         if (request('site_group'))
-            $site_records = Auth::user()->authSites('view.site', request('status'))->where('company_id', request('site_group'));
-        else
-            $site_records = Auth::user()->authSites('view.site', request('status'));
+            $site_records = Auth::user()->authSites('view.site', $status)->where('company_id', request('site_group'));
+        else {
+            // If SiteGroup is All (ie 0) and Status (Upcoming or Inactive) then restrict sites to only user own company
+            // Child company can't see inactive or upcoming sites for parent
+            $site_records = (request('site_group') == '0' && $status != 1) ?
+                Auth::user()->authSites('view.site', $status)->where('company_id', Auth::user()->company_id) :
+                Auth::user()->authSites('view.site', $status);
+        }
 
         $dt = Datatables::of($site_records)
             ->editColumn('id', function ($site) {
-                return '<div class="text-center"><a href="/site/' . $site->slug . '"><i class="fa fa-search"></i></a></div>';
+                // Only return link to site if owner of site
+                return (Auth::user()->isCompany($site->company_id)) ? '<div class="text-center"><a href="/site/' . $site->slug . '"><i class="fa fa-search"></i></a></div>' : '';
             })
             ->editColumn('client_phone', function ($site) {
                 $string = '';

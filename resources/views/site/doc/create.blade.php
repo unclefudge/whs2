@@ -52,8 +52,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}" id="site_id_form">
                                         {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
-                                        {!! Form::select('site_id', Auth::user()->company->sitesSelect('prompt'),
-                                             $site_id, ['class' => 'form-control select2']) !!}
+                                        {!! Form::select('site_id', Auth::user()->company->sitesSelect('prompt'), $site_id, ['class' => 'form-control select2']) !!}
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
                                 </div>

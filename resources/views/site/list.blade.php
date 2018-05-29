@@ -40,26 +40,38 @@
                                     Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name.' sites'], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
                                 </div>
                             </div>
+                            <div class="col-md-2 pull-right">
+                                <div class="form-group">
+                                    <select name="status" id="status" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        @if (Auth::user()->company->subscription)
+                                            <option value="-1">Upcoming</option>
+                                            <option value="0">Completed</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
                         @else
                             {!! Form::hidden('site_group', '') !!}
-                        @endif
-                        <div class="col-md-2 pull-right">
-                            <div class="form-group">
-                                <select name="status" id="status" class="form-control bs-select">
-                                    <option value="1" selected>Active</option>
-                                    @if (Auth::user()->company->subscription)
-                                        <option value="-1">Upcoming</option>
-                                        <option value="0">Completed</option>
-                                    @endif
-                                </select>
+                            <div class="col-md-2 pull-right">
+                                <div class="form-group">
+                                    <select name="status" id="status" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        @if (Auth::user()->company->subscription)
+                                            <option value="-1">Upcoming</option>
+                                            <option value="0">Completed</option>
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @endif
+
                     </div>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
-                                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96')
+                                @if (Auth::user()->company->subscription ||  Auth::user()->company_id == '96')
                                     <th width="5%"> #</th>
                                 @endif
                                 <th width="5%"> No.</th>
@@ -111,7 +123,7 @@
             }
         },
         columns: [
-                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96'){data: 'id', name: 'sites.id', orderable: false, searchable: false}, @endif
+                @if (Auth::user()->company->subscription ||  Auth::user()->company_id == '96'){data: 'id', name: 'sites.id', orderable: false, searchable: false}, @endif
             {
                 data: 'code', name: 'code'
             },
@@ -129,22 +141,20 @@
     });
 
     $('select#site_group').change(function () {
-        if ($('#site_group').val() == {{ Auth::user()->company_id}}) {
-            alert('same');
-            var newOptions = {"Active": "1",
-                "Upcoming": "-1",
-                "Completed": "0"
-            };
+        if ($('#site_group').val() == 0 || $('#site_group').val() == {{ Auth::user()->company_id}}) {
+            var newOptions = {"Active": "1", "Upcoming": "-1", "Completed": "0"};
 
             var $el = $("#status");
             $el.empty(); // remove old options
             $.each(newOptions, function(key,value) {
                 $el.append($("<option></option>").attr("value", value).text(key));
             });
+            $('#status').selectpicker('refresh');
         } else {
-            alert('dif');
             $('#status').children('option:not(:first)').remove();
-            //$('#status option:gt(0)').remove();
+            $('#status').selectpicker('refresh');
+
+            //$('#status').remove();
         }
 
         table_list.ajax.reload();

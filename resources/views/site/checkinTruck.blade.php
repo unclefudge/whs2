@@ -203,7 +203,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-10 col-xs-8">
-                                        Does {{ $worksite->client->clientOfCompany->name }} need to take any action?
+                                        Does {{ $worksite->company->name }} need to take any action?
                                     </div>
                                 </div>
                             </div>
