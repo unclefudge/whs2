@@ -184,6 +184,9 @@ class CompanyDocController extends Controller {
         }
         Toastr::success("Uploaded document");
 
+        // Closing any outstanding todoos associated with this doc category ie. expired docs
+        $doc->closeToDo();
+
         // If uploaded by User with 'authorise' permissions set to active other set pending
         $doc->status = 2;
         $category = CompanyDocCategory::find($doc->category_id);
