@@ -38,10 +38,10 @@
 
                     <div class="row">
                         @if (Auth::user()->permissionLevel('view.site.hazard', Auth::user()->company_id) && (Auth::user()->company->parent_company && Auth::user()->permissionLevel('view.site.hazard', Auth::user()->company->reportsTo()->id)))
-                        <div class="col-md-5">
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    {!! Form::select('site_group', ['0' => 'All Sites', Auth::user()->company_id => Auth::user()->company->name.' sites',
-                                    Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name.' sites'], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
+                                    {!! Form::select('site_group', ['0' => 'All Sites', Auth::user()->company_id => Auth::user()->company->name,
+                                    Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
                                 </div>
                             </div>
                         @else
@@ -128,7 +128,9 @@
         ]
     });
 
-    $('select#site_group').change(function () {table_list.ajax.reload();});
+    $('select#site_group').change(function () {
+        table_list.ajax.reload();
+    });
 
     $('select#status').change(function () {
         if ($('#status').val() == 0)

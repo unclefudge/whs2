@@ -497,7 +497,7 @@ class SitePlannerController extends Controller {
     /**
      * Get Site Attendance for specific site
      */
-    public function getSiteAttendance(Request $request, $site_id, $date)
+    public function getSiteAttendance($site_id, $date)
     {
         $today = Carbon::now()->format('Y-m-d');
         $carbon_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
@@ -836,7 +836,7 @@ class SitePlannerController extends Controller {
      */
     public function getSites(Request $request)
     {
-        if (Auth::user()->company->subscription)
+        if (Auth::user()->company->addon('planner'))
             $allowedSites = Auth::user()->company->sites('1')->pluck('id')->toArray();
         else {
             $this_mon = new Carbon('monday this week');

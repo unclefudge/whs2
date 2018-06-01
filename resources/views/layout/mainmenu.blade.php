@@ -288,7 +288,7 @@
                                             @if(Auth::user()->hasAnyPermissionType('manage.report|site.export') || Auth::user()->hasAnyPermission2('add.site.doc|edit.site.doc|del.site.doc|add.safety.doc|edit.safety.doc|del.safety.doc'))
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
-                                                        @if(Auth::user()->hasAnyPermissionType('manage.report|site.export'))
+                                                        @if(Auth::user()->hasAnyPermissionType('manage.report|site.export') || Auth::user()->hasAnyPermission2('add.site.doc|edit.site.doc|del.site.doc|add.safety.doc|edit.safety.doc|del.safety.doc'))
                                                             <li><h3 class="h3-submenu">Reports / Exports</h3></li>
                                                             @if (Auth::user()->hasAnyPermission2('add.site.doc|edit.site.doc|del.site.doc|add.safety.doc|edit.safety.doc|del.safety.doc'))
                                                                 <li><a href="/manage/file" class="nav-link"> File Manager </a></li>

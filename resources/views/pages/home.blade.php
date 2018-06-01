@@ -85,47 +85,49 @@
             </div>
 
         @endif
-        <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-medkit font-dark"></i>
-                        <span class="caption-subject font-dark bold uppercase">Safety Report</span>
-                        <span class="caption-helper">Safety is everyone's responsibility</span>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if (Auth::user()->hasPermission2('add.site.accident'))
-                                <a href="/site/accident/create" class="btn btn-lg red center-block"></i> Report Accident </a>
-                            @endif
-                        </div>
-                        <div class="margin-bottom-10 visible-sm visible-xs"></div>
-                        <div class="col-md-6">
-                            @if (Auth::user()->hasPermission2('add.site.hazard'))
-                                <a href="/site/hazard/create" class="btn btn-lg blue center-block"></i> Report Hazard </a>
-                            @endif
+        @if (Auth::user()->hasPermission2('add.site.accident') || Auth::user()->hasPermission2('add.site.hazard') || Auth::user()->hasPermission2('add.site.asbestos'))
+            <div class="col-md-6 col-sm-6 hidden-sm hidden-xs">
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-medkit font-dark"></i>
+                            <span class="caption-subject font-dark bold uppercase">Safety Report</span>
+                            <span class="caption-helper">Safety is everyone's responsibility</span>
                         </div>
                     </div>
-                    @if (Auth::user()->hasPermission2('add.site.asbestos'))
-                        <div class="row" style="margin-top: 10px">
-                            <div class="col-md-12">
-                                <a href="/site/asbestos/create" class="btn btn-lg green center-block"></i> Lodge Asbestos Notification </a>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if (Auth::user()->hasPermission2('add.site.accident'))
+                                    <a href="/site/accident/create" class="btn btn-lg red center-block"></i> Report Accident </a>
+                                @endif
+                            </div>
+                            <div class="margin-bottom-10 visible-sm visible-xs"></div>
+                            <div class="col-md-6">
+                                @if (Auth::user()->hasPermission2('add.site.hazard'))
+                                    <a href="/site/hazard/create" class="btn btn-lg blue center-block"></i> Report Hazard </a>
+                                @endif
                             </div>
                         </div>
-                    @endif
+                        @if (Auth::user()->hasPermission2('add.site.asbestos'))
+                            <div class="row" style="margin-top: 10px">
+                                <div class="col-md-12">
+                                    <a href="/site/asbestos/create" class="btn btn-lg green center-block"></i> Lodge Asbestos Notification </a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-sm-6 visible-sm visible-xs">
-            <a href="/site/accident/create" class="btn btn-lg red center-block"></i> Report Accident </a>
-            <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
-            @if (Session::has('siteID'))
-                <a href="/site/hazard/create" class="btn btn-lg blue center-block" style="margin-bottom: 5px"></i> Lodge Safety Issue </a>
-            @endif
-            <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
-        </div>
+            <div class="col-md-6 col-sm-6 visible-sm visible-xs">
+                <a href="/site/accident/create" class="btn btn-lg red center-block"></i> Report Accident </a>
+                <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
+                @if (Session::has('siteID'))
+                    <a href="/site/hazard/create" class="btn btn-lg blue center-block" style="margin-bottom: 5px"></i> Lodge Safety Issue </a>
+                @endif
+                <div style="margin: 0px; padding: 0px; font-size: 6px">&nbsp;</div>
+            </div>
+        @endif
     </div>
 
     <!-- Outstanding Safety Hazards -->

@@ -317,7 +317,7 @@
                 ///alert('Failed to save Toolbox talk id:' + $('#talk_id').val());
                 swal({
                     title: 'Failed to save Toolbox',
-                    text: "<b>We apologise but we were unable to save your Toolbox Talk (id:"+$('#talk_id').val() +")<br><br>Please try again but if the problem persists let us know.</b>",
+                    text: "<b>We apologise but we were unable to save your Toolbox Talk (id:"+$('#talk_id').val()+")<br><br>Please try again but if the problem persists let us know.</b>",
                     html: true
                 });
             }

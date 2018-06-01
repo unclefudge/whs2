@@ -443,6 +443,7 @@ trait UserRolesPermissions {
      */
     public function authSitesSelect2Options($permission, $selected = null, $status = 1)
     {
+        $headers = false;
         $options = '<option></option>';
 
 
@@ -463,6 +464,7 @@ trait UserRolesPermissions {
                     foreach ($sites_planned as $site_id => $text)
                         $options .= "<option value='$site_id' >$text</option>";
                     $options .= '</optgroup>';
+                    $headers = true;
                 }
             }
         } elseif (Session::has('siteID')) {
@@ -472,6 +474,7 @@ trait UserRolesPermissions {
             $sel_tag = ($selected == $site->id) ? ' selected ' : '';
             $options .= "<option value='$site->id' $sel_tag>$site->suburb - $site->address ($site->name)</option>";
             $options .= '</optgroup>';
+            $headers = true;
         }
 
 
@@ -491,13 +494,13 @@ trait UserRolesPermissions {
         asort($sites_company_array);
 
         if (count($sites_company_array)) {
-            if ($this->company->parent_company)
+            if ($headers || ($this->company->parent_company && $this->company->subscription))
                 $options .= '<optgroup label="' . $this->company->name . '">';
             foreach ($sites_company_array as $site_id => $text) {
                 $sel_tag = ($selected == $site_id) ? ' selected ' : '';
                 $options .= "<option value='$site_id' $sel_tag>$text</option>";
             }
-            if ($this->company->parent_company)
+            if ($headers || ($this->company->parent_company && $this->company->subscription))
                 $options .= '</optgroup>';
         }
 
@@ -520,12 +523,14 @@ trait UserRolesPermissions {
             asort($sites_parent_array);
 
             if (count($sites_parent_array)) {
-                $options .= '<optgroup label="' . $this->company->reportsTo()->name . '">';
+                if ($headers || ($this->company->parent_company && $this->company->subscription))
+                    $options .= '<optgroup label="' . $this->company->reportsTo()->name . '">';
                 foreach ($sites_parent_array as $site_id => $text) {
                     $sel_tag = ($selected == $site_id) ? ' selected ' : '';
                     $options .= "<option value='$site_id' $sel_tag>$text</option>";
                 }
-                $options .= '</optgroup>';
+                if ($headers || ($this->company->parent_company && $this->company->subscription))
+                    $options .= '</optgroup>';
             }
         }
 
@@ -612,6 +617,7 @@ trait UserRolesPermissions {
             // Companies
             if ($permissiontype == 'company') {
                 if ($action == 'del' && $record->id == $this->company_id) return false; // User can't delete own company
+                if ($action == 'sig' && $record->id == $this->company_id && $record->parent_company) return false; // User can't sign off own company if has parent
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
 
                 return false;

@@ -15,7 +15,7 @@ $rec = $user;
             @if(Auth::user()->security && Auth::user()->isCompany($user->cid))
                 <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                     {!! Form::label('roles', 'Assigned Role(s)', ['class' => 'control-label']) !!}
-                    {!! Form::select('roles', $user->company->rolesSelect(), $user->roles2->pluck('id')->toArray(),
+                    {!! Form::select('roles', $user->company->rolesSelect('int'), $user->roles2->pluck('id')->toArray(),
                     ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple']) !!}
                     {!! fieldErrorMessage('roles', $errors) !!}
                 </div>
@@ -83,7 +83,7 @@ $rec = $user;
        data-content="Grants ability to view or modify your company information or any 'child' company."
        data-original-title="Company"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
 <table class="table table-bordered table-striped">
-    @if ($sub2)
+    @if ($sub2 && Auth::user()->company_id == $user->company_id)
         <tr>
             <td>Company Record</td>
             <td width="30%" colspan="2"></td>
@@ -97,7 +97,7 @@ $rec = $user;
         <td>Company Details</td>
         <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-        @if ($sub2)
+        @if ($sub2 && Auth::user()->company_id == $user->company_id)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
         @else
@@ -109,7 +109,7 @@ $rec = $user;
         <td>Business Details</td>
         <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-        @if ($sub2)
+        @if ($sub2 && Auth::user()->company_id == $user->company_id)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
         @else
@@ -125,13 +125,17 @@ $rec = $user;
             <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
         </tr>
     @endif
-    @if ($sub2)
+    @if ($sub2 && Auth::user()->company_id == $user->company_id)
         <tr>
             <td>WHS Compliance</td>
             <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="30%" colspan="2"></td>
-            <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
+            @if ($sub2 && Auth::user()->company_id == $user->company_id)
+                <td width="30%" colspan="2"></td>
+                <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
+            @else
+                <td width="45%" colspan="3"></td>
+            @endif
         </tr>
         <tr>
             <td>Company Leave</td>
@@ -145,7 +149,7 @@ $rec = $user;
 <hr>
 
 {{-- Documents --}}
-@if ($sub1)
+@if ($sub1 && Auth::user()->company_id == $user->company_id)
     <h3>Documents</h3>
     <table class="table table-striped">
         <tr>
@@ -179,22 +183,24 @@ $rec = $user;
             </tr>
         @endforeach
     </table>
-    <h5 class="font-green-haze" style="font-size: 16px">Private Documents</h5>
-    <table class="table table-bordered table-striped">
-        @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
-            <tr>
-                <td>{{ $doc_name }}
-                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                       data-content="{!! $companyDocTypes::docNames('acc', 1) !!}" data-original-title="Documents"> <i
-                                class="fa fa-question-circle font-grey-silver"></i> </a></td>
-                <td width="15%">{!! permSelect("view.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                <td width="15%">{!! permSelect("edit.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                <td width="15%">{!! permSelect("add.docs.$doc_type.pri", 'up', $rec, $cid, $dis) !!}</td>
-                <td width="15%">{!! permSelect("del.docs.$doc_type.pri", 'arc', $rec, $cid, $dis) !!}</td>
-                <td width="15%">{!! permSelect("sig.docs.$doc_type.pri", 'sig', $rec, $cid, $dis) !!}</td>
-            </tr>
-        @endforeach
-    </table>
+    @if ($cc)
+        <h5 class="font-green-haze" style="font-size: 16px">Private Documents</h5>
+        <table class="table table-bordered table-striped">
+            @foreach ($companyDocTypes::all() as $doc_type => $doc_name)
+                <tr>
+                    <td>{{ $doc_name }}
+                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                           data-content="{!! $companyDocTypes::docNames('acc', 1) !!}" data-original-title="Documents"> <i
+                                    class="fa fa-question-circle font-grey-silver"></i> </a></td>
+                    <td width="15%">{!! permSelect("view.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                    <td width="15%">{!! permSelect("edit.docs.$doc_type.pri", ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                    <td width="15%">{!! permSelect("add.docs.$doc_type.pri", 'up', $rec, $cid, $dis) !!}</td>
+                    <td width="15%">{!! permSelect("del.docs.$doc_type.pri", 'arc', $rec, $cid, $dis) !!}</td>
+                    <td width="15%">{!! permSelect("sig.docs.$doc_type.pri", 'sig', $rec, $cid, $dis) !!}</td>
+                </tr>
+            @endforeach
+        </table>
+    @endif
 @endif
 
 {{-- Legacy --}}
@@ -234,7 +240,7 @@ $rec = $user;
 </table>
 
 
-@if ($sub1)
+@if ($sub1 && Auth::user()->company_id == $user->company_id)
     <h5 class="font-green-haze" style="font-size: 16px">Work Site
         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
            data-content="Grants ability to view or modify work sites and relevant trades/tasks/superviors required on the sites."
@@ -445,18 +451,20 @@ $rec = $user;
 
     @if ($sub1)
         <table class="table table-bordered table-striped">
-            @if ($cc)
+            @if ($sub1)
                 <tr>
-                    <td>Management Reports<br><span class="font-grey-silver">Cape Cod Only</span></td>
+                    <td>Management Reports</td>
                     <td width="15%">{!! permSelect('view.manage.report', 'all', $rec, $cid, $dis) !!}</td>
                     <td width="60%" colspan="4"></td>
                 </tr>
             @endif
-            <tr>
-                <td>Export Site Data</td>
-                <td width="15%">{!! permSelect('view.site.export', 'super', $rec, $cid, $dis) !!}</td>
-                <td width="60%" colspan="4"></td>
-            </tr>
+            @if ($cc)
+                <tr>
+                    <td>Export Site Data</td>
+                    <td width="15%">{!! permSelect('view.site.export', 'super', $rec, $cid, $dis) !!}</td>
+                    <td width="60%" colspan="4"></td>
+                </tr>
+            @endif
         </table>
     @endif
 

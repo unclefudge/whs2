@@ -117,6 +117,17 @@ class CompanyPeriodTradeController extends Controller {
         // Create PTC
         $ptc = CompanyDocPeriodTrade::create($ptc_request);
 
+        // Create Site Doc
+        $doc = CompanyDoc::create([
+            'category_id'    => 5,
+            'name'           => 'Period Trade Contract',
+            'expiry'         => $ptc->expiry,
+            'ref_no'         => $ptc->id,
+            'status'         => 2,
+            'for_company_id' => $ptc->for_company_id,
+            'company_id'     => $ptc->company_id,
+        ]);
+
         // Create approval ToDoo
         $ptc->createApprovalToDo($ptc->owned_by->notificationsUsersTypeArray('n.doc.acc.approval'));
 
@@ -178,18 +189,16 @@ class CompanyPeriodTradeController extends Controller {
         $pdf->save(public_path("$path/$filename"));
         //return $pdf->stream();
 
-        // Create Site Doc
-        $doc = CompanyDoc::create([
-            'category_id'    => 5,
-            'name'           => 'Period Trade Contract',
-            'attachment'     => $filename,
-            'expiry'         => $ptc->expiry,
-            'status'         => 1,
-            'for_company_id' => $ptc->for_company_id,
-            'company_id'     => $ptc->company_id,
-            'approved_by'    => $ptc->principle_signed_id,
-            'approved_at'    => $ptc->principle_signed_at,
-        ]);
+        // Update Company Doc
+        $doc = CompanyDoc::where('category_id', 5)->where('ref_no', $ptc->id)->where('company_id', $ptc->company_id)->where('for_company_id', $ptc->for_company_id)->first();
+        if ($doc) {
+            $doc->attachment = $filename;
+            $doc->status = 1;
+            $doc->approved_by = $ptc->principle_signed_id;
+            $doc->approved_at = $ptc->principle_signed_at;
+            $doc->save();
+        }
+
 
         Toastr::success("Signed contract");
 

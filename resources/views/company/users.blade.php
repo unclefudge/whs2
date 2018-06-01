@@ -128,15 +128,6 @@
             }
         },
         columns: [
-                /*
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-            {data: 'full_name', name: 'full_name'},
-            //{data: 'full_name_search', name: 'full_name_search', visible: false},
-            {data: 'company', name: 'company', orderable: false, visible: false},
-            {data: 'phone', name: 'phone', orderable: false},
-            {data: 'email', name: 'email', orderable: false},
-            {data: 'last_login', name: 'last_login'},*/
-
             {data: 'id', name: 'users.id', orderable: false, searchable: false},
             {data: 'full_name', name: 'full_name', orderable: true, searchable: false},
             {data: 'name', name: 'companys.name', visible: false},
@@ -158,5 +149,10 @@
             table_staff.column(2).visible(true);    // To show
         table_staff.ajax.reload();
     });
+
+    @if ($company->subscription > 1)
+    table_staff.column(2).visible(true);
+    @endif
+
 </script>
 @stop

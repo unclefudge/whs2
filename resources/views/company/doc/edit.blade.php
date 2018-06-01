@@ -242,9 +242,13 @@
                                             {!! Form::text('filename', $doc->attachment, ['class' => 'form-control', 'readonly']) !!}
                                         </div>
                                         <div class="col-md-3">
-                                            <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
+                                            @if ($doc->category_id == 5 && $doc->status == 2)
+                                                <a href="/company/{{ $company->id }}/doc/period-trade-contract/{{ $doc->ref_no }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
+                                            @else
+                                                <a href="{{ $doc->attachment_url }}" target="_blank" id="doc_link"><i class="fa fa-bold fa-3x fa-file-text-o" style="margin-top: 25px;"></i><br>VIEW</a>
+                                            @endif
                                         </div>
-                                        @if($doc->for_company_id == Auth::user()->company_id && $doc->category_id != 4) {{-- Cant edit SS --}}
+                                        @if($doc->for_company_id == Auth::user()->company_id && $doc->category_id != 4 && $doc->category_id != 5) {{-- Cant edit SS or PTC--}}
                                         <div class="col-md-3 col-md-offset-9">
                                             <button type="button" class="btn blue" style="margin-top: 25px;" id="change_file"> Change File</button>
                                         </div>
@@ -269,7 +273,9 @@
                                     <a class="btn dark" data-toggle="modal" href="#modal_archive"> Archive </a>
                                 @endif
                                 {{-- Reject / Approve - only pending/rejected docs --}}
-                                @if (in_array($doc->status, [2,3]) && Auth::user()->allowed2('sig.company.doc', $doc))
+                                @if ($doc->category_id == 5 && $doc->status == 2)
+                                    <a href="/company/{{ $company->id }}/doc/period-trade-contract/{{ $doc->ref_no }}" class="btn dark" id="but_save">View Contract for Approval</a>
+                                @elseif (in_array($doc->status, [2,3]) && Auth::user()->allowed2('sig.company.doc', $doc))
                                     @if ($doc->status == 2)
                                         <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
                                     @endif

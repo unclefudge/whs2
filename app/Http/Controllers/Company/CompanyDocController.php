@@ -114,7 +114,7 @@ class CompanyDocController extends Controller {
             return json_encode("failed");
 
         // Delete attached file
-        if (file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
+        if ( $doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
             unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
 
         $doc->closeToDo();
@@ -460,7 +460,7 @@ class CompanyDocController extends Controller {
 
         $dt = Datatables::of($records)
             ->editColumn('id', function ($doc) {
-                return '<div class="text-center"><a href="' . $doc->attachment_url . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>';
+                return ($doc->attachment) ? '<div class="text-center"><a href="' . $doc->attachment_url . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>' : '';
             })
             ->editColumn('category_id', function ($doc) {
 
