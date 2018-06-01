@@ -18,8 +18,8 @@
                 </div>
             </div>
         </div>
-        <hr class="field-hr">
         @if(Auth::user()->isCC())
+            <hr class="field-hr">
             {{-- Planner Name --}}
             <div class="row">
                 <div class="form-group {!! fieldHasError('nickname', $errors) !!}">
