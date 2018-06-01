@@ -239,7 +239,7 @@
                                                         @elseif(Auth::user()->hasAnyPermissionType('company'))
                                                             <li><a href="/company/{{ Auth::user()->company_id }}" class="nav-link"> Company Profile </a></li>
                                                         @endif
-                                                        @if (Auth::user()->hasAnyPermissionType('company.leave'))
+                                                        @if (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company.leave'))
                                                             <li><a href="/company/leave" class="nav-link"> Company Leave </a></li>
                                                         @endif
                                                     </ul>
