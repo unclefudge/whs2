@@ -258,7 +258,7 @@
                                                                 <li><a href="/trade" class="nav-link"> Trades </a></li>
                                                             @endif
                                                             @if(Auth::user()->hasAnyPermissionType('area.super'))
-                                                                <li><a href="/site/supervisor" class="nav-link"> Supervisor Management</a></li>
+                                                                <li><a href="/site/supervisor" class="nav-link"> Supervisors</a></li>
                                                             @endif
                                                         @endif
                                                     </ul>
