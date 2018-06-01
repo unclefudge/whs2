@@ -187,20 +187,18 @@ $cc = 1;*/
                                                 @endif
                                             </tr>
                                         @endif
-                                        @if($plan)
-                                            <tr>
-                                                <td>Construction</td>
-                                                <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                @if (!$role->external)
-                                                    <td width="30%" colspan="2"></td>
-                                                    <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
-                                                @else
-                                                    <td width="45%" colspan="3"></td>
-                                                @endif
-                                            </tr>
-                                        @endif
                                         @if ($sub2)
+                                                <tr>
+                                                    <td>Construction</td>
+                                                    <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                    @if (!$role->external)
+                                                        <td width="30%" colspan="2"></td>
+                                                        <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
+                                                    @else
+                                                        <td width="45%" colspan="3"></td>
+                                                    @endif
+                                                </tr>
                                             <tr>
                                                 <td>WHS Compliance</td>
                                                 <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
