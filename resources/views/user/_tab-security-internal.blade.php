@@ -307,24 +307,22 @@ $rec = $user;
                 <td width="45%" colspan="3"></td>
             </tr>
         </table>
-    @endif
 
-    <h5 class="font-green-haze" style="font-size: 16px">Attendance / Compliance
-        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-           data-content="Grants ability to view or edit attendance for users which belong to your company work sites."
-           data-original-title="Attendance / Compliance"> <i
-                    class="fa fa-question-circle font-grey-silver"></i>
-        </a>
-    </h5>
-    <table class="table table-bordered table-striped">
-        <tr>
-            <td>Attendance</td>
-            <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
-            <td width="45%" colspan="3"></td>
-        </tr>
-        @if($cc)
-            @if ($plan)
+        <h5 class="font-green-haze" style="font-size: 16px">Attendance / Compliance
+            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+               data-content="Grants ability to view or edit attendance for users which belong to your company work sites."
+               data-original-title="Attendance / Compliance"> <i
+                        class="fa fa-question-circle font-grey-silver"></i>
+            </a>
+        </h5>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>Attendance</td>
+                <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
+                <td width="45%" colspan="3"></td>
+            </tr>
+            @if($cc)
                 <tr>
                     <td>Compliance<br><span class="font-grey-silver">Cape Cod Only</span></td>
                     <td width="15%">{!! permSelect('view.compliance', ($sub2) ? 'super.company' : 'super', $rec, $cid, $dis) !!}</td>
@@ -332,8 +330,8 @@ $rec = $user;
                     <td width="45%" colspan="3"></td>
                 </tr>
             @endif
-        @endif
-    </table>
+        </table>
+    @endif
 
     <h5 class="font-green-haze" style="font-size: 16px">Site Documents
         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
