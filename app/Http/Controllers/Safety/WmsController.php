@@ -69,7 +69,7 @@ class WmsController extends Controller {
     {
         $doc = WmsDoc::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.wms', $doc))
             return view('errors/404');
 

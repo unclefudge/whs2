@@ -248,7 +248,8 @@ class SiteDocController extends Controller {
         if (request('site_id'))
             $allowedSites = [request('site_id')];
         else
-            $allowedSites = Auth::user()->authSites('view.site.doc', 1)->pluck('id')->toArray();
+            //$allowedSites = Auth::user()->authSites('view.site.doc', 1)->pluck('id')->toArray();
+        $allowedSites = Auth::user()->company->sites(1)->pluck('id')->toArray();
 
 
         if ($type == 'ALL')
