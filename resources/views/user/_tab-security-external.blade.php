@@ -104,27 +104,28 @@ $rec = $user;
             <td width="45%" colspan="3"></td>
         @endif
     </tr>--}}
-    @if($plan)
+
+    @if ($sub2)
         <tr>
             <td>Construction</td>
             <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
-    @endif
-    @if ($sub2)
         <tr>
             <td>WHS Compliance</td>
             <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="45%" colspan="3"></td>
         </tr>
-        <tr>
-            <td>Company Leave</td>
-            <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            <td width="45%" colspan="3"></td>
-        </tr>
+        @if($plan)
+            <tr>
+                <td>Company Leave</td>
+                <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                <td width="45%" colspan="3"></td>
+            </tr>
+        @endif
     @endif
 
 </table>
