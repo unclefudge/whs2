@@ -1121,6 +1121,7 @@ class Company extends Model {
             ->where(function ($q) {
                 $q->where('company_id', Auth::user()->company_id);
                 $q->orWhere('company_id', Auth::user()->company->reportsTo()->id);
+                $q->orWhere('company_id', 3);
             })
             ->where('status', '1')->get();
 
