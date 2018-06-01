@@ -390,6 +390,7 @@ $rec = $user;
                 <td width="60%" colspan="4"></td>
             @endif
         </tr>
+        {{--}}
         <tr>
             <td>Company Documents</td>
             <td width="15%">{!! permSelect('view.company.doc', 'all', $rec, $cid) !!}</td>
@@ -397,7 +398,7 @@ $rec = $user;
             <td width="15%">{!! permSelect('add.company.doc', 'add', $rec, $cid) !!}</td>
             <td width="15%">{!! permSelect('del.company.doc', 'del', $rec, $cid) !!}</td>
             <td width="15%"></td>
-        </tr>
+        </tr>--}}
     </table>
 
     <h5 class="font-green-haze" style="font-size: 16px">Management Reports / Exports
