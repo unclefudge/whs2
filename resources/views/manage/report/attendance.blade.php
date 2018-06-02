@@ -122,6 +122,12 @@
         </div>
         {!! Form::close() !!}
     </div>
+    <!-- loading Spinner -->
+    <div style="background-color: #FFF; padding: 20px; display: none" id="spinner">
+        <div class="loadSpinnerOverlay">
+            <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
+        </div>
+    </div>
     <!-- END PAGE CONTENT INNER -->
 @stop
 
@@ -164,16 +170,12 @@
             // custom handling here
 
 
-            if ($('#company_id').val() != 'all')
+            if (($('#company_id').val() != 'all') || ($('#status').val() == '1' && $('#site_id_active').val() != 'all') ||
+                    ($('#status').val() == '0' && $('#site_id_completed').val() != 'all') || ($('#status').val() == '' && $('#site_id_all').val() != 'all')) {
+                $('#spinner').show();
                 return true;
-            else {
-                if ($('#status').val() == '1' && $('#site_id_active').val() != 'all')
-                    return true;
-                if ($('#status').val() == '0' && $('#site_id_completed').val() != 'all')
-                    return true;
-                if ($('#status').val() == '' && $('#site_id_all').val() != 'all')
-                    return true;
             }
+
 
             swal({
                 title: 'Unable to view PDF',
@@ -185,7 +187,8 @@
         });
 
 
-    });
+    })
+    ;
 
     $('.date-picker').datepicker({
         autoclose: true,
