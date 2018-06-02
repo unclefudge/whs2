@@ -92,6 +92,13 @@ span.select2.select2-container.select2-container--bootstrap {
     border-bottom: 1px solid #ccc;
 }
 
+/* Notes */
+.note.note-grey {
+    background-color: #ff0000 !important;
+    border-color: #f3cc31;
+    color: #000;
+}
+
 /*  Active tabs - Over-rides */
 .tabbable-custom > .nav-tabs > li.active {
     border-top: 3px solid #44b6ae;

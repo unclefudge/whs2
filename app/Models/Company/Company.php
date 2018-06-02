@@ -279,13 +279,13 @@ class Company extends Model {
      *
      * @return array
      */
-    public function companiesSelect($prompt = '')
+    public function companiesSelect($prompt = '', $status = '')
     {
         $array = [];
-        foreach ($this->companies() as $company) {
+        foreach ($this->companies($status) as $company) {
             //$record = Company::find($company->id);
-            if ($company->status)
-                $array[$company->id] = $company->name_alias;
+            //if ($company->status)
+            $array[$company->id] = $company->name_alias;
         }
         asort($array);
 
@@ -315,13 +315,12 @@ class Company extends Model {
      *
      * @return array
      */
-    public function usersSelect($prompt = '')
+    public function usersSelect($prompt = '', $status = '')
     {
         $array = [];
-        foreach ($this->users() as $user) {
-            if ($user->status)
-                $array[$user->id] = (Auth::user()->company->subscription > 1) ? $user->full_name . " (" . $user->company->name_alias . ")" : $user->full_name;
-        }
+        foreach ($this->users($status) as $user)
+            $array[$user->id] = (Auth::user()->company->subscription > 1) ? $user->full_name . " (" . $user->company->name_alias . ")" : $user->full_name;
+
         asort($array);
 
         if ($prompt == 'all')
@@ -673,15 +672,12 @@ class Company extends Model {
     }
 
     /**
-     * A list of sites this company has authority over
-     * ie company has authority all its clients sites
+     * A list of sites this company owns
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function sites($status = '')
     {
-        //$client_list = $this->clients->pluck('id')->toArray();
-
         return ($status == '') ? Site::where('company_id', $this->id)->get() : Site::where('status', $status)->where('company_id', $this->id)->get();
     }
 
@@ -694,9 +690,9 @@ class Company extends Model {
     {
         $array = [];
         foreach ($this->sites($status) as $site) {
-            $record = Site::findOrFail($site->id);
-            if ($record->status)
-                $array[$site->id] = $record->name;
+            //$record = Site::findOrFail($site->id);
+            //if ($record->status)
+            $array[$site->id] = "$site->suburb - $site->address ($site->name)";
         }
         asort($array);
 

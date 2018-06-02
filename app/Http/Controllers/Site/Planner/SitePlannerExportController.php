@@ -232,9 +232,9 @@ class SitePlannerExportController extends Controller {
             $pdf = PDF::loadView($view, compact('site', 'date', 'weeks', 'sitedata'));
             $pdf->setPaper('a4', 'landscape');//->setOrientation('landscape');
 
-                //->setOption('page-width', 200)->setOption('page-height', 287)
-                //->setOption('margin-bottom', 10)
-                //->setOrientation('landscape');
+            //->setOption('page-width', 200)->setOption('page-height', 287)
+            //->setOption('margin-bottom', 10)
+            //->setOrientation('landscape');
 
 
             //$file = public_path('filebank/company/' . $doc->for_company_id . '/wms/' . $doc->name . ' v' . $doc->version . ' ref-' . $doc->id . ' ' . '.pdf');
@@ -430,9 +430,9 @@ class SitePlannerExportController extends Controller {
 
             //return view('pdf/plan-company', compact('company_id', 'date', 'weeks', 'sitedata'));
             $pdf = PDF::loadView('pdf/plan-company', compact('company_id', 'date', 'weeks', 'sitedata'));
-                //->setOption('page-width', 200)->setOption('page-height', 287)
-                //->setOption('margin-bottom', 10)
-                //->setOrientation('landscape');
+            //->setOption('page-width', 200)->setOption('page-height', 287)
+            //->setOption('margin-bottom', 10)
+            //->setOrientation('landscape');
 
             //$file = public_path('filebank/company/' . $doc->for_company_id . '/wms/' . $doc->name . ' v' . $doc->version . ' ref-' . $doc->id . ' ' . '.pdf');
             //if (file_exists($file))
@@ -448,54 +448,81 @@ class SitePlannerExportController extends Controller {
      */
     public function attendancePDF(Request $request)
     {
-        $siteID = $request->get('site_id');
+        //$siteID = $request->get('site_id');
 
-        $site = Site::findOrFail($siteID);
-        $obj_site = (object) [];
-        $obj_site->site_id = $site->id;
-        $obj_site->site_name = $site->name;
-        $obj_site->attendance = [];
+        $site_id = '';
+        $company = (request('company_id') != 'all') ? Company::find(request('company_id')) : null;
+        if (request('status') == '1' && request('site_id_active') != 'all')
+            $site_id = request('site_id_active');
+        elseif (request('status') == '0' && request('site_id_completed') != 'all')
+            $site_id = request('site_id_completed');
+        elseif (request('site_id_all') != 'all')
+            $site_id = request('site_id_all');
 
-        // First Attendance
-        $first_date = SiteAttendance::where('site_id', $siteID)->orderBy('date')->first();
-        $last_date = SiteAttendance::where('site_id', $siteID)->orderBy('date', 'DESC')->first();
+        $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') : null;
+        $to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00') : null;;
+        //dd($site_id);
+        //dd(request()->all());
+        //
+        // Export Single Site
+        //
+        if ($site_id) {
+            $site = Site::findOrFail($site_id);
+            $obj_site = (object) [];
+            $obj_site->site_id = $site->id;
+            $obj_site->site_name = $site->name;
+            $obj_site->attendance = [];
 
-        $attendance = SiteAttendance::where('site_id', $siteID)->orderBy('date')->get();
+            $attendance = ($from) ? SiteAttendance::where('site_id', $site_id)->whereDate('date', '>=', $from)->whereDate('date', '<=', $to)->orderBy('date')->get() : SiteAttendance::where('site_id', $site_id)->orderBy('date')->get();
 
-        foreach ($attendance as $attend) {
-            $user = User::find($attend->user_id);
-            $date = $attend->date->format('D M d, Y');
-            if (isset($obj_site->attendance[$date])) {
-                if (isset($obj_site->attendance[$date][$user->company->name_alias]))
+            foreach ($attendance as $attend) {
+                $date = $attend->date->format('D M d, Y');
+                $user = User::find($attend->user_id);
+                if (!$company || ($company && $user && $user->company_id == $company->id))
                     $obj_site->attendance[$date][$user->company->name_alias][$user->id] = $user->full_name;
-                else {
-                    $obj_site->attendance[$date][$user->company->name_alias]['tasks'] = implode(", ",$site->entityTasksOnDate('c', $user->company_id, $attend->date->format('Y-m-d')));
-                    $obj_site->attendance[$date][$user->company->name_alias][$user->id] = $user->full_name;
-                }
-            } else {
-                $obj_site->attendance[$date][$user->company->name_alias]['tasks'] = implode(", ",$site->entityTasksOnDate('c', $user->company_id, $attend->date->format('Y-m-d')));
-                $obj_site->attendance[$date][$user->company->name_alias][$user->id] = $user->full_name;
             }
+
+            $sitedata[] = $obj_site;
+            //dd($sitedata);
+
+            //return view('pdf/site-attendance', compact('site', 'date', 'weeks', 'sitedata', 'company', 'from', 'to'));
+            $pdf = PDF::loadView('pdf/site-attendance', compact('site', 'weeks', 'sitedata', 'company', 'from', 'to'));
+            $pdf->setPaper('a4', 'landscape');
+
+            return $pdf->stream();
+        } else {
+            //dd('company rep');
+            $user_ids = $company->staff->pluck('id')->toArray();
+            $attendance = SiteAttendance::whereIn('user_id', $user_ids)->orderBy('date')->get();
+            $company_attendance = [];
+
+            //dd($attendance);
+            foreach ($attendance as $attend) {
+                $date = $attend->date->format('D M d, Y');
+                $user = $attend->user;
+                if (isset($company_attendance[$date]))
+                    $company_attendance[$date][$attend->site->name][$user->id] = $user->full_name;
+                else
+                    $company_attendance[$date][$attend->site->name][$user->id] = $user->full_name;
+
+            }
+
+            //$sitedata[] = $obj_site;
+            //dd($company_attendance);
+
+            //return view('pdf/company-attendance', compact('company_attendance', 'company', 'from', 'to'));
+            $pdf = PDF::loadView('pdf/company-attendance', compact('company_attendance', 'company', 'from', 'to'));
+            $pdf->setPaper('a4', 'landscape');
+
+            return $pdf->stream();
         }
 
-        $sitedata[] = $obj_site;
-        //dd($sitedata);
-
-
-        //return view('pdf/site-attendance', compact('site', 'date', 'weeks', 'sitedata'));
-
-        $pdf = PDF::loadView('pdf/site-attendance', compact('site', 'weeks', 'sitedata'));
-        $pdf->setPaper('a4', 'landscape');
-            //->setOption('page-width', 200)->setOption('page-height', 287)
-            //->setOption('margin-bottom', 10)
-            //->setOrientation('landscape');
-
-        return $pdf->stream();
     }
 
     /*
      * Create Export Site Attendance PDF
      */
+    /*
     public function attendance2PDF(Request $request, $site_id)
     {
         $siteID = $request->get('site_id');
@@ -514,18 +541,18 @@ class SitePlannerExportController extends Controller {
         if ($first_date) {
             $current_date = $first_date->date->startOfWeek()->format('Y-m-d');
             $date = $first_date->date->startOfWeek()->format('Y-m-d');
-            /*echo "date: " . $first_date->date->format('Y-m-d') . '<br>';
-            echo "mon: " . $current_date . '<br>';
-            echo 'last: ' . $last_date->date->format('Y-m-d') . '<br>';
-            echo $last_date->date->diffInWeeks($first_date->date) . '<br>--<br>';
-            */
+            //echo "date: " . $first_date->date->format('Y-m-d') . '<br>';
+            //echo "mon: " . $current_date . '<br>';
+            //echo 'last: ' . $last_date->date->format('Y-m-d') . '<br>';
+            //echo $last_date->date->diffInWeeks($first_date->date) . '<br>--<br>';
+
             $weeks = $last_date->date->diffInWeeks($first_date->date) + 1;
             $date1 = Carbon::createFromFormat('d/m/Y H:i:s', '25/05/2017 00:00:00');
             $date2 = Carbon::createFromFormat('d/m/Y H:i:s', '29/05/2017 00:00:00');
-            /*echo 'd1 ' . $date1->format('Y-m-d') . '<br>';
-            echo 'm1 ' . $date1->startOfWeek()->format('Y-m-d') . '<br>';
-            echo 'd2 ' . $date2->format('Y-m-d') . '<br>';
-            echo $date2->diffInWeeks($date1->startOfWeek()) + 1 . '<br>';*/
+            //echo 'd1 ' . $date1->format('Y-m-d') . '<br>';
+            //echo 'm1 ' . $date1->startOfWeek()->format('Y-m-d') . '<br>';
+            //echo 'd2 ' . $date2->format('Y-m-d') . '<br>';
+            //echo $date2->diffInWeeks($date1->startOfWeek()) + 1 . '<br>';
         } else
             $weeks = 0;
 
@@ -605,7 +632,7 @@ class SitePlannerExportController extends Controller {
             ->setOrientation('landscape');
 
         return $pdf->stream();
-    }
+    }*/
 
 
     /**
@@ -647,9 +674,9 @@ class SitePlannerExportController extends Controller {
         //return view('pdf/plan-jobstart', compact('startdata'));
         $pdf = PDF::loadView('pdf/plan-jobstart', compact('startdata'));
         $pdf->setPaper('A4', 'landscape');
-            //->setOption('page-width', 200)->setOption('page-height', 287)
-            //->setOption('margin-bottom', 10)
-            //->setOrientation('landscape');
+        //->setOption('page-width', 200)->setOption('page-height', 287)
+        //->setOption('margin-bottom', 10)
+        //->setOrientation('landscape');
 
         if ($request->has('view_pdf'))
             return $pdf->stream();
@@ -721,9 +748,9 @@ class SitePlannerExportController extends Controller {
         //return view('pdf/plan-completion', compact('startdata'));
         $pdf = PDF::loadView('pdf/plan-completion', compact('startdata'));
         $pdf->setPaper('A4', 'landscape');
-            //->setOption('page-width', 200)->setOption('page-height', 287)
-            //->setOption('margin-bottom', 10)
-            //->setOrientation('landscape');
+        //->setOption('page-width', 200)->setOption('page-height', 287)
+        //->setOption('margin-bottom', 10)
+        //->setOrientation('landscape');
 
         if ($request->has('view_pdf'))
             return $pdf->stream();
