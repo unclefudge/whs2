@@ -39,6 +39,49 @@ class ReportController extends Controller {
         return view('manage/report/list');
     }
 
+    public function recent()
+    {
+        return view('manage/report/recent');
+    }
+
+    public function recentFiles()
+    {
+        $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+        // Create directory if required
+        if (!is_dir(public_path($dir)))
+            mkdir(public_path($dir), 0777, true);
+
+        $files = scandir_datesort(public_path($dir));
+
+        //dd($files);
+        $reports = [];
+        foreach ($files as $file) {
+            if (($file[0] != '.')) {
+                $processed = false;
+                if (filesize(public_path("$dir/$file")) > 0)
+                    $processed = true;
+
+                $date = Carbon::createFromFormat('YmdHis', substr($file, - 18, 4) . substr($file, - 14, 2) . substr($file, - 12, 2) . substr($file, - 10, 2) . substr($file, - 8, 2) . substr($file, - 6, 2));
+                $deleted = false;
+                if ($date->lt(Carbon::today()->subDays(10))) {
+                    unlink(public_path("$dir/$file"));
+                    $deleted = true;
+                }
+
+                if (!$deleted)
+                    $reports[$file] = filesize(public_path("$dir/$file"));
+
+                //$done = substr($file, - 5, 1);
+                //preg_match('#\((.*?)\)#', $file, $match);
+                //$site_id = $match[1];
+                //$site = Site::find($site_id);
+            }
+        }
+
+        return $reports;
+
+    }
+
     public function newusers()
     {
         $users = \App\User::where('created_at', '>', '2016-08-27 12:00:00')->orderBy('created_at', 'DESC')->get();
@@ -147,8 +190,8 @@ class ReportController extends Controller {
         else
             $site_ids = ($site_id_all) ? [$site_id_all] : Auth::user()->company->sites()->pluck('id')->toArray();
 
-        $date_from =  (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
-        $date_to =  (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
+        $date_from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
+        $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
 
 
         //dd(request('site_id_all'));

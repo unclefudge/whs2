@@ -1,11 +1,5 @@
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-download"></i> Quality Assurance Report</h1>
-    </div>
-@stop
-
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -48,62 +42,11 @@
                                 <button type="submit" class="btn green" name="export_site" value="true"> Generate PDF</button>
                             </div>
                         </div>
-                        <hr>
-                        <h3>Reports created in the last 10 days <a href="/site/export/qa" class="btn dark pull-right">Refresh</a></h3>
-                        <?php $files = array_reverse(array_diff(scandir(public_path('/filebank/tmp/qa/')), array('.', '..'))); ?>
-                        <table class="table table-striped table-bordered table-hover order-column" id="table_list">
-                            <thead>
-                            <tr class="mytable-header">
-                                <th width="5%"> #</th>
-                                <th> Site</th>
-                                <th width="20%"> Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($files as $file)
-                                @if (($file[0] != '.'))
-                                    <?php
-                                    $processed = false;
-                                    if (filesize(public_path("/filebank/tmp/qa/$file")) > 0)
-                                        $processed = true;
-
-                                    $date = Carbon\Carbon::createFromFormat('YmdHis', substr($file, - 19, 4) . substr($file, - 15, 2) . substr($file, - 13, 2) . substr($file, - 11, 2) . substr($file, - 9, 2) . substr($file, - 7, 2));
-                                    $deleted = false;
-                                    if ($date->lt(Carbon\Carbon::today()->subDays(7))) {
-                                        unlink(public_path("/filebank/tmp/qa/$file"));
-                                        $deleted = true;
-                                    }
-
-                                    $done = substr($file, - 5, 1);
-                                    preg_match('#\((.*?)\)#', $file, $match);
-                                    $site_id = $match[1];
-                                    $site = App\Models\Site\Site::find($site_id);
-                                    ?>
-                                    @if (!$deleted && $site && Auth::user()->allowed2('view.site', $site))
-                                        @if ($processed)
-                                            <tr>
-                                                <td>
-                                                    <div class="text-center"><a href="/filebank/tmp/qa/{{ $file }}" target="_blank"><i class="fa fa-file-text-o"></i></a></div>
-                                                </td>
-                                                <td>{!! ($done) ? $site->name : $site->name . ' <span class="label label-warning">incomplete</span>' !!}</td>
-                                                <td>{!! $date->format('d/m/y g:i a') !!}</td>
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>{!! ($done) ? $site->name : $site->name . ' <span class="label label-warning">incomplete</span>' !!}</td>
-                                                <td><span class="font-red"><i class="fa fa-spin fa-spinner"> </i> Processing</span></td>
-                                            </tr>
-                                        @endif
-                                    @endif
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
 
                         <div class="form-actions right">
                             <a href="/site/export" class="btn default"> Back</a>
                         </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>

@@ -49,7 +49,7 @@
 
 <body>
 <div class="container">
-    @foreach($sitedata as $siteplan)
+    @foreach($data as $siteplan)
         <div class="page22">
             <?php $site = App\Models\Site\Site::find($siteplan->site_id) ?>
             <div class="row">

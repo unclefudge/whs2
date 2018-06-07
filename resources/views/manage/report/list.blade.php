@@ -38,6 +38,9 @@
                             </thead>
                             <tbody>
                             <tr>
+                                <td><a href="/manage/report/recent">Recent Reports</a></td>
+                            </tr>
+                            <tr>
                                 <td><a href="/manage/report/newusers">New Users</a></td>
                             </tr>
                             <tr>

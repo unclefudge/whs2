@@ -69,7 +69,7 @@
             <div class="col-xs-3">Site</div>
             <div class="col-xs-8">Attendance</div>
         </div>
-        @foreach($company_attendance as $day => $site)
+        @foreach($data as $day => $site)
             @foreach($site as $site_name => $data)
                 <div class="row" @if ($loop->last)style="border-bottom: 1px solid lightgrey;" @endif>
                     <div class="col-xs-1">@if ($loop->first) {{ $day }} @endif</div>

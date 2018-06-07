@@ -299,7 +299,21 @@ function llllink_to($body, $path, $type)
             <button type="submit">{$body}</button>
          </form>
 EOT;
+}
 
+function scandir_datesort($dir) {
+    $ignored = array('.', '..', '.svn', '.htaccess');
+
+    $files = array();
+    foreach (scandir($dir) as $file) {
+        if (in_array($file, $ignored)) continue;
+        $files[$file] = filemtime($dir . '/' . $file);
+    }
+
+    arsort($files);
+    $files = array_keys($files);
+
+    return ($files) ? $files : false;
 }
 
 function format_expiry_field($date)

@@ -14,6 +14,8 @@ use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Http\Requests\Site\Planner\SitePlannerExportRequest;
+use App\Jobs\SiteAttendancePdf;
+use App\Jobs\CompanyAttendancePdf;
 use App\User;
 use App\Models\Site\Planner\Task;
 use App\Models\Site\Planner\Trade;
@@ -461,6 +463,12 @@ class SitePlannerExportController extends Controller {
 
         $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') : null;
         $to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00') : null;;
+
+        $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+        // Create directory if required
+        if (!is_dir(public_path($dir)))
+            mkdir(public_path($dir), 0777, true);
+
         //dd($site_id);
         //dd(request()->all());
         //
@@ -482,41 +490,44 @@ class SitePlannerExportController extends Controller {
                     $obj_site->attendance[$date][$user->company->name_alias][$user->id] = $user->full_name;
             }
 
-            $sitedata[] = $obj_site;
+            $data[] = $obj_site;
             //dd($sitedata);
 
-            //return view('pdf/site-attendance', compact('site', 'date', 'weeks', 'sitedata', 'company', 'from', 'to'));
-            $pdf = PDF::loadView('pdf/site-attendance', compact('site', 'weeks', 'sitedata', 'company', 'from', 'to'));
-            $pdf->setPaper('a4', 'landscape');
+            $output_file = public_path($dir.'/Site Attendance '.sanitizeFilename($site->name).' '.Carbon::now()->format('YmdHis').'.pdf');
+            touch($output_file);
 
-            return $pdf->stream();
+            //return view('pdf/site-attendance', compact('site', 'data', 'company', 'from', 'to'));
+            //return PDF::loadView('pdf/site-attendance', compact('site', 'data', 'company', 'from', 'to'))->setPaper('a4', 'landscape')->stream();
+            SiteAttendancePdf::dispatch($data, $site_id, $company, $from, $to, $output_file);
         } else {
             //dd('company rep');
             $user_ids = $company->staff->pluck('id')->toArray();
             $attendance = SiteAttendance::whereIn('user_id', $user_ids)->orderBy('date')->get();
-            $company_attendance = [];
+            $data = [];
 
             //dd($attendance);
             foreach ($attendance as $attend) {
                 $date = $attend->date->format('D M d, Y');
                 $user = $attend->user;
-                if (isset($company_attendance[$date]))
-                    $company_attendance[$date][$attend->site->name][$user->id] = $user->full_name;
+                if (isset($data[$date]))
+                    $data[$date][$attend->site->name][$user->id] = $user->full_name;
                 else
-                    $company_attendance[$date][$attend->site->name][$user->id] = $user->full_name;
+                    $data[$date][$attend->site->name][$user->id] = $user->full_name;
 
             }
 
             //$sitedata[] = $obj_site;
             //dd($company_attendance);
 
-            //return view('pdf/company-attendance', compact('company_attendance', 'company', 'from', 'to'));
-            $pdf = PDF::loadView('pdf/company-attendance', compact('company_attendance', 'company', 'from', 'to'));
-            $pdf->setPaper('a4', 'landscape');
+            $output_file = public_path($dir.'/Company Attendance '.sanitizeFilename($company->name).' '.Carbon::now()->format('YmdHis').'.pdf');
+            touch($output_file);
 
-            return $pdf->stream();
+            //return view('pdf/company-attendance', compact('data', 'company', 'from', 'to'));
+            //return PDF::loadView('pdf/company-attendance', compact('data', 'company', 'from', 'to'))->setPaper('a4', 'landscape')->stream();
+            CompanyAttendancePdf::dispatch($data, $company, $from, $to, $output_file);
         }
 
+        return redirect('/manage/report/recent');
     }
 
     /*

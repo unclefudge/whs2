@@ -495,14 +495,20 @@ class SiteQaController extends Controller {
             }
 
             //dd($data);
-            $output_file = public_path('filebank/tmp/qa/'.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('YmdHis').$completed.'.pdf');
+            $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+            // Create directory if required
+            if (!is_dir(public_path($dir)))
+                mkdir(public_path($dir), 0777, true);
+            $output_file = public_path($dir.'/QA '.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('YmdHis').'.pdf');
             touch($output_file);
 
+            //return view('pdf/site-qa', compact('site', 'data'));
+            //return PDF::loadView('pdf/site-qa', compact('site', 'data'))->setPaper('a4')->stream();
             // Queue the job to generate PDF
             SiteQaPdf::dispatch(request('site_id'), $data, $output_file);
         }
 
-        return redirect('/site/export/qa')->with('message', 'Generating PDF!');
+        return redirect('/manage/report/recent');
 
         if ($request->has('email_pdf')) {
             /*$file = public_path('filebank/tmp/jobstart-' . Auth::user()->id  . '.pdf');

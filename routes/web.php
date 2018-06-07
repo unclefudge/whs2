@@ -81,6 +81,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Reports
     Route::get('/manage/report', 'Misc\ReportController@index');
+    Route::get('/manage/report/recent', 'Misc\ReportController@recent');
+    Route::get('/manage/report/recent/files', 'Misc\ReportController@recentFiles');
     Route::get('/manage/report/newusers', 'Misc\ReportController@newusers');
     Route::get('/manage/report/newcompanies', 'Misc\ReportController@newcompanies');
     Route::get('/manage/report/users_noemail', 'Misc\ReportController@users_noemail');
