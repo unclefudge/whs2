@@ -17,36 +17,24 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Site Management</span>
-                        </div>
-                        <div class="actions">
-                            @if (Auth::user()->allowed2('add.site'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/create" data-original-title="Add">Add</a>
-                            @endif
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
+                            <span class="caption-subject bold uppercase font-green-haze"> Site List</span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2 pull-right">
-                            <div class="form-group">
-                                <select name="status" id="status" class="form-control bs-select">
-                                    <option value="1" selected>Active</option>
-                                    @if (Auth::user()->company->subscription)
-                                        <option value="-1">Upcoming</option>
-                                        <option value="0">Completed</option>
-                                    @endif
-                                </select>
+                        @if (Auth::user()->permissionLevel('view.site', Auth::user()->company_id) && (Auth::user()->company->parent_company && Auth::user()->permissionLevel('view.site', Auth::user()->company->reportsTo()->id)))
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    {!! Form::select('site_group', ['0' => 'All Sites', Auth::user()->company_id => Auth::user()->company->name,
+                                    Auth::user()->company->parent_company => Auth::user()->company->reportsTo()->name], null, ['class' => 'form-control bs-select', 'id' => 'site_group']) !!}
+                                </div>
                             </div>
-                        </div>
+                        @endif
+
                     </div>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
-                                @if (Auth::user()->company->subscription ||  Auth::user()->company_id == '96')
-                                    <th width="5%"> #</th>
-                                @endif
-                                <th width="5%"> No.</th>
                                 <th> Suburb</th>
                                 <th> Name</th>
                                 {{-- CapeCod + JonSpin --}}
@@ -87,17 +75,14 @@
         processing: true,
         serverSide: true,
         ajax: {
-            'url': '{!! url('site/dt/sites') !!}',
+            'url': '{!! url('site/dt/sitelist') !!}',
             'type': 'GET',
             'data': function (d) {
-                d.status = $('#status').val();
+                d.site_group = $('#site_group').val();
+                d.status = 1;
             }
         },
         columns: [
-                @if (Auth::user()->company->subscription ||  Auth::user()->company_id == '96'){data: 'id', name: 'sites.id', orderable: false, searchable: false}, @endif
-            {
-                data: 'code', name: 'code'
-            },
             {data: 'suburb', name: 'suburb'},
             {data: 'name', name: 'name'},
                 @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96') {data: 'client_phone', name: 'client_phone'}, @endif
@@ -107,7 +92,7 @@
             {data: 'supervisor', name: 'supervisor'},
         ],
         order: [
-                @if (Auth::user()->isCC() ||  Auth::user()->company_id == '96') [2, "asc"], [3, 'asc']  @else [1, "asc"], [2, 'asc'] @endif
+            [0, "asc"], [1, 'asc']
         ]
     });
 

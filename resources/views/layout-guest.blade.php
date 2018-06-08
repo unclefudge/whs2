@@ -131,7 +131,9 @@
         <!-- END PAGE HEAD-->
         <!-- BEGIN PAGE CONTENT BODY -->
         <div class="page-content"
-             style="background: #eff3f8">
+             @if (\App::environment('dev')) style="background-image: url('/img/bg-development.png'); background-repeat: repeat" @endif
+             @if (\App::environment('local')) style="background-image: url('/img/bg-local.png'); background-repeat: repeat" @endif
+             @if (\App::environment('prod')) style="background: #eff3f8" @endif>
             <div class="container">
                 <!-- BEGIN PAGE BREADCRUMBS -->
                 @yield('breadcrumbs')

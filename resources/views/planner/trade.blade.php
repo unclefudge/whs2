@@ -58,8 +58,8 @@
                                 @if (Auth::user()->hasPermission2('view.trade.planner'))
                                     <button v-on:click="gotoURL('/planner/transient')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">L</button>
                                 @endif
-                                @if (Auth::user()->hasPermission2('view.attendance'))
-                                    <button v-on:click="gotoURL('/planner/attendance')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">A</button>
+                                @if (Auth::user()->hasPermission2('view.roster'))
+                                    <button v-on:click="gotoURL('/planner/roster')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">R</button>
                                 @endif
                                 @if (Auth::user()->hasPermission2('view.site.planner'))
                                     <button v-on:click="gotoURL('/planner/site')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">S</button>

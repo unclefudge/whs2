@@ -78,16 +78,19 @@
                                                         @endif
 
                                                         @if (Auth::user()->hasAnyPermissionType('site'))
-                                                            <li><a href="/site" class="nav-link"> Site List </a></li>
+                                                            <li><a href="/sitelist" class="nav-link"> Site List </a></li>
                                                         @endif
                                                     </ul>
                                                 </div>
                                             @endif
                                             {{-- Site Info Document --}}
-                                            @if (Auth::user()->hasAnyPermissionType('site.qa'))
+                                            @if (Auth::user()->hasAnyPermissionType('site.attendance|site.qa'))
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Reports</h3></li>
+                                                        @if (Auth::user()->hasAnyPermissionType('site.attendance'))
+                                                            <li><a href="/site/attendance" class="nav-link"> Site Attendanace </a></li>
+                                                        @endif
                                                         @if (Auth::user()->hasAnyPermissionType('site.qa'))
                                                             <li><a href="/site/qa" class="nav-link"> Quality Assurance </a></li>
                                                         @endif
@@ -157,7 +160,7 @@
                     {{-----------------------------------------------------------------------------------
                        Planners
                      -----------------------------------------------------------------------------------}}
-                    @if (Auth::user()->hasAnyPermissionType('weekly.planner|site.planner|trade.planner|attendance'))
+                    @if (Auth::user()->hasAnyPermissionType('weekly.planner|site.planner|trade.planner|roster'))
                         <li class="menu-dropdown mega-menu-dropdown mega-menu-full">
                             <a href="javascript:;"><i class="fa fa-calendar"></i> Planners
                                 <span class="arrow"></span>
@@ -179,8 +182,8 @@
                                                     @if (Auth::user()->hasAnyPermissionType('site.planner'))
                                                         <li><a href="/planner/site" class="nav-link"> Site Planner </a></li>
                                                     @endif
-                                                    @if (Auth::user()->hasAnyPermissionType('attendance'))
-                                                        <li><a href="/planner/attendance" class="nav-link"> Site Attendance </a></li>
+                                                    @if (Auth::user()->hasAnyPermissionType('roster'))
+                                                        <li><a href="/planner/roster" class="nav-link"> Site Roster </a></li>
                                                     @endif
                                                 </ul>
                                             </div>

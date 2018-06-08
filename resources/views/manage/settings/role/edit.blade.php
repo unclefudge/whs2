@@ -188,17 +188,17 @@ $cc = 1;*/
                                             </tr>
                                         @endif
                                         @if ($sub2)
-                                                <tr>
-                                                    <td>Construction</td>
-                                                    <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                    @if (!$role->external)
-                                                        <td width="30%" colspan="2"></td>
-                                                        <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
-                                                    @else
-                                                        <td width="45%" colspan="3"></td>
-                                                    @endif
-                                                </tr>
+                                            <tr>
+                                                <td>Construction</td>
+                                                <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                @if (!$role->external)
+                                                    <td width="30%" colspan="2"></td>
+                                                    <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
+                                                @else
+                                                    <td width="45%" colspan="3"></td>
+                                                @endif
+                                            </tr>
                                             <tr>
                                                 <td>WHS Compliance</td>
                                                 <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
@@ -400,6 +400,11 @@ $cc = 1;*/
                                                     <td width="60%" colspan="4"></td>
                                                 @endif
                                             </tr>
+                                            <tr>
+                                                <td>Attendance</td>
+                                                <td width="15%">{!! permSelect('view.site.attendance', ($sub2) ? 'company.individual' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="60%" colspan="4"></td>
+                                            </tr>
                                             @if (!$role->external)
                                                 @if ($plan)
                                                     <tr>
@@ -412,7 +417,7 @@ $cc = 1;*/
                                                     </tr>
                                                 @endif
                                                 <tr>
-                                                    <td>Site Supervisors @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
+                                                    <td>Supervisors @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
                                                     <td width="15%">{!! permSelect('view.area.super', 'all', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('edit.area.super', 'all', $rec, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
@@ -456,18 +461,18 @@ $cc = 1;*/
                                                 </tr>
                                             </table>
 
-                                            <h5 class="font-green-haze" style="font-size: 16px">Attendance / Compliance
+                                            <h5 class="font-green-haze" style="font-size: 16px">Roster / Compliance
                                                 <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                                   data-content="Grants ability to view or edit attendance for users which belong to your company work sites."
+                                                   data-content="Grants ability to view or edit roster for users which belong to your company work sites."
                                                    data-original-title="Attendance / Compliance"> <i
                                                             class="fa fa-question-circle font-grey-silver"></i>
                                                 </a>
                                             </h5>
                                             <table class="table table-bordered table-striped">
                                                 <tr>
-                                                    <td>Attendance</td>
-                                                    <td width="15%">{!! permSelect('view.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.attendance', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
+                                                    <td>Roster</td>
+                                                    <td width="15%">{!! permSelect('view.roster', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.roster', ($sub2) ? 'super.company' : 'super.individual', $rec, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
                                                 </tr>
                                                 @if($cc)

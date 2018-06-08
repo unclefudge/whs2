@@ -619,7 +619,7 @@ class SitePlannerController extends Controller {
 
         $sel_site = [];
         $sel_site[] = ['value' => '', 'text' => 'Select Site'];
-        $sites = Auth::user()->authSites('view.attendance');
+        $sites = Auth::user()->authSites('view.roster');
         foreach ($sites as $site) {
             if (Auth::user()->company->addon('planner')) {
                 if ($site->anyTasksOnDate($date))
@@ -647,9 +647,9 @@ class SitePlannerController extends Controller {
 
         // Get Users permissions
         $permission = '';
-        if (Auth::user()->hasPermission2('view.attendance'))
+        if (Auth::user()->hasPermission2('view.roster'))
             $permission = 'view';
-        if (Auth::user()->hasPermission2('edit.attendance'))
+        if (Auth::user()->hasPermission2('edit.roster'))
             $permission = 'edit';
 
         $json = [];

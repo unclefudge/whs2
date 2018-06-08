@@ -40,6 +40,20 @@ class SiteController extends Controller {
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sitelist()
+    {
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->hasAnyPermissionType('site'))
+            return view('errors/404');
+
+        return view('site/list-basic');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -214,6 +228,42 @@ class SiteController extends Controller {
      */
     public function getSites()
     {
+        $site_records = Auth::user()->company->sites(request('status'));
+
+        $dt = Datatables::of($site_records)
+            ->editColumn('id', function ($site) {
+                // Only return link to site if owner of site
+                return (Auth::user()->isCompany($site->company_id)) ? '<div class="text-center"><a href="/site/' . $site->slug . '"><i class="fa fa-search"></i></a></div>' : '';
+            })
+            ->editColumn('client_phone', function ($site) {
+                $string = '';
+                if ($site->client_phone) {
+                    $string = $site->client_phone;
+                    if ($site->client_phone_desc)
+                        $string = $site->client_phone . ' ' . $site->client_phone_desc;
+                }
+                if ($site->client_phone2) {
+                    $string .= '<br>' . $site->client_phone2;
+                    if ($site->client_phone2_desc)
+                        $string .= ' ' . $site->client_phone2_desc;
+                }
+
+                return $string;
+            })
+            ->addColumn('supervisor', function ($site) {
+                return $site->supervisorsSBC();
+            })
+            ->rawColumns(['id', 'client_phone'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Sites current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getSiteList()
+    {
         $status = request('status');
         if (request('site_group'))
             $site_records = Auth::user()->authSites('view.site', $status)->where('company_id', request('site_group'));
@@ -226,10 +276,6 @@ class SiteController extends Controller {
         }
 
         $dt = Datatables::of($site_records)
-            ->editColumn('id', function ($site) {
-                // Only return link to site if owner of site
-                return (Auth::user()->isCompany($site->company_id)) ? '<div class="text-center"><a href="/site/' . $site->slug . '"><i class="fa fa-search"></i></a></div>' : '';
-            })
             ->editColumn('client_phone', function ($site) {
                 $string = '';
                 if ($site->client_phone) {

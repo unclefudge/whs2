@@ -214,6 +214,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('site/supervisor/data/supers', 'Company\CompanySupervisorController@getSupers');
     Route::resource('site/supervisor', 'Company\CompanySupervisorController');
 
+    // Site Attendance
+    Route::get('/site/attendance/dt/attendance', 'Site\SiteAttendanceController@getAttendance');
+    Route::resource('/site/attendance', 'Site\SiteAttendanceController');
+
+
     // Site Exports
     Route::get('site/export', 'Site\Planner\SitePlannerExportController@index');
     Route::get('site/export/plan', 'Site\Planner\SitePlannerExportController@exportPlanner');
@@ -229,6 +234,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Routes
     Route::get('site/dt/sites', 'Site\SiteController@getSites');
+    Route::get('site/dt/sitelist', 'Site\SiteController@getSiteList');
+    Route::get('sitelist', 'Site\SiteController@siteList');
     //Route::get('site/{slug}/checkin', 'Site\SiteController@siteCheckin');
     //Route::post('site/{slug}/checkin', 'Site\SiteController@processCheckin');
     Route::get('site/{slug}/settings', 'Site\SiteController@showSettings');
@@ -299,7 +306,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('planner/site', 'Site\Planner\SitePlannerController@showSite');
     Route::any('planner/site/{site_id}', 'Site\Planner\SitePlannerController@showSite');
     Route::any('planner/trade', 'Site\Planner\SitePlannerController@showTrade');
-    Route::any('planner/attendance', 'Site\Planner\SitePlannerController@showAttendance');
+    Route::any('planner/roster', 'Site\Planner\SitePlannerController@showAttendance');
     Route::any('planner/transient', 'Site\Planner\SitePlannerController@showTransient');
     Route::get('planner/data/sites', 'Site\Planner\SitePlannerController@getSites');
     Route::get('planner/data/site/{site_id}', 'Site\Planner\SitePlannerController@getSitePlan');

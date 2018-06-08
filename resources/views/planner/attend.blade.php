@@ -2,14 +2,14 @@
 
 @section('pagetitle')
     <div class="page-title" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
-        <h1><i class="fa fa-calendar"></i> Site Attendance</h1>
+        <h1><i class="fa fa-calendar"></i> Site Roster</h1>
     </div>
 @stop
 
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        <li><span>Site Attendance</span></li>
+        <li><span>Site Roster</span></li>
     </ul>
 @stop
 
@@ -43,14 +43,14 @@
                         <div class="portlet-title tabbable-line">
                             <div class="caption font-dark">
                                 <i class="icon-layers"></i>
-                                <span class="caption-subject bold uppercase font-green-haze"> Site Attendance</span>
+                                <span class="caption-subject bold uppercase font-green-haze"> Site Roster</span>
                             </div>
                             <div class="actions">
                                 <div class="actions">
                                     @if (Auth::user()->hasPermission2('view.trade.planner'))
                                         <button v-on:click="gotoURL('/planner/transient')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">L</button>
                                     @endif
-                                    <button class="btn btn-circle btn-icon-only btn-default grey-steel disabled" style="margin: 3px">A</button>
+                                    <button class="btn btn-circle btn-icon-only btn-default grey-steel disabled" style="margin: 3px">R</button>
                                     @if (Auth::user()->hasPermission2('view.site.planner'))
                                         <button v-on:click="gotoURL('/planner/site')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">S</button>
                                     @endif

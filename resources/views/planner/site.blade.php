@@ -31,8 +31,8 @@
                             @if (Auth::user()->hasPermission2('view.trade.planner'))
                                 <a href="javascript: postAndRedirect('/planner/transient', xx.params)" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">L</a>
                             @endif
-                            @if (Auth::user()->hasPermission2('view.attendance'))
-                                <a href="javascript: postAndRedirect('/planner/attendance', xx.params)" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">A</a>
+                            @if (Auth::user()->hasPermission2('view.roster'))
+                                <a href="javascript: postAndRedirect('/planner/roster', xx.params)" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">R</a>
                             @endif
                             <button class="btn btn-circle btn-icon-only grey-steel disabled" style="margin: 3px">S</button>
                             @if (Auth::user()->hasPermission2('view.trade.planner'))

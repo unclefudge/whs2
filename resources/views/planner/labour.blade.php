@@ -55,7 +55,7 @@
                             </div>
                             <div class="actions">
                                 <button class="btn btn-circle btn-icon-only btn-default grey-steel disabled" style="margin: 3px">L</button>
-                                <button v-on:click="gotoURL('/planner/attendance')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">A</button>
+                                <button v-on:click="gotoURL('/planner/roster')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">R</button>
                                 <button v-on:click="gotoURL('/planner/site')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">S</button>
                                 <button v-on:click="gotoURL('/planner/trade')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">T</button>
                                 <button v-on:click="gotoURL('/planner/weekly')" class="btn btn-circle btn-icon-only btn-default" style="margin: 3px">W</button>

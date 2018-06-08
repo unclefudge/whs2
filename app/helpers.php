@@ -137,6 +137,9 @@ function permOptions($action, $type = '')
             case 'super.individual' :
                 $array = ['0' => 'No', '99' => "All", '40' => 'Supervisor for', '10' => "Individual Only"];
                 break;
+            case 'company.individual' :
+                $array = ['0' => 'No', '99' => "All", '20' => 'Own Company', '10' => "Individual Only"];
+                break;
             case 'every-plan' :
                 $array = ['0' => 'No', '99' => "All", '50' => "Our Company", '40' => 'Supervisor for', '20' => 'Own Company', '10' => "Individual Only"];
                 break;
