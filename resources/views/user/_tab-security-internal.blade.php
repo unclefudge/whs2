@@ -83,7 +83,7 @@ $rec = $user;
        data-content="Grants ability to view or modify your company information or any 'child' company."
        data-original-title="Company"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
 <table class="table table-bordered table-striped">
-    @if ($sub2 && Auth::user()->company_id == $user->company_id)
+    @if (Auth::user()->company_id == $user->company_id)
         <tr>
             <td>Company Record</td>
             <td width="30%" colspan="2"></td>
@@ -97,7 +97,7 @@ $rec = $user;
         <td>Company Details</td>
         <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-        @if ($sub2 && Auth::user()->company_id == $user->company_id)
+        @if (Auth::user()->company_id == $user->company_id)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
         @else
@@ -109,7 +109,7 @@ $rec = $user;
         <td>Business Details</td>
         <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
         <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-        @if ($sub2 && Auth::user()->company_id == $user->company_id)
+        @if (Auth::user()->company_id == $user->company_id)
             <td width="30%" colspan="2"></td>
             <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
         @else
@@ -118,7 +118,7 @@ $rec = $user;
     </tr>
 
 
-    @if ($sub2 && Auth::user()->company_id == $user->company_id)
+    @if (Auth::user()->company_id == $user->company_id)
         <tr>
             <td>Construction</td>
             <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
@@ -130,7 +130,7 @@ $rec = $user;
             <td>WHS Compliance</td>
             <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
             <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-            @if ($sub2 && Auth::user()->company_id == $user->company_id)
+            @if (Auth::user()->company_id == $user->company_id)
                 <td width="30%" colspan="2"></td>
                 <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
             @else
@@ -143,10 +143,9 @@ $rec = $user;
                 <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                 <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                 <td width="45%" colspan="3"></td>
-                @endif
             </tr>
         @endif
-
+    @endif
 </table>
 <hr>
 

@@ -544,11 +544,20 @@ class CronController extends Controller {
 
             // Toolbox Talk
             if ($todo->type == 'toolbox') {
-                echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "<br>";
-                $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "\n";
-                $todo->emailToDo();
-                if (!in_array($todo->type_id, $toolboxs_overdue))
-                    $toolboxs_overdue[] = $todo->type_id;
+                $toolbox = ToolboxTalk::find($todo->type_id);
+                if ($toolbox && $toolbox->status) {
+                    echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "<br>";
+                    $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "\n";
+                    $todo->emailToDo();
+                    if (!in_array($todo->type_id, $toolboxs_overdue))
+                        $toolboxs_overdue[] = $todo->type_id;
+                } else {
+                    // Toolbox is no longer active so close outstanding ToDos
+                    $todo->status = 0;
+                    $todo->done_at = Carbon::now();
+                    $todo->done_by = 1;
+                    $todo->save();
+                }
             }
         }
 

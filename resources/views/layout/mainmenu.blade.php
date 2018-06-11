@@ -228,19 +228,8 @@
                                                         @if (Auth::user()->hasAnyPermissionType('user'))
                                                             <li><a href="/company/{{ Auth::user()->company_id }}/user" class="nav-link"> Users </a></li>
                                                         @endif
-                                                        {{--
-                                                        @if (Auth::user()->hasAnyPermissionType('contractor'))
-                                                            <li><a href="/contractor" class="nav-link"> Contractors </a></li>
-                                                        @endif
-                                                        --}}
-                                                        {{--
-                                                        @if(Auth::user()->company->subscription && Auth::user()->hasAnyPermissionType('client'))
-                                                             <li><a href="/client" class="nav-link"> Clients </a></li>
-                                                        @endif --}}
-                                                        @if(Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company'))
+                                                        @if(Auth::user()->hasAnyPermissionType('company'))
                                                             <li><a href="/company" class="nav-link"> Companies </a></li>
-                                                        @elseif(Auth::user()->hasAnyPermissionType('company'))
-                                                            <li><a href="/company/{{ Auth::user()->company_id }}" class="nav-link"> Company Profile </a></li>
                                                         @endif
                                                         @if (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company.leave'))
                                                             <li><a href="/company/leave" class="nav-link"> Company Leave </a></li>

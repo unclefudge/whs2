@@ -3,12 +3,6 @@
 
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-user"></i> User Management</h1>
-    </div>
-@stop
-
 @if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
@@ -77,139 +71,11 @@
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
                         {!! Form::model('user', ['action' => 'UserController@store', 'class' => 'horizontal-form']) !!}
-                        {!! Form::hidden('status', '1') !!}
                         @include('form-error')
 
                         <div class="form-body">
-                            {{-- Login Details --}}
-                            <h3 class="font-green form-section">Login Details</h3>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('username', $errors) !!}">
-                                        {!! Form::label('username', 'Username *', ['class' => 'control-label']) !!}
-                                        {!! Form::text('username', null, ['class' => 'form-control', 'required']) !!}
-                                        {!! fieldErrorMessage('username', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-2 pull-right">
-                                    <div class="form-group {!! fieldHasError('security', $errors) !!}">
-                                        <p class="myswitch-label" style="font-size: 14px">Security Access
-                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                               data-content="Grants user the abilty to edit other users permissions with your company" data-original-title="Security Access">
-                                                <i class="fa fa-question-circle font-grey-silver"></i>
-                                            </a></p>
-                                        {!! Form::label('security', "&nbsp;", ['class' => 'control-label']) !!}
-                                        {!! Form::checkbox('security', '1', null,
-                                         ['class' => 'make-switch',
-                                         'data-on-text'=>'Yes', 'data-on-color'=>'success',
-                                         'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
-                                        {!! fieldErrorMessage('security', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('password', $errors) !!}">
-                                        {!! Form::label('password', 'Password *', ['class' => 'control-label']) !!}
-                                        {!! Form::text('password', null, ['class' => 'form-control', 'required', 'placeholder' => 'User will be forced to choose new password upon login']) !!}
-                                        {!! fieldErrorMessage('password', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Roles--}}
-                            <div class="row">
-                                @if(Auth::user()->company->subscription)
-                                    {!! Form::hidden('subscription', 1) !!}
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('roles', $errors) !!}">
-                                            {!! Form::label('roles', 'Role(s)', ['class' => 'control-label']) !!}
-                                            {!! Form::select('roles', Auth::user()->company->rolesSelect('int'), null, ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
-                                            {!! fieldErrorMessage('roles', $errors) !!}
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-
-                            {{-- Contact Details --}}
-                            <h3 class="font-green form-section">Contact Details</h3>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
-                                        {!! Form::label('firstname', 'First Name *', ['form-control', 'required']) !!}
-                                        {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
-                                        {!! fieldErrorMessage('firstname', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
-                                        {!! Form::label('lastname', 'Last Name *', ['class' => 'control-label']) !!}
-                                        {!! Form::text('lastname', null, ['class' => 'form-control', 'required']) !!}
-                                        {!! fieldErrorMessage('lastname', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Address -->
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group {!! fieldHasError('address', $errors) !!}">
-                                        {!! Form::label('address', 'Address', ['class' => 'control-label']) !!}
-                                        {!! Form::text('address', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('address', $errors) !!}
-                                    </div>
-                                </div>
                                 <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group {!! fieldHasError('suburb', $errors) !!}">
-                                                {!! Form::label('suburb', 'Suburb', ['class' => 'control-label']) !!}
-                                                {!! Form::text('suburb', null, ['class' => 'form-control']) !!}
-                                                {!! fieldErrorMessage('suburb', $errors) !!}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group {!! fieldHasError('state', $errors) !!}">
-                                                {!! Form::label('state', 'State', ['class' => 'control-label']) !!}
-                                                {!! Form::select('state', $ozstates::all(),
-                                                 'NSW', ['class' => 'form-control bs-select']) !!}
-                                                {!! fieldErrorMessage('state', $errors) !!}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group {!! fieldHasError('postcode', $errors) !!}">
-                                                {!! Form::label('postcode', 'Postcode', ['class' => 'control-label']) !!}
-                                                {!! Form::text('postcode', null, ['class' => 'form-control']) !!}
-                                                {!! fieldErrorMessage('postcode', $errors) !!}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Phone + Email -->
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('phone', $errors) !!}">
-                                        {!! Form::label('phone', 'Phone', ['class' => 'control-label']) !!}
-                                        {!! Form::text('phone', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('phone', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group {!! fieldHasError('email', $errors) !!}">
-                                        {!! Form::label('email', 'Email *', ['class' => 'control-label']) !!}
-                                        {!! Form::text('email', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('email', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Additional Details --}}
-                            <h3 class="font-green form-section">Additional Information</h3>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
                                     <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
                                         {!! Form::label('employment_type', 'Employment type * : What is the relationship of this worker to your business', ['class' => 'control-label']) !!}
                                         {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
@@ -218,42 +84,192 @@
                                         {!! fieldErrorMessage('employment_type', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
-                                        {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
-                                        {!! Form::select('subcontractor_type', $companyEntity::all(),
-                                                 null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('subcontractor_type', $errors) !!}
-                                        <br><br>
-                                        <div class="note note-warning" style="display: none" id="subcontractor_wc">
-                                            A separate Worker's Compensation Policy is required for this Subcontractor
-                                        </div>
-                                        <div class="note note-warning" style="display: none" id="subcontractor_sa">
-                                            A separate Sickness & Accident Policy is required for this Subcontractor
+                            </div>
+
+                            {{-- User Creation field --}}
+                            <div id="user_creation_fields">
+                                {{-- Login Details --}}
+                                <h3 class="font-green form-section">Login Details</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group {!! fieldHasError('username', $errors) !!}">
+                                            {!! Form::label('username', 'Username *', ['class' => 'control-label']) !!}
+                                            {!! Form::text('username', null, ['class' => 'form-control', 'required']) !!}
+                                            {!! fieldErrorMessage('username', $errors) !!}
                                         </div>
                                     </div>
+                                    <div class="col-md-2 pull-right">
+                                        <div class="form-group {!! fieldHasError('security', $errors) !!}">
+                                            <p class="myswitch-label" style="font-size: 14px">Security Access
+                                                <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                                   data-content="Grants user the abilty to edit other users permissions with your company" data-original-title="Security Access">
+                                                    <i class="fa fa-question-circle font-grey-silver"></i>
+                                                </a></p>
+                                            {!! Form::label('security', "&nbsp;", ['class' => 'control-label']) !!}
+                                            {!! Form::checkbox('security', '1', null,
+                                             ['class' => 'make-switch',
+                                             'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                             'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                            {!! fieldErrorMessage('security', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group {!! fieldHasError('password', $errors) !!}">
+                                            {!! Form::label('password', 'Password *', ['class' => 'control-label']) !!}
+                                            {!! Form::text('password', null, ['class' => 'form-control', 'required', 'placeholder' => 'User will be forced to choose new password upon login']) !!}
+                                            {!! fieldErrorMessage('password', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Roles--}}
+                                <div class="row">
+                                    @if(Auth::user()->company->subscription)
+                                        {!! Form::hidden('subscription', 1) !!}
+                                        <div class="col-md-6">
+                                            <div class="form-group {!! fieldHasError('roles', $errors) !!}">
+                                                {!! Form::label('roles', 'Role(s)', ['class' => 'control-label']) !!}
+                                                {!! Form::select('roles', Auth::user()->company->rolesSelect('int'), null, ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple', 'required']) !!}
+                                                {!! fieldErrorMessage('roles', $errors) !!}
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- Contact Details --}}
+                                <h3 class="font-green form-section">Contact Details</h3>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group {!! fieldHasError('firstname', $errors) !!}">
+                                            {!! Form::label('firstname', 'First Name *', ['form-control', 'required']) !!}
+                                            {!! Form::text('firstname', null, ['class' => 'form-control', 'required']) !!}
+                                            {!! fieldErrorMessage('firstname', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
+                                            {!! Form::label('lastname', 'Last Name *', ['class' => 'control-label']) !!}
+                                            {!! Form::text('lastname', null, ['class' => 'form-control', 'required']) !!}
+                                            {!! fieldErrorMessage('lastname', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group {!! fieldHasError('address', $errors) !!}">
+                                            {!! Form::label('address', 'Address', ['class' => 'control-label']) !!}
+                                            {!! Form::text('address', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('address', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group {!! fieldHasError('suburb', $errors) !!}">
+                                                    {!! Form::label('suburb', 'Suburb', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('suburb', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('suburb', $errors) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('state', $errors) !!}">
+                                                    {!! Form::label('state', 'State', ['class' => 'control-label']) !!}
+                                                    {!! Form::select('state', $ozstates::all(),
+                                                     'NSW', ['class' => 'form-control bs-select']) !!}
+                                                    {!! fieldErrorMessage('state', $errors) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group {!! fieldHasError('postcode', $errors) !!}">
+                                                    {!! Form::label('postcode', 'Postcode', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('postcode', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('postcode', $errors) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phone + Email -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group {!! fieldHasError('phone', $errors) !!}">
+                                            {!! Form::label('phone', 'Phone', ['class' => 'control-label']) !!}
+                                            {!! Form::text('phone', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('phone', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group {!! fieldHasError('email', $errors) !!}">
+                                            {!! Form::label('email', 'Email *', ['class' => 'control-label']) !!}
+                                            {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('email', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Additional Details --}}
+                                <h3 class="font-green form-section">Additional Information</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
+                                        <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
+                                            {!! Form::label('employment_type', 'Employment type * : What is the relationship of this worker to your business', ['class' => 'control-label']) !!}
+                                            {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
+                                            '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
+                                                     '', ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('employment_type', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
+                                            {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
+                                            {!! Form::select('subcontractor_type', $companyEntity::all(),
+                                                     null, ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('subcontractor_type', $errors) !!}
+                                            <br><br>
+                                            <div class="note note-warning" style="display: none" id="subcontractor_wc">
+                                                A separate Worker's Compensation Policy is required for this Subcontractor
+                                            </div>
+                                            <div class="note note-warning" style="display: none" id="subcontractor_sa">
+                                                A separate Sickness & Accident Policy is required for this Subcontractor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Notes -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('notes', $errors) !!}">
+                                            {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('notes', null, ['rows' => '2', 'class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('notes', $errors) !!}
+                                            <span class="help-block"> For internal use only </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions right">
+                                    @if (Auth::user()->company->status == 2)
+                                        <a href="/signup/workers/{{ Auth::user()->company_id }}" class="btn default"> Back</a>
+                                    @else
+                                        <a href="/user" class="btn default"> Back</a>
+                                    @endif
+                                    <button type="submit" class="btn green"> Save</button>
                                 </div>
                             </div>
 
-                            <!-- Notes -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('notes', null, ['rows' => '2', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
-                                        <span class="help-block"> For internal use only </span>
-                                    </div>
+                            {{-- Company Creation field --}}
+                            <div class="note note-warning" id="company_creation_fields">
+                                <b>This person is a separate entity (Soul Trader, Partnership, Trading Trust or Company).</b><br><br>
+                                This means that you need to collect extra documentation from them in order for you to be compliant.<br><br>
+                                Add this person via <a href="/company/create" class="btn dark btn-sm" data-original-title="Add" style="margin-left: 20px">Add Company</a>
                                 </div>
-                            </div>
-                            <div class="form-actions right">
-                                @if (Auth::user()->company->status == 2)
-                                    <a href="/signup/workers/{{ Auth::user()->company_id }}" class="btn default"> Back</a>
-                                @else
-                                    <a href="/user" class="btn default"> Back</a>
-                                @endif
-                                <button type="submit" class="btn green"> Save</button>
-                            </div>
+
                         </div>
                         {!! Form::close() !!}
                     </div>
@@ -286,15 +302,25 @@
             placeholder: "Select Company",
         });
 
+        $("#user_creation_fields").hide();
+        $("#company_creation_fields").hide();
 
-        // Show Subcontractor field
-        if ($("#employment_type").val() == '3')
-            $("#subcontract_type_field").show();
+        // Show User Creation fields
+        if ($("#employment_type").val() == 1 || $("#employment_type").val() == 2)
+            $("#user_creation_fields").show();
+
+        // Show Company Creations field
+        if ($("#employment_type").val() == 3)
+            $("#company_creation_fields").show();
 
         $("#employment_type").on("change", function () {
-            $("#subcontract_type_field").hide();
-            if ($("#employment_type").val() == '3')
-                $("#subcontract_type_field").show();
+            $("#user_creation_fields").hide();
+            $("#company_creation_fields").hide();
+
+            if ($("#employment_type").val() == 1 || $("#employment_type").val() == 2)
+                $("#user_creation_fields").show();
+            if ($("#employment_type").val() == 3)
+                $("#company_creation_fields").show();
         });
 
         // Show appropiate Subcontractor message

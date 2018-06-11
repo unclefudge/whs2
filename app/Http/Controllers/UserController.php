@@ -73,6 +73,7 @@ class UserController extends Controller {
         $user_request['company_id'] = Auth::user()->company_id;
         $user_request['password'] = bcrypt($user_request['password']);  // encrypt password from form
         $user_request['password_reset'] = 1;
+        $user_request['status'] = 1;
 
         // Empty State field if rest of address fields are empty
         if (!$request->filled('address') && !$request->filled('suburb') && !$request->filled('postcode'))

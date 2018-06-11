@@ -37,7 +37,7 @@ class CompanyController extends Controller {
      */
     public function index()
     {
-        if (!(Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company')))
+        if (!Auth::user()->hasAnyPermissionType('company'))
             return view('errors/404');
 
         return view('company/list');
@@ -51,7 +51,7 @@ class CompanyController extends Controller {
     public function create()
     {
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company') || Auth::user()->company->subscription < 2)
+        if (!Auth::user()->allowed2('add.company'))
             return view('errors/404');
 
         return view('company/create');
@@ -73,7 +73,7 @@ class CompanyController extends Controller {
         ]);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company') || Auth::user()->company->subscription < 2)
+        if (!Auth::user()->allowed2('add.company'))
             return view('errors/404');
 
         // Create Company
@@ -537,7 +537,7 @@ class CompanyController extends Controller {
         $companies = [];
         if (Auth::user()->company_id == 2) // Safeworksite Website Owner
             $companies = Company::where('status', $request->get('status'))->get();
-        elseif (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company'))
+        elseif (Auth::user()->hasAnyPermissionType('company'))
             $companies = Auth::user()->authCompanies('view.company', $request->get('status'));
 
         $dt = Datatables::of($companies)

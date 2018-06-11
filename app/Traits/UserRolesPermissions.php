@@ -623,9 +623,18 @@ trait UserRolesPermissions {
                 return false;
             }
 
-            // Company Accounting + WHS + Construction + Leave
-            if ($permissiontype == 'company.acc' || $permissiontype == 'company.con' || $permissiontype == 'company.whs' || $permissiontype == 'company.leave') {
+            // Company Accounting + Leave
+            if ($permissiontype == 'company.acc' || $permissiontype == 'company.leave') {
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
+
+                return false;
+            }
+
+            // Company WHS + Construction
+            if ($permissiontype == 'company.con' || $permissiontype == 'company.whs') {
+                // Company has no parent or Uses doesn't belong to this company
+                // ie Users can't edit their own company record if they hgave a parent
+                if ((!$record->parent_company || $this->company_id != $record->id) && $this->authCompanies($permission)->contains('id', $record->id)) return true;
 
                 return false;
             }

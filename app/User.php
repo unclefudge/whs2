@@ -257,7 +257,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         else
             $user_list = $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
 
-        if ($status)
+        if ($status != '')
             return SiteHazard::where('status', '=', $status)
                 ->where(function ($q) use ($site_list, $user_list) {
                     $q->whereIn('created_by', $user_list);
