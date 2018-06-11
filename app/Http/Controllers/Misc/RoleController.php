@@ -104,6 +104,7 @@ class RoleController extends Controller {
 
         $role_request = request()->only('name', 'description');
 
+        //echo $role->id."<br>";
         //dd(request()->all());
         $role->update($role_request);
 
@@ -112,7 +113,7 @@ class RoleController extends Controller {
         // Update Permissions
         $role->detachAllPermissions();
         foreach ($permissions as $permission) {
-            if (request("p$permission->id") != 0)
+            if (request("p$permission->id"))
                 $role->attachPermission($permission->id, request("p$permission->id"), Auth::user()->company_id);
         }
 

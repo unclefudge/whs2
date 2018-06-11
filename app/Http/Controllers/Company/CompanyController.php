@@ -559,7 +559,7 @@ class CompanyController extends Controller {
                         $name .= ' &nbsp; <span class="label label-sm label-info">Uploading documents</span></a>';
 
                     // Created info
-                    $name .= "<br><br>Created: ".$company->created_at->format('d/m/Y'). " (".User::find($company->created_by)->fullname.")";
+                    $name .= "<br><br>Created: " . $company->created_at->format('d/m/Y') . " (" . User::find($company->created_by)->fullname . ")";
                     $name .= "<br><a href='/signup/cancel/$company->id' class='btn btn-xs dark'>Cancel Sign Up & Delete Company</a>";
 
                 }
@@ -609,9 +609,9 @@ class CompanyController extends Controller {
         $dt = Datatables::of($users)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
             ->editColumn('id', function ($user) {
-                //if (Auth::user()->allowed2('view.user', $user))
-                return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
-                //return '';
+                if (Auth::user()->allowed2('view.user', $user))
+                    return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
+                return '';
             })
             ->editColumn('full_name', function ($user) {
                 $string = $user->firstname . ' ' . $user->lastname;

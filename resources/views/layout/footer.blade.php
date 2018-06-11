@@ -4,9 +4,11 @@
         <div class="row">
             <div class="col-md-4 col-sm-6 col-xs-12 footer-block">
                 @if (Auth::user()->company_id == 41 || Auth::user()->parent_company == 41)
-                    <img src="/img/logo-sydneywaste.png" height="70">
+                    <img src="/img/logo-sydneywaste.png" height="100">
+                @elseif (Auth::user()->company_id == 198 || Auth::user()->parent_company == 198)
+                    <img src="/img/logo-capstone.png" height="100">
                 @else
-                    <img src="/img/logo-capecod.png" height="70">
+                    <img src="/img/logo-capecod.png" height="100">
                 @endif
             </div>
             <div class="col-md-4 col-sm-6 col-xs-12 footer-block">

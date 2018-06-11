@@ -150,6 +150,10 @@
         table_staff.ajax.reload();
     });
 
+    $('#status').change(function () {
+        table_staff.ajax.reload();
+    });
+
     @if ($company->subscription > 1)
     table_staff.column(2).visible(true);
     @endif
