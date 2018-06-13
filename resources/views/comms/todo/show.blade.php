@@ -137,7 +137,7 @@
                                 @endif
                                 @if($todo->type == 'swms')
                                     <a href="/safety/doc/wms/{{ $todo->type_id }}" class="btn dark">View expired SWMS</a>
-                                    <a href="/safety/doc/wms/{{ $todo->type_id }}/renew" class="btn blue">Make new SWMS</a>
+                                    <a href="/safety/doc/wms/{{ $todo->type_id }}/replace" class="btn blue">Make new SWMS</a>
                                 @endif
                                 @if($todo->type == 'company doc')
                                     <?php $doc = \App\Models\Company\CompanyDoc::find($todo->type_id) ?>

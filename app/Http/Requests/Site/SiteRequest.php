@@ -33,7 +33,7 @@ class SiteRequest extends Request {
             }
             default: { // Create + settings:info rules
                 return [
-                    'code'      => 'required|unique:sites,code,' . $this->get('id'),
+                    'code'      => 'required',
                     'name'      => 'required',
                     'address'   => 'required',
                     'suburb'    => 'required',
@@ -48,7 +48,6 @@ class SiteRequest extends Request {
     {
         return [
             'code.required'      => 'The site no. field is required.',
-            'code.unique'        => 'The site no. has already been taken.',
             'client_id.required' => 'The client field is required.',
             'photo'              => 'No image was selected.',
         ];

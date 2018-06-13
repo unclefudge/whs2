@@ -269,10 +269,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('safety/doc/dt/toolbox_templates', 'Safety\ToolboxTalkController@getToolboxTemplates');
     Route::resource('safety/doc/toolbox2', 'Safety\ToolboxTalkController');
 
-
     // Safety Docs - WMS
     Route::get('safety/doc/wms', 'Safety\WmsController@index');
     Route::get('safety/doc/wms/expired', 'Safety\WmsController@expired');
+    Route::get('safety/doc/wms/{id}/create', 'Safety\WmsController@createFromTemplate');
     Route::get('safety/doc/wms/{id}/steps', 'Safety\WmsController@getSteps');
     Route::any('safety/doc/wms/{id}/update', 'Safety\WmsController@update');
     Route::get('safety/doc/wms/{id}/reject', 'Safety\WmsController@reject');
@@ -281,7 +281,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('safety/doc/wms/{id}/pdf', 'Safety\WmsController@pdf');
     Route::post('safety/doc/wms/{id}/email', 'Safety\WmsController@email');
     Route::any('safety/doc/wms/{id}/upload', 'Safety\WmsController@upload');
-    Route::get('safety/doc/wms/{id}/renew', 'Safety\WmsController@renew');
+    Route::get('safety/doc/wms/{id}/replace', 'Safety\WmsController@replace');
+    Route::get('safety/doc/wms/{id}/renew', 'Safety\WmsController@createRenew');
     Route::get('safety/doc/dt/wms', 'Safety\WmsController@getWms');
     Route::get('safety/doc/dt/wms_templates', 'Safety\WmsController@getWmsTemplates');
     Route::resource('safety/doc/wms', 'Safety\WmsController');

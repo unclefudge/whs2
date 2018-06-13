@@ -218,7 +218,7 @@ class ReportController extends Controller {
         //dd($attendance_records);
         $dt = Datatables::of($attendance_records)
             ->editColumn('date', function ($attendance) {
-                return $attendance->date->format('d/m/Y');
+                return $attendance->date->format('d/m/Y H:m a');
             })
             ->editColumn('sites.name', function ($attendance) {
                 return '<a href="/site/' . $attendance->site->slug . '">' . $attendance->site->name . '</a>';

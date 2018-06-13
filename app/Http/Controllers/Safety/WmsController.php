@@ -55,9 +55,44 @@ class WmsController extends Controller {
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
+        dd('nn');
         $data = [];
 
         return view('safety/doc/wms/create', compact('data'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromTemplate($id)
+    {
+        $doc = WmsDoc::findOrFail($id);
+        $data = [];
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('add.wms'))
+            return view('errors/404');
+
+        return view('safety/doc/wms/create_template', compact('data', 'doc'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createRenew($id)
+    {
+        $doc = WmsDoc::findOrFail($id);
+        $data = [];
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('add.wms'))
+            return view('errors/404');
+
+        return view('safety/doc/wms/create_renew', compact('data', 'doc'));
     }
 
     /**
@@ -284,7 +319,7 @@ class WmsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function renew(Request $request, $id)
+    public function replace($id)
     {
         /// Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.wms'))

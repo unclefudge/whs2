@@ -84,7 +84,7 @@
                             <table class="table table-striped table-bordered table-hover order-column" id="table1">
                                 <thead>
                                 <tr class="mytable-header">
-                                    <th width="10%"> Date</th>
+                                    <th width="20%"> Date</th>
                                     <th> Site</th>
                                     <th> Name</th>
                                     <th> Company</th>

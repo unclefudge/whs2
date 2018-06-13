@@ -46,8 +46,8 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-pencil "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Create New Talk</span>
-                            <span class="caption-helper"></span>
+                            <span class="caption-subject font-green-haze bold uppercase">Create New Talk From Template</span>
+                            <span class="caption-helper">{{ $talk->name }}</span>
                         </div>
                         <div class="actions">
                             <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
@@ -63,24 +63,10 @@
                         <input type="hidden" name="version" value="1.0">
                         <input type="hidden" name="for_company_id" value="{{ Auth::user()->company_id }}">
                         <input type="hidden" name="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
+                        <input type="hidden" name="master_id" value="{{ $talk->id }}">
                         <div class="form-body">
                             <!-- Template or File -->
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('toolbox_type', 'Which method would you like to use?', ['class' => 'control-label']) !!}
-                                        {!! Form::text('toolbox_type', 'Use a template from the Toolbox library', ['class' => 'form-control', 'readonly']) !!}
-                                        {!! fieldErrorMessage('toolbox_type', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-6" id="library_div">
-                                    <div class="form-group {!! fieldHasError('master_id', $errors) !!}">
-                                        <input type="hidden" name="master_id" value="{{ $talk->id }}">
-                                        <label for="master_id" class="control-label">Template library</label>
-                                        {!! Form::text('master_id_text', "$talk->name ($talk->version)", ['class' => 'form-control', 'readonly']) !!}
-                                        {!! fieldErrorMessage('master_id', $errors) !!}
-                                    </div>
-                                </div>
                                 <div class="col-md-6" id="required_fields">
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name of Toolbox Talk', ['class' => 'control-label']) !!}

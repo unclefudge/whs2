@@ -411,7 +411,7 @@ class CronController extends Controller {
         $log .= "------------------------------------------------------------------------\n\n";
 
         $today = Carbon::today();
-        $today1 = Carbon::today()->subYear();
+        $today1 = Carbon::today()->subYears(2);
         $week2_coming = Carbon::today()->addDays(14);
         $week2_coming1 = Carbon::today()->addDays(14)->subYear();
         $week4_ago = Carbon::today()->subDays(28);

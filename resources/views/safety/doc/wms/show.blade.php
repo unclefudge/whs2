@@ -271,22 +271,31 @@
                                 <div class="col-xs-6 text-right"><b>Person responsible for reviewing SWMS control measures:</b></div>
                                 <div class="col-xs-6">{{ $doc->res_review }}</div>
                             </div>
+
                             <hr>
-                            @if ($doc->status == 2)
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="pull-right" style="min-height: 50px">
-                                            <br>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pull-right" style="min-height: 50px">
+                                        <br>
+                                        <a href="/safety/doc/wms" class="btn default"> Back</a>
+                                        @if($doc->master && $doc->status == 1 && Auth::user()->hasPermission2('add.wms'))
+                                            <a href="/safety/doc/wms/{{ $doc->id}}/create" class="btn green">Create SWMS using this Template</a>
+                                        @endif
+                                        @if (Auth::user()->hasPermission2('add.wms') && $doc->status == 1 && $doc->for_company_id == Auth::user()->company_id)
+                                            <a href="/safety/doc/wms/{{ $doc->id }}/renew" class="btn green"> Renew</a>
+                                        @endif
+                                        @if ($doc->status == 2)
                                             @if(Auth::user()->allowed2('sig.wms', $doc))
                                                 <a href="/safety/doc/wms/{{ $doc->id }}/reject" class="btn red"> Reject</a>
                                                 <a href="/safety/doc/wms/{{ $doc->id }}/signoff" class="btn green"> Sign Off</a>
                                             @elseif ($doc->for_company_id == Auth::user()->company_id && Auth::user()->allowed2('edit.wms', $doc))
                                                 <a href="/safety/doc/wms/{{ $doc->id }}/reject" class="btn red"> Cancel Sign Off Request</a>
                                             @endif
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>

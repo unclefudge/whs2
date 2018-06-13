@@ -68,7 +68,7 @@
                                     <div class="form-group">
                                         {!! Form::label('files', 'Files', ['class' => 'control-label']) !!}
                                         {!! Form::select('files', ['single' => 'Single File', 'multi' => 'Multiple Files'],
-                                             'multi', ['class' => 'form-control bs-select']) !!}
+                                             'single', ['class' => 'form-control bs-select']) !!}
                                     </div>
                                 </div>
                             </div>
