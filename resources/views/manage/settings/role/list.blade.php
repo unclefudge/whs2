@@ -52,11 +52,10 @@
                                 <th width="5%"> #</th>
                                 <th width="25%"> Name</th>
                                 <th> Description</th>
-                                @if (Auth::user()->company->subscription > 1)
-                                    <th width="10%">Child Role</th>
-                                    <th width="10%">Child First</th>
-                                    <th width="10%">Child Other</th>
-                                @endif
+                                <th width="10%">Child Role</th>
+                                <th width="10%">Child First</th>
+                                <th width="10%">Child Other</th>
+                                <th width="5%"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,37 +68,37 @@
                                         </td>
                                         <td>{{ $role->name }}</td>
                                         <td>{{ $role->description }}</td>
-                                        @if (Auth::user()->company->subscription > 1)
-                                            <td class="text-center" width="10%">
-                                                @if ($role->external)
-                                                    @if (Auth::user()->allowed2('edit.settings', $role))
-                                                        <a href="/settings/role/child-role/{{ $role->id }}"><i class="fa fa-check-square-o font-dark" style="font-size: 20px; padding-top: 5px"></i></a>
-                                                    @else
-                                                        <i class="fa fa-check-square-o font-dark" style="font-size: 20px; padding-top: 5px"></i>
-                                                    @endif
+
+                                        <td class="text-center" width="10%">
+                                            @if ($role->external)
+                                                @if (Auth::user()->allowed2('edit.settings', $role))
+                                                    <a href="/settings/role/child-role/{{ $role->id }}"><i class="fa fa-check-square-o font-dark" style="font-size: 20px; padding-top: 5px"></i></a>
+                                                @else
+                                                    <i class="fa fa-check-square-o font-dark" style="font-size: 20px; padding-top: 5px"></i>
+                                                @endif
+                                            @elseif (Auth::user()->allowed2('edit.settings', $role) )
+                                                <a href="/settings/role/child-role/{{ $role->id }}"><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
+                                            @endif
+                                        </td>
+                                        <td class="text-center" width="10%">
+                                            @if ($role->external)
+                                                @if ($role->child == "primary")
+                                                    <i class="fa fa-check-square-o" style="font-size: 20px; padding-top: 5px"></i>
                                                 @elseif (Auth::user()->allowed2('edit.settings', $role) )
-                                                    <a href="/settings/role/child-role/{{ $role->id }}"><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
+                                                    <a href="/settings/role/child-primary/{{ $role->id }}"><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
                                                 @endif
-                                            </td>
-                                            <td class="text-center" width="10%">
-                                                @if ($role->external)
-                                                    @if ($role->child == "primary")
-                                                        <i class="fa fa-check-square-o" style="font-size: 20px; padding-top: 5px"></i>
-                                                    @elseif (Auth::user()->allowed2('edit.settings', $role) )
-                                                        <a href="/settings/role/child-primary/{{ $role->id }}"><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
-                                                    @endif
+                                            @endif
+                                        </td>
+                                        <td class="text-center" width="10%">
+                                            @if ($role->external)
+                                                @if ($role->child == "default")
+                                                    <i class="fa fa-check-square-o" style="font-size: 20px; padding-top: 5px"></i>
+                                                @elseif (Auth::user()->allowed2('edit.settings', $role) )
+                                                    <a href="/settings/role/child-default/{{ $role->id }}"><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
                                                 @endif
-                                            </td>
-                                            <td class="text-center" width="10%">
-                                                @if ($role->external)
-                                                    @if ($role->child == "default")
-                                                        <i class="fa fa-check-square-o" style="font-size: 20px; padding-top: 5px"></i>
-                                                    @elseif (Auth::user()->allowed2('edit.settings', $role) )
-                                                        <a href="/settings/role/child-default/{{ $role->id }}""><i class="fa fa-square-o " style="font-size: 20px; padding-top: 5px"></i></a>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                        @endif
+                                            @endif
+                                        </td>
+                                        <td><button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-id="{{ $role->id }}" data-name="{{ $role->name }}"><i class="fa fa-trash"></i></button></td>
                                     </tr>
                                 @endif
                             @endforeach
@@ -126,5 +125,42 @@
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
+    });
 
+    $(document).ready(function () {
+
+
+        $('.btn-delete').click(function (e) {
+            e.preventDefault();
+            var url = "/settings/role/"+$(this).data('id');
+            var name = $(this).data('name');
+
+            swal({
+                title: "Are you sure?",
+                text: "The role <b>" + name + "</b> will be deleted and the permissions associated with it will be removed from all users.<br><br><span class='font-red'><i class='fa fa-warning'></i> You will not be able to undo this action!</span>",
+                showCancelButton: true,
+                cancelButtonColor: "#555555",
+                confirmButtonColor: "#E7505A",
+                confirmButtonText: "Yes, delete it!",
+                allowOutsideClick: true,
+                html: true,
+            }, function () {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    data: {method: '_DELETE', submit: true},
+                    success: function (data) {
+                        toastr.error('Deleted role');
+                    },
+                }).always(function (data) {
+                    location.reload();
+                });
+            });
+        });
+    });
+</script>
 @stop

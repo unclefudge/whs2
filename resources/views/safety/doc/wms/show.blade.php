@@ -94,7 +94,7 @@
                                         @if ($doc->status != 2)
                                             @if ($doc->attachment && file_exists(public_path('/filebank/company/'.$doc->for_company_id.'/wms/'.$doc->attachment)))
                                                 <li><a data-original-title="Email" data-toggle="modal" href="#email"><i class="fa fa-envelope"></i> Email</a></li>
-                                            @elseif($doc->builder)
+                                            @elseif($doc->builder && !$doc->master)
                                                 <li><a href="/safety/doc/wms/{{ $doc->id }}/pdf"><i class="fa fa-file-text-o"></i> Generate PDF</a></li>
                                             @endif
 

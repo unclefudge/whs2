@@ -444,8 +444,9 @@ class ToolboxTalkController extends Controller {
 
         // For Company IDs of Toolboxs user is allowed to view
         // ie. User can view Toolboxs owned by their Parent but they have access to only view 'Own Company'
+        //     unless Child company has subscription then child company permission overides
         $for_company_ids = [];
-        if (Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsTo()->id) == 20)
+        if (!Auth::user()->company->subscription && Auth::user()->permissionLevel('view.toolbox', Auth::user()->company->reportsTo()->id) == 20)
             $for_company_ids[] = Auth::user()->company_id;
 
         $records = DB::table('toolbox_talks AS t')

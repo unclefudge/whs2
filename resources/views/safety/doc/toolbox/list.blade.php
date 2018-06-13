@@ -15,7 +15,19 @@
 
 @section('content')
     <div class="page-content-inner">
-        <!-- Toolbox Talks -->
+        {{-- Toolbox ToDoo's --}}
+        @if (Auth::user()->todoType('toolbox', 1)->count())
+            <div class="row note note-warning">
+                <h3>Outstanding Toolbox Talks </h3>
+                <ul>
+                    @foreach(Auth::user()->todoType('toolbox', 1) as $todo)
+                        <li>Due: {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!} &nbsp; <a href="{{ $todo->url() }}">{{ $todo->name }} </a></li>
+                    @endforeach
+                </ul>
+
+            </div>
+        @endif
+        {{-- Toolbox Talks --}}
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">
@@ -53,7 +65,7 @@
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
                                 <th> Name</th>
-                                <th  width="20%"> Company</th>
+                                <th width="20%"> Company</th>
                                 <th width="10%"> Updated</th>
                                 <th width="10%"> Completed</th>
                                 <th width="10%"></th>
@@ -66,8 +78,7 @@
         </div>
 
         <!-- Toolbox Templates -->
-
-        @if (Auth::user()->hasPermission2('edit.toolbox'))
+        @if (Auth::user()->hasPermission2('add.toolbox'))
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">

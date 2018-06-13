@@ -105,7 +105,7 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $doc = CompanyDoc::findOrFail($id);
 

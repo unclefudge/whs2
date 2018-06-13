@@ -126,7 +126,7 @@
 
                                 {{-- Roles--}}
                                 <div class="row">
-                                    @if(Auth::user()->company->subscription)
+                                    @if(Auth::user()->company->subscription && count(Auth::user()->company->rolesSelect('int')))
                                         {!! Form::hidden('subscription', 1) !!}
                                         <div class="col-md-6">
                                             <div class="form-group {!! fieldHasError('roles', $errors) !!}">
@@ -212,37 +212,8 @@
                                     </div>
                                 </div>
 
-                                {{-- Additional Details --}}
-                                <h3 class="font-green form-section">Additional Information</h3>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}
-                                        <div class="form-group {!! fieldHasError('employment_type', $errors) !!}">
-                                            {!! Form::label('employment_type', 'Employment type * : What is the relationship of this worker to your business', ['class' => 'control-label']) !!}
-                                            {!! Form::select('employment_type', ['' => 'Select type', '1' => 'Employee - Our company employs them directly',
-                                            '2' => 'External Employment Company - Our company employs them using an external labour hire business',  '3' => 'Subcontractor - They are a separate entity that subcontracts to our company'],
-                                                     '', ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('employment_type', $errors) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
-                                            {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
-                                            {!! Form::select('subcontractor_type', $companyEntity::all(),
-                                                     null, ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('subcontractor_type', $errors) !!}
-                                            <br><br>
-                                            <div class="note note-warning" style="display: none" id="subcontractor_wc">
-                                                A separate Worker's Compensation Policy is required for this Subcontractor
-                                            </div>
-                                            <div class="note note-warning" style="display: none" id="subcontractor_sa">
-                                                A separate Sickness & Accident Policy is required for this Subcontractor
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- Notes -->
+                                <hr>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group {!! fieldHasError('notes', $errors) !!}">
@@ -268,7 +239,7 @@
                                 <b>This person is a separate entity (Soul Trader, Partnership, Trading Trust or Company).</b><br><br>
                                 This means that you need to collect extra documentation from them in order for you to be compliant.<br><br>
                                 Add this person via <a href="/company/create" class="btn dark btn-sm" data-original-title="Add" style="margin-left: 20px">Add Company</a>
-                                </div>
+                            </div>
 
                         </div>
                         {!! Form::close() !!}

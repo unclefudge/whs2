@@ -84,28 +84,32 @@ class ReportController extends Controller {
 
     public function newusers()
     {
-        $users = \App\User::where('created_at', '>', '2016-08-27 12:00:00')->orderBy('created_at', 'DESC')->get();
+        $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+        $users = \App\User::where('created_at', '>', '2016-08-27 12:00:00')->whereIn('id', $allowed_users)->orderBy('created_at', 'DESC')->get();
 
         return view('manage/report/newusers', compact('users'));
     }
 
     public function newcompanies()
     {
-        $companies = \App\Models\Company\Company::where('created_at', '>', '2016-08-27 12:00:00')->orderBy('created_at', 'DESC')->get();
+        $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
+        $companies = \App\Models\Company\Company::where('created_at', '>', '2016-08-27 12:00:00')->whereIn('id', $allowed_companies)->orderBy('created_at', 'DESC')->get();
 
         return view('manage/report/newcompanies', compact('companies'));
     }
 
     public function users_noemail()
     {
-        $users = \App\User::where('email', null)->where('status', 1)->orderBy('company_id', 'ASC')->get();
+        $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+        $users = \App\User::where('email', null)->where('status', 1)->whereIn('id', $allowed_users)->orderBy('company_id', 'ASC')->get();
 
         return view('manage/report/users_noemail', compact('users'));
     }
 
     public function roleusers()
     {
-        $users = DB::table('role_user')->orderBy('role_id')->get();
+        $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+        $users = DB::table('role_user')->whereIn('user_id', $allowed_users)->orderBy('role_id')->get();
 
         return view('manage/report/roleusers', compact('users'));
     }

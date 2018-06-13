@@ -104,7 +104,6 @@ class RoleController extends Controller {
 
         $role_request = request()->only('name', 'description');
 
-        //echo $role->id."<br>";
         //dd(request()->all());
         $role->update($role_request);
 
@@ -130,9 +129,18 @@ class RoleController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        //
+        $role = Role2::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.settings', $role))
+            return json_encode("failed");
+
+        //dd($role->id);
+        $role->delete();
+
+        return json_encode('success');
     }
 
     /**
@@ -192,6 +200,7 @@ class RoleController extends Controller {
     public function show(Request $request)
     {
         //
+        dd('show');
     }
 
 
