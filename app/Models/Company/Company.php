@@ -926,7 +926,7 @@ class Company extends Model {
         }
 
         // Subcontractor (On Site Trade)
-        if ($this->category == 1 && in_array($type, [1, 4, 5])) return true; // Requires PL, Sub, PTC
+        if ($this->category == 1 && (in_array($type, [1, 4]) || ($this->parent_company == 3 && $type == 5))) return true; // Requires PL, Sub,  + PTC (CC Only)
         if ($this->category == 1 && $type == 7) {
             if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
             if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
