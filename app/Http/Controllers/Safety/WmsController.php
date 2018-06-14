@@ -55,7 +55,6 @@ class WmsController extends Controller {
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
-        dd('nn');
         $data = [];
 
         return view('safety/doc/wms/create', compact('data'));
@@ -71,7 +70,7 @@ class WmsController extends Controller {
         $doc = WmsDoc::findOrFail($id);
         $data = [];
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
@@ -88,7 +87,7 @@ class WmsController extends Controller {
         $doc = WmsDoc::findOrFail($id);
         $data = [];
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
@@ -126,7 +125,7 @@ class WmsController extends Controller {
     {
         $doc = WmsDoc::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.wms', $doc))
             return view('errors/404');
 
@@ -143,7 +142,7 @@ class WmsController extends Controller {
      */
     public function store(WmsRequest $request)
     {
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.wms'))
             return view('errors/404');
 
