@@ -60,7 +60,7 @@
                                     <b>Risk Rating: </b>{!! $hazard->ratingTextColoured !!}<br><br>
                                     <b>Location of Hazard:</b><br>{{ $hazard->location }}<br><br>
                                     <b>What is the hazard / safety issue:</b><br>{{ $hazard->reason }}<br><br>
-                                    @if (!$hazard->status || !Auth::user()->allowed2('del.site.asbestos', $hazard))
+                                    @if (!$hazard->status || !Auth::user()->allowed2('del.site.hazard', $hazard))
                                         <b>Failure Type:</b> {{ $hazard->failure_type }}<br><br>
                                         <b>Source:</b><br>{{ $hazard->source }}<br><br>
                                     @else

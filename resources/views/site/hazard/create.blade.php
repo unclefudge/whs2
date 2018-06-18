@@ -128,7 +128,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-10 col-xs-8">
-                                    Does Cape Cod need to take any action?
+                                    Does site owner need to take any action?
                                 </div>
                             </div>
                             <div class="form-actions right">
