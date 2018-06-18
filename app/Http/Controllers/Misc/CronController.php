@@ -356,7 +356,7 @@ class CronController extends Controller {
 
                         if ($date == Carbon::today()->addDays(14)->format('Y-m-d')) {
                             // Due in 2 weeks
-                            if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), false);
+                            //if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), false);
 
                             // Email Parent Company
                             if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
