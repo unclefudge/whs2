@@ -683,7 +683,7 @@ Diff Compare
     z-index: 1;
 }
 
-.icon-profile:before, .icon-document:before, .icon-staff:before {
+.icon-profile:before, .icon-document:before, .icon-staff:before, .icon-lock:before {
     width: 40px;
     height: 40px;
     margin-left: -10px;
@@ -700,6 +700,10 @@ Diff Compare
 
 .icon-staff:before {
     background: url("/img/icon-staff.png") no-repeat;
+}
+
+.icon-lock:before {
+    background: url("/img/icon-lock.png") no-repeat;
 }
 
 .tabs .tabs-item {

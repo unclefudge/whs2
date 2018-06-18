@@ -99,7 +99,10 @@ Route::group(['middleware' => 'auth'], function () {
     // User Routes
     Route::get('user/dt/users', 'UserController@getUsers');
     Route::get('user/dt/contractors', 'UserController@getContractors');
+    Route::post('user/{id}/login', 'UserController@updateLogin');
     Route::get('user/{id}/security', 'UserController@showSecurity');
+    Route::get('user/{id}/resetpassword', 'UserController@showResetPassword');
+    Route::post('user/{id}/resetpassword', 'UserController@updatePassword');
     Route::post('user/{id}/security', 'UserController@updateSecurity');
     Route::get('user/{id}/resetpermissions', 'UserController@resetPermissions');
     Route::get('contractor', 'UserController@contractorList');

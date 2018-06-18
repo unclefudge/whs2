@@ -146,6 +146,24 @@ $cc = 1;*/
                                                    data-original-title="Sign Off"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
                                         </tr>
                                     </table>
+
+                                    {{-- Users --}}
+                                    <h5 class="font-green-haze" style="font-size: 16px">User
+                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                           data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
+                                           data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <td>User</td>
+                                            <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('add.user', 'add', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('del.user', 'arc', $rec, $cid, $dis) !!}</td>
+                                            <td width="15%">{!! permSelect('sig.user', 'sig', $rec, $cid, $dis) !!}</td>
+                                        </tr>
+                                    </table>
+
+                                    {{-- Companies --}}
                                     <h5 class="font-green-haze" style="font-size: 16px">Companies
                                         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                                            data-content="Grants ability to view or modify your company information or any 'child' company."
@@ -318,24 +336,6 @@ $cc = 1;*/
                 </div>
             </div>
         </div>
-        <!--
-        <div class="row">
-            <div class="col-md-12">
-                <div class="portlet light bordered">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <span class="caption-subject font-green-haze bold uppercase">Edit Role</span>
-                        </div>
-                    </div>
-
-                    <div class="portlet-body form">
-                        <div class="form-body">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
 
         <div class="row">
             <div class="col-md-12">
@@ -352,7 +352,7 @@ $cc = 1;*/
                                 <div class="col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td style="background: #FFF; border: 0px #e7ecf1; font-size: 18px; font-weight: 300; padding: 0;">Permissions</td>
+                                            <td style="background: #FFF; border: 0px #e7ecf1; font-size: 18px; font-weight: 300; padding: 0;"></td>
                                             <td width="15%" style="border: 1px solid; border-color:#e7ecf1">View</td>
                                             <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Edit</td>
                                             <td width="15%" style="border: 1px solid; border-color:#e7ecf1">Create</td>
@@ -366,21 +366,6 @@ $cc = 1;*/
                                                    data-original-title="Sign Off"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
                                         </tr>
                                     </table>
-                                    <h5 class="font-green-haze" style="font-size: 16px">User
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
-                                           data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
-                                    <table class="table table-bordered table-striped">
-                                        <tr>
-                                            <td>User</td>
-                                            <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('add.user', 'add', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('del.user', 'arc', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('sig.user', 'sig', $rec, $cid, $dis) !!}</td>
-                                        </tr>
-                                    </table>
-
 
                                     @if ($sub1)
                                         <h5 class="font-green-haze" style="font-size: 16px">Work Site

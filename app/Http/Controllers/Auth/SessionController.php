@@ -91,7 +91,7 @@ class SessionController extends Controller {
             }
 
             if (Auth::user()->password_reset)
-                return redirect('/user/' . Auth::user()->id . '/edit');
+                return redirect('/user/' . Auth::user()->id . '/resetpassword');
 
             return redirect()->intended('home');
             //return redirect('/dashboard');

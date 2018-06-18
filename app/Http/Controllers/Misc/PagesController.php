@@ -63,7 +63,7 @@ class PagesController extends Controller {
 
         // Auto redirect to password reset if flagged
         if (Auth::user()->password_reset)
-            return redirect('/user/' . Auth::user()->id . '/edit');
+            return redirect('/user/' . Auth::user()->id . '/resetpassword');
 
         // If primary user and incompleted company Signup - redirect to correct step
         if (Auth::user()->company->status == 2 and Auth::user()->company->primary_user == Auth::user()->id) {
@@ -412,8 +412,8 @@ class PagesController extends Controller {
         //
         // Creating Permission
         //
-        $name = 'Site Attendance';
-        $slug = 'site.attendance';
+        $name = 'User Security';
+        $slug = 'user.security';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);

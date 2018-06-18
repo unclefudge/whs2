@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
 
 use DB;
 use Mail;
@@ -114,7 +115,7 @@ class UserController extends Controller {
             return redirect("/signup/workers/" . $user->company_id);
         }
 
-        return redirect('/company/'.$user->company_id.'/user');
+        return redirect('/company/' . $user->company_id . '/user');
     }
 
     /**
@@ -130,9 +131,7 @@ class UserController extends Controller {
         if (!Auth::user()->allowed2('view.user', $user))
             return view('errors/404');
 
-        $tabs = ['profile', 'info'];
-
-        return view('user/show', compact('user', 'tabs'));
+        return view('user/show', compact('user'));
     }
 
     /**
@@ -152,6 +151,22 @@ class UserController extends Controller {
     }
 
     /**
+     * Display the settings for the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showResetPassword($id)
+    {
+        $user = User::findorFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        return view('user/resetpassword', compact('user'));
+    }
+
+    /**
      * Edit the resource.
      *
      * @return \Illuminate\Http\Response
@@ -167,7 +182,7 @@ class UserController extends Controller {
         if (Auth::user()->password_reset)
             Toastr::warning("Your password was reset by an admin and you are required to choose an new one");
 
-        return view('user/edit', compact('user'));
+        return redirect("user/{{ $user->id }}/resetpassword");
     }
 
 
@@ -176,56 +191,84 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $username)
+    public function update($id)
     {
-        $user = User::where(compact('username'))->firstOrFail();
-
-        // Validate
-        $rules = [
-            'username'           => 'required|min:3|max:50|unique:users,username,' . $user->id,
-            'firstname'          => 'required',
-            'lastname'           => 'required',
-            'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $user->id . ',id',
-            'roles'              => 'required_if:subscription,1',
-            //'employment_type'    => 'required',
-            //'subcontractor_type' => 'required_if:employment_type,3',
-        ];
-
-        $mesgs = [
-            'email.required_if'              => 'The email field is required if user active ie. Login Enabled.',
-            'roles.required_if'                          => 'You must select at least one role',
-            'subcontractor_type.required_if' => 'The subcontractor entity is required',
-        ];
-        $this->validate(request(), $rules, $mesgs);
-
-        if (request()->filled('password') || request()->filled('password_force')) {
-            $this->validate(request(), [
-                'password' => 'required:|confirmed|min:3',
-            ]);
-
-        }
+        $user = User::findOrFail($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.user', $user))
             return view('errors/404');
 
-        $user_request = removeNullValues($request->all());
-        $password_reset = false;
+        // Validate
+        $rules = [
+            'firstname' => 'required',
+            'lastname'  => 'required',
+            'email'     => 'required_if:status,1|email|max:255|unique:users,email,' . $user->id . ',id',
+            //'roles'     => 'required_if:subscription,1',
+        ];
+
+        $mesgs = [
+            'email.required_if' => 'The email field is required if user active ie. Login Enabled.',
+            //'roles.required_if'              => 'You must select at least one role',
+        ];
+        $this->validate(request(), $rules, $mesgs);
+
+        if (request()->filled('password') || request()->filled('password_force'))
+            $this->validate(request(), ['password' => 'required:|confirmed|min:3',]);
+
+        $user_request = removeNullValues(request()->all());
 
         // Empty State field if rest of address fields are empty
-        if (!$request->filled('address') && !$request->filled('suburb') && !$request->filled('postcode'))
+        if (!request('address') && !request('suburb') && !request('postcode'))
             $user_request['state'] = null;
 
         // Null email field if empty  - for unique validation
-        if (!$user_request['email'])
-            $user_request['email'] = null;
+        if (!$user_request['email']) $user_request['email'] = null;
 
-        // Zero Subcontractor_type field if empty
-        if (!$request->get('subcontractor_type'))
-            $user_request['subcontractor_type'] = 0;
+        //dd($user_request);
+
+        // Update User
+        $user->update($user_request);
+        Toastr::success("Saved changes");
+
+        return redirect('/user/' . $user->id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateLogin($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        //
+        // Validate
+        //
+        $rules = ['username' => 'required|min:3|max:50|unique:users,username,' . $user->id];
+
+        // Add Password rule if password_update is set
+        if (request('password_update') == 1 && Auth::user()->id == $user->id)
+            $rules['password'] = (Auth::user()->id == $user->id) ? 'required|confirmed|min:3' : 'required||min:3';
+
+        $validator = Validator::make(request()->all(), $rules);
+
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'login');
+            Toastr::error("Failed to save changes");
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user_request = removeNullValues(request()->all());
 
         // If user being made inactive then update email
-        if ($request->filled('status') && request('status') == 0) {
+        if (request('status') && request('status') == 0) {
             // Delete outstanding ToDoos (except Toolbox
             $user->todoDeleteAllActive();
             // If user being made inactive and has email then append 'achived-userid' to front to allow
@@ -241,36 +284,50 @@ class UserController extends Controller {
         }
 
         // Encrypt password
-        if ($request->filled('password'))
+        if (request('password_update')) {
             $user_request['password'] = bcrypt($user_request['password']);
-        // Password has ben set by someone other then user so force user to reset after login
-        if ($request->filled('newpassword')) {
-            $user_request['password'] = bcrypt($user_request['newpassword']);
-            $user_request['password_reset'] = 1;
-        }
+            // Password has ben set by someone other then user so force user to reset after login
+            if (Auth::user()->id != $user->id)
+                $user_request['password_reset'] = 1;
 
-        if ($request->filled('password')) {
             // Password has been reset by user after being set by another
-            if (Auth::user()->password_reset && Auth::user()->id == $user->id) {
+            if (Auth::user()->password_reset && Auth::user()->id == $user->id)
                 $user_request['password_reset'] = 0;
-                $password_reset = true;
-            }
         }
+
         //dd($user_request);
-
-        // Update User
         $user->update($user_request);
-
-        if ($password_reset) {
-            Toastr::success("Updated password");
-            sleep(1);
-
-            return redirect('/dashboard');
-        }
-
         Toastr::success("Saved changes");
 
-        return redirect('/user/' . $user->id);
+        return back();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user', $user))
+            return view('errors/404');
+
+        // Validate
+        $this->validate(request(), ['password' => 'required|confirmed|min:3']);
+        $user_request = request()->all();
+
+        // Encrypt password
+        $user_request['password'] = bcrypt($user_request['password']);
+        $user_request['password_reset'] = 0;
+
+        //dd($user_request);
+        $user->update($user_request);
+        Toastr::success("Saved changes");
+
+        return redirect('/');
     }
 
     /**
@@ -343,23 +400,23 @@ class UserController extends Controller {
         return redirect('/user/' . $user->id . '/security');
     }
 
-        /**
+    /**
      * Get the security permissions for user resource in storage.
      *
      * @return \Illuminate\Http\Response
      */
-		 /*
-    public function getSecurityPermissions(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        $permissions = DB::table('permission_user')
-            ->where('user_id', $user->id)
-            ->lists('permission_id');
-        foreach ($permissions as $permission)
-            $array[] = "$permission";
+    /*
+public function getSecurityPermissions(Request $request, $id)
+{
+   $user = User::findOrFail($id);
+   $permissions = DB::table('permission_user')
+       ->where('user_id', $user->id)
+       ->lists('permission_id');
+   foreach ($permissions as $permission)
+       $array[] = "$permission";
 
-        return $array;
-    }*/
+   return $array;
+}*/
 
     /**
      * Update the photo on user model resource in storage.
@@ -444,7 +501,8 @@ class UserController extends Controller {
             ->editColumn('name', function ($user) {
                 $cname = $user->company->name;
                 $cid = $user->company->id;
-                return '<a href="company/'.$cid.'">'.$cname.'</a>';
+
+                return '<a href="company/' . $cid . '">' . $cname . '</a>';
             })
             ->editColumn('last_login', function ($user) {
                 return ($user->last_login != '-0001-11-30 00:00:00') ? with(new Carbon($user->last_login))->format('d/m/Y') : 'never';

@@ -387,6 +387,4 @@
         });
     });
 </script>
-
-</script>
 @stop
