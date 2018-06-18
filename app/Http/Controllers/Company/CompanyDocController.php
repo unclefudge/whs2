@@ -49,21 +49,16 @@ class CompanyDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($cid, $id)
     {
-        /*$doc = SiteDoc::findorFail($id);
+        $company = Company::findOrFail($cid);
+        $doc = CompanyDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.site.doc', $doc))
+        if (!Auth::user()->allowed2("view.company.doc", $doc))
             return view('errors/404');
 
-        $site_id = $doc->site_id;
-        if ($doc->type == 'RISK') $type = 'risk';
-        if ($doc->type == 'HAZ') $type = 'hazard';
-        if ($doc->type == 'PLAN') $type = 'plan';
-
-        return view('site/doc/edit', compact('doc', 'site_id', 'type'));
-        */
+        return view('company/doc/show', compact('company', 'doc'));
     }
 
     /**
@@ -94,8 +89,13 @@ class CompanyDocController extends Controller {
         $doc = CompanyDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("edit.company.doc", $doc))
+        if (!Auth::user()->allowed2("edit.company.doc", $doc)) {
+            // If allowed to view then redirect to View only
+            if (Auth::user()->allowed2("view.company.doc", $doc))
+                return redirect("company/$company->id/doc/$doc->id");
             return view('errors/404');
+        }
+
 
         return view('company/doc/edit', compact('company', 'doc'));
     }
@@ -501,6 +501,8 @@ class CompanyDocController extends Controller {
 
                 if (Auth::user()->allowed2("edit.company.doc", $doc))
                     $actions .= '<a href="/company/' . $company->id . '/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                elseif (Auth::user()->allowed2("view.company.doc", $doc))
+                    $actions .= '<a href="/company/' . $company->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
                 if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
