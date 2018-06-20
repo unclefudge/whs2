@@ -67,7 +67,7 @@
                         <div class="actions">
                             @if (Auth::user()->allowed2('edit.user', $user) && Auth::user()->company->status == 1)
                                 <a href="/user/{{ $user->id }}/security" class="btn btn-circle green btn-outline btn-sm">
-                                    <i class="fa fa-lock"></i> @if (Auth::user()->security) Edit @endif Security Settings</a>
+                                    <i class="fa fa-lock"></i> @if (Auth::user()->hasPermission2('edit.user.security')) Edit @endif Security Settings</a>
                             @endif
                             <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
@@ -86,7 +86,7 @@
                                             <h3 class="sbold visible-sm visible-xs">{{ $user->name }}
                                                 <small class='font-grey-cascade' style="margin:0px"> {{ $user->company->name_alias }}</small>
                                             </h3>
-                                            @if ($user->security )
+                                            @if ($user->hasPermission2('edit.user.security') )
                                                 <span class='label label-warning'>Security Access</span>
                                             @endif
                                             @if ($user->id == $user->company->primary_user )
@@ -249,7 +249,7 @@
                                     {{-- Additional Info --}}
                                     <h3 class="font-green form-section">Additional Information</h3>
                                     {{-- Employment Type --}}
-                                    @if (Auth::user()->id != $user->id || (Auth::user()->security && Auth::user()->isCompany($user->company_id)))
+                                    @if (Auth::user()->id != $user->id || (Auth::user()->hasPermission2('edit.user.security') && Auth::user()->isCompany($user->company_id)))
                                         <div class="row">
                                             <div class="col-md-6">
                                                 {{--  Are you an Employee, Subcontractor or employed by External Employment Company? --}}

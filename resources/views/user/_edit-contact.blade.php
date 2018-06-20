@@ -111,7 +111,7 @@
             {!! Form::hidden('postcode', null, ['class' => 'form-control']) !!}
         @endif
         {{-- Notes --}}
-        @if ((Auth::user()->isCompany($user->company_id) && Auth::user()->security) || ($user->company->parent_company && Auth::user()->isCompany($user->company->reportsTo()->id)))
+        @if ((Auth::user()->isCompany($user->company_id) && Auth::user()->hasPermission2('view.user.security')) || ($user->company->parent_company && Auth::user()->isCompany($user->company->reportsTo()->id)))
             <hr class="field-hr">
             <div class="row">
                 <div class="form-group {!! fieldHasError('notes', $errors) !!}">

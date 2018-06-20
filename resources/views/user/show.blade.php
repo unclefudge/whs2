@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Contact Details --}}
-                @if (Auth::user()->allowed2('view.user', $user))
+                @if (Auth::user()->allowed2('view.user.contact', $user))
                     @include('user/_show-contact')
                     @include('user/_edit-contact')
                 @endif
@@ -36,12 +36,11 @@
                     @include('user/_show-login')
                     @include('user/_edit-login')
                 @endif
-
             </div>
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Security Details --}}
-                @if (Auth::user()->allowed2('view.user', $user))
+                @if (Auth::user()->allowed2('view.user.security', $user))
                     @include('user/_show-security')
                 @endif
 

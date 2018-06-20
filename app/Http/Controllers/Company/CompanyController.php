@@ -620,7 +620,7 @@ class CompanyController extends Controller {
                     $string .= " <span class='badge badge-info badge-roundless'>P</span>";
                 if ($user->id == $user->company->secondary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>S</span>";
-                if ($user->security)
+                if ($user->hasPermission2('edit.user.security'))
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
 
                 return $string;

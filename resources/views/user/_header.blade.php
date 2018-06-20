@@ -26,7 +26,7 @@
                 <li class="member-bar-item {{ $active_profile }}"><i class="icon-profile"></i><a class="member-bar-link" href="/user/{{ $user->id }}" title="Profile">PROFILE</a></li>
                 <li class="member-bar-item {{ $active_doc }}"><i class="icon-document"></i><a class="member-bar-link" href="/user/{{ $user->id }}/doc" title="Documents">
                         <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                @if (Auth::user()->allowed2('edit.user', $user) && Auth::user()->company->status == 1)
+                @if (Auth::user()->allowed2('view.user.security', $user) || Auth::user()->allowed2('edit.user.security', $user))
                     <li class="member-bar-item {{ $active_security }}"><i class="icon-lock"></i><a class="member-bar-link" href="/user/{{ $user->id }}/security" title="Security">SECURITY</a></li>
                 @endif
             </ul>

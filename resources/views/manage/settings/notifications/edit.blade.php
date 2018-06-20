@@ -58,6 +58,8 @@
                         <h3 class="font-green form-section">Document Notifications</h3>
                         {!! notificationSelect($notificationTypes::type('n.doc.acc.approval'), 'Accounts Approval', 'Accounts document requires approval', $companyDocTypes::docNames('acc', 0), 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
                         {!! notificationSelect($notificationTypes::type('n.doc.whs.approval'), 'WHS Approval', 'WHS document requires approval', $companyDocTypes::docNames('whs', 0), 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
+                        {!! notificationSelect($notificationTypes::type('n.swms.approval'), 'SWMS Approval', 'SWMS requires approval', 'SWMS documents', 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
+
 
 
                         <div class="form-actions right">

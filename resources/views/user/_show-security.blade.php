@@ -3,7 +3,7 @@
     <div class="portlet-title">
         <div class="caption">
             <span class="caption-subject font-dark bold uppercase">Assigned Roles
-                @if ($user->security )<span class='label label-sm label-warning'>Security Access</span>@endif
+                @if ($user->hasPermission2('edit.user.security') )<span class='label label-sm label-warning'>Security Access</span>@endif
             </span>
         </div>
         <div class="actions">

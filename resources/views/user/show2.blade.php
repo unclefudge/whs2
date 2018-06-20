@@ -47,7 +47,7 @@
                             <h3 class="sbold visible-sm visible-xs">{{ $user->name }}
                                 <small class='font-grey-cascade' style="margin:0px"> {{ $user->company->name_alias }}</small>
                             </h3>
-                            @if ($user->security )
+                            @if ($user->hasPermission2('edit.user.security') )
                                 <span class='label label-warning'>Security Access</span>
                             @endif
                             @if ($user->id == $user->company->primary_user )
@@ -93,7 +93,7 @@
                     </div>
 
                     {{-- Additional Info --}}
-                    @if ((Auth::user()->security && Auth::user()->isCompany($user->company_id)) ||  ($user->company->parent_company && Auth::user()->isCompany($user->company->reportsTo()->id)))
+                    @if ((Auth::user()->hasPermission2('edit.user.security') && Auth::user()->isCompany($user->company_id)) ||  ($user->company->parent_company && Auth::user()->isCompany($user->company->reportsTo()->id)))
                         <h3 class="font-green form-section">Additional Information</h3>
                         <div class="row">
                             <div class="col-md-2"><b>Employment Type</b></div>

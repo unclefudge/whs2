@@ -154,7 +154,7 @@ class WmsController extends Controller {
         $wms_request['principle_id'] = Auth::user()->company->reportsTo()->id;
         $wms_request['principle'] = Auth::user()->company->reportsTo()->name;
 
-        // Determine Principle contractor if subsciption otherwise assign parent company
+        // Determine Principle contractor if subscription otherwise assign parent company
         if (Auth::user()->company->subscription) {
             // If Principle checkbox Yes then assign principle fields + document owner
             if (request('master')) {
@@ -239,7 +239,7 @@ class WmsController extends Controller {
             else
                 ($doc->principle_id) ? $doc->status = 2 : $doc->status = 1;
 
-            if ($doc->status == 2 && !($doc->principle_id && $doc->company_id == Auth::user()->company_id) && Auth::user()->allowed2('sig.wms', $doc))
+            if ($doc->status == 2) // && !($doc->principle_id && $doc->company_id == Auth::user()->company_id) && Auth::user()->allowed2('sig.wms', $doc))
                 $doc->emailSignOff();
         }
 

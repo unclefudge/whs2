@@ -169,7 +169,7 @@ class WmsDoc extends Model {
     {
         $email_to = [];
         if (\App::environment('dev', 'prod'))
-            $email_to = $this->owned_by->notificationsUsersEmailType('n.doc.whs.approval');   // WHS Mgr
+            $email_to = $this->owned_by->notificationsUsersEmailType('n.swms.approval');
         else
             $email_to[] = env('EMAIL_ME');
         $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';

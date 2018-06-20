@@ -93,21 +93,13 @@ $cc = 1;*/
                                 function.</p>
                             <p><br>For the View / Edit categories, users are able to be restricted to only certain records, which are as follows:</p>
                             <ul>
-
-                                @if ($sub2)
-                                    <li><span style="float: left; width:150px">All</span>All records including any 'child' companies.</li>
-                                    <li><span style="float: left; width:150px">Our Company</span>Only records that relate specifically to your own company (excludes 'child' company records).
-                                    </li>
-                                @else
-                                    <li><span style="float: left; width:150px">All</span>All records.</li>
-                                @endif
+                                <li><span style="float: left; width:150px">All</span>All records including any 'child' companies.</li>
+                                <li><span style="float: left; width:150px">Our Company</span>Only records that relate specifically to your own company (excludes 'child' company records).</li>
                                 <li><span style="float: left; width:150px">Supervisor for</span>Only records that relate to a 'site' which the user is a supervisor for.</li>
                                 @if ($plan)
                                     <li><span style="float: left; width:150px">Planned for</span>Only records that relate to a 'site' which the user is planned for.</li>
                                 @endif
-                                @if ($sub2)
-                                    <li><span style="float: left; width:150px">Own Company</span>Only records that relate to the 'child' company the user belongs to.</li>
-                                @endif
+                                <li><span style="float: left; width:150px">Own Company</span>Only records that relate to the 'child' company the user belongs to.</li>
                                 <li><span style="float: left; width:150px">Individual Only</span>Only records that the user created or relate specifically to them.</li>
                             </ul>
                         </div>
@@ -148,20 +140,35 @@ $cc = 1;*/
                                     </table>
 
                                     {{-- Users --}}
-                                    <h5 class="font-green-haze" style="font-size: 16px">User
-                                        <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                                           data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
-                                           data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
-                                    <table class="table table-bordered table-striped">
-                                        <tr>
-                                            <td>User</td>
-                                            <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('add.user', 'add', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('del.user', 'arc', $rec, $cid, $dis) !!}</td>
-                                            <td width="15%">{!! permSelect('sig.user', 'sig', $rec, $cid, $dis) !!}</td>
-                                        </tr>
-                                    </table>
+                                    @if (!$role->external)
+                                        <h5 class="font-green-haze" style="font-size: 16px">User
+                                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                               data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
+                                               data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>Login Details <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.user', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.user', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.user', 'add', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.user', 'arc', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact Details <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.user.contact', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.user.contact', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="30%" colspan="2"></td>
+                                                <td width="15%">{!! permSelect('sig.user.contact', 'sig', $rec, $cid, $dis) !!}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Security Details <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.user.security', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.user.security', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="45%" colspan="3"></td>
+                                            </tr>
+                                        </table>
+                                    @endif
 
                                     {{-- Companies --}}
                                     <h5 class="font-green-haze" style="font-size: 16px">Companies
@@ -169,9 +176,9 @@ $cc = 1;*/
                                            data-content="Grants ability to view or modify your company information or any 'child' company."
                                            data-original-title="Company"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
                                     <table class="table table-bordered table-striped">
-                                        @if ($sub2 && !$role->external)
+                                        @if (!$role->external)
                                             <tr>
-                                                <td>Company Record</td>
+                                                <td>Company Record <br><span class="font-red">Disabled for 'child' company roles</span></td>
                                                 <td width="30%" colspan="2"></td>
                                                 <td width="15%">{!! permSelect('add.company', 'add', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('del.company', 'arc', $rec, $cid, $dis) !!}</td>
@@ -181,9 +188,9 @@ $cc = 1;*/
                                         @endif
                                         @if (!$role->external)
                                             <tr>
-                                                <td>Company Details @if ($sub2) <br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
-                                                <td width="15%">{!! permSelect('view.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td>Company Details <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.company', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company', 'own', $rec, $cid, $dis) !!}</td>
                                                 @if ($sub2)
                                                     <td width="30%" colspan="2"></td>
                                                     <td width="15%">{!! permSelect('sig.company', 'sig', $rec, $cid, $dis) !!}</td>
@@ -194,9 +201,9 @@ $cc = 1;*/
 
                                             </tr>
                                             <tr>
-                                                <td>Business Details @if ($sub2)<br><span class="font-red">Disabled for 'child' company roles</span>@endif</td>
-                                                <td width="15%">{!! permSelect('view.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.acc', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td>Business Details <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.company.acc', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.acc', 'own', $rec, $cid, $dis) !!}</td>
                                                 @if ($sub2)
                                                     <td width="30%" colspan="2"></td>
                                                     <td width="15%">{!! permSelect('sig.company.acc', 'sig', $rec, $cid, $dis) !!}</td>
@@ -208,8 +215,8 @@ $cc = 1;*/
                                         @if ($sub2)
                                             <tr>
                                                 <td>Construction</td>
-                                                <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('view.company.con', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.con', 'own', $rec, $cid, $dis) !!}</td>
                                                 @if (!$role->external)
                                                     <td width="30%" colspan="2"></td>
                                                     <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
@@ -219,8 +226,8 @@ $cc = 1;*/
                                             </tr>
                                             <tr>
                                                 <td>WHS Compliance</td>
-                                                <td width="15%">{!! permSelect('view.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.whs', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('view.company.whs', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.whs', 'own', $rec, $cid, $dis) !!}</td>
                                                 @if (!$role->external)
                                                     <td width="30%" colspan="2"></td>
                                                     <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
@@ -231,8 +238,8 @@ $cc = 1;*/
                                             @if($plan)
                                                 <tr>
                                                     <td>Company Leave</td>
-                                                    <td width="15%">{!! permSelect('view.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.company.leave', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.company.leave', 'own', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.company.leave', 'own', $rec, $cid, $dis) !!}</td>
                                                     <td width="45%" colspan="3"></td>
                                                 </tr>
                                             @endif

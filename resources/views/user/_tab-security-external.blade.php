@@ -20,7 +20,7 @@ $rec = $user;
         <div class="portlet-body form">
             <div class="row">
                 <div class="col-md-12">
-                    @if(Auth::user()->security && Auth::user()->isCompany($cid))
+                    @if(Auth::user()->hasPermission2('edit.user.security') && Auth::user()->isCompany($cid))
                         <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                             {!! Form::select('roles', $user->company->reportsTo()->rolesSelect('ext'), $user->roles2->pluck('id')->toArray(),
                             ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'multiple']) !!}
@@ -64,6 +64,7 @@ $rec = $user;
     <div class="portlet-title">
         <div class="caption">
             <span class="caption-subject font-dark bold uppercase">Management</span>
+            <span class="caption-helper"> Users & Companies</span>
         </div>
     </div>
     <div class="portlet-body form">
@@ -87,29 +88,13 @@ $rec = $user;
                     </tr>
                 </table>
 
-                {{-- Users --}}
-                <h5 class="font-green-haze" style="font-size: 16px">User
-                    <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
-                       data-content="Grants ability to view or modify users that belong to your company or any 'child' company."
-                       data-original-title="User"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <td>User</td>
-                        <td width="15%">{!! permSelect('view.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                        <td width="15%">{!! permSelect('edit.user', ($sub2) ? 'our' : 'all', $rec, $cid, $dis) !!}</td>
-                        <td width="15%">{!! permSelect('add.user', 'add', $rec, $cid, $dis) !!}</td>
-                        <td width="15%">{!! permSelect('del.user', 'arc', $rec, $cid, $dis) !!}</td>
-                        <td width="15%">{!! permSelect('sig.user', 'sig', $rec, $cid, $dis) !!}</td>
-                    </tr>
-                </table>
-
                 {{-- Companies --}}
                 <h5 class="font-green-haze" style="font-size: 16px">Companies
                     <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                        data-content="Grants ability to view or modify your company information or any 'child' company."
                        data-original-title="Company"> <i class="fa fa-question-circle font-grey-silver"></i> </a></h5>
                 <table class="table table-bordered table-striped">
-                    @if ($sub2)
+                    @if ($sub1)
                         <tr>
                             <td>Construction</td>
                             <td width="15%">{!! permSelect('view.company.con', ($sub2) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>

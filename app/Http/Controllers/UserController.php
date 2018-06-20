@@ -335,23 +335,22 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateSecurity(Request $request, $id)
+    public function updateSecurity($id)
     {
         $user = User::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->security || !Auth::user()->allowed2('edit.user', $user))
+        if (!Auth::user()->allowed2('edit.user.security', $user))
             return view('errors/404');
 
 
         // Update Security but ensure at least one user from company has security access
+        $remove_security_access = true;
         if (Auth::user()->isCompany($user->company_id)) {
-            $security_count = User::where('company_id', $user->company_id)->where('security', '1')->where('status', '1')->get()->count();
-            if ($user->security && !$request->has('security') && $security_count < 2) {
-                Toastr::warning("Unable to remove Security Access because at least one user within company must have it.");
-            } else {
-                $user->security = $request->has('security') ? 1 : 0;
-                $user->save();
+            $security_count = $user->company->securityUsers(1)->count();
+            if ($user->hasPermission2('edit.user.security') && !request('p385') && $security_count < 2) {
+                Toastr::warning("Unable to remove Edit User Security Details because at least one user within company must have it.");
+                $remove_security_access = false;
             }
         }
 
@@ -359,15 +358,19 @@ class UserController extends Controller {
         $permissions = Permission2::all();
         $user->detachAllPermissions2(Auth::user()->company_id);
         foreach ($permissions as $permission) {
+            // Re-add 'edit.user.security' if last user within company has permission
+            if ($permission->id == 385 && !$remove_security_access)
+                $user->attachPermission2(385, 99, Auth::user()->company_id);
+
             // Add Permission if user given higher level then one of their roles.
-            if ($request->get("p$permission->id") != 0 && $request->get("p$permission->id") > $user->rolesPermissionLevel($permission->id, Auth::user()->company_id)) {
+            if (request("p$permission->id") != 0 && request("p$permission->id") > $user->rolesPermissionLevel($permission->id, Auth::user()->company_id)) {
                 //echo "added $permission->id [".$request->get("p$permission->id")."/".$user->rolesPermissionLevel($permission->id, Auth::user()->company_id)."] to $user->fullname for company[".Auth::user()->company_id."]<br>";
-                $user->attachPermission2($permission->id, $request->get("p$permission->id"), Auth::user()->company_id);
+                $user->attachPermission2($permission->id, request("p$permission->id"), Auth::user()->company_id);
             }
         }
 
         // Update Roles
-        $roles = $request->get('roles');
+        $roles = request('roles');
         $user->detachAllRoles2(Auth::user()->company_id);
         if ($roles) {
             foreach ($roles as $role)
@@ -391,7 +394,7 @@ class UserController extends Controller {
         $user = User::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->security || !Auth::user()->allowed2('edit.user', $user))
+        if (!Auth::user()->allowed2('edit.user.security', $user))
             return view('errors/404');
 
         $user->detachAllPermissions2(Auth::user()->company_id);
@@ -493,7 +496,7 @@ public function getSecurityPermissions(Request $request, $id)
                     $string .= " <span class='badge badge-info badge-roundless'>P</span>";
                 if ($user->id == $user->company->secondary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>S</span>";
-                if ($user->security)
+                if ($user->hasPermission2('edit.user.security'))
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
 
                 return $string;
@@ -542,7 +545,7 @@ public function getSecurityPermissions(Request $request, $id)
                     $string .= " <span class='badge badge-info badge-roundless'>P</span>";
                 if ($user->id == $company->secondary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>S</span>";
-                if ($user->security)
+                if ($user->hasPermission2('edit.user.security'))
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
 
                 return $string;

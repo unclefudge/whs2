@@ -140,10 +140,15 @@ trait UserRolesPermissions {
      */
     public function attachPermission2($permission, $level, $company_id)
     {
-        // Determine if exists
-        $exists = DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'company_id' => $company_id])->first();
+        // Determine if exists and exact same
+        $exists = DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id])->first();
+        if ($exists)
+            return true;
 
-        return ($exists) ? true : DB::table('permission_user')->insert(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id]);
+        // Delete if exists but different level
+        DB::table('permission_user')->where(['user_id' => $this->id, 'permission_id' => $permission, 'company_id' => $company_id])->delete();
+
+        return DB::table('permission_user')->insert(['user_id' => $this->id, 'permission_id' => $permission, 'level' => $level, 'company_id' => $company_id]);
     }
 
     /**
@@ -548,12 +553,11 @@ trait UserRolesPermissions {
         list($action, $permissiontype) = explode('.', $permission, 2);
 
         // User can always view/edit own profile
-        if (($permission == 'view.user' || $permission == 'edit.user') && $record->id == $this->id)
+        if (($permission == 'view.user' || $permission == 'edit.user' || $permission == 'view.user.contact' || $permission == 'edit.user.contact'
+                || $permission == 'view.user.security') && $record->id == $this->id)
             return true;
 
         // ToDoo
-
-
         if ($permissiontype == 'todo') {
             if ($action == 'add') return true; // User can always add todoo
             //dd($record->assignedTo());
@@ -564,7 +568,7 @@ trait UserRolesPermissions {
         if ($permission == 'view.support.ticket' || $permission == 'edit.support.ticket') {
             if ($record->created_by == $this->id) // User can always view/edit own record
                 return true;
-            if ($this->security && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) // User belongs to own or child company
+            if ($this->hasPermission2('edit.user.security') && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) // User belongs to own or child company
                 return true;
 
             return false;
@@ -607,8 +611,7 @@ trait UserRolesPermissions {
             //  ['0' => 'No', '99' => "All", '50' => "Our Company", '40' => 'Supervisor for', '30' => 'Planned for', '20' => 'Own Company', '10' => "Individual Only"]
 
             // Users
-            if ($permissiontype == 'user') {
-                if ($record->id == $this->id && ($action == 'view' || $action == 'edit')) return true;  // User can always view/edit own profile
+            if ($permissiontype == 'user' || $permissiontype == 'user.contact' || $permissiontype == 'user.security') {
                 if ($this->authUsers($permission)->contains('id', $record->id)) return true;
 
                 return false;

@@ -112,9 +112,16 @@ class RegistrationController extends Controller {
         // Attach permissions required for primary user
         $user->attachPermission2(1, 99, $company->id);  // View all users
         $user->attachPermission2(3, 99, $company->id);  // Edit all users
-        $user->attachPermission2(5, 1, $company->id);   // Create users
-        $user->attachPermission2(7, 1, $company->id);   // Archive users
+        $user->attachPermission2(5, 1, $company->id);   // Add users
+        $user->attachPermission2(7, 1, $company->id);   // Dell users
         $user->attachPermission2(241, 1, $company->id); // Signoff users
+
+        $user->attachPermission2(379, 1, $company->id);   // View users contact
+        $user->attachPermission2(380, 1, $company->id);   // Edit users contact
+        $user->attachPermission2(384, 1, $company->id);   // View users security
+        $user->attachPermission2(385, 1, $company->id);   // Edit users security
+
+
         $user->attachPermission2(9, 99, $company->id);  // View company details
         $user->attachPermission2(11, 99, $company->id); // Edit company details
         $user->attachPermission2(308, 99, $company->id); // View business details

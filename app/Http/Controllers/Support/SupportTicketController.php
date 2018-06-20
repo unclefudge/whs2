@@ -207,7 +207,7 @@ class SupportTicketController extends Controller {
      */
     public function getTickets(Request $request)
     {
-        if (Auth::user()->security)
+        if (Auth::user()->hasPermission2('edit.user.security'))
             $user_list = Auth::user()->company->users()->pluck('id')->toArray();
         else
             $user_list = [Auth::user()->id];

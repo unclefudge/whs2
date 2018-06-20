@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    @if (Auth::user()->isCC() && Auth::user()->security)
+                                    @if (Auth::user()->isCC() && Auth::user()->hasPermission2('edit.user.security'))
                                         <div class="form-group {!! fieldHasError('type', $errors) !!}">
                                             {!! Form::label('type', 'Type', ['class' => 'control-label']) !!}
                                             {!! Form::select('type', ['0' => 'Support Ticket', '1' => 'Development Upgrade'],

@@ -454,7 +454,7 @@ class Company extends Model {
     }
 
     /**
-     * A list of users this company has with 'security access'
+     * A list of users this company has with 'edit.user.security' permission
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -464,7 +464,7 @@ class Company extends Model {
 
         $array = [];
         foreach ($staff as $user) {
-            if ($user->security)
+            if ($user->hasPermission2('edit.user.security'))
                 $array[] = $user->id;
         }
 
@@ -499,9 +499,9 @@ class Company extends Model {
         if ($this->secondary_user)
             $array[] = $this->secondary_user;
 
-        // Include any with Security
+        // Include any with 'edit.user.security' permission
         foreach ($this->staffStatus(1) as $user) {
-            if ($user->security)
+            if ($user->hasPermission2('edit.user.security'))
                 $array[] = $user->id;
         }
 
@@ -520,13 +520,13 @@ class Company extends Model {
         // Include Primary + Secondary
         if ($this->primary_user) {
             $string .= $this->primary_contact()->fullname . " <span class='badge badge-info badge-roundless'>P</span>";
-            if ($this->primary_contact()->security)
+            if ($this->primary_contact()->hasPermission2('edit.user.security'))
                 $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
             $string .= ', ';
         }
         if ($this->secondary_user) {
             $string .= $this->secondary_contact()->fullname . " <span class='badge badge-info badge-roundless'>S</span>";
-            if ($this->secondary_contact()->security)
+            if ($this->secondary_contact()->hasPermission2('edit.user.security'))
                 $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
             $string .= ', ';
         }
@@ -607,7 +607,7 @@ class Company extends Model {
         foreach ($staff as $user) {
             if ($user->hasRole2($role)) {
                 $string .= $user->fullname;
-                if ($user->security)
+                if ($user->hasPermission2('edit.user.security'))
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
                 if ($user->id == $this->primary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>P</span> ";

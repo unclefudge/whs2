@@ -109,7 +109,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($site->attendance as $attend)
-                                    @if ($attend->user->id == Auth::user()->id || ($attend->user->company_id == Auth::user()->company_id  && Auth::user()->security))
+                                    @if ($attend->user->id == Auth::user()->id || ($attend->user->company_id == Auth::user()->company_id  && Auth::user()->hasPermission2('edit.user.security')))
                                         <tr>
                                             <td>{{ $attend->date->format('d/m/y') }}</td>
                                             <td>{{ App\User::find($attend->user_id)->fullname }}</td>
