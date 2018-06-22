@@ -2,7 +2,6 @@
 @inject('companyEntity', 'App\Http\Utilities\CompanyEntityTypes')
 @extends('layout')
 
-@if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -15,7 +14,6 @@
         <li><span>Profile</span></li>
     </ul>
 @stop
-@endif
 
 @section('content')
     {{-- BEGIN PAGE CONTENT INNER --}}
@@ -38,6 +36,7 @@
                 @endif
             </div>
 
+
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Security Details --}}
                 @if (Auth::user()->allowed2('view.user.security', $user))
@@ -45,6 +44,7 @@
                 @endif
 
             </div>
+
         </div>
     </div>
 
@@ -84,7 +84,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         /* Select2 */
-        $("#supervisors").select2({placeholder: "Select one or more", width: '100%'});
+        $("#roles").select2({placeholder: "Select one or more", width: '100%'});
 
         if ($('#transient').val() == 1)
             $('#super-div').show();

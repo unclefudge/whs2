@@ -95,6 +95,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/attendance/dt/attendance', 'Misc\ReportController@getAttendance');
     Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
 
+    // User Docs
+    Route::get('user/{uid}/doc/dt/docs', 'User\UserDocController@getDocs');
+    Route::get('user/{uid}/doc/upload', 'User\UserDocController@create');
+    //Route::post('user/{uid}/doc/reject/{id}', 'User\UserDocController@reject');
+    //Route::get('user/{uid}/doc/archive/{id}', 'User\UserDocController@archive');
+    //Route::get('user/{uid}/doc/cats/{department}', 'User\UserDocController@getCategories');
+    Route::resource('user/{uid}/doc', 'User\UserDocController');
 
     // User Routes
     Route::get('user/dt/users', 'UserController@getUsers');

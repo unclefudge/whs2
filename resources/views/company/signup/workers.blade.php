@@ -88,7 +88,6 @@
                                         <table class="table table-striped table-bordered table-hover order-column" id="table_staff">
                                             <thead>
                                             <tr class="mytable-header">
-                                                <th width="5%"> #</th>
                                                 <th> Name</th>
                                                 <th> Phone</th>
                                                 <th> Email</th>
@@ -159,7 +158,6 @@
             }
         },
         columns: [
-            {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'full_name', name: 'full_name'},
             {data: 'phone', name: 'phone', orderable: false},
             {data: 'email', name: 'email', orderable: false},

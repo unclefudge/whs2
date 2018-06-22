@@ -28,22 +28,24 @@ class UserRequest extends Request {
     public function rules()
     {
         $rules = [
-            'username'           => 'required|min:3|max:50|unique:users',
+            'username'         => 'required|min:3|max:50|unique:users',
             //'username'           => 'required|min:3|max:50|unique:users,username,' . $this->get('id'),
-            'password'           => 'required|min:3',
-            'firstname'          => 'required',
-            'lastname'           => 'required',
-            'email'              => 'required_if:status,1|email|max:255|unique:users,email,NULL',
+            'password'         => 'required|min:3',
+            'firstname'        => 'required',
+            'lastname'         => 'required',
+            'email'            => 'required_if:status,1|email|max:255|unique:users,email,NULL',
             //'email'              => 'required_if:status,1|email|max:255|unique:users,email,' . $this->get('id') . ',id',
-            'roles'              => 'required_if:subscription,1',
-            'employment_type'    => 'required',
-            'subcontractor_type' => 'required_if:employment_type,3',
+            'roles'            => 'required_if:subscription,1',
+            'employment_type'  => 'required',
+            //'subcontractor_type' => 'required_if:employment_type,3',
+            'apprentice_start' => 'required_if:apprentice,1',
         ];
 
-        $tabs = $this->get('tabs');
-        if (!$tabs)
-            return $rules;
+        //$tabs = $this->get('tabs');
+        //if (!$tabs)
+        return $rules;
 
+        /*
         switch ($tabs) {
             case 'settings:info': {
                 return [
@@ -64,7 +66,7 @@ class UserRequest extends Request {
                     'password' => 'required|confirmed|min:3'
                 ];
             }
-        }
+        }*/
     }
 
     /**
@@ -79,7 +81,8 @@ class UserRequest extends Request {
             'photo'                          => 'No image was selected.',
             'email.required_if'              => 'The email field is required if user active ie. Login Enabled.',
             'roles.required_if'              => 'You must select at least one role',
-            'subcontractor_type.required_if' => 'The subcontractor entity is required',
+            //'subcontractor_type.required_if' => 'The subcontractor entity is required',
+            'apprentice_start.required_if'   => 'The apprentice start date  is required',
         ];
     }
 
@@ -90,6 +93,7 @@ class UserRequest extends Request {
      * @param array $errors
      * @return $this|JsonResponse
      */
+    /*
     public function response(array $errors)
     {
         // Optionally, send a custom response on authorize failure
@@ -125,7 +129,7 @@ class UserRequest extends Request {
                     ->withInput($this->except($this->dontFlash))
                     ->withErrors($errors, $this->errorBag);
         }
-    }
+    }*/
 
     /**
      * Get the URL to redirect to on a validation error.

@@ -88,6 +88,10 @@ class UserController extends Controller {
         $user = User::create($user_request);
         Toastr::success("Created new user");
 
+        // Attach trades
+        if (request('trades'))
+            $user->tradesSkilledIn()->sync(request('trades'));
+
         // Attach parent company default child role
         if ($user->company->parent_company) {
             $default_user_role = Role2::where('company_id', $user->company->reportsTo()->id)->where('child', 'default')->first();

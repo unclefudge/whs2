@@ -56,6 +56,9 @@
                         @else
                             <input type="text" name="password" id="password" value="{{ old('password') }}" class="form-control" placeholder="Leave blank to keep password unchanged">
                         @endif
+                        @if (Auth::user()->id != $user->id)
+                            <span class="help-block">User will be forced to choose new password upon login</span>
+                        @endif
                         {!! fieldErrorMessage('password', $errors) !!}
                     </div>
                 </div>

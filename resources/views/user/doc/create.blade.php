@@ -3,37 +3,33 @@
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        @if (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company'))
-            <li><a href="/company">Companies</a><i class="fa fa-circle"></i></li>
+        @if (Auth::user()->allowed2('view.company', $user->company))
+            <li><a href="/company/{{ $user->company_id }}">Company</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><a href="/company/{{ $company->id }}/doc">Documents</a><i class="fa fa-circle"></i></li>
-        <li><span>Upload</span></li>
+        @if (Auth::user()->hasAnyPermissionType('user'))
+            <li><a href="/company/{{ Auth::user()->company->id}}/user">Users</a><i class="fa fa-circle"></i></li>
+        @endif
+        <li><span>Profile</span></li>
     </ul>
 @stop
 
 @section('content')
     <div class="page-content-inner">
-        {{-- Company Header --}}
-        @include('company/_header')
+        {{-- Users Header --}}
+        @include('user/_header')
 
-        {{-- Compliance Documents --}}
-        @if (count($company->missingDocs()))
-            <div class="row">
-                @include('company/_compliance-docs')
-            </div>
-        @endif
 
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-dark bold uppercase"> Upload Documents</span>
+                            <span class="caption-subject font-dark bold uppercase"> Upload Documents <span class="font-red">UNDER DEVELOPMENT</span> </span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('companydoc', ['action' => ['Company\CompanyDocController@store', $company->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                        {!! Form::model('userdoc', ['action' => ['User\UserDocController@store', $user->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
                         {!! Form::hidden('create', 'true') !!}
 
@@ -51,7 +47,7 @@
                                     {{-- Doc type --}}
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}" id="category_id_form">
                                         {!! Form::label('category_id', 'Document type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id',Auth::user()->companyDocTypeSelect('add', $company, 'prompt'),
+                                        {!! Form::select('category_id',Auth::user()->userDocTypeSelect('add', $user, 'prompt'),
                                              $category_id, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
@@ -73,11 +69,12 @@
                                         {!! fieldErrorMessage('ref_name', $errors) !!}
                                     </div>
                                     {{-- Category --}}
+                                    {{--}}
                                     <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" style="display: none" id="fields_category">
                                         {!! Form::label('ref_type', 'Category', ['class' => 'control-label']) !!}
                                         {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('ref_type', $errors) !!}
-                                    </div>
+                                    </div>--}}
                                     {{-- Lic No --}}
                                     <div class="form-group {!! fieldHasError('lic_no', $errors) !!}" style="display: none" id="fields_lic_no">
                                         {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
@@ -85,13 +82,14 @@
                                         {!! fieldErrorMessage('lic_no', $errors) !!}
                                     </div>
                                     {{-- Lic Class --}}
+                                    {{--}}
                                     <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_lic_class">
                                         {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
                                         <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
                                             {!! $company->contractorLicenceOptions() !!}
                                         </select>
                                         {!! fieldErrorMessage('lic_type', $errors) !!}
-                                    </div>
+                                    </div>--}}
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
                                         {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
@@ -106,28 +104,6 @@
                                             <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                         </div>
                                         {!! fieldErrorMessage('expiry', $errors) !!}
-                                    </div>
-                                    {{-- Test Expire Type --}}
-                                    <div class="form-group {!! fieldHasError('tag_type', $errors) !!}" style="display: none" id="fields_tag_type">
-                                        @if ($company->id == 3)
-                                            {!! Form::label('tag_type', 'Expiry', ['class' => 'control-label']) !!}
-                                            {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], null, ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('tag_type', $errors) !!}
-                                        @else
-                                            {!! Form::hidden('tag_type', '3') !!}
-                                        @endif
-                                    </div>
-                                    {{-- Test date --}}
-                                    <div class="form-group {!! fieldHasError('tag_date', $errors) !!}" style="display: none" id="fields_tag_date">
-                                        {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
-                                        <div class="input-group date date-picker">
-                                            {!! Form::text('tag_date', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
-                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
-                                        </div>
-                                        @if ($company->id != 3)
-                                            <span class="help-block">Expires 3 months from date of testing</span>
-                                        @endif
-                                        {!! fieldErrorMessage('tag_date', $errors) !!}
                                     </div>
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}" style="display: none" id="fields_notes">
@@ -155,8 +131,9 @@
                             </div>
 
                             <div class="form-actions right">
-                                <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
-                                <button type="submit" name="save" value="save" class="btn green" id="upload" style="display: none;">Upload</button>
+                                <a href="/user/{{ $user->id }}/doc" class="btn default"> Back</a>
+                                {{--}}
+                                <button type="submit" name="save" value="save" class="btn green" id="upload" style="display: none;">Upload</button>--}}
                             </div>
                         </div>
 
@@ -251,6 +228,7 @@
             } else // Other Licence + everything else
                 $('#fields_name').show();
 
+            /*
             if (cat == 1 || cat == 2 || cat == 3) {  // PL, WC & SA
                 $('#fields_policy').show();
                 $('#fields_insurer').show();
@@ -273,6 +251,7 @@
 
             if (cat == 8)  // Asbestos
                 $('#fields_asb_class').show();
+                */
         }
 
         display_fields();

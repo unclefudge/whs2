@@ -17,6 +17,21 @@ use Carbon\Carbon;
 trait UserRolesPermissions {
 
     /**
+     * A user belongs to many roles
+     */
+    public function roles2()
+    {
+        return $this->belongsToMany('App\Models\Misc\Role2', 'role_user', 'user_id', 'role_id');
+    }
+
+    /**
+     * A user belongs to many permission
+     */
+    public function permissions2($company_id)
+    {
+        return DB::table('permission_user')->where(['user_id' => $this->id, 'company_id' => $company_id])->get();
+    }
+    /**
      * Check if a user has a certain 'role'
      *
      * @return boolean
@@ -552,10 +567,13 @@ trait UserRolesPermissions {
     {
         list($action, $permissiontype) = explode('.', $permission, 2);
 
-        // User can always view/edit own profile
+        // User can always view/edit own profile + add/view own doc
         if (($permission == 'view.user' || $permission == 'edit.user' || $permission == 'view.user.contact' || $permission == 'edit.user.contact'
                 || $permission == 'view.user.security') && $record->id == $this->id)
             return true;
+
+        //
+
 
         // ToDoo
         if ($permissiontype == 'todo') {
@@ -579,7 +597,6 @@ trait UserRolesPermissions {
             if ($action == 'add') {
                 if ($this->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')) return true;
             } else {
-                //$allowed_cats = array_keys(Auth::user()->companyDocTypeSelect($action, $record->owned_by));
                 $category = CompanyDocCategory::find($record->category_id);
                 $doc_permission = ($category->private) ? "$action.docs.$category->type.pri" : "$action.docs.$category->type.pub";
                 // User has 'All' permission to this record
@@ -592,6 +609,30 @@ trait UserRolesPermissions {
                         if ($this->permissionLevel($doc_permission, $record->company_id) == 20) return true; // User has 'Own Company' permission so record must be 'for' their company
                     }
                 }
+            }
+
+            return false;
+        }
+
+        // User Documents
+        if ($permissiontype == 'user.doc') {
+            if ($action == 'add') {
+                if ($this->hasAnyPermission2('add.docs.whs.pub|add.docs.whs.pri')) return true;
+            } else {
+                $category = UserDocCategory::find($record->category_id);
+                $doc_permission = ($category->private) ? "$action.docs.$category->type.pri" : "$action.docs.$category->type.pub";
+                // User has 'All' permission to this record
+                if ($this->permissionLevel($doc_permission, $record->company_id) == 99 || $this->permissionLevel($doc_permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
+
+                // Document is For User Company but isn't the owner of it
+                // Only allowed to edit/delete documents with status pending/rejected ie. 2 or 3
+
+                /*
+                if ($record->for_company_id == $this->company_id && $record->company_id != $this->company_id) {
+                    if ($action == 'view' || $record->status == '2' || $record->status == '3') {
+                        if ($this->permissionLevel($doc_permission, $record->company_id) == 20) return true; // User has 'Own Company' permission so record must be 'for' their company
+                    }
+                }*/
             }
 
             return false;

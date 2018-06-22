@@ -12,17 +12,11 @@ use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
 use App\Models\Company\Company;
 use App\Models\Company\CompanySupervisor;
-use App\Models\Company\CompanyDoc;
-use App\Models\Company\CompanyDocCategory;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
 use App\Models\Comms\Notify;
-use App\Models\Comms\NotifyUser;
-use App\Models\Misc\Role2;
-use App\Models\Misc\Permission2;
 use App\Models\Safety\ToolboxTalk;
 use App\Http\Utilities\CompanyEntityTypes;
-use App\Http\Utilities\CompanyDocTypes;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use nilsenj\Toastr\Facades\Toastr;
@@ -36,12 +30,14 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use App\Traits\UserRolesPermissions;
+use App\Traits\UserDocs;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable, CanResetPassword;
     use Authorizable;
     use UserRolesPermissions;
+    use UserDocs;
 
     // The database table used by the model.
     protected $table = 'users';
@@ -50,7 +46,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $fillable = [
         'username', 'email', 'password', 'phone', 'firstname', 'lastname',
         'address', 'address2', 'suburb', 'state', 'postcode', 'country',
-        'employment_type', 'subcontractor_type', 'photo', 'notes', 'company_id', 'client_id',
+        'employment_type', 'subcontractor_type', 'onsite', 'apprentice', 'apprentice_start',
+        'approved_by', 'approved_at', 'photo', 'notes', 'company_id', 'client_id',
         'last_ip', 'last_login', 'password_reset', 'security',
         'status', 'created_by', 'updated_by',
     ];
@@ -59,7 +56,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = ['password', 'remember_token'];
 
     // The date fields to be converted to Carbon instances
-    protected $dates = ['last_login'];
+    protected $dates = ['last_login', 'apprentice_start', 'approved_at'];
 
     /**
      * A User belongs to a company
@@ -80,6 +77,33 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->belongsTo('App\User', 'created_by');
     }
+
+    /**
+     * A User has many trades (trades they are skilled in).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function tradesSkilledIn()
+    {
+        return $this->belongsToMany('App\Models\Site\Planner\Trade', 'user_trade', 'user_id', 'trade_id');
+    }
+
+    /**
+     * A list of trades that user is skilled in separated by ,
+     *
+     * @return string
+     */
+    public function tradesSkilledInSBC()
+    {
+        $string = '';
+        foreach ($this->tradesSkilledIn as $trade) {
+            if ($trade->status)
+                $string .= $trade->name . ', ';
+        }
+
+        return rtrim($string, ', ');
+    }
+
 
     /**
      * A User has many SiteAttendance
@@ -182,64 +206,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
     }
 
-    /**
-     * A dropdown list of types of Company Document Departments user can access
-     *
-     * @return array
-     */
-    public function companyDocDeptSelect($action, $company, $prompt = '')
-    {
-        $array = [];
-        foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
-            // Public Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pub"))
-                $array[$doc_type] = $doc_name;
-            // Private Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pri"))
-                $array[$doc_type] = $doc_name;
-        }
 
-        asort($array);
-
-        if ($prompt == 'all')
-            return ($prompt && count($array) > 1) ? $array = array('all' => 'All departments') + $array : $array;
-
-        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
-    }
-
-    /**
-     * A dropdown list of types of Company Document Types user can access
-     *
-     * @return array
-     */
-    public function companyDocTypeSelect($action, $company, $prompt = '')
-    {
-        $array = [];
-        $single = DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
-        foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
-            // Public Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
-                foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
-                        $array[$id] = $name;
-                }
-            }
-            // Private Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
-                foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
-                        $array[$id] = $name;
-                }
-            }
-        }
-
-        asort($array);
-
-        if ($prompt == 'all')
-            return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
-
-        return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
-    }
 
     /**
      * A list of Site Hazards this user is allowed to view
@@ -604,22 +571,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $array;
     }
 
-
-    /**
-     * A user belongs to many roles
-     */
-    public function roles2()
-    {
-        return $this->belongsToMany('App\Models\Misc\Role2', 'role_user', 'user_id', 'role_id');
-    }
-
-    /**
-     * A user belongs to many permission
-     */
-    public function permissions2($company_id)
-    {
-        return DB::table('permission_user')->where(['user_id' => $this->id, 'company_id' => $company_id])->get();
-    }
 
     /**
      * Get the Status Text Both  (getter)
