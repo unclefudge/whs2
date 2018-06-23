@@ -12,6 +12,7 @@ class CompanyTypes {
         '4' => 'Supply & Fit',
         '5' => 'Supply Only',
         '6' => 'Consultant',
+        '7' => 'Builder',
     ];
 
 
