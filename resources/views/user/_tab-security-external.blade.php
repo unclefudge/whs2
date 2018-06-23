@@ -346,6 +346,14 @@ $rec = $user;
                             <td width="15%">{!! permSelect('del.site.doc', 'del', $rec, $cid) !!}</td>
                             <td width="15%"></td>
                         </tr>
+                        <tr>
+                            <td>Asbestos Notifications</td>
+                            <td width="15%">{!! permSelect('view.site.asbestos', 'super', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('add.site.asbestos', 'add', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('del.site.asbestos', 'res', $rec, $cid) !!}</td>
+                            <td width="15%"></td>
+                        </tr>
                         @if($cc)
                             <tr>
                                 <td>Quality Assurance Reports</td>
@@ -354,14 +362,6 @@ $rec = $user;
                                 <td width="15%">{!! permSelect('add.site.qa', 'add', $rec, $cid) !!}</td>
                                 <td width="15%">{!! permSelect('del.site.qa', 'res', $rec, $cid) !!}</td>
                                 <td width="15%">{!! permSelect('sig.site.qa', 'sig', $rec, $cid) !!}</td>
-                            </tr>
-                            <tr>
-                                <td>Asbestos Notifications</td>
-                                <td width="15%">{!! permSelect('view.site.asbestos', 'super', $rec, $cid) !!}</td>
-                                <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $rec, $cid) !!}</td>
-                                <td width="15%">{!! permSelect('add.site.asbestos', 'add', $rec, $cid) !!}</td>
-                                <td width="15%">{!! permSelect('del.site.asbestos', 'res', $rec, $cid) !!}</td>
-                                <td width="15%"></td>
                             </tr>
                         @endif
                     </table>

@@ -59,7 +59,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('date', $errors) !!}">
                                         {!! Form::label('date', 'Date / Time of Incident', ['class' => 'control-label']) !!}
-                                        <div class="input-group date form_datetime form_datetime bs-datetime" data-date-start-date="+0d">
+                                        <div class="input-group date form_datetime form_datetime bs-datetime date-picker" data-date-end-date="0d"> <!-- bs-datetime -->
                                             {!! Form::text('date', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
                                             <span class="input-group-addon">
                                                 <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
@@ -215,6 +215,11 @@
         /* Select2 */
         $("#site_id").select2({placeholder: "Select Site"});
 
+    });
+
+    // Force datepicker to not be able to select dates after today
+    $('.bs-datetime').datetimepicker({
+        endDate : new Date()
     });
 </script>
 @stop

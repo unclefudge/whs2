@@ -521,11 +521,12 @@ class ToolboxTalkController extends Controller {
         $records = DB::table('toolbox_talks AS t')
             ->select(['t.id', 't.name', 't.version', 't.for_company_id', 't.company_id', 't.status', 't.updated_at', 'c.name AS company_name'])
             ->join('companys AS c', 't.company_id', '=', 'c.id')
-            ->where(function ($q) {
-                $q->where('t.for_company_id', Auth::user()->company_id);
+            /*->where(function ($q) {
+                $q->where('t.for_company_id', 3);
                 $q->orWhere('t.company_id', Auth::user()->company_id);
                 $q->orWhere('t.company_id', Auth::user()->company->reportsTo()->id);
-            })
+            })*/
+            ->where('t.company_id', 3)
             ->where('t.master', '1')
             ->where('t.status', $request->get('status'));
 

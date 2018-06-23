@@ -70,18 +70,26 @@ class SiteAttendanceController extends Controller {
         //dd($attendance_records);
         $dt = Datatables::of($attendance_records)
             ->editColumn('date', function ($attendance) {
+                if ($attendance->date->isToday())
+                    return '<span class="font-blue">'.$attendance->date->format('d/m/Y H:m a').'</span>';
                 return $attendance->date->format('d/m/Y H:m a');
             })
             ->editColumn('sites.name', function ($attendance) {
+                if ($attendance->date->isToday())
+                    return '<span class="font-blue">'.$attendance->site->name.'</span>';
                 return $attendance->site->name;
             })
             ->editColumn('full_name', function ($attendance) {
+                if ($attendance->date->isToday())
+                    return '<span class="font-blue">'.$attendance->user->full_name.'</span>';
                 return $attendance->user->full_name;
             })
             ->editColumn('companys.name', function ($attendance) {
+                if ($attendance->date->isToday())
+                    return '<span class="font-blue">'.$attendance->user->company->name.'</span>';
                 return $attendance->user->company->name;
             })
-            ->rawColumns(['id', 'full_name', 'companys.name', 'sites.name'])
+            ->rawColumns(['id', 'date', 'full_name', 'companys.name', 'sites.name'])
             ->make(true);
 
         return $dt;

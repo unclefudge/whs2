@@ -528,6 +528,14 @@ $cc = 1;*/
                                                 <td width="15%">{!! permSelect('del.site.doc', 'del', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%"></td>
                                             </tr>
+                                            <tr>
+                                                <td>Asbestos Notifications</td>
+                                                <td width="15%">{!! permSelect('view.site.asbestos', 'super', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('add.site.asbestos', 'add', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('del.site.asbestos', 'res', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%"></td>
+                                            </tr>
                                             @if($cc)
                                                 <tr>
                                                     <td>Quality Assurance Reports<br><span class="font-grey-silver">Cape Cod Only</span></td>
@@ -536,14 +544,6 @@ $cc = 1;*/
                                                     <td width="15%">{!! permSelect('add.site.qa', 'add', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('del.site.qa', 'res', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('sig.site.qa', 'sig', $rec, $cid, $dis) !!}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Asbestos Notifications<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.site.asbestos', 'super', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('edit.site.asbestos', 'super', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('add.site.asbestos', 'add', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%">{!! permSelect('del.site.asbestos', 'res', $rec, $cid, $dis) !!}</td>
-                                                    <td width="15%"></td>
                                                 </tr>
                                             @endif
                                         </table>
