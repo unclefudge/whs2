@@ -908,6 +908,7 @@ class Company extends Model {
         // 5  PTC - Period Trade Contract
         // 6  TT - Test & Tag
         // 7  CL - Contractors Licence
+        // 10 BL - Builders Licence
         //
         // Categories                          | PL  |WC/SA| SUB | PTC | CL  | BL  |
         // 0  Unallocated                      |_____|_____|_____|_____|_____|_____|
@@ -942,6 +943,9 @@ class Company extends Model {
 
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
+
+        // Bulder
+        if ($this->category == 7 && $type == 10) return true; // Requires BL
 
         return false;
     }
