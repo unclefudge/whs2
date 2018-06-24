@@ -61,7 +61,7 @@ class SessionController extends Controller {
             Auth::user()->save();
 
             // Log Supervisors
-            if (Auth::user()->isSupervisor())
+            if (Auth::user()->isCC() && Auth::user()->isSupervisor())
                 File::append(public_path('filebank/log/users/supers_login.txt'), Carbon::now()->format('d/m/Y H:i:s') . ' ' . Auth::user()->fullname . ' (' . Auth::user()->username . ")\n");
 
             // Display Site Specific Alerts

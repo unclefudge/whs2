@@ -124,8 +124,17 @@ class RegistrationController extends Controller {
 
         $user->attachPermission2(9, 99, $company->id);  // View company details
         $user->attachPermission2(11, 99, $company->id); // Edit company details
+        $user->attachPermission2(13, 99, $company->id); // Add company details
+        $user->attachPermission2(15, 99, $company->id); // Del company details
         $user->attachPermission2(308, 99, $company->id); // View business details
         $user->attachPermission2(309, 99, $company->id); // Edit business details
+        $user->attachPermission2(312, 99, $company->id); // Signoff business details
+        $user->attachPermission2(313, 99, $company->id); // View contruction details
+        $user->attachPermission2(314, 99, $company->id); // Edit contruction details
+        $user->attachPermission2(317, 99, $company->id); // Signoff contruction details
+        $user->attachPermission2(303, 99, $company->id); // View WHS details
+        $user->attachPermission2(304, 99, $company->id); // Edit WHS details
+        $user->attachPermission2(307, 99, $company->id); // Signoff WHS details
 
         // Update Company Primary User + Signup step
         $company->primary_user = $user->id;

@@ -3,6 +3,7 @@
 namespace App;
 
 use DB;
+use Session;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Site\Planner\SiteCompliance;
@@ -207,7 +208,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
 
-
     /**
      * A list of Site Hazards this user is allowed to view
      *
@@ -215,14 +215,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function siteHazards($status = '')
     {
-        $site_list = [];
-        $user_list = [];
+        $site_list = (Session::has('siteID')) ?[Session::get('siteID')] : [];
+        $user_list = [$this->id];
         $company_level = $this->permissionLevel('view.site.hazard', $this->company_id);
         $parent_level = $this->permissionLevel('view.site.hazard', $this->company->reportsTo()->id);
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
-            $site_list = $this->authSites('view.site.hazard')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
+            $site_list = $site_list + $this->authSites('view.site.hazard')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
-            $user_list = $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
+            $user_list = $user_list + $this->authUsers('view.site.hazard')->pluck('id')->toArray(); // Else - check users
 
         if ($status != '')
             return SiteHazard::where('status', '=', $status)
@@ -245,14 +245,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function siteAccidents($status = '')
     {
-        $site_list = [];
-        $user_list = [];
+        $site_list = (Session::has('siteID')) ?[Session::get('siteID')] : [];
+        $user_list = [$this->id];
         $company_level = $this->permissionLevel('view.site.accident', $this->company_id);
         $parent_level = $this->permissionLevel('view.site.accident', $this->company->reportsTo()->id);
         if ($company_level == 30 || $company_level == 40 || $parent_level == 30 || $parent_level == 40)
-            $site_list = $this->authSites('view.site.accident')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
+            $site_list = $site_list + $this->authSites('view.site.accident')->pluck('id')->toArray(); // Planned For or Supervisor For so  - check site
         else
-            $user_list = $this->authUsers('view.site.accident')->pluck('id')->toArray(); // Else - check users
+            $user_list = $user_list + $this->authUsers('view.site.accident')->pluck('id')->toArray(); // Else - check users
 
         if ($status != '')
             return SiteAccident::where('status', '=', $status)

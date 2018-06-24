@@ -36,7 +36,7 @@ class ActionController extends Controller {
             ->join('users', 'a.created_by', '=', 'users.id')
             ->where('table', $table)
             ->where('table_id', $table_id)
-            ->orderBy('a.created_at')->get();
+            ->orderBy('a.created_at', 'desc')->get();
 
         return response()->json($actions);
 

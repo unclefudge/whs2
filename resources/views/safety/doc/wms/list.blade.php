@@ -61,50 +61,52 @@
         </div>
 
         <!-- Templates -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="portlet light ">
-                    <div class="portlet-title">
-                        <div class="caption font-dark">
-                            <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Safe Work Method Template Library</span>
-                        </div>
-                        <div class="actions">
-                            @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/wms/create" data-original-title="Add">Add</a>
-                            @endif
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 pull-right">
-                            <div class="form-group">
-                                <select name="status2" id="status2" class="form-control bs-select">
-                                    <option value="1" selected>Active</option>
-                                    @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
-                                        <option value="2">Pending</option>
-                                        <option value="0">Draft</option>
-                                        <option value="-1">Archived</option>
-                                    @endif
-                                </select>
+        @if(Auth::user()->hasPermission2('add.wms'))
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption font-dark">
+                                <i class="icon-layers"></i>
+                                <span class="caption-subject bold uppercase font-green-haze"> Safe Work Method Template Library</span>
+                            </div>
+                            <div class="actions">
+                                @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
+                                    <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/wms/create" data-original-title="Add">Add</a>
+                                @endif
+                                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                             </div>
                         </div>
-                    </div>
-                    <div class="portlet-body">
-                        <table class="table table-striped table-bordered table-hover order-column" id="table2">
-                            <thead>
-                            <tr class="mytable-header">
-                                <th width="5%"> #</th>
-                                <th> Safe Work Method Statement</th>
-                                <th width="10%"> Updated</th>
-                                <th width="5%"></th>
-                            </tr>
-                            </thead>
-                        </table>
+                        <div class="row">
+                            <div class="col-md-2 pull-right">
+                                <div class="form-group">
+                                    <select name="status2" id="status2" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        @if(Auth::user()->hasPermission2('add.wms') && in_array(Auth::user()->id, [3, 6, 351, 109]))
+                                            <option value="2">Pending</option>
+                                            <option value="0">Draft</option>
+                                            <option value="-1">Archived</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <table class="table table-striped table-bordered table-hover order-column" id="table2">
+                                <thead>
+                                <tr class="mytable-header">
+                                    <th width="5%"> #</th>
+                                    <th> Safe Work Method Statement</th>
+                                    <th width="10%"> Updated</th>
+                                    <th width="5%"></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
     <!-- END PAGE CONTENT INNER -->
 @stop

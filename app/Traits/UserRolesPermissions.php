@@ -699,6 +699,12 @@ trait UserRolesPermissions {
                 // check users
                 if ($this->authUsers($permission)->contains('id', $record->created_by)) return true;
 
+                // User always allowed to view on Accident / Hazard
+                if ($action == 'view' && $this->id == $record->created_by) return true;
+
+                // User always allowed to view on Hazard of site they currently logged into
+                if ($action == 'view' && $permissiontype == 'site.hazard' && Session::has('siteID') && Session::get('siteID') == $record->site_id) return true;
+
                 return false;
             }
 

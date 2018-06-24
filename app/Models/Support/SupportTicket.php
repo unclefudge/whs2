@@ -85,7 +85,7 @@ class SupportTicket extends Model {
 
         $email_list = env('EMAIL_ME');
         if (\App::environment('prod', 'dev'))
-            $email_list = "jo@capecod.com.au; tara@capecod.com.au; robert@capecod.com.au; ".$email_list;
+            $email_list = "jo@capecod.com.au; ".$email_list;
         $email_list = explode(';', $email_list);
         $email_list = array_map('trim', $email_list); // trim white spaces
         $email_user =  $this->createdBy->email;

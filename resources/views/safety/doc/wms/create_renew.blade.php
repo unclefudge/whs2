@@ -56,12 +56,13 @@
 
                         <input type="hidden" name="version" value="1.0">
                         <div class="form-body">
-                            {!! Form::hidden('swms_type', 'library') !!}
+                            {!! Form::hidden('swms_type', ($doc->builder) ? 'library' : 'upload') !!}
                             {!! Form::hidden('master_id', $doc->id) !!}
                             {!! Form::hidden('replace_switch', 1) !!}
                             {!! Form::hidden('replace_id', $doc->id) !!}
                             {!! Form::hidden('principle_id', $doc->principle_id) !!}
                             {!! Form::hidden('principle', $doc->principle) !!}
+                            {!! Form::hidden('builder', $doc->builder) !!}
 
                             <div class="note note-warning">The old SWMS will be archived if you continue</div>
                             {{-- Name --}}
@@ -73,6 +74,15 @@
                                         {!! fieldErrorMessage('name', $errors) !!}
                                     </div>
                                 </div>
+                                @if (!$doc->builder)
+                                    <div class="col-md-6" id="upload_div">
+                                        <div class="form-group {!! fieldHasError('attachment', $errors) !!}">
+                                            <label class="control-label">Select File</label>
+                                            <input id="attachment" name="attachment" type="file" class="file-loading">
+                                            {!! fieldErrorMessage('attachment', $errors) !!}
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
 
                             <!-- Save as Template -->
@@ -155,6 +165,19 @@
 
         $('#replace_switch').on('switchChange.bootstrapSwitch', function (event, state) {
             $('#replace-div').toggle();
+        });
+
+        /* Bootstrap Fileinput */
+        $("#attachment").fileinput({
+            showUpload: false,
+            allowedFileExtensions: ["pdf"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn btn-danger",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn btn-info",
         });
     });
 </script>

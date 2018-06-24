@@ -147,7 +147,7 @@ class WmsController extends Controller {
             return view('errors/404');
 
         $wms_request = request()->all();
-        $wms_request['for_company_id'] = Auth::user()->company->id;
+        $wms_request['for_company_id'] = Auth::user()->company_id;
 
         // Defaults
         $wms_request['company_id'] = Auth::user()->company->reportsTo()->id;
@@ -172,7 +172,7 @@ class WmsController extends Controller {
             }
         }
 
-        if ($request->get('swms_type') != 'upload') {
+        if (request('swms_type') != 'upload') {
             $wms_request['builder'] = 1;
             $wms_request['project'] = 'All Jobs';
         }
@@ -204,12 +204,13 @@ class WmsController extends Controller {
         if ($request->hasFile('attachment')) {
             $file = request('attachment');
 
-            $path = "filebank/company/" . request('for_company_id') . '/wms';
+            $path = "filebank/company/" .  Auth::user()->company_id . '/wms';
             $name = sanitizeFilename($newDoc->name) . '-v1.0-' . $newDoc->id . '.' . strtolower($file->getClientOriginalExtension());
             $path_name = $path . '/' . $name;
             $file->move($path, $name);
             $newDoc->attachment = $name;
             $newDoc->save();
+            //dd($path);
         }
 
         Toastr::success("Created new statement");
@@ -393,9 +394,11 @@ class WmsController extends Controller {
             $name = sanitizeFilename($request->get('name')) . '-v1.0-' . $doc->id . '.' . strtolower($file->getClientOriginalExtension());
             $file->move($path, $name);
             $doc->attachment = $name;
+            dd('y');
         } else
             $doc->attachment = '';
         $doc->save();
+        dd('c');
 
 
         return ['attachment' => $doc->attachment, 'version' => $doc->version];

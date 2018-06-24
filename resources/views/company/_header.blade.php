@@ -24,9 +24,13 @@
             ?>
             <ul class="member-bar-menu">
                 <li class="member-bar-item {{ $active_profile }}"><i class="icon-profile"></i><a class="member-bar-link" href="/company/{{ $company->id }}" title="Profile">PROFILE</a></li>
-                <li class="member-bar-item {{ $active_doc }}"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
+                @if (Auth::user()->companyDocTypeSelect('view', $company, 'all'))
+                    <li class="member-bar-item {{ $active_doc }}"><i class="icon-document"></i><a class="member-bar-link" href="/company/{{ $company->id }}/doc" title="Documents">
                         <span class="hidden-xs hidden-sm">DOCUMENTS</span><span class="visible-xs visible-sm">DOCS</span></a></li>
-                <li class="member-bar-item {{ $active_user }}"><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Users">USERS</a></li>
+                @endif
+                @if (Auth::user()->permissionLevel('view.user', Auth::user()->company_id) || Auth::user()->permissionLevel('edit.user', Auth::user()->company_id))
+                    <li class="member-bar-item {{ $active_user }}"><i class="icon-staff"></i><a class="member-bar-link" href="/company/{{ $company->id }}/user" title="Users">USERS</a></li>
+                @endif
             </ul>
         </div>
     </div>
