@@ -102,13 +102,10 @@ class PagesController extends Controller {
                 $user->attachPermission2(5, 1, $user->company_id);   // Add users
                 $user->attachPermission2(7, 1, $user->company_id);   // Dell users
                 $user->attachPermission2(241, 1, $user->company_id); // Signoff users
-
                 $user->attachPermission2(379, 99, $user->company_id);   // View users contact
                 $user->attachPermission2(380, 99, $user->company_id);   // Edit users contact
                 $user->attachPermission2(384, 99, $user->company_id);   // View users security
                 $user->attachPermission2(385, 99, $user->company_id);   // Edit users security
-
-
                 $user->attachPermission2(9, 99, $user->company_id);  // View company details
                 $user->attachPermission2(11, 99, $user->company_id); // Edit company details
                 $user->attachPermission2(13, 1, $user->company_id); // Add company details

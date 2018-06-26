@@ -115,26 +115,24 @@ class RegistrationController extends Controller {
         $user->attachPermission2(5, 1, $company->id);   // Add users
         $user->attachPermission2(7, 1, $company->id);   // Dell users
         $user->attachPermission2(241, 1, $company->id); // Signoff users
+        $user->attachPermission2(379, 99, $company->id);   // View users contact
+        $user->attachPermission2(380, 99, $company->id);   // Edit users contact
+        $user->attachPermission2(384, 99, $company->id);   // View users security
+        $user->attachPermission2(385, 99, $company->id);   // Edit users security
 
-        $user->attachPermission2(379, 1, $company->id);   // View users contact
-        $user->attachPermission2(380, 1, $company->id);   // Edit users contact
-        $user->attachPermission2(384, 1, $company->id);   // View users security
-        $user->attachPermission2(385, 1, $company->id);   // Edit users security
-
-
-        $user->attachPermission2(9, 99, $company->id);  // View company details
-        $user->attachPermission2(11, 99, $company->id); // Edit company details
-        $user->attachPermission2(13, 99, $company->id); // Add company details
-        $user->attachPermission2(15, 99, $company->id); // Del company details
+        $user->attachPermission2(9, 99, $company->id);   // View company details
+        $user->attachPermission2(11, 99, $company->id);  // Edit company details
+        $user->attachPermission2(13, 1, $company->id);   // Add company details
+        $user->attachPermission2(15, 1, $company->id);   // Del company details
         $user->attachPermission2(308, 99, $company->id); // View business details
         $user->attachPermission2(309, 99, $company->id); // Edit business details
-        $user->attachPermission2(312, 99, $company->id); // Signoff business details
+        $user->attachPermission2(312, 1, $company->id);  // Signoff business details
         $user->attachPermission2(313, 99, $company->id); // View contruction details
         $user->attachPermission2(314, 99, $company->id); // Edit contruction details
-        $user->attachPermission2(317, 99, $company->id); // Signoff contruction details
+        $user->attachPermission2(317, 1, $company->id);  // Signoff contruction details
         $user->attachPermission2(303, 99, $company->id); // View WHS details
         $user->attachPermission2(304, 99, $company->id); // Edit WHS details
-        $user->attachPermission2(307, 99, $company->id); // Signoff WHS details
+        $user->attachPermission2(307, 1, $company->id);  // Signoff WHS details
 
         // Update Company Primary User + Signup step
         $company->primary_user = $user->id;

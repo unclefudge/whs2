@@ -26,7 +26,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Company List</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->company->subscription && Auth::user()->allowed2('add.company'))
+                            @if(Auth::user()->allowed2('add.company'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/company/create" data-original-title="Add">Add</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
