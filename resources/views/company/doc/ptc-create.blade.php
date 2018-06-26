@@ -36,7 +36,7 @@
                         </li>
                         <li>
                             {!! ($company->activeCompanyDoc(3) && $company->activeCompanyDoc(3)->status == 1) ? "<a href='".$company->activeCompanyDoc(3)->attachment_url."' target='_blank'>Sickness & Accident</a>" : 'Sickness & Accident' !!}
-                            {!! ($company->requiresCompanyDoc(3) && !($company->activeCompanyDoc(3) && $company->activeCompanyDoc(2)->status == 1)) ? " &nbsp; <span class='font-red'> Not submitted </span> <a href='/company/$company->id/doc/create'><i class='fa fa-upload' style='padding: 0px 15px'></i> Upload</a>" : '' !!}
+                            {!! ($company->requiresCompanyDoc(3) && !($company->activeCompanyDoc(3) && $company->activeCompanyDoc(3)->status == 1)) ? " &nbsp; <span class='font-red'> Not submitted </span> <a href='/company/$company->id/doc/create'><i class='fa fa-upload' style='padding: 0px 15px'></i> Upload</a>" : '' !!}
                         </li>
                     </ul>
                     <b>Please ensure ALL of these items are uploaded and correct prior to generating this form.</b><br><br>

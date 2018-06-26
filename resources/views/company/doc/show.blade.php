@@ -244,6 +244,14 @@
 
                             <div class="form-actions right">
                                 <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
+                                {{-- SS Renewal --}}
+                                @if ($doc->category_id == 4 && $doc->status == 1 && Auth::user()->isCompany($company->id))
+                                    <a href="/company/{{ $company->id }}/doc/subcontractor-statement/create" class="btn green"> Renew</a>
+                                @endif
+                                {{-- PTC Renewal --}}
+                                @if ($doc->category_id == 5 && $doc->status == 1 && Auth::user()->isCompany($company->id))
+                                    <a href="/company/{{ $company->id }}/doc/period-trade-contract/create" class="btn green"> Renew</a>
+                                @endif
                             </div>
                         </div>
                         {!! Form::close() !!}

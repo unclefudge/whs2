@@ -144,7 +144,7 @@
                 </div>
                 <div style="width: 100%; display: table;">
                     <span style="display: table-cell; width: 90px;">ADDRESS </span>
-                    <span style="display: table-cell">{{ $ptc->contractor_address }}<br></span>
+                    <span style="display: table-cell">{!! $ptc->contractor_address !!}<br></span>
                 </div>
                 <div style="width: 100%; display: table;">
                     <span style="display: table-cell; width: 90px;">ABN </span>
