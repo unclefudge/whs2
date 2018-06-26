@@ -91,17 +91,39 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
-        /*echo "<br><br>Move security toggle to permission<br><br>";
+        echo "<br><br>Move security toggle to permission<br><br>";
         $users = \App\User::all();
         foreach ($users as $user) {
             if ($user->security) {
-                echo $user->name."<br>";
-                $user->attachPermission2(384, 99, $user->company_id); // view.user.security
-                $user->attachPermission2(385, 99, $user->company_id); // edit.user.security
-                $user->attachPermission2(379, 99, $user->company_id); // view.user.contact
-                $user->attachPermission2(380, 99, $user->company_id); // edit.user.contact
+                echo $user->name . "<br>";
+                // Attach permissions required for primary user
+                $user->attachPermission2(1, 99, $user->company_id);  // View all users
+                $user->attachPermission2(3, 99, $user->company_id);  // Edit all users
+                $user->attachPermission2(5, 1, $user->company_id);   // Add users
+                $user->attachPermission2(7, 1, $user->company_id);   // Dell users
+                $user->attachPermission2(241, 1, $user->company_id); // Signoff users
+
+                $user->attachPermission2(379, 1, $user->company_id);   // View users contact
+                $user->attachPermission2(380, 1, $user->company_id);   // Edit users contact
+                $user->attachPermission2(384, 1, $user->company_id);   // View users security
+                $user->attachPermission2(385, 1, $user->company_id);   // Edit users security
+
+
+                $user->attachPermission2(9, 99, $user->company_id);  // View company details
+                $user->attachPermission2(11, 99, $user->company_id); // Edit company details
+                $user->attachPermission2(13, 99, $user->company_id); // Add company details
+                $user->attachPermission2(15, 99, $user->company_id); // Del company details
+                $user->attachPermission2(308, 99, $user->company_id); // View business details
+                $user->attachPermission2(309, 99, $user->company_id); // Edit business details
+                $user->attachPermission2(312, 99, $user->company_id); // Signoff business details
+                $user->attachPermission2(313, 99, $user->company_id); // View contruction details
+                $user->attachPermission2(314, 99, $user->company_id); // Edit contruction details
+                $user->attachPermission2(317, 99, $user->company_id); // Signoff contruction details
+                $user->attachPermission2(303, 99, $user->company_id); // View WHS details
+                $user->attachPermission2(304, 99, $user->company_id); // Edit WHS details
+                $user->attachPermission2(307, 99, $user->company_id); // Signoff WHS details
             }
-        }*/
+        }
 
         echo "<br><br>Todo company doc completed but still active<br><br>";
         $todos = \App\Models\Comms\Todo::all();
