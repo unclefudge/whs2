@@ -42,6 +42,7 @@ class CronController extends Controller {
         CronController::nonattendees();
         CronController::roster();
         CronController::qa();
+        CronController::completeToDoCompanyDoc();
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
         CronController::archiveToolbox();
@@ -518,6 +519,56 @@ class CronController extends Controller {
     }
 
     /*
+     * Archive completed Toolbox
+     */
+    static public function completeToDoCompanyDoc()
+    {
+        $log = '';
+        echo "<h2>Todo company doc completed but still active</h2>";
+        $log .= "Todo company doc completed but still active\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $todos = \App\Models\Comms\Todo::all();
+        foreach ($todos as $todo) {
+            if ($todo->status && $todo->type == 'company doc') {
+                $doc = \App\Models\Company\CompanyDoc::find($todo->type_id);
+                if ($doc) {
+                    if ($doc->status == 1) {
+                        //echo "ToDo [$todo->id] - $todo->name (".$doc->company->name.") ACTIVE DOC<br>";
+                        //$todo->status = 0;
+                        //$todo->done_at = Carbon::now();
+                        //$todo->done_by = 1;
+                        //$todo->save();
+                    }
+                    if ($doc->status == 0) {
+                        if ($doc->company->activeCompanyDoc($doc->category_id)) {
+                            echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC<br>";
+                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC<br>";
+                            $todo->status = 0;
+                            $todo->done_at = Carbon::now();
+                            $todo->done_by = 1;
+                            $todo->save();
+                        } else {
+                            echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
+                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
+                        }
+
+                    }
+
+                } else {
+                    echo "ToDo [$todo->id] - " . $todo->company->name . " (DELETED)<br>";
+                }
+            }
+        }
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
+
+    /*
      * Check for overdue ToDoo
      */
     static public function overdueToDo()
@@ -545,7 +596,7 @@ class CronController extends Controller {
             // Toolbox Talk
             if ($todo->type == 'toolbox') {
                 $toolbox = ToolboxTalk::find($todo->type_id);
-                if ($toolbox && $toolbox->status) {
+                if ($toolbox && $toolbox->status == 1) {
                     echo "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "<br>";
                     $log .= "id[$todo->id] $todo->name [" . $todo->due_at->format('d/m/Y') . "] - " . $todo->assignedToBySBC() . "\n";
                     $todo->emailToDo();

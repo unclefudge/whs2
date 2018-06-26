@@ -102,7 +102,7 @@ class ToolboxTalkController extends Controller {
      */
     public function store(ToolboxRequest $request)
     {
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.toolbox'))
             return view('errors/404');
 

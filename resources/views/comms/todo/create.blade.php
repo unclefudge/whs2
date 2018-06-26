@@ -150,7 +150,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group {!! fieldHasError('role_list', $errors) !!}">
                                         {!! Form::label('role_list', 'Roles(s)', ['class' => 'control-label']) !!}
-                                        {!! Form::select('role_list', App\Models\Misc\Role2::where('id', '<>', '1')->where('id', '<>', '11')->orderBy('name')->pluck('name', 'id')->toArray(),
+                                        {!! Form::select('role_list', App\Models\Misc\Role2::where('company_id', Auth::user()->company_id)->orderBy('name')->pluck('name', 'id')->toArray(),
                                              null, ['class' => 'form-control select2', 'name' => 'role_list[]', 'multiple' => 'multiple']) !!}
                                         {!! fieldErrorMessage('role_list', $errors) !!}
                                     </div>

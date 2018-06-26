@@ -119,7 +119,7 @@
                             <!-- Fullscreen devices -->
                             <div class="row hidden-sm hidden-xs" style="border-bottom: 1px solid #ccc">
                                 <div class="col-xs-12">
-                                    <h1 style="margin: 0 0 25px 0"><b>@if($doc->company){{ $doc->company->name }} @else Company @endif</b>
+                                    <h1 style="margin: 0 0 25px 0"><b>@if($doc->company && !$doc->master){{ $doc->company->name }} @else {{ Auth::user()->company->name }} @endif</b>
                                         @if($doc->attachment && file_exists(public_path($doc->attachmentUrl)))
                                             <a href="{{ $doc->attachmentUrl }}"><i class="fa fa-bold fa-file-pdf-o pull-right" style="font-size: 1.4em; padding: 20px"></i></a>
                                         @endif

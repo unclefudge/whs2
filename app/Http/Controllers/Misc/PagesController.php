@@ -91,7 +91,7 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
-        echo "<br><br>Move security toggle to permission<br><br>";
+        /*echo "<br><br>Move security toggle to permission<br><br>";
         $users = \App\User::all();
         foreach ($users as $user) {
             if ($user->security) {
@@ -101,8 +101,8 @@ class PagesController extends Controller {
                 $user->attachPermission2(379, 99, $user->company_id); // view.user.contact
                 $user->attachPermission2(380, 99, $user->company_id); // edit.user.contact
             }
-        }
-        /*
+        }*/
+
         echo "<br><br>Todo company doc completed but still active<br><br>";
         $todos = \App\Models\Comms\Todo::all();
         foreach ($todos as $todo) {
@@ -132,7 +132,7 @@ class PagesController extends Controller {
                     echo "ToDo [$todo->id] - " . $todo->company->name . " (DELETED)<br>";
                 }
             }
-        }*/
+        }
 
         /*
         $company = \App\Models\Company\Company::find(125);

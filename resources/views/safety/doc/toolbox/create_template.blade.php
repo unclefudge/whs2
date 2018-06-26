@@ -64,6 +64,7 @@
                         <input type="hidden" name="for_company_id" value="{{ Auth::user()->company_id }}">
                         <input type="hidden" name="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
                         <input type="hidden" name="master_id" value="{{ $talk->id }}">
+                        <input type="hidden" name="toolbox_type" value="library">
                         <div class="form-body">
                             <!-- Template or File -->
                             <div class="row">

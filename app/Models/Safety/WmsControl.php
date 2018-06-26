@@ -35,7 +35,7 @@ class WmsControl extends Model {
         }
         if ($this->attributes['res_company']) {
             ($string) ? $string .= ' & ' : '';
-            $string .= ($this->step->document->for_company_id) ? $this->step->document->company->name  : "Company";
+            $string .= ($this->step->document->for_company_id && !$this->step->document->master) ? $this->step->document->company->name  : "Company";
         }
         if ($this->attributes['res_worker']) {
             ($string) ? $string .= ' & ' : '';

@@ -917,12 +917,12 @@ class Company extends Model {
         // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|_____|
         // 4  Supply & Fit                     |__X__|__X__|_____|_____|__X__|_____|
         // 5  Supply Only                      |__X__|_____|_____|_____|_____|_____|
-        // 6  Consultant                       |_____|__X__|_____|_____|_____|_____|
+        // 6  Consultant                       |__X__|__X__|_____|__X__|_____|_____|
         // 7  Builder                          |__X__|__X__|_____|_____|_____|__X__|
 
 
         // Determine WC or SA
-        if (in_array($this->category, [1, 2, 3, 4, 6])) {  // All but 'Supply Only'
+        if (in_array($this->category, [1, 2, 3, 4, 6, 7])) {  // All but 'Supply Only'
             if ($type == 2 && in_array($this->business_entity, ['1', 'Company', '4', 'Trading Trust'])) return true;
             if ($type == 3 && in_array($this->business_entity, ['2', 'Partnership', '3', 'Sole Trader'])) return true;
         }
@@ -944,8 +944,11 @@ class Company extends Model {
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
 
-        // Bulder
-        if ($this->category == 7 && $type == 10) return true; // Requires BL
+        // Consultant
+        if ($this->category == 6 && in_array($type, [1, 5])) return true; // Requires PL + PTC
+
+        // Builder
+        if ($this->category == 7 && in_array($type, [1, 10])) return true; // Requires PL + BL
 
         return false;
     }
@@ -1014,7 +1017,7 @@ class Company extends Model {
      */
     public function compliantDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence', 10 => 'Buillder Licence'];
         $compliant_docs = [];
         $compliant_html = '';
 
@@ -1039,7 +1042,7 @@ class Company extends Model {
      */
     public function missingDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence', 10 => 'Buillder Licence'];
         $missing_docs = [];
         $missing_html = '';
 
