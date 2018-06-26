@@ -66,6 +66,11 @@
                             <tr>
                                 <td><a href="/manage/report/attendance">Attendance</a></td>
                             </tr>
+                            @if (Auth::user()->isCC())
+                                <tr>
+                                    <td><a href="/manage/report/payroll">Payroll</a></td>
+                                </tr>
+                            @endif
                             @if (Auth::user()->hasRole2('web'))
                                 <tr>
                                     <td><a href="/manage/report/nightly">Nightly Log</a></td>

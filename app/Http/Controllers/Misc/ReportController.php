@@ -173,6 +173,17 @@ class ReportController extends Controller {
         return view('manage/report/attendance', compact('companies'));
     }
 
+    /*
+     * Payroll Report
+     */
+    public function payroll()
+    {
+        $companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
+        $companies = Auth::user()->company->companies(1);
+
+        return view('manage/report/payroll', compact('companies'));
+    }
+
     /**
      * Get Site Attendance user is authorise to view
      *
