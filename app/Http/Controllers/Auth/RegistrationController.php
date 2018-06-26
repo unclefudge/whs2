@@ -86,6 +86,8 @@ class RegistrationController extends Controller {
         $user_request['security'] = 1;
         $user_request['password'] = bcrypt($user_request['password']);  // encrypt password from form
         $user_request['password_reset'] = 0;
+        $user_request['created_by'] = 1;
+        $user_request['updated_by'] = 1;
 
         // Empty State field if rest of address fields are empty
         if (!request()->filled('address') && !request()->filled('suburb') && !request()->filled('postcode'))

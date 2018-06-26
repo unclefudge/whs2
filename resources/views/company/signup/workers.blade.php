@@ -2,12 +2,6 @@
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
 @extends('layout-guest')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-users"></i> Workers</h1>
-    </div>
-@stop
-
 @if (Auth::user()->company->status != 2)
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">

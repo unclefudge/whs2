@@ -3,12 +3,6 @@
 
 @extends('layout-guest')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1>Welcome to SafeWorksite</h1>
-    </div>
-@stop
-
 @section('content')
     <div class="page-content-inner">
         {{-- Company Signup Progress --}}

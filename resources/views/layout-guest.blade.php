@@ -106,9 +106,11 @@
                     <li class="menu-dropdown classic-menu-dropdown ">
                         <a href="/"><i class="fa fa-home"></i> Home </a>
                     </li>
-                    <li class="menu-dropdown classic-menu-dropdown">
-                        <a href="/login"><i class="fa fa-lock"></i> Login </a>
-                    </li>
+                    @if (!Auth::check())
+                        <li class="menu-dropdown classic-menu-dropdown">
+                            <a href="/login"><i class="fa fa-lock"></i> Login </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <!-- END MEGA MENU -->

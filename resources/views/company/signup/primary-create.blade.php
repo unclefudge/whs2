@@ -3,12 +3,6 @@
 
 @extends('layout-guest')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1>Welcome to SafeWorksite</h1>
-    </div>
-@stop
-
 @section('content')
     <div class="page-content-inner">
         {{-- Company Signup Progress --}}
@@ -170,23 +164,16 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('subcontractor_type', $errors) !!}" style="display:none" id="subcontract_type_field">
-                                        {!! Form::label('subcontractor_type', 'Subcontractor Entity', ['class' => 'control-label']) !!}
-                                        {!! Form::select('subcontractor_type', $companyEntity::all(),
-                                                 null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('subcontractor_type', $errors) !!}
-                                        <br><br>
-                                        <div class="note note-warning" style="display: none" id="subcontractor_wc">
-                                            A separate Worker's Compensation Policy is required for this Subcontractor
-                                        </div>
-                                        <div class="note note-warning" style="display: none" id="subcontractor_sa">
-                                            A separate Sickness & Accident Policy is required for this Subcontractor
+                                    <div style="display:none" id="subcontract_type_field">
+                                        <br>
+                                        <div class="note note-warning">
+                                            You can not add a subcontractor as a Primary User for your company
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-actions right">
-                                <button type="submit" class="btn green">Continue</button>
+                                <button type="submit" class="btn green" id="continue">Continue</button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -212,24 +199,22 @@
 
         /* Select2 */
 
+        $("#continue").show();
+
         // Show Subcontractor field
-        if ($("#employment_type").val() == '3')
+        if ($("#employment_type").val() == '3') {
             $("#subcontract_type_field").show();
+            $("#continue").show();
+        }
 
         $("#employment_type").on("change", function () {
             $("#subcontract_type_field").hide();
-            if ($("#employment_type").val() == '3')
-                $("#subcontract_type_field").show();
-        });
+            $("#continue").show();
 
-        // Show appropriate Subcontractor message
-        $("#subcontractor_type").on("change", function () {
-            $("#subcontractor_wc").hide();
-            $("#subcontractor_sa").hide();
-            if ($("#subcontractor_type").val() == '1' || $("#subcontractor_type").val() == '4')
-                $("#subcontractor_wc").show();
-            if ($("#subcontractor_type").val() == '2' || $("#subcontractor_type").val() == '3')
-                $("#subcontractor_sa").show();
+            if ($("#employment_type").val() == '3') {
+                $("#subcontract_type_field").show();
+                $("#continue").hide();
+            }
         });
     });
 </script>

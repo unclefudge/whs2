@@ -3,12 +3,6 @@
 @inject('companyEntityTypes', 'App\Http\Utilities\CompanyEntityTypes')
 @extends('layout-guest')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-users"></i> Company Information</h1>
-    </div>
-@stop
-
 @section('content')
     {{-- BEGIN PAGE CONTENT INNER --}}
     <div class="page-content-inner">

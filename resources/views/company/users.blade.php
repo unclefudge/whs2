@@ -39,7 +39,7 @@
                     <div class="portlet-body">
 
                         <div class="row">
-                            @if ($company->subscription > 1)
+                            @if (count($company->companies()) > 1)
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::select('staff', ['staff' => 'Staff only', 'all' => 'All users' ], (Auth::user()->isCompany($company->id) ? 'all' : 'staff'), ['class' => 'form-control bs-select', 'id' => 'staff']) !!}

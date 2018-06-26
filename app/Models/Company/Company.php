@@ -908,17 +908,16 @@ class Company extends Model {
         // 5  PTC - Period Trade Contract
         // 6  TT - Test & Tag
         // 7  CL - Contractors Licence
-        // 10 BL - Builders Licence
         //
-        // Categories                          | PL  |WC/SA| SUB | PTC | CL  | BL  |
-        // 0  Unallocated                      |_____|_____|_____|_____|_____|_____|
-        // 1  Subcontractor (On Site Trade)    |__X__|__X__|__X__|__X__|__X__|_____|
-        // 2  Service Provider (On Site trade  |__X__|__X__|_____|_____|__X__|_____|
-        // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|_____|
-        // 4  Supply & Fit                     |__X__|__X__|_____|_____|__X__|_____|
-        // 5  Supply Only                      |__X__|_____|_____|_____|_____|_____|
-        // 6  Consultant                       |__X__|__X__|_____|__X__|_____|_____|
-        // 7  Builder                          |__X__|__X__|_____|_____|_____|__X__|
+        // Categories                          | PL  |WC/SA| SUB | PTC | CL  |
+        // 0  Unallocated                      |_____|_____|_____|_____|_____|
+        // 1  Subcontractor (On Site Trade)    |__X__|__X__|__X__|__X__|__X__|
+        // 2  Service Provider (On Site trade  |__X__|__X__|_____|_____|__X__|
+        // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|
+        // 4  Supply & Fit                     |__X__|__X__|_____|_____|__X__|
+        // 5  Supply Only                      |__X__|_____|_____|_____|_____|
+        // 6  Consultant                       |__X__|__X__|__X__|_____|_____|
+        // 7  Builder                          |__X__|__X__|_____|_____|_____|
 
 
         // Determine WC or SA
@@ -945,10 +944,10 @@ class Company extends Model {
         if ($this->category == 5 && $type == 1) return true; // Requires PL
 
         // Consultant
-        if ($this->category == 6 && in_array($type, [1, 5])) return true; // Requires PL + PTC
+        if ($this->category == 6 && in_array($type, [1, 4])) return true; // Requires PL + PTC
 
         // Builder
-        if ($this->category == 7 && in_array($type, [1, 10])) return true; // Requires PL + BL
+        if ($this->category == 7 && in_array($type, [1, 7])) return true; // Requires PL + BL
 
         return false;
     }
@@ -1017,7 +1016,7 @@ class Company extends Model {
      */
     public function compliantDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence', 10 => 'Buillder Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $compliant_docs = [];
         $compliant_html = '';
 
@@ -1042,7 +1041,7 @@ class Company extends Model {
      */
     public function missingDocs($format = 'array')
     {
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence', 10 => 'Buillder Licence'];
+        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
         $missing_docs = [];
         $missing_html = '';
 

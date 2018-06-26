@@ -3,12 +3,6 @@
 
 @extends('layout-guest')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-list"></i> Summary</h1>
-    </div>
-@stop
-
 @section('content')
     <div class="page-content-inner">
         {{-- Company Signup Progress --}}
