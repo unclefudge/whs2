@@ -59,6 +59,13 @@ function sortSiteName($a, $b)
     return ($a['site_name'] < $b['site_name']) ? - 1 : 1;
 }
 
+/* Flattens a multi-dimesion arrary recursively into a flat array */
+function flatten_array($arg)
+{
+    return is_array($arg) ? array_reduce($arg, function ($c, $a) {
+        return array_merge($c, flatten_array($a));
+    }, []) : [$arg];
+}
 /*
 function companyTradesSBC ($slug) {
 

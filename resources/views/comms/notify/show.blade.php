@@ -141,6 +141,10 @@
 
     $(document).ready(function () {
 
+        $(window).resize(function(){
+            $(".sweet-alert").css("margin-top",-$(".sweet-alert").outerHeight()/2);
+        });
+
         $("#test_alert").click(function (e) {
             e.preventDefault();
             swal($("#title").val(), $("#mesg").val());

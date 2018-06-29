@@ -1,5 +1,19 @@
 /* Custom CSS for application */
 
+.sweet-alert {
+    box-sizing : border-box;
+    max-height : 100% !important;
+    overflow-y : auto !important;
+    padding : 0 17px 17px !important;
+    width : 512px;
+}
+.sweet-alert:before {
+    content : "";
+    display : block;
+    height : 17px;
+    width : 0;
+}
+
 /* extra Text classes */
 .text-bold {
     font-weight: bold;

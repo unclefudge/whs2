@@ -268,10 +268,58 @@ class Company extends Model {
         if ($this->id == 2) // Safworksite Website
             return ($status != '') ? Company::where('status', $status)->get() : Company::all();
 
-        if ($status != '')
-            return Company::where('status', $status)->where('parent_company', $this->id)->orWhere('id', $this->id)->get();
+        $company_list = $this->subCompanies($this->id);
+        $company_list = flatten_array($company_list);
 
-        return Company::where('parent_company', $this->id)->orWhere('id', $this->id)->get();;
+        if ($status != '')
+            return Company::where('status', $status)->whereIn('id', $company_list)->get();
+
+        return Company::find($company_list);
+    }
+
+    /**
+     * A list of companies this company is a parent of (including itself)
+     * ie company is a parent of their child companies + each of their child companies
+     *
+     * @return multi-dimension array
+     */
+    public function subCompanies($parent_id)
+    {
+        $company_list = [$parent_id];
+        $children = Company::where('parent_company', $parent_id)->get();
+        // Check for child companies
+        if ($children) {
+            foreach ($children as $child)
+                $company_list[] = $this->subCompanies($child->id);
+        }
+
+        return $company_list;
+    }
+
+    /**
+     * A list of companies this company is a child of (including itself)
+     * ie company is a child of their parent company + each of their parent companies
+     *
+     * @return multi-dimension array
+     */
+    public function parCompanies()
+    {
+        if ($this->parent_company) {
+            $parent_list = [$this->parent_company];
+            $parent_id = $this->parent_company;
+            while ($parent_id) {
+                $parent = Company::find($parent_id);
+                if ($parent) {
+                    $parent_list[] = $parent->id;
+                    $parent_id = $parent->id;
+                } else
+                    $parent_id = 0;
+            }
+
+            return Company::find($parent_list);
+        };
+
+        return null;
     }
 
     /**
@@ -282,11 +330,9 @@ class Company extends Model {
     public function companiesSelect($prompt = '', $status = '')
     {
         $array = [];
-        foreach ($this->companies($status) as $company) {
-            //$record = Company::find($company->id);
-            //if ($company->status)
+        foreach ($this->companies($status) as $company)
             $array[$company->id] = $company->name_alias;
-        }
+
         asort($array);
 
         if ($prompt == 'all')
