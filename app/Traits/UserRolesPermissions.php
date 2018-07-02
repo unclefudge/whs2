@@ -6,6 +6,7 @@ use Session;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
+use App\Models\Site\SiteHazard;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
@@ -580,6 +581,10 @@ trait UserRolesPermissions {
             if ($action == 'add') return true; // User can always add todoo
             //dd($record->assignedTo());
             if ($action == 'view' && $record->assignedTo()->contains('id', $this->id)) return true; // Todoo is assigned to user
+            if ($record->type == 'hazard') {
+                $hazard = SiteHazard::find($record->type_id);
+                if ($this->allowed2($action.'.site.hazard', $hazard)) return true; // User is allowed to view Site Hazard)
+            }
         }
 
         // Support Tickets

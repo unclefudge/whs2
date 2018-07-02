@@ -43,11 +43,11 @@
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Safety</h3></li>
                                                         @if (Auth::user()->hasAnyPermissionType('site.hazard'))
-                                                            <li><a href="/site/hazard" class="nav-link @if (Auth::user()->siteHazards('1')->count()) font-yellow-lemon @endif">Hazard</a></li>
+                                                            <li><a href="/site/hazard" class="nav-link @if (Auth::user()->siteHazards('1')->count()) font-yellow-lemon @endif">Hazards</a></li>
                                                         @endif
 
                                                         @if (Auth::user()->hasAnyPermissionType('site.accident'))
-                                                            <li><a href="/site/accident" class="nav-link @if (Auth::user()->siteAccidents('1')->count()) font-yellow-lemon @endif">Accident</a>
+                                                            <li><a href="/site/accident" class="nav-link @if (Auth::user()->siteAccidents('1')->count()) font-yellow-lemon @endif">Accidents</a>
                                                             </li>
                                                         @endif
 

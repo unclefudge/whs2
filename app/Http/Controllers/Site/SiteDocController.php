@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use DB;
+use File;
 use Session;
 use App\Models\Site\Site;
 use App\Models\Site\SiteDoc;
@@ -87,7 +88,22 @@ class SiteDocController extends Controller {
     {
         $doc = SiteDoc::findOrFail($id);
 
-        // Delete previous file
+        // Check authorisation and throw 404 if not
+        if ($doc->type == 'PLAN' && !Auth::user()->allowed2('del.site.doc', $doc))
+            return json_encode('failed');
+        else if (!Auth::user()->allowed2('del.safety.doc', $doc))
+            return json_encode('failed');
+
+
+        // Log the delete action
+        if (!file_exists(public_path("/filebank/log"))) {
+            mkdir(public_path("/filebank/log"));
+            File::put(public_path('/filebank/log/sitedocs.txt'), "Site Docs\n---------\n\n");
+        }
+        $log = Carbon::now()->format('d/m/Y G:i:s') . " - " . Auth::user()->username . " DELETED ID:$doc->id Site:$doc->site_id (" . $doc->site->name . ") Name:$doc->name\n";
+        File::append(public_path('filebank/log/sitedocs.txt'), $log);
+
+        // Delete file
         if (file_exists(public_path($doc->attachmentUrl)))
             unlink(public_path($doc->attachmentUrl));
         $doc->delete();
@@ -249,7 +265,7 @@ class SiteDocController extends Controller {
             $allowedSites = [request('site_id')];
         else
             //$allowedSites = Auth::user()->authSites('view.site.doc', 1)->pluck('id')->toArray();
-        $allowedSites = Auth::user()->company->sites(1)->pluck('id')->toArray();
+            $allowedSites = Auth::user()->company->sites(1)->pluck('id')->toArray();
 
 
         if ($type == 'ALL')
