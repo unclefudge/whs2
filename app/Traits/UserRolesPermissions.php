@@ -580,10 +580,11 @@ trait UserRolesPermissions {
         if ($permissiontype == 'todo') {
             if ($action == 'add') return true; // User can always add todoo
             //dd($record->assignedTo());
-            if ($action == 'view' && $record->assignedTo()->contains('id', $this->id)) return true; // Todoo is assigned to user
+            if ($record->assignedTo()->contains('id', $this->id)) return true; // Todoo is assigned to user
             if ($record->type == 'hazard') {
                 $hazard = SiteHazard::find($record->type_id);
-                if ($this->allowed2($action.'.site.hazard', $hazard)) return true; // User is allowed to view Site Hazard)
+                if ($action == 'view' && $this->allowed2('view.site.hazard', $hazard)) return true; // User is allowed to view Site Hazard
+                if ($action == 'edit' && $hazard->site->isSupervisorOrAreaSupervisor($this)) return true; // User Supervisor of Site
             }
         }
 

@@ -88,7 +88,7 @@ class CompanyPeriodTradeController extends Controller {
         $ptc_request['principle_name'] = $company->reportsTo()->name;
         $ptc_request['principle_address'] = $company->reportsTo()->address_formatted;
         $ptc_request['principle_phone'] = $company->reportsTo()->phone;
-        $ptc_request['principle_email'] = ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email;
+        $ptc_request['principle_email'] = ($company->reportsTo()->id == 3) ? 'accounts1@capecod.com.au' : $company->reportsTo()->email;
         $ptc_request['principle_abn'] = $company->reportsTo()->abn;
         $ptc_request['contractor_id'] = $company->id;
         $ptc_request['contractor_name'] = $company->name;

@@ -115,7 +115,7 @@
                 </div>
                 <div style="width: 100%; display: table;">
                     <span style="display: table-cell; width: 90px;">EMAIL </span>
-                    <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</span>
+                    <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecod.com.au' : $company->reportsTo()->email !!}</span>
                 </div>
                 <div style="width: 100%; display: table;">
                     <span style="display: table-cell; width: 190px;">HIA MEMBER NUMBER </span>

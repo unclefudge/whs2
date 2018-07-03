@@ -212,8 +212,8 @@ class TodoController extends Controller {
 
         //dd($request->all());
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('del.todo', $todo))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.todo', $todo))
+            return view('errors/404');
 
         // Update done by if Todo marked as completed
         if ($request->get('status') == 0 && !$todo->done_by) {

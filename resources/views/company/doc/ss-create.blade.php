@@ -27,7 +27,7 @@
                         </li>
                     </ul>
                     <b>Please ensure ALL of these items are uploaded and correct prior to generating this form.</b><br><br>
-                    If any information is incorrect please update your above details/documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
+                    If any information is incorrect please update your above details/documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecod.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
                     @if ($company->requiresCompanyDoc(2) && !($company->activeCompanyDoc(2) && $company->activeCompanyDoc(2)->status == 1))
                         <br><br><span class="font-red"><b><i class="fa fa-warning"></i> We are unble to generate your Subcontractor's Statement until you have submitted the required documents</b></span>
                     @endif

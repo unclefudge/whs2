@@ -40,7 +40,7 @@
                         </li>
                     </ul>
                     <b>Please ensure ALL of these items are uploaded and correct prior to generating this form.</b><br><br>
-                    If any information is incorrect please update your above details/documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
+                    If any information is incorrect please update your above details/documents or contact <a href="mailto:{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecod.com.au' : $company->reportsTo()->email !!}">{{ $company->reportsTo()->name }}</a>
                     @if ($company->requiresCompanyDoc(1) && !($company->activeCompanyDoc(1) && $company->activeCompanyDoc(1)->status == 1) ||
                     $company->requiresCompanyDoc(2) && !($company->activeCompanyDoc(2) && $company->activeCompanyDoc(2)->status == 1) ||
                     $company->requiresCompanyDoc(3) && !($company->activeCompanyDoc(3) && $company->activeCompanyDoc(3)->status == 1) ||
@@ -119,7 +119,7 @@
                                             </div>
                                             <div style="width: 100%; display: table;">
                                                 <span style="display: table-cell; width: 90px;">EMAIL </span>
-                                                <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecode.com.au' : $company->reportsTo()->email !!}</span>
+                                                <span style="display: table-cell">{!! ($company->reportsTo()->id == 3) ? 'accounts1@capecod.com.au' : $company->reportsTo()->email !!}</span>
                                             </div>
                                             <div style="width: 100%; display: table;">
                                                 <span style="display: table-cell; width: 190px;">HIA MEMBER NUMBER </span>

@@ -133,7 +133,10 @@
                                     <a href="/site/qa/{{$todo->type_id}}" class="btn green">View QA Report</a>
                                 @endif
                                 @if($todo->type == 'hazard')
-                                    <a href="/site/hazard/{{$todo->type_id}}" class="btn dark">View Site Hazard</a>
+                                    <?php $hazard = \App\Models\Site\SiteHazard::find($todo->type_id) ?>
+                                    @if (Auth::user()->allowed2('view.site.hazard', $hazard))
+                                        <a href="/site/hazard/{{$todo->type_id}}" class="btn dark">View Site Hazard</a>
+                                    @endif
                                 @endif
                                 @if($todo->type == 'swms')
                                     <a href="/safety/doc/wms/{{ $todo->type_id }}" class="btn dark">View expired SWMS</a>
@@ -147,7 +150,7 @@
                                     <?php $doc = \App\Models\Company\CompanyDocPeriodTrade::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/period-trade-contract/{{ $doc->id }}" class="btn dark">View Document</a>
                                 @endif
-                                @if($todo->status && ($todo->type == 'general' || $todo->type == 'hazard'))
+                                @if($todo->status && Auth::user()->allowed2('edit.todo', $todo) && ($todo->type == 'general' || $todo->type == 'hazard'))
                                     <button class="btn green" id="save">Save</button>
                                     <button class="btn blue" id="close">Mark Complete</button>
                                 @endif
