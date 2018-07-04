@@ -168,11 +168,13 @@ class WmsDoc extends Model {
     public function emailSignOff()
     {
         $email_to = [];
-        if (\App::environment('dev', 'prod'))
+        $email_user = '';
+        if (\App::environment('dev', 'prod')) {
             $email_to = $this->owned_by->notificationsUsersEmailType('n.swms.approval');
-        else
+            $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+        } else
             $email_to[] = env('EMAIL_ME');
-        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+
 
         $data = [
             'user_email'        => Auth::user()->email,
@@ -202,6 +204,7 @@ class WmsDoc extends Model {
     public function emailArchived()
     {
         $email_to = [];
+        $email_user = '';
         if (\App::environment('dev', 'prod'))
             $email_to = $this->owned_by->notificationsUsersEmailType('n.doc.whs.approval'); 
         //$email_to[] = env('EMAIL_ME');

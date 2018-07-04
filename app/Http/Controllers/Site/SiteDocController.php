@@ -259,15 +259,20 @@ class SiteDocController extends Controller {
      */
     public function getDocs()
     {
+        //dd(request()->all());
+        $site_id_active = (request('site_id_active') == 'all') ? '' : request('site_id_active');
+        $site_id_completed = (request('site_id_completed') == 'all') ? '' : request('site_id_completed');
+        $site_id_upcoming = (request('site_id_upcoming') == 'all') ? '' : request('site_id_upcoming');
 
-        $type = request('type');
-        if (request('site_id'))
-            $allowedSites = [request('site_id')];
+        if (request('status') == 1)
+            $allowedSites = ($site_id_active) ? [$site_id_active] : Auth::user()->company->sites(1)->pluck('id')->toArray();
+        elseif (request('status') == '0')
+            $allowedSites = ($site_id_completed) ? [$site_id_completed] : Auth::user()->company->sites(0)->pluck('id')->toArray();
         else
-            //$allowedSites = Auth::user()->authSites('view.site.doc', 1)->pluck('id')->toArray();
-            $allowedSites = Auth::user()->company->sites(1)->pluck('id')->toArray();
+            $allowedSites = ($site_id_upcoming) ? [$site_id_upcoming] : Auth::user()->company->sites(-1)->pluck('id')->toArray();
 
-
+        //dd($allowedSites);
+        $type = request('type');
         if ($type == 'ALL')
             $records = DB::table('site_docs as d')
                 ->select(['d.id', 'd.type', 'd.site_id', 'd.attachment', 'd.name', 's.id as sid', 's.name as site_name'])
@@ -281,6 +286,8 @@ class SiteDocController extends Controller {
                 ->where('d.type', $type)
                 ->whereIn('site_id', $allowedSites)
                 ->where('d.status', '1');
+
+        //dd($records);
 
         $dt = Datatables::of($records)
             ->editColumn('id', '<div class="text-center"><a href="/filebank/site/{{$site_id}}/docs/{{$attachment}}"><i class="fa fa-file-text-o"></i></a></div>')

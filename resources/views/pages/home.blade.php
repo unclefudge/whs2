@@ -212,30 +212,29 @@
                             @endif
 
 
-                            {{-- Pending SWMS --}}
-                            @if (Auth::user()->hasPermission2('del.wms'))
-                                @foreach(Auth::user()->company->wmsdocs as $doc)
-                                    @if($doc->status == 2 && !$doc->user_signed_id)
-                                        <li>
-                                            <a href="/safety/doc/wms/{{ $doc->id }}" class="task-title">
-                                                <div class="col1">
-                                                    <div class="cont">
-                                                        <div class="cont-col1">
-                                                            <div class="label label-sm label-success">
-                                                                <i class="fa fa-file-pdf-o"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="cont-col2">
-                                                            <div class="desc"> Please sign off on your SWMS {{ $doc->name }}</div>
+                            {{-- SWMS TooDo's --}}
+                            @if (Auth::user()->todoType('swms', 1)->count())
+                                <h4>Safe Work Method Statements</h4>
+                                @foreach(Auth::user()->todoType('swms', 1) as $todo)
+                                    <li>
+                                        <a href="{{ $todo->url() }}" class="task-title">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="label label-sm @if($todo->priority) label-danger @else label-success @endif">
+                                                            <i class="fa fa-star"></i>
                                                         </div>
                                                     </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc"> {{ $todo->name }}</div>
+                                                    </div>
                                                 </div>
-                                                <div class="col2">
-                                                    <div class="date"> Pending</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    @endif
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
+                                            </div>
+                                        </a>
+                                    </li>
                                 @endforeach
                             @endif
                             {{-- QA ToDoo's --}}
@@ -336,8 +335,24 @@
                                     </li>
                                 @endforeach
                             @endif
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-
+            <div class="portlet light tasks-widget ">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-list-alt font-dark"></i>
+                        <span class="caption-subject font-dark bold uppercase">Unresolved Site Safety Issues</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="scroller">
+                        <ul class="feeds">
                             {{-- Open Site Accidents for CC admin/super --}}
                             <?php $count = 0 ?>
                             @foreach(App\Models\Site\SiteAccident::where('status', '1')->get() as $doc)
@@ -428,7 +443,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="col-md-6 col-sm-6">
             <div class="portlet light portlet-fit">
@@ -624,9 +638,10 @@
         </div>
     </div>
 
-
     <div class="row">
+        <div class="col-md-6 col-sm-6">
 
+        </div>
     </div>
 @stop
 

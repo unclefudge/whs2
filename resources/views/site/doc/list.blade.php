@@ -35,18 +35,36 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="site_active">
                             <div class="form-group">
-                                {!! Form::label('site_id', '&nbsp;', ['class' => 'control-label']) !!}
-                                {!! Form::select('site_id', Auth::user()->company->sitesSelect('all'),
-                                     $site_id, ['class' => 'form-control select2']) !!}
+                                <!--<label for="site_id_active" class="control-label">Active Sites ({!! Auth::user()->company->sites(1)->count() !!})</label>-->
+                                {!! Form::select('site_id_active', Auth::user()->company->sitesSelect('ALL', 1), null, ['class' => 'form-control select2', 'id' => 'site_id_active']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="site_completed">
+                            <div class="form-group">
+                                <!--<label for="site_id_completed" class="control-label">Completed Sites ({!! Auth::user()->company->sites('0')->count() !!})</label>-->
+                                {!! Form::select('site_id_completed', Auth::user()->company->sitesSelect('ALL', 0), null, ['class' => 'form-control select2', 'id' => 'site_id_completed']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="site_upcoming">
+                            <div class="form-group">
+                                <!--<label for="site_id_all" class="control-label">Any Site ({!! Auth::user()->company->sites()->count() !!})</label>-->
+                                {!! Form::select('site_id_upcoming', Auth::user()->company->sitesSelect('ALL', -1), null, ['class' => 'form-control select2', 'id' => 'site_id_all']) !!}
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                {!! Form::label('type', '&nbsp;', ['class' => 'control-label']) !!}
-                                {!! Form::select('type', Auth::user()->siteDocTypeSelect('view', 'all'),
-                                     $type, ['class' => 'form-control bs-select']) !!}
+                                {!! Form::select('type', Auth::user()->siteDocTypeSelect('view', 'all'), $type, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <div class="form-group">
+                                <select name="status" id="status" class="form-control bs-select">
+                                    <option value="1" selected>Active</option>
+                                    <option value="-1">Upcoming</option>
+                                    <option value="0">Completed</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -92,9 +110,12 @@
 
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
-        });
+        $("#site_id_active").select2({placeholder: "Select Site", width: '100%'});
+        $("#site_id_completed").select2({placeholder: "Select Site", width: '100%'});
+        $("#site_id_upcoming").select2({placeholder: "Select Site", width: '100%'});
+
+        $('#site_completed').hide();
+        $('#site_upcoming').hide();
 
     });
 
@@ -112,8 +133,11 @@
             'url': '{!! url('site/doc/dt/docs') !!}',
             'type': 'GET',
             'data': function (d) {
-                d.site_id = $('#site_id').val();
+                d.site_id_all = $('#site_id_all').val();
+                d.site_id_active = $('#site_id_active').val();
+                d.site_id_completed = $('#site_id_completed').val();
                 d.type = $('#type').val();
+                d.status = $('#status').val();
             }
         },
         columns: [
@@ -158,10 +182,32 @@
     });
 
     // Reload table on change of site_id or type
-    $('#site_id').change(function () {
+    $('#status').change(function () {
+        if ($('#status').val() == 1) {
+            $('#site_active').show();
+            $('#site_completed').hide();
+            $('#site_upcoming').hide();
+        } else if ($('#status').val() == '0') {
+            $('#site_active').hide();
+            $('#site_completed').show();
+            $('#site_upcoming').hide();
+        } else {
+            $('#site_active').hide();
+            $('#site_completed').hide();
+            $('#site_upcoming').show();
+        }
+
         table1.ajax.reload();
     });
-
+    $('#site_id_active').change(function () {
+        table1.ajax.reload();
+    });
+    $('#site_id_completed').change(function () {
+        table1.ajax.reload();
+    });
+    $('#site_upcoming').change(function () {
+        table1.ajax.reload();
+    });
     $('#type').change(function () {
         table1.ajax.reload();
     });

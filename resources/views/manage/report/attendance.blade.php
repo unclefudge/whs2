@@ -168,8 +168,6 @@
         //$('#view_pdf').click(function (e) {
         $('form').submit(function (e) {
             // custom handling here
-
-
             if (($('#company_id').val() != 'all') || ($('#status').val() == '1' && $('#site_id_active').val() != 'all') ||
                     ($('#status').val() == '0' && $('#site_id_completed').val() != 'all') || ($('#status').val() == '' && $('#site_id_all').val() != 'all')) {
                 $('#spinner').show();

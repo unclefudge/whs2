@@ -163,17 +163,17 @@ class ToolboxTalkController extends Controller {
             //dd($tool_request);
 
             // Calculate if any differences in previous version of talk
-            $diff_overview = Diff2::toTable(Diff2::compare($talk->overview, request('overview')."\n"));
-            $diff_hazards = Diff2::toTable(Diff2::compare($talk->hazards, request('hazards')."\n"));
-            $diff_controls = Diff2::toTable(Diff2::compare($talk->controls, request('controls')."\n"));
-            $diff_further = Diff2::toTable(Diff2::compare($talk->further, request('further')."\n"));
+            $diff_overview = Diff2::toTable(Diff2::compare($talk->overview, request('overview') . "\n"));
+            $diff_hazards = Diff2::toTable(Diff2::compare($talk->hazards, request('hazards') . "\n"));
+            $diff_controls = Diff2::toTable(Diff2::compare($talk->controls, request('controls') . "\n"));
+            $diff_further = Diff2::toTable(Diff2::compare($talk->further, request('further') . "\n"));
             $mod_overview = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_overview);
             $mod_hazards = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_hazards);
             $mod_controls = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_controls);
             $mod_further = preg_match('/diffDeleted|diffInserted|diffBlank/', $diff_further);
 
             // Increment minor version if has been modified
-            if ($talk->name != request('name') ||  $talk->status != request('status') || $mod_overview || $mod_hazards || $mod_controls || $mod_further) {
+            if ($talk->name != request('name') || $talk->status != request('status') || $mod_overview || $mod_hazards || $mod_controls || $mod_further) {
                 // Talk modified so increment version
                 if ($talk->name != request('name') || $mod_overview || $mod_hazards || $mod_controls || $mod_further) {
                     list($major, $minor) = explode('.', $talk->version);
@@ -362,6 +362,9 @@ class ToolboxTalkController extends Controller {
         else {
             //$talk->emailArchived();
             Toastr::success("Toolbox archived");
+
+            // Delete user ToDoo task for Toolbox talk if they haven't already completed
+            Todo::where('type', 'toolbox')->where('type_id', $talk->id)->delete();
         }
 
         return redirect('/safety/doc/toolbox2/' . $talk->id);
@@ -585,37 +588,41 @@ class ToolboxTalkController extends Controller {
         $talk->save();
     }
 
-    public function diffArray($old, $new){
+    public function diffArray($old, $new)
+    {
         $matrix = array();
         $maxlen = 0;
-        foreach($old as $oindex => $ovalue){
+        foreach ($old as $oindex => $ovalue) {
             $nkeys = array_keys($new, $ovalue);
-            foreach($nkeys as $nindex){
+            foreach ($nkeys as $nindex) {
                 $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ? $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
-                if($matrix[$oindex][$nindex] > $maxlen){
+                if ($matrix[$oindex][$nindex] > $maxlen) {
                     $maxlen = $matrix[$oindex][$nindex];
                     $omax = $oindex + 1 - $maxlen;
                     $nmax = $nindex + 1 - $maxlen;
                 }
             }
         }
-        if($maxlen == 0) return array(array('d'=>$old, 'i'=>$new));
+        if ($maxlen == 0) return array(array('d' => $old, 'i' => $new));
+
         return array_merge(
             $this->diffArray(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
             array_slice($new, $nmax, $maxlen),
             $this->diffArray(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
 
-    public function htmlDiff($old, $new){
+    public function htmlDiff($old, $new)
+    {
         $ret = '';
         $diff = $this->diffArray(explode(' ', $old), explode(' ', $new));
-        foreach($diff as $k){
-            if(is_array($k)){
-                $ret .= (!empty($k['d'])?'<del>'.implode(' ',$k['d']).'</del> ':'').(!empty($k['i'])?'<ins>'.implode(' ',$k['i']).'</ins> ':'');
-            }else{
+        foreach ($diff as $k) {
+            if (is_array($k)) {
+                $ret .= (!empty($k['d']) ? '<del>' . implode(' ', $k['d']) . '</del> ' : '') . (!empty($k['i']) ? '<ins>' . implode(' ', $k['i']) . '</ins> ' : '');
+            } else {
                 $ret .= $k . ' ';
             }
         }
+
         return $ret;
     }
 }
