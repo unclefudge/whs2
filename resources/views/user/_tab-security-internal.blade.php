@@ -23,7 +23,7 @@ $rec = $user;
                     @if(Auth::user()->hasPermission2('edit.user.security') && Auth::user()->isCompany($cid))
                         <div class="form-group {!! fieldHasError('roles', $errors) !!}">
                             {!! Form::select('roles', $user->company->rolesSelect('int'), $user->roles2->pluck('id')->toArray(),
-                            ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'title' => 'Select one or more roles', 'multiple', 'id' => 'roles']) !!}
+                            ['class' => 'form-control select2-multiple', 'name' => 'roles[]', 'title' => 'Select one or more roles', 'multiple', 'id' => 'roles' ]) !!}
                             {!! fieldErrorMessage('roles', $errors) !!}
                         </div>
                     @else

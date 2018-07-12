@@ -46,6 +46,7 @@
                                     <th> WC Policy Exp</th>
                                     <th> WC Category</th>
                                     <th> Subcontractors Statement</th>
+                                    <th> Inactived</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -61,6 +62,7 @@
                                         <td>{{ ($company->activeCompanyDoc(2)) ?  $company->activeCompanyDoc(2)->expiry->format('d/m/Y') : '-'}}</td>
                                         <td>{{ ($company->activeCompanyDoc(2)) ?  $company->activeCompanyDoc(2)->ref_type : '-'}}</td>
                                         <td>{{ ($company->activeCompanyDoc(4)) ?  $company->activeCompanyDoc(4)->expiry->format('d/m/Y') : '-'}}</td>
+                                        <td>{!! ($company->status) ? 'Active' : $company->updated_at->format('d/m/Y') !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

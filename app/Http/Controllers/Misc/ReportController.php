@@ -179,7 +179,7 @@ class ReportController extends Controller {
     public function payroll()
     {
         $companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
-        $companies = Auth::user()->company->companies(1);
+        $companies = Auth::user()->company->companies();
 
         return view('manage/report/payroll', compact('companies'));
     }
