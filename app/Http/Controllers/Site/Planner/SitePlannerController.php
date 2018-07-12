@@ -167,8 +167,8 @@ class SitePlannerController extends Controller {
         $supervisor_id = 'all';
         if ($request->get('supervisor_id'))
             $supervisor_id = $request->get('supervisor_id');
-        //elseif (Auth::user()->isSupervisor() && Auth::user()->id != 7) // ie Not Gary
-        //    $supervisor_id = Auth::user()->id;
+        elseif (Auth::user()->isSupervisor() && Auth::user()->company_id == 3 && Auth::user()->id != 7) // ie Not Gary
+            $supervisor_id = Auth::user()->id;
 
         $site_id = $request->get('site_id');
         $site_start = $request->get('site_start');
