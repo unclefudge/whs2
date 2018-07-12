@@ -163,6 +163,7 @@ trait UserDocs {
     public function companyDocTypeSelect($action, $company, $prompt = '')
     {
         $array = [];
+        $array_ss_ptc = [];
         $single = DB::table('company_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
         foreach (CompanyDocTypes::all() as $doc_type => $doc_name) {
             // Public Docs
@@ -170,6 +171,8 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($doc_type, [4,5]))
+                        $array_ss_ptc[$id] = $name;
                 }
             }
             // Private Docs
@@ -177,14 +180,19 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($doc_type, [4,5]))
+                        $array_ss_ptc[$id] = $name;
                 }
             }
         }
 
         asort($array);
+        asort($array_ss_ptc);
 
         if ($prompt == 'all')
             return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
+        if ($prompt == '-SS-PTC')
+            return ($prompt && count($array_ss_ptc) > 1) ? $array_ss_ptc = array('' => 'Select Type') + $array_ss_ptc : $array_ss_ptc;
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
     }

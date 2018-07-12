@@ -167,8 +167,8 @@ class SitePlannerController extends Controller {
         $supervisor_id = 'all';
         if ($request->get('supervisor_id'))
             $supervisor_id = $request->get('supervisor_id');
-        elseif (Auth::user()->isSupervisor() && Auth::user()->id != 7) // ie Not Gary
-            $supervisor_id = Auth::user()->id;
+        //elseif (Auth::user()->isSupervisor() && Auth::user()->id != 7) // ie Not Gary
+        //    $supervisor_id = Auth::user()->id;
 
         $site_id = $request->get('site_id');
         $site_start = $request->get('site_start');
@@ -331,7 +331,8 @@ class SitePlannerController extends Controller {
                 $user = User::find($attend->user_id);
 
                 // For non subscription companies limit to their users on
-                if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
+                //if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
+                if (in_array($user->company_id, Auth::user()->company->companies()->pluck('id')->toArray())) {
                     $key = $attend->site_id . '.' . $attend->date->format('Y-m-d');
                     if (isset($non_rostered[$key]))
                         $non_rostered[$key][$user->id] = $user->fullname;
@@ -1243,32 +1244,38 @@ class SitePlannerController extends Controller {
      */
     public function getPlannerForWeek($date_from, $date_to, $allowedSites, $excludeTasks)
     {
-        if (Auth::user()->company->subscription)
+        if (Auth::user()->company->subscription) {
+            $allowedCompanies = Auth::user()->company->companies()->pluck('id')->toArray();
+
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
                 // Tasks that start 'from' between mon-fri of given week
-                ->where(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->where(function ($q) use ($date_from, $date_to, $allowedSites, $allowedCompanies, $excludeTasks) {
                     $q->where('from', '>=', $date_from->format('Y-m-d'));
                     $q->Where('from', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
+                    $q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 // Tasks that end 'to between mon-fri of given week
-                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $allowedCompanies, $excludeTasks) {
                     $q->where('to', '>=', $date_from->format('Y-m-d'));
                     $q->Where('to', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
+                    $q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 // Tasks that start before mon but end after fri
                 // ie they span the whole week but begin prior + end after given week
-                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $allowedCompanies, $excludeTasks) {
                     $q->where('from', '<', $date_from->format('Y-m-d'));
                     $q->Where('to', '>', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
+                    $q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 ->orderBy('from')->get();
-        else
+        } else
+
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
                 // Tasks that start 'from' between mon-fri of given week
                 ->where(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {

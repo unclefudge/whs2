@@ -51,7 +51,7 @@
                                     {{-- Doc type --}}
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}" id="category_id_form">
                                         {!! Form::label('category_id', 'Document type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id',Auth::user()->companyDocTypeSelect('add', $company, 'prompt'),
+                                        {!! Form::select('category_id',Auth::user()->companyDocTypeSelect('add', $company, '-SS-PTC'),
                                              $category_id, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
