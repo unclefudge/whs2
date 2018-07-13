@@ -1246,6 +1246,7 @@ class SitePlannerController extends Controller {
     {
         if (Auth::user()->company->subscription) {
             $allowedCompanies = Auth::user()->company->companies()->pluck('id')->toArray();
+            //dd($allowedCompanies);
 
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
                 // Tasks that start 'from' between mon-fri of given week
@@ -1253,7 +1254,7 @@ class SitePlannerController extends Controller {
                     $q->where('from', '>=', $date_from->format('Y-m-d'));
                     $q->Where('from', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
-                    $q->whereIn('entity_id', $allowedCompanies);
+                    //$q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 // Tasks that end 'to between mon-fri of given week
@@ -1261,7 +1262,7 @@ class SitePlannerController extends Controller {
                     $q->where('to', '>=', $date_from->format('Y-m-d'));
                     $q->Where('to', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
-                    $q->whereIn('entity_id', $allowedCompanies);
+                    //$q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 // Tasks that start before mon but end after fri
@@ -1270,7 +1271,7 @@ class SitePlannerController extends Controller {
                     $q->where('from', '<', $date_from->format('Y-m-d'));
                     $q->Where('to', '>', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
-                    $q->whereIn('entity_id', $allowedCompanies);
+                    //$q->whereIn('entity_id', $allowedCompanies);
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 ->orderBy('from')->get();
