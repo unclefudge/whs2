@@ -117,7 +117,7 @@ class CompanyPeriodTradeController extends Controller {
         // Create PTC
         $ptc = CompanyDocPeriodTrade::create($ptc_request);
 
-        // Create Site Doc
+        // Create Company Doc
         $doc = CompanyDoc::create([
             'category_id'    => 5,
             'name'           => 'Period Trade Contract',

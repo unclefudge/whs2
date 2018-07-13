@@ -171,7 +171,7 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($doc_type, [4,5]))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4,5]))
                         $array_ss_ptc[$id] = $name;
                 }
             }
@@ -180,7 +180,7 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($doc_type, [4,5]))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4,5]))
                         $array_ss_ptc[$id] = $name;
                 }
             }
@@ -190,9 +190,9 @@ trait UserDocs {
         asort($array_ss_ptc);
 
         if ($prompt == 'all')
-            return ($prompt && count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
+            return (count($array) > 1) ? $array = array('ALL' => 'All categories') + $array : $array;
         if ($prompt == '-SS-PTC')
-            return ($prompt && count($array_ss_ptc) > 1) ? $array_ss_ptc = array('' => 'Select Type') + $array_ss_ptc : $array_ss_ptc;
+            return (count($array_ss_ptc) > 1) ? $array_ss_ptc = array('' => 'Select Type') + $array_ss_ptc : $array_ss_ptc;
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
     }
