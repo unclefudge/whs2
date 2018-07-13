@@ -392,7 +392,7 @@
 
             <br><br>
             <hr>
-            <!--<pre v-if="xx.dev">@{{ xx.day_date }}<br>@{{ xx.day_eid }}<br>@{{ xx.day_eid2 }}<br>@{{ xx.other_sites }}
+            <<!--<pre v-if="xx.dev">@{{ xx.day_date }}<br>@{{ xx.day_eid }}<br>@{{ xx.day_eid2 }}<br>@{{ xx.other_sites }}
                     <br>plan@{{ xx.day_plan | json}}<br>str@{{ xx.connected_tasks | json}}</pre>
             -->
 
@@ -442,7 +442,7 @@
             </template>
         </div>
 
-        <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
+        <pre v-if="xx.dev">@{{ $data | json }}</pre>
         -->
     </template>
 
