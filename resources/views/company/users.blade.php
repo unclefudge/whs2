@@ -31,7 +31,7 @@
                             <span class="caption-subject font-dark bold uppercase">Users</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->allowed2('add.user'))
+                            @if(Auth::user()->company->isCompany($company->id) && Auth::user()->allowed2('add.user') )
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/user/create" data-original-title="Add">Add</a>
                             @endif
                         </div>
