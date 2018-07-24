@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
-                            <div class="row" @if(!(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')) style="display: none;" @endif>
+                            <div class="row" @if(!in_array(Auth::user()->id, [3, 351, 109, 6])) style="display: none;" @endif>
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-xs-3">

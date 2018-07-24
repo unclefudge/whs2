@@ -43,7 +43,7 @@
                             <tr>
                                 <td><a href="/company/{{ Auth::user()->company_id }}/doc"> Company Documents</a></td>
                             </tr>
-                            @if (in_array(Auth::user()->id, [3, 109, 351])) {{-- Fudge, Jo, Tara --}}
+                            @if (in_array(Auth::user()->id, [3, 109, 351, 6])) {{-- Fudge, Jo, Tara, Rob --}}
                                 <tr>
                                     <td><a href="/safety/doc/sds">Safety Data Sheets</a></td>
                                 </tr>

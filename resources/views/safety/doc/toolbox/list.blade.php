@@ -87,8 +87,8 @@
                                 <i class="icon-layers"></i>
                                 <span class="caption-subject bold uppercase font-green-haze"> Toolbox Template Library</span>
                             </div>
-                            {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
-                            @if(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')
+                            {{-- Only allowed Fudge/Tara/Jo/Rob access to add to library --}}
+                            @if(in_array(Auth::user()->id, [3, 351, 109, 6]))
                                 <div class="actions">
                                     @if(Auth::user()->hasPermission2('add.toolbox'))
                                         <a class="btn btn-circle green btn-outline btn-sm" href="/safety/doc/toolbox2/create" data-original-title="Add">Add</a>
@@ -97,8 +97,8 @@
                                 </div>
                             @endif
                         </div>
-                        {{-- Only allowed Fudge/Tara/Jo access to add to library --}}
-                        @if(Auth::user()->id == '3' || Auth::user()->id == '351' || Auth::user()->id == '109')
+                        {{-- Only allowed Fudge/Tara/Jo/Rob access to add to library --}}
+                        @if(in_array(Auth::user()->id, [3, 351, 109, 6]))
                             <div class="row">
                                 <div class="col-md-2 pull-right">
                                     <div class="form-group">
