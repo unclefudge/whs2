@@ -96,8 +96,9 @@ class PagesController extends Controller {
         $talk = \App\Models\Safety\ToolboxTalk::find(287);
         $todos = \App\Models\Comms\Todo::where('type', 'toolbox')->where('type_id', 287)->get();
         foreach ($todos as $todo) {
-            $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->type_id)->first();
-            echo "ToDo [$todo->id] - $todo->name (" . $todo->name . ") - UserID:$todo_user->user_id <br>";
+            $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
+            if ($todo_user)
+                echo "ToDo [$todo->id] - $todo->name (" . $todo->name . ") - UserID:$todo_user->user_id <br>";
         }
 
         /*
