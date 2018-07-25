@@ -91,6 +91,15 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
+        echo "<br><br>Export Toolbox Talk<br><br>";
+
+        $talk = \App\Models\Safety\ToolboxTalk::find(287);
+        $todos = \App\Models\Comms\Todo::where('type', 'toolbox')->where('type_id', 287)->get();
+        foreach ($todos as $todo) {
+            $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->type_id)->first();
+            echo "ToDo [$todo->id] - $todo->name (" . $to->name . ") - UserID:$todo_user->user_id <br>";
+        }
+
         /*
         echo "<br><br>Move security toggle to permission<br><br>";
         $users = \App\User::all();
@@ -123,6 +132,7 @@ class PagesController extends Controller {
             }
         }*/
 
+        /*
         echo "<br><br>Todo company doc completed but still active<br><br>";
         $todos = \App\Models\Comms\Todo::all();
         foreach ($todos as $todo) {
@@ -152,7 +162,7 @@ class PagesController extends Controller {
                     echo "ToDo [$todo->id] - " . $todo->company->name . " (DELETED)<br>";
                 }
             }
-        }
+        }*/
 
 
         /*
@@ -303,7 +313,8 @@ class PagesController extends Controller {
     }
 
 
-    public function completedQA(Request $request)
+    public
+    function completedQA(Request $request)
     {
         echo "Closing completed QA ToDos<br><br>";
         $records = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
@@ -318,7 +329,8 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function refreshQA(Request $request)
+    public
+    function refreshQA(Request $request)
     {
         echo "Updating Current QA Reports to match new QA template with Supervisor tick<br><br>";
         $items = \App\Models\Site\SiteQaItem::all();
@@ -353,7 +365,8 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function importCompany(Request $request)
+    public
+    function importCompany(Request $request)
     {
         echo "Importing Companies<br><br>";
         $row = 0;
@@ -440,7 +453,8 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function createPermission(Request $request)
+    public
+    function createPermission(Request $request)
     {
         //
         // Creating Permission
@@ -471,7 +485,8 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function fixplanner(Request $request)
+    public
+    function fixplanner(Request $request)
     {
         set_time_limit(120);
 
@@ -578,7 +593,8 @@ class PagesController extends Controller {
 
     }
 
-    public function workDaysBetween($from, $to, $debug = false)
+    public
+    function workDaysBetween($from, $to, $debug = false)
     {
         if ($from == $to)
             return 1;

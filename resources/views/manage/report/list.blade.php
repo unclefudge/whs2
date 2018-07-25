@@ -71,7 +71,7 @@
                                     <td><a href="/manage/report/payroll">Payroll</a></td>
                                 </tr>
                             @endif
-                            @if (Auth::user()->hasRole2('web'))
+                            @if (Auth::user()->hasRole2('web-admin'))
                                 <tr>
                                     <td><a href="/manage/report/nightly">Nightly Log</a></td>
                                 </tr>
