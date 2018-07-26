@@ -102,7 +102,7 @@ VALUES<br>";
             $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
             if ($todo_user) {
                 $done_at = ($todo->done_at) ? $todo->done_at : 'NULL';
-                echo "($todo->id, '$todo->name', '$todo->info', '$todo->type', $todo->type_id, '$todo->due_at', $done_at, $todo->done_by, $todo->priority, $todo->attachment, $todo->comments, $todo->status, $todo->company_id, $todo->created_by, $todo->updated_by, '$todo->created_at', '$todo->updated_at', '$todo->deleted_at'<br>";
+                echo "($todo->id, '$todo->name', '$todo->info', '$todo->type', $todo->type_id, '$todo->due_at', $done_at, $todo->done_by, $todo->priority, NULL, NULL, $todo->status, $todo->company_id, $todo->created_by, $todo->updated_by, '$todo->created_at', '$todo->updated_at', NULL<br>";
                 //echo $x++ . " ToDo [$todo->id] - $todo->name - UserID:$todo_user->user_id <br>";
             }
         }
