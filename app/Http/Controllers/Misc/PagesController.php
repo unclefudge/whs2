@@ -103,11 +103,11 @@ VALUES<br>";
         foreach ($todos as $todo) {
             $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
             if ($todo_user) {
-                $done_at = ($todo->done_at) ? $todo->done_at : 'NULL';
-                $opened_at = ($todo_user->opened_at) ? $todo->opened_at : 'NULL';
+                $done_at = ($todo->done_at) ? "'$todo->done_at'" : 'NULL';
+                $opened_at = ($todo_user->opened_at) ? "'$todo_user->opened_at'" : 'NULL';
                 //echo "($todo->id, '$todo->name', '$todo->info', '$todo->type', $todo->type_id, '$todo->due_at', $done_at, $todo->done_by, $todo->priority, NULL, NULL, $todo->status, $todo->company_id, $todo->created_by, $todo->updated_by, '$todo->created_at', '$todo->updated_at', NULL),<br>";
                 $insert_todo .= "($todo->id, '$todo->name', '$todo->info', '$todo->type', $todo->type_id, '$todo->due_at', $done_at, $todo->done_by, $todo->priority, NULL, NULL, $todo->status, $todo->company_id, $todo->created_by, $todo->updated_by, '$todo->created_at', '$todo->updated_at', NULL),<br>";
-                $insert_todo_user .= "($todo_user->id, $todo_user->todo_id, $todo_user->user_id, $todo_user->opened, '$opened_at' ),<br>";
+                $insert_todo_user .= "($todo_user->id, $todo_user->todo_id, $todo_user->user_id, $todo_user->opened, $opened_at ),<br>";
                 //echo $x++ . " ToDo [$todo->id] - $todo->name - UserID:$todo_user->user_id <br>";
                 $ids[] = $todo_user->id;
             }
