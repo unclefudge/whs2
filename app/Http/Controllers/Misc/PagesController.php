@@ -113,6 +113,8 @@ VALUES<br>";
             }
         }
 
+        $insert_todo = rtrim(',', $insert_todo). ';';
+        $insert_todo_user = rtrim(',', $insert_todo_user). ';';
         echo $insert_todo;
         echo "<br><br>-----<br>";
         echo $insert_todo_user;
