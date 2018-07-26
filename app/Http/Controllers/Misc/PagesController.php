@@ -96,10 +96,13 @@ class PagesController extends Controller {
         $talk = \App\Models\Safety\ToolboxTalk::find(287);
         $todos = \App\Models\Comms\Todo::where('type', 'toolbox')->where('type_id', 287)->get();
         $x = 1;
+        echo "INSERT INTO `todo` (`id`, `name`, `info`, `type`, `type_id`, `due_at`, `done_at`, `done_by`, `priority`, `attachment`, `comments`, `status`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`)
+VALUES<br>";
         foreach ($todos as $todo) {
             $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
             if ($todo_user)
-                echo $x++ . " ToDo [$todo->id] - $todo->name - UserID:$todo_user->user_id <br>";
+                echo "($todo->id, '$todo->name', '$todo->info'<br>";
+            //echo $x++ . " ToDo [$todo->id] - $todo->name - UserID:$todo_user->user_id <br>";
         }
 
         /*
