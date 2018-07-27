@@ -63,7 +63,7 @@
 <div class="container">
     <table class="table" style="border: 0px; padding: 0px; margin: 0px;">
         <tr>
-            <td width="70%"><span style="font-size: 28px">{{ $doc->company->name }}</span></td>
+            <td width="70%"><span style="font-size: {!! (strlen($doc->company->name) < 30) ? 28 : 20 !!}px">{{ $doc->company->name }}</span></td>
             <td>
                 <span style="font-size: 8px; line-height: 1em">{{ $doc->company->address }}<br>{{ $doc->company->suburb_state_postcode }}<br>{{ $doc->company->phone }}<br>{{ $doc->company->email }}</span>
             </td>

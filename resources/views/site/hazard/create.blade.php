@@ -103,16 +103,14 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
-                                            <div class="fileinput-preview fileinput-exists thumbnail"
-                                                 style="max-width: 200px; max-height: 150px;"></div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                                             <div>
-                                                    <span class="btn default btn-file">
-                                                        <span class="fileinput-new"> Upload Photo/Video of issue</span>
-                                                        <span class="fileinput-exists"> Change </span>
-                                                        <input type="file" name="media">
-                                                    </span>
-                                                <a href="javascript:;" class="btn default fileinput-exists"
-                                                   data-dismiss="fileinput">Remove </a>
+                                                <span class="btn default btn-file">
+                                                    <span class="fileinput-new"> Upload Photo/Video of issue</span>
+                                                    <span class="fileinput-exists"> Change </span>
+                                                    <input type="file" name="media">
+                                                </span>
+                                                <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput">Remove </a>
                                             </div>
                                         </div>
                                     </div>

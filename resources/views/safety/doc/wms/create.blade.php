@@ -62,7 +62,7 @@
                                     <div class="form-group">
                                         {!! Form::label('swms_type', 'Which method would you like to use?', ['class' => 'control-label']) !!}
                                         {!! Form::select('swms_type',
-                                        ['' => 'Select option', 'library' => 'Use a template from the SWMS library', 'upload' => 'Upload an existing SWMS as a file', 'scratch' => 'Start from Scratch'],
+                                        ['' => 'Select option', 'library' => 'Use a template from the SWMS library or Previous Statement', 'upload' => 'Upload an existing SWMS as a file', 'scratch' => 'Start from Scratch'],
                                          null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('swms_type', $errors) !!}
                                     </div>

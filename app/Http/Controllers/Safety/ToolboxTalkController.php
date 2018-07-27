@@ -188,7 +188,7 @@ class ToolboxTalkController extends Controller {
                     if ($master)
                         $master_version = $master->version;
                 }
-                if ($request->get('status') == 1 && Auth::user()->isCC() && !Auth::user()->hasPermission2('sig.toolbox') && (!$talk->master_id || $master_version != $tool_request['version'])) {
+                if (request('status') == 1 && Auth::user()->isCC() && !Auth::user()->hasPermission2('sig.toolbox') && (!$talk->master_id || $master_version != $tool_request['version'])) {
                     $tool_request['status'] = 2;
                     // Mail notification talk owner
                     if ($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))
@@ -199,7 +199,7 @@ class ToolboxTalkController extends Controller {
                 $talk->update($tool_request);
 
                 // If regular talk is made active + copy of template determine if template was modified
-                if ($request->get('status') == 1 && !$talk->master && $talk->master_id && $master_version != $tool_request['version']) {
+                if (request('status') == 1 && !$talk->master && $talk->master_id && $master_version != $tool_request['version']) {
                     $diffs = '';
                     if ($mod_overview) $diffs .= "OVERVIEW<br>$diff_overview<br>";
                     if ($mod_hazards) $diffs .= "HAZARDS<br>$diff_hazards<br>";
@@ -229,25 +229,42 @@ class ToolboxTalkController extends Controller {
             $todo_request = [
                 'type'       => 'toolbox',
                 'type_id'    => $id,
-                'name'       => 'Toolbox Talk - ' . $request->get('name'),
+                'name'       => 'Toolbox Talk - ' . request('name'),
                 'info'       => 'Please acknowledge you have read and understood the toolbox talk.',
                 'due_at'     => nextWorkDate(Carbon::today(), '+', 5)->toDateTimeString(),
-                'company_id' => $request->get('for_company_id')
+                'company_id' => request('for_company_id')
             ];
 
-            $user_list = ($request->has('user_list')) ? $request->get('user_list') : [];
-            $current_users = ($talk->assignedTo()) ? $talk->assignedTo()->pluck('id')->toArray() : [];
-
             $assign_list = [];
-            foreach ($user_list as $id) {
-                if ($id == 'all') {
-                    $assign_list = Auth::user()->company->users('1')->pluck('id')->toArray();
-                    break;
-                } else
-                    $assign_list[] = $id;
+            if (request('assign_to') == 'user') {
+                $user_list = (request('user_list')) ? request('user_list') : [];
+                foreach ($user_list as $id) {
+                    if ($id == 'all') {
+                        $assign_list = Auth::user()->company->users('1')->pluck('id')->toArray();
+                        break;
+                    } else
+                        $assign_list[] = $id;
+                }
+            } elseif (request('assign_to') == 'company') {
+                $company_list = (request('company_list')) ? request('company_list') : [];
+                $company_list = (in_array('all', $company_list)) ? Auth::user()->company->companies(1)->pluck('id')->toArray() : $company_list;
+                foreach ($company_list as $id) {
+                    $company = Company::findOrFail($id);
+                    $assign_list = array_merge($assign_list, $company->staffStatus(1)->pluck('id')->toArray());
+                }
+            } elseif (request('assign_to') == 'role') {
+                $role_list = (request('role_list')) ? request('role_list') : [];
+                $users = DB::table('role_user')->select('user_id')->whereIn('role_id', $role_list)->distinct('user_id')->orderBy('user_id')->get();
+                $company_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+                foreach ($users as $u) {
+                    if (in_array($u->user_id, $company_users))
+                        $assign_list[] = $u->user_id;
+                }
             }
+            //dd($assign_list);
 
             // Create ToDoo for user if haven't got one
+            $current_users = ($talk->assignedTo()) ? $talk->assignedTo()->pluck('id')->toArray() : [];
             foreach ($assign_list as $user_id) {
                 if (!in_array($user_id, $current_users)) {
                     $todo = Todo::create($todo_request);
