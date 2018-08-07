@@ -228,7 +228,7 @@
                                 <input type="hidden" name="assign_to" value="user">
                                 <div class="form-group {!! fieldHasError('user_list', $errors) !!}">
                                     {!! Form::label('user_list', 'Assigned to users', ['class' => 'control-label']) !!}
-                                    {!! Form::select('user_list', Auth::user()->company->usersSelect('ALL'),
+                                    {!! Form::select('user_list', Auth::user()->company->usersSelect('ALL', 1),
                                          ($talk->assignedTo()) ? $talk->assignedTo()->pluck('id')->toArray() : null, ['class' => 'form-control select2', 'name' => 'user_list[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                     {!! fieldErrorMessage('user_list', $errors) !!}
                                 </div>
@@ -248,7 +248,7 @@
                         <div class="col-md-12" id="user_div" style="display: none">
                             <div class="form-group {!! fieldHasError('user_list', $errors) !!}">
                                 {!! Form::label('user_list', 'User(s)', ['class' => 'control-label']) !!}
-                                {!! Form::select('user_list', Auth::user()->company->usersSelect('ALL'),
+                                {!! Form::select('user_list', Auth::user()->company->usersSelect('ALL', 1),
                                      null, ['class' => 'form-control select2', 'name' => 'user_list[]', 'multiple' => 'multiple', 'width' => '100%']) !!}
                                 {!! fieldErrorMessage('user_list', $errors) !!}
                             </div>
