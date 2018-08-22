@@ -501,6 +501,8 @@
             textColour: function (record) {
                 if (record.status == '-1')
                     return 'font-grey-silver';
+                if (record.status == '0' && record.signed_by != '0')
+                        return 'leaveBG';
                 return '';
             },
             doNothing: function () {

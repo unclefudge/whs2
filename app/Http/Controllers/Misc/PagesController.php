@@ -91,15 +91,28 @@ class PagesController extends Controller {
 
     public function quick(Request $request)
     {
+        echo "<br><br>Signed QA items with status 0<br><br>";
+        $qas = \App\Models\Site\SiteQa::where('status', '>', 0)->where('master', 0)->get();
+        foreach ($qas as $qa) {
+            foreach ($qa->items as $item) {
+                if ($item->status == 0 && $item->sign_by) {
+                    echo "[$qa->id]-[$item->id] " . $qa->site->name . ": $qa->name - $item->name<br>";
+                    $item->status = 1;
+                    $item->save();
+                }
+            }
+        }
+        /*
         echo "<br><br>Export Toolbox Talk<br><br>";
 
-        $talk = \App\Models\Safety\ToolboxTalk::find(287);
-        $todos = \App\Models\Comms\Todo::where('type', 'toolbox')->where('type_id', 287)->get();
+        $toolbox_id = 286;
+        $talk = \App\Models\Safety\ToolboxTalk::find($toolbox_id);
+        $todos = \App\Models\Comms\Todo::where('type', 'toolbox')->where('type_id', $toolbox_id)->get();
         $x = 1;
 
         $insert_todo = "INSERT INTO `todo` (`id`, `name`, `info`, `type`, `type_id`, `due_at`, `done_at`, `done_by`, `priority`, `attachment`, `comments`, `status`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`)
 VALUES<br>";
-        $insert_todo_user = "INSERT INTO `todo` (`id`,`todo_id`, `user_id`, `opened`, `opened_at`) VALUES<br>";
+        $insert_todo_user = "INSERT INTO `todo_user` (`id`,`todo_id`, `user_id`, `opened`, `opened_at`) VALUES<br>";
         foreach ($todos as $todo) {
             $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
             if ($todo_user) {
@@ -118,6 +131,8 @@ VALUES<br>";
         echo $insert_todo;
         echo "<br><br>-----<br>";
         echo $insert_todo_user;
+        */
+
         /*
         echo "<br><br>Move security toggle to permission<br><br>";
         $users = \App\User::all();

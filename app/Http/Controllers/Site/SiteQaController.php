@@ -254,17 +254,23 @@ class SiteQaController extends Controller {
         //    return view('errors/404');
 
         $item_request = $request->only(['status', 'done_by']);
+        //dd($item_request);
 
         // Update resolve date if just modified
-        if (!$request->has('status')) {
+        if (!request('status')) {
             $item->status = 0;
             $item->sign_by = null;
+            $item->sign_at = null;
+            //echo 'no stat';
+            //dd($item_request);
             $item->save();
         } else {
-            if ($item_request['status'] == '1' && $item->status != 1) {
+            //echo "stat";
+            if ($item_request['status'] == 1 && $item->status != 1) {
                 $item_request['sign_by'] = Auth::user()->id;
                 $item_request['sign_at'] = Carbon::now()->toDateTimeString();
             }
+            //dd($item_request);
             $item->update($item_request);
         }
 

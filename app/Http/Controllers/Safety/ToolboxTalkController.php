@@ -365,7 +365,7 @@ class ToolboxTalkController extends Controller {
     /**
      * Archive or Unarchive the given talk.
      */
-    public function archive(Request $request, $id)
+    public function archive($id)
     {
         $talk = ToolboxTalk::findOrFail($id);
         if (!Auth::user()->allowed2('del.toolbox', $talk))
@@ -374,14 +374,25 @@ class ToolboxTalkController extends Controller {
         ($talk->status == 1) ? $talk->status = - 1 : $talk->status = 1;
         $talk->save();
 
-        if ($talk->status == 1)
+        if ($talk->status == 1) {
             Toastr::success("Toolbox restored");
-        else {
+
+            // Re-open user ToDoo task for Toolbox talk if they haven't already completed
+            $undone = Todo::where('type', 'toolbox')->where('type_id', $talk->id)->where('done_by', 0)->get();
+            foreach ($undone as $todo) {
+                $todo->status = 1;
+                $todo->save();
+            }
+        } else {
             //$talk->emailArchived();
             Toastr::success("Toolbox archived");
 
-            // Delete user ToDoo task for Toolbox talk if they haven't already completed
-            Todo::where('type', 'toolbox')->where('type_id', $talk->id)->delete();
+            // Close user ToDoo task for Toolbox talk if they haven't already completed
+            $undone = Todo::where('type', 'toolbox')->where('type_id', $talk->id)->where('status', 1)->get();
+            foreach ($undone as $todo) {
+                $todo->status = 0;
+                $todo->save();
+            }
         }
 
         return redirect('/safety/doc/toolbox2/' . $talk->id);
@@ -390,7 +401,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Delete the specified resource in storage.
      */
-    public function destroy(Request $request, $id)
+    public
+    function destroy(Request $request, $id)
     {
         $talk = ToolboxTalk::findOrFail($id);
         if (!Auth::user()->allowed2('del.toolbox', $talk))
@@ -408,7 +420,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Sign off on the given talk.
      */
-    public function signoff(Request $request, $id)
+    public
+    function signoff(Request $request, $id)
     {
         $talk = ToolboxTalk::findOrFail($id);
         if (!Auth::user()->allowed2('sig.toolbox', $talk))
@@ -428,7 +441,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Reject the given talk and return it to draft.
      */
-    public function reject(Request $request, $id)
+    public
+    function reject(Request $request, $id)
     {
         $talk = ToolboxTalk::findOrFail($id);
         if (!Auth::user()->allowed2('sig.toolbox', $talk))
@@ -449,7 +463,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Get Talks current user is authorised to manage + Process datatables ajax request.
      */
-    public function getToolbox(Request $request)
+    public
+    function getToolbox(Request $request)
     {
         // Toolboxs assigned to user
         $toolbox_user = Auth::user()->toolboxs()->pluck('id')->toArray();
@@ -536,7 +551,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Get Talks current user is authorised to manage + Process datatables ajax request.
      */
-    public function getToolboxTemplates(Request $request)
+    public
+    function getToolboxTemplates(Request $request)
     {
         $records = DB::table('toolbox_talks AS t')
             ->select(['t.id', 't.name', 't.version', 't.for_company_id', 't.company_id', 't.status', 't.updated_at', 'c.name AS company_name'])
@@ -585,7 +601,8 @@ class ToolboxTalkController extends Controller {
     /**
      * Copy Template from Master
      */
-    private function copyTemplate($master_id, $talk_id)
+    private
+    function copyTemplate($master_id, $talk_id)
     {
         $master = ToolboxTalk::find($master_id);
         $talk = ToolboxTalk::find($talk_id);
@@ -605,7 +622,8 @@ class ToolboxTalkController extends Controller {
         $talk->save();
     }
 
-    public function diffArray($old, $new)
+    public
+    function diffArray($old, $new)
     {
         $matrix = array();
         $maxlen = 0;
@@ -628,7 +646,8 @@ class ToolboxTalkController extends Controller {
             $this->diffArray(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
 
-    public function htmlDiff($old, $new)
+    public
+    function htmlDiff($old, $new)
     {
         $ret = '';
         $diff = $this->diffArray(explode(' ', $old), explode(' ', $new));

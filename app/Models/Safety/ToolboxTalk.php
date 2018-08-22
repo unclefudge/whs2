@@ -213,7 +213,7 @@ class ToolboxTalk extends Model {
      */
     public function outstandingBy()
     {
-        $outstanding = Todo::where('type', 'toolbox')->where('type_id', $this->id)->where('status', 1)->pluck('id')->toArray();
+        $outstanding = Todo::where('type', 'toolbox')->where('type_id', $this->id)->where('done_by', 0)->pluck('id')->toArray();
         $user_ids = TodoUser::whereIn('todo_id', $outstanding)->pluck('user_id')->toArray();
 
         return User::whereIn('id', $user_ids)->orderBy('firstname')->get();
