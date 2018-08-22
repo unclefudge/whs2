@@ -325,14 +325,15 @@ class SitePlannerController extends Controller {
         //
         $non_rostered = [];
         $attendance = SiteAttendance::whereDate('date', '>=', $date_from->format('Y-m-d'))->whereDate('date', '<=', $date_to->format('Y-m-d'))->get();
+        $allowed_companies = Auth::user()->company->companies()->pluck('id')->toArray();
         foreach ($attendance as $attend) {
             $site = Site::find($attend->site_id);
             if (!$site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
                 $user = User::find($attend->user_id);
 
-                // For non subscription companies limit to their users on
+                // For non subscription companies limit to their users only
                 //if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
-                if (in_array($user->company_id, Auth::user()->company->companies()->pluck('id')->toArray())) {
+                if (in_array($user->company_id, $allowed_companies)) {
                     $key = $attend->site_id . '.' . $attend->date->format('Y-m-d');
                     if (isset($non_rostered[$key]))
                         $non_rostered[$key][$user->id] = $user->fullname;
