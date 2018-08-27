@@ -609,7 +609,7 @@ class CompanyController extends Controller {
         $dt = Datatables::of($users)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
             ->editColumn('id', function ($user) {
-                if (in_array(Auth::user()->id, [3,109]) || Auth::user()->allowed2('view.user', $user))
+                //if (in_array(Auth::user()->id, [3,109]) || Auth::user()->allowed2('view.user', $user))
                     return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
                 return '';
             })
