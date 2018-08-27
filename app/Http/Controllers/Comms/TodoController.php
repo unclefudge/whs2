@@ -154,7 +154,7 @@ class TodoController extends Controller {
                     $user_list = [];
                     $users = DB::table('role_user')->select('user_id')->where('role_id', $id)->distinct('user_id')->orderBy('user_id')->get();
                     foreach ($users as $u) {
-                        if (in_array($u->user_id, Auth::user()->company->users()->pluck('id')->toArray()))
+                        if (in_array($u->user_id, Auth::user()->company->users(1)->pluck('id')->toArray()))
                             $user_list[] = $u->user_id;
                     }
                     $todo = Todo::create($todo_request);

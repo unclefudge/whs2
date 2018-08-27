@@ -327,18 +327,19 @@ class SitePlannerController extends Controller {
         $attendance = SiteAttendance::whereDate('date', '>=', $date_from->format('Y-m-d'))->whereDate('date', '<=', $date_to->format('Y-m-d'))->get();
         $allowed_companies = Auth::user()->company->companies()->pluck('id')->toArray();
         foreach ($attendance as $attend) {
-            $site = Site::find($attend->site_id);
-            if (!$site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
-                $user = User::find($attend->user_id);
+            //$site = Site::find($attend->site_id);
+            //if (!$site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
+            if (!$attend->site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
+                //$user = User::find($attend->user_id);
 
                 // For non subscription companies limit to their users only
                 //if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
-                if (in_array($user->company_id, $allowed_companies)) {
+                if (in_array($attend->user->company_id, $allowed_companies)) {
                     $key = $attend->site_id . '.' . $attend->date->format('Y-m-d');
                     if (isset($non_rostered[$key]))
-                        $non_rostered[$key][$user->id] = $user->fullname;
+                        $non_rostered[$key][$attend->user->id] = $attend->user->fullname;
                     else
-                        $non_rostered[$key] = [$user->id => $user->fullname];
+                        $non_rostered[$key] = [$attend->user->id => $attend->user->fullname];
                 }
             }
         }
@@ -354,9 +355,11 @@ class SitePlannerController extends Controller {
 
         $planner2 = $this->getPlannerForWeek($date_from, $date_to, $allowedSites, $excludeTasks);
         $conflicts = $this->getPlanConflicts($request, $planner2, 'any', 'json');
+        //$conflicts = [];
 
         // Get Companies on leave
         $company_leave = $this->getCompanyLeave();
+        //$company_leave = [];
 
 
         //
@@ -367,6 +370,7 @@ class SitePlannerController extends Controller {
 
         $company_onsite = [];
         // Initialise all companies on the planner to be onsite ie. true
+
         foreach ($planner as $plan) {
             $site = Site::find($plan->site_id);
             $current_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
@@ -1247,6 +1251,7 @@ class SitePlannerController extends Controller {
     {
         if (Auth::user()->company->subscription) {
             $allowedCompanies = Auth::user()->company->companies()->pluck('id')->toArray();
+
             //dd($allowedCompanies);
 
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
