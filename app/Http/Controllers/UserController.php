@@ -476,7 +476,7 @@ public function getSecurityPermissions(Request $request, $id)
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUsers(Request $request)
+    public function getUsers()
     {
         $user_list = [Auth::user()->id];
         if (Auth::user()->hasAnyPermissionType('user'))
@@ -488,21 +488,19 @@ public function getSecurityPermissions(Request $request, $id)
             'companys.name', 'users.address', 'users.last_login', 'users.status'])
             ->join('companys', 'users.company_id', '=', 'companys.id')
             ->whereIn('users.id', $user_list)
-            ->where('users.status', $request->get('status'));
+            ->where('users.status', request('status'));
 
         $dt = Datatables::of($user_records)
             //->filterColumn('full_name', 'whereRaw', "CONCAT(users.firstname,' ',users.lastname) like ?", ["%$1%"])
             ->editColumn('id', '<div class="text-center"><a href="/user/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('full_name', function ($user) {
                 $string = $user->firstname . ' ' . $user->lastname;
-
                 if ($user->id == $user->company->primary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>P</span>";
                 if ($user->id == $user->company->secondary_user)
                     $string .= " <span class='badge badge-info badge-roundless'>S</span>";
                 if ($user->hasPermission2('edit.user.security'))
                     $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
-
                 return $string;
             })
             ->editColumn('name', function ($user) {
