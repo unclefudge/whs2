@@ -520,8 +520,8 @@ class WmsController extends Controller {
                 $name = $doc->name . ' v' . $doc->version;
                 if ($doc->status == 1) {
                     $now = Carbon::now();
-                    $yearago = $now->subYear()->toDateTimeString();
-                    if ($doc->updated_at < $yearago)
+                    $twoyearago = $now->subYears(2)->toDateTimeString();
+                    if ($doc->updated_at < $twoyearago)
                         $name .= ' <span class="badge badge-danger badge-roundless">Out of Date</span>';
                 }
 
