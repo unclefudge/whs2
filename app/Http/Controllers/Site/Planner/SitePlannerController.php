@@ -324,22 +324,22 @@ class SitePlannerController extends Controller {
         // Non Rostered Users who attended
         //
         $non_rostered = [];
-        $attendance = SiteAttendance::whereDate('date', '>=', $date_from->format('Y-m-d'))->whereDate('date', '<=', $date_to->format('Y-m-d'))->get();
-        $allowed_companies = Auth::user()->company->companies()->pluck('id')->toArray();
-        foreach ($attendance as $attend) {
-            //$site = Site::find($attend->site_id);
-            //if (!$site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
-            if (!$attend->site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
-                //$user = User::find($attend->user_id);
-
-                // For non subscription companies limit to their users only
-                //if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
-                if (in_array($attend->user->company_id, $allowed_companies)) {
-                    $key = $attend->site_id . '.' . $attend->date->format('Y-m-d');
-                    if (isset($non_rostered[$key]))
-                        $non_rostered[$key][$attend->user->id] = $attend->user->fullname;
-                    else
-                        $non_rostered[$key] = [$attend->user->id => $attend->user->fullname];
+        if ($plan_type == 'weekly') {
+            $attendance = SiteAttendance::whereDate('date', '>=', $date_from->format('Y-m-d'))->whereDate('date', '<=', $date_to->format('Y-m-d'))->get();
+            $allowed_companies = Auth::user()->company->companies()->pluck('id')->toArray();
+            foreach ($attendance as $attend) {
+                //$site = Site::find($attend->site_id);
+                //if (!$site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
+                if (!$attend->site->isUserOnRoster($attend->user_id, $attend->date->format('Y-m-d'))) {
+                    // For non subscription companies limit to their users only
+                    //if (Auth::user()->company->subscription || $user->isCompany(Auth::user()->company)) {
+                    if (in_array($attend->user->company_id, $allowed_companies)) {
+                        $key = $attend->site_id . '.' . $attend->date->format('Y-m-d');
+                        if (isset($non_rostered[$key]))
+                            $non_rostered[$key][$attend->user->id] = $attend->user->fullname;
+                        else
+                            $non_rostered[$key] = [$attend->user->id => $attend->user->fullname];
+                    }
                 }
             }
         }
@@ -365,39 +365,39 @@ class SitePlannerController extends Controller {
         //
         // Get attendance for Today and verify if Company all onsite
         //
-        $today = Carbon::today();
-        $planner = $this->getPlannerForWeek($date_from, $date_to, $allowedSites, []);
-
         $company_onsite = [];
-        // Initialise all companies on the planner to be onsite ie. true
-
-        foreach ($planner as $plan) {
-            $site = Site::find($plan->site_id);
-            $current_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
-            for ($x = 0; $x < 5; $x ++) {
-                if ($plan->entity_type == 'c' && $site->isCompanyOnPlanner($plan->entity_id, $current_date->format('Y-m-d')))
-                    $company_onsite[$current_date->format('Y-m-d') . '.' . $plan->site_id . '.' . $plan->entity_type . '.' . $plan->entity_id] = 1;
-                $current_date->addDay(1);
-                if ($current_date->gt($today))
-                    break;
-            }
-        }
-
-        // Now determine those who aren't all onsite ie. false
-        foreach ($company_onsite as $key => $value) {
-            list($day_date, $site_id, $etype, $eid) = explode('.', $key);
-            $staff = Company::findOrFail($eid)->staffStatus(1)->pluck('id')->toArray();
-            $roster = SiteRoster::where('site_id', $site_id)->whereDate('date', '=', $day_date)->whereIn('user_id', $staff)->get();
-            if (!$roster->isEmpty()) {
-                foreach ($roster as $rost) {
-                    $site = Site::find($rost->site_id);
-                    if (!$site->isUserOnsite($rost->user_id, $rost->date->format('Y-m-d')))
-                        $company_onsite[$key] = 0;
-
+        if ($plan_type == 'weekly') {
+            $today = Carbon::today();
+            $planner = $this->getPlannerForWeek($date_from, $date_to, $allowedSites, []);
+            // Initialise all companies on the planner to be onsite ie. true
+            foreach ($planner as $plan) {
+                $site = Site::find($plan->site_id);
+                $current_date = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
+                for ($x = 0; $x < 5; $x ++) {
+                    if ($plan->entity_type == 'c' && $site->isCompanyOnPlanner($plan->entity_id, $current_date->format('Y-m-d')))
+                        $company_onsite[$current_date->format('Y-m-d') . '.' . $plan->site_id . '.' . $plan->entity_type . '.' . $plan->entity_id] = 1;
+                    $current_date->addDay(1);
+                    if ($current_date->gt($today))
+                        break;
                 }
-            } else
-                $company_onsite[$key] = - 1;
+            }
 
+            // Now determine those who aren't all onsite ie. false
+            foreach ($company_onsite as $key => $value) {
+                list($day_date, $site_id, $etype, $eid) = explode('.', $key);
+                $staff = Company::findOrFail($eid)->staffStatus(1)->pluck('id')->toArray();
+                $roster = SiteRoster::where('site_id', $site_id)->whereDate('date', '=', $day_date)->whereIn('user_id', $staff)->get();
+                if (!$roster->isEmpty()) {
+                    foreach ($roster as $rost) {
+                        $site = Site::find($rost->site_id);
+                        if (!$site->isUserOnsite($rost->user_id, $rost->date->format('Y-m-d')))
+                            $company_onsite[$key] = 0;
+
+                    }
+                } else
+                    $company_onsite[$key] = - 1;
+
+            }
         }
 
 
@@ -678,8 +678,8 @@ class SitePlannerController extends Controller {
         $array['id'] = $plan->id;
         $array['site_id'] = $plan->site_id;
 
-        $site = Site::find($plan->site_id);
-        $array['site_name'] = $site->name;
+        //$site = Site::find($plan->site_id);
+        $array['site_name'] = $plan->site->name;
 
         $array['entity_type'] = $plan->entity_type;
         $array['entity_id'] = $plan->entity_id;
