@@ -128,8 +128,9 @@
 
                             <div class="row">
                                 <div class="col-md-6">
+                                    {!! Form::hidden('filetype', '', ['id' => 'filetype']) !!}
                                     {{-- Category --}}
-                                    {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control']) !!}
+                                    {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control', 'id' => 'category_id']) !!}
                                     @if ($doc->category_id > 8)
                                         <div class="form-group">
                                             {!! Form::label('category_id_text', 'Category', ['class' => 'control-label']) !!}
@@ -255,11 +256,18 @@
                                         @endif
                                     </div>
 
-                                    <!-- File upload -->
+                                    <!-- Single File -->
                                     <div class="form-group {!! fieldHasError('singlefile', $errors) !!}" style="display: none" id="singlefile-div">
                                         <label class="control-label">Select File</label>
                                         <input id="singlefile" name="singlefile" type="file" class="file-loading">
                                         {!! fieldErrorMessage('singlefile', $errors) !!}
+                                    </div>
+
+                                    <!-- Single Image File -->
+                                    <div class="form-group {!! fieldHasError('singleimage', $errors) !!}" style="display: none" id="singleimage-div">
+                                        <label class="control-label">Select File / Photo</label>
+                                        <input id="singleimage" name="singleimage" type="file" class="file-loading">
+                                        {!! fieldErrorMessage('singleimage', $errors) !!}
                                     </div>
 
                                 </div>
@@ -370,6 +378,8 @@
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+        $("#filetype").val(''); // clear field on onload
+
         /* Bootstrap Fileinput */
         $("#singlefile").fileinput({
             showUpload: false,
@@ -383,9 +393,29 @@
             uploadClass: "btn btn-info",
         });
 
+        /* Bootstrap Fileinput */
+        $("#singleimage").fileinput({
+            showUpload: false,
+            allowedFileExtensions: ["pdf", "jpg", "png", "gif"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn btn-danger",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn btn-info",
+        });
+
         $("#change_file").click(function () {
             $('#attachment-div').hide();
-            $('#singlefile-div').show();
+            //$('#singlefile-div').show();
+            if ($("#category_id").val() == 7 || $("#category_id").val() == 9 || $("#category_id").val() == 10) { // 7 Contractors Lic, 9 Other Lic, 10 Builders Lic
+                $('#singleimage-div').show();
+                $('#filetype').val('image');
+            } else {
+                $('#singlefile-div').show();
+                $('#filetype').val('pdf');
+            }
             $('#but_upload').show();
             $('#but_save').hide();
         });

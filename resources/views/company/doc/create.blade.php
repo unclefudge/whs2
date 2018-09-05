@@ -36,6 +36,7 @@
                         {!! Form::model('companydoc', ['action' => ['Company\CompanyDocController@store', $company->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
                         {!! Form::hidden('create', 'true') !!}
+                        {!! Form::hidden('filetype', 'pdf', ['id' => 'filetype']) !!}
 
                         <div class="alert alert-danger alert-dismissable" style="display: none;" id="multifile-error">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
@@ -150,6 +151,13 @@
                                         <input id="singlefile" name="singlefile" type="file" class="file-loading">
                                         {!! fieldErrorMessage('singlefile', $errors) !!}
                                     </div>
+
+                                    <!-- Single Image File -->
+                                    <div class="form-group {!! fieldHasError('singleimage', $errors) !!}" style="display: none" id="singleimage-div">
+                                        <label class="control-label">Select File / Photo</label>
+                                        <input id="singleimage" name="singleimage" type="file" class="file-loading">
+                                        {!! fieldErrorMessage('singleimage', $errors) !!}
+                                    </div>
                                 </div>
 
                             </div>
@@ -235,11 +243,19 @@
             $('#fields_tag_date').hide();
             $('#fields_notes').hide();
             $('#singlefile-div').hide();
+            $('#singleimage-div').hide();
             $('#upload').hide();
 
 
             if (cat != '') {
-                $('#singlefile-div').show();
+                if (cat == 7 || cat == 9 || cat == 10) { // 7 Contractors Lic, 9 Other Lic, 10 Builders Lic
+                    $('#singleimage-div').show();
+                    $('#filetype').val('image');
+                } else {
+                    $('#singlefile-div').show();
+                    $('#filetype').val('pdf');
+                }
+                //$("#singlefile").fileinput('allowedFileExtensions', ["pdf"]);*/
                 $('#fields_expiry').show();
                 $('#fields_notes').show();
                 $('#upload').show();
@@ -300,6 +316,19 @@
         $("#singlefile").fileinput({
             showUpload: false,
             allowedFileExtensions: ["pdf"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn btn-danger",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn btn-info",
+        });
+
+        /* Bootstrap Fileinput */
+        $("#singleimage").fileinput({
+            showUpload: false,
+            allowedFileExtensions: ["pdf", "jpg", "png", "gif"],
             browseClass: "btn blue",
             browseLabel: "Browse",
             browseIcon: "<i class=\"fa fa-folder-open\"></i> ",

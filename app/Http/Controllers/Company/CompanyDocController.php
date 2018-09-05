@@ -169,8 +169,8 @@ class CompanyDocController extends Controller {
         $doc = CompanyDoc::create($doc_request);
 
         // Handle attached file
-        if ($request->hasFile('singlefile')) {
-            $file = $request->file('singlefile');
+        if ($request->hasFile('singlefile') || $request->hasFile('singleimage')) {
+            $file = ($request->hasFile('singlefile')) ? $request->file('singlefile') : $request->file('singleimage');
 
             $path = "filebank/company/" . $company->id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
