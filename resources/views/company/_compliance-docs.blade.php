@@ -128,6 +128,12 @@
                         @endif
                     </div>
                 @endif
+
+                {{-- Non-compliant docs needing Approval --}}
+                @if (count($company->nonCompliantDocs('array', 2)))
+                    <br>
+                    <a href="/company/{{ $company->id }}/doc" class="btn btn-warning">Some documents require approval</a>
+                @endif
             </div>
         </div>
     @endif

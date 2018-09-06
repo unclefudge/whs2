@@ -1082,6 +1082,32 @@ class Company extends Model {
 
     }
 
+    /**
+     * Documents required for a company to be compliant
+     *
+     * @return Text or Array
+     */
+    public function nonCompliantDocs($format = 'array', $status = '')
+    {
+        $compliant_docs = $this->compliantDocs();
+        $non_compliant_docs = [];
+        $non_compliant_html = '';
+
+        foreach ($this->companyDocs() as $doc) {
+            if ($doc->status && !isset($compliant_docs[$doc->category_id])) {
+                if ($status != '' && $doc->status != $status)
+                    continue;
+                $non_compliant_docs[$doc->category_id] = $doc->name;
+                $non_compliant_html .= "$doc->name, ";
+            }
+        }
+
+        $non_compliant_html = rtrim($non_compliant_html, ', ');
+
+        return ($format == 'csv') ? $non_compliant_html : $non_compliant_docs;
+
+    }
+
 
     /**
      * Missing Company Documents to be compliant
