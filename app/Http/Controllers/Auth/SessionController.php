@@ -61,8 +61,8 @@ class SessionController extends Controller {
             Auth::user()->save();
 
             // Log Supervisors
-            if (Auth::user()->isCC() && Auth::user()->isSupervisor())
-                File::append(public_path('filebank/log/users/supers_login.txt'), Carbon::now()->format('d/m/Y H:i:s') . ' ' . Auth::user()->fullname . ' (' . Auth::user()->username . ")\n");
+            //if (Auth::user()->isCC() && Auth::user()->isSupervisor())
+            //    File::append(public_path('filebank/log/users/supers_login.txt'), Carbon::now()->format('d/m/Y H:i:s') . ' ' . Auth::user()->fullname . ' (' . Auth::user()->username . ")\n");
 
             // Display Site Specific Alerts
             /*
@@ -81,14 +81,22 @@ class SessionController extends Controller {
                 }
             }*/
 
+            ///dd(redirect()->intended('home')->getTargetUrl());
             // Display User Specific Alerts
-            foreach (Auth::user()->notify() as $notify) {
-                //$mesg = ($notify->isOpenedBy($user)) ? '[1]' : '[0]';
-                $mesg = $notify->info; // . $mesg;
-                alert()->message($mesg, $notify->name)->persistent('Ok');
-                if (!$notify->isOpenedBy(Auth::user()))
-                    $notify->markOpenedBy(Auth::user());
+            if (Auth::user()->notify()) {
+                $user = Auth::user();
+                foreach (Auth::user()->notify() as $notify) {
+                    //$mesg = ($notify->isOpenedBy($user)) ? '[1]' : '[0]';
+                    //$mesg = $notify->info; // . $mesg;
+                    //alert()->message($mesg, $notify->name)->persistent('Ok')->autoclose(60000);
+                    //if (!$notify->isOpenedBy(Auth::user()))
+                    //    $notify->markOpenedBy(Auth::user());
+                }
+                $intended_url = redirect()->intended('home')->getTargetUrl();
+
+                return view('comms/notify/alertuser', compact('intended_url', 'user'));
             }
+
 
             if (Auth::user()->password_reset)
                 return redirect('/user/' . Auth::user()->id . '/resetpassword');
