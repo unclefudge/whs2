@@ -83,18 +83,18 @@ class SessionController extends Controller {
 
             ///dd(redirect()->intended('home')->getTargetUrl());
             // Display User Specific Alerts
-            if (Auth::user()->notify()) {
+            if (Auth::user()->notify()->count()) {
                 $user = Auth::user();
-                foreach (Auth::user()->notify() as $notify) {
+                $intended_url = redirect()->intended('home')->getTargetUrl();
+                return view('comms/notify/alertuser', compact('intended_url', 'user'));
+
+                //foreach (Auth::user()->notify() as $notify) {
                     //$mesg = ($notify->isOpenedBy($user)) ? '[1]' : '[0]';
                     //$mesg = $notify->info; // . $mesg;
                     //alert()->message($mesg, $notify->name)->persistent('Ok')->autoclose(60000);
                     //if (!$notify->isOpenedBy(Auth::user()))
                     //    $notify->markOpenedBy(Auth::user());
-                }
-                $intended_url = redirect()->intended('home')->getTargetUrl();
-
-                return view('comms/notify/alertuser', compact('intended_url', 'user'));
+                //}
             }
 
 
