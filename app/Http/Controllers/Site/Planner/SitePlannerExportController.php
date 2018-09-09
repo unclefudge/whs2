@@ -14,6 +14,8 @@ use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Http\Requests\Site\Planner\SitePlannerExportRequest;
+use App\Jobs\SitePlannerPdf;
+use App\Jobs\SitePlannerCompanyPdf;
 use App\Jobs\SiteAttendancePdf;
 use App\Jobs\CompanyAttendancePdf;
 use App\User;
@@ -88,31 +90,45 @@ class SitePlannerExportController extends Controller {
     /*
      * Create Export Site PDF
      */
-    //public function sitePDF(SitePlannerExportRequest $request, $site_id, $date, $weeks)
     public function sitePDF(SitePlannerExportRequest $request)
     {
-        $date = Carbon::createFromFormat('d/m/Y H:i:s', $request->get('date') . ' 00:00:00')->format('Y-m-d');
+        $date = Carbon::createFromFormat('d/m/Y H:i:s', request('date') . ' 00:00:00')->format('Y-m-d');
         $weeks = $request->get('weeks');
 
         /*
          * Export by Site
          */
         if ($request->has('export_site') || $request->has('export_site_client')) {
-            $site_id = ($request->has('export_site')) ? $request->get('site_id') : $request->get('site_id_client');
-            $sites = [];
+            $site_id = ($request->has('export_site')) ? request('site_id') : request('site_id_client');
             if ($site_id)
-                $sites[] = $site_id;
+                $sites = $site_id;
             else
                 $sites = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
 
-            // Sort Sites by Site Name
+            // Create Site List & Sort Sites by Site Name
             $site_list = [];
-            foreach ($sites as $siteID)
-                $site_list[$siteID] = Site::find($siteID)->name;
+            $site_list_csv = '';
+            foreach ($sites as $siteID) {
+                if ($siteID == 'all') {
+                    $site_list = Auth::user()->company->reportsTo()->sites('1')->pluck('id')->toArray();
+                    $site_list_csv = 'All';
+                    break;
+                }
+                $site = Site::find($siteID);
+                if ($site) {
+                    $site_list[$siteID] = $site->name;
+                    $site_list_csv .= $site->code.", ";
+                }
+
+            }
             asort($site_list);
+            if ($site_id)
+                $site_list_csv = (count($sites) > 5) ? 'multiple 5+' : rtrim($site_list_csv, ', ');
+            else
+                $site_list_csv = 'All';
 
             // For each Site get Tasks om Planner
-            $sitedata = [];
+            $data = [];
             foreach ($site_list as $siteID => $siteName) {
                 $site = Site::findOrFail($siteID);
                 $obj_site = (object) [];
@@ -221,29 +237,34 @@ class SitePlannerExportController extends Controller {
                     $date_next = Carbon::createFromFormat('Y-m-d H:i:s', $current_date . ' 00:00:00')->addDays(7);;
                     $current_date = $date_next->format('Y-m-d');
                 }
-                $sitedata[] = $obj_site;
+                $data[] = $obj_site;
                 //dd($sitedata);
             }
 
             $view = 'pdf.plan-site';
-            if ($request->has('export_site_client'))
+            $client = '';
+            if ($request->has('export_site_client')) {
                 $view = 'pdf/plan-site-client';
+                $client = 'Client ';
+            }
+
+
+            $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+            // Create directory if required
+            if (!is_dir(public_path($dir)))
+                mkdir(public_path($dir), 0777, true);
+            $output_file = public_path($dir . "/{$client}Site Plan ($site_list_csv) " . Carbon::now()->format('YmdHis') . '.pdf');
+            touch($output_file);
+            SitePlannerPdf::dispatch($view, $data, $output_file);
+
+            return redirect('/manage/report/recent');
 
             //return view($view, compact('site', 'date', 'weeks', 'sitedata'));
 
-            $pdf = PDF::loadView($view, compact('site', 'date', 'weeks', 'sitedata'));
-            $pdf->setPaper('a4', 'landscape');//->setOrientation('landscape');
+            //$pdf = PDF::loadView($view, compact('data'));
+            //$pdf->setPaper('a4', 'landscape');//->setOrientation('landscape');
 
-            //->setOption('page-width', 200)->setOption('page-height', 287)
-            //->setOption('margin-bottom', 10)
-            //->setOrientation('landscape');
-
-
-            //$file = public_path('filebank/company/' . $doc->for_company_id . '/wms/' . $doc->name . ' v' . $doc->version . ' ref-' . $doc->id . ' ' . '.pdf');
-            //if (file_exists($file))
-            //    unlink($file);
-            //$pdf->save($file);
-            return $pdf->stream();
+            //return $pdf->stream();
         }
 
 
@@ -251,21 +272,38 @@ class SitePlannerExportController extends Controller {
          * Export by Company
          */
         if ($request->has('export_company')) {
-            $company_id = $request->get('company_id');
-            $companies = [];
+            $company_id = request('company_id');
             if ($company_id)
-                $companies[] = $company_id;
+                $companies = $company_id;
             else
                 $companies = Auth::user()->company->companies('1')->pluck('id')->toArray();
 
-            // Sort Companies by Name
+            // Create Company List & Sort by Name
             $company_list = [];
-            foreach ($companies as $cid)
-                $company_list[$cid] = Company::find($cid)->name;
+            $company_list_csv = '';
+            foreach ($companies as $cid) {
+                if ($cid == 'all') {
+                    $company_list = Auth::user()->company->companies('1')->pluck('id')->toArray();
+                    $company_list_csv = 'All';
+                    break;
+                }
+                $company = Company::find($cid);
+                if ($company) {
+                    $company_list[$cid] = $company->name;
+                    $company_list_csv .= $company->id.", ";
+                }
+            }
             asort($company_list);
 
+            if ($company_id)
+                $company_list_csv = (count($companies) > 5) ? 'multiple 5+' : rtrim($company_list_csv, ', ');
+            else
+                $company_list_csv = 'All';
+
+
+            //dd($company_list);
             // For each Company get Tasks om Planner
-            $sitedata = [];
+            $data = [];
             foreach ($company_list as $cid => $cname) {
                 $company = Company::find($cid);
                 $obj_site = (object) [];
@@ -427,11 +465,26 @@ class SitePlannerExportController extends Controller {
                 }
 
                 //}
-                $sitedata[] = $obj_site;
+                $data[] = $obj_site;
             }
 
+
+            //dd($data);
+            $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+            // Create directory if required
+            if (!is_dir(public_path($dir)))
+                mkdir(public_path($dir), 0777, true);
+            $output_file = public_path($dir . "/Company Site Plan ($company_list_csv) " . Carbon::now()->format('YmdHis') . '.pdf');
+            touch($output_file);
+            SitePlannerCompanyPdf::dispatch($data, $output_file);
+
+            return redirect('/manage/report/recent');
+
+
+
+
             //return view('pdf/plan-company', compact('company_id', 'date', 'weeks', 'sitedata'));
-            $pdf = PDF::loadView('pdf/plan-company', compact('company_id', 'date', 'weeks', 'sitedata'));
+            //$pdf = PDF::loadView('pdf/plan-company', compact('company_id', 'date', 'weeks', 'data'));
             //->setOption('page-width', 200)->setOption('page-height', 287)
             //->setOption('margin-bottom', 10)
             //->setOrientation('landscape');
@@ -493,7 +546,7 @@ class SitePlannerExportController extends Controller {
             $data[] = $obj_site;
             //dd($sitedata);
 
-            $output_file = public_path($dir.'/Site Attendance '.sanitizeFilename($site->name).' '.Carbon::now()->format('YmdHis').'.pdf');
+            $output_file = public_path($dir . '/Site Attendance ' . sanitizeFilename($site->name) . ' ' . Carbon::now()->format('YmdHis') . '.pdf');
             touch($output_file);
 
             //return view('pdf/site-attendance', compact('site', 'data', 'company', 'from', 'to'));
@@ -519,7 +572,7 @@ class SitePlannerExportController extends Controller {
             //$sitedata[] = $obj_site;
             //dd($company_attendance);
 
-            $output_file = public_path($dir.'/Company Attendance '.sanitizeFilename($company->name).' '.Carbon::now()->format('YmdHis').'.pdf');
+            $output_file = public_path($dir . '/Company Attendance ' . sanitizeFilename($company->name) . ' ' . Carbon::now()->format('YmdHis') . '.pdf');
             touch($output_file);
 
             //return view('pdf/company-attendance', compact('data', 'company', 'from', 'to'));

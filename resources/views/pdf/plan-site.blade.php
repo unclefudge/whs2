@@ -55,7 +55,7 @@
 <body>
 <div class="container">
     <?php $site_count = 0; ?>
-    @foreach($sitedata as $siteplan)
+    @foreach($data as $siteplan)
         <?php $site = App\Models\Site\Site::find($siteplan->site_id) ?>
         <?php $site_count ++ ?>
         <div class="row">
@@ -103,7 +103,7 @@
             </table>
             <br>
         @endforeach
-        @if ($site_count < count($sitedata))
+        @if ($site_count < count($data))
             <div class="page"></div>
         @endif
     @endforeach

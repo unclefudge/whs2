@@ -65,9 +65,8 @@
                         <hr style="margin: 5px 0px 15px 0px">
                         <div class="row">
                             <div class="col-md-3"><h4>Export Planner by Site</h4></div>
-                            <div class="col-md-3">
-                                {!! Form::select('site_id', Auth::user()->authSitesSelect('view.site.export', '1', 'all'),
-                                null, ['class' => 'form-control bs-select', 'id' => 'site_id']) !!}
+                            <div class="col-md-6">
+                                {!! Form::select('site_id', Auth::user()->authSitesSelect('view.site.export', '1', 'ALL'), null, ['class' => 'form-control select2', 'name' => 'site_id[]', 'id' => 'site_id', 'multiple' ]) !!}
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn green" name="export_site" value="true"> View PDF</button>
@@ -76,9 +75,8 @@
                         <br>
                         <div class="row">
                             <div class="col-md-3"><h4>Export Planner by Site (Client)</h4></div>
-                            <div class="col-md-3">
-                                {!! Form::select('site_id_client', Auth::user()->authSitesSelect('view.site.export', '1', 'all'),
-                                null, ['class' => 'form-control bs-select', 'id' => 'site_id']) !!}
+                            <div class="col-md-6">
+                                {!! Form::select('site_id_client', Auth::user()->authSitesSelect('view.site.export', '1', 'ALL'), null, ['class' => 'form-control select2', 'name' => 'site_id_client[]', 'id' => 'site_id_client', 'multiple' ]) !!}
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn green" name="export_site_client" value="true"> View PDF</button>
@@ -87,9 +85,8 @@
                         <br>
                         <div class="row">
                             <div class="col-md-3"><h4>Export Planner by Company</h4></div>
-                            <div class="col-md-3">
-                                {!! Form::select('company_id', Auth::user()->company->companiesSelect('all'),
-                                null, ['class' => 'form-control bs-select', 'id' => 'company_id',]) !!}
+                            <div class="col-md-6">
+                                {!! Form::select('company_id', Auth::user()->company->companiesSelect('all'), null, ['class' => 'form-control select2', 'name' => 'company_id[]', 'id' => 'company_id', 'multiple' ]) !!}
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn green" name="export_company" value="true"> View PDF</button>
@@ -113,15 +110,29 @@
     <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
+@section('page-level-styles-head')
+    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+@stop
+
 @section('page-level-plugins')
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script>
+    $(document).ready(function () {
+        /* Select2 */
+        $("#site_id").select2({placeholder: "All Sites", width: '100%'});
+        $("#site_id_client").select2({placeholder: "All Sites", width: '100%'});
+        $("#company_id").select2({placeholder: "All Companies", width: '100%'});
+
+    });
+
     $('.date-picker').datepicker({
         autoclose: true,
         format: 'dd/mm/yyyy',

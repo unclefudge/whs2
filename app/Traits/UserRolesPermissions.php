@@ -450,8 +450,8 @@ trait UserRolesPermissions {
         }
         asort($array);
 
-        if ($prompt == 'all')
-            return ($prompt && count($array) > 1) ? $array = array('' => 'All Sites') + $array : $array;
+        if ($prompt == 'ALL')
+            return ($prompt && count($array) > 1) ? $array = array('all' => 'All Sites') + $array : $array;
 
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Site') + $array : $array;
     }
