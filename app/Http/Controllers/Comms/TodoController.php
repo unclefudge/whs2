@@ -215,6 +215,8 @@ class TodoController extends Controller {
         if (!Auth::user()->allowed2('edit.todo', $todo))
             return view('errors/404');
 
+        dd($request->all());
+
         // Update done by if Todo marked as completed
         if ($request->get('status') == 0 && !$todo->done_by) {
             $todo_request['done_by'] = Auth::user()->id;

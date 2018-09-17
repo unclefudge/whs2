@@ -154,7 +154,7 @@
                                     <button class="btn green" id="save">Save</button>
                                     <button class="btn blue" id="close">Mark Complete</button>
                                 @endif
-                                @if(!$todo->status && ($todo->type == 'general' || $todo->type == 'hazard'))
+                                @if(!$todo->status && ($todo->type == 'general' || ($todo->type == 'hazard' && Auth::user()->allowed2('edit.todo', $todo))))
                                     <button class="btn green" id="open">Re-open Task</button>
                                 @endif
                             </div>

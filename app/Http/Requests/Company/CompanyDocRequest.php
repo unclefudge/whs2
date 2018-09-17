@@ -32,7 +32,7 @@ class CompanyDocRequest extends Request {
             'lic_no'      => 'required_if:category_id,7',
             'lic_type'    => 'required_if:category_id,7',
             'asb_type'    => 'required_if:category_id,8',
-            'expiry'      => 'required_if:category_id,1,2,3,4,5,7,8,9,10',
+            'expiry'      => 'required_if:category_id,1,2,3,4,5,7,8,9,10,11',
             'tag_date'    => 'required_if:category_id,6',
             //'expiry'      => 'required',
             'singlefile'  => 'required_if:filetype,pdf',
