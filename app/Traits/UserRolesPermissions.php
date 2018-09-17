@@ -584,7 +584,7 @@ trait UserRolesPermissions {
             if ($record->type == 'hazard') {
                 $hazard = SiteHazard::find($record->type_id);
                 if ($action == 'view' && $this->allowed2('view.site.hazard', $hazard)) return true; // User is allowed to view Site Hazard
-                if ($action == 'edit' && $hazard->site->isSupervisorOrAreaSupervisor($this)) return true; // User Supervisor of Site
+                if ($action == 'edit' && ($hazard->site->isSupervisorOrAreaSupervisor($this) || $this->allowed2('view.site.hazard', $hazard))) return true; // User Supervisor of Site
             }
         }
 
