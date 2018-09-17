@@ -209,8 +209,7 @@ class TodoController extends Controller {
         $todo = Todo::findorFail($id);
         $old_status = $todo->status;
         $todo_request = $request->all();
-
-        //dd($request->all());
+        
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.todo', $todo))
             return view('errors/404');
