@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SupportTicketCreated extends Mailable implements ShouldQueue {
+class SupportTicketUpdated extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 
@@ -36,8 +36,8 @@ class SupportTicketCreated extends Mailable implements ShouldQueue {
     {
         $file_path = public_path($this->action->attachment_url);
         if ($this->action->attachment && file_exists($file_path))
-            return $this->markdown('emails/misc/support-ticket-created')->subject('SafeWorksite - New Support Ticket')->attach($file_path);
+            return $this->markdown('emails/misc/support-ticket-updated')->subject('SafeWorksite - Support Ticket Updated')->attach($file_path);
 
-        return $this->markdown('emails/misc/support-ticket-created')->subject('SafeWorksite - New Support Ticket');
+        return $this->markdown('emails/misc/support-ticket-updated')->subject('SafeWorksite - Support Ticket Updated');
     }
 }

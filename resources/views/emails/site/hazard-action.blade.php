@@ -17,7 +17,7 @@ A hazard has been updated for {{ $hazard->site->name }}.
 | **Supervisor**  | {{ $hazard->site->supervisorsSBC() }} |
 | **Rating**  | {{ $hazard->ratingText }} |
 | **Location**  | {{ $hazard->location }} |
-| **Reason**  | {{ $hazard->reason }} |
+| **Reason**  | {!! nl2br($hazard->reason) !!} |
 | **Actions Taken**  | {{ $action->action }} |
 | **Submitted by**  | {{ $action->user->name }} ({{ $action->user->company->name }}) |
 | **Submitted at**  | {{ $action->created_at->format('d/m/Y g:i a') }} |

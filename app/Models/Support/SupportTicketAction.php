@@ -34,6 +34,16 @@ class SupportTicketAction extends Model {
     }
 
     /**
+     * A Support Ticket belongs to a user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by');
+    }
+
+    /**
      * Save attachment to existing Issue
      */
     public function saveAttachment($file)
@@ -60,37 +70,33 @@ class SupportTicketAction extends Model {
     /**
      * Email Action Notification
      */
-    public function emailAction($action)
+    public function emailAction()
     {
-        $ticket = SupportTicket::findOrFail($action->ticket_id);
+        $ticket = SupportTicket::findOrFail($this->ticket_id);
 
-        $email_list = env('EMAIL_ME');
+        $email_to = [env('EMAIL_DEV')];
         if (\App::environment('prod', 'dev'))
-            $email_list = "jo@capecod.com.au; tara@capecod.com.au; ".$email_list;
-        $email_list = explode(';', $email_list);
-        $email_list = array_map('trim', $email_list); // trim white spaces
-        $email_user =  $ticket->createdBy->email;
-        $data = [
-            'id'                => $ticket->id,
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'name'              => $ticket->name,
-            'priority'          => $ticket->priority_text,
-            'summary'           => $this->action,
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-        ];
-        $filename = $this->attachment;
-        Mail::send('emails/supportTicket', $data, function ($m) use ($email_list, $email_user, $filename, $action) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_list);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Support Ticket Update Notification');
-            $file_path = public_path('filebank/support/ticket/'.$filename);
-            if ($filename && file_exists($file_path))
-                $m->attach($file_path);
-        });
+            $email_to = "jo@capecod.com.au; ".$email_to;
+
+        $email_user = (Auth::check() && validEmail($this->createdBy->email)) ? $this->createdBy->email : '';
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Misc\SupportTicketUpdated($ticket, $this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Misc\SupportTicketUpdated($ticket, $this));
     }
+
+    /**
+     * Get the Attachment URL (setter)
+     */
+    public function getAttachmentUrlAttribute()
+    {
+        if ($this->attributes['attachment'])
+            return '/filebank/support/ticket/' . $this->attributes['attachment'];
+
+        return '';
+    }
+
 
     /**
      * Get the owner of record  (getter)

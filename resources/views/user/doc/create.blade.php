@@ -32,14 +32,7 @@
                         {!! Form::model('userdoc', ['action' => ['User\UserDocController@store', $user->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
                         {!! Form::hidden('create', 'true') !!}
-
-                        <div class="alert alert-danger alert-dismissable" style="display: none;" id="multifile-error">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            <i class="fa fa-warning"></i><strong> Error(s) have occured</strong>
-                            <ul>
-                                <li>Before you can upload multiple files you are required to select Category</li>
-                            </ul>
-                        </div>
+                        {!! Form::hidden('filetype', 'pdf', ['id' => 'filetype']) !!}
 
                         <div class="form-body">
                             <div class="row">
@@ -47,8 +40,7 @@
                                     {{-- Doc type --}}
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}" id="category_id_form">
                                         {!! Form::label('category_id', 'Document type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id',Auth::user()->userDocTypeSelect('add', $user, 'prompt'),
-                                             $category_id, ['class' => 'form-control bs-select']) !!}
+                                        {!! Form::select('category_id',Auth::user()->userDocTypeSelect('add', $user, 'prompt'), $category_id, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                     {{-- Name --}}

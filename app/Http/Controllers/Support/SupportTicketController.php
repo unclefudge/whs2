@@ -111,19 +111,19 @@ class SupportTicketController extends Controller {
      */
     public function addAction(Request $request)
     {
-        $ticket_id = $request->get('ticket_id');
+        $ticket_id = request('ticket_id');
         $ticket = SupportTicket::findorFail($ticket_id);
 
         //Add action to ticket
         if ($ticket) {
-            $action = $ticket->actions()->save(new SupportTicketAction(['action' => $request->get('action')]));
+            $action = $ticket->actions()->save(new SupportTicketAction(['action' => request('action')]));
 
             // Handle attachment
             if ($request->hasFile('attachment'))
                 $action->saveAttachment($request->file('attachment'));
 
             // Email action
-            $action->emailAction($action);
+            $action->emailAction();
 
             $ticket->updated_by = Auth::user()->id;
             $ticket->touch();

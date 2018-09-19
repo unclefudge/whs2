@@ -1,16 +1,16 @@
 @component('mail::message')
-# New Support Ticket
+# Support Ticket Updated
 
-A new support ticket has been created on {{ config('app.name') }} with the following details:
+A support ticket has been updated on {{ config('app.name') }} with the following details:
 
 |        |        |
 | ------:|--------|
 | **Ticket ID**  | {{ $ticket->id  }} |
 | **Priority**  | {{ $ticket->priority_text  }} |
 | **Name** | {{ $ticket->name  }} |
-| **Description** | {{ $ticket->summary  }} |
-| **Date/Time** | {{ $ticket->created_at->format('d/m/Y g:i a')  }} |
-| **Created By** | {{ $ticket->createdBy->name  }} |
+| **Action** | {{ $action->action  }} |
+| **Date/Time** | {{ $action->created_at->format('d/m/Y g:i a')  }} |
+| **Created By** | {!! (\App\User::find($action->created_by)) ? \App\User::find($action->created_by)->name : '' !!} |
 
 @component('mail::button', ['url' => config('app.url').'/support/ticket/'.$ticket->id])
 View Ticket

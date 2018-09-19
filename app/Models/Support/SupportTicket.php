@@ -79,37 +79,17 @@ class SupportTicket extends Model {
      */
     public function emailTicket($action)
     {
-        // Send out Welcome Email to user
-        //Mail::to('fudge@jordan.net.au')->send(new \App\Mail\Misc\SupportTicketCreated($this));
-
-
-        $email_list = env('EMAIL_ME');
+        $email_to = [env('EMAIL_DEV')];
         if (\App::environment('prod', 'dev'))
-            $email_list = "jo@capecod.com.au; ".$email_list;
-        $email_list = explode(';', $email_list);
-        $email_list = array_map('trim', $email_list); // trim white spaces
-        $email_user =  $this->createdBy->email;
-        $data = [
-            'id'                => $this->id,
-            'date'              => Carbon::now()->format('d/m/Y g:i a'),
-            'name'              => $this->name,
-            'priority'          => $this->priority_text,
-            'summary'           => $this->summary,
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
-        ];
-        $filename = $this->attachment;
-        Mail::send('emails/supportTicket', $data, function ($m) use ($email_list, $email_user, $filename, $action) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_list);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Support Ticket Notification');
-            $file_path = public_path('filebank/support/ticket/'.$filename);
-            if ($filename && file_exists($file_path))
-                $m->attach($file_path);
-        });
-        
+            $email_to = "jo@capecod.com.au; ".$email_to;
+
+
+        $email_user = (Auth::check() && validEmail($this->createdBy->email)) ? $this->createdBy->email : '';
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Misc\SupportTicketCreated($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Misc\SupportTicketCreated($this, $action));
     }
 
     /**
@@ -129,6 +109,16 @@ class SupportTicket extends Model {
 
     }
 
+    /**
+     * Get the Attachment URL (setter)
+     */
+    public function getAttachmentUrlAttribute()
+    {
+        if ($this->attributes['attachment'])
+            return '/filebank/support/ticket/' . $this->attributes['attachment'];
+
+        return '';
+    }
     /**
      * Get the owner of record  (getter)
      *
