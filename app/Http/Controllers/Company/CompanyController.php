@@ -204,6 +204,29 @@ class CompanyController extends Controller {
             $company->deactivateAllStaff();
             $company->deleteFromPlanner(Carbon::today());
             CompanyLeave::where('from', '>=', Carbon::today()->toDateTimeString())->where('company_id', $company->id)->delete();  // delete future leave
+
+            // Archive active/pending docs
+            $docs = $company->companyDocs()->where('status', '>', 0);
+            $docs_count = count($docs);
+            foreach($docs as $doc) {
+                $doc->status = 0;
+                $doc->save();
+                $doc->closeToDo();
+            }
+            if ($docs_count)
+                Toastr::error("($docs_count) Documents archived");
+
+            // Archive active/pending SWMS
+            $wms = $company->wmsDocs()->where('status', '>', 0)->where('company_id', Auth::user()->company_id)->get();
+            $wms_count = count($wms);
+            foreach($wms as $doc) {
+                $doc->status = -1;
+                $doc->save();
+                $doc->closeToDo();
+            }
+            if ($wms_count)
+                Toastr::error("($wms_count) SWMS archived");
+
             Toastr::error("Deactivated Company");
         } elseif ($company->status && !$old_status) {
             Toastr::success("Reactivated Company");

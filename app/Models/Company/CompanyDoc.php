@@ -172,46 +172,6 @@ class CompanyDoc extends Model {
             Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
         elseif ($email_to)
             Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
-
-
-        /*
-
-        $company = Company::find($this->for_company_id);
-        if (\App::environment('prod')) {
-            if (!$email_to) {
-                $email_to = [];
-                $email_to[] = $company->seniorUsersEmail();
-
-                // Send CC to Parent Company Account
-                $email_user = $company->reportsTo()->notificationsUsersEmailType('company.doc');
-            }
-        } else {
-            $email_to = [env('EMAIL_ME')];
-            $email_user = [env('EMAIL_ME')];
-        }
-
-        $mesg = ($expired == true) ? "has Expired " . $this->expiry->format('d/m/Y') : "due to expire " . $this->expiry->format('d/m/Y');
-
-        $data = [
-            'user_email'        => 'do-not-reply@safeworksite.com.au',
-            'user_fullname'     => 'Safeworksite',
-            'user_company_name' => 'Safeworksite',
-            'company_name'      => $company->name_alias,
-            'doc_name'          => $this->name,
-            'doc_attachment'    => $this->attachment,
-            'mesg'              => $mesg,
-            'url'               => URL::to('/company') . '/' . $this->for_company_id,
-        ];
-        $doc = $this;
-        */
-        /*
-        Mail::send('emails/company-doc-expired', $data, function ($m) use ($email_to, $email_user, $doc, $mesg, $data) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            if ($email_user)
-                $m->cc($email_user);
-            $m->subject('Company Document ' . $doc->name . ' ' . $mesg);
-        });*/
     }
 
 
@@ -220,7 +180,6 @@ class CompanyDoc extends Model {
      */
     public function getAttachmentUrlAttribute()
     {
-        //$url = URL::to('/filebank') . '/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
         if ($this->attributes['attachment'])// && file_exists(public_path('/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'])))
             return '/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
 

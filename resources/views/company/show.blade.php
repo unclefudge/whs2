@@ -64,6 +64,11 @@
                     @include('company/_edit-whs')
                 @endif
 
+                {{-- SWMS --}}
+                @if (Auth::user()->allowed2('view.company.whs', $company))
+                    @include('company/_show-swms')
+                @endif
+
             </div>
         </div>
     </div>
@@ -164,6 +169,7 @@
                 text: "Once you make a company <b>Inactive</b> and save it will also:<br><br>" +
                 "<div style='text-align: left'><ul>" +
                 "<li>Make all users within this company 'Inactive'</li>" +
+                "<li>Archive all active/pending documents & SWMS</li>" +
                 "<li>Remove company from planner for all future events</li>" +
                 "</ul></div>",
                 allowOutsideClick: true,
