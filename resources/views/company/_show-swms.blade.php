@@ -19,7 +19,14 @@
                         <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($company->isCompliant()) ? 'color: #26C281' : '' !!}"></i>
                             <a href="/safety/doc/wms/{{ $doc->id }}" class="linkDark" target="_blank">{{ $doc->name }}</a>
                         </div>
-                        <div class="col-xs-4">{{ $doc->updated_at->format('d/m/Y') }}</div>
+                        <div class="col-xs-4">
+                            <?php
+                            $now = \Carbon\Carbon::now();
+                            $twoyearago = $now->subYears(2)->toDateTimeString();
+                            ?>
+                            <span class="{!! ($doc->updated_at < $twoyearago) ? 'label label-danger label-sm' : '' !!}">{{ $doc->updated_at->format('d/m/Y') }}</span>
+                        </div>
+
                     @endif
                     {{-- Pending --}}
                     @if ($doc->status == 2)
