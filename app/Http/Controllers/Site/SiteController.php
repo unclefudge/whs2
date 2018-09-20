@@ -88,6 +88,8 @@ class SiteController extends Controller {
         if ($request->get('supervisors'))
             $newSite->supervisors()->sync($request->get('supervisors'));
 
+        $newSite->emailSite('new');
+
         Toastr::success("Created new site");
 
         return redirect('site');
@@ -138,6 +140,7 @@ class SiteController extends Controller {
     public function update(SiteRequest $request, $slug)
     {
         $site = Site::where(compact('slug'))->firstOrFail();
+        $old_status = $site->status;
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site', $site))
@@ -158,6 +161,10 @@ class SiteController extends Controller {
             $site->supervisors()->sync($request->get('supervisors'));
         else
             $site->supervisors()->detach();
+
+        // Email Site if status change
+        if ($site->status != $old_status)
+            $site->emailSite();
 
         Toastr::success("Saved changes");
         $tabs = explode(':', $request->get('tabs'));

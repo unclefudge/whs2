@@ -46,6 +46,7 @@
                         @endif
                         {{-- Site --}}
                         <h3 class="font-green form-section">Site Notifications</h3>
+                        {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Site Created/Status change', 'Site Status', 'created, status change', 'Automatically includes relevant Site/Area Supervisors') !!}
                         {!! notificationSelect($notificationTypes::type('n.site.accident'), 'Accident Reports', 'Site Accident', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}
                         {!! notificationSelect($notificationTypes::type('n.site.hazard'), 'Hazard Reports', 'Site Hazard', 'lodgement, updated', 'Automatically includes: Site/Area Supervisors') !!}
                         @if (Auth::user()->isCC())

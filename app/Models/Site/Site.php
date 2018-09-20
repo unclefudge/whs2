@@ -3,6 +3,7 @@
 namespace App\Models\Site;
 
 use DB;
+use Mail;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Site\Planner\SiteRoster;
@@ -314,44 +315,6 @@ class Site extends Model {
     }
 
     /**
-     * A Site may have Senior Supervisors (Area Supervisors / Construction Managers)
-     *
-     * @return collection
-     */
-		 /*
-    public function seniorSupervisors()
-    {
-        $area_super_ids = $this->areaSupervisors()->pluck('id')->toArray();
-        $con_mgr_ids = [];
-        //$records = DB::table('role_user')->where('role_id', 8)->get();  // Construction Mgrs
-        //foreach ($records as $rec)
-        //    $con_mgr_ids[] = $rec->user_id;
-
-        return User::whereIn('id', array_unique(array_merge($area_super_ids,$con_mgr_ids)))->get();
-    }*/
-
-    /**
-     * An array of senior supervisors emails for this site
-     *
-     * @return string
-     */
-    /*
-    public function seniorSupervisorsEmails()
-    {
-        $array = [];
-        foreach ($this->seniorSupervisors() as $user) {
-            if ($user->status && validEmail($user->email))
-                $array[] = $user->email;
-            //foreach ($user->areaSupervisors() as $area) {
-            //    if ($area->status && validEmail($area->email))
-            //        $array[] = $area->email;
-           // }
-        }
-
-        return $array;
-    }*/
-
-    /**
      * A SiteAttendance for specific date yyyy-mm-dd
      *
      * @return \Illuminate\Database\Eloquent\Collection
@@ -536,6 +499,23 @@ class Site extends Model {
     }
 
     /**
+     * Email Site
+     */
+    public function emailSite($action = '')
+    {
+        $email_to = [env('EMAIL_DEV')];
+
+        if (\App::environment('prod')) {
+            $email_list = $this->site->company->notificationsUsersEmailType('n.site.status');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
+
+        Mail::to($email_to)->send(new \App\Mail\Site\SiteUpdated($this, $action));
+
+    }
+
+    /**
      * Get the 'START' job task date if it exists  (getter)
      *
      * @return string;
@@ -685,6 +665,48 @@ class Site extends Model {
             $string = $this->attributes['address'] . ', ' . $string;
 
         return $string;
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getAddressFormattedAttribute()
+    {
+        $string = '';
+
+        if ($this->attributes['address'])
+            $string = strtoupper($this->attributes['address']) . '<br>';
+
+        $string .= strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return ($string) ? $string : '-';
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getAddressFormattedSingleAttribute()
+    {
+        $string = '';
+
+        if ($this->attributes['address'])
+            $string = strtoupper($this->attributes['address']) . ', ';
+
+        $string .= strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return ($string) ? $string : '-';
     }
 
     /**

@@ -72,7 +72,7 @@ Vue.component('app-weekly', {
 });
 
 Vue.component('app-site', {
-    props: ['site_id', 'site_name', 'site_code', 'site_contact'],
+    props: ['site_id', 'site_name', 'site_code', 'site_contact', 'site_address'],
     template: '#site-template',
 
     data: function () {
@@ -291,7 +291,7 @@ var myApp = new Vue({
                 return true;
             oneWeekAway = moment(this.xx.mon_now).add(7, 'days');
 
-            if (moment(this.xx.mon_now).add(7, 'days').isBefore(moment(this.xx.mon_this).add(13, 'days')))
+            if (moment(this.xx.mon_now).add(7, 'days').isBefore(moment(this.xx.mon_this).add(20, 'days')))
                 return true;
             //alert(oneWeekAway.format('YYYY-MM-DD'));
         },

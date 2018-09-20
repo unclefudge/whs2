@@ -872,6 +872,7 @@ class SitePlannerController extends Controller {
 
             $array['supervisors'] = $site_record->supervisorsSelect();
             $array['supervisors_contact'] = $site_record->supervisorsContactSBC();
+            $array['address'] = $site_record->address_formatted;
             $site_details[] = $array;
         }
 

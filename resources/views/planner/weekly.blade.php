@@ -60,8 +60,7 @@
                             <div class="col-md-5 text-center"><h4 class="bold font-green-haze">@{{ weeklyHeader(xx.mon_now, 0) }}</h4></div>
                             <div class="col-md-4 pull-right">
                                 <div class="btn-group btn-group-circle pull-right">
-                                    <!--<a href="/planner/weekly/@{{ weekDate(xx.mon_now, -7) }}" class="btn blue-hoki">Prev Week</a>-->
-                                    @if(Auth::user()->company->subscription)
+                                    @if(true || Auth::user()->company->subscription)
                                         <button v-on:click="changeWeek(weekDate(xx.mon_now, -7))" class="btn blue-hoki">Prev Week</button>
                                     @endif
                                     <button v-on:click="changeWeek(weekDate(xx.mon_this, 0))" class="btn blue-dark">This Week</button>
@@ -80,7 +79,7 @@
                                 <div class="col-xs-2">Fri @{{ weekDateHeader(xx.mon_now, 4) }}</div>
                             </div>
                             <template v-for="site in xx.sites">
-                                <app-site :site_id="site.id" :site_name="site.name" :site_code="site.code" :site_contact="site.supervisors_contact"></app-site>
+                                <app-site :site_id="site.id" :site_name="site.name" :site_code="site.code" :site_contact="site.supervisors_contact" :site_address="site.address"></app-site>
                             </template>
 
                         </div>
@@ -109,7 +108,10 @@
         <div v-show="showSite(site_id) && site_code != '0007'" class="row row-striped" style="border-bottom: 1px solid lightgrey; overflow: hidden;">
             <div class="col-xs-2 sideColBG">
                 <small>@{{ site_name | max20chars }}<br>
-                    <small>@{{ site_code }} <span v-if="xx.show_contact == 1"><br>@{{ site_contact }}</span></small>
+                    <small>
+                        <span v-if="xx.show_contact == 1"><br><span v-html="site_address"></span><br>@{{ site_contact }}</span>
+                        <span v-else>@{{ site_code }}</span>
+                    </small>
                 </small>
             </div>
             <div class="col-xs-2" v-bind:class="{ 'todayBG': weekDate(xx.mon_now, 0 ) == xx.today }">
