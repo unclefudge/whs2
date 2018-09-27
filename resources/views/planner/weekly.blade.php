@@ -22,6 +22,9 @@
         <input v-model="xx.params.site_start" type="hidden" value="{{ $site_start }}">
         <input v-model="xx.user_company_id" type="hidden" value="{{ Auth::user()->company_id }}">
         <input v-model="xx.show_contact" type="hidden" value="{{ (Auth::user()->company->parent_company) ? '1': '0' }}">
+        {{-- Extended Weekly view for trades
+        13-Bricklayer, 4-Electrician, 5-Floor and Wall Tiler, 6-Gyprocker, 7-Painter, 8-Plumber, 9-Roofer, 20-Roof Plumber, 27-Renderer, 11-Stairs --}}
+        <input v-model="xx.plan_ahead" type="hidden" value="{{ (!empty(array_intersect([13, 4, 5, 6, 7, 8, 9, 20, 27, 11], Auth::user()->company->tradesSkilledIn->pluck('id')->toArray()))) ? '48': '20' }}">
         @if (Auth::user()->company->parent_company && Auth::user()->company->reportsTo()->id == 3)
             <div class="note note-warning">
                 This is a guide only. Contact with Site Supervisor is still required.

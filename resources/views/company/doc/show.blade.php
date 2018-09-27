@@ -103,6 +103,16 @@
                         {!! Form::model($doc, ['method' => 'PATCH', 'action' => ['Company\CompanyDocController@update',$company->id, $doc->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
 
+                        @if (file_exists(public_path($doc->attachment_url)) && filesize(public_path($doc->attachment_url)) == 0)
+                            <div class="alert alert-danger">
+                                <i class="fa fa-warning"></i> <b>Error(s) have occured</b><br>
+                                <ul>
+                                    <li>Uploaded file failed to upload or is an empty file ie. 0 bytes.</li>
+                                </ul>
+                                <br>Please verify original file and upload new one.
+                            </div>
+                        @endif
+
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-9">

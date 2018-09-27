@@ -164,7 +164,7 @@ class SiteHazardController extends Controller {
             DB::raw('DATE_FORMAT(site_hazards.resolved_at, "%d/%m/%y") AS nicedate2'),
             DB::raw('CONCAT(users.firstname, " ", users.lastname) AS fullname'),
             'site_hazards.reason', 'site_hazards.action_required', 'site_hazards.attachment',
-            'site_hazards.status',
+            'site_hazards.status', 'site_hazards.location', 'site_hazards.rating', 'site_hazards.source',
             'sites.name', 'sites.code', 'sites.company_id',
         ])
             ->join('sites', 'site_hazards.site_id', '=', 'sites.id')
@@ -185,6 +185,13 @@ class SiteHazardController extends Controller {
             })
             ->editColumn('action_required', function ($issue) {
                 return ($issue->action_required) ? 'Yes' : 'No';
+            })
+            ->editColumn('rating', function ($issue) {
+                if ($issue->rating == 3) return 'High';
+                if ($issue->rating == 2) return 'Med';
+                if ($issue->rating == 1) return 'Low';
+
+                return 'None';
             })
             ->editColumn('nicedate2', function ($issue) {
                 return ($issue->nicedate2 == '00/00/00') ? '' : $issue->nicedate2;

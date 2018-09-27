@@ -138,7 +138,7 @@ class SiteAccidentController extends Controller {
         $accident_ids = Auth::user()->siteAccidents($request->get('status'))->pluck('id')->toArray();
         $accident_records = SiteAccident::select([
             'site_accidents.id', 'site_accidents.site_id', 'site_accidents.name',
-            'site_accidents.location', 'site_accidents.nature',
+            'site_accidents.location', 'site_accidents.nature', 'site_accidents.info',
             'site_accidents.status', 'sites.company_id',
             DB::raw('DATE_FORMAT(site_accidents.date, "%d/%m/%y") AS nicedate'),
             DB::raw('DATE_FORMAT(site_accidents.resolved_at, "%d/%m/%y") AS nicedate2'),

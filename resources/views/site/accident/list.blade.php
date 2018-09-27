@@ -61,12 +61,13 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
-                                <th width="5%"> ID</th>
-                                <th width="10%"> Date</th>
-                                <th width="10%"> Resolved</th>
+                                <th> ID</th>
+                                <th> Date</th>
+                                <th> Resolved</th>
                                 <th> Site</th>
                                 <th> Name</th>
                                 <th> Supervisor</th>
+                                <th> Description</th>
                                 <th> Location</th>
                                 <th> Nature</th>
                             </tr>
@@ -117,6 +118,7 @@
             {data: 'sitename', name: 'sites.name'},
             {data: 'name', name: 'site_accidents.name'},
             {data: 'supervisor', name: 'supervisor', orderable: false, searchable: false},
+            {data: 'info', name: 'site_accidents.info', orderable: false},
             {data: 'location', name: 'site_accidents.location', orderable: false},
             {data: 'nature', name: 'site_accidents.nature', orderable: false},
         ],

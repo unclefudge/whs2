@@ -103,7 +103,7 @@
                                     <div class="form-group {!! fieldHasError('expiry', $errors) !!}" style="display: none" id="fields_expiry">
                                         {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
                                         <div class="input-group date date-picker">
-                                            {!! Form::text('expiry', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                            {!! Form::text('expiry', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", 'readonly']) !!}
                                             <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                         </div>
                                         {!! fieldErrorMessage('expiry', $errors) !!}

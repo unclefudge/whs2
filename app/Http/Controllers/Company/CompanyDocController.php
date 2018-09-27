@@ -93,6 +93,7 @@ class CompanyDocController extends Controller {
             // If allowed to view then redirect to View only
             if (Auth::user()->allowed2("view.company.doc", $doc))
                 return redirect("company/$company->id/doc/$doc->id");
+
             return view('errors/404');
         }
 
@@ -114,7 +115,7 @@ class CompanyDocController extends Controller {
             return json_encode("failed");
 
         // Delete attached file
-        if ( $doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
+        if ($doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
             unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
 
         $doc->closeToDo();
@@ -169,6 +170,7 @@ class CompanyDocController extends Controller {
         $doc = CompanyDoc::create($doc_request);
 
         // Handle attached file
+        $empty_file = 0;
         if ($request->hasFile('singlefile') || $request->hasFile('singleimage')) {
             $file = ($request->hasFile('singlefile')) ? $request->file('singlefile') : $request->file('singleimage');
 
@@ -181,6 +183,9 @@ class CompanyDocController extends Controller {
             $file->move($path, $name);
             $doc->attachment = $name;
             $doc->save();
+
+            if (file_exists(public_path("$path/$name")) && filesize(public_path("$path/$name")) == 0)
+                $empty_file = 1;
         }
         Toastr::success("Uploaded document");
 
@@ -201,6 +206,9 @@ class CompanyDocController extends Controller {
                 $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
         }
         $doc->save();
+
+        if ($empty_file)
+            return redirect("company/$company->id/doc/$doc->id/edit")->withErrors(['empty_file' => ['Uploaded file is empty ie. 0 bytes']]);
 
         return redirect("company/$company->id/doc/upload");
     }
@@ -474,7 +482,7 @@ class CompanyDocController extends Controller {
                 if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
                     $details .= "<br>Type: $doc->ref_type";
                 if (in_array($doc->category_id, [6])) // Test&Tag
-                    $details = 'Test Date: '.$doc->expiry->subMonths($doc->ref_type)->format('d/m/Y');
+                    $details = 'Test Date: ' . $doc->expiry->subMonths($doc->ref_type)->format('d/m/Y');
                 if (in_array($doc->category_id, [7])) // CL + Asb
                     $details = "Lic no: $doc->ref_no  &nbsp; Class: " . $doc->company->contractorLicenceSBC();
                 if (in_array($doc->category_id, [8])) // CL + Asb

@@ -70,11 +70,6 @@ class ReportController extends Controller {
 
                 if (!$deleted)
                     $reports[$file] = filesize(public_path("$dir/$file"));
-
-                //$done = substr($file, - 5, 1);
-                //preg_match('#\((.*?)\)#', $file, $match);
-                //$site_id = $match[1];
-                //$site = Site::find($site_id);
             }
         }
 

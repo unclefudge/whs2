@@ -69,7 +69,9 @@
                                 <th> Initiated By</th>
                                 <th> Supervisor</th>
                                 <th> Safety Concern</th>
-                                <th width="5%"> Req</th>
+                                <th>Location</th>
+                                <th>Source</th>
+                                <th width="5%"> Rating</th>
                                 <th width="2%"></th>
                             </tr>
                             </thead>
@@ -120,7 +122,9 @@
             {data: 'fullname', name: 'fullname', orderable: false, searchable: false},
             {data: 'supervisor', name: 'supervisor', orderable: false, searchable: false},
             {data: 'reason', name: 'site_hazards.reason'},
-            {data: 'action_required', name: 'site_hazards.action_required'},
+            {data: 'location', name: 'site_hazards.location'},
+            {data: 'source', name: 'site_hazards.source'},
+            {data: 'rating', name: 'rating'},
             {data: 'attachment', name: 'site_hazards.attachment', orderable: false, searchable: false},
         ],
         order: [

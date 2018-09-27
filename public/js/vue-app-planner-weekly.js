@@ -291,7 +291,7 @@ var myApp = new Vue({
                 return true;
             oneWeekAway = moment(this.xx.mon_now).add(7, 'days');
 
-            if (moment(this.xx.mon_now).add(7, 'days').isBefore(moment(this.xx.mon_this).add(20, 'days')))
+            if (moment(this.xx.mon_now).add(7, 'days').isBefore(moment(this.xx.mon_this).add(this.xx.plan_ahead, 'days')))
                 return true;
             //alert(oneWeekAway.format('YYYY-MM-DD'));
         },
