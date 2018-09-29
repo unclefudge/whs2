@@ -307,7 +307,7 @@ class ReportController extends Controller {
 
         $expired_docs = CompanyDoc::select([
             'company_docs.id', 'company_docs.category_id', 'company_docs.name', 'company_docs.expiry',
-            'company_docs.for_company_id', 'company_docs.company_id', 'company_docs.status',
+            'company_docs.for_company_id', 'company_docs.company_id', 'company_docs.attachment', 'company_docs.status',
             'companys.status',
         ])
             ->join('companys', 'company_docs.for_company_id', '=', 'companys.id')
