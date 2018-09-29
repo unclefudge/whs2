@@ -66,6 +66,9 @@
                             <tr>
                                 <td><a href="/manage/report/attendance">Attendance</a></td>
                             </tr>
+                            <tr>
+                                <td><a href="/manage/report/expired_company_docs">Expired Company Documents</a></td>
+                            </tr>
                             @if (Auth::user()->isCC())
                                 <tr>
                                     <td><a href="/manage/report/payroll">Payroll</a></td>

@@ -113,10 +113,6 @@
                             </div>
                         @endif
 
-                        <button type="button" class="btn btn-circle btn-primary">Donate Australia</button>
-                        <button type="button" class="btn btn-circle btn-primary"> Donate US/Canada</button>
-                        <button type="button" class="btn btn-circle btn-primary btn-sm"> Area No. X2182</button>
-
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-9">

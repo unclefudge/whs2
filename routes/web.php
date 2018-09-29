@@ -93,6 +93,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/licence_override', 'Misc\ReportController@licenceOverride');
     Route::get('/manage/report/attendance', 'Misc\ReportController@attendance');
     Route::get('/manage/report/attendance/dt/attendance', 'Misc\ReportController@getAttendance');
+    Route::get('/manage/report/expired_company_docs', 'Misc\ReportController@expiredCompanyDocs');
+    Route::get('/manage/report/expired_company_docs/dt/expired_company_docs', 'Misc\ReportController@getExpiredCompanyDocs');
     Route::get('/manage/report/payroll', 'Misc\ReportController@payroll');
     Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
 

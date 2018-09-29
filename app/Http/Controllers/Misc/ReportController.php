@@ -7,9 +7,7 @@ use Session;
 use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteAttendance;
-use App\Models\Site\Planner\SiteCompliance;
-use App\Models\Site\SiteQa;
-use App\Models\Misc\Permission2;
+use App\Models\Company\CompanyDoc;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -159,16 +157,6 @@ class ReportController extends Controller {
     }
 
     /*
-     * Site Attendance Report
-     */
-    public function attendance()
-    {
-        $companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
-
-        return view('manage/report/attendance', compact('companies'));
-    }
-
-    /*
      * Payroll Report
      */
     public function payroll()
@@ -177,6 +165,17 @@ class ReportController extends Controller {
         $companies = Auth::user()->company->companies();
 
         return view('manage/report/payroll', compact('companies'));
+    }
+
+
+    /*
+     * Site Attendance Report
+     */
+    public function attendance()
+    {
+        //$companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
+
+        return view('manage/report/attendance'); // compact('companies'));
     }
 
     /**
@@ -236,6 +235,101 @@ class ReportController extends Controller {
                 return '<a href="/company/' . $attendance->user->company_id . '">' . $attendance->user->company->name . '</a>';
             })
             ->rawColumns(['id', 'full_name', 'companys.name', 'sites.name'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /*
+     * Expired Company Docs Report
+     */
+    public function expiredCompanyDocs()
+    {
+        return view('manage/report/expired_company_docs');
+    }
+
+    /**
+     * Get Expired Company Docs user is authorise to view
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getExpiredCompanyDocs()
+    {
+
+        $site_id_all = (request('site_id_all') == 'all') ? '' : request('site_id_all');
+        $site_id_active = (request('site_id_active') == 'all') ? '' : request('site_id_active');
+        $site_id_completed = (request('site_id_completed') == 'all') ? '' : request('site_id_completed');
+        $company_id = (request('company_id') == 'all') ? '' : request('company_id');
+
+        $today = Carbon::today();
+        $days_30 = $today->addDays(30)->format('Y-m-d');
+        if (request('expiry') > 0) {
+            $date_to = $today->addDays(request('expiry'))->format('Y-m-d');
+            $date_from = $today->format('Y-m-d');
+        } else {
+            $date_to = $today->format('Y-m-d');
+            $date_from = $today->subDays(abs(request('expiry')))->format('Y-m-d');
+        }
+
+        $company_ids = ($company_id) ? [$company_id] : Auth::user()->company->companies()->pluck('id')->toArray();
+
+
+        $company_docs = CompanyDoc::whereIn('for_company_id', $company_ids)
+            //->where('companys.status', 1)
+            //->whereDate('expiry', '>=', $date_from)
+            ->whereDate('expiry', '<=', $days_30)
+            ->where('for_company_id', '<>', 3)
+            ->get();
+
+        //dd($company_docs->get());
+        $expired_docs = [];
+        foreach ($company_docs as $doc) {
+            if ($doc->company->status) {
+                $exp = 'Replaced';
+                if (!$doc->company->activeCompanyDoc($doc->category_id)) {
+                    $expired_docs[] = $doc->id;
+                    $exp = 'Expired';
+                }
+               // echo "[$doc->id] " . $doc->company->name . " - $doc->name ($doc->category_id) $exp<br>";
+            }
+        }
+        //dd($expired_docs);
+
+        $expired_docs = CompanyDoc::select([
+            'company_docs.id', 'company_docs.category_id', 'company_docs.name', 'company_docs.expiry',
+            'company_docs.for_company_id', 'company_docs.company_id', 'company_docs.status',
+            'companys.status',
+        ])
+            ->join('companys', 'company_docs.for_company_id', '=', 'companys.id')
+            ->whereIn('company_docs.id', $expired_docs)
+            ->where('companys.status', 1);
+            //->whereDate('company_docs.expiry', '>=', $date_from)
+            //->whereDate('company_docs.expiry', '<=', $date_to);
+
+
+        //dd($expired_docs->get());
+        $dt = Datatables::of($expired_docs)
+            ->editColumn('company_docs.id', function ($doc) {
+                return ($doc->attachment) ? '<div class="text-center"><a href="' . $doc->attachment_url . '" target="_blank"><i class="fa fa-file-text-o"></i></a></div>' : '';
+            })
+            ->editColumn('category_id', function ($doc) {
+                return strtoupper($doc->category->type);
+            })
+            ->editColumn('companys.name', function ($doc) {
+                return '<a href="/company/' . $doc->for_company_id . '/doc">' . $doc->company->name . '</a>';
+            })
+            ->editColumn('company_docs.name', function ($doc) {
+                return $doc->name;
+            })
+            ->editColumn('expiry', function ($doc) {
+                $now = Carbon::now();
+                $yearago = $now->subYear()->toDateTimeString();
+
+                //if ($doc->updated_at < $yearago && Auth::user()->isCC())
+                return ($doc->expiry->lt(Carbon::today())) ? "<span class='font-red'>" . $doc->expiry->format('d/m/Y') . "</span>" : $doc->expiry->format('d/m/Y');
+            })
+            ->rawColumns(['company_docs.id', 'full_name', 'companys.name', 'expiry'])
             ->make(true);
 
         return $dt;

@@ -6,7 +6,7 @@
         @if (Auth::user()->hasAnyPermissionType('manage.report'))
             <li><a href="/manage/report">Management Reports</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Attendance</span></li>
+        <li><span>Expired Company Documents</span></li>
     </ul>
 @stop
 
@@ -19,7 +19,7 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Attendance Report</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Expired Company Documents</span>
                         </div>
                         <div class="actions">
                             <button type="submit" class="btn btn-circle btn-outline btn-sm green" id="view_pdf"> View PDF</button>
@@ -68,13 +68,16 @@
                                 <div class="col-md-1"></div>
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('from', $errors) !!}">
-                                        {!! Form::label('from', 'Dates', ['class' => 'control-label']) !!}
-                                        <div class="input-group date date-picker input-daterange" data-date-format="dd/mm/yyyy" data-date-reset>
-                                            {!! Form::text('from', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF', 'id' => 'from']) !!}
-                                            <span class="input-group-addon"> to </span>
-                                            {!! Form::text('to', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF', 'id' => 'to']) !!}
-                                        </div>
-                                        {!! fieldErrorMessage('start_date', $errors) !!}
+                                        {!! Form::label('expiry', 'Expiry Date', ['class' => 'control-label']) !!}
+                                        <select name="expiry" id="expiry" class="form-control bs-select">
+                                            <option value="30" selected>Next 30 days</option>
+                                            <option value="14">Next 14 days</option>
+                                            <option value="-7">Last week</option>
+                                            <option value="-30">Last month</option>
+                                            <option value="-90">Last 3 months</option>
+                                            <option value="-180">Last 6 months</option>
+                                            <option value="-365">Last year</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -84,10 +87,11 @@
                             <table class="table table-striped table-bordered table-hover order-column" id="table1">
                                 <thead>
                                 <tr class="mytable-header">
-                                    <th width="20%"> Date</th>
-                                    <th> Site</th>
-                                    <th> Name</th>
+                                    <th width="5%"> #</th>
+                                    <th> Dept.</th>
                                     <th> Company</th>
+                                    <th> Document</th>
+                                    <th width="10%"> Expiry</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -141,6 +145,7 @@
         $("#site_id_active").select2({placeholder: "Select Site", width: '100%'});
         $("#site_id_completed").select2({placeholder: "Select Site", width: '100%'});
         $("#company_id").select2({placeholder: "Select Company", width: '100%'});
+        $("#expiry").select2({placeholder: "Select Timeframe", width: '100%'});
 
         $('#site_active').hide();
         $('#site_completed').hide();
@@ -153,8 +158,6 @@
                 $('#spinner').show();
                 return true;
             }
-
-
             swal({
                 title: 'Unable to view PDF',
                 text: 'You must select a <b>Site</b> or <b>Company</b>',
@@ -181,25 +184,20 @@
         processing: true,
         serverSide: true,
         ajax: {
-            'url': '{!! url('/manage/report/attendance/dt/attendance') !!}',
+            'url': '{!! url('/manage/report/expired_company_docs/dt/expired_company_docs') !!}',
             'type': 'GET',
             'data': function (d) {
                 d.status = $('#status').val();
-                d.site_id_all = $('#site_id_all').val();
-                d.site_id_active = $('#site_id_active').val();
-                d.site_id_completed = $('#site_id_completed').val();
+                d.expiry = $('#expiry').val();
                 d.company_id = $('#company_id').val();
-                d.from = $('#from').val();
-                d.to = $('#to').val();
             }
         },
         columns: [
-            {data: 'date', name: 'site_attendance.date'},
-            {data: 'sites.name', name: 'sites.name'},
-            {data: 'full_name', name: 'full_name', orderable: false, searchable: false},
+            {data: 'company_docs.id', name: 'company_docs.id'},
+            {data: 'category_id', name: 'category_id'},
             {data: 'companys.name', name: 'companys.name'},
-            {data: 'firstname', name: 'users.firstname', visible: false},
-            {data: 'lastname', name: 'users.lastname', visible: false},
+            {data: 'company_docs.name', name: 'company_docs.name'},
+            {data: 'expiry', name: 'expiry'},
         ],
         order: [
             [0, "desc"]
@@ -223,22 +221,10 @@
 
         table1.ajax.reload();
     });
-    $('select#site_id_all').change(function () {
-        table1.ajax.reload();
-    });
-    $('select#site_id_active').change(function () {
-        table1.ajax.reload();
-    });
-    $('select#site_id_completed').change(function () {
+    $('select#expiry').change(function () {
         table1.ajax.reload();
     });
     $('select#company_id').change(function () {
-        table1.ajax.reload();
-    });
-    $('#from').change(function () {
-        table1.ajax.reload();
-    });
-    $('#to').change(function () {
         table1.ajax.reload();
     });
 </script>
