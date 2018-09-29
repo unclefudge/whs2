@@ -8,6 +8,7 @@ use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Company\CompanyDoc;
+use App\Models\Company\CompanyDocCategory;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -256,28 +257,30 @@ class ReportController extends Controller {
 
     public function getExpiredCompanyDocs()
     {
-
-        $site_id_all = (request('site_id_all') == 'all') ? '' : request('site_id_all');
-        $site_id_active = (request('site_id_active') == 'all') ? '' : request('site_id_active');
-        $site_id_completed = (request('site_id_completed') == 'all') ? '' : request('site_id_completed');
         $company_id = (request('company_id') == 'all') ? '' : request('company_id');
+        $company_ids = ($company_id) ? [$company_id] : Auth::user()->company->companies()->pluck('id')->toArray();
+        $compliance = (request('compliance')) ? request('compliance') : 'all';
 
         $today = Carbon::today();
         $days_30 = $today->addDays(30)->format('Y-m-d');
-        if (request('expiry') > 0) {
-            $date_to = $today->addDays(request('expiry'))->format('Y-m-d');
-            $date_from = $today->format('Y-m-d');
-        } else {
-            $date_to = $today->format('Y-m-d');
-            $date_from = $today->subDays(abs(request('expiry')))->format('Y-m-d');
+
+        /* Filter Department + Categories */
+        $categories = (request('category_id') == 'ALL') ? array_keys(Auth::user()->companyDocTypeSelect('view', Auth::user()->company)) : [request('category_id')];
+        if (request('department') != 'all') {
+            $filtered = [];
+            if ($categories) {
+                foreach ($categories as $cat) {
+                    $category = CompanyDocCategory::find($cat);
+                    if ($category && $category->type == request('department'))
+                        $filtered[] = $cat;
+                }
+                $categories = $filtered;
+            }
         }
 
-        $company_ids = ($company_id) ? [$company_id] : Auth::user()->company->companies()->pluck('id')->toArray();
-
-
+        //dd($categories);
         $company_docs = CompanyDoc::whereIn('for_company_id', $company_ids)
-            //->where('companys.status', 1)
-            //->whereDate('expiry', '>=', $date_from)
+            ->whereIn('category_id', $categories)
             ->whereDate('expiry', '<=', $days_30)
             ->where('for_company_id', '<>', 3)
             ->get();
@@ -287,11 +290,17 @@ class ReportController extends Controller {
         foreach ($company_docs as $doc) {
             if ($doc->company->status) {
                 $exp = 'Replaced';
-                if (!$doc->company->activeCompanyDoc($doc->category_id)) {
-                    $expired_docs[] = $doc->id;
-                    $exp = 'Expired';
+                $req = ($doc->company->requiresCompanyDoc($doc->category_id)) ? 'req' : 'add';
+                if ($compliance == 'all' || $compliance == $req) {
+                    if (!$doc->company->activeCompanyDoc($doc->category_id)) {
+                        $expired_docs[] = $doc->id;
+                        $exp = 'Expired';
+                    } elseif ($doc->expiry->gte(Carbon::today()) ) {
+                        $expired_docs[] = $doc->id;
+                        $exp = 'Near Expiry';
+                    }
+                    //echo "[$doc->id] " . $doc->company->name . " - $doc->name ($doc->category_id) $exp $req<br>";
                 }
-               // echo "[$doc->id] " . $doc->company->name . " - $doc->name ($doc->category_id) $exp<br>";
             }
         }
         //dd($expired_docs);
@@ -320,7 +329,7 @@ class ReportController extends Controller {
                 return '<a href="/company/' . $doc->for_company_id . '/doc">' . $doc->company->name . '</a>';
             })
             ->editColumn('company_docs.name', function ($doc) {
-                return $doc->name;
+                return ($doc->company->requiresCompanyDoc($doc->category_id)) ? $doc->name : "<span class='font-yellow-crusta'>$doc->name</span>";
             })
             ->editColumn('expiry', function ($doc) {
                 $now = Carbon::now();
@@ -329,7 +338,7 @@ class ReportController extends Controller {
                 //if ($doc->updated_at < $yearago && Auth::user()->isCC())
                 return ($doc->expiry->lt(Carbon::today())) ? "<span class='font-red'>" . $doc->expiry->format('d/m/Y') . "</span>" : $doc->expiry->format('d/m/Y');
             })
-            ->rawColumns(['company_docs.id', 'full_name', 'companys.name', 'expiry'])
+            ->rawColumns(['company_docs.id', 'full_name', 'companys.name', 'company_docs.name', 'expiry'])
             ->make(true);
 
         return $dt;

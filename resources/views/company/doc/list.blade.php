@@ -127,7 +127,7 @@
 
 
     $(document).ready(function () {
-        /* Dynamic Category dropdown from Departmeny */
+        /* Dynamic Category dropdown from Department */
         $("#category_id").select2({width: '100%', minimumResultsForSearch: -1});
         $("#department").on('change', function () {
             var dept_id = $(this).val();
