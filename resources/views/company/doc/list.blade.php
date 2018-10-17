@@ -4,10 +4,8 @@
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
         @if (Auth::user()->company->subscription > 1 && Auth::user()->hasAnyPermissionType('company'))
             <li><a href="/company">Companies</a><i class="fa fa-circle"></i></li>
-            <li><span>Documents</span></li>
-        @else
-            <li><span>Documents</span></li>
         @endif
+        <li><span>Documents</span></li>
     </ul>
 @stop
 

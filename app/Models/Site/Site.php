@@ -305,10 +305,6 @@ class Site extends Model {
         foreach ($this->areaSupervisors() as $user) {
             if ($user->status && validEmail($user->email))
                 $array[] = $user->email;
-            //foreach ($user->areaSupervisors() as $area) {
-            //    if ($area->status && validEmail($area->email))
-            //        $array[] = $area->email;
-            //}
         }
 
         return $array;

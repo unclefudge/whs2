@@ -27,10 +27,12 @@
                             @if(Auth::user()->hasPermission2('add.wms'))
                                 <a class="btn btn-circle blue btn-sm" href="/safety/doc/wms/create" data-original-title="Make a SWMS">Make a SWMS</a>
                             @endif
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-3">
+                            <a class="btn btn-circle btn-warning btn-sm" href="/filebank/doc/Creating_SWMS_Guide.pdf" target="_blank" data-original-title="Instruction Guide">Instruction Guide</a>
+                        </div>
                         <div class="col-md-2 pull-right">
                             <div class="form-group">
                                 <select name="status" id="status1" class="form-control bs-select">
