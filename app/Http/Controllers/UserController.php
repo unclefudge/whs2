@@ -389,6 +389,47 @@ class UserController extends Controller {
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateConstruction($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.user.security', $user))
+            return view('errors/404');
+
+        // Validate
+        $validator = Validator::make(request()->all(), ['apprentice_start' => 'required_if:apprentice,1'], ['apprentice_start.required_if' => 'The apprenticeship start date is required.']);
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'construction');
+            Toastr::error("Failed to save changes");
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user_request = request()->all();
+        $user_request['apprentice_start'] = (request('apprentice_start')) ? Carbon::createFromFormat('d/m/Y H:i', request('apprentice_start') . '00:00')->toDateTimeString() : null;
+
+        //dd($user_request);
+        $user->update($user_request);
+
+        // Update trades for company
+        if (request('trades')) {
+            $user->tradesSkilledIn()->sync(request('trades'));
+        } else
+            $user->tradesSkilledIn()->detach();
+
+        $user->save();
+        Toastr::success("Saved changes");
+
+        return redirect("/user/$user->id");
+
+    }
+
+    /**
      * Reset permission back to ones given by user roles only
      *
      * @return \Illuminate\Http\Response

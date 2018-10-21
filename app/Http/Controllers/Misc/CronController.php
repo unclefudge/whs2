@@ -412,16 +412,16 @@ class CronController extends Controller {
         $log .= "------------------------------------------------------------------------\n\n";
 
         $today = Carbon::today();
-        $today1 = Carbon::today()->subYears(2);
+        $today2 = Carbon::today()->subYears(2);
         $week2_coming = Carbon::today()->addDays(14);
-        $week2_coming1 = Carbon::today()->addDays(14)->subYear();
+        $week2_coming2 = Carbon::today2()->addDays(14)->subYear();
         $week4_ago = Carbon::today()->subDays(28);
-        $week4_ago1 = Carbon::today()->subDays(28)->subYear();
+        $week4_ago2 = Carbon::today2()->subDays(28)->subYear();
 
         $dates = [
-            $week2_coming1->format('Y-m-d') => "Expiry in 2 weeks on " . $week2_coming->format('d/m/Y'),
-            $today1->format('Y-m-d')        => "Expired today on " . $today->format('d/m/Y'),
-            $week4_ago1->format('Y-m-d')    => "Expired 4 weeks ago on " . $week4_ago->format('d/m/Y'),
+            $week2_coming2->format('Y-m-d') => "Expiry in 2 weeks on " . $week2_coming->format('d/m/Y'),
+            $today2->format('Y-m-d')        => "Expired today on " . $today->format('d/m/Y'),
+            $week4_ago2->format('Y-m-d')    => "Expired 4 weeks ago on " . $week4_ago->format('d/m/Y'),
         ];
 
         foreach ($dates as $date => $mesg) {
@@ -445,7 +445,7 @@ class CronController extends Controller {
                                 $log .= "Created ToDo for company + emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.swms.approval')) . "\n";
                             } else {
                                 $doc->closeToDo(User::find(1));
-                                //if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
+                                if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), true);
                                 echo "Created ToDo for company<br>";
                                 $log .= "Created ToDo for company\n";
                                 if ($date == Carbon::today()->subDays(28)->format('Y-m-d')) {
@@ -543,14 +543,14 @@ class CronController extends Controller {
                     if ($doc->status == 0) {
                         if ($doc->company->activeCompanyDoc($doc->category_id)) {
                             echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC<br>";
-                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC<br>";
+                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") REPLACED DOC\n";
                             $todo->status = 0;
                             $todo->done_at = Carbon::now();
                             $todo->done_by = 1;
                             $todo->save();
                         } else {
                             echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
-                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
+                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC\n";
                         }
 
                     }

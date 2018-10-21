@@ -492,8 +492,8 @@ VALUES<br>";
         //
         // Creating Permission
         //
-        $name = 'User Security';
-        $slug = 'user.security';
+        $name = 'User Construction';
+        $slug = 'user.Construction';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);

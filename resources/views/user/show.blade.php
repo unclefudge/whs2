@@ -43,6 +43,17 @@
                     @include('user/_show-security')
                 @endif
 
+                {{-- Construction --}}
+                @if (Auth::user()->allowed2('view.user.security', $user))
+                    @include('user/_show-construction')
+                    @include('user/_edit-construction')
+                @endif
+
+                {{-- Attendance --}}
+                @if (in_array($user->id, Auth::user()->authUsers('view.site.attendance')->pluck('id')->toArray()))
+                    @include('user/_show-attendance')
+                @endif
+
             </div>
 
         </div>
@@ -85,16 +96,21 @@
     $(document).ready(function () {
         /* Select2 */
         $("#roles").select2({placeholder: "Select one or more", width: '100%'});
-
-        if ($('#transient').val() == 1)
-            $('#super-div').show();
-        else
-            $('#supervisors').val('');
+        $("#trades").select2({placeholder: "Select one or more", width: '100%'});
 
         $('#password').click(function (e) {
             if ($('#user').val() == 1)
                 $('#password_confirmation_div').show();
             $('#password_update').val(1);
+        });
+
+        if ($('#apprentice').val() == 1)
+            $('#apprentice-div').show();
+        else
+            $('#apprentice_start').val('');
+
+        $('#apprentice').change(function (e) {
+            $('#apprentice-div').toggle();
         });
     });
 
@@ -117,7 +133,7 @@
 
             @if (count($errors) > 0)
     var errors = {!! $errors !!};
-    if (errors.FORM == 'contact' || errors.FORM == 'login' || errors.FORM == 'security') {
+    if (errors.FORM == 'contact' || errors.FORM == 'login' || errors.FORM == 'security' || errors.FORM == 'construction') {
         $('#show_' + errors.FORM).hide();
         $('#edit_' + errors.FORM).show();
     }
@@ -129,6 +145,12 @@
 
     console.log(errors)
     @endif
+
+    $('.date-picker').datepicker({
+        autoclose: true,
+        clearBtn: true,
+        format: 'dd/mm/yyyy',
+    });
 
 </script>
 @stop

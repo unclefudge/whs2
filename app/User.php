@@ -113,7 +113,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function siteAttendance()
     {
-        return $this->hasMany('App\Models\SiteAttendance', 'user_id');
+        return $this->hasMany('App\Models\Site\Planner\SiteAttendance', 'user_id');
     }
 
     /**

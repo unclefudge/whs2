@@ -118,6 +118,12 @@ $rec = $user;
                         <td width="15%">{!! permSelect('edit.user.security', 'all', $rec, $cid, $dis) !!}</td>
                         <td width="45%" colspan="3"></td>
                     </tr>
+                    <tr>
+                        <td>Construction</td>
+                        <td width="15%">{!! permSelect('view.user.construction', 'all', $rec, $cid, $dis) !!}</td>
+                        <td width="15%">{!! permSelect('edit.user.construction', 'all', $rec, $cid, $dis) !!}</td>
+                        <td width="45%" colspan="3"></td>
+                    </tr>
                 </table>
 
                 {{-- Companies --}}

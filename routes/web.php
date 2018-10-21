@@ -114,6 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/{id}/resetpassword', 'UserController@showResetPassword');
     Route::post('user/{id}/resetpassword', 'UserController@updatePassword');
     Route::post('user/{id}/security', 'UserController@updateSecurity');
+    Route::post('user/{id}/construction', 'UserController@updateConstruction');
     Route::get('user/{id}/resetpermissions', 'UserController@resetPermissions');
     Route::get('contractor', 'UserController@contractorList');
     Route::resource('user', 'UserController');

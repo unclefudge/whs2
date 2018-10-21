@@ -346,7 +346,6 @@ class CompanyController extends Controller {
         $planned_trades = '';
         foreach ($old_trades as $old_trade) {
             if (!$new_trades || !in_array($old_trade->id, $new_trades)) {
-                echo "checking trade $old_trade->id<br>";
                 // Determine if company on planner for this trade
                 $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $company->id)
                     ->whereIn('task_id', Trade::find($old_trade->id)->tasks->pluck('id')->toArray())

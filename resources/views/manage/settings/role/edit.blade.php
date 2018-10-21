@@ -167,6 +167,12 @@ $cc = 1;*/
                                                 <td width="15%">{!! permSelect('edit.user.security', 'all', $rec, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
+                                            <tr>
+                                                <td>Construction <br><span class="font-red">Disabled for 'child' company roles</span></td>
+                                                <td width="15%">{!! permSelect('view.user.construction', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.user.construction', 'all', $rec, $cid, $dis) !!}</td>
+                                                <td width="45%" colspan="3"></td>
+                                            </tr>
                                         </table>
                                     @endif
 

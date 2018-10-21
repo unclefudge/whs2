@@ -1,4 +1,4 @@
-{{-- Show Company Details --}}
+{{-- Show Contruction Details --}}
 <div class="portlet light" id="show_construction">
     <div class="portlet-title">
         <div class="caption">
