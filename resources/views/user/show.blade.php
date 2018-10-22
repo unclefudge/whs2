@@ -44,7 +44,7 @@
                 @endif
 
                 {{-- Construction --}}
-                @if (Auth::user()->allowed2('view.user.security', $user))
+                @if (Auth::user()->allowed2('view.user.construction', $user))
                     @include('user/_show-construction')
                     @include('user/_edit-construction')
                 @endif

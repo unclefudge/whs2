@@ -1,3 +1,4 @@
+@inject('ozstates', 'App\Http\Utilities\Ozstates')
 @extends('layout')
 
 @section('breadcrumbs')
@@ -8,8 +9,9 @@
         @endif
         @if (Auth::user()->hasAnyPermissionType('user'))
             <li><a href="/company/{{ Auth::user()->company->id}}/user">Users</a><i class="fa fa-circle"></i></li>
+            <li><a href="/user/{{ $user->id}}/doc">Documents</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Profile</span></li>
+        <li><span>Upload</span></li>
     </ul>
 @stop
 
@@ -48,45 +50,48 @@
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
                                         {!! Form::text('name', null, ['class' => 'form-control']) !!}
                                     </div>
-                                    {{-- Policy --}}
-                                    <div class="form-group {!! fieldHasError('ref_no', $errors) !!}" style="display: none" id="fields_policy">
-                                        {!! Form::label('ref_no', 'Policy No', ['class' => 'control-label']) !!}
-                                        {!! Form::text('ref_no', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('ref_no', $errors) !!}
-                                    </div>
-                                    {{-- Insurer --}}
-                                    <div class="form-group {!! fieldHasError('ref_name', $errors) !!}" style="display: none" id="fields_insurer">
-                                        {!! Form::label('ref_name', 'Insurer', ['class' => 'control-label']) !!}
-                                        {!! Form::text('ref_name', null, ['class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('ref_name', $errors) !!}
-                                    </div>
-                                    {{-- Category --}}
-                                    {{--}}
-                                    <div class="form-group {!! fieldHasError('ref_type', $errors) !!}" style="display: none" id="fields_category">
-                                        {!! Form::label('ref_type', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('ref_type', $company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('ref_type', $errors) !!}
-                                    </div>--}}
                                     {{-- Lic No --}}
                                     <div class="form-group {!! fieldHasError('lic_no', $errors) !!}" style="display: none" id="fields_lic_no">
                                         {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
                                         {!! Form::text('lic_no', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('lic_no', $errors) !!}
                                     </div>
-                                    {{-- Lic Class --}}
-                                    {{--}}
-                                    <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_lic_class">
+                                    {{-- Drivers Lic Class --}}
+                                    <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_driver_class">
                                         {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
                                         <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
-                                            {!! $company->contractorLicenceOptions() !!}
+                                            {!! $user->driversLicenceOptions() !!}
                                         </select>
                                         {!! fieldErrorMessage('lic_type', $errors) !!}
-                                    </div>--}}
+                                    </div>
+                                    {{-- Contractor Lic Class --}}
+                                    <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_cl_class">
+                                        {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                        <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
+                                            {!! $user->contractorLicenceOptions() !!}
+                                        </select>
+                                        {!! fieldErrorMessage('lic_type', $errors) !!}
+                                    </div>
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
                                         {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                        {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select']) !!}
+                                        {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A (Friable)', 'B' => 'Class B (Non-Friable)'], null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('asb_type', $errors) !!}
+                                    </div>
+                                    {{-- State --}}
+                                    <div class="form-group {!! fieldHasError('state', $errors) !!}" style="display: none" id="fields_state">
+                                        {!! Form::label('state', 'State', ['class' => 'control-label']) !!}
+                                        {!! Form::select('state', $ozstates::all(), 'NSW', ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('state', $errors) !!}
+                                    </div>
+                                    {{-- Date --}}
+                                    <div class="form-group {!! fieldHasError('date', $errors) !!}" style="display: none" id="fields_date">
+                                        {!! Form::label('date', 'Date', ['class' => 'control-label']) !!}
+                                        <div class="input-group date date-picker">
+                                            {!! Form::text('date', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                        </div>
+                                        {!! fieldErrorMessage('date', $errors) !!}
                                     </div>
                                     {{-- Expiry --}}
                                     <div class="form-group {!! fieldHasError('expiry', $errors) !!}" style="display: none" id="fields_expiry">
@@ -105,18 +110,18 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <!--   <div class="form-group">
-                                        {!! Form::label('files', 'Files', ['class' => 'control-label']) !!}
-                                    {!! Form::select('files', ['single' => 'Single File', 'multi' => 'Multiple Files'],
-                                         'single', ['class' => 'form-control bs-select']) !!}
-                                            </div>
-
-                                        -->
                                     <!-- Single File -->
                                     <div class="form-group {!! fieldHasError('singlefile', $errors) !!}" style="display: none" id="singlefile-div">
                                         <label class="control-label">Select File</label>
                                         <input id="singlefile" name="singlefile" type="file" class="file-loading">
                                         {!! fieldErrorMessage('singlefile', $errors) !!}
+                                    </div>
+
+                                    <!-- Single Image File -->
+                                    <div class="form-group {!! fieldHasError('singleimage', $errors) !!}" style="display: none" id="singleimage-div">
+                                        <label class="control-label">Select File / Photo</label>
+                                        <input id="singleimage" name="singleimage" type="file" class="file-loading">
+                                        {!! fieldErrorMessage('singleimage', $errors) !!}
                                     </div>
                                 </div>
 
@@ -124,28 +129,7 @@
 
                             <div class="form-actions right">
                                 <a href="/user/{{ $user->id }}/doc" class="btn default"> Back</a>
-                                {{--}}
-                                <button type="submit" name="save" value="save" class="btn green" id="upload" style="display: none;">Upload</button>--}}
-                            </div>
-                        </div>
-
-                        <!-- Multi File upload -->
-                        <div id="multifile-div" style="display: none">
-                            <div class="note note-warning">
-                                When uploading multiple documents please note the actual filename of the document will also be used as the name or 'title' of the document.
-                                <ul>
-                                    <li>Once you have selected your files upload them by clicking
-                                        <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">Select Files</label>
-                                        <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
-                                    </div>
-                                </div>
+                                <button type="submit" name="save" value="save" class="btn green" id="upload" style="display: none;">Upload</button>
                             </div>
                         </div>
                     </div> <!--/form-body-->
@@ -197,74 +181,64 @@
             $('#fields_insurer').hide();
             $('#fields_category').hide();
             $('#fields_lic_no').hide();
-            $('#fields_lic_class').hide();
+            $('#fields_driver_class').hide();
+            $('#fields_cl_class').hide();
             $('#fields_asb_class').hide();
+            $('#fields_state').hide();
             $('#fields_expiry').hide();
+            $('#fields_date').hide();
             $('#fields_tag_type').hide();
             $('#fields_tag_date').hide();
             $('#fields_notes').hide();
             $('#singlefile-div').hide();
+            $('#singleimage-div').hide();
             $('#upload').hide();
 
 
             if (cat != '') {
-                $('#singlefile-div').show();
-                $('#fields_expiry').show();
+                if (cat == 1 || cat == 2 || cat == 3) { // 1 WhiteCard, 2 Drivers Lic, 3 Contractors Lic
+                    $('#singleimage-div').show();
+                    $('#filetype').val('image');
+                } else {
+                    $('#singlefile-div').show();
+                    $('#filetype').val('pdf');
+                }
                 $('#fields_notes').show();
                 $('#upload').show();
             }
 
-            if (cat < 9) {
+            if (cat < 10) {
                 $('#name').val($("#category_id option:selected").text());
                 $('#fields_name').hide();
             } else // Other Licence + everything else
                 $('#fields_name').show();
 
-            /*
-            if (cat == 1 || cat == 2 || cat == 3) {  // PL, WC & SA
-                $('#fields_policy').show();
-                $('#fields_insurer').show();
-            }
-            if (cat == 2 || cat == 3) // WC & SA
-                $('#fields_category').show();
 
-            if (cat == 6) { // Test & Tag
-                $('#fields_tag_type').show();
-                $('#fields_tag_date').show();
-                $('#fields_expiry').hide();
-            } else {
-                $('#fields_tag_date').hide();
+            // Show Expiry or Date field
+            if (cat == 2 || cat == 3)  // Drivers, CL
                 $('#fields_expiry').show();
-            }
-            if (cat == 7) { // CL
+            else if (cat != '')
+                $('#fields_date').show();
+
+            if (cat == 2) { // Drivers
                 $('#fields_lic_no').show();
-                $('#fields_lic_class').show();
+                $('#fields_driver_class').show();
+                $('#fields_state').show();
+            }
+
+            if (cat == 3) { // CL
+                $('#fields_lic_no').show();
+                $('#fields_cl_class').show();
             }
 
             if (cat == 8)  // Asbestos
                 $('#fields_asb_class').show();
-                */
         }
 
         display_fields();
         // On Change determine if Category fields are valid for multi file upload
         $("#category_id").change(function () {
             display_fields();
-
-            /*
-             if ($("#files").val() == 'multi') {
-             if ($("#category_id").val() == '') {
-             $("category_form").addClass('has-error');
-             $('#multifile-div').hide();
-             $('#multifile-error').show();
-             } else {
-             $("#category_form").removeClass('has-error');
-             if ($("#site_id").val() != '') {
-             $('#multifile-div').show();
-             $('#multifile-error').hide();
-             }
-             }
-             }*/
         });
 
         /* Bootstrap Fileinput */
@@ -281,73 +255,17 @@
         });
 
         /* Bootstrap Fileinput */
-        $("#multifile").fileinput({
-            uploadUrl: "/company/doc/upload/", // server upload action
-            uploadAsync: true,
-            allowedFileExtensions: ["pdf"],
+        $("#singleimage").fileinput({
+            showUpload: false,
+            allowedFileExtensions: ["pdf", "jpg", "png", "gif"],
             browseClass: "btn blue",
             browseLabel: "Browse",
             browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
-            //removeClass: "btn red",
+            //removeClass: "btn btn-danger",
             removeLabel: "",
             removeIcon: "<i class=\"fa fa-trash\"></i> ",
-            uploadClass: "btn dark",
-            uploadIcon: "<i class=\"fa fa-upload\"></i> ",
-            uploadExtraData: {
-                "category_id": category_id,
-            },
-            layoutTemplates: {
-                main1: '<div class="input-group {class}">\n' +
-                '   {caption}\n' +
-                '   <div class="input-group-btn">\n' +
-                '       {remove}\n' +
-                '       {upload}\n' +
-                '       {browse}\n' +
-                '   </div>\n' +
-                '</div>\n' +
-                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
-                '{preview}\n'
-            },
+            uploadClass: "btn btn-info",
         });
-
-        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
-            data.form.append("category_id", $("#category_id").val());
-        });
-
-        // Toggle between Single + Multi file upload inputs
-        $("#files").change(function () {
-            $('#singlefile-div').toggle();
-            $('#multifile-div').toggle();
-
-            // If Multi verify Category fields are completed
-            if ($("#files").val() == 'multi') {
-                $('#singlefile-div').hide();
-                $('#save').hide();
-                $("#catform").removeClass('has-error');
-                if ($("#category_id").val() == '') {
-                    $("#category_form").addClass('has-error');
-                    $('#multifile-div').hide();
-                    $('#multifile-error').show();
-                }
-            } else {
-                $('#singlefile-div').show();
-                $('#save').show();
-                $('#multifile-div').hide();
-                $('#multifile-error').hide();
-            }
-        });
-
-
-        // On load verify Category fields are set otherwise hide multi upload
-        if ($("#files").val() == 'multi' && $("#category_id").val() == '') {
-            $('#multifile-div').hide();
-        }
-        // On load verify File upload type and show right div
-        if ($("#files").val() == 'single') {
-            $('#save').show();
-            $('#singlefile-div').show();
-            $('#multifile-div').hide();
-        }
 
 
     });

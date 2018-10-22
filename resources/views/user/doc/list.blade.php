@@ -9,7 +9,7 @@
         @if (Auth::user()->hasAnyPermissionType('user'))
             <li><a href="/company/{{ Auth::user()->company->id}}/user">Users</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Profile</span></li>
+        <li><span>Documents</span></li>
     </ul>
 @stop
 

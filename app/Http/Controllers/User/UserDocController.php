@@ -13,8 +13,7 @@ use App\Models\User\UserDocCategory;
 use App\Models\Company\Company;
 use App\Http\Utilities\UserDocTypes;
 use App\Http\Requests;
-use App\Http\Requests\Company\CompanyDocRequest;
-use App\Http\Requests\Company\CompanyProfileDocRequest;
+use App\Http\Requests\User\UserDocRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
@@ -50,16 +49,16 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($cid, $id)
+    public function show($uid, $id)
     {
-        $company = Company::findOrFail($cid);
-        $doc = CompanyDoc::findOrFail($id);
+        $user = User::findOrFail($uid);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("view.company.doc", $doc))
-            return view('errors/404');
+        //if (!Auth::user()->allowed2("view.user.doc", $doc))
+        //    return view('errors/404');
 
-        return view('company/doc/show', compact('company', 'doc'));
+        return view('user/doc/show', compact('user', 'doc'));
     }
 
     /**
@@ -129,30 +128,27 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyDocRequest $request, $cid)
+    public function store(UserDocRequest $request, $uid)
     {
-        $company = Company::find($cid);
+        $user = User::find($uid);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("add.company.doc"))
-            return view('errors/404');
-
-        $category_id = $request->get('category_id');
-
+        //if (!Auth::user()->allowed2("add.company.doc"))
+        //    return view('errors/404');
 
         $doc_request = request()->all();
-        $doc_request['for_company_id'] = $company->id;
-        $doc_request['company_id'] = $company->reportsTo()->id;
+        $doc_request['user_id'] = $user->id;
+        $doc_request['company_id'] = $user->company_id;
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
 
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
-            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
+            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
             $doc_request['ref_type'] = request('tag_type');
         }
 
-        // Convert licence type into CSV
-        if (request('category_id') == '7') {
+        // Convert licence type into CSV - Drivers/Contractors
+        if (in_array(request('category_id'), [2,3])) {
             $doc_request['ref_no'] = request('lic_no');
             $doc_request['ref_type'] = implode(',', request('lic_type'));
         }
@@ -161,19 +157,19 @@ class UserDocController extends Controller {
         if (request('category_id') == '8')
             $doc_request['ref_type'] = request('asb_type');
 
-        // Reassign Additional Licences to correct name
-        if (request('category_id') == '9')
+        // Reassign Other to correct name
+        if (request('category_id') == '10')
             $doc_request['name'] = request('name'); //'Additional Licence';
 
         // Create Company Doc
         //dd($doc_request);
-        $doc = CompanyDoc::create($doc_request);
+        $doc = UserDoc::create($doc_request);
 
         // Handle attached file
         if ($request->hasFile('singlefile')) {
             $file = $request->file('singlefile');
 
-            $path = "filebank/company/" . $company->id . '/docs';
+            $path = "filebank/user/" . $user->id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
             // Ensure filename is unique by adding counter to similiar filenames
             $count = 1;
@@ -190,9 +186,9 @@ class UserDocController extends Controller {
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
         $doc->status = 2;
-        $category = CompanyDocCategory::find($doc->category_id);
+        $category = UserDocCategory::find($doc->category_id);
         $pub_pri = ($category->private) ? 'pri' : 'pub';
-        if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $company->reportsTo()->id)) {
+        if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $user->company->reportsTo()->id)) {
             $doc->approved_by = Auth::user()->id;
             $doc->approved_at = Carbon::now()->toDateTimeString();
             $doc->status = 1;
@@ -203,7 +199,7 @@ class UserDocController extends Controller {
         }
         $doc->save();
 
-        return redirect("company/$company->id/doc/upload");
+        return redirect("user/$user->id/doc/upload");
     }
 
     /**
@@ -311,9 +307,9 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function reject($cid, $id)
+    public function reject($uid, $id)
     {
-        $company = Company::find($cid);
+        $company = Company::find($uid);
         $doc = CompanyDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not

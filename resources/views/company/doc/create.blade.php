@@ -138,13 +138,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <!--   <div class="form-group">
-                                        {!! Form::label('files', 'Files', ['class' => 'control-label']) !!}
-                                    {!! Form::select('files', ['single' => 'Single File', 'multi' => 'Multiple Files'],
-                                         'single', ['class' => 'form-control bs-select']) !!}
-                                            </div>
-
-                                        -->
                                     <!-- Single File -->
                                     <div class="form-group {!! fieldHasError('singlefile', $errors) !!}" style="display: none" id="singlefile-div">
                                         <label class="control-label">Select File</label>

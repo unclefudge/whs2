@@ -11,11 +11,13 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
+use App\Models\User\UserDoc;
 use App\Models\Company\Company;
 use App\Models\Company\CompanySupervisor;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
 use App\Models\Comms\Notify;
+use App\Models\Misc\ContractorLicence;
 use App\Models\Safety\ToolboxTalk;
 use App\Http\Utilities\CompanyEntityTypes;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +105,59 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return rtrim($string, ', ');
+    }
+
+    /**
+     * Dropdown Option for Contractor Licence
+     *
+     * @return string
+     */
+    public function contractorLicenceOptions()
+    {
+        $doc = UserDoc::where('category_id', 3)->where('user_id', $this->id)->where('status', '>', '0')->first();
+        if ($doc)
+            return ContractorLicence::find(1)->classOptions(explode(',', $doc->ref_type));
+
+        return ContractorLicence::find(1)->classOptions();
+    }
+
+    /**
+     * Contractor Licence Class SBC
+     *
+     * @return string
+     */
+    public function contractorLicenceSBC()
+    {
+        $str = '';
+        $doc = UserDoc::where('category_id', 3)->where('user_id', $this->id)->where('status', '>', '0')->first();
+        if ($doc) {
+            foreach (explode(',', $doc->ref_type) as $class_id) {
+                $lic = ContractorLicence::find($class_id);
+                if ($lic)
+                    $str .= $lic->name . ', ';
+            }
+        }
+
+        return rtrim($str, ', ');
+    }
+
+    /**
+     * A dropdown of Driver Class Options.
+     *
+     * @return string
+     */
+    public function driversLicenceOptions($selected = [])
+    {
+        $str = '';
+        $classes = [
+            'C' => 'Car','C-A' => 'Car (automatic only)', 'R' => 'Rider', 'RE' => 'Restricted Rider', 'LR' => 'Light Rigid',
+            'MR' => 'Medium Rigid', 'HR' => 'Heavy Rigid', 'HC' => 'Heavy Combination', 'MC' => 'Multi-Combination'
+        ];
+        foreach ($classes as $class => $name) {
+                $sel = (in_array($class, $selected)) ? 'selected' : '';
+                $str .= "<option value='$class-' $sel>$name</option>";
+        }
+        return $str;
     }
 
 

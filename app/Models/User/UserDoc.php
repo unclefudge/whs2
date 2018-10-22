@@ -80,7 +80,7 @@ class UserDoc extends Model {
     {
         $user = User::findOrFail($this->user_id);
         $todo_request = [
-            'type'       => 'company doc',
+            'type'       => 'user doc',
             'type_id'    => $this->id,
             'name'       => 'User Document Approval Request - ' . $user->name . ' (' . $this->company->name . ')',
             'info'       => 'Please approve/reject uploaded document',
@@ -104,7 +104,7 @@ class UserDoc extends Model {
     {
         $mesg = ($expired == true) ? "$this->name Expired " . $this->expiry->format('d/m/Y') : "$this->name due to expire " . $this->expiry->format('d/m/Y');
         $todo_request = [
-            'type'       => 'company doc',
+            'type'       => 'user doc',
             'type_id'    => $this->id,
             'name'       => $mesg,
             'info'       => 'Please uploaded a current version of the document',
@@ -128,12 +128,12 @@ class UserDoc extends Model {
 
         // Get a list of Document ID's of same type as this Document ie Workers Comp
         // so we can close any ToDoo related to this type of document
-        $similiar_docs = DB::table('company_docs')->select('id')->where('category_id', $this->category_id)->where('for_company_id', $this->for_company_id)->where('company_id', $this->company_id)->get();
+        $similiar_docs = DB::table('users_docs')->select('id')->where('category_id', $this->category_id)->where('user_id', $this->user_id)->where('company_id', $this->company_id)->get();
         $id_array = [];
         foreach ($similiar_docs as $doc)
             $id_array[] = $doc->id;
 
-        $todos = Todo::where('type', 'company doc')->whereIn('type_id', $id_array)->where('status', '1')->get();
+        $todos = Todo::where('type', 'user doc')->whereIn('type_id', $id_array)->where('status', '1')->get();
         foreach ($todos as $todo) {
             $todo->status = 0;
             $todo->done_at = Carbon::now();

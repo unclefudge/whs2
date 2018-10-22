@@ -570,7 +570,7 @@ trait UserRolesPermissions {
 
         // User can always view/edit own profile + add/view own doc
         if (($permission == 'view.user' || $permission == 'edit.user' || $permission == 'view.user.contact' || $permission == 'edit.user.contact'
-                || $permission == 'view.user.security') && $record->id == $this->id)
+                || $permission == 'view.user.construction' || $permission == 'view.user.security') && $record->id == $this->id)
             return true;
 
         //
@@ -658,7 +658,7 @@ trait UserRolesPermissions {
             //  ['0' => 'No', '99' => "All", '50' => "Our Company", '40' => 'Supervisor for', '30' => 'Planned for', '20' => 'Own Company', '10' => "Individual Only"]
 
             // Users
-            if ($permissiontype == 'user' || $permissiontype == 'user.contact' || $permissiontype == 'user.security') {
+            if ($permissiontype == 'user' || $permissiontype == 'user.contact' || $permissiontype == 'user.security' || $permissiontype == 'user.construction') {
                 if ($this->authUsers($permission)->contains('id', $record->id)) return true;
 
                 return false;
