@@ -35,6 +35,7 @@
                         @include('form-error')
                         {!! Form::hidden('create', 'true') !!}
                         {!! Form::hidden('filetype', 'pdf', ['id' => 'filetype']) !!}
+                        {!! Form::hidden('name', '', ['id' => 'name']) !!}
 
                         <div class="form-body">
                             <div class="row">
@@ -42,13 +43,14 @@
                                     {{-- Doc type --}}
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}" id="category_id_form">
                                         {!! Form::label('category_id', 'Document type', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id',Auth::user()->userDocTypeSelect('add', $user, 'prompt'), $category_id, ['class' => 'form-control bs-select']) !!}
+                                        {!! Form::select('category_id',Auth::user()->userDocTypeSelect('add', $user, 'prompt'), null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                     {{-- Name --}}
-                                    <div class="form-group {!! fieldHasError('name', $errors) !!}" style="display: none" id="fields_name">
-                                        {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                    <div class="form-group {!! fieldHasError('ref_name', $errors) !!}" style="display: none" id="fields_name">
+                                        {!! Form::label('ref_name', 'Name', ['class' => 'control-label']) !!}
+                                        {!! Form::text('ref_name', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('ref_name', $errors) !!}
                                     </div>
                                     {{-- Lic No --}}
                                     <div class="form-group {!! fieldHasError('lic_no', $errors) !!}" style="display: none" id="fields_lic_no">
@@ -57,20 +59,20 @@
                                         {!! fieldErrorMessage('lic_no', $errors) !!}
                                     </div>
                                     {{-- Drivers Lic Class --}}
-                                    <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_driver_class">
-                                        {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                        <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
+                                    <div class="form-group {!! fieldHasError('drivers_type', $errors) !!}" style="display: none" id="fields_driver_class">
+                                        {!! Form::label('drivers_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                        <select id="drivers_type" name="drivers_type[]" class="form-control select2" width="100%" multiple>
                                             {!! $user->driversLicenceOptions() !!}
                                         </select>
-                                        {!! fieldErrorMessage('lic_type', $errors) !!}
+                                        {!! fieldErrorMessage('drivers_type', $errors) !!}
                                     </div>
                                     {{-- Contractor Lic Class --}}
-                                    <div class="form-group {!! fieldHasError('lic_type', $errors) !!}" style="display: none" id="fields_cl_class">
-                                        {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                        <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple>
+                                    <div class="form-group {!! fieldHasError('cl_type', $errors) !!}" style="display: none" id="fields_cl_class">
+                                        {!! Form::label('cl_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                        <select id="cl_type" name="cl_class[]" class="form-control select2" width="100%" multiple>
                                             {!! $user->contractorLicenceOptions() !!}
                                         </select>
-                                        {!! fieldErrorMessage('lic_type', $errors) !!}
+                                        {!! fieldErrorMessage('cl_type', $errors) !!}
                                     </div>
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
@@ -84,14 +86,14 @@
                                         {!! Form::select('state', $ozstates::all(), 'NSW', ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('state', $errors) !!}
                                     </div>
-                                    {{-- Date --}}
-                                    <div class="form-group {!! fieldHasError('date', $errors) !!}" style="display: none" id="fields_date">
-                                        {!! Form::label('date', 'Date', ['class' => 'control-label']) !!}
+                                    {{-- Issued --}}
+                                    <div class="form-group {!! fieldHasError('issued', $errors) !!}" style="display: none" id="fields_issued">
+                                        {!! Form::label('issued', 'Issued Date', ['class' => 'control-label']) !!}
                                         <div class="input-group date date-picker">
-                                            {!! Form::text('date', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
+                                            {!! Form::text('issued', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy"]) !!}
                                             <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                         </div>
-                                        {!! fieldErrorMessage('date', $errors) !!}
+                                        {!! fieldErrorMessage('issued', $errors) !!}
                                     </div>
                                     {{-- Expiry --}}
                                     <div class="form-group {!! fieldHasError('expiry', $errors) !!}" style="display: none" id="fields_expiry">
@@ -168,27 +170,21 @@
     $(document).ready(function () {
 
         /* Select2 */
-        $("#lic_type").select2({
-            placeholder: "Select one or more",
-            width: '100%',
-        });
+        $("#drivers_class").select2({placeholder: "Select one or more", width: '100%'});
+        $("#cl_class").select2({placeholder: "Select one or more", width: '100%'});
 
         function display_fields() {
             var cat = $("#category_id").val();
 
-            $('#name').val('');
-            $('#fields_policy').hide();
-            $('#fields_insurer').hide();
-            $('#fields_category').hide();
+            $('#name').val($("#category_id option:selected").text());
+            $('#fields_name').hide();
             $('#fields_lic_no').hide();
             $('#fields_driver_class').hide();
             $('#fields_cl_class').hide();
             $('#fields_asb_class').hide();
             $('#fields_state').hide();
             $('#fields_expiry').hide();
-            $('#fields_date').hide();
-            $('#fields_tag_type').hide();
-            $('#fields_tag_date').hide();
+            $('#fields_issued').hide();
             $('#fields_notes').hide();
             $('#singlefile-div').hide();
             $('#singleimage-div').hide();
@@ -207,9 +203,9 @@
                 $('#upload').show();
             }
 
-            if (cat < 10) {
-                $('#name').val($("#category_id option:selected").text());
+            if (cat < 6 || cat == 8 || cat == 9) {
                 $('#fields_name').hide();
+                $('#ref_name').val('');
             } else // Other Licence + everything else
                 $('#fields_name').show();
 
@@ -218,7 +214,7 @@
             if (cat == 2 || cat == 3)  // Drivers, CL
                 $('#fields_expiry').show();
             else if (cat != '')
-                $('#fields_date').show();
+                $('#fields_issued').show();
 
             if (cat == 2) { // Drivers
                 $('#fields_lic_no').show();

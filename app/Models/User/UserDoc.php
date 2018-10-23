@@ -16,10 +16,10 @@ class UserDoc extends Model {
 
     protected $table = 'user_docs';
     protected $fillable = [
-        'type', 'category_id', 'name', 'attachment', 'expiry', 'ref_no', 'ref_name', 'ref_type',
+        'type', 'category_id', 'name', 'attachment', 'issued', 'expiry', 'ref_no', 'ref_name', 'ref_type',
         'version', 'private', 'share', 'notes', 'user_id', 'company_id',
         'status', 'created_by', 'updated_by', 'approved_by', 'approved_at'];
-    protected $dates = ['expiry', 'approved_at'];
+    protected $dates = ['expiry', 'issued', 'approved_at'];
 
 
     /**
@@ -192,7 +192,7 @@ class UserDoc extends Model {
     {
         //$url = URL::to('/filebank') . '/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
         if ($this->attributes['attachment'])// && file_exists(public_path('/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'])))
-            return '/filebank/company/' . $this->company->id . '/docs/' . $this->attributes['attachment'];
+            return '/filebank/user/' . $this->user_id . '/docs/' . $this->attributes['attachment'];
 
         return '';
     }

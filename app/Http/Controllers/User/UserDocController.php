@@ -140,34 +140,32 @@ class UserDocController extends Controller {
         $doc_request['user_id'] = $user->id;
         $doc_request['company_id'] = $user->company_id;
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
+        $doc_request['issued'] = (request('issued')) ? Carbon::createFromFormat('d/m/Y H:i', request('issued') . '00:00')->toDateTimeString() : null;
 
         // Calculate Test & Tag expiry
-        if (request('category_id') == '6') {
-            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
-            $doc_request['ref_type'] = request('tag_type');
-        }
+        //if (request('category_id') == '6') {
+        //    $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
+        //    $doc_request['ref_type'] = request('tag_type');
+        //}
 
         // Convert licence type into CSV - Drivers/Contractors
         if (in_array(request('category_id'), [2,3])) {
             $doc_request['ref_no'] = request('lic_no');
-            $doc_request['ref_type'] = implode(',', request('lic_type'));
+            $doc_request['ref_type'] = (request('category_id') == 2) ? implode(',', request('drivers_type')) : implode(',', request('cl_type'));
         }
 
         // Reassign Asbestos Licence to correct category
         if (request('category_id') == '8')
             $doc_request['ref_type'] = request('asb_type');
 
-        // Reassign Other to correct name
-        if (request('category_id') == '10')
-            $doc_request['name'] = request('name'); //'Additional Licence';
 
-        // Create Company Doc
+        // Create User Doc
         //dd($doc_request);
         $doc = UserDoc::create($doc_request);
 
         // Handle attached file
-        if ($request->hasFile('singlefile')) {
-            $file = $request->file('singlefile');
+        if ($request->hasFile('singlefile') || $request->hasFile('singleimage')) {
+            $file = ($request->hasFile('singlefile')) ? $request->file('singlefile') : $request->file('singleimage');
 
             $path = "filebank/user/" . $user->id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
@@ -176,13 +174,15 @@ class UserDocController extends Controller {
             while (file_exists(public_path("$path/$name")))
                 $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
             $file->move($path, $name);
+
+            //dd($doc_request);
             $doc->attachment = $name;
             $doc->save();
         }
         Toastr::success("Uploaded document");
 
         // Closing any outstanding todoos associated with this doc category ie. expired docs
-        $doc->closeToDo();
+        //$doc->closeToDo();
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
         $doc->status = 2;
@@ -309,11 +309,11 @@ class UserDocController extends Controller {
      */
     public function reject($uid, $id)
     {
-        $company = Company::find($uid);
-        $doc = CompanyDoc::findOrFail($id);
+        $user = User::find($uid);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("sig.company.doc", $doc))
+        if (!Auth::user()->allowed2("sig.user.doc", $doc))
             return view('errors/404');
 
         //dd(request()->all());
@@ -325,7 +325,7 @@ class UserDocController extends Controller {
 
         Toastr::success("Updated document");
 
-        return redirect("company/$company->id/doc/$doc->id/edit");
+        return redirect("user/$user->id/doc/$doc->id/edit");
     }
 
     /**
@@ -333,13 +333,13 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function archive($cid, $id)
+    public function archive($uid, $id)
     {
-        $company = Company::find($cid);
-        $doc = CompanyDoc::findOrFail($id);
+        $user = User::find($uid);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("del.company.doc", $doc))
+        if (!Auth::user()->allowed2("del.user.doc", $doc))
             return view('errors/404');
 
         //dd(request()->all());
@@ -354,55 +354,7 @@ class UserDocController extends Controller {
             Toastr::success("Document achived");
         }
 
-        return redirect("company/$company->id/doc/$doc->id/edit");
-    }
-
-    /**
-     * Upload File + Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function upload($id)
-    {
-        // Check authorisation and throw 404 if not
-        if (!(Auth::user()->allowed2('add.company.doc.gen') || Auth::user()->allowed2('add.company.doc.lic') ||
-            Auth::user()->allowed2('add.company.doc.whs') || Auth::user()->allowed2('add.company.doc.ics'))
-        )
-            return json_encode("failed");
-
-        // Handle file upload
-        if (request()->hasFile('multifile')) {
-            $files = request()->file('multifile');
-            foreach ($files as $file) {
-                $path = "filebank/company/" . Auth::user()->company_id . '/docs';
-                $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
-
-                // Ensure filename is unique by adding counter to similiar filenames
-                $count = 1;
-                while (file_exists(public_path("$path/$name")))
-                    $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
-                $file->move($path, $name);
-
-                $doc_request['category_id'] = $request->get('category_id');
-                $doc_request['name'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $doc_request['company_id'] = Auth::user()->company_id;
-                $doc_request['for_company_id'] = Auth::user()->company_id;
-                $doc_request['expiry'] = null;
-
-                // Set Type
-                if ($doc_request['category_id'] > 6 && $doc_request['category_id'] < 10)
-                    $doc_request['type'] = 'lic';
-                elseif ($doc_request['category_id'] > 20)
-                    $doc_request['type'] = 'gen';
-
-                // Create Site Doc
-                $doc = CompanyDoc::create($doc_request);
-                $doc->attachment = $name;
-                $doc->save();
-            }
-        }
-
-        return json_encode("success");
+        return redirect("user/$user->id/doc/$doc->id/edit");
     }
 
 
@@ -468,18 +420,10 @@ class UserDocController extends Controller {
             ->addColumn('details', function ($doc) {
                 $details = '';
 
-                /*
-                if (in_array($doc->category_id, [1, 2, 3])) // PL + WC + SA
-                    $details .= "Policy No: $doc->ref_no &nbsp; Insurer: $doc->ref_name";
-                if (in_array($doc->category_id, [2, 3])) // PL + WC + SA
-                    $details .= "<br>Type: $doc->ref_type";
-                if (in_array($doc->category_id, [6])) // Test&Tag
-                    $details = 'Test Date: '.$doc->expiry->subMonths($doc->ref_type)->format('d/m/Y');
-                if (in_array($doc->category_id, [7])) // CL + Asb
-                    $details = "Lic no: $doc->ref_no  &nbsp; Class: " . $doc->company->contractorLicenceSBC();
-                if (in_array($doc->category_id, [8])) // CL + Asb
-                    $details = "Class: $doc->ref_type";
-                */
+                if (in_array($doc->category_id, [2, 3])) // Drivers + CL
+                    $details .= "Licence No: $doc->ref_no";
+                if (in_array($doc->category_id, [6, 7, 10]) || $doc->category_id > 10) // FirstAid + Training + Apprentice + Other
+                    $details .= "$doc->ref_name";
 
                 return ($details == '') ? '-' : $details;
             })
@@ -491,8 +435,11 @@ class UserDocController extends Controller {
 
                 return $doc->name;
             })
+            ->editColumn('issued', function ($doc) {
+                return ($doc->issued) ? $doc->issued->format('d/m/Y') : '-';
+            })
             ->editColumn('expiry', function ($doc) {
-                return ($doc->expiry) ? $doc->expiry->format('d/m/Y') : 'none';
+                return ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '-';
             })
             ->addColumn('action', function ($doc) {
                 $actions = '';
@@ -505,147 +452,13 @@ class UserDocController extends Controller {
                 //elseif (Auth::user()->allowed2("view.company.doc", $doc))
                     $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
-                //if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
-                //    $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
+                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
+                    $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/user/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
+
 
                 return $actions;
             })
             ->rawColumns(['id', 'name', 'details', 'action'])
-            ->make(true);
-
-        return $dt;
-    }
-
-    /**
-     * Display a listing of risks.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function listRisks()
-    {
-        if (!Auth::user()->hasPermission2('view.safety.doc'))
-            return view('errors/404');
-
-        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
-
-        return view('site/doc/risk/list', compact('site_id'));
-    }
-
-    /**
-     * Get Risks current user is authorised to manage + Process datatables ajax request.
-     */
-    public function getRisks(Request $request)
-    {
-        $records = SiteDoc::select(['id', 'type', 'site_id', 'attachment', 'name',])
-            ->where('type', 'RISK')
-            ->where('site_id', '=', $request->get('site_id'))
-            ->where('status', '1');
-
-        $dt = Datatables::of($records)
-            ->editColumn('id', '<div class="text-center"><a href="/filebank/site/{{$site_id}}/risk/{{$attachment}}"><i class="fa fa-search"></i></a></div>')
-            ->editColumn('id', function ($doc) {
-                ($doc->type == 'RISK') ? $type = 'risk' : $type = 'hazard';
-
-                return '<div class="text-center"><a href="/filebank/site/' . $doc->site_id . '/' . $type . '/' . $doc->attachment . '"><i class="fa fa-file-text-o"></i></a></div>';
-            })
-            ->make(true);
-
-        return $dt;
-    }
-
-    /**
-     * Display a listing of hazards.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function listHazards()
-    {
-        if (!Auth::user()->hasPermission2('view.safety.doc'))
-            return view('errors/404');
-
-        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
-
-        return view('site/doc/hazard/list', compact('site_id'));
-    }
-
-
-    /**
-     * Get Hazards current user is authorised to manage + Process datatables ajax request.
-     */
-    public function getHazards(Request $request)
-    {
-        $records = SiteDoc::select(['id', 'type', 'site_id', 'attachment', 'name',])
-            ->where('type', 'HAZ')
-            ->where('site_id', '=', $request->get('site_id'))
-            ->where('status', '1');
-
-        $dt = Datatables::of($records)
-            ->editColumn('id', '<div class="text-center"><a href="/filebank/site/{{$site_id}}/risk/{{$attachment}}"><i class="fa fa-search"></i></a></div>')
-            ->editColumn('id', function ($doc) {
-                ($doc->type == 'RISK') ? $type = 'risk' : $type = 'hazard';
-
-                return '<div class="text-center"><a href="/filebank/site/' . $doc->site_id . '/' . $type . '/' . $doc->attachment . '"><i class="fa fa-file-text-o"></i></a></div>';
-            })
-            ->make(true);
-
-        return $dt;
-    }
-
-    /**
-     * Display a listing of plans.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function listPlans()
-    {
-        if (!Auth::user()->hasPermission2('view.site.doc'))
-            return view('errors/404');
-
-        $site_id = (Session::has('siteID')) ? Session::get('siteID') : '';
-
-        return view('site/doc/plan/list', compact('site_id'));
-    }
-
-    /**
-     * Get Plans current user is authorised to view + Process datatables ajax request.
-     */
-    public function getPlans(Request $request)
-    {
-        $records = SiteDoc::select(['id', 'type', 'site_id', 'attachment', 'name',])
-            ->where('type', 'PLAN')
-            ->where('site_id', '=', $request->get('site_id'))
-            ->where('status', '1');
-
-        $dt = Datatables::of($records)
-            ->editColumn('id', '<div class="text-center"><a href="/filebank/site/{{$site_id}}/risk/{{$attachment}}"><i class="fa fa-search"></i></a></div>')
-            ->editColumn('id', function ($doc) {
-                return '<div class="text-center"><a href="/filebank/site/' . $doc->site_id . '/plan/' . $doc->attachment . '"><i class="fa fa-file-text-o"></i></a></div>';
-            })
-            ->make(true);
-
-        return $dt;
-    }
-
-    /**
-     * Show CC Standard Details
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showStandard()
-    {
-        return view('company/doc/list-standard');
-    }
-
-    /**
-     * Get CC Standard Details
-     */
-    public function getStandard()
-    {
-        $records = CompanyDoc::where('company_id', 3)->where('category_id', 22)->where('status', '1');
-
-        $dt = Datatables::of($records)
-            ->editColumn('id', '<div class="text-center"><a href="/filebank/company/3/docs/{{$attachment}}"><i class="fa fa-file-text-o"></i></a></div>')
-            ->rawColumns(['id', 'name'])
             ->make(true);
 
         return $dt;

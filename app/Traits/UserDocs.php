@@ -98,7 +98,8 @@ trait UserDocs {
     public function userDocTypeSelect($action, $user, $prompt = '')
     {
         $array = [];
-        $single = DB::table('user_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
+        $single = DB::table('user_docs_categories')->whereIn('company_id', ['1', '3'])->where('multiple', 0)->pluck('id')->toArray();
+        //$single = DB::table('user_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
         foreach (UserDocTypes::all() as $doc_type => $doc_name) {
             // Public Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
@@ -109,7 +110,7 @@ trait UserDocs {
             }
             // Private Docs
             if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
-                foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
+                foreach (UserDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $this->activeUserDoc($id)))
                         $array[$id] = $name;
                 }

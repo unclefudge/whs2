@@ -155,7 +155,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         ];
         foreach ($classes as $class => $name) {
                 $sel = (in_array($class, $selected)) ? 'selected' : '';
-                $str .= "<option value='$class-' $sel>$name</option>";
+                $str .= "<option value='$class' $sel>$name</option>";
         }
         return $str;
     }

@@ -14,7 +14,7 @@ class AddDateFieldToUserDocsTable extends Migration
     public function up()
     {
         Schema::table('user_docs', function (Blueprint $table) {
-            $table->dateTime('date')->nullable();
+            $table->dateTime('issued')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddDateFieldToUserDocsTable extends Migration
     public function down()
     {
         Schema::table('user_docs', function($table) {
-            $table->dropColumn('date');
+            $table->dropColumn('issued');
         });
     }
 }

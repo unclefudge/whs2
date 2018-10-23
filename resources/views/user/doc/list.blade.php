@@ -55,6 +55,7 @@
                                 <th> Document</th>
                                 <th> Dept.</th>
                                 <th> Details</th>
+                                <th width="10%"> Issued</th>
                                 <th width="10%"> Expiry</th>
                                 <th width="10%"> Action</th>
                             </tr>
@@ -106,6 +107,7 @@
             {data: 'name', name: 'name'},
             {data: 'category_id', name: 'category_id'},
             {data: 'details', name: 'details'},
+            {data: 'issued', name: 'issued'},
             {data: 'expiry', name: 'expiry'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],

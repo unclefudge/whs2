@@ -82,23 +82,8 @@
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
                                         {!! Form::text('name', null, ['class' => 'form-control', ($doc->category_id < 9) ? 'readonly' : '']) !!}
                                     </div>
-                                    @if (in_array($doc->category_id, [2, 3]))
-                                        {{-- Expiry --}}
-                                        <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
-                                            {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
-                                            {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('expiry', $errors) !!}
-                                        </div>
-                                    @else
-                                        {{-- Date --}}
-                                        <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
-                                            {!! Form::label('date', 'Date', ['class' => 'control-label']) !!}
-                                            {!! Form::text('date', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('date', $errors) !!}
-                                        </div>
-                                    @endif
-                                    {{-- Lic No + Lic Class--}}
-                                    @if ($doc->category_id == 7)
+                                    {{-- Drivers Lic No + Class--}}
+                                    @if ($doc->category_id == 2)
                                         <div class="form-group {!! fieldHasError('lic_no', $errors) !!}">
                                             {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
                                             {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control', 'readonly']) !!}
@@ -106,9 +91,28 @@
                                         </div>
                                         <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
                                             {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::text('lic_no', $doc->ref_type, ['class' => 'form-control', 'readonly']) !!}
+                                            {{--
                                             <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple readonly>
-                                                {!! $company->contractorLicenceOptions() !!}
-                                            </select>
+                                                {!! $user->driversLicenceOptions() !!}
+                                            </select>--}}
+                                            {!! fieldErrorMessage('lic_type', $errors) !!}
+                                        </div>
+                                    @endif
+                                    {{-- Contractor Lic No + Class--}}
+                                    @if ($doc->category_id == 3)
+                                        <div class="form-group {!! fieldHasError('lic_no', $errors) !!}">
+                                            {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
+                                            {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control', 'readonly']) !!}
+                                            {!! fieldErrorMessage('lic_no', $errors) !!}
+                                        </div>
+                                        <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
+                                            {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::text('lic_no', $user->contractorLicenceSBC(), ['class' => 'form-control', 'readonly']) !!}
+                                            {{--
+                                            <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple readonly>
+                                                {!! $user->contractorLicenceOptions() !!}
+                                            </select>--}}
                                             {!! fieldErrorMessage('lic_type', $errors) !!}
                                         </div>
                                     @endif
@@ -118,6 +122,22 @@
                                         {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select', 'readonly']) !!}
                                         {!! fieldErrorMessage('asb_type', $errors) !!}
                                     </div>
+
+                                    @if (in_array($doc->category_id, [2, 3]))
+                                        {{-- Expiry --}}
+                                        <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
+                                            {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
+                                            {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
+                                            {!! fieldErrorMessage('expiry', $errors) !!}
+                                        </div>
+                                    @else
+                                        {{-- Issued --}}
+                                        <div class="form-group {!! fieldHasError('issued', $errors) !!}">
+                                            {!! Form::label('issued', 'Issued Date', ['class' => 'control-label']) !!}
+                                            {!! Form::text('issued', ($doc->issued) ? $doc->issued->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
+                                            {!! fieldErrorMessage('issued', $errors) !!}
+                                        </div>
+                                    @endif
 
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}">

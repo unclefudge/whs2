@@ -623,7 +623,7 @@ trait UserRolesPermissions {
         // User Documents
         if ($permissiontype == 'user.doc') {
             if ($action == 'add') {
-                if ($this->hasAnyPermission2('add.docs.whs.pub|add.docs.whs.pri')) return true;
+                if ($this->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')) return true;
             } else {
                 $category = UserDocCategory::find($record->category_id);
                 $doc_permission = ($category->private) ? "$action.docs.$category->type.pri" : "$action.docs.$category->type.pub";
