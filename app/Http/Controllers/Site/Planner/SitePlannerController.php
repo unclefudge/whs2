@@ -303,7 +303,7 @@ class SitePlannerController extends Controller {
         } else {
             $this_mon = new Carbon('monday this week');
             $this_mon_2 = new Carbon('monday this week');
-            $this_mon_2->addDays(13);
+            $this_mon_2->addDays(34);  // was 13
             $allowedSites = Auth::user()->company->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
         }
 
@@ -847,7 +847,7 @@ class SitePlannerController extends Controller {
         else {
             $this_mon = new Carbon('monday this week');
             $this_mon_2 = new Carbon('monday this week');
-            $this_mon_2->addDays(13);
+            $this_mon_2->addDays(34); // was 13
             $allowedSites = Auth::user()->company->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
         }
         //$allowedSites = ['115'];
