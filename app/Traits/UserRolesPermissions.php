@@ -573,8 +573,7 @@ trait UserRolesPermissions {
                 || $permission == 'view.user.construction' || $permission == 'view.user.security') && $record->id == $this->id)
             return true;
 
-        //
-
+        //dd($permission);
 
         // ToDoo
         if ($permissiontype == 'todo') {
@@ -644,6 +643,9 @@ trait UserRolesPermissions {
             return false;
         }
 
+        // SDS add - Only Fudge, Jo, Tara, Rob
+        if ($permission == 'add.sds' && in_array($this->id, ['3', '109', '351', '6'])) return true;
+
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
         $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
@@ -660,8 +662,6 @@ trait UserRolesPermissions {
             // Users
             if ($permissiontype == 'user' || $permissiontype == 'user.contact' || $permissiontype == 'user.security' || $permissiontype == 'user.construction') {
                 if ($this->authUsers($permission)->contains('id', $record->id)) return true;
-
-                return false;
             }
 
             // Companies
@@ -669,15 +669,11 @@ trait UserRolesPermissions {
                 if ($action == 'del' && $record->id == $this->company_id) return false; // User can't delete own company
                 if ($action == 'sig' && $record->id == $this->company_id && $record->parent_company) return false; // User can't sign off own company if has parent
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
-
-                return false;
             }
 
             // Company Accounting + Leave
             if ($permissiontype == 'company.acc' || $permissiontype == 'company.leave') {
                 if ($this->authCompanies($permission)->contains('id', $record->id)) return true;
-
-                return false;
             }
 
             // Company WHS + Construction
@@ -685,15 +681,11 @@ trait UserRolesPermissions {
                 // Company has no parent or Uses doesn't belong to this company
                 // ie Users can't edit their own company record if they hgave a parent
                 if ((!$record->parent_company || $this->company_id != $record->id) && $this->authCompanies($permission)->contains('id', $record->id)) return true;
-
-                return false;
             }
 
             // Sites + Planners (Weekly/Site/Trade)
             if ($permissiontype == 'site' || $permissiontype == 'site.admin' || $permissiontype == 'weekly.planner' || $permissiontype == 'site.planner' || $permissiontype == 'trade.planner') {
                 if ($this->authSites($permission)->contains('id', $record->id)) return true;
-
-                return false;
             }
 
             // Site Accident + Hazard
@@ -710,8 +702,6 @@ trait UserRolesPermissions {
 
                 // User always allowed to view on Hazard of site they currently logged into
                 if ($action == 'view' && $permissiontype == 'site.hazard' && Session::has('siteID') && Session::get('siteID') == $record->site_id) return true;
-
-                return false;
             }
 
 
@@ -723,8 +713,6 @@ trait UserRolesPermissions {
 
                 // Site QA Master templates - Only Fudge, Jo, Tara, Rob
                 if ($permissiontype == 'site.qa' && $record->master && in_array($this->id, ['3', '109', '351', '6'])) return true;
-
-                return false;
             }
 
             // Toolbox + WMS
@@ -733,31 +721,24 @@ trait UserRolesPermissions {
                 if ($action == 'view' && $record->master && $record->company_id == '3') return true; // User can view library
                 if ($this->permissionLevel($permission, $record->company_id) == 99 || $this->permissionLevel($permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
                 if ($this->permissionLevel($permission, $record->company_id) == 20 && $record->for_company_id == $this->company_id) return true; // User has 'Own Company' permission so record must be 'for' their company
-
-                return false;
             }
 
             // Safetytip + Notify + SDS
-            if ($permissiontype == 'safetytip' || $permission == 'notify' || $permission == 'sds') {
-                if ($this->hasPermission2($permission))
-                    return true;
+            if ($permissiontype == 'safetytip' || $permissiontype == 'notify' || $permissiontype == 'sds') {
+                if ($this->hasPermission2($permission)) return true;
             }
 
             // Settings
             if ($permissiontype == 'settings') {
-                if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) // User belong to same company record
-                    return true;
-
-                return false;
+                if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) return true; // User belong to same company record
             }
 
             // Area Super - Needs to be fixed for Multiple level 2 companies
             if ($permissiontype == 'area.super') {
-                if ($this->permissionLevel($permission, $record->company_id) && $record->company_id == $this->company_id) // User belong to same company record
-                    return true;
-
-                return false;
+                if ($this->permissionLevel($permission, $record->company_id) && $record->company_id == $this->company_id) return true; // User belong to same company record
             }
+
+            return false;
         }
     }
 }
