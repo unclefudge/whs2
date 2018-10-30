@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        {!! Form::model($doc, ['method' => 'PATCH', 'action' => ['Company\CompanyDocController@update',$company->id, $doc->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                        {!! Form::model($doc, ['method' => 'PATCH', 'action' => ['Company\CompanyDocController@update',$company->id, $doc->id], 'class' => 'horizontal-form', 'files' => true, 'id' => 'doc_form']) !!}
                         @include('form-error')
 
                         @if (file_exists(public_path($doc->attachment_url)) && filesize(public_path($doc->attachment_url)) == 0)
@@ -141,6 +141,7 @@
                                     {!! Form::hidden('filetype', '', ['id' => 'filetype']) !!}
                                     {{-- Category --}}
                                     {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control', 'id' => 'category_id']) !!}
+                                    {!! Form::hidden('archive', null, ['class' => 'form-control', 'id' => 'archive']) !!}
                                     @if ($doc->category_id > 8)
                                         <div class="form-group">
                                             {!! Form::label('category_id_text', 'Category', ['class' => 'control-label']) !!}
@@ -297,7 +298,11 @@
                                     @if ($doc->status == 2)
                                         <a class="btn dark" data-toggle="modal" href="#modal_reject"> Reject </a>
                                     @endif
-                                    <button type="submit" class="btn green">Approve</button>
+                                    @if ((in_array($doc->category_id, [1,2,3]) && $company->activeCompanyDoc($doc->category_id) && $company->activeCompanyDoc($doc->category_id)->status == 1))
+                                        <a href="#modal_approve_archive" class="btn green" data-toggle="modal" id="approve_archive">Approve</a>
+                                    @else
+                                        <button type="submit" name="save" value="save" class="btn green" id="approve">Approve</button>
+                                    @endif
                                 @else
                                     {{-- Save / Upload - only 'current' docs status > 0 --}}
                                     @if ($doc->status != 0)
@@ -355,6 +360,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn green">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Approve & Archive Modal --}}
+        <div id="modal_approve_archive" class="modal fade bs-modal-sm" id="basic" tabindex="-1" role="modal_approve_archive" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Replace Existing Document</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <b>{{ $company->name }}</b> currently has the following valid document.<br><br>
+                            <a href="{!! $company->activeCompanyDoc($doc->category_id)->attachment_url !!}" target="_blank">{{ $doc->name }}<br>
+                                expiry {!! ($company->activeCompanyDoc($doc->category_id)) ? $company->activeCompanyDoc($doc->category_id)->expiry->format('d/m/Y') : '' !!}</a><br><br>
+                            <span class="font-red"><b>By approving this document it will archive the old one.</b></span><br><br>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn green" name="archive_doc" id="accept_archive">Accept</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -428,6 +458,12 @@
             }
             $('#but_upload').show();
             $('#but_save').hide();
+        });
+
+        $("#accept_archive").click(function (e) {
+            e.preventDefault();
+            $('#archive').val({{ ($company->activeCompanyDoc($doc->category_id)) ? $company->activeCompanyDoc($doc->category_id)->id : null }});
+            $("#doc_form").submit();
         });
 
     });

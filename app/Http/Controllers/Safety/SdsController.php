@@ -53,13 +53,13 @@ class SdsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.sds'))
             return view('errors/404');
 
-        $category_id = $request->get('category_id');
+        $category_id = request('category_id');
 
         return view('safety/doc/sds/create', compact('category_id'));
     }
@@ -69,7 +69,7 @@ class SdsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $doc = SafetyDoc::findOrFail($id);
 
@@ -85,7 +85,7 @@ class SdsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $doc = SafetyDoc::findOrFail($id);
 
@@ -234,10 +234,10 @@ class SdsController extends Controller {
     /**
      * Get Docs current user is authorised to manage + Process datatables ajax request.
      */
-    public function getSDS(Request $request)
+    public function getSDS()
     {
-        if ($request->get('category_id') && $request->get('category_id') != ' ')
-            $category_list = [$request->get('category_id')];
+        if (request('category_id') && request('category_id') != ' ')
+            $category_list = [request('category_id')];
         else
             $category_list = SafetyDocCategory::pluck('id')->toArray();
 

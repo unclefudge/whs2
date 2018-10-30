@@ -230,6 +230,16 @@ class CompanyDocController extends Controller {
         $doc_request = request()->all();
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
 
+        //dd($doc_request);
+        // Archive old doc if required
+        if (request('archive')) {
+            $old_doc = CompanyDoc::findOrFail(request('archive'));
+            $old_doc->status = 0;
+            //dd($old_doc->id);
+            $old_doc->save();
+        }
+        //dd('bb');
+
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
             $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
