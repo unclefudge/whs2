@@ -643,8 +643,8 @@ trait UserRolesPermissions {
             return false;
         }
 
-        // SDS add - Only Fudge, Jo, Tara, Rob
-        if ($permission == 'add.sds' && in_array($this->id, ['3', '109', '351', '6'])) return true;
+        // SDS add - Only Fudge, Jo, Tara, Rob, Demi
+        if ($permission == 'add.sds' && in_array($this->id, ['3', '109', '351', '6', '424'])) return true;
 
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
