@@ -33,7 +33,7 @@ class PagesController extends Controller {
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $worksite = '';
 
@@ -77,7 +77,7 @@ class PagesController extends Controller {
         return view('pages/home', compact('worksite'));
     }
 
-    public function testcal(Request $request)
+    public function testcal()
     {
         return view('pages/testcal');
     }
@@ -89,7 +89,7 @@ class PagesController extends Controller {
     }
 
 
-    public function quick(Request $request)
+    public function quick()
     {
         echo "<br><br>Signed QA items with status 0<br><br>";
         $qas = \App\Models\Site\SiteQa::where('status', '>', 0)->where('master', 0)->get();
@@ -346,8 +346,7 @@ VALUES<br>";
     }
 
 
-    public
-    function completedQA(Request $request)
+    public function completedQA()
     {
         echo "Closing completed QA ToDos<br><br>";
         $records = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
@@ -362,8 +361,7 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function refreshQA(Request $request)
+    public function refreshQA()
     {
         echo "Updating Current QA Reports to match new QA template with Supervisor tick<br><br>";
         $items = \App\Models\Site\SiteQaItem::all();
@@ -398,8 +396,7 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function importCompany(Request $request)
+    public function importCompany(Request $request)
     {
         echo "Importing Companies<br><br>";
         $row = 0;
@@ -486,14 +483,13 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function createPermission(Request $request)
+    public function createPermission()
     {
         //
         // Creating Permission
         //
-        $name = 'User Construction';
-        $slug = 'user.Construction';
+        $name = 'Company WHS Override';
+        $slug = 'company.whs.override';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);
@@ -518,8 +514,7 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function fixplanner(Request $request)
+    public function fixplanner()
     {
         set_time_limit(120);
 
@@ -626,8 +621,7 @@ VALUES<br>";
 
     }
 
-    public
-    function workDaysBetween($from, $to, $debug = false)
+    public function workDaysBetween($from, $to, $debug = false)
     {
         if ($from == $to)
             return 1;

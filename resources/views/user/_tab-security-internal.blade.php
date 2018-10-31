@@ -163,7 +163,6 @@ $rec = $user;
                         @endif
                     </tr>
 
-
                     @if (Auth::user()->company_id == $user->company_id)
                         <tr>
                             <td>Construction</td>
@@ -189,6 +188,14 @@ $rec = $user;
                             <td width="15%">{!! permSelect('edit.company.leave', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                             <td width="45%" colspan="3"></td>
                         </tr>
+                        @if (Auth::user()->isCC())
+                            <tr>
+                                <td>WHS Override</td>
+                                <td width="15%">{!! permSelect('view.company.whs.override', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('edit.company.whs.override', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="45%" colspan="3"></td>
+                            </tr>
+                        @endif
                     @endif
                 </table>
             </div>
