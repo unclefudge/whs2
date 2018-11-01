@@ -56,7 +56,7 @@
                 {{-- Expiry --}}
                 <div class="row">
                     <div class="form-group {!! fieldHasError("expiry-$over->id", $errors) !!}">
-                        {!! Form::label('expiry-$over->id', 'Expiry:', ['class' => 'col-md-3 control-label']) !!}
+                        {!! Form::label("expiry-$over->id", 'Expiry:', ['class' => 'col-md-3 control-label']) !!}
                         <div class="col-md-9">
                             <div class="input-group date date-picker">
                                 {!! Form::text("expiry-$over->id", ($over->expiry) ? $over->expiry->format('d/m/Y') : null, ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", 'placeholder' => 'Leave blank to never expire', 'readonly']) !!}

@@ -55,6 +55,21 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Expiry --}}
+            <hr class="field-hr">
+            <div class="row">
+                <div class="form-group {!! fieldHasError("expiry", $errors) !!}">
+                    {!! Form::label('expiry', 'Expiry:', ['class' => 'col-md-3 control-label']) !!}
+                    <div class="col-md-9">
+                        <div class="input-group date date-picker">
+                            {!! Form::text("expiry", null, ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", 'placeholder' => 'Leave blank to never expire', 'readonly']) !!}
+                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                        </div>
+                        {!! fieldErrorMessage('expiry', $errors) !!}
+                    </div>
+                </div>
+            </div><br>
         </div>
         <br>
         <div class="form-actions right">
