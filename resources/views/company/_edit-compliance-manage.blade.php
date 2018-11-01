@@ -5,7 +5,7 @@
             <span class="caption-subject font-dark bold uppercase">Compliance Management</span>
         </div>
         <div class="actions">
-            @if (Auth::user()->allowed2('edit.company.whs', $company) && $company->status)
+            @if (Auth::user()->allowed2('edit.compliance.manage', $company) && $company->status)
                 <button class="btn btn-circle green btn-outline btn-sm" onclick="addForm('compliance')">Add</button>
             @endif
         </div>
