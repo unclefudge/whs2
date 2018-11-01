@@ -230,22 +230,22 @@ $cc = 1;*/
                                                     <td width="45%" colspan="3"></td>
                                                 @endif
                                             </tr>
+                                                <tr>
+                                                    <td>WHS Compliance</td>
+                                                    <td width="15%">{!! permSelect('view.company.whs', 'own', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.company.whs', 'own', $rec, $cid, $dis) !!}</td>
+                                                    @if (!$role->external)
+                                                        <td width="30%" colspan="2"></td>
+                                                        <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
+                                                    @else
+                                                        <td width="45%" colspan="3"></td>
+                                                    @endif
+                                                </tr>
                                             <tr>
                                                 <td>Company Leave</td>
                                                 <td width="15%">{!! permSelect('view.company.leave', 'own', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('edit.company.leave', 'own', $rec, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>WHS Compliance</td>
-                                                <td width="15%">{!! permSelect('view.company.whs', 'own', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.whs', 'own', $rec, $cid, $dis) !!}</td>
-                                                @if (!$role->external)
-                                                    <td width="30%" colspan="2"></td>
-                                                    <td width="15%">{!! permSelect('sig.company.whs', 'sig', $rec, $cid, $dis) !!}</td>
-                                                @else
-                                                    <td width="45%" colspan="3"></td>
-                                                @endif
                                             </tr>
                                             @if ($cc)
                                                 <tr>
