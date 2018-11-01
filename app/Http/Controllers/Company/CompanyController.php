@@ -14,10 +14,12 @@ use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyLeave;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\Trade;
+use App\Models\Misc\ComplianceOverride;
 use App\Models\Site\Planner\Task;
 use App\Http\Requests;
 use App\Http\Requests\Company\CompanyRequest;
 use App\Http\Utilities\CompanyTypes;
+use App\Http\Utilities\OverrideTypes;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -208,7 +210,7 @@ class CompanyController extends Controller {
             // Archive active/pending docs
             $docs = $company->companyDocs()->where('status', '>', 0);
             $docs_count = count($docs);
-            foreach($docs as $doc) {
+            foreach ($docs as $doc) {
                 $doc->status = 0;
                 $doc->save();
                 $doc->closeToDo();
@@ -219,8 +221,8 @@ class CompanyController extends Controller {
             // Archive active/pending SWMS
             $wms = $company->wmsDocs()->where('status', '>', 0)->where('company_id', Auth::user()->company_id)->get();
             $wms_count = count($wms);
-            foreach($wms as $doc) {
-                $doc->status = -1;
+            foreach ($wms as $doc) {
+                $doc->status = - 1;
                 $doc->save();
                 $doc->closeToDo();
             }
@@ -436,7 +438,7 @@ class CompanyController extends Controller {
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update leave resource in storage.
      *
      * @return \Illuminate\Http\Response
      */
@@ -480,6 +482,99 @@ class CompanyController extends Controller {
             Toastr::error("Failed to delete leave");
 
         return redirect("company/$leave->company_id");
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCompliance($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.whs.override', $company))
+            return view('errors/404');
+
+        // Validate
+        $validator = Validator::make(request()->all(), ['reason' => 'required'], ['reason.required' => 'Please specify a reason']);
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'compliance.add');
+            Toastr::error("Failed to save compliance override");
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $existing_same_type = ComplianceOverride::where('for_company_id', $company->id)->where('type', request('compliance_type'))->where('status', 1)->first();
+        if ($existing_same_type) {
+            Toastr::error("Company already has a Compliance Override of same type");
+
+            $type_name = OverrideTypes::name(request('compliance_type'));
+
+            return back()->withErrors(['FORM' => 'compliance.add', 'duplicate_override' => "This company currently has a override of same type and the old one MUST be deleted first."])->withInput();
+        }
+
+
+        // Format date from daterange picker to mysql format
+        $compliace_request['type'] = request('compliance_type');
+        $compliace_request['required'] = (request('compliance_type') != 'cdu') ? request('required') : null;
+        $compliace_request['for_company_id'] = $company->id;
+        $compliace_request['company_id'] = Auth::user()->company_id;
+        $compliace_request['reason'] = request('reason');
+        $compliace_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
+        $compliace_request['status'] = 1;
+
+        //dd($compliace_request);
+        // Create Compliance Override
+        ComplianceOverride::create($compliace_request);
+        Toastr::success("Created new compliance override");
+
+        return redirect("company/$company->id");
+    }
+
+    /**
+     * Update Compliance resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCompliance($id)
+    {
+        $company = Company::findorFail($id);
+
+        /// Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('edit.company.leave', $company))
+        //    return view('errors/404');
+
+        //dd(request()->all());
+
+        //
+        foreach (request()->all() as $key => $val) {
+            if (preg_match('/compliance_type-/', $key)) {
+                list($crap, $over_id) = explode('-', $key);
+                $compliace_request['expiry'] = (request("expiry-$over_id")) ? Carbon::createFromFormat('d/m/Y H:i', request("expiry-$over_id") . '00:00')->toDateTimeString() : null;
+                $compliace_request['required'] = (request("compliance_type-$over_id") != 'cdu') ? request("required-$over_id") : null;
+                $compliace_request['reason'] = request("reason-$over_id");
+                $compliance = ComplianceOverride::findOrFail($over_id);
+                //var_dump($compliace_request);
+                $compliance->update($compliace_request);
+            }
+        }
+
+        // Delete Marked records
+        $records2del = (request('co_del')) ? request('co_del') : [];
+        if ($records2del && count($records2del)) {
+            foreach ($records2del as $del_id) {
+                $rec = ComplianceOverride::findOrFail($del_id);
+                $rec->status = 0;
+                $rec->save();
+                Toastr::error("Deleted override");
+            }
+        }
+        Toastr::success("Saved changes");
+
+        //dd(request()->all());
+        return redirect("company/$company->id");
     }
 
 
@@ -632,7 +727,8 @@ class CompanyController extends Controller {
             //->filterColumn('full_name', 'whereRaw', "CONCAT(firstname,' ',lastname) like ?", ["%$1%"])
             ->editColumn('id', function ($user) {
                 //if (in_array(Auth::user()->id, [3,109]) || Auth::user()->allowed2('view.user', $user))
-                    return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
+                return '<div class="text-center"><a href="/user/' . $user->id . '"><i class="fa fa-search"></i></a></div>';
+
                 return '';
             })
             ->editColumn('full_name', function ($user) {

@@ -677,7 +677,7 @@ trait UserRolesPermissions {
             }
 
             // Company WHS + Construction
-            if ($permissiontype == 'company.con' || $permissiontype == 'company.whs') {
+            if ($permissiontype == 'company.con' || $permissiontype == 'company.whs' || $permissiontype == 'company.whs.override') {
                 // Company has no parent or Uses doesn't belong to this company
                 // ie Users can't edit their own company record if they hgave a parent
                 if ((!$record->parent_company || $this->company_id != $record->id) && $this->authCompanies($permission)->contains('id', $record->id)) return true;

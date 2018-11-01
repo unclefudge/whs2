@@ -7,7 +7,8 @@
                     <span class="caption-subject font-dark bold uppercase">Compliance Documents</span>
                 </div>
                 <div class="actions">
-                    @if(count($company->missingDocs()) && Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+                    @if(count($company->missingDocs()) && (Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc')) ||
+                            (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload()))
                         <a href="/company/{{ $company->id }}/doc/upload" class="btn btn-circle green btn-outline btn-sm">Upload</a>
                     @endif
                 </div>

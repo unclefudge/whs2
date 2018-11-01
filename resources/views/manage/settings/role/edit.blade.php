@@ -231,6 +231,12 @@ $cc = 1;*/
                                                 @endif
                                             </tr>
                                             <tr>
+                                                <td>Company Leave</td>
+                                                <td width="15%">{!! permSelect('view.company.leave', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="15%">{!! permSelect('edit.company.leave', 'own', $rec, $cid, $dis) !!}</td>
+                                                <td width="45%" colspan="3"></td>
+                                            </tr>
+                                            <tr>
                                                 <td>WHS Compliance</td>
                                                 <td width="15%">{!! permSelect('view.company.whs', 'own', $rec, $cid, $dis) !!}</td>
                                                 <td width="15%">{!! permSelect('edit.company.whs', 'own', $rec, $cid, $dis) !!}</td>
@@ -241,12 +247,16 @@ $cc = 1;*/
                                                     <td width="45%" colspan="3"></td>
                                                 @endif
                                             </tr>
-                                            <tr>
-                                                <td>Company Leave</td>
-                                                <td width="15%">{!! permSelect('view.company.leave', 'own', $rec, $cid, $dis) !!}</td>
-                                                <td width="15%">{!! permSelect('edit.company.leave', 'own', $rec, $cid, $dis) !!}</td>
-                                                <td width="45%" colspan="3"></td>
-                                            </tr>
+                                            @if ($cc)
+                                                <tr>
+                                                    <td>Compliance Management  <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                                                         data-content="Grants ability to override the default compliance requirements in regards to documents for individual companies. To be used sparingly"
+                                                                         data-original-title="Compliance Management"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
+                                                    <td width="15%">{!! permSelect('view.compliance.manage', 'own', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('edit.compliance.manage', 'own', $rec, $cid, $dis) !!}</td>
+                                                    <td width="45%" colspan="3"></td>
+                                                </tr>
+                                            @endif
                                         @endif
                                     </table>
                                 </div>

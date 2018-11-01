@@ -72,7 +72,8 @@ class CompanyDocController extends Controller {
         $category_id = '';
 
         // Check authorisation and throw 404 if not
-        if (!(Auth::user()->allowed2('add.company.doc')))
+        if (!((Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload())))
             return view('errors/404');
 
         return view('company/doc/create', compact('company', 'category_id'));
@@ -134,8 +135,8 @@ class CompanyDocController extends Controller {
         $company = Company::find($cid);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("add.company.doc"))
-            return view('errors/404');
+        if (!((Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
+            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload())))
 
         $category_id = $request->get('category_id');
 

@@ -16,6 +16,7 @@ use App\Models\Safety\ToolboxTalk;
 use App\Models\Misc\ContractorLicence;
 use App\Models\Misc\SettingsNotification;
 use App\Models\Misc\Role2;
+use App\Models\Misc\ComplianceOverride;
 use App\Models\Company\CompanyDoc;
 use App\Http\Utilities\SettingsNotificationTypes;
 use Carbon\Carbon;
@@ -947,7 +948,7 @@ class Company extends Model {
      *
      * @return boolean
      */
-    public function requiresCompanyDoc($type)
+    public function requiresCompanyDoc($type, $system = false)
     {
         // Doc types
         // 1  PL - Public Liabilty
@@ -968,6 +969,12 @@ class Company extends Model {
         // 6  Consultant                       |__X__|__X__|__X__|_____|_____|
         // 7  Builder                          |__X__|__X__|_____|_____|_____|
 
+        // If System == False then check for any Compliance Overrides
+        if (!$system) {
+            $override = ComplianceOverride::where('type', "cd$type")->where('for_company_id', $this->id)->where('status', 1)->first();
+            if ($override)
+                return ($override->required) ? true : false;
+        }
 
         // Determine WC or SA
         if (in_array($this->category, [1, 2, 3, 4, 6, 7])) {  // All but 'Supply Only'
@@ -1083,7 +1090,7 @@ class Company extends Model {
     }
 
     /**
-     * Documents required for a company to be compliant
+     * Documents company has but aren't required to be compliant
      *
      * @return Text or Array
      */
@@ -1105,7 +1112,22 @@ class Company extends Model {
         $non_compliant_html = rtrim($non_compliant_html, ', ');
 
         return ($format == 'csv') ? $non_compliant_html : $non_compliant_docs;
+    }
 
+    /**
+     * List of Compliance overrides set for this company
+     */
+    public function complianceOverrides()
+    {
+        return ComplianceOverride::where('for_company_id', $this->id)->where('status', 1)->get();
+    }
+
+    /**
+     * List of Compliance overrides set for this company
+     */
+    public function parentUpload()
+    {
+        return (ComplianceOverride::where('type', 'cdu')->where('for_company_id', $this->id)->where('status', 1)->first()) ? true : false;
     }
 
 

@@ -165,6 +165,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('company/{id}/leave', 'Company\CompanyController@storeLeave');
     Route::post('company/{id}/leave/update', 'Company\CompanyController@updateLeave');
     Route::get('company/{id}/leave/{lid}', 'Company\CompanyController@destroyLeave');
+    Route::post('company/{id}/compliance', 'Company\CompanyController@storeCompliance');
+    Route::post('company/{id}/compliance/update', 'Company\CompanyController@updateCompliance');
     Route::get('company/{id}/user', 'Company\CompanyController@users');
     //Route::get('company/{id}/edit/trade', 'Company\CompanyController@editTrade');
     //Route::post('company/{id}/settings/logo', 'Company\CompanyController@updateLogo');

@@ -23,7 +23,7 @@
                 </div>
             </div>
             <hr class="field-hr">
-            {{-- First Name --}}
+            {{-- Last Name --}}
             <div class="row">
                 <div class="form-group {!! fieldHasError('lastname', $errors) !!}">
                     {!! Form::label('lastname', 'Last Name:', ['class' => 'col-md-3 control-label']) !!}

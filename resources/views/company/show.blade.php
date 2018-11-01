@@ -4,6 +4,7 @@
 @inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
 @inject('companyEntityTypes', 'App\Http\Utilities\CompanyEntityTypes')
 @inject('companyDocTypes', 'App\Http\Utilities\CompanyDocTypes')
+@inject('overrideTypes', 'App\Http\Utilities\OverrideTypes')
 @extends('layout')
 
 
@@ -59,9 +60,17 @@
                 @endif
 
                 {{-- WHS --}}
+                {{--}}
                 @if (Auth::user()->allowed2('view.company.whs', $company))
                     @include('company/_show-whs')
                     @include('company/_edit-whs')
+                @endif --}}
+
+                {{-- Compliance Management --}}
+                @if (Auth::user()->allowed2('view.company.whs.override', $company))
+                    @include('company/_show-compliance-manage')
+                    @include('company/_edit-compliance-manage')
+                    @include('company/_add-compliance-manage')
                 @endif
 
                 {{-- SWMS --}}
@@ -122,6 +131,37 @@
             $('#super-div').toggle();
         });
 
+        $('#compliance_type').change(function (e) {
+            overide2();
+        });
+
+        function overide2() {
+            var type = $('#compliance_type').val();
+            if (type != '') {
+                $('#add_compliance_fields').show();
+                $('#save_compliance').show();
+                if (type == 'cdu')
+                    $('#add_compliance_required').hide();
+                else {
+                    $('#add_compliance_required').show();
+                    var cat = type.substring(2, type.length);
+                    if ($('#ot_'+type).val() == '1') {
+                        $('#creq_yes').show();
+                        $('#creq_not').hide();
+                        $('#required').val('0');
+                    } else {
+                        $('#creq_yes').hide();
+                        $('#creq_not').show();
+                        $('#required').val('1');
+                    }
+                    $('#required').trigger('change');
+                }
+            } else {
+                $('#add_compliance_fields').hide();
+                $('#save_compliance').hide();
+            }
+        }
+
         /* Over Ride Licence */
         $('#lic_override_tog').change(function () {
             overide();
@@ -147,6 +187,7 @@
     function editForm(name) {
         $('#show_' + name).hide();
         $('#edit_' + name).show();
+        $('#add_' + name).hide();
     }
 
     function cancelForm(e, name) {
@@ -158,6 +199,7 @@
 
     function addForm(name) {
         $('#show_' + name).hide();
+        $('#edit_' + name).hide();
         $('#add_' + name).show();
     }
 
@@ -202,7 +244,7 @@
 
             @if (count($errors) > 0)
     var errors = {!! $errors !!};
-    if (errors.FORM == 'company' || errors.FORM == 'construction' || errors.FORM == 'whs') {
+    if (errors.FORM == 'company' || errors.FORM == 'construction' || errors.FORM == 'whs' || errors.FORM == 'compliance') {
         $('#show_' + errors.FORM).hide();
         $('#edit_' + errors.FORM).show();
     }
@@ -211,9 +253,20 @@
         $('#edit_leave').hide();
         $('#add_leave').show();
     }
+    if (errors.FORM == 'compliance.add') {
+        $('#show_compliance').hide();
+        $('#edit_compliance').hide();
+        $('#add_compliance').show();
+    }
 
     console.log(errors)
     @endif
+
+    $('.date-picker').datepicker({
+        autoclose: true,
+        clearBtn: true,
+        format: 'dd/mm/yyyy',
+    });
 
 </script>
 @stop

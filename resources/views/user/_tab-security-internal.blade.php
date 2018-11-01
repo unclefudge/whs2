@@ -172,6 +172,12 @@ $rec = $user;
                             <td width="15%">{!! permSelect('sig.company.con', 'sig', $rec, $cid, $dis) !!}</td>
                         </tr>
                         <tr>
+                            <td>Company Leave</td>
+                            <td width="15%">{!! permSelect('view.company.leave', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                            <td width="15%">{!! permSelect('edit.company.leave', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                            <td width="45%" colspan="3"></td>
+                        </tr>
+                        <tr>
                             <td>WHS Compliance</td>
                             <td width="15%">{!! permSelect('view.company.whs', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                             <td width="15%">{!! permSelect('edit.company.whs', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
@@ -182,17 +188,13 @@ $rec = $user;
                                 <td width="45%" colspan="3"></td>
                             @endif
                         </tr>
-                        <tr>
-                            <td>Company Leave</td>
-                            <td width="15%">{!! permSelect('view.company.leave', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                            <td width="15%">{!! permSelect('edit.company.leave', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                            <td width="45%" colspan="3"></td>
-                        </tr>
                         @if (Auth::user()->isCC())
                             <tr>
-                                <td>WHS Override</td>
-                                <td width="15%">{!! permSelect('view.company.whs.override', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
-                                <td width="15%">{!! permSelect('edit.company.whs.override', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                <td>Compliance Management<a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                                                    data-content="Grants ability to override the default compliance requirements in regards to documents for individual companies. To be used sparingly"
+                                                    data-original-title="Compliance Management"> <i class="fa fa-question-circle font-grey-silver"></i> </a></td>
+                                <td width="15%">{!! permSelect('view.compliance.manage', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('edit.compliance.manage', ($sub1) ? 'own' : 'all', $rec, $cid, $dis) !!}</td>
                                 <td width="45%" colspan="3"></td>
                             </tr>
                         @endif

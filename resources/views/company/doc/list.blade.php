@@ -29,8 +29,9 @@
                             <span class="caption-subject font-dark bold uppercase"> Company Documents</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-                                @if ($company->parent_company)
+                            @if((Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc')) ||
+                            (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload()))
+                                @if ($company->parent_company && Auth::user()->isCompany($company->id))
                                     <div class="btn-group">
                                         <a class="btn green btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Generate
                                             <i class="fa fa-angle-down"></i>
