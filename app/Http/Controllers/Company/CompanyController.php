@@ -494,7 +494,7 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.whs.override', $company))
+        if (!Auth::user()->allowed2('edit.compliance.manage', $company))
             return view('errors/404');
 
         // Validate
@@ -543,7 +543,7 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.company.leave', $company))
+        //if (!Auth::user()->allowed2('edit.compliance.manage', $company))
         //    return view('errors/404');
 
         //dd(request()->all());
