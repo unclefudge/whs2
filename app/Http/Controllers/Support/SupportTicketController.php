@@ -9,6 +9,7 @@ use DB;
 use PDF;
 use Mail;
 use Session;
+use App\User;
 use App\Models\Support\SupportTicket;
 use App\Models\Support\SupportTicketAction;
 use App\Http\Requests;
@@ -207,7 +208,9 @@ class SupportTicketController extends Controller {
      */
     public function getTickets(Request $request)
     {
-        if (Auth::user()->hasPermission2('edit.user.security'))
+        if (in_array(Auth::user()->id, [3, 109])) // Fudge + Jo
+            $user_list = User::all()->pluck('id')->toArray();
+        else if (Auth::user()->hasPermission2('edit.user.security'))
             $user_list = Auth::user()->company->users()->pluck('id')->toArray();
         else
             $user_list = [Auth::user()->id];

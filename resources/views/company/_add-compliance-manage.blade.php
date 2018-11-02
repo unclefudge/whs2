@@ -69,7 +69,7 @@
                         {!! fieldErrorMessage('expiry', $errors) !!}
                     </div>
                 </div>
-            </div><br>
+            </div>
         </div>
         <br>
         <div class="form-actions right">
