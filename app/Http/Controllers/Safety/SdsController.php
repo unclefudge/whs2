@@ -253,14 +253,14 @@ class SdsController extends Controller {
         $dt = Datatables::of($records)
             ->editColumn('id', '<div class="text-center"><a href="/filebank/whs/sds/{{$attachment}}"><i class="fa fa-file-text-o"></i></a></div>')
             ->addColumn('action', function ($doc) {
-                //$record = SafetyDoc::find($doc->id);
+                $record = SafetyDoc::find($doc->id);
                 $actions = '';
 
-                //if (Auth::user()->allowed2('edit.sds', $record))
-                if (Auth::user()->hasPermission2('edit.sds'))
+                if (Auth::user()->allowed2('edit.sds', $record))
+                //if (Auth::user()->hasPermission2('edit.sds'))
                     $actions .= '<a href="/safety/doc/sds/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
-                //if (Auth::user()->allowed2('del.sds', $record))
-                if (Auth::user()->hasPermission2('del.sds'))
+                if (Auth::user()->allowed2('del.sds', $record))
+                //if (Auth::user()->hasPermission2('del.sds'))
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/safety/doc/sds/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
                 return $actions;
