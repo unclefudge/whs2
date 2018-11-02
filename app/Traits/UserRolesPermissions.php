@@ -589,10 +589,9 @@ trait UserRolesPermissions {
 
         // Support Tickets
         if ($permission == 'view.support.ticket' || $permission == 'edit.support.ticket') {
-            if ($record->created_by == $this->id) // User can always view/edit own record
-                return true;
-            if ($this->hasPermission2('edit.user.security') && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) // User belongs to own or child company
-                return true;
+            if ($record->created_by == $this->id) return true; // User can always view/edit own record
+            if ($this->hasPermission2('edit.user.security') && in_array($record->created_by, $this->company->users()->pluck('id')->toArray())) return true; // User belongs to own or child company
+            if (in_array($this->id, [3, 109])) return true; // Fudge, Jo
 
             return false;
         }
