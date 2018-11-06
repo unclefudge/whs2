@@ -983,18 +983,18 @@ class Company extends Model {
         }
 
         // Subcontractor (On Site Trade)
-        if ($this->category == 1 && (in_array($type, [1, 4]) || ($this->parent_company == 3 && $type == 5))) return true; // Requires PL, Sub,  + PTC (CC Only)
-        if ($this->category == 1 && $type == 7) {
-            if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
-            if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
-        }
+        if ($this->category == 1 && (in_array($type, [1, 4]) || ($this->parent_company == 3 && $type == 5))) return true; // Requires PL, Sub, + PTC (CC Only)
+        if ($this->category == 1 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // {
+            //if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
+            //if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
+        //}
 
         // Service Provider (On Site Trades) or Supply & Fit
         if (in_array($this->category, [2, 4]) && $type == 1) return true; // Requires PL
-        if (in_array($this->category, [2, 4]) && $type == 7) {
-            if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
-            if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
-        }
+        if (in_array($this->category, [2, 4]) && $type == 7 && $this->tradeRequiresContractorsLicence()) return true; // {
+            //if ($this->tradeRequiresContractorsLicence() && !$this->lic_override) return true; // Requires CL
+            //if (!$this->tradeRequiresContractorsLicence() && $this->lic_override) return true; // Requires CL
+        //}
 
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
@@ -1052,15 +1052,15 @@ class Company extends Model {
      */
     public function isCompliant()
     {
-        $doc_types = [1, 2, 3, 4, 5];
+        $doc_types = [1, 2, 3, 4, 5, 7];
         foreach ($doc_types as $type) {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
                 return false;
         }
 
         // Contractors Licence
-        if ($this->requiresCompanyDoc(7) && !$this->lic_override && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
-            return false;
+        //if ($this->requiresCompanyDoc(7) && !$this->lic_override && (!$this->activeCompanyDoc(7) || $this->activeCompanyDoc(7)->status != 1))
+        //    return false;
 
         return true;
     }

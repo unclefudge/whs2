@@ -60,10 +60,10 @@
                 @endif
 
                 {{-- WHS --}}
-                @if (Auth::user()->allowed2('view.company.whs', $company))
+                {{--}}@if (Auth::user()->allowed2('view.company.whs', $company))
                     @include('company/_show-whs')
                     @include('company/_edit-whs')
-                @endif
+                @endif --}}
 
                 {{-- Compliance Management --}}
                 @if (Auth::user()->allowed2('view.compliance.manage', $company))
