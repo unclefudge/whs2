@@ -38,10 +38,10 @@
                         </div>
                     @endif
                 @endforeach
+                <hr class="field-hr">
             @else
                 <div class="col-xs-12">No active documents found</div>
             @endif
         </div>
-        <hr class="field-hr">
     </div>
 </div>

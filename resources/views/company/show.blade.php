@@ -59,12 +59,6 @@
                     @include('company/_edit-construction')
                 @endif
 
-                {{-- WHS --}}
-                {{--}}@if (Auth::user()->allowed2('view.company.whs', $company))
-                    @include('company/_show-whs')
-                    @include('company/_edit-whs')
-                @endif --}}
-
                 {{-- Compliance Management --}}
                 @if (Auth::user()->allowed2('view.compliance.manage', $company))
                     @include('company/_show-compliance-manage')
@@ -220,6 +214,7 @@
     });
 
     // Warning message for deleting leave
+    {{--}}}
     $('.delete_leave').click(function (e) {
         e.preventDefault();
         var id = $(this).data('id');
@@ -238,7 +233,7 @@
         }, function () {
             window.location = "/company/{{ $company->id }}/leave/" + id;
         });
-    });
+    });--}}
 
 
             @if (count($errors) > 0)

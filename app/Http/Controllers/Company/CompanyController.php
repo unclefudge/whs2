@@ -429,7 +429,6 @@ class CompanyController extends Controller {
         $leave_request['from'] = Carbon::createFromFormat('d/m/Y H:i', request('from') . '00:00')->toDateTimeString();
         $leave_request['to'] = Carbon::createFromFormat('d/m/Y H:i', request('to') . '00:00')->toDateTimeString();
 
-        //dd($leave_request);
         // Create Leave
         CompanyLeave::create($leave_request);
         Toastr::success("Created new leave");
@@ -458,10 +457,19 @@ class CompanyController extends Controller {
                 $leave_request['notes'] = request("notes-$leave_id");
                 $leave = CompanyLeave::find($leave_id);
                 $leave->update($leave_request);
-                Toastr::success("Saved changes");
             }
         }
 
+        // Delete Marked records
+        $records2del = (request('leave_del')) ? request('leave_del') : [];
+        if ($records2del && count($records2del)) {
+            foreach ($records2del as $del_id) {
+                CompanyLeave::findOrFail($del_id)->delete();
+                Toastr::error("Deleted leave");
+            }
+        }
+
+        Toastr::success("Saved changes");
         return redirect("company/$company->id");
     }
 
@@ -543,12 +551,9 @@ class CompanyController extends Controller {
         $company = Company::findorFail($id);
 
         /// Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.compliance.manage', $company))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.compliance.manage', $company))
+            return view('errors/404');
 
-        //dd(request()->all());
-
-        //
         foreach (request()->all() as $key => $val) {
             if (preg_match('/compliance_type-/', $key)) {
                 list($crap, $over_id) = explode('-', $key);
@@ -573,7 +578,6 @@ class CompanyController extends Controller {
         }
         Toastr::success("Saved changes");
 
-        //dd(request()->all());
         return redirect("company/$company->id");
     }
 

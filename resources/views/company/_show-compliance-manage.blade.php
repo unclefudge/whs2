@@ -42,7 +42,6 @@
             <div class="row">
                 <div class="col-md-12">Company uses the default system compliance requirements</div>
             </div>
-            <hr class="field-hr">
         @endif
     </div>
 </div>

@@ -69,12 +69,11 @@
 
                 {{-- Delete --}}
                 <div class="row">
-                    <div class="form-group {!! fieldHasError("reason-$over->id", $errors) !!}">
+                    <div class="form-group">
                         <div class="col-md-12">
-{{--}}}{!! Form::checkbox("co_del", $over->id) !!} --}}
                             <div class="mt-checkbox-list">
                                 <label class="mt-checkbox mt-checkbox-outline pull-right"> Mark to be Deleted
-                                    <input type="checkbox" value="{{ $over->id }}" name="co_del[]" />
+                                    <input type="checkbox" value="{{ $over->id }}" name="co_del[]"/>
                                     <span></span>
                                 </label>
                             </div>
@@ -89,12 +88,14 @@
                 <button class="btn default" onclick="cancelForm(event, 'compliance')">Cancel</button>
                 <button type="submit" class="btn green"> Save</button>
             </div>
-                {!! Form::close() !!}
+            {!! Form::close() !!}
         @else
             <div class="row">
-                <div class="col-md-12">Currenty no overrides are set. Use <button class="btn btn-circle green btn-outline btn-sm" onclick="addForm('compliance')">Add</button> button to create one.</div>
+                <div class="col-md-12">Currenty no overrides are set. Use
+                    <button class="btn btn-circle green btn-outline btn-sm" onclick="addForm('compliance')">Add</button>
+                    button to create one.
+                </div>
             </div>
-            <hr class="field-hr">
         @endif
 
     </div>

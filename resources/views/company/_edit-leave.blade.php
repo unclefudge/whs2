@@ -4,13 +4,18 @@
         <div class="caption">
             <span class="caption-subject font-dark bold uppercase">Company Leave</span>
         </div>
+        <div class="actions">
+            @if (Auth::user()->allowed2('edit.company.leave', $company) && $company->status)
+                <button class="btn btn-circle green btn-outline btn-sm" onclick="addForm('leave')">Add</button>
+            @endif
+        </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateLeave', $company->id]]) !!}
-
         {{-- Leave --}}
         @if ($company->leave()->whereDate('to', '>', date('Y-m-d'))->first())
+            {!! Form::model('company', ['method' => 'POST', 'action' => ['Company\CompanyController@updateLeave', $company->id]]) !!}
             @foreach($company->leave()->whereDate('to', '>', date('Y-m-d'))->get() as $leave)
+                {{-- Dates --}}
                 <div class="row">
                     <div class="form-group {!! fieldHasError("from-$leave->id", $errors) !!}">
                         {!! Form::label("from-$leave->id", 'Leave From:', ['class' => 'col-md-3 control-label']) !!}
@@ -25,6 +30,7 @@
                     </div>
                 </div>
                 <br>
+                {{-- Note --}}
                 <div class="row">
                     <div class="form-group {!! fieldHasError("notes-$leave->id", $errors) !!}">
                         {!! Form::label("notes-$leave->id", 'Notes:', ['class' => 'col-md-3 control-label']) !!}
@@ -34,20 +40,38 @@
                         </div>
                     </div>
                 </div>
+                {{-- Delete --}}
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="mt-checkbox-list">
+                                <label class="mt-checkbox mt-checkbox-outline pull-right"> Mark to be Deleted
+                                    <input type="checkbox" value="{{ $leave->id }}" name="leave_del[]">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @if(!$loop->last)
                     <hr class="field-hr">
                 @endif
             @endforeach
+            <br>
+            <div class="form-actions right">
+                <button class="btn default" onclick="cancelForm(event, 'leave')">Cancel</button>
+                <button type="submit" class="btn green"> Save</button>
+            </div>
+            {!! Form::close() !!}
         @else
-            No scheduled leave
+            <div class="row">
+                <div class="col-md-12">Currenty no scheduled leave. Use
+                    <button class="btn btn-circle green btn-outline btn-sm" onclick="addForm('leave')">Add</button>
+                    button to create.
+                </div>
+            </div>
         @endif
 
 
-        <br>
-        <div class="form-actions right">
-            <button class="btn default" onclick="cancelForm(event, 'leave')">Cancel</button>
-            <button type="submit" class="btn green"> Save</button>
-        </div>
-        {!! Form::close() !!}
     </div>
 </div>

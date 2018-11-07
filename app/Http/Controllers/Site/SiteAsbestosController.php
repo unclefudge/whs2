@@ -153,11 +153,31 @@ class SiteAsbestosController extends Controller {
         return redirect('/site/asbestos/');
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(SiteAsbestosRequest $request, $id, $status)
+    {
+        $asb = SiteAsbestos::findOrFail($id);
+
+        dd(request()->all());
+        
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.site.asbestos', $asb))
+            return view('errors/404');
+
+        // Update Status
+        if ($status != $old_status)
+            $asb->updateStatus($status);
+
+        return redirect('site/asbestos/' . $asb->id);
+    }
+
 
     /**
      * Update Status the specified resource in storage.
      */
-    public function updateStatus(Request $request, $id, $status)
+    public function updateStatus($id, $status)
     {
         $asb = SiteAsbestos::findOrFail($id);
         $old_status = $asb->status;
@@ -176,7 +196,7 @@ class SiteAsbestosController extends Controller {
     /**
      * Get Asbestos Reports current user is authorised to manage + Process datatables ajax request.
      */
-    public function getReports(Request $request)
+    public function getReports()
     {
         $site_list = Auth::user()->authSites('view.site.asbestos')->pluck('id')->toArray();
         $records = DB::table('site_asbestos AS a')
@@ -184,7 +204,7 @@ class SiteAsbestosController extends Controller {
                 's.name as sitename', 's.code'])
             ->join('sites AS s', 'a.site_id', '=', 's.id')
             ->whereIn('a.site_id', $site_list)
-            ->where('a.status', $request->get('status'));
+            ->where('a.status', request('status'));
 
         $dt = Datatables::of($records)
             ->editColumn('id', '<div class="text-center"><a href="/site/asbestos/{{$id}}"><i class="fa fa-search"></i></a></div>')

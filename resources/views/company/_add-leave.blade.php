@@ -33,24 +33,6 @@
             </div>
         </div>
         <br>
-        @if ($company->leave()->whereDate('to', '>', date('Y-m-d'))->first())
-            <div class="mt-comments">
-                @foreach($company->leave()->whereDate('to', '>', date('Y-m-d'))->get() as $leave)
-                    <hr style="margin: 5px 0px 0px 0px">
-                    <div class="mt-comment" style="padding: 5px" id="show_leave-{{ $leave->id }}">
-                        <div class="mt-comment-body" style="padding-left: 0px">
-                            <div class="mt-comment-info">
-                                <div class="row">
-                                    <div class="col-md-3">{{ $leave->from->format('M j') }}
-                                        - {!! ($leave->from->format('M') == $leave->to->format('M')) ? $leave->to->format('j') : $leave->to->format('M j') !!}</div>
-                                    <div class="col-md-9">{{ $leave->notes }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
         <div class="form-actions right">
             <button class="btn default" onclick="cancelForm(event, 'leave')">Cancel</button>
             <button type="submit" class="btn green"> Save</button>
