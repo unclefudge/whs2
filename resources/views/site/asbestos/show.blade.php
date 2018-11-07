@@ -123,6 +123,9 @@
                             <a href="/site/asbestos" class="btn default"> Back</a>
                             @if(Auth::user()->allowed2('del.site.asbestos', $asb))
                                 @if ($asb->status)
+                                    @if(Auth::user()->allowed2('edit.site.asbestos', $asb))
+                                        <a href="/site/asbestos/{{ $asb->id }}/edit" class="btn green"> Edit Notification</a>
+                                    @endif
                                     <a href="/site/asbestos/{{ $asb->id }}/status/0" class="btn red"> Close Notification</a>
                                 @else
                                     <a href="/site/asbestos/{{ $asb->id }}/status/1" class="btn green"> Re-open Notification</a>

@@ -34,41 +34,35 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($abs, ['method' => 'PATCH', 'action' => ['Site\SiteAsbestosController@update', $abs->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                        {!! Form::model($asb, ['method' => 'PATCH', 'action' => ['Site\SiteAsbestosController@update', $asb->id], 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
 
+                        {!! Form::hidden('site_id', $asb->site_id) !!}
                         <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}">
                         {!! Form::hidden('amount_over', '0', ['id' => 'amount_over']) !!}
                         <div class="form-body">
+
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
-                                        {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
-                                        <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
-                                            {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id')) !!}
-                                        </select>
-                                        {!! fieldErrorMessage('site_id', $errors) !!}
-                                    </div>
+                                <div class="col-md-7">
+                                    <h2 style="margin-top: 0px">{{ $asb->site->name }}</h2>
+                                    {{ $asb->site->fulladdress }}
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('address', 'Site Address', ['class' => 'control-label']) !!}
-                                        {!! Form::text('address', null, ['class' => 'form-control', 'readonly']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        {!! Form::label('code', 'Site No.', ['class' => 'control-label']) !!}
-                                        {!! Form::text('code', null, ['class' => 'form-control', 'readonly']) !!}
-                                    </div>
+                                <div class="col-md-5">
+                                    @if (!$asb->status)
+                                        <h2 class="font-red pull-right" style="margin-top: 0px">CLOSED</h2>
+                                    @endif
+                                    <b>Site No:</b> {{ $asb->site->code }}<br>
+                                    <b>Supervisor(s):</b> {{ $asb->site->supervisorsSBC() }}<br>
                                 </div>
                             </div>
+                            <hr>
+
                             {{-- Amount --}}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('amount', $errors) !!}">
                                         {!! Form::label('amount', 'Amount to be removed (m2)', ['class' => 'control-label']) !!}
-                                        <input type="text" class="form-control" value="{{ old('amount') }}" id="amount" name="amount" onkeypress="return isNumber(event)">
+                                        <input type="text" class="form-control" value="{{ (old('amount')) ? old('amount') : $asb->amount }}" id="amount" name="amount" onkeypress="return isNumber(event)">
                                         {!! fieldErrorMessage('amount', $errors) !!}
                                     </div>
                                     <div class="note note-warning" style="display: none;" id="amount_note">
@@ -128,9 +122,9 @@
                                     <div class="form-group {!! fieldHasError('from', $errors) !!}">
                                         {!! Form::label('from', 'Proposed dates of asbestos removal work', ['class' => 'control-label']) !!}
                                         <div class="input-group date date-picker input-daterange" data-date-format="dd/mm/yyyy" data-date-start-date="0d">
-                                            {!! Form::text('date_from', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
+                                            {!! Form::text('date_from', $asb->date_from->format('d/m/Y'), ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
                                             <span class="input-group-addon"> to </span>
-                                            {!! Form::text('date_to', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
+                                            {!! Form::text('date_to',  $asb->date_to->format('d/m/Y'), ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
                                         </div>
                                         {!! fieldErrorMessage('from', $errors) !!}
                                     </div>
@@ -139,9 +133,9 @@
                                     <div class="form-group {!! fieldHasError('hours_from', $errors) !!} {!! fieldHasError('open_to', $errors) !!}">
                                         {!! Form::label('hours_from', 'Operating hours of the site', ['class' => 'control-label']) !!}
                                         <div class="input-group">
-                                            {!! Form::text('hours_from', '7:00 AM', ['class' => 'form-control timepicker timepicker-no-seconds']) !!}
+                                            {!! Form::text('hours_from', null, ['class' => 'form-control timepicker timepicker-no-seconds']) !!}
                                             <span class="input-group-addon"> to </span>
-                                            {!! Form::text('hours_to', '3:30 PM', ['class' => 'form-control timepicker timepicker-no-seconds']) !!}
+                                            {!! Form::text('hours_to', null, ['class' => 'form-control timepicker timepicker-no-seconds']) !!}
                                         </div>
                                         {!! fieldErrorMessage('hours_from', $errors) !!}
                                         {!! fieldErrorMessage('hours_to', $errors) !!}
@@ -158,7 +152,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group {!! fieldHasError('workers', $errors) !!}">
                                             {!! Form::label('workers', 'Number of workers involved in the asbestos removal work', ['class' => 'control-label']) !!}
-                                            <input type="text" class="form-control" value="{{ old('workers') }}" id="workers" name="workers" onkeypress="return isNumber(event)"/>
+                                            <input type="text" class="form-control" value="{{ (old('workers')) ? old('workers') : $asb->workers }}" id="workers" name="workers" onkeypress="return isNumber(event)"/>
                                             {!! fieldErrorMessage('workers', $errors) !!}
                                         </div>
                                     </div>
@@ -178,15 +172,17 @@
                                         <div class="form-group">
                                             <div class="mt-checkbox-list">
                                                 <label class="mt-checkbox mt-checkbox-outline"> Protective coveralls
-                                                    {!! Form::checkbox('equip[]', 'equip_overalls') !!}
+                                                    <input type="checkbox" value="equip_overalls" name="equip[]" {{ ($asb->equip_overalls) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Protective gloves
                                                     {!! Form::checkbox('equip[]', 'equip_gloves') !!}
+                                                    <input type="checkbox" value="equip_gloves" name="equip[]" {{ ($asb->equip_gloves) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> P2 Mask
-                                                    {!! Form::checkbox('equip[]','equip_mask') !!}
+                                                    {!! Form::checkbox('equip[]','') !!}
+                                                    <input type="checkbox" value="equip_mask" name="equip[]" {{ ($asb->equip_mask) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                             </div>
@@ -196,24 +192,24 @@
                                         <div class="form-group">
                                             <div class="mt-checkbox-list">
                                                 <label class="mt-checkbox mt-checkbox-outline"> 1/2 face respirator
-                                                    {!! Form::checkbox('equip[]', 'equip_half_face') !!}
+                                                    <input type="checkbox" value="equip_half_face" name="equip[]" {{ ($asb->equip_half_face) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Full face air supplied
-                                                    {!! Form::checkbox('equip[]', 'equip_full_face') !!}
+                                                    <input type="checkbox" value="equip_full_face" name="equip[]" {{ ($asb->equip_full_face) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Other
-                                                    {!! Form::checkbox('equip[]', 'equip_other', false, ['onClick' => 'checkbox_equipOther(this)']) !!}
+                                                    <input type="checkbox" value="equip_other" name="equip[]" {{ (old('equip_other') || $asb->equip_other)  ? 'checked="checked" ' : '' }} onClick='checkbox_equipOther(this)'>
                                                     <span></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" style="display: none;" id="equip_other_div">
+                                    <div class="col-md-6" style="{{ ($asb->equip_other || old('equip_other')) ? '' : 'display: none' }}" id="equip_other_div">
                                         <div class="form-group {!! fieldHasError('equip_other', $errors) !!}">
                                             {!! Form::label('equip_other', 'Other Equipment', ['class' => 'control-label']) !!}
-                                            {!! Form::text('equip_other', '', ['class' => 'form-control', 'placeholder' => 'Please specify other']) !!}
+                                            {!! Form::text('equip_other', null, ['class' => 'form-control', 'placeholder' => 'Please specify other']) !!}
                                             {!! fieldErrorMessage('equip_other', $errors) !!}
                                         </div>
                                     </div>
@@ -229,19 +225,19 @@
                                         <div class="form-group">
                                             <div class="mt-checkbox-list">
                                                 <label class="mt-checkbox mt-checkbox-outline"> Fencing
-                                                    {!! Form::checkbox('method[]', 'method_fencing') !!}
+                                                    <input type="checkbox" value="method_fencing" name="method[]" {{ ($asb->method_fencing) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Signage
-                                                    {!! Form::checkbox('method[]', 'method_signage') !!}
+                                                    <input type="checkbox" value="method_signage" name="method[]" {{ ($asb->method_signage) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Water
-                                                    {!! Form::checkbox('method[]', 'method_water') !!}
+                                                    <input type="checkbox" value="method_water" name="method[]" {{ ($asb->method_water) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> PVA
-                                                    {!! Form::checkbox('method[]', 'method_pva') !!}
+                                                    <input type="checkbox" value="method_pva" name="method[]" {{ ($asb->method_pva) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                             </div>
@@ -251,28 +247,28 @@
                                         <div class="form-group">
                                             <div class="mt-checkbox-list">
                                                 <label class="mt-checkbox mt-checkbox-outline"> Barriers
-                                                    {!! Form::checkbox('method[]', 'method_barriers') !!}
+                                                    <input type="checkbox" value="method_barriers" name="method[]" {{ ($asb->method_barriers) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> 200 μm plastic
-                                                    {!! Form::checkbox('method[]', 'method_plastic') !!}
+                                                    <input type="checkbox" value="method_plastic" name="method[]" {{ ($asb->method_plastic) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Class H asbestos vacuum cleaners
-                                                    {!! Form::checkbox('method[]', 'method_vacuum') !!}
+                                                    <input type="checkbox" value="method_vacuum" name="method[]" {{ ($asb->method_vacuum) ? 'checked="checked" ' : '' }}>
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox mt-checkbox-outline"> Other
-                                                    {!! Form::checkbox('method[]', 'method_other', false, ['onClick' => 'checkbox_methodOther(this)']) !!}
+                                                    <input type="checkbox" value="method_other" name="method[]" {{ (old('method_other') || $asb->method_other)  ? 'checked="checked" ' : '' }} onClick='checkbox_methodOther(this)'>
                                                     <span></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" style="display: none;" id="method_other_div">
+                                    <div class="col-md-6" style="{{ ($asb->method_other || old('method_other')) ? '' : 'display: none' }}" id="method_other_div">
                                         <div class="form-group {!! fieldHasError('method_other', $errors) !!}">
                                             {!! Form::label('method_other', 'Other Method', ['class' => 'control-label']) !!}
-                                            {!! Form::text('method_other', '', ['class' => 'form-control', 'placeholder' => 'Please specify other']) !!}
+                                            {!! Form::text('method_other', null, ['class' => 'form-control', 'placeholder' => 'Please specify other']) !!}
                                             {!! fieldErrorMessage('method_other', $errors) !!}
                                         </div>
                                     </div>
@@ -371,7 +367,7 @@
                             </div>
                             <br><br>
                             <div class="form-actions right">
-                                <a href="/site/asbestos" class="btn default"> Back</a>
+                                <a href="/site/asbestos/{{ $asb->id }}" class="btn default"> Back</a>
                                 <button type="submit" class="btn green"> Save</button>
                             </div>
 
@@ -413,18 +409,6 @@
         displayFields();
 
         function displayFields() {
-            var site_id = $("#site_id").select2("val");
-            if (site_id != '') {
-                $.ajax({
-                    url: '/site/data/details/' + site_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        $("#address").val(data.address + ', ' + data.suburb);
-                        $("#code").val(data.code);
-                    },
-                })
-            }
             // Amount
             if ($("#amount").val() > 9) {
                 $("#amount_note").show();
@@ -445,17 +429,21 @@
 
             // Checkbox Equip
             //alert($("#equip").val());
-            $('[name="equip[]"]').eq(5).is(':checked') ? $("#equip_other_div").show() : $("#equip_other_div").hide(); // Equip other
+            if ($('[name="equip[]"]').eq(5).is(':checked') || $old('equip_other')) {  // Equip other
+                $("#equip_other_div").show()
+            } else {
+                $("#equip_other_div").hide();
+            }
+            if ($('[name="method[]"]').eq(7).is(':checked') || $old('method_other')) {  // Equip method
+                $("#equip_other_div").show()
+            } else {
+                $("#equip_other_div").hide();
+            }
             $("#type").val() == 'other' ? $("#type_other_div").show() : $("#type_other_div").hide(); // Type
             $("#register").val() == '0' ? $("#register_note").show() : $("#register_note").hide(); // Register
             $("#swms").val() == '0' ? $("#swms_note").show() : $("#swms_note").hide(); // SWMS
             $("#inspection").val() == '0' ? $("#inspection_note").show() : $("#inspection_note").hide();  // Inspection
         }
-
-        // On Change Site ID
-        $("#site_id").change(function () {
-            displayFields();
-        });
 
         // On Change Amount
         $("#amount").keyup(function () {
@@ -474,7 +462,6 @@
 
         // On Change Equip
         $("#equip").click(function () {
-            alert('k');
             displayFields();
         });
 
@@ -504,10 +491,20 @@
     }
 
     function checkbox_equipOther(el) {
-        (el.checked) ? document.getElementById('equip_other_div').style.display = 'block' : document.getElementById('equip_other_div').style.display = 'none';
+        if (el.checked)
+            document.getElementById('equip_other_div').style.display = 'block'
+        else {
+            document.getElementById('equip_other_div').style.display = 'none';
+            $("#equip_other").val('');
+        }
     }
     function checkbox_methodOther(el) {
-        (el.checked) ? document.getElementById('method_other_div').style.display = 'block' : document.getElementById('method_other_div').style.display = 'none';
+        if (el.checked)
+            document.getElementById('method_other_div').style.display = 'block'
+        else {
+            document.getElementById('method_other_div').style.display = 'none';
+            $("#method_other").val('');
+        }
     }
 
 </script>

@@ -72,11 +72,28 @@ class SiteAsbestosController extends Controller {
     {
         $asb = SiteAsbestos::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.site.asbestos', $asb))
             return view('errors/404');
 
         return view('site/asbestos/show', compact('asb'));
+    }
+
+    /**
+     * Edit the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $asb = SiteAsbestos::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!(Auth::user()->allowed2('edit.site.asbestos', $asb)))
+            return view('errors/404');
+
+        return view('site/asbestos/edit', compact('asb'));
+
     }
 
     /**
@@ -91,11 +108,11 @@ class SiteAsbestosController extends Controller {
             return view('errors/404');
 
         // Additional Complex Custom Validation for Inspection + Supervisor fields
-        $validator = Validator::make($request->all(), []);
+        $validator = Validator::make(request()->all(), []);
         $validator->after(function ($validator) {
-            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('inspection') != '1')
+            if (request('friable') == '0' && request('amount_over') == '1' && request('inspection') != '1')
                 $validator->errors()->add('inspection', 'The inspection confirmation field must be YES');
-            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('supervisor_id') == '')
+            if (request('friable') == '0' && request('amount_over') == '1' && request('supervisor_id') == '')
                 $validator->errors()->add('supervisor_id', 'You must select a Supervisor');
         });
 
@@ -103,18 +120,18 @@ class SiteAsbestosController extends Controller {
             return redirect('site/asbestos/create')->withErrors($validator)->withInput();
         }
 
-        $asb_request = removeNullValues($request->all());
+        $asb_request = removeNullValues(request()->all());
 
         // Type Other Specificed
-        if ($request->get('type') == 'other')
-            $asb_request['type'] = $request->get('type_other');
+        if (request('type') == 'other')
+            $asb_request['type'] = request('type_other');
 
         // Dates
-        $asb_request['date_from'] = Carbon::createFromFormat('d/m/Y H:i', $request->get('date_from') . '00:00')->toDateTimeString();
-        $asb_request['date_to'] = Carbon::createFromFormat('d/m/Y H:i', $request->get('date_to') . '00:00')->toDateTimeString();
+        $asb_request['date_from'] = Carbon::createFromFormat('d/m/Y H:i', request('date_from') . '00:00')->toDateTimeString();
+        $asb_request['date_to'] = Carbon::createFromFormat('d/m/Y H:i', request('date_to') . '00:00')->toDateTimeString();
 
         // Equipment flags
-        $equipment = $request->get('equip');
+        $equipment = request('equip');
         if ($equipment) {
             foreach ($equipment as $e) {
                 if ($e == 'equip_overalls') $asb_request['equip_overalls'] = 1;
@@ -126,7 +143,7 @@ class SiteAsbestosController extends Controller {
         }
 
         // Equipment flags
-        $methods = $request->get('method');
+        $methods = request('method');
         if ($methods) {
             foreach ($methods as $m) {
                 if ($m == 'method_fencing') $asb_request['method_fencing'] = 1;
@@ -156,21 +173,68 @@ class SiteAsbestosController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(SiteAsbestosRequest $request, $id, $status)
+    public function update(SiteAsbestosRequest $request, $id)
     {
         $asb = SiteAsbestos::findOrFail($id);
 
-        dd(request()->all());
-        
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site.asbestos', $asb))
             return view('errors/404');
 
-        // Update Status
-        if ($status != $old_status)
-            $asb->updateStatus($status);
+        // Additional Complex Custom Validation for Inspection + Supervisor fields
+        $validator = Validator::make($request->all(), []);
+        $validator->after(function ($validator) {
+            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('inspection') != '1')
+                $validator->errors()->add('inspection', 'The inspection confirmation field must be YES');
+            if (request()->get('friable') == '0' && request()->get('amount_over') == '1' && request()->get('supervisor_id') == '')
+                $validator->errors()->add('supervisor_id', 'You must select a Supervisor');
+        });
 
-        return redirect('site/asbestos/' . $asb->id);
+        if ($validator->fails()) {
+            return redirect("site/asbestos/$asb->id/edit")->withErrors($validator)->withInput();
+        }
+
+        $asb_request = removeNullValues($request->all());
+
+        // Type Other Specificed
+        if (request('type') == 'other')
+            $asb_request['type'] = request('type_other');
+
+        // Dates
+        $asb_request['date_from'] = Carbon::createFromFormat('d/m/Y H:i', request('date_from') . '00:00')->toDateTimeString();
+        $asb_request['date_to'] = Carbon::createFromFormat('d/m/Y H:i', request('date_to') . '00:00')->toDateTimeString();
+
+        // Equipment flags
+        $equipment = request('equip');
+        if ($equipment) {
+            foreach ($equipment as $e) {
+                if ($e == 'equip_overalls') $asb_request['equip_overalls'] = 1;
+                if ($e == 'equip_mask') $asb_request['equip_mask'] = 1;
+                if ($e == 'equip_gloves') $asb_request['equip_gloves'] = 1;
+                if ($e == 'equip_half_face') $asb_request['equip_half_face'] = 1;
+                if ($e == 'equip_full_face') $asb_request['equip_full_face'] = 1;
+            }
+        }
+
+        // Equipment flags
+        $methods = request('method');
+        if ($methods) {
+            foreach ($methods as $m) {
+                if ($m == 'method_fencing') $asb_request['method_fencing'] = 1;
+                if ($m == 'method_signage') $asb_request['method_signage'] = 1;
+                if ($m == 'method_water') $asb_request['method_water'] = 1;
+                if ($m == 'method_barriers') $asb_request['method_barriers'] = 1;
+                if ($m == 'method_plastic') $asb_request['method_plastic'] = 1;
+                if ($m == 'method_vacuum') $asb_request['method_vacuum'] = 1;
+            }
+        }
+
+        //dd($asb_request);
+        $asb->update($asb_request);
+        Action::create(['action' => 'Notification fields updated', 'table' => 'site_asbestos', 'table_id' => $asb->id]);
+        Toastr::success("Saved changes");
+
+        return redirect("site/asbestos/$asb->id");
     }
 
 
@@ -220,10 +284,10 @@ class SiteAsbestosController extends Controller {
                 return ($s->supervisorsSBC());
             })
             ->addColumn('action', function ($doc) {
-                if ($doc->status && Auth::user()->allowed2('edit.site.asbestos', $doc))
-                    return '<a href="/site/asbestos/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                //if ($doc->status && Auth::user()->allowed2('edit.site.asbestos', $doc))
+                //    return '<a href="/site/asbestos/' . $doc->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
-                return '<a href="/site/asbestos/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
+                //return '<a href="/site/asbestos/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
             })
             ->rawColumns(['id', 'action'])
             ->make(true);

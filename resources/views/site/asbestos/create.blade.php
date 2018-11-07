@@ -474,7 +474,6 @@
 
         // On Change Equip
         $("#equip").click(function () {
-            alert('k');
             displayFields();
         });
 
@@ -504,10 +503,20 @@
     }
 
     function checkbox_equipOther(el) {
-        (el.checked) ? document.getElementById('equip_other_div').style.display = 'block' : document.getElementById('equip_other_div').style.display = 'none';
+        if (el.checked)
+            document.getElementById('equip_other_div').style.display = 'block'
+        else {
+            document.getElementById('equip_other_div').style.display = 'none';
+            $("#equip_other").val('');
+        }
     }
     function checkbox_methodOther(el) {
-        (el.checked) ? document.getElementById('method_other_div').style.display = 'block' : document.getElementById('method_other_div').style.display = 'none';
+        if (el.checked)
+            document.getElementById('method_other_div').style.display = 'block'
+        else {
+            document.getElementById('method_other_div').style.display = 'none';
+            $("#method_other").val('');
+        }
     }
 
 </script>
