@@ -61,9 +61,6 @@
                                 <td><a href="/manage/report/company_users">Company Staff</a></td>
                             </tr>
                             <tr>
-                                <td><a href="/manage/report/licence_override">Company Licence Override</a></td>
-                            </tr>
-                            <tr>
                                 <td><a href="/manage/report/attendance">Attendance</a></td>
                             </tr>
                             <tr>

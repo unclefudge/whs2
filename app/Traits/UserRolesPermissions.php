@@ -727,6 +727,11 @@ trait UserRolesPermissions {
                 if ($this->hasPermission2($permission)) return true;
             }
 
+            // Equipment
+            if ($permissiontype == 'equipment') {
+                if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) return true; // User belong to same company record
+            }
+
             // Settings
             if ($permissiontype == 'settings') {
                 if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) return true; // User belong to same company record

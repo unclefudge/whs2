@@ -125,10 +125,10 @@
         });
 
         $('#compliance_type').change(function (e) {
-            overide2();
+            overide();
         });
 
-        function overide2() {
+        function overide() {
             var type = $('#compliance_type').val();
             if (type != '') {
                 $('#add_compliance_fields').show();
@@ -154,27 +154,6 @@
                 $('#save_compliance').hide();
             }
         }
-
-        /* Over Ride Licence */
-        $('#lic_override_tog').change(function () {
-            overide();
-        });
-
-        overide();
-
-        function overide() {
-            $('#req_yes').hide();
-            $('#req_no').hide();
-            if ($('#lic_override_tog').val() == 1) {
-                $('#overide_div').show();
-                if ($('#requiresContractorsLicence').val() == 1)
-                    $('#req_yes').show();
-                else
-                    $('#req_no').show();
-            } else
-                $('#overide_div').hide();
-        }
-
     });
 
     function editForm(name) {

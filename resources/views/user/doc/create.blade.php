@@ -192,7 +192,7 @@
 
 
             if (cat != '') {
-                if (cat == 1 || cat == 2 || cat == 3) { // 1 WhiteCard, 2 Drivers Lic, 3 Contractors Lic
+                if (cat == 1 || cat == 2 || cat == 3 || cat == 4) { // 1 WhiteCard, 2 Drivers Lic, 3 Contractors Lic, 4 Supervisor Liv
                     $('#singleimage-div').show();
                     $('#filetype').val('image');
                 } else {
@@ -203,7 +203,7 @@
                 $('#upload').show();
             }
 
-            if (cat < 6 || cat == 8 || cat == 9) {
+            if (cat < 6 || cat == 9 || cat == 10) {
                 $('#fields_name').hide();
                 $('#ref_name').val('');
             } else // Other Licence + everything else
@@ -227,7 +227,7 @@
                 $('#fields_cl_class').show();
             }
 
-            if (cat == 8)  // Asbestos
+            if (cat == 9)  // Asbestos
                 $('#fields_asb_class').show();
         }
 

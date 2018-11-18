@@ -22,6 +22,8 @@
         @include('user/_header')
 
         <div class="row">
+            @include('user/_compliance-docs')
+
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Contact Details --}}
                 @if (Auth::user()->allowed2('view.user.contact', $user))

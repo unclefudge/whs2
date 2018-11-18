@@ -122,12 +122,6 @@ class ReportController extends Controller {
         return view('manage/report/missing_company_info', compact('companies'));
     }
 
-    public function licenceOverride()
-    {
-        $companies = \App\Models\Company\Company::where('parent_company', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
-
-        return view('manage/report/licence_override', compact('companies'));
-    }
 
     public function nightly()
     {

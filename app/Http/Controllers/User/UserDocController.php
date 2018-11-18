@@ -142,12 +142,6 @@ class UserDocController extends Controller {
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
         $doc_request['issued'] = (request('issued')) ? Carbon::createFromFormat('d/m/Y H:i', request('issued') . '00:00')->toDateTimeString() : null;
 
-        // Calculate Test & Tag expiry
-        //if (request('category_id') == '6') {
-        //    $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
-        //    $doc_request['ref_type'] = request('tag_type');
-        //}
-
         // Convert licence type into CSV - Drivers/Contractors
         if (in_array(request('category_id'), [2,3])) {
             $doc_request['ref_no'] = request('lic_no');
@@ -155,7 +149,7 @@ class UserDocController extends Controller {
         }
 
         // Reassign Asbestos Licence to correct category
-        if (request('category_id') == '8')
+        if (request('category_id') == '9')
             $doc_request['ref_type'] = request('asb_type');
 
 
@@ -185,6 +179,8 @@ class UserDocController extends Controller {
         //$doc->closeToDo();
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
+        $doc->status = 1;
+        /*
         $doc->status = 2;
         $category = UserDocCategory::find($doc->category_id);
         $pub_pri = ($category->private) ? 'pri' : 'pub';
@@ -196,7 +192,7 @@ class UserDocController extends Controller {
             // Create approval ToDoo
             if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
                 $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
-        }
+        }*/
         $doc->save();
 
         return redirect("user/$user->id/doc/upload");

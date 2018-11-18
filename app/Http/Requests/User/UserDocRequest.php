@@ -26,13 +26,13 @@ class UserDocRequest extends Request {
         return [
             'category_id'  => 'required_with:save',
             'name'         => 'required_with:save',
-            'ref_name'     => 'required_if:category_id,6,7,20',
+            'ref_name'     => 'required_if:category_id,6,7,8,20',
             'lic_no'       => 'required_if:category_id,2,3',
             'drivers_type' => 'required_if:category_id,2',
             'cl_type'      => 'required_if:category_id,3',
-            'asb_type'     => 'required_if:category_id,8',
+            'asb_type'     => 'required_if:category_id,9',
             'expiry'       => 'required_if:category_id,2,3',
-            'issued'       => 'required_if:category_id,1,4,5,6,8,9',
+            'issued'       => 'required_if:category_id,1,5,6,7,9',
             'singlefile'   => 'required_if:filetype,pdf',
             'singleimage'  => 'required_if:filetype,image',
         ];

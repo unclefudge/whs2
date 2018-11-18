@@ -5,15 +5,10 @@ use DB;
 use Auth;
 use Session;
 use App\User;
-use App\Models\Company\Company;
-use App\Models\Company\CompanyDoc;
-use App\Models\Company\CompanyDocCategory;
-use App\Models\Site\Site;
-use App\Models\Site\Planner\SitePlanner;
-use App\Models\Misc\Role2;
-use App\Models\Misc\Permission2;
-use App\Models\User\UserDoc;
 use App\Models\User\UserDocCategory;
+use App\Models\User\UserDoc;
+use App\Models\Misc\ContractorLicence;
+use App\Models\Misc\ComplianceOverride;
 use App\Http\Utilities\UserDocTypes;
 use App\Http\Utilities\CompanyDocTypes;
 use Carbon\Carbon;
@@ -21,36 +16,6 @@ use Carbon\Carbon;
 
 trait UserDocs {
 
-    /**
-     * Missing Company Documents to be compliant
-     *
-     * @return Text or Array
-     */
-    public function missingDocs($format = 'array')
-    {
-        /*
-        $doc_types = [1 => 'Public Liability', 2 => "Worker's Compensation", 3 => 'Sickness & Accident Insurance', 4 => 'Subcontractors Statement', 5 => 'Period Trade Contract', 7 => 'Contractor Licence'];
-        $missing_docs = [];
-        $missing_html = '';
-
-        foreach ($doc_types as $type => $name) {
-            if ($this->requiresUserDoc($type) && (!$this->activeUserDoc($type) || $this->activeUserDoc($type)->status != 1)) {
-                $missing_docs[$type] = $name;
-                if ($this->activeUserDoc($type)) {
-                    $missing_status = ($this->activeUserDoc($type)->status == 2) ? 'label-warning' : 'label-danger';
-                    $missing_html .= "<span class='label label-sm $missing_status'>$name</span>, ";
-                } else
-                    $missing_html .= "$name, ";
-            }
-
-        }
-
-        $missing_html = rtrim($missing_html, ', ');
-
-        return ($format == 'csv') ? $missing_html : $missing_docs;
-
-        */
-    }
 
     /**
      * A User may have many UserDocs
@@ -125,6 +90,206 @@ trait UserDocs {
         return ($prompt && count($array) > 1) ? $array = array('' => 'Select Type') + $array : $array;
     }
 
+    /**
+     * Dropdown Option for Contractor Licence
+     *
+     * @return string
+     */
+    public function contractorLicenceOptions()
+    {
+        $doc = UserDoc::where('category_id', 3)->where('user_id', $this->id)->where('status', '>', '0')->first();
+        if ($doc)
+            return ContractorLicence::find(1)->classOptions(explode(',', $doc->ref_type));
+
+        return ContractorLicence::find(1)->classOptions();
+    }
+
+    /**
+     * Contractor Licence Class SBC
+     *
+     * @return string
+     */
+    public function contractorLicenceSBC()
+    {
+        $str = '';
+        $doc = UserDoc::where('category_id', 3)->where('user_id', $this->id)->where('status', '>', '0')->first();
+        if ($doc) {
+            foreach (explode(',', $doc->ref_type) as $class_id) {
+                $lic = ContractorLicence::find($class_id);
+                if ($lic)
+                    $str .= $lic->name . ', ';
+            }
+        }
+
+        return rtrim($str, ', ');
+    }
+
+    /**
+     * A dropdown of Driver Class Options.
+     *
+     * @return string
+     */
+    public function driversLicenceOptions($selected = [])
+    {
+        $str = '';
+        $classes = [
+            'C'  => 'Car', 'C-A' => 'Car (automatic only)', 'R' => 'Rider', 'RE' => 'Restricted Rider', 'LR' => 'Light Rigid',
+            'MR' => 'Medium Rigid', 'HR' => 'Heavy Rigid', 'HC' => 'Heavy Combination', 'MC' => 'Multi-Combination'
+        ];
+        foreach ($classes as $class => $name) {
+            $sel = (in_array($class, $selected)) ? 'selected' : '';
+            $str .= "<option value='$class' $sel>$name</option>";
+        }
+
+        return $str;
+    }
+
+    /**
+     * Determine if a certain document type is Required
+     *
+     * @return boolean
+     */
+    public function requiresUserDoc($type, $system = false)
+    {
+        // Doc types
+        // 1  WC - White Card
+        // 3  CL - Contractors Licence
+        // 4  SL - Supervisors Licence
+        // 8  AP - Aprentice Document
+        // 9  AS - Asbestos Removal Training
+        // 10 HI - High Risk Work Licence
+        //
+        // Categories                            | WC  | CL  | SL  | AP  |
+        // 0  Unallocated / Offsite              |_____|_____|_____|_____|
+        // 1  On Site Non-Trade                  |__X__|_____|_____|_____|
+        // 2  On Site Trade (Sole Trader)        |__X__|__X__|_____|_____|
+        // 3  On Site Trade (Partner/Company)    |__X__|_____|_____|_____|
+        // 4  On Site Apprentice                 |__X__|_____|_____|_____|
+
+        // If System == False then check for any Compliance Overrides
+        if (!$system) {
+            $override = ComplianceOverride::where('type', "ud$type")->where('user_id', $this->id)->where('status', 1)->first();
+            if ($override)
+                return ($override->required) ? true : false;
+        }
+
+        // White Card
+        if ($type == 1 && $this->onsite) return true;  // If you Onsite MUST have a WC (White Card)
+
+        if (in_array($this->company->business_entity, ['3', 'Sole Trader'])) {
+            if ($type == 3) return true; // Contractor Licence Required for ALL Sole Traders
+        } else {
+            // Contractor or Supervisor Licence Required if user is nominated by own company as licence holder/supervisor of their CL
+            if (in_array($type, [3, 4]) && $this->company->activeCompanyDoc(7) && $this->company->activeCompanyDoc(7)->status == 1 && $this->company->activeCompanyDoc(7)->ref_name == $this->id) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a certain document type is Required
+     *
+     * @return boolean
+     */
+    public function requiresUserDocText($type)
+    {
+        return ($this->requiresUserDoc($type) ? '<span class="font-red">Required</span>' : '');
+    }
+
+    /**
+     * Determine if User is compliant ie. has required docs.
+     *
+     * @return booleen
+     */
+    public function isCompliant()
+    {
+        $doc_types = [1, 3, 4];
+        foreach ($doc_types as $type) {
+            if ($this->requiresUserDoc($type) && (!$this->activeUserDoc($type) || $this->activeUserDoc($type)->status != 1))
+                return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * Documents required for a company to be compliant
+     *
+     * @return Text or Array
+     */
+    public function compliantDocs($format = 'array')
+    {
+        $doc_types = [1 => 'White Card', 3 => 'Contractor Licence', 4 => 'Supervisor Licence'];
+        $compliant_docs = [];
+        $compliant_html = '';
+
+        foreach ($doc_types as $type => $name) {
+            if ($this->requiresUserDoc($type)) {
+                $compliant_docs[$type] = $name;
+                $compliant_html .= "$name, ";
+            }
+        }
+
+        $compliant_html = rtrim($compliant_html, ', ');
+
+        return ($format == 'csv') ? $compliant_html : $compliant_docs;
+
+    }
+
+    /**
+     * Documents user has but aren't required to be compliant
+     *
+     * @return Text or Array
+     */
+    public function nonCompliantDocs($format = 'array', $status = '')
+    {
+        $compliant_docs = $this->compliantDocs();
+        $non_compliant_docs = [];
+        $non_compliant_html = '';
+
+        foreach ($this->userDocs() as $doc) {
+            if ($doc->status && !isset($compliant_docs[$doc->category_id])) {
+                if ($status != '' && $doc->status != $status)
+                    continue;
+                $non_compliant_docs[$doc->category_id] = $doc->name;
+                $non_compliant_html .= "$doc->name, ";
+            }
+        }
+
+        $non_compliant_html = rtrim($non_compliant_html, ', ');
+
+        return ($format == 'csv') ? $non_compliant_html : $non_compliant_docs;
+    }
+
+    /**
+     * Missing Company Documents to be compliant
+     *
+     * @return Text or Array
+     */
+    public function missingDocs($format = 'array')
+    {
+        $doc_types = [1 => 'White Card',  3 => 'Contractor Licence', 4 => 'Supervisor Licence'];
+        $missing_docs = [];
+        $missing_html = '';
+
+        foreach ($doc_types as $type => $name) {
+            if ($this->requiresUserDoc($type) && (!$this->activeUserDoc($type) || $this->activeUserDoc($type)->status != 1)) {
+                $missing_docs[$type] = $name;
+                if ($this->activeUserDoc($type)) {
+                    $missing_status = ($this->activeUserDoc($type)->status == 2) ? 'label-warning' : 'label-danger';
+                    $missing_html .= "<span class='label label-sm $missing_status'>$name</span>, ";
+                } else
+                    $missing_html .= "$name, ";
+            }
+
+        }
+
+        $missing_html = rtrim($missing_html, ', ');
+
+        return ($format == 'csv') ? $missing_html : $missing_docs;
+    }
+
+
     /****************************
      *
      * Company Docs
@@ -172,7 +337,7 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4,5]))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4, 5]))
                         $array_ss_ptc[$id] = $name;
                 }
             }
@@ -181,7 +346,7 @@ trait UserDocs {
                 foreach (CompanyDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)))
                         $array[$id] = $name;
-                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4,5]))
+                    if (!($action == 'add' && in_array($id, $single) && $company->activeCompanyDoc($id)) && !in_array($id, [4, 5]))
                         $array_ss_ptc[$id] = $name;
                 }
             }

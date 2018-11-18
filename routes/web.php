@@ -305,6 +305,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('safety/doc/dt/wms_templates', 'Safety\WmsController@getWmsTemplates');
     Route::resource('safety/doc/wms', 'Safety\WmsController');
 
+
+    // Equipment
+    //Route::get('equipment/inventory/dt/list', 'Misc\EquipmentController@getEquipment');
+    //Route::get('equipment/inventory/{id}/transfer', 'Misc\EquipmentController@transfer');
+
+    //Route::post('equipment/inventory/update', 'Misc\EquipmentController@updateItem');
+    //Route::resource('equipment/inventory', 'Misc\EquipmentController');
+
+    Route::get('equipment/dt/allocation', 'Misc\EquipmentController@getAllocation');
+    Route::get('equipment/dt/inventory', 'Misc\EquipmentController@getInventory');
+    Route::get('equipment/dt/transactions', 'Misc\EquipmentController@getTransactions');
+    Route::get('equipment/inventory', 'Misc\EquipmentController@inventory');
+    Route::get('equipment/{id}/transfer', 'Misc\EquipmentController@transfer');
+    Route::post('equipment/{id}/transfer-item', 'Misc\EquipmentController@transferItem');
+    Route::get('equipment/{id}/delete', 'Misc\EquipmentController@destroy');
+    Route::resource('equipment', 'Misc\EquipmentController');
+
+
     // Configuration
     Route::get('settings', 'Misc\PagesController@settings');
     Route::resource('settings/notifications', 'Misc\SettingsNotificationController');

@@ -145,7 +145,6 @@ class CompanyController extends Controller {
             return view('errors/404');
 
         return view('company/edit', compact('company'));
-
     }
 
 

@@ -80,9 +80,12 @@
                                             </div>
                                         </div>
                                         <div class="col-md-9" style="padding-left: 0px">
-                                            <b>Source of Hazard</b><br>
+                                            <b>Identification Source"</b><br>
                                             <div class="form-group {!! fieldHasError('source', $errors) !!}">
-                                                {!! Form::textarea('source', null, ['rows' => '3', 'class' => 'form-control']) !!}
+                                                {{--}}{!! Form::textarea('source', null, ['rows' => '3', 'class' => 'form-control']) !!}--}}
+                                                {!! Form::select('source', ['' => 'Select source', 'WHS Inspection' => 'WHS Inspection', 'Worker Identification' => 'Worker Identification',
+                                                'Supervisor' => 'Supervisor', 'Client Report' => 'Client Report', 'Regulator' => 'Regulator', 'Council' => 'Council', 'Public' => 'Public'],
+                                                null, ['class' => 'form-control bs-select']) !!}
                                                 {!! fieldErrorMessage('source', $errors) !!}
                                             </div>
                                         </div>

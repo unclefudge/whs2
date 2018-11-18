@@ -93,6 +93,12 @@
                                         </select>
                                         {!! fieldErrorMessage('lic_type', $errors) !!}
                                     </div>
+                                    {{-- Supervisor of CL --}}
+                                    <div class="form-group {!! fieldHasError('supervisor_id', $errors) !!}" style="display: none" id="fields_supervisor_id">
+                                        {!! Form::label('supervisor_id', 'Supervisor of licence', ['class' => 'control-label']) !!}
+                                        {!! Form::select('supervisor_id', $company->staffSelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('supervisor_id', $errors) !!}
+                                    </div>
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
                                         {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
@@ -230,6 +236,7 @@
             $('#fields_category').hide();
             $('#fields_lic_no').hide();
             $('#fields_lic_class').hide();
+            $('#fields_supervisor_id').hide();
             $('#fields_asb_class').hide();
             $('#fields_expiry').hide();
             $('#fields_tag_type').hide();
@@ -278,6 +285,7 @@
             if (cat == 7) { // CL
                 $('#fields_lic_no').show();
                 $('#fields_lic_class').show();
+                $('#fields_supervisor_id').show();
             }
 
             if (cat == 8)  // Asbestos

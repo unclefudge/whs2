@@ -278,6 +278,7 @@ function getUserEmailsWithRoles($role_ids)
  * @param array $selected
  * @return strig
  */
+/*
 function contractorLicenceOptions($selected)
 {
     $str = '';
@@ -285,7 +286,7 @@ function contractorLicenceOptions($selected)
     $str .= ($selected) ? '<option value="1">General building work</option>' : '<option value="1">General building work</option>';
 
     return $str;
-}
+}*/
 
 
 function llllink_to($body, $path, $type)

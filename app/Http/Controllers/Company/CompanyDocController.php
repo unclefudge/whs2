@@ -146,6 +146,7 @@ class CompanyDocController extends Controller {
         $doc_request['company_id'] = $company->reportsTo()->id;
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
 
+
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
             $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
@@ -156,6 +157,7 @@ class CompanyDocController extends Controller {
         if (request('category_id') == '7') {
             $doc_request['ref_no'] = request('lic_no');
             $doc_request['ref_type'] = implode(',', request('lic_type'));
+            $doc_request['ref_name'] = (request('supervisor_id')) ? request('supervisor_id') : null;
         }
 
         // Reassign Asbestos Licence to correct category
@@ -251,6 +253,7 @@ class CompanyDocController extends Controller {
         if (request('category_id') == '7') {
             $doc_request['ref_no'] = request('lic_no');
             $doc_request['ref_type'] = implode(',', request('lic_type'));
+            $doc_request['ref_name'] = (request('ref_name')) ? request('ref_name') : null;
         }
 
         // Reassign Asbestos Licence to correct category

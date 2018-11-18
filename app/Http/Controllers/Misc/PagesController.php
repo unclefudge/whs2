@@ -488,8 +488,8 @@ VALUES<br>";
         //
         // Creating Permission
         //
-        $name = 'Company WHS Override';
-        $slug = 'company.whs.override';
+        $name = 'Equipment Allocation';
+        $slug = 'equipment';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);

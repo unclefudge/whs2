@@ -36,7 +36,7 @@
                             <span class="caption-subject font-dark bold uppercase"> User Documents</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->isCompany($user->id) && Auth::user()->allowed2('add.user.doc'))
+                            @if(Auth::user()->isCompany($user->company_id) && Auth::user()->allowed2('add.user.doc'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/user/{{ $user->id }}/doc/upload" data-original-title="Upload">Upload</a>
                             @endif
                         </div>

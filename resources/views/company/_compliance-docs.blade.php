@@ -1,4 +1,10 @@
 {{-- Compliance Docs --}}
+<?php
+
+$isCompliant = $company->isCompliant();
+$compliantDocs = $company->compliantDocs();
+?>
+
 <div class="col-lg-6 col-xs-12 col-sm-12 pull-right">
     @if (Auth::user()->allowed2('view.company.acc', $company))
         <div class="portlet light">
@@ -14,24 +20,24 @@
                 </div>
             </div>
             <div class="portlet-body">
-                @if (count($company->compliantDocs()))
+                @if (count($compliantDocs))
                     <div class="row">
                         <div class="col-md-12">
-                            @if ($company->isCompliant())
+                            @if ($isCompliant)
                                 <b>All compliance documents have been submited and approved:</b>
                             @else
-                                <b>The following {!! count($company->compliantDocs()) !!} documents are required to be compliant:</b>
+                                <b>The following {!! count($compliantDocs) !!} documents are required to be compliant:</b>
                             @endif
                         </div>
 
-                        @foreach ($company->compliantDocs() as $type => $name)
+                        @foreach ($compliantDocs as $type => $name)
                             {{-- Accepted --}}
                             @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 1)
-                                <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($company->isCompliant()) ? 'color: #26C281' : '' !!}"></i>
+                                <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($isCompliant) ? 'color: #26C281' : '' !!}"></i>
                                     <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                 </div>
                                 <div class="col-xs-4">
-                                    @if (!$company->isCompliant())
+                                    @if (!$isCompliant)
                                         <span class="label label-success label-sm">Accepted</span>
                                     @endif
                                 </div>
@@ -42,7 +48,7 @@
                                     <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                 </div>
                                 <div class="col-xs-4">
-                                    @if (!$company->isCompliant())
+                                    @if (!$isCompliant)
                                         <span class="label label-warning label-sm">Pending Approval</span>
                                     @endif
                                 </div>
@@ -60,7 +66,7 @@
                                     @endif
                                 </div>
                                 <div class="col-xs-4">
-                                    @if (!$company->isCompliant())
+                                    @if (!$isCompliant)
                                         <span class="label label-danger label-sm">Rejected</span>
                                     @endif
                                 </div>
@@ -79,7 +85,7 @@
                                         @endif
                                     @endif
                                 </div>
-                                <div class="col-xs-4 font-red">{!! (!$company->isCompliant()) ? 'Not submitted' : '' !!}</div>
+                                <div class="col-xs-4 font-red">{!! (!$isCompliant) ? 'Not submitted' : '' !!}</div>
                             @endif
                         @endforeach
                     </div>
