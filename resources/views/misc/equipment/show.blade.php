@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     @if (!$equip->status)
-                                        <h3 style="margin-top: 0px" class="font-red">DELETED {{ $equip->updated_at->format('d/m/Y)') }}</h3>
+                                        <h3 style="margin-top: 0px" class="font-red">DELETED {{ $equip->updated_at->format('d/m/Y') }}</h3>
                                     @endif
                                 </div>
                             </div>
