@@ -61,9 +61,9 @@ class Site extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function equipmentLocations()
+    public function equipmentLocation()
     {
-        return $this->hasMany('App\Models\Misc\Equipment\EquipmentLocation');
+        return $this->hasOne('App\Models\Misc\Equipment\EquipmentLocation');
     }
 
     /**
@@ -73,8 +73,8 @@ class Site extends Model {
      */
     public function equipmentItems()
     {
-        $locations = $this->equipmentLocations->pluck('id')->toArray();
-        return EquipmentLocationItem::whereIn('location_id', $locations)->get();
+        //$locations = $this->equipmentLocation->pluck('id')->toArray();
+        return EquipmentLocationItem::where('location_id', $this->equipmentLocation->id)->get();
     }
 
     /**
@@ -710,6 +710,27 @@ class Site extends Model {
      * Get the suburb, state, postcode  (getter)
      */
     public function getAddressFormattedSingleAttribute()
+    {
+        $string = '';
+
+        if ($this->attributes['address'])
+            $string = strtoupper($this->attributes['address']) . ', ';
+
+        $string .= strtoupper($this->attributes['suburb']);
+        if ($this->attributes['suburb'] && $this->attributes['state'])
+            $string .= ', ';
+        if ($this->attributes['state'])
+            $string .= $this->attributes['state'];
+        if ($this->attributes['postcode'])
+            $string .= ' ' . $this->attributes['postcode'];
+
+        return ($string) ? $string : '-';
+    }
+
+    /**
+     * Get the suburb, state, postcode  (getter)
+     */
+    public function getLocationIdAttribute()
     {
         $string = '';
 
