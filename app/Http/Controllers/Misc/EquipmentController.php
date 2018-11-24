@@ -337,20 +337,22 @@ class EquipmentController extends Controller {
             $items = EquipmentLocationItem::select([
                 'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id',
                 'equipment_location.site_id', 'equipment_location.other', 'equipment_location.status',
-                'equipment.name AS itemname', 'sites.name AS sitename', 'sites.code', 'sites.suburb'])
+                'equipment.name AS itemname', 'equipment.status', 'sites.name AS sitename', 'sites.code', 'sites.suburb'])
                 ->join('equipment', 'equipment_location_items.equipment_id', '=', 'equipment.id')
                 ->join('equipment_location', 'equipment_location_items.location_id', '=', 'equipment_location.id')
                 ->leftjoin('sites', 'equipment_location.site_id', '=', 'sites.id')
                 ->whereIn('equipment_location_items.equipment_id', $items_list)
+                ->where('equipment.status', 1)
                 ->where('equipment_location.site_id', request('site_id'));
         else {
             $items = EquipmentLocationItem::select([
                 'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id',
                 'equipment_location.site_id', 'equipment_location.other', 'equipment_location.status',
-                'equipment.name AS itemname', 'sites.name AS sitename', 'sites.code', 'sites.suburb'])
+                'equipment.name AS itemname', 'equipment.status', 'sites.name AS sitename', 'sites.code', 'sites.suburb'])
                 ->join('equipment', 'equipment_location_items.equipment_id', '=', 'equipment.id')
                 ->join('equipment_location', 'equipment_location_items.location_id', '=', 'equipment_location.id')
                 ->leftjoin('sites', 'equipment_location.site_id', '=', 'sites.id')
+                ->where('equipment.status', 1)
                 ->whereIn('equipment_location_items.equipment_id', $items_list);
         }
 
