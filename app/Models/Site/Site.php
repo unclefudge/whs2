@@ -73,8 +73,7 @@ class Site extends Model {
      */
     public function equipmentItems()
     {
-        //$locations = $this->equipmentLocation->pluck('id')->toArray();
-        return EquipmentLocationItem::where('location_id', $this->equipmentLocation->id)->get();
+        return ($this->equipmentLocation) ? EquipmentLocationItem::where('location_id', $this->equipmentLocation->id)->get() : [];
     }
 
     /**

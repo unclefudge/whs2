@@ -453,14 +453,14 @@
                         </div>
                         <div class="actions">
                             @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
-                            <a class="btn btn-circle btn-outline btn-default" href="/equipment/stocktake/{{ $worksite->equipmentLocation->id }}" data-original-title="" title=""> Stocktake</a>
+                            <a class="btn btn-circle btn-outline btn-default" href="/equipment/stocktake/{{ ($worksite->equipmentLocation) ? $worksite->equipmentLocation->id : 0 }}" data-original-title="" title=""> Stocktake</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
                         </div>
                     </div>
                     <div class="portlet-body">
                         <div class="scroller">
-                            @if ($worksite->equipmentItems())
+                            @if (count($worksite->equipmentItems()))
                                 <ul class="feeds">
                                     @foreach($worksite->equipmentItems() as $item)
                                         <li>
