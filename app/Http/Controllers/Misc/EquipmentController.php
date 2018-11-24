@@ -423,7 +423,7 @@ class EquipmentController extends Controller {
      */
     public function getInventory()
     {
-        $equipment = Equipment::where('company_id', Auth::user()->company_id);
+        $equipment = Equipment::where('company_id', Auth::user()->company_id)->where('status', 1);
 
         $dt = Datatables::of($equipment)
             ->editColumn('id', function ($equip) {
