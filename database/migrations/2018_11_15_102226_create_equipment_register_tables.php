@@ -108,6 +108,7 @@ class CreateEquipmentRegisterTables extends Migration
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);
             $table->foreign('company_id')->references('id')->on('companys')->onDelete('cascade');
+            $table->foreign('stocktake_id')->references('id')->on('equipment_stocktake')->onDelete('cascade');
 
             // Modify info
             $table->integer('created_by')->unsigned();
