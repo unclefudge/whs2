@@ -27,9 +27,13 @@
                             {!! Form::hidden('item_id', $equip->id, ['id' => 'item_id']) !!}
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-7">
                                     <h2 style="margin-top: 0px">{{ $equip->name }}</h2>
                                     {!! nl2br($equip->notes) !!}
+                                </div>
+                                <div class="col-md-5">
+                                    @if (!$equip->status)
+                                    <h2 style="margin-top: 0px" class="font-red">DELETED {{ $equip->updated_at->format('d/m/Y)') }}</h2>
                                 </div>
                             </div>
 
