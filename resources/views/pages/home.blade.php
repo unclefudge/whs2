@@ -452,6 +452,9 @@
                             <span class="caption-subject font-dark bold uppercase">Equipment</span>
                         </div>
                         <div class="actions">
+                            @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
+                            <a class="btn btn-circle btn-outline btn-default" href="/equipment/stocktake/{{ $worksite->id }}" data-original-title="" title=""> Stocktake</a>
+                            @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
                         </div>
                     </div>
