@@ -60,6 +60,7 @@ class EquipmentStocktakeController extends Controller {
         $locations = ['' => 'Select location'] + $locations;
         $items = [];
         if ($location) {
+            // Get items then filter out 'deleted'
             $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
             $items = $all_items->filter(function ($item) {
                 if ($item->equipment->status) return $item;
@@ -124,7 +125,11 @@ class EquipmentStocktakeController extends Controller {
         $stocktake->save();
         $passed_all = 1;;
 
-        $items = EquipmentLocationItem::where('location_id', $location->id)->get();
+        // Get items then filter out 'deleted'
+        $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
+        $items = $all_items->filter(function ($item) {
+            if ($item->equipment->status) return $item;
+        });
         // Check if current qty matches DB
         foreach ($items as $item) {
             $qty_now = request($item->id . '-qty');
