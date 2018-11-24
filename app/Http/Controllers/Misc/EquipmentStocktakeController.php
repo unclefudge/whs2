@@ -181,7 +181,8 @@ class EquipmentStocktakeController extends Controller {
 
         if (count($extra_items)) {
             $lost_items = EquipmentLost::whereIn('equipment_id', $extra_items)->get();
-            if ($lost_items)
+            //dd($lost_items);
+            if (count($lost_items))
                 return redirect("/equipment/stocktake/found/$location->id");
             //return view('misc/equipment/stocktake-lost', compact('location', 'extra_items', 'lost_items'));
         }
