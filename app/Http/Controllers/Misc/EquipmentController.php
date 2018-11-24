@@ -55,10 +55,11 @@ class EquipmentController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function stocktake($id)
+    /*public function stocktake($id)
     {
         $location = EquipmentLocation::find($id);
 
+        dd('here');
         foreach (EquipmentLocation::all() as $loc) {
             if ($loc->site_id)
                 $locations[$loc->id] = $loc->site->name;
@@ -89,7 +90,7 @@ class EquipmentController extends Controller {
             return view('errors/404');
 
         return view('misc/equipment/stocktake', compact('location', 'locations', 'items'));
-    }
+    }*/
 
     /**
      * Show the form for creating a new resource.
