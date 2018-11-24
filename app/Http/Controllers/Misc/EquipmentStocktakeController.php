@@ -59,10 +59,13 @@ class EquipmentStocktakeController extends Controller {
 
         $locations = ['' => 'Select location'] + $locations;
         $items = [];
-        if ($location)
-            $items = EquipmentLocationItem::where('location_id', $location->id)->filter(function ($item) {
+        if ($location) {
+            $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
+            $items = $all_items->filter(function ($item) {
                 if ($item->equipment->status) return $item;
             });
+        }
+
 
 
         return view('misc/equipment/stocktake', compact('location', 'locations', 'items'));
