@@ -73,7 +73,13 @@ class EquipmentController extends Controller {
         if (!$location)
             $locations = ['' => 'Select location'] + $locations;
         else
-            $items = ($location->site_id) ? EquipmentLocation::where('site_id', $location->site_id)->get() : EquipmentLocation::where('other', $location->other)->get();
+            $items_all = ($location->site_id) ? EquipmentLocation::where('site_id', $location->site_id)->get() : EquipmentLocation::where('other', $location->other)->get();
+
+        $items = $items_all->filter(function($item)
+        {
+            if ($item->equipment->status)
+                return $item;
+        });
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->hasPermission2('edit.equipment'))
