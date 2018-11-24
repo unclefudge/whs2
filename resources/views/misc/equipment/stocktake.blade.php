@@ -77,9 +77,9 @@
                                         <?php
                                         $max = ($location->site_id && $location->site_id == 25) ? 10 : 3;
                                         if ($items)
-                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('company_id', Auth::user()->company_id)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
                                         else
-                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('company_id', Auth::user()->company_id)->toArray()->get();
+                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->toArray()->get();
 
                                         ?>
                                         @for ($x = 1; $x <= $max; $x++)
