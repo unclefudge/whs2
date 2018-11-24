@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Misc;
+namespace App\Models\Misc\Equipment;
 
 use DB;
 use App\User;
@@ -10,39 +10,50 @@ use Illuminate\Support\Facades\Auth;
 class Equipment extends Model {
 
     protected $table = 'equipment';
-    protected $fillable = ['name', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['name', 'purchased', 'disposed', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
-     * A Equipment has many locations.
+     * A Equipment has many LocationItems.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function locations()
+    public function locationItems()
     {
-        return $this->hasMany('App\Models\Misc\EquipmentLocation', 'item_id');
+        return $this->hasMany('App\Models\Misc\Equipment\EquipmentLocationItem');
     }
 
     /**
-     * A Equipment has many transaction.
+     * A Equipment has many logs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
 
-    public function transactions()
+    public function log()
     {
-        return $this->hasMany('App\Models\Misc\EquipmentTransaction', 'item_id');
+        return $this->hasMany('App\Models\Misc\Equipment\EquipmentLog');
     }
 
     /**
-     * A list of users that supervise the company separated by ,
+     * A Equipment has many logs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+
+    public function lost()
+    {
+        return $this->hasMany('App\Models\Misc\Equipment\EquipmentLost');
+    }
+
+    /**
+     * A list of location of the items separated by ,
      *
      * @return string
      */
     public function locationsSBC()
     {
         $string = '';
-        foreach ($this->locations as $loc) {
-            $string .= ($loc->site_id) ? $loc->site->suburb . ', ' : $loc->other;
+        foreach ($this->locationItems as $item) {
+            $string .= ($item->location->site_id) ? $item->location->site->name . ', ' : $item->location->other;
         }
 
         return rtrim($string, ', ');
@@ -53,7 +64,15 @@ class Equipment extends Model {
      */
     public function getTotalAttribute()
     {
-        return DB::table('equipment_location')->where('item_id', $this->id)->sum('qty');
+        return DB::table('equipment_location_items')->where('equipment_id', $this->id)->sum('qty');
+    }
+
+    /**
+     * Get the # Missing  (getter)
+     */
+    public function getTotalLostAttribute()
+    {
+        return DB::table('equipment_lost')->where('equipment_id', $this->id)->sum('qty');
     }
 
     /**
@@ -85,6 +104,7 @@ class Equipment extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
+                $table->company_id = Auth::user()->company_id;
             });
 
             // create a event to happen on updating

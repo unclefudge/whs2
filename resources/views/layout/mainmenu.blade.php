@@ -146,11 +146,16 @@
                                                     </ul>
                                                 </div>
                                             @endif
-                                            @if (Auth::user()->hasAnyPermissionType('equipment'))
+                                            @if (Auth::user()->hasAnyPermissionType('equipment|equipment.stocktake'))
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Equipment</h3></li>
-                                                        <li><a href="/equipment" class="nav-link "> Equipment Allocation</a></li>
+                                                        @if (Auth::user()->hasAnyPermissionType('equipment'))
+                                                            <li><a href="/equipment" class="nav-link "> Equipment Allocation</a></li>
+                                                        @endif
+                                                        @if (Auth::user()->hasAnyPermissionType('equipment.stocktake'))
+                                                            <li><a href="/equipment/stocktake/0" class="nav-link "> Equipment Stocktake</a></li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             @endif

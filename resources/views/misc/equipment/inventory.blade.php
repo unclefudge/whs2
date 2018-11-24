@@ -17,7 +17,6 @@
                 <div class="portlet light ">
                     <div class="portlet-title">
                         <div class="caption font-dark">
-                            <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Equipment Inventory</span>
                         </div>
                         <div class="actions">
@@ -32,8 +31,10 @@
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
                                 <th> Item Name</th>
-                                <th> Locations</th>
                                 <th width="10%"> Quantity</th>
+                                <th width="10%"> Missing</th>
+                                <th width="10%"> Puchased</th>
+                                <th width="10%"> Disposed</th>
                                 <th width="10%"> Action</th>
                             </tr>
                             </thead>
@@ -77,8 +78,10 @@
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'name', name: 'name'},
-            {data: 'location', name: 'location'},
             {data: 'total', name: 'total'},
+            {data: 'lost', name: 'lost'},
+            {data: 'purchased', name: 'purchased'},
+            {data: 'disposed', name: 'disposed'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [

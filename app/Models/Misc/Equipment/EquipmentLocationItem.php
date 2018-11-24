@@ -1,33 +1,33 @@
 <?php
 
-namespace App\Models\Misc;
+namespace App\Models\Misc\Equipment;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class EquipmentLocation extends Model {
+class EquipmentLocationItem extends Model {
 
-    protected $table = 'equipment_location';
-    protected $fillable = ['item_id', 'site_id', 'other', 'qty', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $table = 'equipment_location_items';
+    protected $fillable = ['location_id', 'equipment_id', 'qty', 'extra', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
-     * A EquipmentLocation belongs to a Equipment Item
+     * A EquipmentLocationItem belongs to a Equipment Location
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function item()
+    public function location()
     {
-        return $this->belongsTo('App\Models\Misc\Equipment');
+        return $this->belongsTo('App\Models\Misc\Equipment\EquipmentLocation', 'location_id');
     }
 
     /**
-     * A EquipmentLocation MAY belongs to a Site
+     * A EquipmentLocationItem belongs to a Equipment
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function site()
+    public function equipment()
     {
-        return ($this->site_id) ? $this->belongsTo('App\Models\Site\Site') : NULL;
+        return $this->belongsTo('App\Models\Misc\Equipment\Equipment', 'equipment_id');
     }
 
     /**
@@ -39,6 +39,15 @@ class EquipmentLocation extends Model {
     {
         return $this->belongsTo('App\User', 'updated_by');
     }
+
+    /**
+     * Get the Item Total  (getter)
+     */
+    public function getItemNameAttribute()
+    {
+        return $this->equipment->name;
+    }
+
 
     /**
      * The "booting" method of the model.
@@ -56,6 +65,7 @@ class EquipmentLocation extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
+                $table->company_id = Auth::user()->company_id;
             });
 
             // create a event to happen on updating

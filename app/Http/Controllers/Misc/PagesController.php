@@ -488,8 +488,8 @@ VALUES<br>";
         //
         // Creating Permission
         //
-        $name = 'Equipment Allocation';
-        $slug = 'equipment';
+        $name = 'Equipment Stocktake';
+        $slug = 'equipment.stocktake';
         echo "Creating Permission for $name ($slug)<br><br>";
         // View
         $p = Permission2::create(['name' => "View $name", 'slug' => "view.$slug"]);

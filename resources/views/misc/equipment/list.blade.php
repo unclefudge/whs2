@@ -16,16 +16,29 @@
                 <div class="portlet light ">
                     <div class="portlet-title">
                         <div class="caption font-dark">
-                            <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Equipment Allocation</span>
                         </div>
                         <div class="actions">
+                            @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/stocktake/0" data-original-title="Stocktake">Stocktake</a>
+                            @endif
                             @if (Auth::user()->allowed2('add.equipment'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/inventory" data-original-title="Inventory">Inventory</a>
                             @endif
                         </div>
                     </div>
                     <div class="portlet-body">
+                        @if (Session::has('siteID'))
+                            <?php $worksite = \App\Models\Site\Site::find(Session::get('siteID')) ?>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
+                                        {!! Form::select('site_id', [$worksite->id => "$worksite->suburb ($worksite->name)", '' => 'All Sites'], $worksite->id, ['class' => 'form-control bs-select', 'id' => 'site_id']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
@@ -73,6 +86,7 @@
                 'url': '{!! url('equipment/dt/allocation') !!}',
                 'type': 'GET',
                 'data': function (d) {
+                    d.site_id = $('#site_id').val();
                 }
             },
             columns: [
@@ -82,12 +96,16 @@
                 {data: 'code', name: 'sites.code'},
                 {data: 'suburb', name: 'sites.suburb'},
                 {data: 'sitename', name: 'sites.name'},
-                {data: 'other', name: 'other'},
+                {data: 'other', name: 'equipment_location.other'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order: [
                 [1, "asc"], [2, "desc"]
             ]
+        });
+
+        $('select#site_id').change(function () {
+            table_list.ajax.reload();
         });
     });
 </script>

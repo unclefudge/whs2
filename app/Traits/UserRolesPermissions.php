@@ -728,7 +728,7 @@ trait UserRolesPermissions {
             }
 
             // Equipment
-            if ($permissiontype == 'equipment') {
+            if ($permissiontype == 'equipment' || $permissiontype == 'equipment.stocktake') {
                 if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) return true; // User belong to same company record
             }
 

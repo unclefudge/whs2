@@ -18,7 +18,6 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-pencil "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Edit Item </span>
                             <span class="caption-helper"> - ID: {{ $item->id }}</span>
                         </div>
@@ -67,15 +66,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <br>
-                                    <div class="note note-warning"><b>Note:</b> Purchased items will be initially allocated to CAPE COD STORE (0000)</div>
-                                </div>
-                            </div>
-
-                            {{-- Delete Warning --}}
-                            <div class="row" style="display: none" id="delete-div">
-                                <div class="col-md-6"></div>
-                                <div class="col-md-6">
-                                    <div class="note note-warning"><b><span class="font-red"><i class="fa fa-warning"></i> WARNING</span></b><br><br>You are about the <b>DELETE</b> this item and this action can't be undone!!</div>
+                                    <div class="note note-warning"><b>Note:</b> Purchased items will be initially allocated to CAPE COD STORE</div>
                                 </div>
                             </div>
 
@@ -102,14 +93,9 @@
 @stop
 
 @section('page-level-plugins-head')
-    <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}

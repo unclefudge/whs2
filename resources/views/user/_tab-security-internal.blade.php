@@ -577,6 +577,12 @@ $rec = $user;
                                 <td width="15%">{!! permSelect('del.equipment', 'del', $rec, $cid, $dis) !!}</td>
                                 <td width="15%"></td>
                             </tr>
+                            <tr>
+                                <td>Equipment Stocktake</td>
+                                <td width="15%">{!! permSelect('view.equipment.stocktake', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('edit.equipment.stocktake', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="45%" colspan="3"></td>
+                            </tr>
                         </table>
                     @endif
 

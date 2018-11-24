@@ -340,6 +340,7 @@
                 </div>
             </div>
 
+            {{-- Safety Issues --}}
             <div class="portlet light tasks-widget ">
                 <div class="portlet-title">
                     <div class="caption">
@@ -439,9 +440,52 @@
                             @endforeach
                         </ul>
                     </div>
-
                 </div>
             </div>
+
+            {{-- Equipment --}}
+            @if (Session::has('siteID') && Auth::user()->hasPermission2('view.equipment'))
+                <div class="portlet light tasks-widget ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-list-alt font-dark"></i>
+                            <span class="caption-subject font-dark bold uppercase">Equipment</span>
+                        </div>
+                        <div class="actions">
+                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="scroller">
+                            @if ($worksite->equipmentItems())
+                                <ul class="feeds">
+                                    @foreach($worksite->equipmentItems() as $item)
+                                        <li>
+                                            <a href="/equipment/transfer/{{ $item->id }}" class="task-title">
+                                                <div class="col1">
+                                                    <div class="cont">
+                                                        <div class="cont-col1">
+                                                            {{ $item->qty }}
+                                                        </div>
+                                                        <div class="cont-col2">
+                                                            <div class="desc"> {{ $item->equipment->name }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col2">
+                                                    <div class="date"> {!! (Auth::user()->allowed2('edit.equipment', $item)) ? '<a href="/equipment/' . $item->id . '/transfer" class="btn default btn-xs sbold uppercase margin-bottom">Transfer</a>' : '' !!}</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                No equipment on site
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="col-md-6 col-sm-6">

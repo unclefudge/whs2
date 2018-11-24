@@ -8,6 +8,7 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\Planner\SiteCompliance;
+use App\Models\Misc\Equipment\EquipmentLocationItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -53,6 +54,27 @@ class Site extends Model {
     public function attendance()
     {
         return $this->hasMany('App\Models\Site\Planner\SiteAttendance');
+    }
+
+    /**
+     * A Site has many EquipmentLocation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function equipmentLocations()
+    {
+        return $this->hasMany('App\Models\Misc\Equipment\EquipmentLocation');
+    }
+
+    /**
+     * A Site has many EquipmentLocationItems
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function equipmentItems()
+    {
+        $locations = $this->equipmentLocations->pluck('id')->toArray();
+        return EquipmentLocationItem::whereIn('location_id', $locations)->get();
     }
 
     /**

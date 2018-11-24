@@ -18,26 +18,25 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-pencil "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Transfer Item </span>
-                            <span class="caption-helper"> - ID: {{ $location->id }}</span>
+                            <span class="caption-helper"> - ID: {{ $item->id }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($location, ['action' => ['Misc\EquipmentController@transferItem', $location->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($item, ['action' => ['Misc\EquipmentController@transferItem', $item->id], 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
 
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-7">
-                                    <h2 style="margin-top: 0px">{{ $location->item->name }}</h2>
-                                    {!! nl2br($location->item->notes) !!}
+                                    <h2 style="margin-top: 0px">{{ $item->equipment->name }}</h2>
+                                    {!! nl2br($item->equipment->notes) !!}
                                 </div>
                                 <div class="col-md-5">
-                                    <b>Location:</b> {!! ($location->site_id) ? $location->site->suburb.' ('.$location->site->name.')' : $location->other !!}<br>
-                                    <b>Quantity:</b> {{ $location->qty }}<br>
+                                    <b>Location:</b> {!! ($item->location->site_id) ? $item->location->site->suburb.' ('.$item->location->site->name.')' : $item->location->other !!}<br>
+                                    <b>Quantity:</b> {{ $item->qty }}<br>
                                 </div>
                             </div>
                             <hr>
@@ -48,7 +47,7 @@
                                     <div class="form-group">
                                         {!! Form::label('qty', 'Quantity', ['class' => 'control-label']) !!}
                                         <select id="transfer_qty" name="qty" class="form-control bs-select" width="100%">
-                                            @for ($i = 1; $i <= $location->qty; $i++)
+                                            @for ($i = 1; $i <= $item->qty; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
                                         </select>
@@ -57,7 +56,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group {!! fieldHasError('type', $errors) !!}">
                                         {!! Form::label('type', 'Transfer to', ['class' => 'control-label']) !!}
-                                        {!! Form::select('type', ['' => 'Select action', 'site' => 'Site', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                                        {!! Form::select('type', ['' => 'Select action', 'site' => 'Site', 'other' => 'Other location', 'missing' => 'Missing', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
                                         {!! fieldErrorMessage('type', $errors) !!}
                                     </div>
                                 </div>

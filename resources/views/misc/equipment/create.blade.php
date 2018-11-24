@@ -18,7 +18,6 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-pencil "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Create Item </span>
                         </div>
                     </div>
@@ -53,18 +52,12 @@
 @stop
 
 @section('page-level-plugins-head')
-    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
-    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/js/libs/fileinput.min.js"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
-<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
 
