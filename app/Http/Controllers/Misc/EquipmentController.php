@@ -509,10 +509,10 @@ class EquipmentController extends Controller {
             ->addColumn('action', function ($item) {
                 $action = '';
                 if (Auth::user()->allowed2('edit.equipment', $item)) {
-                    //if ($item->inTransit() && Auth::user()->allowed2('view.todo', $item->inTransit()))
-                    //    $action .= "<a href='/todo/" . $item->inTransit()->id . "' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>View Task</a>";
-                    //elseif (!$item->inTransit())
-                    //    $action .= "<a href='/equipment/$item->id/transfer' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>Transfer</a>";
+                    if ($item->inTransit() && Auth::user()->allowed2('view.todo', $item->inTransit()))
+                        $action .= "<a href='/todo/" . $item->inTransit()->id . "' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>View Task</a>";
+                    elseif (!$item->inTransit())
+                        $action .= "<a href='/equipment/$item->id/transfer' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>Transfer</a>";
                 }
 
                 return $action;
