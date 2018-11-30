@@ -13,7 +13,7 @@ use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentLocationItem;
 use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Misc\Equipment\EquipmentLog;
-use App\Models\Comms\ToDo;
+use App\Models\Comms\Todo;
 use App\Models\Site\Site;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -364,7 +364,7 @@ class EquipmentController extends Controller {
         $location->status = 0;
         $location->save();
 
-        $todo = ToDo::find($todo_id);
+        $todo = Todo::find($todo_id);
         $todo->done_by = Auth::user()->id;
         $todo->done_at = Carbon::now();
         $todo->status = 0;
