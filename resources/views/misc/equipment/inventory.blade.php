@@ -87,7 +87,7 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [
-            [1, "asc"], [2, "desc"]
+            [1, "asc"], [2, "asc"]
         ]
     });
 </script>
