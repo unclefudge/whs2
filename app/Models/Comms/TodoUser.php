@@ -27,7 +27,7 @@ class TodoUser extends Model {
      */
     public function todo()
     {
-        return $this->belongsTo('App\Models\Comms\ToDo');
+        return $this->belongsTo('App\Models\Comms\Todo');
     }
 
     /**
