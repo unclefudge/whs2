@@ -30,8 +30,9 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
+                                <th> Category</th>
                                 <th> Item Name</th>
-                                <th width="10%"> Quantity</th>
+                                <th width="10%"> Available</th>
                                 <th width="10%"> Missing</th>
                                 <th width="10%"> Puchased</th>
                                 <th width="10%"> Disposed</th>
@@ -77,6 +78,7 @@
         },
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
+            {data: 'catname', name: 'equipment_categories.name'},
             {data: 'name', name: 'name'},
             {data: 'total', name: 'total'},
             {data: 'lost', name: 'lost'},
@@ -85,7 +87,7 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [
-            [1, "asc"]
+            [1, "asc"], [2, "desc"]
         ]
     });
 </script>

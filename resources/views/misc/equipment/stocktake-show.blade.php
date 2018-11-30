@@ -45,7 +45,6 @@
                                     <th> Name</th>
                                     <th width="10%"> Qty Expected</th>
                                     <th width="10%"> Qty Actual</th>
-                                    <th width="10%"> Passed</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -57,7 +56,6 @@
                                         <td>{{ $item->item_name }}</td>
                                         <td>{{ $item->qty_expect }}</td>
                                         <td>{{ $item->qty_actual }}</td>
-                                        <td>{!! ($item->passed) ? 'Yes' : 'No' !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

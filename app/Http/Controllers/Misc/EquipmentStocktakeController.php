@@ -48,10 +48,10 @@ class EquipmentStocktakeController extends Controller {
         $location = EquipmentLocation::find($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->hasPermission2('edit.equipment'))
+        if (!Auth::user()->allowed('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('company_id', Auth::user()->company_id)->get() as $loc) {
+        foreach (EquipmentLocation::where('status', 1)->get() as $loc) {
             if (count($loc->items))
                 $locations[$loc->id] = $loc->name;
         }
@@ -67,29 +67,9 @@ class EquipmentStocktakeController extends Controller {
             });
         }
 
-
-
         return view('misc/equipment/stocktake', compact('location', 'locations', 'items'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function foundItem($id)
-    {
-        $location = EquipmentLocation::find($id);
-
-        // Check authorisation and throw 404 if not
-        //if (!Auth::user()->hasPermission2('edit.equipment'))
-        //    return view('errors/404');
-
-
-        //$items = EquipmentLocationItem::where('location_id', $location->id)->get();
-
-        return view('misc/equipment/stocktake-found', compact('location'));
-    }
 
     /**
      * Display a listing of the resource.
@@ -101,8 +81,8 @@ class EquipmentStocktakeController extends Controller {
         $stock = EquipmentStocktake::find($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->hasPermission2('edit.equipment'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed('edit.equipment.stocktake', $stock))
+            return view('errors/404');
 
 
         //$items = EquipmentLocationItem::where('location_id', $location->id)->get();
@@ -119,6 +99,11 @@ class EquipmentStocktakeController extends Controller {
     public function update($id)
     {
         $location = EquipmentLocation::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed('edit.equipment.stocktake', $location))
+            return view('errors/404');
+
         $extra_items = [];
 
         $stocktake = new EquipmentStocktake(['location_id' => $location->id]);
@@ -138,11 +123,13 @@ class EquipmentStocktakeController extends Controller {
             if ($item->qty > $qty_now) {
                 // Missing items
                 $passed_all = $pass_item = 0;
-                $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty_now));
+                // There were less items found at location then expected so
+                // check if 'extra' items are elsewhere and any none 'extra' mark them as missing
+                if (($item->qty - $qty_now) > $item->equipment->total_excess)
+                    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty_now - $item->equipment->total_excess));
             } elseif ($item->qty < $qty_now) {
                 // Extra items
                 $item->extra = ($qty_now - $item->qty);
-                //$this->foundItem($item->location_id, $item->equipment_id, ($qty_now - $item->qty));
                 $extra_items[$item->equipment_id] = ($qty_now - $item->qty);
             }
 
@@ -179,69 +166,41 @@ class EquipmentStocktakeController extends Controller {
             }
         }
 
+        // For the 'extra' items above the expected amount determine if they were missing from another site
+        // a) if missing the mark as found
+        // b) if not missing mark as excess
         if (count($extra_items)) {
-            $lost_items = EquipmentLost::whereIn('equipment_id', $extra_items)->get();
-            //dd($lost_items);
-            if (count($lost_items))
-                return redirect("/equipment/stocktake/found/$location->id");
-            //return view('misc/equipment/stocktake-lost', compact('location', 'extra_items', 'lost_items'));
+            foreach ($extra_items as $equip_id => $amount) {
+                $extra_amount = $amount;
+                $lost_items = EquipmentLost::where('equipment_id', $equip_id)->orderBy('created_at', 'DESC')->get();
+                if ($lost_items) {
+                    foreach ($lost_items as $lost) {
+                        if ($extra_amount) {
+                            if ($lost->qty > $extra_amount) {
+                                // More lost items then found so subtract only found amount
+                                $lost->decrement('qty', $extra_amount);
+                                $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $extra_amount, 'action' => 'F', 'notes' => "Found $extra_amount items at $location->name"]);
+                                $extra_amount = 0;
+                                break;
+                            } else {
+                                // Found more items then are actually lost so delete full amount from lost item.
+                                $extra_amount = $extra_amount - $lost->qty;
+                                $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $lost->qty, 'action' => 'F', 'notes' => "Found $lost->qty items at $location->name"]);
+                                $lost->delete();
+                            }
+                            $log->save();
+                        }
+                    }
+                    if ($extra_amount) {
+                        $equip = Equipment::find($equip_id);
+                        if (($equip->total - ($equip->purchased - $equip->disposed)) > 0)
+                            Toastr::warning("Item: $equip->name increased above actual number of purchased items.");
+                    }
+                }
+            }
         }
         if (!$passed_all)
             Toastr::error("Some items marked as missing");
-        Toastr::success("Saved changes");
-
-
-        return redirect("/equipment/stocktake/$location->id");
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function transferLost($id)
-    {
-        $location = EquipmentLocation::findOrFail($id);
-
-        $transfer = [];
-        $verify = [];
-        foreach (request()->all() as $key => $val) {
-            if (substr($key, 0, 3) == 'qty') {
-                list($item_id, $qty) = explode('-', substr($key, 4));
-                $verify[$item_id]['max'] = $qty;
-                $verify[$item_id]['now'] = (isset($verify[$item_id]['now'])) ? $verify[$item_id]['now'] + $val : $val;
-                if ($val)
-                    $transfer[$item_id] = $val;
-            }
-        }
-
-        // Verify not trying to transfer more 'lost' item to new location then there are
-        foreach ($verify as $id => $val) {
-            if ($val['now'] > $val['max']) {
-                Toastr::error("Transfer failed");
-                $equipment = Equipment::find($id);
-
-                return back()->withErrors(['exceeded_lost' => "Attempted to transfer " . $val['now'] . " $equipment->name and the location only has an addition " . $val['max']])->withInput();
-            }
-        }
-
-        // Mark lost item as found
-        foreach ($transfer as $item_id => $qty) {
-            $lost = EquipmentLost::find($item_id);
-            $found = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $lost->equipment_id)->first();
-            //echo "Transfer ".$lost->equipment->name."[$lost->equipment_id] From:".$lost->location->name." To: $location->name Item: Qty:$qty<br>";
-
-            $found->extra = $found->extra - $qty;
-            $found->save();
-
-            $lost->qty = $lost->qty - $qty;
-            ($lost->qty) ? $lost->save() : $lost->delete();
-
-            // Create New Transaction for log
-            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $qty, 'action' => 'F', 'notes' => "Found $qty missing items from " . $lost->location->name . " @ $location->name"]);
-            $log->save();
-        }
-        //dd(request()->all());
         Toastr::success("Saved changes");
 
         return redirect("/equipment/stocktake/$location->id");
@@ -250,8 +209,6 @@ class EquipmentStocktakeController extends Controller {
 
     /**
      * Lost item
-     *
-     * @return \Illuminate\Http\Response
      */
     public function lostItem($location_id, $equipment_id, $qty)
     {

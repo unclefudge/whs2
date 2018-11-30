@@ -32,6 +32,7 @@ trait UserRolesPermissions {
     {
         return DB::table('permission_user')->where(['user_id' => $this->id, 'company_id' => $company_id])->get();
     }
+
     /**
      * Check if a user has a certain 'role'
      *
@@ -570,7 +571,8 @@ trait UserRolesPermissions {
 
         // User can always view/edit own profile + add/view own doc
         if (($permission == 'view.user' || $permission == 'edit.user' || $permission == 'view.user.contact' || $permission == 'edit.user.contact'
-                || $permission == 'view.user.construction' || $permission == 'view.user.security') && $record->id == $this->id)
+                || $permission == 'view.user.construction' || $permission == 'view.user.security') && $record->id == $this->id
+        )
             return true;
 
         //dd($permission);
@@ -578,13 +580,17 @@ trait UserRolesPermissions {
         // ToDoo
         if ($permissiontype == 'todo') {
             if ($action == 'add') return true; // User can always add todoo
-            //dd($record->assignedTo());
             if ($record->assignedTo()->contains('id', $this->id)) return true; // Todoo is assigned to user
             if ($record->type == 'hazard') {
                 $hazard = SiteHazard::find($record->type_id);
                 if ($action == 'view' && $this->allowed2('view.site.hazard', $hazard)) return true; // User is allowed to view Site Hazard
                 if ($action == 'edit' && ($hazard->site->isSupervisorOrAreaSupervisor($this) || $this->allowed2('view.site.hazard', $hazard))) return true; // User Supervisor of Site
             }
+            if ($record->type == 'equipment' && $action == 'view')
+                if ($this->hasPermission2('view.equipment')) return true; // User has the permission to view
+            if ($record->type == 'equipment' && $action == 'edit')
+                if ($this->hasPermission2('edit.equipment') && $this->isCC()) return true; // User has the permission to edit and is CC
+
         }
 
         // Support Tickets
@@ -643,7 +649,7 @@ trait UserRolesPermissions {
         }
 
         // SDS add - Only Fudge, Jo, Tara, Rob, Demi
-        if (($permission == 'add.sds' || $permission == 'edit.sds' || $permission == 'del.sds')  && in_array($this->id, ['3', '109', '351', '6', '424'])) return true;
+        if (($permission == 'add.sds' || $permission == 'edit.sds' || $permission == 'del.sds') && in_array($this->id, ['3', '109', '351', '6', '424'])) return true;
 
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
@@ -729,7 +735,7 @@ trait UserRolesPermissions {
 
             // Equipment
             if ($permissiontype == 'equipment' || $permissiontype == 'equipment.stocktake') {
-                if ($this->hasPermission2($permission) && $record->company_id == $this->company_id) return true; // User belong to same company record
+                if ($this->hasPermission2($permission)) return true; // User has the permission
             }
 
             // Settings

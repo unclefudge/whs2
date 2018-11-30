@@ -16,6 +16,9 @@ use App\Models\Misc\Action;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
 use App\Models\Site\SiteHazard;
+use App\Models\Misc\Equipment\EquipmentLocation;
+use App\Models\Misc\Equipment\EquipmentLocationItem;
+use App\Models\Misc\Equipment\EquipmentLog;
 use App\Http\Requests;
 use App\Http\Requests\Comms\TodoRequest;
 use App\Http\Controllers\Controller;
@@ -214,12 +217,6 @@ class TodoController extends Controller {
         if (!Auth::user()->allowed2('edit.todo', $todo))
             return view('errors/404');
 
-        // Update done by if Todo marked as completed
-        if ($request->get('status') == 0 && !$todo->done_by) {
-            $todo_request['done_by'] = Auth::user()->id;
-            $todo_request['done_at'] = Carbon::now();
-        }
-
         $todo->update($todo_request);
 
         // Recently closed Hazard ToDo
@@ -261,7 +258,7 @@ class TodoController extends Controller {
     }
 
     /**
-     * Get Todo list current user is authorised to manage + Process datatables ajax request.
+     * Get Todoo list current user is authorised to manage + Process datatables ajax request.
      */
     public function getTodo(Request $request)
     {
@@ -296,4 +293,49 @@ class TodoController extends Controller {
 
         return $dt;
     }
+
+    /**
+     * Transfer Item
+     */
+    /*
+    public function transferItem($todo) {
+        // Transfer items
+        $temp_location = EquipmentLocation::find($todo->type_id);
+
+        if ($temp_location) {
+            foreach ($temp_location->items as $item) {
+                // Create New Transaction for log
+                $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => $item->qty, 'action' => 'T']);
+
+                list ($new_type, $new_details) = explode(':', $temp_location->notes);
+                if ($new_type == 'site') {
+                    $site = Site::find($new_details);
+                    $log->notes = "Transferred $item->qty items from $temp_location->other => $site->suburb ($site->name)";
+                    $location = EquipmentLocation::where('site_id', $site->id)->first();
+                } else {
+                    $log->notes = "Transferred $item->qty items from $temp_location->other => " . request('other');
+                    $location = EquipmentLocation::where('other', $new_details)->first();
+                }
+
+                // Check if location exists
+                if ($location) {
+                    // Check if location also has existing item to add qty to.
+                    $existing = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $item->equipment_id)->first();
+                    if ($existing) {
+                        $existing->qty = $existing->qty + $item->qty;
+                        $existing->save();
+                    } else
+                        $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $item->equipment_id, 'qty' => $item->qty]));
+                } else {
+                    // Create location + add item
+                    $loc_request = ($new_type == "site") ? ['site_id' => $new_details] : ['other' => $new_details];
+                    $newLocation = new EquipmentLocation($loc_request);
+                    $newLocation->save();
+                    $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $item->qty]));
+                }
+                $log->save(); // update log
+            }
+            $temp_location->delete();
+        }
+    }*/
 }

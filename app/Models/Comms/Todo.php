@@ -85,6 +85,16 @@ class Todo extends Model {
     }
 
     /**
+     * A Todoo MAY have a EquipmentLocation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function location()
+    {
+        return $this->hasOne('App\Models\Misc\Equipment\EquipmentLocation', 'id', 'type_id');
+    }
+
+    /**
      * A Todoo is done 'completed' by a user
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
@@ -107,10 +117,6 @@ class Todo extends Model {
                 return '/safety/doc/toolbox2/' . $this->type_id;
             case 'qa':
                 return '/site/qa/' . $this->type_id;
-            case 'hazard':
-                return '/todo/' . $this->id;
-            case 'swms':
-                return '/todo/' . $this->id;
             case 'company doc':
                 $doc = CompanyDoc::find($this->type_id);
                 if ($doc)
@@ -119,7 +125,7 @@ class Todo extends Model {
                 $ptc = CompanyDocPeriodTrade::find($this->type_id);
                 if ($ptc)
                     return '/company/' . $ptc->for_company_id . '/doc/period-trade-contract/' . $this->type_id;
-            case 'general':
+            default:
                 return '/todo/' . $this->id;
         }
 

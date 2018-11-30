@@ -18,6 +18,7 @@ class CreateEquipmentRegisterTables extends Migration
         //
         Schema::create('equipment', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('category_id')->unsigned()->nullable();
             $table->string('name', 100)->nullable();
             $table->tinyInteger('purchased')->unsigned()->default(0);
             $table->tinyInteger('disposed')->unsigned()->default(0);
@@ -35,6 +36,26 @@ class CreateEquipmentRegisterTables extends Migration
         });
 
         //
+        // Equipment Categpries
+        Schema::create('equipment_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('type', 10)->nullable();
+            $table->string('name', 100)->nullable();
+            $table->integer('parent')->unsigned();
+            $table->tinyInteger('private')->default(0);
+            $table->tinyInteger('status')->default(1);
+
+            // Foreign keys
+            $table->integer('company_id')->unsigned()->default(0);
+            $table->foreign('company_id')->references('id')->on('companys');
+
+            // Modify info
+            $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
+            $table->timestamps();
+        });
+
+        //
         // Equipment Location
         //
         Schema::create('equipment_location', function (Blueprint $table) {
@@ -42,6 +63,7 @@ class CreateEquipmentRegisterTables extends Migration
             $table->integer('site_id')->unsigned()->nullable();
             $table->string('other', 255)->nullable();
             $table->tinyInteger('status')->default(1);
+            $table->text('notes')->nullable();
 
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);
@@ -124,6 +146,7 @@ class CreateEquipmentRegisterTables extends Migration
             $table->integer('location_id')->unsigned()->nullable();
             $table->integer('equipment_id')->unsigned()->nullable();
             $table->tinyInteger('qty')->nullable();
+            $table->text('notes')->nullable();
 
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);
@@ -170,6 +193,7 @@ class CreateEquipmentRegisterTables extends Migration
         Schema::dropIfExists('equipment_stocktake');
         Schema::dropIfExists('equipment_location_items');
         Schema::dropIfExists('equipment_location');
+        Schema::dropIfExists('equipment_categories');
         Schema::dropIfExists('equipment');
 
     }

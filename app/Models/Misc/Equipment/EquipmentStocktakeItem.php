@@ -67,7 +67,7 @@ class EquipmentStocktakeItem extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
-                $table->company_id = Auth::user()->company_id;
+                $table->company_id = 3; //Auth::user()->company_id;
             });
 
             // create a event to happen on updating

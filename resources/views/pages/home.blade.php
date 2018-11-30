@@ -211,7 +211,6 @@
                                 </li>
                             @endif
 
-
                             {{-- SWMS TooDo's --}}
                             @if (Auth::user()->todoType('swms', 1)->count())
                                 <h4>Safe Work Method Statements</h4>
@@ -267,6 +266,32 @@
                             @if (Auth::user()->todoType('toolbox', 1)->count())
                                 <h4>Toolbox Talks</h4>
                                 @foreach(Auth::user()->todoType('toolbox', 1) as $todo)
+                                    <li>
+                                        <a href="{{ $todo->url() }}" class="task-title">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="label label-sm label-success">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc"> {{ $todo->name }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+
+                            {{-- Equipment Transfer --}}
+                            @if (Auth::user()->todoType('equipment', 1)->count())
+                                <h4>Equipment Transfer</h4>
+                                @foreach(Auth::user()->todoType('equipment', 1) as $todo)
                                     <li>
                                         <a href="{{ $todo->url() }}" class="task-title">
                                             <div class="col1">
@@ -449,7 +474,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-list-alt font-dark"></i>
-                            <span class="caption-subject font-dark bold uppercase">Equipment</span>
+                            <span class="caption-subject font-dark bold uppercase">Onsite Equipment</span>
                         </div>
                         <div class="actions">
                             @if (Auth::user()->hasPermission2('view.equipment.stocktake'))

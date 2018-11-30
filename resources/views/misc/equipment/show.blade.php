@@ -55,6 +55,7 @@
                             </table>
 
                             {{-- Missing --}}
+                            {{--}}
                             @if (count($equip->lost))
                                 <h3 class="form-section">Missing:
                                     <small>Total: {!! count($equip->lost) !!}</small>
@@ -71,6 +72,7 @@
                                     </thead>
                                 </table>
                             @endif
+                            --}}
 
                             {{-- History --}}
                             <h3 class="form-section">History</h3>
@@ -156,29 +158,6 @@
             ]
         });
 
-        var table_lost = $('#table_lost').DataTable({
-            pageLength: 10,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '{!! url('equipment/dt/missing') !!}',
-                'type': 'GET',
-                'data': function (d) {
-                    d.equipment_id = "{{ $equip->id }}";
-                }
-            },
-            columns: [
-                {data: 'qty', name: 'qty'},
-                {data: 'code', name: 'sites.code'},
-                {data: 'suburb', name: 'sites.suburb'},
-                {data: 'sitename', name: 'sites.name'},
-                {data: 'other', name: 'equipment_location.other'},
-            ],
-            order: [
-                [0, "desc"]
-            ]
-        });
-
         var table_history = $('#table_history').DataTable({
             pageLength: 10,
             processing: true,
@@ -199,6 +178,30 @@
                 [0, "desc"]
             ]
         });
+
+        /*
+         var table_lost = $('#table_lost').DataTable({
+         pageLength: 10,
+         processing: true,
+         serverSide: true,
+         ajax: {
+         'url': '{!! url('equipment/dt/missing') !!}',
+         'type': 'GET',
+         'data': function (d) {
+         d.equipment_id = "{{ $equip->id }}";
+         }
+         },
+         columns: [
+         {data: 'qty', name: 'qty'},
+         {data: 'code', name: 'sites.code'},
+         {data: 'suburb', name: 'sites.suburb'},
+         {data: 'sitename', name: 'sites.name'},
+         {data: 'other', name: 'equipment_location.other'},
+         ],
+         order: [
+         [0, "desc"]
+         ]
+         }); */
 
     });
 </script>

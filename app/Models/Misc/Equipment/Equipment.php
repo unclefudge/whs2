@@ -10,7 +10,18 @@ use Illuminate\Support\Facades\Auth;
 class Equipment extends Model {
 
     protected $table = 'equipment';
-    protected $fillable = ['name', 'purchased', 'disposed', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['category_id', 'name', 'purchased', 'disposed', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+
+    /**
+     * A Equipment belongs to a category.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongTo
+     */
+
+    public function category()
+    {
+        return $this->belongTo('App\Models\Misc\Equipment\EquipmentCategory');
+    }
 
     /**
      * A Equipment has many LocationItems.
@@ -20,6 +31,18 @@ class Equipment extends Model {
     public function locationItems()
     {
         return $this->hasMany('App\Models\Misc\Equipment\EquipmentLocationItem');
+    }
+
+    /**
+     * A Equipment has many Locations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function locations()
+    {
+        $ids = EquipmentLocationItem::where('equipment_id', $this->id)->pluck('location_id')->toArray();
+
+        return EquipmentLocation::whereIn('id', $ids)->where('status', 1)->get();
     }
 
     /**
@@ -64,7 +87,8 @@ class Equipment extends Model {
      */
     public function getTotalAttribute()
     {
-        return DB::table('equipment_location_items')->where('equipment_id', $this->id)->sum('qty');
+        return DB::table('equipment_location_items')->join('equipment_location', 'equipment_location.id', '=', 'equipment_location_items.location_id')
+            ->where('equipment_id', $this->id)->where('equipment_location.status', 1)->sum('qty');
     }
 
     /**
@@ -74,6 +98,15 @@ class Equipment extends Model {
     {
         return DB::table('equipment_lost')->where('equipment_id', $this->id)->sum('qty');
     }
+
+    /**
+     * Get the # Missing  (getter)
+     */
+    public function getTotalExcessAttribute()
+    {
+        return $this->total - $this->purchased + $this->disposed + $this->total_lost;
+    }
+
 
     /**
      * Display records last update_by + date
@@ -104,7 +137,7 @@ class Equipment extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
-                $table->company_id = Auth::user()->company_id;
+                $table->company_id = 3; //Auth::user()->company_id;
             });
 
             // create a event to happen on updating

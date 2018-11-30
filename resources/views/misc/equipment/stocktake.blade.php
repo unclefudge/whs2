@@ -141,7 +141,6 @@
                                     <th width="10%"> Date</th>
                                     <th> By Whom</th>
                                     <th> Summary</th>
-                                    <th width="10%"> Passed</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -206,7 +205,6 @@
                 {data: 'created_at', name: 'created_at'},
                 {data: 'created_by', name: 'created_by'},
                 {data: 'summary', name: 'summary'},
-                {data: 'passed', name: 'passed'},
             ],
             order: [
                 [1, "desc"]

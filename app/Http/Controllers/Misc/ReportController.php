@@ -162,6 +162,16 @@ class ReportController extends Controller {
         return view('manage/report/payroll', compact('companies'));
     }
 
+    /*
+     * Equipment List Report
+     */
+    public function equipment()
+    {
+        $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
+
+        return view('manage/report/equipment', compact('equipment'));
+    }
+
 
     /*
      * Site Attendance Report

@@ -25,7 +25,6 @@
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
                         {!! Form::model($item, ['method' => 'PATCH', 'action' => ['Misc\EquipmentController@update', $item->id], 'class' => 'horizontal-form']) !!}
-                        {!! Form::hidden('action', null, ['class' => 'form-control', 'id' => 'action']) !!}
 
                         @include('form-error')
 
@@ -38,27 +37,29 @@
                                         {!! fieldErrorMessage('name', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        {!! Form::label('total', 'Quantity', ['class' => 'control-label']) !!}
-                                        {!! Form::text('total', null, ['class' => 'form-control', 'readonly']) !!}
+                                <div class="col-md-3">
+                                    <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                                          null, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="btn-delete">&nbsp;</label><br>
-                                        <button class="btn blue" id="btn-purchase">Puchase</button>
+                                        {!! Form::label('total', 'No. of items in stock', ['class' => 'control-label']) !!}
+                                        {!! Form::text('total', null, ['class' => 'form-control', 'readonly']) !!}
                                     </div>
                                 </div>
                             </div>
 
                             {{-- Purchase --}}
-                            <div class="row" style="display: none" id="purchase-div">
+                            <div class="row"  id="purchase-div">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        {!! Form::label('purchase_qty', 'No. of items', ['class' => 'control-label']) !!}
+                                        {!! Form::label('purchase_qty', 'No. of items to purchase', ['class' => 'control-label']) !!}
                                         <select id="purchase_qty" name="purchase_qty" class="form-control bs-select" width="100%">
-                                            @for ($i = 1; $i < 100; $i++)
+                                            @for ($i = 0; $i < 100; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
                                         </select>
@@ -101,14 +102,6 @@
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script>
     $(document).ready(function () {
-
-        $("#btn-purchase").click(function (e) {
-            e.preventDefault();
-            $('#purchase-div').show();
-            $("#btn-delete").hide();
-            $("#action").val('P');
-        });
-
         $("#btn-delete").click(function (e) {
             e.preventDefault();
             swal({

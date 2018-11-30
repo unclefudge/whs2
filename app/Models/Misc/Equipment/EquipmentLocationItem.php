@@ -2,6 +2,7 @@
 
 namespace App\Models\Misc\Equipment;
 
+use App\Models\Comms\ToDo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,6 +42,15 @@ class EquipmentLocationItem extends Model {
     }
 
     /**
+     * A EquipmentTransaction MAY be currently transferred
+     *
+     */
+    public function inTransit()
+    {
+        return ToDo::where('type', 'equipment')->where('type_id', $this->location->id)->first();
+    }
+
+    /**
      * Get the Item Total  (getter)
      */
     public function getItemNameAttribute()
@@ -65,7 +75,7 @@ class EquipmentLocationItem extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
-                $table->company_id = Auth::user()->company_id;
+                $table->company_id = 3; //Auth::user()->company_id;
             });
 
             // create a event to happen on updating

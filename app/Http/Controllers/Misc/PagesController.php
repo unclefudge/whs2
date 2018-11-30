@@ -7,7 +7,7 @@ use PDF;
 use Session;
 use App\User;
 use App\Models\Site\Site;
-use App\Models\Site\Planner\SiteCompliance;
+use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Site\SiteQa;
 use App\Models\Misc\Permission2;
 use App\Http\Requests;
@@ -91,7 +91,34 @@ class PagesController extends Controller {
 
     public function quick()
     {
-        echo "<br><br>Signed QA items with status 0<br><br>";
+        $extra_items = ['3' => 2, 2 => 3];
+        foreach ($extra_items as $equip_id => $amount) {
+            $extra_amount = $amount;
+            $lost_items = EquipmentLost::where('equipment_id', $equip_id)->orderBy('created_at', 'DESC')->get();
+            if ($lost_items) {
+                echo "<br>Found equipment id $equip_id - amount $extra_amount<br>";
+                foreach($lost_items as $lost) {
+                    echo "$lost->id : $lost->created_at : Qty $lost->qty: Extra: $extra_amount<br>";
+                    if ($extra_amount) {
+                        if ($lost->qty > $extra_amount) {
+                            //$lost->decrement('qty', $extra_amount);
+                            $extra_amount = 0;
+                            echo "[$lost->id] Sub $extra_amount : Remain $extra_amount<br>";
+                            break;
+                        } else {
+                            $extra_amount = $extra_amount - $lost->qty;
+                            echo "[$lost->id] Del $lost->qty : Remain $extra_amount<br>";
+                            //$lost->delete();
+                        }
+                    }
+                }
+                echo "Not found: $extra_amount - Found: ".($amount-$extra_amount)."<br>";
+            }
+        }
+
+
+
+        /*echo "<br><br>Signed QA items with status 0<br><br>";
         $qas = \App\Models\Site\SiteQa::where('status', '>', 0)->where('master', 0)->get();
         foreach ($qas as $qa) {
             foreach ($qa->items as $item) {
@@ -101,7 +128,7 @@ class PagesController extends Controller {
                     $item->save();
                 }
             }
-        }
+        }*/
         /*
         echo "<br><br>Export Toolbox Talk<br><br>";
 

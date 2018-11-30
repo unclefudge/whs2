@@ -69,6 +69,19 @@
                                         {!! Form::textarea('s_info', $todo->info, ['rows' => '4', 'class' => 'form-control', 'readonly']) !!}
                                     </div>
                                 </div>
+                                @if ($todo->type == 'equipment' && $todo->location && count($todo->location->items))
+                                    <div class="col-md-12">
+                                        List of equipment to tranfer:<br>
+                                        <ul>
+                                            @foreach ($todo->location->items as $item)
+                                                <li>({{ $item->qty }}) {{ $item->item_name }}</li>
+                                            @endforeach
+                                        </ul>
+                                        <br>
+                                        <b>Assigned to:</b> {{ $todo->assignedToBySBC() }}
+                                        <br><br>
+                                    </div>
+                                @endif
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         {!! Form::label('comments', 'Comments', ['class' => 'control-label']) !!}
@@ -149,6 +162,10 @@
                                 @if($todo->type == 'company ptc')
                                     <?php $doc = \App\Models\Company\CompanyDocPeriodTrade::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/period-trade-contract/{{ $doc->id }}" class="btn dark">View Document</a>
+                                @endif
+                                @if($todo->type == 'equipment' && $todo->status && Auth::user()->allowed2('edit.todo', $todo))
+                                    <button class="btn green" id="save">Save</button>
+                                    <a href="/equipment/{{$todo->type_id}}/transfer-verify" class="btn blue"> Verify Transfer</a>
                                 @endif
                                 @if($todo->status && Auth::user()->allowed2('edit.todo', $todo) && ($todo->type == 'general' || $todo->type == 'hazard'))
                                     <button class="btn green" id="save">Save</button>

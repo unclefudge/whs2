@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class EquipmentLocation extends Model {
 
     protected $table = 'equipment_location';
-    protected $fillable = ['site_id', 'other', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['site_id', 'other', 'status', 'notes', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
      * A EquipmentLocation has many items.
@@ -19,6 +19,7 @@ class EquipmentLocation extends Model {
     {
         return $this->hasMany('App\Models\Misc\Equipment\EquipmentLocationItem', 'location_id');
     }
+
 
     /**
      * A EquipmentLocation MAY belongs to a Site
@@ -41,11 +42,43 @@ class EquipmentLocation extends Model {
     }
 
     /**
+     * A Equipment specific items.
+     *
+     * @return collection
+     */
+    public function equipment($equipment_id = '')
+    {
+        return ($equipment_id) ? EquipmentLocationItem::where('location_id', $this->id)->where('equipment_id', $equipment_id)->first() : EquipmentLocationItem::where('location_id', $this->id)->get();
+    }
+
+    /**
+     * A EquipmentLocation has many items - List format.
+     *
+     * @return STRING
+     */
+    public function itemsList()
+    {
+        $str = '';
+        foreach ($this->items as $item) {
+            $str = "($item->qty) $item->item_name<br>";
+        }
+        return $str;
+    }
+
+    /**
      * Get the Item Total  (getter)
      */
     public function getNameAttribute()
     {
         return ($this->site_id) ? $this->site->suburb . ' (' . $this->site->name . ')' : $this->other;
+    }
+
+    /**
+     * Get the Item Total  (getter)
+     */
+    public function getName2Attribute()
+    {
+        return ($this->site_id) ? $this->site->code . ' &nbsp; ' . $this->site->name  : $this->other;
     }
 
 
@@ -65,7 +98,7 @@ class EquipmentLocation extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
-                $table->company_id = Auth::user()->company_id;
+                $table->company_id = 3; //Auth::user()->company_id;
             });
 
             // create a event to happen on updating

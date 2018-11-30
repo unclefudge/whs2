@@ -2,37 +2,30 @@
 
 namespace App\Models\Misc\Equipment;
 
-use URL;
-use Mail;
+use DB;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
-class EquipmentLog extends Model {
+class EquipmentCategory extends Model {
 
-    protected $table = 'equipment_log';
-    protected $fillable = ['equipment_id', 'qty', 'action', 'notes', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $table = 'equipment_categories';
+    protected $fillable = ['type', 'name', 'parent', 'private', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
-    /**
-     * A EquipmentTransaction belongs to a Equipment Item
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function item()
-    {
-        return $this->belongsTo('App\Models\Misc\Equipment\Equipment');
-    }
 
     /**
-     * A EquipmentTransaction belongs to a User
+     * Display records last update_by + date
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return string
      */
-    public function user()
+    public function displayUpdatedBy()
     {
-        return $this->belongsTo('App\User', 'updated_by');
+        $user = User::findOrFail($this->updated_by);
+
+        return '<span style="font-weight: 400">Last modified: </span>' . $this->updated_at->diffForHumans() . ' &nbsp; ' .
+        '<span style="font-weight: 400">By:</span> ' . $user->fullname;
     }
-    
+
     /**
      * The "booting" method of the model.
      *

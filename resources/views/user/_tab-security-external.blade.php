@@ -454,6 +454,32 @@ $rec = $user;
                         @endif
                     </table>
 
+                    @if ($cc)
+                        <h5 class="font-green-haze" style="font-size: 16px">Miscellaneous
+                            <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
+                               data-content="Grants ability to view / modify miscellaneous features for this website"
+                               data-original-title="Miscellaneous"> <i class="fa fa-question-circle font-grey-silver"></i>
+                            </a>
+                        </h5>
+
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <td>Equipment Allocation</td>
+                                <td width="15%">{!! permSelect('view.equipment', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('edit.equipment', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('add.equipment', 'add', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('del.equipment', 'del', $rec, $cid, $dis) !!}</td>
+                                <td width="15%"></td>
+                            </tr>
+                            <tr>
+                                <td>Equipment Stocktake</td>
+                                <td width="15%">{!! permSelect('view.equipment.stocktake', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="15%">{!! permSelect('edit.equipment.stocktake', 'all', $rec, $cid, $dis) !!}</td>
+                                <td width="45%" colspan="3"></td>
+                            </tr>
+                        </table>
+                    @endif
+
                     <h5 class="font-green-haze" style="font-size: 16px">Configuration / Settings
                         <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                            data-content="Grants ability to view / modify configuration settings for this website"

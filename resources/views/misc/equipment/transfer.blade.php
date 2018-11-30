@@ -56,7 +56,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group {!! fieldHasError('type', $errors) !!}">
                                         {!! Form::label('type', 'Transfer to', ['class' => 'control-label']) !!}
-                                        {!! Form::select('type', ['' => 'Select action', 'site' => 'Site', 'other' => 'Other location', 'missing' => 'Missing', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
                                         {!! fieldErrorMessage('type', $errors) !!}
                                     </div>
                                 </div>
@@ -69,18 +69,28 @@
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
                                     <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('other', $errors) ? '' : 'display:none' }}" id="other-div">
-                                        {!! Form::label('other', 'Other Location Name', ['class' => 'control-label']) !!}
+                                        {!! Form::label('other', 'Specify Other Location', ['class' => 'control-label']) !!}
                                         {!! Form::text('other', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('other', $errors) !!}
                                     </div>
                                     <div class="form-group {!! fieldHasError('reason', $errors) !!}" style="{{ fieldHasError('reason', $errors) ? '' : 'display:none' }}" id="dispose-div">
-                                        {!! Form::label('reason', 'Reason', ['class' => 'control-label']) !!}
+                                        {!! Form::label('reason', 'Reason for disposal', ['class' => 'control-label']) !!}
                                         {!! Form::text('reason', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('reason', $errors) !!}
                                     </div>
                                 </div>
                             </div>
-
+                            @if (Auth::user()->isCC())
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group {!! fieldHasError('assign', $errors) !!}" style="{{ fieldHasError('site_id', $errors) ? '' : 'display:none' }}" id="assign-div">
+                                            {!! Form::label('assign', 'Assign task to (optional)', ['class' => 'control-label']) !!}
+                                            {!! Form::select('assign', Auth::user()->company->usersSelect('prompt'), null, ['class' => 'form-control select2', 'id' => 'assign', 'width' => '100%']) !!}
+                                            {!! fieldErrorMessage('assign', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-actions right">
                                 <a href="{{ URL::previous() }}" class="btn default"> Back</a>
                                 <button type="submit" name="save" class="btn green">Save</button>
@@ -109,20 +119,30 @@
 <script>
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
-        });
+        $("#site_id").select2({placeholder: "Select Site"});
+        $("#assign").select2({placeholder: "Select User", width: '100%'});
 
         $("#type").change(function () {
             $('#site-div').hide();
             $('#other-div').hide();
             $('#dispose-div').hide();
+            $('#assign-div').hide();
 
-            if ($("#type").val() == 'site')
+            if ($("#type").val() == 'store') {
+                $('#site_id').val(25);
+                $('#site_id').trigger('change');
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'site') {
                 $('#site-div').show();
+                $('#assign-div').show();
+            }
 
-            if ($("#type").val() == 'other')
+            if ($("#type").val() == 'other') {
                 $('#other-div').show();
+                $('#assign-div').show();
+            }
 
             if ($("#type").val() == 'dispose')
                 $('#dispose-div').show();

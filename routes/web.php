@@ -97,6 +97,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/expired_company_docs/dt/expired_company_docs', 'Misc\ReportController@getExpiredCompanyDocs');
     Route::get('/manage/report/payroll', 'Misc\ReportController@payroll');
     Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
+    Route::get('/manage/report/equipment', 'Misc\ReportController@equipment');
+    Route::get('/manage/report/equipment_site', 'Misc\ReportController@equipmentSite');
+    Route::get('/manage/report/equipment_transactions', 'Misc\ReportController@equipmentTransactions');
 
     // User Docs
     Route::get('user/{uid}/doc/dt/docs', 'User\UserDocController@getDocs');
@@ -314,6 +317,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('equipment/inventory', 'Misc\EquipmentController@inventory');
     Route::get('equipment/{id}/transfer', 'Misc\EquipmentController@transfer');
     Route::post('equipment/{id}/transfer', 'Misc\EquipmentController@transferItem');
+    Route::get('equipment/{id}/transfer-verify', 'Misc\EquipmentController@verify');
+    Route::post('equipment/{id}/transfer-confirm', 'Misc\EquipmentController@confirmTransfer');
     Route::get('equipment/{id}/delete', 'Misc\EquipmentController@destroy');
     Route::post('equipment/lost', 'Misc\EquipmentController@lostItem');
     Route::resource('equipment', 'Misc\EquipmentController');
@@ -321,7 +326,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('equipment/stocktake/dt/stocktake', 'Misc\EquipmentStocktakeController@getStocktake');
     Route::get('equipment/stocktake/found/{id}', 'Misc\EquipmentStocktakeController@foundItem');
     Route::get('equipment/stocktake/view/{id}', 'Misc\EquipmentStocktakeController@showStocktake');
-    Route::post('equipment/stocktake/transferlost/{id}', 'Misc\EquipmentStocktakeController@transferLost');
+    //Route::post('equipment/stocktake/transferlost/{id}', 'Misc\EquipmentStocktakeController@transferLost');
     Route::resource('equipment/stocktake', 'Misc\EquipmentStocktakeController');
 
 

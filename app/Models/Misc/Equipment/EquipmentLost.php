@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class EquipmentLost extends Model {
 
     protected $table = 'equipment_lost';
-    protected $fillable = ['location_id', 'equipment_id', 'qty', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['location_id', 'equipment_id', 'qty', 'notes' ,'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
      * A EquipmentLost belongs to a Equipment Location
@@ -65,7 +65,7 @@ class EquipmentLost extends Model {
             static::creating(function ($table) {
                 $table->created_by = Auth::user()->id;
                 $table->updated_by = Auth::user()->id;
-                $table->company_id = Auth::user()->company_id;
+                $table->company_id = 3; //Auth::user()->company_id;
             });
 
             // create a event to happen on updating

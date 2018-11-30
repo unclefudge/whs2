@@ -43,9 +43,10 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
+                                <th> Category</th>
                                 <th> Item Name</th>
                                 <th width="5%"> Qty</th>
-                                <th> Site</th>
+                                <th width="5%"> Site</th>
                                 <th> Suburb</th>
                                 <th> Name</th>
                                 <th> Other</th>
@@ -91,6 +92,7 @@
             },
             columns: [
                 {data: 'view', name: 'view', orderable: false, searchable: false},
+                {data: 'catname', name: 'equipment_categories.name'},
                 {data: 'itemname', name: 'equipment.name'},
                 {data: 'qty', name: 'qty'},
                 {data: 'code', name: 'sites.code'},
@@ -100,7 +102,7 @@
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order: [
-                [1, "asc"], [2, "desc"]
+                [1, "asc"], [2, "asc"], [3, "desc"]
             ]
         });
 

@@ -35,6 +35,14 @@
                                         {!! fieldErrorMessage('name', $errors) !!}
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                                          1, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('category_id', $errors) !!}
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-actions right">
                                 <a href="/equipment/inventory" class="btn default"> Back</a>
