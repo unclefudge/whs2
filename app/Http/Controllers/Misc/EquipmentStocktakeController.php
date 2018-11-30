@@ -48,7 +48,7 @@ class EquipmentStocktakeController extends Controller {
         $location = EquipmentLocation::find($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed('edit.equipment.stocktake', $location))
+        if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
         foreach (EquipmentLocation::where('status', 1)->get() as $loc) {
@@ -81,7 +81,7 @@ class EquipmentStocktakeController extends Controller {
         $stock = EquipmentStocktake::find($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed('edit.equipment.stocktake', $stock))
+        if (!Auth::user()->allowed2('edit.equipment.stocktake', $stock))
             return view('errors/404');
 
 
@@ -101,7 +101,7 @@ class EquipmentStocktakeController extends Controller {
         $location = EquipmentLocation::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed('edit.equipment.stocktake', $location))
+        if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
         $extra_items = [];
