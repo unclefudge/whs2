@@ -47,7 +47,7 @@ class EquipmentLocationItem extends Model {
      */
     public function inTransit()
     {
-        return ToDo::where('type', 'equipment')->where('type_id', $this->location->id)->first();
+        return ToDo::where('type', 'equipment')->where('type_id', $this->location_id)->first();
     }
 
     /**
