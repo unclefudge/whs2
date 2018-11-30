@@ -2,7 +2,7 @@
 
 namespace App\Models\Misc\Equipment;
 
-use App\Models\Comms\ToDo;
+use App\Models\Comms\Todo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
