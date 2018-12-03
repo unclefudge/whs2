@@ -53,6 +53,22 @@ class EquipmentController extends Controller {
         return view('misc/equipment/inventory');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function writeoff()
+    {
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->hasPermission2('edit.equipment.stocktake'))
+            return view('errors/404');
+
+        $missing = EquipmentLost::all();
+        return view('misc/equipment/writeoff', compact('missing'));
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -455,6 +471,34 @@ class EquipmentController extends Controller {
         return redirect("/equipment/inventory");
     }
 
+
+    /**
+     * Write off the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function writeoffItems()
+    {
+       //dd(request()->all());
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->hasPermission2("del.equipment"))
+            return view('errors/404');
+
+        if (request('writeoff')) {
+            foreach(request('writeoff') as $lost_id) {
+                $lost = EquipmentLost::findOrFail($lost_id);
+                $lost->equipment->disposed = $lost->equipment->disposed + $lost->qty;
+                $lost->equipment->save();
+                $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $lost->qty, 'action' => 'W', 'notes' => "Write off $lost->qty items from ".$lost->created_at->format('d/m/Y')]);
+                $log->save();
+                $lost->delete();
+            }
+        }
+        Toastr::error("Items written off");
+
+        return redirect("/equipment/inventory");
+    }
 
     /**
      * Get Allocations + Process datatables ajax request.

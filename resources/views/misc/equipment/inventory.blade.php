@@ -20,8 +20,11 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Equipment Inventory</span>
                         </div>
                         <div class="actions">
-                            @if (Auth::user()->allowed2('add.site'))
+                            @if (Auth::user()->allowed2('add.equipment'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/create" data-original-title="Add">Add</a>
+                            @endif
+                            @if (Auth::user()->hasPermission2('del.equipment'))
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/writeoff" data-original-title="Add">Write-Off</a>
                             @endif
                         </div>
                     </div>

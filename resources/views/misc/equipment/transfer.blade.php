@@ -23,7 +23,6 @@
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        <!-- BEGIN FORM-->
                         {!! Form::model($item, ['action' => ['Misc\EquipmentController@transferItem', $item->id], 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')

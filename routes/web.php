@@ -315,16 +315,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('equipment/dt/missing', 'Misc\EquipmentController@getMissing');
     Route::get('equipment/dt/log', 'Misc\EquipmentController@getLog');
     Route::get('equipment/inventory', 'Misc\EquipmentController@inventory');
+    Route::get('equipment/writeoff', 'Misc\EquipmentController@writeoff');
+    Route::post('equipment/writeoff', 'Misc\EquipmentController@writeoffItems');
     Route::get('equipment/{id}/transfer', 'Misc\EquipmentController@transfer');
     Route::post('equipment/{id}/transfer', 'Misc\EquipmentController@transferItem');
     Route::get('equipment/{id}/transfer-verify', 'Misc\EquipmentController@verify');
     Route::post('equipment/{id}/transfer-confirm', 'Misc\EquipmentController@confirmTransfer');
     Route::get('equipment/{id}/delete', 'Misc\EquipmentController@destroy');
-    Route::post('equipment/lost', 'Misc\EquipmentController@lostItem');
     Route::resource('equipment', 'Misc\EquipmentController');
     // Stocktake
     Route::get('equipment/stocktake/dt/stocktake', 'Misc\EquipmentStocktakeController@getStocktake');
-    Route::get('equipment/stocktake/found/{id}', 'Misc\EquipmentStocktakeController@foundItem');
     Route::get('equipment/stocktake/view/{id}', 'Misc\EquipmentStocktakeController@showStocktake');
     //Route::post('equipment/stocktake/transferlost/{id}', 'Misc\EquipmentStocktakeController@transferLost');
     Route::resource('equipment/stocktake', 'Misc\EquipmentStocktakeController');

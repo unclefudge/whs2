@@ -84,12 +84,8 @@ class EquipmentStocktakeController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $stock))
             return view('errors/404');
 
-
-        //$items = EquipmentLocationItem::where('location_id', $location->id)->get();
-
         return view('misc/equipment/stocktake-show', compact('stock'));
     }
-
 
     /**
      * Update the specified resource in storage.
