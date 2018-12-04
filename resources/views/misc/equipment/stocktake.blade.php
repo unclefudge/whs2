@@ -47,22 +47,33 @@
                                         <th width="10%"> Expected</th>
                                         @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
                                             <th width="10%"> Actual</th>
+                                            <th width="5%"> Exclude</th>
                                         @endif
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if (count($items))
                                         @foreach($items->sortBy('item_name') as $loc)
-                                            <tr>
+                                            <tr id="itemrow-{{ $loc->id }}">
                                                 <td>{{ $loc->item_name }}</td>
                                                 <td>{{ $loc->qty }}</td>
                                                 @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
                                                     <td>
-                                                        <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
-                                                            @for ($i = 0; $i < 100; $i++)
-                                                                <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
-                                                            @endfor
-                                                        </select>
+                                                        <div id="itemactual-{{ $loc->id }}">
+                                                            <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
+                                                                @for ($i = 0; $i < 100; $i++)
+                                                                    <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <label class="mt-checkbox mt-checkbox-outline">
+                                                                <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
                                                     </td>
                                                 @endif
                                             </tr>
@@ -187,6 +198,18 @@
             $("#btn-add-item").hide();
             $("#spinner").show();
             window.location.href = "/equipment/stocktake/" + $("#location_id").val();
+        });
+
+        $(".stockitem").click(function (e) {
+            //alert($(this).val());
+            if ($("#itemcheck-" + $(this).val()).prop('checked')) {
+                $("#itemactual-" + $(this).val()).hide();
+                $("#itemrow-" + $(this).val()).addClass("font-grey-cascade");
+            } else {
+                $("#itemrow-" + $(this).val()).removeClass("font-grey-cascade");
+                $("#itemactual-" + $(this).val()).show();
+            }
+
         });
 
         var table_history = $('#table_history').DataTable({

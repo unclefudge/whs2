@@ -111,32 +111,39 @@ class EquipmentStocktakeController extends Controller {
         $items = $all_items->filter(function ($item) {
             if ($item->equipment->status) return $item;
         });
+
+        $exclude = (request('exclude')) ? request('exclude') : [];
+        //dd($items);
+        //dd(request()->all());
         // Check if current qty matches DB
         foreach ($items as $item) {
             $qty_now = request($item->id . '-qty');
             $passed_item = 1;
             $stocktake_item = new EquipmentStocktakeItem(['stocktake_id' => $stocktake->id, 'equipment_id' => $item->equipment_id, 'qty_expect' => $item->qty, 'qty_actual' => $qty_now]);
-            if ($item->qty > $qty_now) {
-                // Missing items
-                $passed_all = $pass_item = 0;
-                // There were less items found at location then expected so
-                // check if 'extra' items are elsewhere and any none 'extra' mark them as missing
-                if (($item->qty - $qty_now) > $item->equipment->total_excess)
-                    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty_now - $item->equipment->total_excess));
-            } elseif ($item->qty < $qty_now) {
-                // Extra items
-                $item->extra = ($qty_now - $item->qty);
-                $extra_items[$item->equipment_id] = ($qty_now - $item->qty);
-            }
+            if (in_array($item->id, $exclude)) {
+                $stocktake_item->qty_actual = $passed_item = null; // ignore excluded items
+            } else {
+                if ($item->qty > $qty_now) {
+                    // Missing items
+                    $passed_all = $passed_item = 0;
+                    // There were less items found at location then expected so
+                    // check if 'extra' items are elsewhere and any none 'extra' mark them as missing
+                    if (($item->qty - $qty_now) > $item->equipment->total_excess)
+                        $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty_now - $item->equipment->total_excess));
+                } elseif ($item->qty < $qty_now) {
+                    // Extra items
+                    $item->extra = ($qty_now - $item->qty);
+                    $extra_items[$item->equipment_id] = ($qty_now - $item->qty);
+                }
 
-
-            // Update altered qty at location
-            if ($item->qty != $qty_now) {
-                if ($qty_now) {
-                    $item->qty = $qty_now;
-                    $item->save();
-                } else
-                    $item->delete();
+                // Update altered qty at location
+                if ($item->qty != $qty_now) {
+                    if ($qty_now) {
+                        $item->qty = $qty_now;
+                        $item->save();
+                    } else
+                        $item->delete();
+                }
             }
 
             // Save Stocktake

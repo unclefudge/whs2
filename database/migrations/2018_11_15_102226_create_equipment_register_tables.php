@@ -125,7 +125,7 @@ class CreateEquipmentRegisterTables extends Migration
             $table->integer('equipment_id')->unsigned()->nullable();
             $table->integer('qty_expect')->nullable();
             $table->integer('qty_actual')->nullable();
-            $table->tinyInteger('passed')->defult(1);
+            $table->tinyInteger('passed')->nullable()->defult(1);
 
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);

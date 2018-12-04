@@ -51,10 +51,12 @@
                                             <td>{{ $item->item_name }}</td>
                                             <td>{{ $item->qty }}</td>
                                             <td>
-                                                <label class="mt-checkbox mt-checkbox-outline">
-                                                    <input type="checkbox" value="{{ $item->id }}" name="writeoff[]"/>
-                                                    <span></span>
-                                                </label>
+                                                <div class="text-center">
+                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                        <input type="checkbox" value="{{ $item->id }}" name="writeoff[]"/>
+                                                        <span></span>
+                                                    </label>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

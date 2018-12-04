@@ -49,13 +49,20 @@ class EquipmentStocktake extends Model {
     public function summary()
     {
         $str = '';
+        $excluded = '';
         foreach ($this->items as $item) {
-            if ($item->qty_expect > $item->qty_actual)
-                $str .= 'Missing '.($item->qty_expect - $item->qty_actual).' '. $item->item_name.'<br>';
-            if ($item->qty_expect < $item->qty_actual)
-                $str .= 'Extra '.($item->qty_actual - $item->qty_expect).' '. $item->item_name.'<br>';
+            if ($item->qty_actual == NULL) {
+                $excluded .= "$item->item_name, ";
+            } else {
+                if ($item->qty_expect > $item->qty_actual)
+                    $str .= 'Missing '.($item->qty_expect - $item->qty_actual).' '. $item->item_name.'<br>';
+                if ($item->qty_expect < $item->qty_actual)
+                    $str .= 'Extra '.($item->qty_actual - $item->qty_expect).' '. $item->item_name.'<br>';
+            }
         }
-        return ($str) ? $str : 'All items accounted for';
+        $str = rtrim($str,'<br>');
+        $excluded = ($excluded) ? "<br>Excluded from stocktake: ".rtrim($excluded, ', ') : '';
+        return ($str) ? $str.$excluded : "All items accounted for $excluded";
     }
 
     /**
