@@ -589,7 +589,7 @@ trait UserRolesPermissions {
             if ($record->type == 'equipment' && $action == 'view')
                 if ($this->hasPermission2('view.equipment')) return true; // User has the permission to view
             if ($record->type == 'equipment' && $action == 'edit')
-                if ($this->hasPermission2('edit.equipment') && $this->isCC()) return true; // User has the permission to edit and is CC
+                if ($this->hasPermission2('edit.equipment') && $this->id == $record->created_by) return true; // User created equipment ToDoo
 
         }
 

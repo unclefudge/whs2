@@ -21,7 +21,7 @@
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
                         {!! Form::model('stocktake', ['method' => 'PATCH', 'action' => ['Misc\EquipmentStocktakeController@update', ($location) ? $location->id : '0'], 'class' => 'horizontal-form']) !!}
-
+                        {!! Form::hidden('site_id', ($location) ? $location->site_id : null, ['class' => 'control-label', 'id' => 'site_id']) !!}
                         @include('form-error')
 
                         <div class="form-body">
@@ -38,6 +38,15 @@
                                 </div>
                             </div>
 
+                            @if ($location && $location->site_id != 25)
+                                <div class="row" id="exclude-div">
+                                    <div class="col-md-12">
+                                        <button class="btn dark pull-right" id="btn-exclude">Exclude some items from stocktake</button>
+                                        <br><br><br>
+                                    </div>
+                                </div>
+                            @endif
+
                             {{-- Equipment --}}
                             @if ($location)
                                 <table class="table table-striped table-bordered table-hover order-column" id="table_list">
@@ -47,19 +56,19 @@
                                         <th width="10%"> Expected</th>
                                         @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
                                             <th width="10%"> Actual</th>
-                                            <th width="5%"> Exclude</th>
+                                            <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
                                         @endif
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if (count($items))
                                         @foreach($items->sortBy('item_name') as $loc)
-                                            <tr id="itemrow-{{ $loc->id }}">
+                                            <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
                                                 <td>{{ $loc->item_name }}</td>
                                                 <td>{{ $loc->qty }}</td>
                                                 @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
                                                     <td>
-                                                        <div id="itemactual-{{ $loc->id }}">
+                                                        <div class="itemactual-" id="itemactual-{{ $loc->id }}">
                                                             <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
                                                                 @for ($i = 0; $i < 100; $i++)
                                                                     <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
@@ -67,7 +76,7 @@
                                                             </select>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="excludeitems">
                                                         <div class="text-center">
                                                             <label class="mt-checkbox mt-checkbox-outline">
                                                                 <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
@@ -156,12 +165,11 @@
                                 </thead>
                             </table>
                         @endif
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="loadSpinnerOverlay" id="spinner" style="display: none">
-                                    <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
-                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="loadSpinnerOverlay" id="spinner" style="display: none">
+                                <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -186,13 +194,29 @@
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script>
     $(document).ready(function () {
+        // Cape Cod Store by default has all items excluded
+        if ($("#site_id").val() == 25) {
+            $(".itemrow-").addClass("font-grey-cascade");
+            $(".itemactual-").hide();
+        } else {
+            $(".excludeitems").hide();
+        }
 
+        // Add extra items
         $("#btn-add-item").click(function (e) {
             e.preventDefault();
-            $('.add-item').show();
+            $(".add-item").show();
             $("#btn-add-item").hide();
         });
 
+        // Exclude some items
+        $("#btn-exclude").click(function (e) {
+            e.preventDefault();
+            $(".excludeitems").show();
+            $("#exclude-div").hide();
+        });
+
+        // Location
         $("#location_id").change(function () {
             $("#table_list").hide();
             $("#btn-add-item").hide();
@@ -200,16 +224,27 @@
             window.location.href = "/equipment/stocktake/" + $("#location_id").val();
         });
 
-        $(".stockitem").click(function (e) {
-            //alert($(this).val());
-            if ($("#itemcheck-" + $(this).val()).prop('checked')) {
-                $("#itemactual-" + $(this).val()).hide();
-                $("#itemrow-" + $(this).val()).addClass("font-grey-cascade");
-            } else {
-                $("#itemrow-" + $(this).val()).removeClass("font-grey-cascade");
-                $("#itemactual-" + $(this).val()).show();
-            }
 
+        $(".stockitem").click(function (e) {
+            if ($("#site_id").val() == 25) {
+                // Cape Cod Store by default has all items excluded
+                if ($("#itemcheck-" + $(this).val()).prop('checked')) {
+                    $("#itemrow-" + $(this).val()).removeClass("font-grey-cascade");
+                    $("#itemactual-" + $(this).val()).show();
+                } else {
+                    $("#itemactual-" + $(this).val()).hide();
+                    $("#itemrow-" + $(this).val()).addClass("font-grey-cascade");
+                }
+            } else {
+                // All other location by default has all items included
+                if ($("#itemcheck-" + $(this).val()).prop('checked')) {
+                    $("#itemactual-" + $(this).val()).hide();
+                    $("#itemrow-" + $(this).val()).addClass("font-grey-cascade");
+                } else {
+                    $("#itemrow-" + $(this).val()).removeClass("font-grey-cascade");
+                    $("#itemactual-" + $(this).val()).show();
+                }
+            }
         });
 
         var table_history = $('#table_history').DataTable({

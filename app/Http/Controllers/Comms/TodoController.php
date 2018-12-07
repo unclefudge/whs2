@@ -273,7 +273,7 @@ class TodoController extends Controller {
             ->join('users', 'todo.created_by', '=', 'users.id')
             ->where(function ($q) {
                 $q->where('todo_user.user_id', Auth::user()->id);
-                $q->orWhere('todo.created_by', Auth::user()->id);
+                /*$q->orWhere('todo.created_by', Auth::user()->id);*/
             })
             ->where('todo.status', $request->get('status'))
             ->orderBy('todo.due_at');
@@ -293,49 +293,4 @@ class TodoController extends Controller {
 
         return $dt;
     }
-
-    /**
-     * Transfer Item
-     */
-    /*
-    public function transferItem($todo) {
-        // Transfer items
-        $temp_location = EquipmentLocation::find($todo->type_id);
-
-        if ($temp_location) {
-            foreach ($temp_location->items as $item) {
-                // Create New Transaction for log
-                $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => $item->qty, 'action' => 'T']);
-
-                list ($new_type, $new_details) = explode(':', $temp_location->notes);
-                if ($new_type == 'site') {
-                    $site = Site::find($new_details);
-                    $log->notes = "Transferred $item->qty items from $temp_location->other => $site->suburb ($site->name)";
-                    $location = EquipmentLocation::where('site_id', $site->id)->first();
-                } else {
-                    $log->notes = "Transferred $item->qty items from $temp_location->other => " . request('other');
-                    $location = EquipmentLocation::where('other', $new_details)->first();
-                }
-
-                // Check if location exists
-                if ($location) {
-                    // Check if location also has existing item to add qty to.
-                    $existing = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $item->equipment_id)->first();
-                    if ($existing) {
-                        $existing->qty = $existing->qty + $item->qty;
-                        $existing->save();
-                    } else
-                        $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $item->equipment_id, 'qty' => $item->qty]));
-                } else {
-                    // Create location + add item
-                    $loc_request = ($new_type == "site") ? ['site_id' => $new_details] : ['other' => $new_details];
-                    $newLocation = new EquipmentLocation($loc_request);
-                    $newLocation->save();
-                    $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $item->qty]));
-                }
-                $log->save(); // update log
-            }
-            $temp_location->delete();
-        }
-    }*/
 }

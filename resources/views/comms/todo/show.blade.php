@@ -1,10 +1,5 @@
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-list-ul"></i> ToDo Item </h1>
-    </div>
-@stop
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -163,9 +158,17 @@
                                     <?php $doc = \App\Models\Company\CompanyDocPeriodTrade::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/period-trade-contract/{{ $doc->id }}" class="btn dark">View Document</a>
                                 @endif
-                                @if($todo->type == 'equipment' && $todo->status && Auth::user()->allowed2('edit.todo', $todo))
-                                    <button class="btn green" id="save">Save</button>
-                                    <a href="/equipment/{{$todo->type_id}}/transfer-verify" class="btn blue"> Verify Transfer</a>
+                                @if($todo->type == 'equipment')
+                                    @if ($todo->status)
+                                        <a href="{{ URL::previous() }}" class="btn default"> Back</a>
+                                    @endif
+                                    @if($todo->status && Auth::user()->allowed2('edit.todo', $todo))
+                                        <button class="btn green" id="save">Save</button>
+                                        @if ($todo->created_by == Auth::user()->id)
+                                            <a href="/equipment/{{ $todo->type_id }}/transfer-cancel" class="btn dark"> Cancel Transfer</a>
+                                        @endif
+                                        <a href="/equipment/{{ $todo->type_id }}/transfer-verify" class="btn blue"> Verify Transfer</a>
+                                    @endif
                                 @endif
                                 @if($todo->status && Auth::user()->allowed2('edit.todo', $todo) && ($todo->type == 'general' || $todo->type == 'hazard'))
                                     <button class="btn green" id="save">Save</button>

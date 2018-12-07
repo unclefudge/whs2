@@ -28,17 +28,20 @@
                         </div>
                     </div>
                     <div class="portlet-body">
-                        @if (Session::has('siteID'))
-                            <?php $worksite = \App\Models\Site\Site::find(Session::get('siteID')) ?>
-                            <div class="row">
+                        <div class="row">
+                            @if (Session::has('siteID'))
+                                <?php $worksite = \App\Models\Site\Site::find(Session::get('siteID')) ?>
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
                                         {!! Form::select('site_id', [$worksite->id => "$worksite->suburb ($worksite->name)", '' => 'All Sites'], $worksite->id, ['class' => 'form-control bs-select', 'id' => 'site_id']) !!}
                                     </div>
                                 </div>
+                            @endif
+                            <div class="col-md-3">
+                                <a href="/equipment/0/transfer-bulk" class="btn dark" id="btn-multiple" style="margin-top: 25px">Bulk Equipment Transfer</a><br><br>
                             </div>
-                        @endif
+                        </div>
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">

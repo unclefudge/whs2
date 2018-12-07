@@ -51,13 +51,15 @@ class EquipmentStocktakeController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('status', 1)->get() as $loc) {
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->get() as $loc) {
             if (count($loc->items))
                 $locations[$loc->id] = $loc->name;
         }
         asort($locations);
 
-        $locations = ['' => 'Select location'] + $locations;
+        if (!$location)
+            $locations = ['' => 'Select location'] + $locations;
+
         $items = [];
         if ($location) {
             // Get items then filter out 'deleted'
@@ -113,15 +115,15 @@ class EquipmentStocktakeController extends Controller {
         });
 
         $exclude = (request('exclude')) ? request('exclude') : [];
-        //dd($items);
-        //dd(request()->all());
+
         // Check if current qty matches DB
         foreach ($items as $item) {
             $qty_now = request($item->id . '-qty');
             $passed_item = 1;
             $stocktake_item = new EquipmentStocktakeItem(['stocktake_id' => $stocktake->id, 'equipment_id' => $item->equipment_id, 'qty_expect' => $item->qty, 'qty_actual' => $qty_now]);
-            if (in_array($item->id, $exclude)) {
-                $stocktake_item->qty_actual = $passed_item = null; // ignore excluded items
+            if (($location->site_id == 25 && !in_array($item->id, $exclude)) || ($location->site_id != 25 && in_array($item->id, $exclude))) {
+                // Ignore excluded items. For CapeCod Store 'excluded' items are actually 'included' - reverse
+                $stocktake_item->qty_actual = $passed_item = null;
             } else {
                 if ($item->qty > $qty_now) {
                     // Missing items
