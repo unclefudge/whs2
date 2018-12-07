@@ -91,31 +91,52 @@ class PagesController extends Controller {
 
     public function quick()
     {
-        $extra_items = ['3' => 2, 2 => 3];
-        foreach ($extra_items as $equip_id => $amount) {
-            $extra_amount = $amount;
-            $lost_items = EquipmentLost::where('equipment_id', $equip_id)->orderBy('created_at', 'DESC')->get();
-            if ($lost_items) {
-                echo "<br>Found equipment id $equip_id - amount $extra_amount<br>";
-                foreach($lost_items as $lost) {
-                    echo "$lost->id : $lost->created_at : Qty $lost->qty: Extra: $extra_amount<br>";
-                    if ($extra_amount) {
-                        if ($lost->qty > $extra_amount) {
-                            //$lost->decrement('qty', $extra_amount);
-                            $extra_amount = 0;
-                            echo "[$lost->id] Sub $extra_amount : Remain $extra_amount<br>";
-                            break;
-                        } else {
-                            $extra_amount = $extra_amount - $lost->qty;
-                            echo "[$lost->id] Del $lost->qty : Remain $extra_amount<br>";
-                            //$lost->delete();
-                        }
-                    }
-                }
-                echo "Not found: $extra_amount - Found: ".($amount-$extra_amount)."<br>";
-            }
-        }
 
+        // Import Equipment
+        echo "Importing Equipment<br><br>";
+        $row = 0;
+        if (($handle = fopen(public_path("equipment.csv"), "r")) !== false) {
+            while (($data = fgetcsv($handle, 5000, ",")) !== false) {
+                $row ++;
+                if ($row == 1) continue;
+                $num = count($data);
+
+                $name = $data[0];
+                $purchased = $data[1];
+                $project = $data[2];
+                $qty = $data[3];
+
+                echo "<br>$qty $name - $project<br>";
+
+                $equipment = \App\Models\Misc\Equipment\Equipment::where('name', $name)->first();
+                if (!$equipment)
+                    $equipment = \App\Models\Misc\Equipment\Equipment::create(['name' => $name, 'purchased' => $purchased, 'category_id' => 1])->first();
+
+                $site_id = $other = null;
+                if ($project == 'STORE')
+                    $site_id = 25;
+                elseif ($project[0] == 'Z')
+                    $other = $project;
+                else {
+                    $site = \App\Models\Site\Site::where('code', $project)->first();
+                    if ($site)
+                        $site_id = $site->id;
+                    else
+                        echo "***** NO SITE ******<br>";
+                }
+
+                $location = \App\Models\Misc\Equipment\EquipmentLocation::where('site_id', $site_id)->where('other', $other)->first();
+                if (!$location) {
+                    $location = new  \App\Models\Misc\Equipment\EquipmentLocation(['site_id' => $site_id, 'other' => $other]);
+                    $location->save();
+                    echo "Created Location S:$site_id O:$other<br>";
+                }
+                $location->items()->save(new \App\Models\Misc\Equipment\EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $equipment->id, 'qty' => $qty]));
+                echo "Added item E:$equipment->id to Loc:$location->id ($qty)<br>";
+            }
+            fclose($handle);
+        }
+        echo "<br><br>Completed<br>-------------<br>";
 
 
         /*echo "<br><br>Signed QA items with status 0<br><br>";

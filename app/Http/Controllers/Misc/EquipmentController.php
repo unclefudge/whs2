@@ -386,7 +386,6 @@ class EquipmentController extends Controller {
             $this->performTransfer($item, $qty, $site_id, $other);
         }
 
-        //dd(request()->all());
         $location->status = 0;
         $location->save();
 
@@ -435,8 +434,7 @@ class EquipmentController extends Controller {
             $newLocation->save();
             $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
         }
-        // Subtract items
-        $this->subtractItems($item, $qty);
+        $this->subtractItems($item, $qty); // Subtract items from original location
     }
 
     /**
@@ -523,14 +521,14 @@ class EquipmentController extends Controller {
         $other = ($type == 'other') ? $details : null;
         $orig_location = EquipmentLocation::findOrFail($orig_location_id);
         $old_site = ($orig_location->site_id) ? Site::find($orig_location->site_id) : null;
-        $old_location = ($old_site) ? "$old_site->suburb ($old_site->name)" : $orig_location->name;
+        $orig_location_name = ($old_site) ? "$old_site->suburb ($old_site->name)" : $orig_location->name;
         $new_site = ($site_id) ? Site::find($site_id) : null;
         $new_location = ($new_site) ? "$new_site->suburb ($new_site->name)" : $other;
 
         foreach ($location->items as $item)
             $this->performTransfer($item, $item->qty, $orig_location->site_id, $orig_location->other);
 
-        $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => null, 'action' => 'X', 'notes' => "Task cancelled to transfer items from $old_location => $new_location"]);
+        $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => null, 'action' => 'X', 'notes' => "Task cancelled to transfer items from $orig_location_name => $new_location"]);
         $log->save();
 
         // Delete ToDoo + Transfer Location
