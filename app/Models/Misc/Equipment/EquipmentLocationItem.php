@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class EquipmentLocationItem extends Model {
 
     protected $table = 'equipment_location_items';
-    protected $fillable = ['location_id', 'equipment_id', 'qty', 'extra', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['location_id', 'equipment_id', 'qty', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
      * A EquipmentLocationItem belongs to a Equipment Location

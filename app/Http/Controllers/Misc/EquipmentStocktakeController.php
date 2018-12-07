@@ -134,7 +134,6 @@ class EquipmentStocktakeController extends Controller {
                         $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty_now - $item->equipment->total_excess));
                 } elseif ($item->qty < $qty_now) {
                     // Extra items
-                    $item->extra = ($qty_now - $item->qty);
                     $extra_items[$item->equipment_id] = ($qty_now - $item->qty);
                 }
 
@@ -163,7 +162,7 @@ class EquipmentStocktakeController extends Controller {
                 $extra_items[$equip->id] = request("$i-extra_qty");
 
                 // Add item to location
-                $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $equip->id, 'qty' => request("$i-extra_qty"), 'extra' => request("$i-extra_qty")]));
+                $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $equip->id, 'qty' => request("$i-extra_qty")]));
 
                 // Add item to stocktake
                 $stocktake_item = new EquipmentStocktakeItem(['stocktake_id' => $stocktake->id, 'equipment_id' => $equip->id, 'qty_expect' => 0, 'qty_actual' => request("$i-extra_qty"), 'passed' => 1]);
