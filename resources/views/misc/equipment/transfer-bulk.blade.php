@@ -28,7 +28,7 @@
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('location_id', $errors) !!}">
                                         {!! Form::label('location_id', 'Transfer From', ['class' => 'control-label']) !!}
-                                        {!! Form::select('location_id', $locations,  ($location) ? $location->id : 0, ['class' => 'form-control bs-select', 'id' => 'location_id']) !!}
+                                        {!! Form::select('location_id', $locations,  ($location) ? $location->id : 0, ['class' => 'form-control select2', 'id' => 'location_id']) !!}
                                         {!! fieldErrorMessage('location_id', $errors) !!}
                                     </div>
                                 </div>
@@ -127,6 +127,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#site_id").select2({placeholder: "Select Site"});
+        $("#location_id").select2({placeholder: "Select Site"});
         $("#assign").select2({placeholder: "Select User", width: '100%'});
 
 
