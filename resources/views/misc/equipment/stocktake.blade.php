@@ -32,7 +32,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('location_id', $errors) !!}">
                                         {!! Form::label('location_id', 'Change Location', ['class' => 'control-label']) !!}
-                                        {!! Form::select('location_id', $locations, ($location) ? $location->id : null, ['class' => 'form-control bs-select', 'id' => 'location_id']) !!}
+                                        {!! Form::select('location_id', $locations, ($location) ? $location->id : null, ['class' => 'form-control select2', 'id' => 'location_id']) !!}
                                         {!! fieldErrorMessage('location_id', $errors) !!}
                                     </div>
                                 </div>
@@ -183,17 +183,23 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
+<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+        /* Select2 */
+        $("#location_id").select2({placeholder: "Select Site", width: '100%'});
         // Cape Cod Store by default has all items excluded
         if ($("#site_id").val() == 25) {
             $(".itemrow-").addClass("font-grey-cascade");
