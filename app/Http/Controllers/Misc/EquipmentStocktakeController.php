@@ -51,11 +51,12 @@ class EquipmentStocktakeController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->get() as $loc) {
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc) {
             if (count($loc->items))
                 $locations[$loc->id] = $loc->name;
         }
         asort($locations);
+        $locations = ['1' => 'CAPE COD STORE'] + $locations;
 
         if (!$location)
             $locations = ['' => 'Select location'] + $locations;

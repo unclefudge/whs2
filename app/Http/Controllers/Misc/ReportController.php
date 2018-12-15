@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Misc;
 
 use DB;
+use PDF;
 use Session;
 use App\User;
 use App\Models\Site\Site;
@@ -170,6 +171,16 @@ class ReportController extends Controller {
         $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
 
         return view('manage/report/equipment', compact('equipment'));
+    }
+    /**
+     * Equipment List PDF
+     */
+    public function equipmentPDF()
+    {
+        $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
+
+        //return view('pdf/equipment', compact('equipment'));
+        return PDF::loadView('pdf/equipment', compact('equipment'))->setPaper('a4', 'portrait')->stream();
     }
 
 

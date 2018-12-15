@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/payroll', 'Misc\ReportController@payroll');
     Route::get('/manage/report/nightly', 'Misc\ReportController@nightly');
     Route::get('/manage/report/equipment', 'Misc\ReportController@equipment');
+    Route::get('/manage/report/equipment/report', 'Misc\ReportController@equipmentPDF');
     Route::get('/manage/report/equipment_site', 'Misc\ReportController@equipmentSite');
     Route::get('/manage/report/equipment_transactions', 'Misc\ReportController@equipmentTransactions');
 

@@ -414,9 +414,9 @@ class CronController extends Controller {
         $today = Carbon::today();
         $today2 = Carbon::today()->subYears(2);
         $week2_coming = Carbon::today()->addDays(14);
-        $week2_coming2 = Carbon::today2()->addDays(14)->subYear();
+        $week2_coming2 = Carbon::today()->subYears(2)->addDays(14)->subYear();
         $week4_ago = Carbon::today()->subDays(28);
-        $week4_ago2 = Carbon::today2()->subDays(28)->subYear();
+        $week4_ago2 = Carbon::today()->subYears(2)->subDays(28)->subYear();
 
         $dates = [
             $week2_coming2->format('Y-m-d') => "Expiry in 2 weeks on " . $week2_coming->format('d/m/Y'),

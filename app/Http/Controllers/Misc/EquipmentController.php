@@ -145,12 +145,12 @@ class EquipmentController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->get() as $loc) {
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc) {
             if (count($loc->items))
                 $locations[$loc->id] = $loc->name;
         }
         asort($locations);
-
+        $locations = ['1' => 'CAPE COD STORE'] + $locations;
         if (!$location)
             $locations = ['' => 'Select location'] + $locations;
 
@@ -304,6 +304,10 @@ class EquipmentController extends Controller {
             $log->save();
             $this->subtractItems($item, $qty);
         } else {
+            // Verify not transfer to/from aren't same location
+            if (($item->location->site_id && $item->location->site_id == $site_id) || ($item->location->other && $item->location->other == $other))
+                return back()->withErrors(['same' => "The destination location can't be the same as the originating."]);
+
             if (request('assign'))
                 $this->assignTransfer($item, $qty, $site_id, $other, request('assign')); // Assign transfer to user
             else
@@ -327,6 +331,10 @@ class EquipmentController extends Controller {
         request()->validate($rules, $mesg); // Validate
 
         $location = EquipmentLocation::findOrFail($id);
+
+        // Verify not transfer to/from aren't same location
+        if ($location->site_id == request('site_id'))
+            return back()->withErrors(['samelocation' => "The From and To locations can't be the same"]);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.equipment', $location))

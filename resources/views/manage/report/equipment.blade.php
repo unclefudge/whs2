@@ -12,6 +12,12 @@
 
 @section('content')
     <div class="page-content-inner">
+
+        <style>
+            .input-control {width: 100%}
+            .option-value {display:none;}
+        </style>
+
         {!! Form::model('SitePlannerExport', ['action' => 'Site\Planner\SitePlannerExportController@attendancePDF', 'class' => 'horizontal-form']) !!}
         <div class="row">
             <div class="col-md-12">
@@ -27,6 +33,9 @@
                     </div>
                     <div class="portlet-body form">
                         <div class="portlet-body">
+
+                            <div id="build-wrap"></div>
+                            {{--}}
                             @foreach ($equipment as $equip)
                                 <div class="row">
                                     <div class="col-md-12"><b>{{ $equip->name }} ({{ $equip->total }})</b></div>
@@ -40,6 +49,7 @@
                                     @endif
                                 @endforeach
                             @endforeach
+                            --}}
                         </div>
 
                         <div class="form-actions right">
@@ -82,47 +92,26 @@
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 <script type="text/javascript">
-
-    $(document).ready(function () {
-        /* Select2 */
-        $("#site_id_all").select2({placeholder: "Select Site", width: '100%'});
-        $("#site_id_active").select2({placeholder: "Select Site", width: '100%'});
-        $("#site_id_completed").select2({placeholder: "Select Site", width: '100%'});
-        $("#company_id").select2({placeholder: "Select Company", width: '100%'});
-
-        $('#site_active').hide();
-        $('#site_completed').hide();
-
-        //$('#view_pdf').click(function (e) {
-        $('form').submit(function (e) {
-            // custom handling here
-            if (($('#company_id').val() != 'all') || ($('#status').val() == '1' && $('#site_id_active').val() != 'all') ||
-                    ($('#status').val() == '0' && $('#site_id_completed').val() != 'all') || ($('#status').val() == '' && $('#site_id_all').val() != 'all')) {
-                $('#spinner').show();
-                return true;
-            }
-
-
-            swal({
-                title: 'Unable to view PDF',
-                text: 'You must select a <b>Site</b> or <b>Company</b>',
-                html: true,
-            });
-            e.preventDefault();
-
-        });
-
-
+    jQuery(function($) {
+        var fbEditor = document.getElementById("build-wrap"),
+                options = {
+                    controlPosition: 'left',
+                    controlOrder: ['header','text', 'select', 'checkbox-group', 'radio-group', 'date', 'textarea'],
+                    disabledActionButtons: ['data', 'clear'],
+                    disabledAttrs: ["placeholder", "className", "access", "maxlength", "description", "value", "name", "step", "value"],
+                    disableFields: ['autocomplete', 'button', 'file', 'paragraph', 'hidden'],
+                    disabledSubtypes: {
+                        text: ['password', 'email', 'color', 'tel'],
+                    },
+                    prepend: '<h1>Profile for Miss Marple.</h1>', // DOM Object, Array of Dom Objects/Strings or String
+                    append: '<h2>All information is confidential.</h2>'
+                };
+        $(fbEditor).formBuilder(options);
     });
-
-    $('.date-picker').datepicker({
-        autoclose: true,
-        clearBtn: true,
-        format: 'dd/mm/yyyy',
-    });
-
-    var active = $('#status').val();
-
 </script>
 @stop
