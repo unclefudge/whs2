@@ -51,27 +51,31 @@
 <div class="container">
     <div class="page22">
         <div class="row">
-            <div class="col-xs-8">
-                <h3 style="margin: 0px">Equipment List</h3>
-            </div>
-            <div class="col-xs-4">
-                <h6>
-                    <b>Date: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</b>
-                </h6>
-            </div>
+            <div class="col-xs-8"><h3 style="margin: 0px">Equipment List</h3></div>
+            <div class="col-xs-4"><h6><b>Date: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</b></h6></div>
         </div>
         <hr style="margin: 5px 0px">
         <br>
         <?php $row_count = 0; ?>
+        <?php $page_count = 1; ?>
         @foreach ($equipment as $equip)
             <?php $row_count ++ ?>
+            @if (($row_count + $equip->locations()->count() > 45) && $equip->locations()->count() < 45) {{-- New Page if no of lines for current item exceed max --}}
+                    <?php $row_count = 0; $page_count++ ?>
+                    <div class="page"></div>
+                    <div class="row">
+                        <div class="col-xs-8"><h3 style="margin: 0px">Equipment List</h3></div>
+                        <div class="col-xs-4"><h6><b>Date: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</b></h6></div>
+                    </div>
+                    <hr style="margin: 5px 0px">
+            @endif
             <div class="row">
                 <div class="col-md-12"><b>{{ $equip->name }} ({{ $equip->total }})</b></div>
             </div>
             @foreach ($equip->locations() as $location)
                 <?php $row_count ++ ?>
-                @if ($row_count > 50)
-                    <? $row_count = 0 ?>
+                @if ($row_count > 45)
+                    <?php $row_count = 0 ?>
                     <div class="page"></div>
                     <div class="row">
                         <div class="col-xs-8"><h3 style="margin: 0px">Equipment List</h3></div>

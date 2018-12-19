@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="page-content-inner">
-        {!! Form::model('SitePlannerExport', ['action' => 'Site\Planner\SitePlannerExportController@attendancePDF', 'class' => 'horizontal-form']) !!}
+        {!! Form::model('EquipmentPdf', ['action' => 'Site\Planner\SitePlannerExportController@attendancePDF', 'class' => 'horizontal-form']) !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">
@@ -22,7 +22,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Equipment List</span>
                         </div>
                         <div class="actions">
-                            <button type="submit" class="btn btn-circle btn-outline btn-sm green" id="view_pdf"> View PDF</button>
+                            <a href="/manage/report/equipment/report" class="btn btn-circle btn-outline btn-sm green" id="view_pdf"> View PDF</a>
                         </div>
                     </div>
                     <div class="portlet-body form">

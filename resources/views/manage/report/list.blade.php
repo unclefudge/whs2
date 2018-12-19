@@ -73,13 +73,13 @@
                                 <tr>
                                     <td><a href="/manage/report/equipment">Equipment List</a></td>
                                 </tr>
-                                {{--}}
                            <tr>
                                <td><a href="/manage/report/equipment_site">Equipment Allocated by Site </a></td>
                            </tr>
-                           <tr>
-                               <td><a href="/manage/report/equipment_transactions">Equipment Transactions</a></td>
-                           </tr>--}}
+                                {{--}}
+                         <tr>
+                             <td><a href="/manage/report/equipment_transactions">Equipment Transactions</a></td>
+                         </tr>--}}
                             @endif
                             @if (Auth::user()->hasRole2('web-admin'))
                                 <tr>

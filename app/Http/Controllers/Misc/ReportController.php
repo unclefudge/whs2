@@ -74,7 +74,6 @@ class ReportController extends Controller {
         }
 
         return $reports;
-
     }
 
     public function newusers()
@@ -172,6 +171,7 @@ class ReportController extends Controller {
 
         return view('manage/report/equipment', compact('equipment'));
     }
+
     /**
      * Equipment List PDF
      */
@@ -179,8 +179,18 @@ class ReportController extends Controller {
     {
         $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
 
+        $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+        // Create directory if required
+        if (!is_dir(public_path($dir)))
+            mkdir(public_path($dir), 0777, true);
+        $output_file = public_path($dir . "/Equipment List " . Carbon::now()->format('YmdHis') . '.pdf');
+        touch($output_file);
+
         //return view('pdf/equipment', compact('equipment'));
-        return PDF::loadView('pdf/equipment', compact('equipment'))->setPaper('a4', 'portrait')->stream();
+        //return PDF::loadView('pdf/equipment', compact('equipment'))->setPaper('a4', 'portrait')->stream();
+        \App\Jobs\EquipmentPdf::dispatch($equipment, $output_file);
+
+        return redirect('/manage/report/recent');
     }
 
 
@@ -310,7 +320,7 @@ class ReportController extends Controller {
                     if (!$doc->company->activeCompanyDoc($doc->category_id)) {
                         $expired_docs[] = $doc->id;
                         $exp = 'Expired';
-                    } elseif ($doc->expiry->gte(Carbon::today()) ) {
+                    } elseif ($doc->expiry->gte(Carbon::today())) {
                         $expired_docs[] = $doc->id;
                         $exp = 'Near Expiry';
                     }
@@ -328,8 +338,8 @@ class ReportController extends Controller {
             ->join('companys', 'company_docs.for_company_id', '=', 'companys.id')
             ->whereIn('company_docs.id', $expired_docs)
             ->where('companys.status', 1);
-            //->whereDate('company_docs.expiry', '>=', $date_from)
-            //->whereDate('company_docs.expiry', '<=', $date_to);
+        //->whereDate('company_docs.expiry', '>=', $date_from)
+        //->whereDate('company_docs.expiry', '<=', $date_to);
 
 
         //dd($expired_docs->get());

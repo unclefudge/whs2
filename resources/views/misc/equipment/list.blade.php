@@ -22,9 +22,7 @@
                             @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/stocktake/0" data-original-title="Stocktake">Stocktake</a>
                             @endif
-                            @if (Auth::user()->allowed2('add.equipment'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/inventory" data-original-title="Inventory">Inventory</a>
-                            @endif
+                            <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/inventory" data-original-title="Inventory">Inventory</a>
                         </div>
                     </div>
                     <div class="portlet-body">

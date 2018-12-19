@@ -47,7 +47,7 @@ class EquipmentController extends Controller {
     public function inventory()
     {
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.equipment'))
+        if (!Auth::user()->hasAnyPermissionType('equipment'))
             return view('errors/404');
 
         return view('misc/equipment/inventory');
@@ -768,7 +768,7 @@ class EquipmentController extends Controller {
                 return ($equip->total_lost) ? $equip->total_lost : '-';
             })
             ->addColumn('action', function ($equip) {
-                return '<a href="/equipment/' . $equip->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                return (Auth::user()->hasPermission2('add.equipment')) ? '<a href="/equipment/' . $equip->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>' : '';
             })
             ->rawColumns(['id', 'total', 'action'])
             ->make(true);
