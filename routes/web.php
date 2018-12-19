@@ -100,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/equipment', 'Misc\ReportController@equipment');
     Route::get('/manage/report/equipment/report', 'Misc\ReportController@equipmentPDF');
     Route::get('/manage/report/equipment_site', 'Misc\ReportController@equipmentSite');
+    Route::get('/manage/report/equipment_site/report', 'Misc\ReportController@equipmentSitePDF');
     Route::get('/manage/report/equipment_transactions', 'Misc\ReportController@equipmentTransactions');
 
     // User Docs

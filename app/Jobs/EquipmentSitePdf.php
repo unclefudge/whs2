@@ -15,20 +15,20 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class EquipmentPdf implements ShouldQueue {
+class EquipmentSitePdf implements ShouldQueue {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $equipment, $output_file;
+    protected $locations, $output_file;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($equipment, $output_file)
+    public function __construct($locations, $output_file)
     {
-        $this->equipment = $equipment;
+        $this->locations = $locations;
         $this->output_file = $output_file;
     }
 
@@ -39,9 +39,9 @@ class EquipmentPdf implements ShouldQueue {
      */
     public function handle()
     {
-        $equipment = $this->equipment;
+        $locations = $this->locations;
 
-        $pdf = PDF::loadView('pdf/equipment', compact('equipment'));
+        $pdf = PDF::loadView('pdf/equipment-site', compact('locations'));
         $pdf->setPaper('a4');
         $pdf->save($this->output_file);
     }

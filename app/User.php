@@ -167,7 +167,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function supervisorsSites($status = '')
     {
-        $site_list = DB::table('site_supervisor')->where('user_id', $this->id)->pluck('id')->toArray();
+        $site_list = DB::table('site_supervisor')->where('user_id', $this->id)->pluck('site_id')->toArray();
 
         return ($status != '') ? Site::where('status', $status)->whereIn('id', $site_list)->get() : Site::whereIn('id', $site_list)->get();
     }

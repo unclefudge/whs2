@@ -8,8 +8,11 @@ use Session;
 use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\Planner\SiteAttendance;
+use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
+use App\Models\Misc\Equipment\Equipment;
+use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -167,7 +170,7 @@ class ReportController extends Controller {
      */
     public function equipment()
     {
-        $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
+        $equipment = Equipment::where('status', 1)->orderBy('name')->get();
 
         return view('manage/report/equipment', compact('equipment'));
     }
@@ -177,7 +180,7 @@ class ReportController extends Controller {
      */
     public function equipmentPDF()
     {
-        $equipment = \App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get();
+        $equipment = Equipment::where('status', 1)->orderBy('name')->get();
 
         $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
         // Create directory if required
@@ -189,6 +192,91 @@ class ReportController extends Controller {
         //return view('pdf/equipment', compact('equipment'));
         //return PDF::loadView('pdf/equipment', compact('equipment'))->setPaper('a4', 'portrait')->stream();
         \App\Jobs\EquipmentPdf::dispatch($equipment, $output_file);
+
+        return redirect('/manage/report/recent');
+    }
+
+    /*
+     * Equipment List Report
+     */
+    public function equipmentSite()
+    {
+        // Store + Other Sites
+        $locations = [1 => 'other'];
+        $locations_other = EquipmentLocation::where('site_id', null)->orderBy('other')->pluck('id')->toArray();
+        foreach ($locations_other as $loc)
+            $locations[$loc] = 'other';
+
+        // Locations without supervisors
+        $sites_without_super = [];
+        $active_sites = Site::where('status', 1)->where('company_id', 3)->get();
+        foreach ($active_sites as $site) {
+            if (!$site->supervisorsSBC())
+                $sites_without_super[] = $site->id;
+        }
+        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->pluck('id')->toArray();
+        foreach ($locations_nosuper as $loc)
+            $locations[$loc] = 'no-super';
+
+        // Locations with super
+        $supervisors = Company::find(3)->supervisors()->sortBy('lastname');
+        foreach ($supervisors as $super) {
+            $sites = $super->supervisorsSites()->sortBy('code')->pluck('id')->toArray();
+            foreach ($sites as $site) {
+                $location = EquipmentLocation::where('site_id', $site)->where('site_id', '<>', 25)->first();
+                if ($location)
+                    $locations[$location->id] = $super->name;
+            }
+        }
+
+        //dd($locations);
+
+        return view('manage/report/equipment-site', compact('locations'));
+    }
+
+    /**
+     * Equipment List PDF
+     */
+    public function equipmentSitePDF()
+    {
+        // Store + Other Sites
+        $locations = [1 => 'other'];
+        $locations_other = EquipmentLocation::where('site_id', null)->orderBy('other')->pluck('id')->toArray();
+        foreach ($locations_other as $loc)
+            $locations[$loc] = 'other';
+
+        // Locations without supervisors
+        $sites_without_super = [];
+        $active_sites = Site::where('status', 1)->where('company_id', 3)->get();
+        foreach ($active_sites as $site) {
+            if (!$site->supervisorsSBC())
+                $sites_without_super[] = $site->id;
+        }
+        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->pluck('id')->toArray();
+        foreach ($locations_nosuper as $loc)
+            $locations[$loc] = 'no-super';
+
+        // Locations with super
+        $supervisors = Company::find(3)->supervisors()->sortBy('lastname');
+        foreach ($supervisors as $super) {
+            $sites = $super->supervisorsSites()->sortBy('code')->pluck('id')->toArray();
+            foreach ($sites as $site) {
+                $location = EquipmentLocation::where('site_id', $site)->where('site_id', '<>', 25)->first();
+                if ($location)
+                    $locations[$location->id] = $super->name;
+            }
+        }
+
+        $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+        // Create directory if required
+        if (!is_dir(public_path($dir)))
+            mkdir(public_path($dir), 0777, true);
+        $output_file = public_path($dir . "/Equipment List By Site " . Carbon::now()->format('YmdHis') . '.pdf');
+        touch($output_file);
+
+        //return view('pdf/equipment-site', compact('locations'));
+        //return PDF::loadView('pdf/equipment-site', compact('locations'))->setPaper('a4', 'portrait')->stream();
+        \App\Jobs\EquipmentSitePdf::dispatch($locations, $output_file);
 
         return redirect('/manage/report/recent');
     }

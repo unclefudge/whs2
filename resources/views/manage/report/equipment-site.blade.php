@@ -19,26 +19,42 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Equipment List</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Equipment List By Site</span>
                         </div>
                         <div class="actions">
-                            <a href="/manage/report/equipment/report" class="btn btn-circle btn-outline btn-sm green" id="view_pdf"> View PDF</a>
+                            <a href="/manage/report/equipment_site/report" class="btn btn-circle btn-outline btn-sm green" id="view_pdf"> View PDF</a>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="portlet-body">
-                            @foreach ($equipment as $equip)
+                            <?php $current_name = '' ?>
+                            @foreach ($locations as $id => $name)
+                                <?php $location = \App\Models\Misc\Equipment\EquipmentLocation::find($id) ?>
                                 <div class="row">
-                                    <div class="col-md-12"><b>{{ $equip->name }} ({{ $equip->total }})</b></div>
+                                    <div class="col-md-12">
+                                        @if ($name == 'other')
+                                            <b>{{ ($location->id == 1) ? 'STORE' : $location->other }}</b>
+                                        @elseif ($name == 'no-super')
+                                            <?php $site = \App\Models\Site\Site::find($location->site_id); ?>
+                                            <b>{{ $site->code }} {{ $site->name }} &nbsp; &nbsp; ** No Supervisor Assigned To Site **</b>
+                                        @else
+                                            @if ($name != $current_name)
+                                                <?php $current_name = $name ?>
+                                                <h3 class="font-green">{{ $name }}</h3>
+                                            @endif
+                                                <?php $site = \App\Models\Site\Site::find($location->site_id); ?>
+                                                <b>{{ $site->code }} {{ $site->name }}</b>
+                                        @endif
+                                    </div>
                                 </div>
-                                @foreach ($equip->locations() as $location)
-                                    @if ($location->equipment($equip->id)->qty)
-                                        <div class="row">
-                                            <div class="col-xs-1 text-right">{{ $location->equipment($equip->id)->qty }}</div>
-                                            <div class="col-xs-11">{{ $location->name2 }}</div>
-                                        </div>
-                                    @endif
+                                <hr style="margin-top: 2px">
+                                @foreach ($location->items as $item)
+                                    <div class="row">
+                                        <div class="col-xs-1 text-right">{{ $item->qty }}</div>
+                                        <div class="col-xs-11">{{ $item->item_name }}</div>
+                                    </div>
                                 @endforeach
+                                <br><br>
                             @endforeach
                         </div>
 
