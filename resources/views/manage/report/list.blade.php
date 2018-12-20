@@ -76,10 +76,9 @@
                                 <tr>
                                     <td><a href="/manage/report/equipment_site">Equipment List by Site </a></td>
                                 </tr>
-                                {{--}}
-                         <tr>
-                             <td><a href="/manage/report/equipment_transactions">Equipment Transactions</a></td>
-                         </tr>--}}
+                                <tr>
+                                    <td><a href="/manage/report/equipment_transactions">Equipment Transactions</a></td>
+                                </tr>
                             @endif
                             @if (Auth::user()->hasRole2('web-admin'))
                                 <tr>

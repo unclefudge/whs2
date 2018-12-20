@@ -102,6 +102,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/equipment_site', 'Misc\ReportController@equipmentSite');
     Route::get('/manage/report/equipment_site/report', 'Misc\ReportController@equipmentSitePDF');
     Route::get('/manage/report/equipment_transactions', 'Misc\ReportController@equipmentTransactions');
+    Route::post('/manage/report/equipment_transactions/report', 'Misc\ReportController@equipmentTransactionsPDF');
+    Route::get('/manage/report/equipment/dt/transactions', 'Misc\ReportController@getEquipmentTransactions');
+
 
     // User Docs
     Route::get('user/{uid}/doc/dt/docs', 'User\UserDocController@getDocs');

@@ -13,6 +13,7 @@ use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
 use App\Models\Misc\Equipment\Equipment;
 use App\Models\Misc\Equipment\EquipmentLocation;
+use App\Models\Misc\Equipment\EquipmentLog;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -281,6 +282,86 @@ class ReportController extends Controller {
         return redirect('/manage/report/recent');
     }
 
+    /*
+     * Equipment Transaction Report
+     */
+    public function equipmentTransactions()
+    {
+        $equipment = Equipment::where('status', 1)->orderBy('name')->get();
+
+        return view('manage/report/equipment-transactions', compact('equipment'));
+    }
+
+    /**
+     * Equipment Transaction PDF
+     */
+    public function equipmentTransactionsPDF()
+    {
+
+        $date_from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
+        $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
+        $transactions = EquipmentLog::whereDate('equipment_log.created_at', '>=', $date_from)->whereDate('equipment_log.created_at', '<=', $date_to)->get();
+
+        //dd($date_from);
+        $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
+        // Create directory if required
+        if (!is_dir(public_path($dir)))
+            mkdir(public_path($dir), 0777, true);
+        $output_file = public_path($dir . "/Equipment List " . Carbon::now()->format('YmdHis') . '.pdf');
+        touch($output_file);
+
+        $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') :  Carbon::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+        $to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00') : Carbon::tomorrow();
+
+        //return view('pdf/equipment-transactions', compact('transactions', 'from', 'to'));
+        //return PDF::loadView('pdf/equipment-transactions', compact('transactions', 'from', 'to'))->setPaper('a4', 'portrait')->stream();
+        \App\Jobs\EquipmentTransactionsPdf::dispatch($transactions, $from, $to, $output_file);
+
+        return redirect('/manage/report/recent');
+    }
+
+    /**
+     * Get Site Attendance user is authorise to view
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getEquipmentTransactions()
+    {
+        $date_from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
+        $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
+        $actions = ['P', 'D', 'W'];
+
+        $transactions = EquipmentLog::whereDate('created_at', '>=', $date_from)->whereDate('created_at', '<=', $date_to);
+        $transactions = EquipmentLog::select([
+            'equipment_log.id', 'equipment_log.equipment_id', 'equipment_log.qty', 'equipment_log.action', 'equipment_log.notes', 'equipment_log.created_at',
+            'equipment.id', 'equipment.name', 'users.id', 'users.username', 'users.firstname', 'users.lastname',
+            DB::raw('CONCAT(users.firstname, " ", users.lastname) AS full_name')
+        ])
+            ->join('equipment', 'equipment.id', '=', 'equipment_log.equipment_id')
+            ->join('users', 'users.id', '=', 'equipment_log.created_by')
+            ->whereDate('equipment_log.created_at', '>=', $date_from)
+            ->whereDate('equipment_log.created_at', '<=', $date_to);
+
+
+        //dd($transactions);
+        $dt = Datatables::of($transactions)
+            ->editColumn('created_at', function ($trans) {
+                return $trans->created_at->format('d/m/Y');
+            })
+            ->editColumn('action', function ($trans) {
+                if ($trans->action == 'P') return 'Purchase';
+                if ($trans->action == 'D') return 'Disposal';
+                if ($trans->action == 'W') return 'Write Off';
+                if ($trans->action == 'N') return 'New Item';
+                return $trans->action;
+            })
+            ->rawColumns(['full_name', 'created_at'])
+            ->make(true);
+
+        return $dt;
+    }
+
 
     /*
      * Site Attendance Report
@@ -337,7 +418,7 @@ class ReportController extends Controller {
         //dd($attendance_records);
         $dt = Datatables::of($attendance_records)
             ->editColumn('date', function ($attendance) {
-                return $attendance->date->format('d/m/Y H:m a');
+                return $attendance->date->format('d/m/Y H:i a');
             })
             ->editColumn('sites.name', function ($attendance) {
                 return '<a href="/site/' . $attendance->site->slug . '">' . $attendance->site->name . '</a>';

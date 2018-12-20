@@ -12,7 +12,6 @@
 
 @section('content')
     <div class="page-content-inner">
-        {!! Form::model('EquipmentPdf', ['action' => 'Site\Planner\SitePlannerExportController@attendancePDF', 'class' => 'horizontal-form']) !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">
@@ -65,7 +64,6 @@
                 </div>
             </div>
         </div>
-        {!! Form::close() !!}
     </div>
     <!-- loading Spinner -->
     <div style="background-color: #FFF; padding: 20px; display: none" id="spinner">

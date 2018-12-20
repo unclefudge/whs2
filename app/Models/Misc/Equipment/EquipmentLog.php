@@ -20,7 +20,7 @@ class EquipmentLog extends Model {
      */
     public function item()
     {
-        return $this->belongsTo('App\Models\Misc\Equipment\Equipment');
+        return $this->belongsTo('App\Models\Misc\Equipment\Equipment', 'equipment_id');
     }
 
     /**
@@ -32,7 +32,7 @@ class EquipmentLog extends Model {
     {
         return $this->belongsTo('App\User', 'updated_by');
     }
-    
+
     /**
      * The "booting" method of the model.
      *
