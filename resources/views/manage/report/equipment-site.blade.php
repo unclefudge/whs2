@@ -29,6 +29,8 @@
                             <?php $current_name = '' ?>
                             @foreach ($locations as $id => $name)
                                 <?php $location = \App\Models\Misc\Equipment\EquipmentLocation::find($id) ?>
+                                @continue($location->items->count() < 1)
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         @if ($name == 'other')
@@ -41,8 +43,8 @@
                                                 <?php $current_name = $name ?>
                                                 <h3 class="font-green">{{ $name }}</h3>
                                             @endif
-                                                <?php $site = \App\Models\Site\Site::find($location->site_id); ?>
-                                                <b>{{ $site->code }} {{ $site->name }}</b>
+                                            <?php $site = \App\Models\Site\Site::find($location->site_id); ?>
+                                            <b>{{ $site->code }} {{ $site->name }}</b>
                                         @endif
                                     </div>
                                 </div>

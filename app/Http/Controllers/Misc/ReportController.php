@@ -341,7 +341,8 @@ class ReportController extends Controller {
             ->join('equipment', 'equipment.id', '=', 'equipment_log.equipment_id')
             ->join('users', 'users.id', '=', 'equipment_log.created_by')
             ->whereDate('equipment_log.created_at', '>=', $date_from)
-            ->whereDate('equipment_log.created_at', '<=', $date_to);
+            ->whereDate('equipment_log.created_at', '<=', $date_to)
+            ->whereIn('equipment_log.action', $actions);
 
 
         //dd($transactions);

@@ -61,6 +61,7 @@
         <?php $current_name = '' ?>
         @foreach ($locations as $id => $name)
             <?php $location = \App\Models\Misc\Equipment\EquipmentLocation::find($id) ?>
+            @continue($location->items->count() < 1)
             <div class="row">
                 <div class="col-md-12">
                     @if ($name == 'other')
