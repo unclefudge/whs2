@@ -40,6 +40,9 @@
                                         {!! fieldErrorMessage('start_date', $errors) !!}
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <br><b>Report only displays New Items, Purchases, Disposals, Write Offs</b>
+                                    </div>
                             </div>
                         </div>
 
