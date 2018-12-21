@@ -438,8 +438,7 @@ class EquipmentController extends Controller {
         } else {
             // Create location + add item
             $loc_request = ['site_id' => $site_id, 'other' => $other];
-            $newLocation = new EquipmentLocation($loc_request);
-            $newLocation->save();
+            $newLocation = EquipmentLocation::create($loc_request);
             $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
         }
         $this->subtractItems($item, $qty); // Subtract items from original location

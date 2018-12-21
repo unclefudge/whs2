@@ -8,13 +8,9 @@ use Validator;
 use DB;
 use Session;
 use App\Models\Site\Site;
-use App\Models\Site\Planner\SiteRoster;
-use App\Models\Site\Planner\SiteAttendance;
-use App\Models\Site\SiteHazard;
-use App\Models\Misc\Action;
+use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Http\Requests;
 use App\Http\Requests\Site\SiteRequest;
-use App\Http\Requests\Site\SiteCheckinRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -88,6 +84,9 @@ class SiteController extends Controller {
         if ($request->get('supervisors'))
             $newSite->supervisors()->sync($request->get('supervisors'));
 
+        // Create new Equipment Location
+        EquipmentLocation::create(['site_id' => $newSite->id, 'status' => 1]);
+
         $newSite->emailSite('new');
 
         Toastr::success("Created new site");
@@ -148,8 +147,24 @@ class SiteController extends Controller {
 
         $site_request = $request->except('supervisors', 'tabs');
 
-        if ($site_request['status'] == 0 && $site->status != 0)
+        // Site recently marked completed
+        if ($site_request['status'] == 0 && $site->status != 0) {
             $site_request['completed'] = Carbon::now();
+            $location = EquipmentLocation::where('site_id', $site->id)->first();
+            if ($location) {
+                $location->status = 0;
+                $location->save();
+            }
+        }
+        // Site recently reactivated
+        if ($site_request['status'] != 0 && $site->status == 0) {
+            $location = EquipmentLocation::where('site_id', $site->id);
+            if ($location) {
+                $location->status = 1;
+                $location->save();
+            } else
+                $location = EquipmentLocation::create(['site_id' => $site->id, 'status' => 1]);
+        }
         if ($site_request['status'] != 0)
             $site_request['completed'] = '0000-00-00 00:00:00';
 
