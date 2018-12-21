@@ -77,12 +77,25 @@
                                 </div>
                             </div>
                             @if (Auth::user()->isCC())
-                                <div class="row">
+                                <div class="row" style="{{ fieldHasError('site_id', $errors) ? '' : 'display:none' }}" id="assign-div">
                                     <div class="col-md-4">
-                                        <div class="form-group {!! fieldHasError('assign', $errors) !!}" style="{{ fieldHasError('site_id', $errors) ? '' : 'display:none' }}" id="assign-div">
+                                        <div class="form-group {!! fieldHasError('assign', $errors) !!}">
                                             {!! Form::label('assign', 'Assign task to (optional)', ['class' => 'control-label']) !!}
                                             {!! Form::select('assign', Auth::user()->company->usersSelect('prompt'), null, ['class' => 'form-control select2', 'id' => 'assign', 'width' => '100%']) !!}
                                             {!! fieldErrorMessage('assign', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        <div class="form-group {!! fieldHasError('due_at', $errors) !!}">
+                                            {!! Form::label('due_at', 'Due Date', ['class' => 'control-label']) !!}
+                                            <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="due_at" name="due_at">
+                                            <span class="input-group-btn">
+                                                <button class="btn default" type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -104,14 +117,16 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
-<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         /* Select2 */

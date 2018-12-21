@@ -309,7 +309,7 @@ class EquipmentController extends Controller {
                 return back()->withErrors(['same' => "The destination location can't be the same as the originating."]);
 
             if (request('assign'))
-                $this->assignTransfer($item, $qty, $site_id, $other, request('assign')); // Assign transfer to user
+                $this->assignTransfer($item, $qty, $site_id, $other, request('assign'), request('due_at')); // Assign transfer to user
             else
                 $this->performTransfer($item, $qty, $site_id, $other);  // Transfer items now
         }
@@ -352,7 +352,7 @@ class EquipmentController extends Controller {
             $qty = request($item->id . '-qty');
             if ($qty) {
                 if (request('assign'))
-                    $this->assignTransfer($item, $qty, request('site_id'), null, request('assign')); // Assign transfer to user
+                    $this->assignTransfer($item, $qty, request('site_id'), null, request('assign'), request('due_at')); // Assign transfer to user
                 else
                     $this->performTransfer($item, $qty, request('site_id'), null);  // Transfer items now
             }
@@ -447,7 +447,7 @@ class EquipmentController extends Controller {
     /**
      * Assign transfer of items to user
      */
-    public function assignTransfer($item, $qty, $site_id, $other, $assign)
+    public function assignTransfer($item, $qty, $site_id, $other, $assign, $due_at)
     {
         //
         //  Transfer is assigned to be done by a User
@@ -491,7 +491,7 @@ class EquipmentController extends Controller {
                 'type_id'    => $newLocation->id,
                 'name'       => "Equipment transfer - $old_location => $new_location",
                 'info'       => "Please transfer equipment from the locations below.\nFrom: $old_location_full\nTo: $new_location_full",
-                'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
+                'due_at'     => Carbon::createFromFormat('d/m/Y H:i', $due_at . '00:00')->toDateTimeString(),
                 'company_id' => $item->company_id,
             ];
             $todo = Todo::create($todo_request);
