@@ -31,7 +31,7 @@ $compliantDocs = $user->compliantDocs();
                         @foreach ($compliantDocs as $type => $name)
 
                             @if ($user->activeUserDoc($type) && $user->activeUserDoc($type)->status == 1)
-                                <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($user->isCompliant) ? 'color: #26C281' : '' !!}"></i>
+                                <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($isCompliant) ? 'color: #26C281' : '' !!}"></i>
                                     <a href="{!! $user->activeUserDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                 </div>
                                 <div class="col-xs-4">
