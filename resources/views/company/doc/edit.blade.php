@@ -74,6 +74,21 @@
                                     {{-- Category --}}
                                     {!! Form::hidden('category_id', $doc->category_id, ['class' => 'form-control', 'id' => 'category_id']) !!}
                                     {!! Form::hidden('archive', null, ['class' => 'form-control', 'id' => 'archive']) !!}
+                                    {{-- Contract Licence Super Classes 1 --}}
+                                    @foreach ($doc->contractorLicenceSupervisorClasses(1) as $val)
+                                        <input type="hidden" name="super_class1[]" id="super_class1" value="{{ $val }}">
+                                    @endforeach
+                                    {{-- Contract Licence Super Classes 2 --}}
+                                    <input type="hidden" name="super_class2[]" id="super_class2" value="">
+                                    @foreach ($doc->contractorLicenceSupervisorClasses(2) as $val)
+                                        <input type="hidden" name="super_class2[]" id="super_class2" value="{{ $val }}">
+                                    @endforeach
+                                    {{-- Contract Licence Super Classes 3 --}}
+                                    <input type="hidden" name="super_class3[]" id="super_class3" value="">
+                                    @foreach ($doc->contractorLicenceSupervisorClasses(3) as $val)
+                                        <input type="hidden" name="super_class3[]" id="super_class3" value="{{ $val }}">
+                                    @endforeach
+
                                     @if ($doc->category_id > 8)
                                         <div class="form-group">
                                             {!! Form::label('category_id_text', 'Category', ['class' => 'control-label']) !!}
@@ -123,10 +138,53 @@
                                             {!! fieldErrorMessage('lic_type', $errors) !!}
                                         </div>
                                         {{-- Supervisor of CL --}}
-                                        <div class="form-group {!! fieldHasError('ref_name', $errors) !!}">
-                                            {!! Form::label('ref_name', 'Supervisor of licence', ['class' => 'control-label']) !!}
-                                            {!! Form::select('ref_name', $company->staffSelect('prompt'), null, ['class' => 'form-control bs-select']) !!}
-                                            {!! fieldErrorMessage('ref_name', $errors) !!}
+                                        <div class="form-group {!! fieldHasError('supervisor_no', $errors) !!}" id="fields_supervisor_no">
+                                            {!! Form::label('supervisor_no', 'How many Supervisors are required to cover the above class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::select('supervisor_no', ['' => 'Please specify', '1' => '1', '2' => '2', '3' => '3'], $doc->ref_name, ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('supervisor_no', $errors) !!}
+                                        </div>
+                                        <div class="form-group {!! fieldHasError('supervisor_id', $errors) !!}" style="display: none" id="fields_supervisor_id">
+                                            {!! Form::label('supervisor_id', 'Supervisor of all class(s) on licence', ['class' => 'control-label']) !!}
+                                            {!! Form::select('supervisor_id', $company->staffSelect('prompt'), $doc->contractorLicenceSupervisor(1), ['class' => 'form-control bs-select']) !!}
+                                            {!! fieldErrorMessage('supervisor_id', $errors) !!}
+                                        </div>
+                                        <div style="display: none" id="fields_supervisor_id2">
+                                            {{-- Supervisor 1 --}}
+                                            <div class="form-group {!! fieldHasError('supervisor_id1', $errors) !!}">
+                                                {!! Form::label('supervisor_id1', 'Supervisor 1', ['class' => 'control-label']) !!}
+                                                {!! Form::select('supervisor_id1', $company->staffSelect('prompt'), $doc->contractorLicenceSupervisor(1), ['class' => 'form-control bs-select']) !!}
+                                                {!! fieldErrorMessage('supervisor_id1', $errors) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type1', $errors) !!}">
+                                                {!! Form::label('lic_type1', 'Supervisor 1 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                <select id="lic_type1" name="lic_type1[]" class="form-control select2" width="100%" multiple placeholder="Select one or more classes"></select>
+                                                {!! fieldErrorMessage('lic_type1', $errors) !!}
+                                            </div>
+
+                                            {{-- Supervisor 2 --}}
+                                            <div class="form-group {!! fieldHasError('supervisor_id2', $errors) !!}">
+                                                {!! Form::label('supervisor_id2', 'Supervisor 2', ['class' => 'control-label']) !!}
+                                                {!! Form::select('supervisor_id2', $company->staffSelect('prompt'), $doc->contractorLicenceSupervisor(2), ['class' => 'form-control bs-select']) !!}
+                                                {!! fieldErrorMessage('supervisor_id2', $errors) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type2', $errors) !!}">
+                                                {!! Form::label('lic_type2', 'Supervisor 2 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                <select id="lic_type2" name="lic_type2[]" class="form-control select2" width="100%" multiple placeholder="Select one or more classes"></select>
+                                                {!! fieldErrorMessage('lic_type2', $errors) !!}
+                                            </div>
+                                        </div>
+                                        {{-- Supervisor 3 --}}
+                                        <div style="display: none" id="fields_supervisor_id3">
+                                            <div class="form-group {!! fieldHasError('supervisor_id3', $errors) !!}">
+                                                {!! Form::label('supervisor_id3', 'Supervisor 3', ['class' => 'control-label']) !!}
+                                                {!! Form::select('supervisor_id3', $company->staffSelect('prompt'), $doc->contractorLicenceSupervisor(3), ['class' => 'form-control bs-select']) !!}
+                                                {!! fieldErrorMessage('supervisor_id3', $errors) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type3', $errors) !!}">
+                                                {!! Form::label('lic_type3', 'Supervisor 3 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                <select id="lic_type3" name="lic_type3[]" class="form-control select2" width="100%" multiple placeholder="Select one or more classes"></select>
+                                                {!! fieldErrorMessage('lic_type3', $errors) !!}
+                                            </div>
                                         </div>
                                     @endif
                                     {{-- Asbestos Class --}}
@@ -356,6 +414,72 @@
 <script>
     $(document).ready(function () {
         $("#filetype").val(''); // clear field on onload
+
+        /* Select2 */
+        $("#lic_type").select2({placeholder: "Select one or more", width: '100%'});
+        $("#lic_type1").select2({placeholder: "Select one or more", width: '100%'});
+        $("#lic_type2").select2({placeholder: "Select one or more", width: '100%'});
+
+        function display_fields() {
+            var cat = $("#category_id").val();
+
+            $('#fields_supervisor').hide();
+            $('#fields_supervisor_id').hide();
+            $('#fields_supervisor_id2').hide();
+            $('#fields_supervisor_id3').hide();
+
+            if (cat == 7) { // CL
+                $('#fields_lic_no').show();
+                $('#fields_lic_class').show();
+                $('#fields_supervisors').show();
+
+                if ($("#supervisor_no").val() == 1)
+                    $('#fields_supervisor_id').show();
+                if ($("#supervisor_no").val() > 1)
+                    $('#fields_supervisor_id2').show();
+                if ($("#supervisor_no").val() > 2)
+                    $('#fields_supervisor_id3').show();
+
+                var lic_types = {};
+                $("#lic_type option:selected").each(function () {
+                    var val = $(this).val();
+                    if (val !== '')
+                        lic_types[val] = $(this).text();
+                });
+
+                $("#lic_type1").find('option').remove();
+                $("#lic_type2").find('option').remove();
+                $("#lic_type3").find('option').remove();
+                var super_class1 = $("#super_class1").val();
+                var super_class2 = $("#super_class2").val();
+                var super_class3 = $("#super_class3").val();
+                console.log('super1');
+                console.log(super_class1);
+                $.each(lic_types, function (index, value) {
+                    var selected1 = '';
+                    var selected2 = '';
+                    var selected3 = '';
+                    if (jQuery.inArray(index, super_class1)) {
+                        selected1 = ' selected';
+                    }
+                    if (super_class2.includes(index)) selected2 = ' selected';
+                    if (super_class3.indexOf(index)) selected3 = ' selected';
+                    $("#lic_type1").append('<option value="' + index + '"' + selected1 + '>' + value + '</option>');
+                    $("#lic_type2").append('<option value="' + index + '"' + selected2 + '>' + value + '</option>');
+                    $("#lic_type3").append('<option value="' + index + '"' + selected3 + '>' + value + '</option>');
+                });
+            }
+        }
+
+        display_fields();
+
+        $("#lic_type").change(function () {
+            display_fields();
+        });
+
+        $("#supervisor_no").change(function () {
+            display_fields();
+        });
 
         /* Bootstrap Fileinput */
         $("#singlefile").fileinput({

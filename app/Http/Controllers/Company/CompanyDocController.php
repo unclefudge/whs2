@@ -10,6 +10,7 @@ use Session;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
+use App\Models\Misc\ContractorLicenceSupervisor;
 use App\Http\Utilities\CompanyDocTypes;
 use App\Http\Requests;
 use App\Http\Requests\Company\CompanyDocRequest;
@@ -73,7 +74,8 @@ class CompanyDocController extends Controller {
 
         // Check authorisation and throw 404 if not
         if (!((Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload())))
+            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload()))
+        )
             return view('errors/404');
 
         return view('company/doc/create', compact('company', 'category_id'));
@@ -136,16 +138,17 @@ class CompanyDocController extends Controller {
 
         // Check authorisation and throw 404 if not
         if (!((Auth::user()->isCompany($company->id) && Auth::user()->allowed2('add.company.doc'))
-            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload())))
+            || (Auth::user()->isCompany($company->reportsTo()->id) && Auth::user()->allowed2('add.company.doc') && $company->parentUpload()))
+        )
 
-        $category_id = $request->get('category_id');
-
+            $category_id = request('category_id');
 
         $doc_request = request()->all();
         $doc_request['for_company_id'] = $company->id;
         $doc_request['company_id'] = $company->reportsTo()->id;
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
 
+        //dd($doc_request);
 
         // Calculate Test & Tag expiry
         if (request('category_id') == '6') {
@@ -157,7 +160,7 @@ class CompanyDocController extends Controller {
         if (request('category_id') == '7') {
             $doc_request['ref_no'] = request('lic_no');
             $doc_request['ref_type'] = implode(',', request('lic_type'));
-            $doc_request['ref_name'] = (request('supervisor_id')) ? request('supervisor_id') : null;
+            $doc_request['ref_name'] = (request('supervisor_no')) ? request('supervisor_no') : null;
         }
 
         // Reassign Asbestos Licence to correct category
@@ -171,6 +174,25 @@ class CompanyDocController extends Controller {
         // Create Company Doc
         //dd($doc_request);
         $doc = CompanyDoc::create($doc_request);
+
+        // Assign Supervisors to each class on the Contractor Licence
+        if (request('category_id') == '7') {
+            ContractorLicenceSupervisor::where('company_id', $company->id)->delete(); // Clear all previous entries
+            if (request('supervisor_no') == 1) {
+                foreach (request('lic_type') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 1, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id'), 'company_id' => $company->id]);
+            }
+            if (request('supervisor_no') > 1) {
+                foreach (request('lic_type1') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 1, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id1'), 'company_id' => $company->id]);
+                foreach (request('lic_type2') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 2, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id2'), 'company_id' => $company->id]);
+            }
+            if (request('supervisor_no') > 2) {
+                foreach (request('lic_type3') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 3, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id3'), 'company_id' => $company->id]);
+            }
+        }
 
         // Handle attached file
         $empty_file = 0;

@@ -81,7 +81,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group {!! fieldHasError('assign', $errors) !!}">
                                             {!! Form::label('assign', 'Assign task to (optional)', ['class' => 'control-label']) !!}
-                                            {!! Form::select('assign', Auth::user()->company->usersSelect('prompt'), null, ['class' => 'form-control select2', 'id' => 'assign', 'width' => '100%']) !!}
+                                            {!! Form::select('assign', Auth::user()->company->usersSelect('prompt', 1), null, ['class' => 'form-control select2', 'id' => 'assign', 'width' => '100%']) !!}
                                             {!! fieldErrorMessage('assign', $errors) !!}
                                         </div>
                                     </div>

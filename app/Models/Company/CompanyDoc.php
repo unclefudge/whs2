@@ -7,7 +7,7 @@ use URL;
 use Mail;
 use App\User;
 use App\Models\Comms\Todo;
-use App\Models\Company\Company;
+use App\Models\Misc\ContractorLicenceSupervisor;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +62,29 @@ class CompanyDoc extends Model {
         return $this->belongsTo('App\Models\Company\CompanyDocCategory', 'category_id');
     }
 
+    /**
+     * Contract Licence supervisor id
+     */
+    public function contractorLicenceSupervisor($super = 1)
+    {
+        if ($this->category_id == 7) {
+            $rec = ContractorLicenceSupervisor::where('doc_id', $this->id)->where('super', $super)->first();
+            if ($rec)
+                return $rec->user_id;
+        }
+
+        return null;
+    }
+
+    /**
+     * A Document MAY have many users assigned as supervisor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function contractorLicenceSupervisorClasses($super = 1)
+    {
+        return ContractorLicenceSupervisor::where('doc_id', $this->id)->where('super', $super)->pluck('licence_id')->toArray();
+    }
 
     /**
      * Create ToDoo for Company Doc to be approved and assign to given user(s)
@@ -185,7 +208,6 @@ class CompanyDoc extends Model {
 
         return '';
     }
-
 
     /**
      * Display records last update_by + date

@@ -59,13 +59,13 @@ trait CompanyDocs {
      *
      * @return string
      */
-    public function contractorLicenceOptions()
+    public function contractorLicenceOptions($selected = [])
     {
         $doc = CompanyDoc::where('category_id', 7)->where('for_company_id', $this->id)->where('status', '>', '0')->first();
-        if ($doc)
+        if ($doc && empty($selected))
             return ContractorLicence::find(1)->classOptions(explode(',', $doc->ref_type));
 
-        return ContractorLicence::find(1)->classOptions();
+        return ContractorLicence::find(1)->classOptions($selected);
     }
 
     /**
