@@ -718,7 +718,7 @@ class EquipmentController extends Controller {
                     ->where('todo.status', 1); */
 
         $items = EquipmentLocationItem::select([
-            'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id',
+            'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id', 'equipment_location_items.created_at',
             'equipment_location.site_id', 'equipment_location.other', 'equipment_location.notes', 'equipment_location.status', 'equipment_categories.name AS catname',
             'equipment.name AS itemname', 'equipment.status'])
             ->join('equipment', 'equipment_location_items.equipment_id', '=', 'equipment.id')
@@ -770,7 +770,7 @@ class EquipmentController extends Controller {
             //    return '<div class="text-center"><a href="/equipment/' . $item->equipment_id . '"><i class="fa fa-search"></i></a></div>';
             //})
             ->addColumn('date', function ($item) {
-                return $item->location->created_at->format('d/m/Y');
+                return $item->created_at->format('d/m/Y');
             })
             ->editColumn('qty', function ($item) {
                 return $item->qty;
