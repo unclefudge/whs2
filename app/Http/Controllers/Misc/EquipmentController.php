@@ -687,10 +687,123 @@ class EquipmentController extends Controller {
             ->addColumn('action', function ($item) {
                 $action = '';
                 if (Auth::user()->allowed2('edit.equipment', $item)) {
-                    if ($item->inTransit() && Auth::user()->allowed2('view.todo', $item->inTransit()))
-                        $action .= "<a href='/todo/" . $item->inTransit()->id . "' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>View Task</a>";
-                    elseif (!$item->inTransit())
+                    if (!$item->inTransit())
                         $action .= "<a href='/equipment/$item->id/transfer' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>Transfer</a>";
+                }
+
+                return $action;
+            })
+            ->rawColumns(['view', 'created_by', 'action'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Allocations + Process datatables ajax request.
+     */
+    public function getTransfers()
+    {
+        /*
+                $todos = Todo::select([
+                    'todo.id', 'todo.type', 'todo.type_id', 'todo.due_at', 'todo.status', 'todo.created_at',
+                    'equipment_location.site_id', 'equipment_location.other', 'equipment_location.notes', 'equipment_location.status', 'equipment_categories.name AS catname',
+                    'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id',
+                    'equipment.name AS itemname', 'equipment.status',
+                ])
+                    ->join('equipment_location', 'todo.type_id', '=', 'equipment_location.id')
+                    ->join('equipment_location_items', 'equipment_location.id', '=', 'equipment_location_items.location_id')
+                    ->join('equipment', 'equipment_location_items.equipment_id', '=', 'equipment.id')
+                    ->where('todo.type', 'equipment')
+                    ->where('todo.status', 1); */
+
+        $items = EquipmentLocationItem::select([
+            'equipment_location_items.id', 'equipment_location_items.location_id', 'equipment_location_items.equipment_id', 'equipment_location_items.qty', 'equipment_location_items.company_id',
+            'equipment_location.site_id', 'equipment_location.other', 'equipment_location.notes', 'equipment_location.status', 'equipment_categories.name AS catname',
+            'equipment.name AS itemname', 'equipment.status'])
+            ->join('equipment', 'equipment_location_items.equipment_id', '=', 'equipment.id')
+            ->join('equipment_location', 'equipment_location_items.location_id', '=', 'equipment_location.id')
+            ->join('equipment_categories', 'equipment_categories.id', '=', 'equipment.category_id')
+            ->where('equipment.status', 1)
+            ->where('equipment_location.status', 1)
+            ->where('equipment_location.other', 'like', '%Transfer in progress:%');
+
+        /*
+                $dt = Datatables::of($todos)
+                    ->addColumn('date', function ($todo) {
+                        return $todo->created_at->format('d/m/Y');
+                    })
+                    ->addColumn('category', function ($todo) {
+                        return 'cat';
+                    })
+                    ->addColumn('item_name', function ($todo) {
+                        return 'item';
+                    })
+                    ->addColumn('qty', function ($item) {
+                        return 'qty';
+                        //return ($item->equipment->total) ? "$item->qty / " . $item->equipment->total : 0;
+                    })
+                    ->addColumn('from', function ($item) {
+                        return 'from';
+                    })
+                    ->addColumn('to', function ($item) {
+                        return 'to';
+                    })
+                    ->addColumn('assigned_to', function ($todo) {
+                        return $todo->assignedToBySBC();
+                    })
+                    ->addColumn('action', function ($item) {
+                        $action = '';
+                        if ($item->inTransit()) {
+                            //if (Auth::user()->allowed2('view.todo', $item->inTransit()))
+                            $action .= "<a href='/todo/" . $item->inTransit()->id . "' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>View Task</a>";
+                        }
+
+                        return $action;
+                    })
+                    ->rawColumns(['view', 'created_by', 'action'])
+                    ->make(true); */
+
+
+        $dt = Datatables::of($items)
+            //->addColumn('view', function ($item) {
+            //    return '<div class="text-center"><a href="/equipment/' . $item->equipment_id . '"><i class="fa fa-search"></i></a></div>';
+            //})
+            ->addColumn('date', function ($item) {
+                return $item->location->created_at->format('d/m/Y');
+            })
+            ->editColumn('qty', function ($item) {
+                return $item->qty;
+            })
+            ->addColumn('from', function ($item) {
+                list($location_id, $site_other, $site_other_id, $user_id) = explode(':', $item->location->notes);
+                $location = EquipmentLocation::find($location_id);
+
+                return $location->name3;
+            })
+            ->addColumn('to', function ($item) {
+                list($location_id, $site_other, $site_other_id, $user_id) = explode(':', $item->location->notes);
+                if ($site_other == 'site') {
+                    $site = Site::find($site_other_id);
+
+                    return $site->name;
+                }
+
+                return $site_other_id;
+            })
+            ->addColumn('assigned_to', function ($item) {
+                //"$item->location_id:site:$site_id" : "$item->location_id:other:$other";
+                //list($location_id, $site_other, $site_other_id, $user_id) = explode(':', $item->location->notes);
+                if ($item->location->assignedTo())
+                    return $item->location->assignedTo()->fullname;
+
+                return '-';
+            })
+            ->addColumn('action', function ($item) {
+                $action = '';
+                if ($item->inTransit()) {
+                    //if (Auth::user()->allowed2('view.todo', $item->inTransit()))
+                    $action .= "<a href='/todo/" . $item->inTransit()->id . "' class='btn blue btn-xs btn-outline sbold uppercase margin-bottom'>View Task</a>";
                 }
 
                 return $action;

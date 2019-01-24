@@ -316,6 +316,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Equipment
     Route::get('equipment/dt/allocation', 'Misc\EquipmentController@getAllocation');
+    Route::get('equipment/dt/transfers', 'Misc\EquipmentController@getTransfers');
     Route::get('equipment/dt/inventory', 'Misc\EquipmentController@getInventory');
     Route::get('equipment/dt/missing', 'Misc\EquipmentController@getMissing');
     Route::get('equipment/dt/log', 'Misc\EquipmentController@getLog');

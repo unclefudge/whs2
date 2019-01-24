@@ -2,6 +2,7 @@
 
 namespace App\Models\Misc\Equipment;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,7 +67,18 @@ class EquipmentLocation extends Model {
     }
 
     /**
-     * Get the Item Total  (getter)
+     * A Equipment in Transfer is assigned to a User.
+     */
+    public function assignedTo()
+    {
+        list($location_id, $site_other, $site_other_id, $user_id) = explode(':', $this->notes);
+        if ($user_id)
+            return User::find($user_id);
+        return null;
+    }
+
+    /**
+     * Get the Name  (getter)
      */
     public function getNameAttribute()
     {
@@ -74,11 +86,19 @@ class EquipmentLocation extends Model {
     }
 
     /**
-     * Get the Item Total  (getter)
+     * Get the Name  (getter)
      */
     public function getName2Attribute()
     {
         return ($this->site_id) ? $this->site->code . ' &nbsp; ' . $this->site->name  : $this->other;
+    }
+
+    /**
+     * Get the Name  (getter)
+     */
+    public function getName3Attribute()
+    {
+        return ($this->site_id) ? $this->site->name  : $this->other;
     }
 
 

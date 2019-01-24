@@ -26,6 +26,23 @@
                         </div>
                     </div>
                     <div class="portlet-body">
+                        <h3>Current Equipment Transfers</h3>
+                        <table class="table table-striped table-bordered table-hover order-column" id="table_list2">
+                            <thead>
+                            <tr class="mytable-header">
+                                <th width="10%"> Date</th>
+                                <th> Category</th>
+                                <th> Item Name</th>
+                                <th width="5%"> Qty</th>
+                                <th> From</th>
+                                <th> To</th>
+                                <th> Assigned To</th>
+                                <th width="10%"> Action</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <hr>
+                        <h3>Current Equipment Allocation</h3>
                         <div class="row">
                             @if (Session::has('siteID'))
                                 <?php $worksite = \App\Models\Site\Site::find(Session::get('siteID')) ?>
@@ -104,6 +121,35 @@
             ],
             order: [
                 [1, "asc"], [2, "asc"], [4, "asc"], [3, "desc"]
+            ]
+        });
+
+        var table_list2 = $('#table_list2').DataTable({
+            pageLength: 100,
+            processing: true,
+            serverSide: true,
+            searching: false,
+            paging: false,
+            info: false,
+            ajax: {
+                'url': '{!! url('equipment/dt/transfers') !!}',
+                'type': 'GET',
+                'data': function (d) {
+                    d.site_id = $('#site_id').val();
+                }
+            },
+            columns: [
+                {data: 'date', name: 'date', searchable: false},
+                {data: 'catname', name: 'equipment_categories.name'},
+                {data: 'itemname', name: 'equipment.name'},
+                {data: 'qty', name: 'qty'},
+                {data: 'from', name: 'from'},
+                {data: 'to', name: 'to'},
+                {data: 'assigned_to', name: 'assigned_to'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            order: [
+                [0, "asc"],
             ]
         });
 
