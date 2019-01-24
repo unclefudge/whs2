@@ -52,6 +52,19 @@
                                             {!! fieldErrorMessage('assign', $errors) !!}
                                         </div>
                                     </div>
+                                    <div class="col-md-3 ">
+                                        <div class="form-group {!! fieldHasError('due_at', $errors) !!}">
+                                            {!! Form::label('due_at', 'Due Date', ['class' => 'control-label']) !!}
+                                            <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="due_at" name="due_at">
+                                            <span class="input-group-btn">
+                                                <button class="btn default" type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
 

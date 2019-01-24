@@ -92,7 +92,28 @@ class PagesController extends Controller {
     public function quick()
     {
 
+        echo "Equipment transfers TASKS<br><br>";
+        $todos = \App\Models\Comms\Todo::where('type', 'equipment')->whereDate('created_at', '>', '2019-01-01')->get();
+        foreach ($todos as $todo) {
+            $location =  \App\Models\Misc\Equipment\EquipmentLocation::find($todo->type_id);
+            echo "<br>[$todo->id] Equipment Transfer - ".$todo->created_at->format('d/m/Y')."<br>";
+            echo preg_replace('/Please transfer equipment from the locations below./', '', $todo->info)."<br>";
+            echo $location->itemsList();
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+
+        echo "<br><br>Bad Equipment Locations<br><br>";
+        $locations =  \App\Models\Misc\Equipment\EquipmentLocation::where('site_id', null)->where('other', null)->get();
+        foreach ($locations as $location) {
+            $user = \App\User::find($location->created_by);
+            echo "<br>[$location->id] Location created by $user->fullname (".$location->created_at->format('d/m/Y g:i a').")<br>";
+            echo $location->itemsList();
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+
+
         // Import Equipment
+        /*
         echo "Importing Equipment<br><br>";
         $row = 0;
         if (($handle = fopen(public_path("equipment.csv"), "r")) !== false) {
@@ -137,6 +158,7 @@ class PagesController extends Controller {
             fclose($handle);
         }
         echo "<br><br>Completed<br>-------------<br>";
+        */
 
 
         /*echo "<br><br>Signed QA items with status 0<br><br>";
