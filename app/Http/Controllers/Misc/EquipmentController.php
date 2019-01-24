@@ -769,7 +769,7 @@ class EquipmentController extends Controller {
             //->addColumn('view', function ($item) {
             //    return '<div class="text-center"><a href="/equipment/' . $item->equipment_id . '"><i class="fa fa-search"></i></a></div>';
             //})
-            ->addColumn('date', function ($item) {
+            ->editColumn('created_at', function ($item) {
                 return $item->created_at->format('d/m/Y');
             })
             ->editColumn('qty', function ($item) {

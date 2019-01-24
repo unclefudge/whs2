@@ -139,7 +139,7 @@
                 }
             },
             columns: [
-                {data: 'date', name: 'date', searchable: false},
+                {data: 'created_at', name: 'created_at', searchable: false},
                 {data: 'catname', name: 'equipment_categories.name'},
                 {data: 'itemname', name: 'equipment.name'},
                 {data: 'qty', name: 'qty'},
