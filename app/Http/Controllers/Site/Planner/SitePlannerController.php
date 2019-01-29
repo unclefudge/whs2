@@ -305,17 +305,29 @@ class SitePlannerController extends Controller {
             $this_mon_2 = new Carbon('monday this week');
             $this_mon_2->addDays(34);  // was 13
             $allowedSites = Auth::user()->company->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
-        }
 
+            // Hack to allow Split Companies NRW (57,202,255) + Solid Foundations (120,121) to see their other Sites
+            if (in_array(Auth::user()->company_id, [57, 202, 255])) {
+                $c1 = Company::find(57)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $c2 = Company::find(202)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $c3 = Company::find(255)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $allowedSites = array_merge($c1, $c2);
+            }
+            if (in_array(Auth::user()->company_id, [120, 121])) {
+                $c1 = Company::find(120)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $c2 = Company::find(121)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $allowedSites = array_merge($c1, $c2);
+            }
+        }
 
         $date_from = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00');
         $date_to = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00')->addDays(7);
-        //$date_to2 = Carbon::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00')->addDays(7);
 
         //
         // Full Plan
         //
         $planner = $this->getPlannerForWeek($date_from, $date_to, $allowedSites, []);
+        //dd($planner);
         $fullplan = [];
         foreach ($planner as $plan)
             $fullplan[] = $this->getPlanData($plan);
@@ -849,8 +861,14 @@ class SitePlannerController extends Controller {
             $this_mon_2 = new Carbon('monday this week');
             $this_mon_2->addDays(34); // was 13
             $allowedSites = Auth::user()->company->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+
+            // Hack to allow Split Companies NRW (57,202) + Solid Foundations (120,121) to see their other Sites
+            if (in_array(Auth::user()->company_id, [57, 202])) {
+                $c1 = Company::find(57)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $c2 = Company::find(202)->sitesPlannedFor('1', $this_mon->format('Y-m-d'), $this_mon_2->format('Y-m-d'))->pluck('id')->toArray();
+                $allowedSites = array_merge($c1, $c2);
+            }
         }
-        //$allowedSites = ['115'];
 
         $sites = Site::select(['id', 'name'])->where('status', '=', '1')->whereIn('id', $allowedSites)->orderBy('name')->get();
 
@@ -1253,8 +1271,6 @@ class SitePlannerController extends Controller {
         if (Auth::user()->company->subscription) {
             $allowedCompanies = Auth::user()->company->companies()->pluck('id')->toArray();
 
-            //dd($allowedCompanies);
-
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
                 // Tasks that start 'from' between mon-fri of given week
                 ->where(function ($q) use ($date_from, $date_to, $allowedSites, $allowedCompanies, $excludeTasks) {
@@ -1282,38 +1298,53 @@ class SitePlannerController extends Controller {
                     $q->whereNotIn('task_id', $excludeTasks);
                 })
                 ->orderBy('from')->get();
-        } else
+        } else {
+
+            $allowedCompanies = [Auth::user()->company_id];
+            // Hack to allow Split Companies NRW (57,202,255) + Solid Foundations (120,121) to see their other Sites
+            if (in_array(Auth::user()->company_id, [57, 202, 255])) {
+                $c1 = Company::find(57)->companies()->pluck('id')->toArray();
+                $c2 = Company::find(202)->companies()->pluck('id')->toArray();
+                $c3 = Company::find(255)->companies()->pluck('id')->toArray();
+                $allowedCompanies = array_merge($c1, $c2, $c3);
+            }
+            if (in_array(Auth::user()->company_id, [120, 121])) {
+                $c1 = Company::find(120)->companies()->pluck('id')->toArray();
+                $c2 = Company::find(121)->companies()->pluck('id')->toArray();
+                $allowedCompanies = array_merge($c1, $c2);
+            }
 
             return SitePlanner::select(['id', 'site_id', 'entity_type', 'entity_id', 'task_id', 'from', 'to', 'days'])
                 // Tasks that start 'from' between mon-fri of given week
-                ->where(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->where(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks, $allowedCompanies) {
                     $q->where('from', '>=', $date_from->format('Y-m-d'));
                     $q->Where('from', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
                     $q->whereNotIn('task_id', $excludeTasks);
                     $q->where('entity_type', 'c');
-                    $q->where('entity_id', Auth::user()->company_id);
+                    $q->whereIn('entity_id', $allowedCompanies);
                 })
                 // Tasks that end 'to between mon-fri of given week
-                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks, $allowedCompanies) {
                     $q->where('to', '>=', $date_from->format('Y-m-d'));
                     $q->Where('to', '<=', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
                     $q->whereNotIn('task_id', $excludeTasks);
                     $q->where('entity_type', 'c');
-                    $q->where('entity_id', Auth::user()->company_id);
+                    $q->whereIn('entity_id', $allowedCompanies);
                 })
                 // Tasks that start before mon but end after fri
                 // ie they span the whole week but begin prior + end after given week
-                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks) {
+                ->orWhere(function ($q) use ($date_from, $date_to, $allowedSites, $excludeTasks, $allowedCompanies) {
                     $q->where('from', '<', $date_from->format('Y-m-d'));
                     $q->Where('to', '>', $date_to->format('Y-m-d'));
                     $q->whereIn('site_id', $allowedSites);
                     $q->whereNotIn('task_id', $excludeTasks);
                     $q->where('entity_type', 'c');
-                    $q->where('entity_id', Auth::user()->company_id);
+                    $q->whereIn('entity_id', $allowedCompanies);
                 })
                 ->orderBy('from')->get();
+        }
     }
 
     /**
