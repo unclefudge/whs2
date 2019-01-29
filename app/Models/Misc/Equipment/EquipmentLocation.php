@@ -3,6 +3,7 @@
 namespace App\Models\Misc\Equipment;
 
 use App\User;
+use App\Models\Comms\Todo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,11 +62,30 @@ class EquipmentLocation extends Model {
     {
         $str = '';
         foreach ($this->items as $item) {
-            $str = "($item->qty) $item->item_name<br>";
+            $str .= "($item->qty) $item->item_name<br>";
         }
         return $str;
     }
 
+    /**
+     * LocationItem of given equipment type at this location
+     */
+    public function equipmentItem($equipment_id)
+    {
+        return EquipmentLocationItem::where('location_id', $this->id)->where('equipment_id', $equipment_id)->first();
+    }
+
+
+    /**
+     * Qty of given equipment at this location
+     *
+     * @return INT
+     */
+    public function equipmentQty($equipment_id)
+    {
+        $item = EquipmentLocationItem::where('location_id', $this->id)->where('equipment_id', $equipment_id)->first();
+        return ($item) ? $item->qty : 0;
+    }
     /**
      * A Equipment in Transfer is assigned to a User.
      */
@@ -75,6 +95,15 @@ class EquipmentLocation extends Model {
         if ($user_id)
             return User::find($user_id);
         return null;
+    }
+
+    /**
+     * A EquipmentLocation MAY be currently transferred
+     *
+     */
+    public function inTransit()
+    {
+        return Todo::where('type', 'equipment')->where('type_id', $this->id)->first();
     }
 
     /**
