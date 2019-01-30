@@ -57,9 +57,9 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"></th>
-                                <th width="30%"> Item Name</th>
+                                <th> Item Name</th>
                                 <th width="5%"> Qty</th>
-                                <th></th>
+                                <th width="10%"></th>
                             </tr>
                             </thead>
                             @foreach (\App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get() as $equip)
@@ -76,7 +76,7 @@
                                     <?php $item = $location->equipmentItem($equip->id); ?>
                                     <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
                                         <td></td>
-                                        <td>{{ $location->name }}</td>
+                                        <td>{{ $location->name4 }}</td>
                                         <td>{{ ($item) ? $item->qty : 0 }}</td>
                                         <td>
                                             @if (!$location->inTransit())

@@ -356,7 +356,7 @@
                 <ol type="a" style="padding:0px 0px 0px 15px">
                     <li>The <b>trade contractor</b> must carry out and complete the <b> trade works</b>:
                         <ol type="i" style="padding:0px 0px 0px 15px; line-height: 4px; margin: 0px">
-                            <li style="line-height: 9px; padding: 0px; margin: 0px">in a proper, skillful and tradesperson like manner to the satisfaction of the <b>principal contractor</b> acting reasonably;</li>
+                            <li style="line-height: 9px; padding: 0px; margin: 0px">in a proper, skilful and tradesperson like manner to the satisfaction of the <b>principal contractor</b> acting reasonably;</li>
                             <li style="line-height: 9px; padding: 0px; margin: 0px">in accordance with the specifications and the law; and</li>
                             <li style="line-height: 9px; padding: 0px; margin: 0px">at the reasonable times directed by the <b> principal contractor</b>.</li>
                         </ol>
@@ -423,8 +423,8 @@
                 <h6 style="margin-bottom: 1px">4. WARRANTIES</h6>
                 The <b>trade contractor</b> warrants that:
                 <ol type="a" style="padding-left:15px">
-                    <li>the <b>trade works</b> will be carried out in a proper, skillful and tradesperson like manner and in accordance with the contract;</li>
-                    <li>materials supplied by it will be suitable, neww and free of defects; and</li>
+                    <li>the <b>trade works</b> will be carried out in a proper, skilful and tradesperson like manner and in accordance with the contract;</li>
+                    <li>materials supplied by it will be suitable, new and free of defects; and</li>
                     <li>it holds all licences required to carry out the <b>trade works</b>,</li>
                 </ol>
 
@@ -504,7 +504,7 @@
                 <ol type="a" style="padding-left:15px">
                     <li>The <b>trade contractor</b> is responsible for:
                         <ol type="i" style="padding-left:15px">
-                            <li>any damage caused by the <b>trade contractor</b> and its agants or employees;</li>
+                            <li>any damage caused by the <b>trade contractor</b> and its agents or employees;</li>
                             <li>keeping the <b>trade contractor's</b> areas clear and tidy at all times; and</li>
                             <li>the removal of its tools, plant and equipment, and if required the removal of debris and refuse, arising out of the <b>trade works</b>.</li>
                         </ol>
@@ -538,7 +538,7 @@
                     </li>
                 </ol>
 
-                <h6 style="margin-bottom: 1px">11. EXTENSON OF TIME</h6>
+                <h6 style="margin-bottom: 1px">11. EXTENSION OF TIME</h6>
                 The <b>trade contractor</b> is entitled to an extension of time to complete the <b>trade works</b> as determined by the <b>principal contractor</b> acting reasonably if:
                 <ol type="a" style="padding-left:15px">
                     <li>the trade works are delayed by:
@@ -556,7 +556,7 @@
                     </li>
                 </ol>
 
-                <h6 style="margin-bottom: 1px">11. FREEDOM OF ASSOCATION AND COMPLIANCE WITH INDUSTRIAL LAWS</h6>
+                <h6 style="margin-bottom: 1px">11. FREEDOM OF ASSOCIATION AND COMPLIANCE WITH INDUSTRIAL LAWS</h6>
                 A party or its agent must not support an industrial organisation to:
                 <ol type="a" style="padding-left:15px">
                     <li>participate in any form of unauthorised industrial action or secondary boycott that affects the <b>trade works</b>, or</li>
@@ -588,7 +588,7 @@
                     </li>
                 </ol>
 
-                <h6 style="margin-bottom: 1px">15. ENDING THS TRADE CONTRACT</h6>
+                <h6 style="margin-bottom: 1px">15. ENDING THIS TRADE CONTRACT</h6>
                 If a party remains in default 3 working days after the other party has given it written notice requiring the default to be remedied then, without prejudice to any other rights or
                 remedies, the other party may, by giving a further written notice, end this trade Contract.<br><br>
 
@@ -612,7 +612,7 @@
                     <li>co-operate with all workers and other contractors on the <b>site</b>.</li>
                 </ol>
 
-                <h6 style="margin-bottom: 1px">18. INTELECTUAL PROPERTY RIGHTS</h6>
+                <h6 style="margin-bottom: 1px">18. INTELLECTUAL PROPERTY RIGHTS</h6>
                 <ol type="a" style="padding-left:15px">
                     <li><b>Intellectual property rights</b> in any plans or designs supplied by the <b>principal contractor</b> to the <b>trade contractor</b> remains with the <b>principal
                             contractor</b>.

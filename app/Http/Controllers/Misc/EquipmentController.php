@@ -461,7 +461,18 @@ class EquipmentController extends Controller {
 
         // Determine if user is already transferring other items from & to same locations
         $location_code = ($site_id) ? "$item->location_id:site:$site_id" : "$item->location_id:other:$other";
-        $location = EquipmentLocation::where('notes', "$location_code:$assign")->first();
+        //$location = EquipmentLocation::where('notes', "$location_code:$assign")->first();
+        $locations = EquipmentLocation::where('notes', "$location_code:$assign")->get();
+        if ($locations) {
+            $location = null;
+            foreach ($locations as $loc) {
+                $todo = Todo::where('type', 'equipment')->where('type_id', $loc->id)->where('status', 1)->first();
+                if ($todo) {
+                    $location = $loc;
+                    break;
+                }
+            }
+        }
         if ($location) {
             //
             // Append new item to current user ToDoo
@@ -711,7 +722,7 @@ class EquipmentController extends Controller {
             })
             ->addColumn('items', function ($todo) {
                 $location = EquipmentLocation::find($todo->type_id);
-                return $location->itemsList();
+                return $location->itemsListSBC();
             })
             ->addColumn('from', function ($todo) {
                 $location = EquipmentLocation::find($todo->type_id);

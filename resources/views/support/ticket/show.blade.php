@@ -141,7 +141,7 @@
                             <div class="col-md-12">
                                 @foreach($ticket->actions->sortByDesc('created_at') as $action)
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">{{ $action->created_at->format('d/m/Y g:i a') }} <span class="pull-right">{{ $action->user->fullname }}</span></div>
+                                        <div class="panel-heading">{{ $action->created_at->format('d/m/Y g:i a') }} <span class="pull-right"><a href="/user/{{ $action->user->id }}">{{ $action->user->fullname }}</a></span></div>
                                         <div class="panel-body">
                                             {!! nl2br(e($action->action)) !!}
                                             @if ($action->attachment && file_exists('filebank/support/ticket/' . $action->attachment))

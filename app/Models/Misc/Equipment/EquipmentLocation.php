@@ -68,6 +68,20 @@ class EquipmentLocation extends Model {
     }
 
     /**
+     * A EquipmentLocation has many items - List format SBC.
+     *
+     * @return STRING
+     */
+    public function itemsListSBC()
+    {
+        $str = '';
+        foreach ($this->items as $item) {
+            $str .= "$item->qty:$item->item_name, ";
+        }
+        return rtrim($str, ', ');
+    }
+
+    /**
      * LocationItem of given equipment type at this location
      */
     public function equipmentItem($equipment_id)
@@ -128,6 +142,14 @@ class EquipmentLocation extends Model {
     public function getName3Attribute()
     {
         return ($this->site_id) ? $this->site->name  : $this->other;
+    }
+
+    /**
+     * Get the Name  (getter)
+     */
+    public function getName4Attribute()
+    {
+        return ($this->site_id) ? $this->site->suburb . ' (' .$this->site->code.':' . $this->site->name . ')' : 'Other: '.$this->other;
     }
 
 

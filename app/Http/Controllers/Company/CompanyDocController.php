@@ -275,7 +275,7 @@ class CompanyDocController extends Controller {
         if (request('category_id') == '7') {
             $doc_request['ref_no'] = request('lic_no');
             $doc_request['ref_type'] = implode(',', request('lic_type'));
-            $doc_request['ref_name'] = (request('ref_name')) ? request('ref_name') : null;
+            $doc_request['ref_name'] = (request('supervisor_no')) ? request('supervisor_no') : null;
         }
 
         // Reassign Asbestos Licence to correct category
@@ -318,6 +318,25 @@ class CompanyDocController extends Controller {
 
         //dd($doc_request);
         $doc->update($doc_request);
+
+        // Assign Supervisors to each class on the Contractor Licence
+        if (request('category_id') == '7') {
+            ContractorLicenceSupervisor::where('company_id', $company->id)->delete(); // Clear all previous entries
+            if (request('supervisor_no') == 1) {
+                foreach (request('lic_type') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 1, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id'), 'company_id' => $company->id]);
+            }
+            if (request('supervisor_no') > 1) {
+                foreach (request('lic_type1') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 1, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id1'), 'company_id' => $company->id]);
+                foreach (request('lic_type2') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 2, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id2'), 'company_id' => $company->id]);
+            }
+            if (request('supervisor_no') > 2) {
+                foreach (request('lic_type3') as $lic_id)
+                    ContractorLicenceSupervisor::create(['doc_id' => $doc->id, 'super' => 3, 'licence_id' => $lic_id, 'user_id' => request('supervisor_id3'), 'company_id' => $company->id]);
+            }
+        }
 
         // Close any ToDoo and create new one
         if ($doc->category_id < 21) {

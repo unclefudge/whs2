@@ -89,20 +89,17 @@
                                         <div class="form-group {!! fieldHasError('ref_no', $errors) !!}">
                                             {!! Form::label('ref_no', 'Policy No', ['class' => 'control-label']) !!}
                                             {!! Form::text('ref_no', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('ref_no', $errors) !!}
                                         </div>
                                         {{-- Insurer --}}
                                         <div class="form-group {!! fieldHasError('ref_name', $errors) !!}">
                                             {!! Form::label('ref_name', 'Insurer', ['class' => 'control-label']) !!}
                                             {!! Form::text('ref_name', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('ref_name', $errors) !!}
                                         </div>
                                         @if (in_array($doc->category_id, [2, 3]))
                                             {{-- Category --}}
                                             <div class="form-group {!! fieldHasError('ref_type', $errors) !!}">
                                                 {!! Form::label('ref_type', 'Category', ['class' => 'control-label']) !!}
                                                 {!! Form::select('ref_type', $doc->company->workersCompCategorySelect('prompt'), null, ['class' => 'form-control bs-select', 'readonly']) !!}
-                                                {!! fieldErrorMessage('ref_type', $errors) !!}
                                             </div>
                                         @endif
                                     @endif
@@ -111,21 +108,60 @@
                                         <div class="form-group {!! fieldHasError('lic_no', $errors) !!}">
                                             {!! Form::label('lic_no', 'Licence No.', ['class' => 'control-label']) !!}
                                             {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('lic_no', $errors) !!}
                                         </div>
                                         <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
                                             {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                            <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple readonly>
-                                                {!! $company->contractorLicenceOptions() !!}
-                                            </select>
-                                            {!! fieldErrorMessage('lic_type', $errors) !!}
+                                            {!! Form::text('lic_type', $doc->company->contractorLicenceSBC(), ['class' => 'form-control', 'readonly']) !!}
+                                        </div>
+
+                                        {{-- Supervisor of CL --}}
+                                        <div class="form-group {!! fieldHasError('supervisor_no', $errors) !!}" id="fields_supervisor_no">
+                                            {!! Form::label('supervisor_no', 'How many Supervisors are required to cover the above class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::text('supervisor_no', $doc->ref_name, ['class' => 'form-control', 'readonly']) !!}
+                                        </div>
+                                        @if ($doc->ref_name == 1)
+                                            <div class="form-group {!! fieldHasError('supervisor_id', $errors) !!}" id="fields_supervisor_id">
+                                                {!! Form::label('supervisor_id', 'Supervisor of all class(s) on licence', ['class' => 'control-label']) !!}
+                                                {!! Form::text('supervisor_id', $doc->contractorLicenceSupervisor(1), ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                        @endif
+                                        @if ($doc->ref_name > 1)
+                                            {{-- Supervisor 1 --}}
+                                            <div class="form-group {!! fieldHasError('supervisor_id1', $errors) !!}">
+                                                {!! Form::label('supervisor_id1', 'Supervisor 1', ['class' => 'control-label']) !!}
+                                                {!! Form::text('supervisor_id1', (\App\User::find($doc->contractorLicenceSupervisor(1))) ? \App\User::find($doc->contractorLicenceSupervisor(1))->name : '', ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type1', $errors) !!}">
+                                                {!! Form::label('lic_type1', 'Supervisor 1 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                {!! Form::text('lic_type1', $doc->contractorLicenceSupervisorClassesSBC(1), ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+
+                                            {{-- Supervisor 2 --}}
+                                            <div class="form-group {!! fieldHasError('supervisor_id2', $errors) !!}">
+                                                {!! Form::label('supervisor_id2', 'Supervisor 2', ['class' => 'control-label']) !!}
+                                                {!! Form::text('supervisor_id2', (\App\User::find($doc->contractorLicenceSupervisor(2))) ? \App\User::find($doc->contractorLicenceSupervisor(2))->name : '', ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type2', $errors) !!}">
+                                                {!! Form::label('lic_type2', 'Supervisor 2 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                {!! Form::text('lic_type2', $doc->contractorLicenceSupervisorClassesSBC(2), ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                        @endif
+                                        {{-- Supervisor 3 --}}
+                                        <div style="display: none" id="fields_supervisor_id3">
+                                            <div class="form-group {!! fieldHasError('supervisor_id3', $errors) !!}">
+                                                {!! Form::label('supervisor_id3', 'Supervisor 3', ['class' => 'control-label']) !!}
+                                                {!! Form::text('supervisor_id3', (\App\User::find($doc->contractorLicenceSupervisor(3))) ? \App\User::find($doc->contractorLicenceSupervisor(3))->name : '', ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                            <div class="form-group {!! fieldHasError('lic_type3', $errors) !!}">
+                                                {!! Form::label('lic_type3', 'Supervisor 3 is ONLY responsible for class(s) ', ['class' => 'control-label']) !!}
+                                                {!! Form::text('lic_type3', $doc->contractorLicenceSupervisorClassesSBC(3), ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
                                         </div>
                                     @endif
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
                                         {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
                                         {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select', 'readonly']) !!}
-                                        {!! fieldErrorMessage('asb_type', $errors) !!}
                                     </div>
 
                                     @if ($doc->category_id == 6)
@@ -134,36 +170,30 @@
                                             <div class="form-group {!! fieldHasError('tag_type', $errors) !!}" id="fields_tag_type">
                                                 {!! Form::label('tag_type', 'Expiry', ['class' => 'control-label']) !!}
                                                 {!! Form::select('tag_type', ['3' => '3 month (site)', '12' => '12 month (office)'], $doc->ref_type, ['class' => 'form-control bs-select', 'readonly']) !!}
-                                                {!! fieldErrorMessage('tag_type', $errors) !!}
                                             </div>
                                         @else
                                             {!! Form::hidden('tag_type', '3') !!}
                                         @endif
 
-
                                         {{-- Test date --}}
                                         <div class="form-group {!! fieldHasError('tag_date', $errors) !!}" id="fields_tag_date">
                                             {!! Form::label('tag_date', 'Date of Testing', ['class' => 'control-label']) !!}
                                             {!! Form::text('tag_date', $doc->expiry->subMonths($doc->ref_type)->format('d/m/Y'), ['class' => 'form-control', 'data-date-format' => "dd-mm-yyyy", 'readonly', 'disabled']) !!}
-
                                             @if ($company->id != 3)
                                                 <span class="help-block">Expires 3 months from date of testing</span>
                                             @endif
-                                            {!! fieldErrorMessage('tag_date', $errors) !!}
                                         </div>
                                     @else
                                         {{-- Expiry --}}
                                         <div class="form-group {!! fieldHasError('expiry', $errors) !!}">
                                             {!! Form::label('expiry', 'Expiry', ['class' => 'control-label']) !!}
                                             {!! Form::text('expiry', ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
-                                            {!! fieldErrorMessage('expiry', $errors) !!}
                                         </div>
                                     @endif
                                     {{-- Notes --}}
                                     <div class="form-group {!! fieldHasError('notes', $errors) !!}">
                                         {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
                                         {!! Form::textarea('notes', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-6">

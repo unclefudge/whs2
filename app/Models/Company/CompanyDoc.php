@@ -7,6 +7,7 @@ use URL;
 use Mail;
 use App\User;
 use App\Models\Comms\Todo;
+use App\Models\Misc\ContractorLicence;
 use App\Models\Misc\ContractorLicenceSupervisor;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -79,11 +80,27 @@ class CompanyDoc extends Model {
     /**
      * A Document MAY have many users assigned as supervisor
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function contractorLicenceSupervisorClasses($super = 1)
     {
         return ContractorLicenceSupervisor::where('doc_id', $this->id)->where('super', $super)->pluck('licence_id')->toArray();
+    }
+
+    /**
+     * A Document MAY have many users assigned as supervisor - SBC
+     */
+    public function contractorLicenceSupervisorClassesSBC($super = 1)
+    {
+        $classes = ContractorLicenceSupervisor::where('doc_id', $this->id)->where('super', $super)->pluck('licence_id')->toArray();
+        if ($classes) {
+            $string = '';
+            foreach ($classes as $class)
+                $string .= ContractorLicence::find($class)->name . ', ';
+
+            return rtrim($string, ', ');
+        }
+
+        return '';
     }
 
     /**

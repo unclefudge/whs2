@@ -348,9 +348,9 @@
                         lic_types[val] = $(this).text();
                 });
 
-                $("#lic_type1").find('option').remove();
-                $("#lic_type2").find('option').remove();
-                $("#lic_type3").find('option').remove();
+                $("#lic_type1").empty();
+                $("#lic_type2").empty();
+                $("#lic_type3").empty();
                 $.each(lic_types, function (index, value) {
                     $("#lic_type1").append('<option value="' + index + '">' + value + '</option>');
                     $("#lic_type2").append('<option value="' + index + '">' + value + '</option>');
