@@ -143,9 +143,21 @@ class UserDocController extends Controller {
         $doc_request['issued'] = (request('issued')) ? Carbon::createFromFormat('d/m/Y H:i', request('issued') . '00:00')->toDateTimeString() : null;
 
         // Convert licence type into CSV - Drivers/Contractors
-        if (in_array(request('category_id'), [2,3])) {
+        if (request('category_id') == '2') {
             $doc_request['ref_no'] = request('lic_no');
-            $doc_request['ref_type'] = (request('category_id') == 2) ? implode(',', request('drivers_type')) : implode(',', request('cl_type'));
+            $doc_request['ref_type'] = implode(',', request('drivers_type'));
+        }
+
+        // Convert Contractor licence type into CSV
+        if (request('category_id') == '3') {
+            $doc_request['ref_no'] = request('lic_no');
+            $doc_request['ref_type'] = implode(',', request('cl_type'));
+        }
+
+        // Convert Supervisor licence type into CSV
+        if (request('category_id') == '4') {
+            $doc_request['ref_no'] = request('lic_no');
+            $doc_request['ref_type'] = implode(',', request('super_type'));
         }
 
         // Reassign Asbestos Licence to correct category

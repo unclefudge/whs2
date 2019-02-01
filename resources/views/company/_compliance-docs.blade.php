@@ -108,6 +108,25 @@ $compliantDocs = $company->compliantDocs();
                     </div>
                 @endif
                 @if (in_array($company->category, [1,2]))
+                    {{-- Verify Company CL has supervisor for each Class --}}
+                    <?php
+                    $non_cl = $company->nonCompliantContractorsLicence();
+                    $non_super = $company->nonCompliantSupervisorsLicence();
+                    ?>
+                    <hr>
+                    @if ($non_cl)
+                        <b>The following users require Contractor Licence with class(s)</b><br>
+                        @foreach ($non_cl as $name => $classes)
+                            {{ $name }} : {{ $classes }}<br>
+                        @endforeach
+                    @endif
+                    <br>
+                    @if ($non_cl)
+                        <b>The following users require Supervisor Licence with class(s)</b><br>
+                        @foreach ($non_super as $name => $classes)
+                            {{ $name }} : {{ $classes }}<br>
+                        @endforeach
+                    @endif
                     <hr>
                     <b>Additional documents:</b>
                     {{-- Test & Tag --}}

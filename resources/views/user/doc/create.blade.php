@@ -69,10 +69,24 @@
                                     {{-- Contractor Lic Class --}}
                                     <div class="form-group {!! fieldHasError('cl_type', $errors) !!}" style="display: none" id="fields_cl_class">
                                         {!! Form::label('cl_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                        <select id="cl_type" name="cl_class[]" class="form-control select2" width="100%" multiple>
+                                        <select id="cl_type" name="cl_type[]" class="form-control select2" width="100%" multiple>
                                             {!! $user->contractorLicenceOptions() !!}
                                         </select>
                                         {!! fieldErrorMessage('cl_type', $errors) !!}
+                                        @if ($user->requiredContractorLicencesSBC())
+                                            <br><span class="note note-warning" style="width:100%">Company nominated supervisor for classes: {{ $user->requiredContractorLicencesSBC() }}</span>
+                                        @endif
+                                    </div>
+                                    {{-- Supervisor Lic Class --}}
+                                    <div class="form-group {!! fieldHasError('super_type', $errors) !!}" style="display: none" id="fields_super_class">
+                                        {!! Form::label('super_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                        <select id="super_type" name="super_type[]" class="form-control select2" width="100%" multiple>
+                                            {!! $user->contractorLicenceOptions() !!}
+                                        </select>
+                                        {!! fieldErrorMessage('super_type', $errors) !!}
+                                        @if ($user->requiredContractorLicencesSBC())
+                                            <br><span class="note note-warning" style="width:100%">Company nominated supervisor for classes: {{ $user->requiredContractorLicencesSBC() }}</span>
+                                        @endif
                                     </div>
                                     {{-- Asbestos Class --}}
                                     <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
@@ -171,7 +185,7 @@
 
         /* Select2 */
         $("#drivers_class").select2({placeholder: "Select one or more", width: '100%'});
-        $("#cl_class").select2({placeholder: "Select one or more", width: '100%'});
+        $("#cl_type").select2({placeholder: "Select one or more", width: '100%'});
 
         function display_fields() {
             var cat = $("#category_id").val();
@@ -181,6 +195,7 @@
             $('#fields_lic_no').hide();
             $('#fields_driver_class').hide();
             $('#fields_cl_class').hide();
+            $('#fields_super_class').hide();
             $('#fields_asb_class').hide();
             $('#fields_state').hide();
             $('#fields_expiry').hide();
@@ -225,6 +240,11 @@
             if (cat == 3) { // CL
                 $('#fields_lic_no').show();
                 $('#fields_cl_class').show();
+            }
+
+            if (cat == 4) { // Supervisor Lic
+                $('#fields_lic_no').show();
+                $('#fields_super_class').show();
             }
 
             if (cat == 9)  // Asbestos

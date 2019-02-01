@@ -104,6 +104,14 @@ class ReportController extends Controller {
         return view('manage/report/users_noemail', compact('users'));
     }
 
+    public function usersLastLogin()
+    {
+        $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+        $users = \App\User::where('status', 1)->whereIn('id', $allowed_users)->orderBy('last_login', 'ASC')->get();
+
+        return view('manage/report/users_lastlogin', compact('users'));
+    }
+
     public function roleusers()
     {
         $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();

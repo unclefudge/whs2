@@ -8,6 +8,7 @@ use App\User;
 use App\Models\User\UserDocCategory;
 use App\Models\User\UserDoc;
 use App\Models\Misc\ContractorLicence;
+use App\Models\Misc\ContractorLicenceSupervisor;
 use App\Models\Misc\ComplianceOverride;
 use App\Http\Utilities\UserDocTypes;
 use App\Http\Utilities\CompanyDocTypes;
@@ -176,20 +177,60 @@ trait UserDocs {
         // White Card
         if ($type == 1 && $this->onsite) return true;  // If you Onsite MUST have a WC (White Card)
 
+        // Contractor Licence
         if (in_array($this->company->business_entity, ['3', 'Sole Trader'])) {
             if ($type == 3) return true; // Contractor Licence Required for ALL Sole Traders
         } else {
             // Contractor or Supervisor Licence Required if user is nominated by own company as licence holder/supervisor of their CL
-            if (in_array($type, [3, 4]) && $this->company->activeCompanyDoc(7) && $this->company->activeCompanyDoc(7)->status == 1 && $this->company->activeCompanyDoc(7)->ref_name == $this->id) return true;
+            if (in_array($type, [3, 4]) && $this->company->activeCompanyDoc(7) && $this->company->activeCompanyDoc(7)->status == 1
+                && $this->requiredContractorLicences()
+            ) return true;
         }
 
         return false;
     }
 
     /**
-     * Determine if a certain document type is Required
+     * Determine if user is nominated as Supervisor for Company Contractor Licence
      *
      * @return boolean
+     */
+    public function requiredContractorLicences()
+    {
+        $required_cl = ContractorLicenceSupervisor::where('user_id', $this->id)->pluck('licence_id')->toArray();
+        if ($required_cl) {
+            $array = [];
+            foreach ($required_cl as $cl)
+                $array[$cl] = ContractorLicence::find($cl)->name;
+
+            return $array;
+        }
+        return [];
+    }
+
+    /**
+     * Determine if user is nominated as Supervisor for Company Contractor Licence
+     *
+     * @return boolean
+     */
+    public function requiredContractorLicencesSBC()
+    {
+        $required_cl = ContractorLicenceSupervisor::where('user_id', $this->id)->pluck('licence_id')->toArray();
+        if ($required_cl) {
+            $string = '';
+            foreach ($required_cl as $cl)
+                $string .= ContractorLicence::find($cl)->name . ', ';
+
+            return rtrim($string, ', ');
+        }
+        return '';
+    }
+
+
+    /**
+     * Determine if a certain document type is Required
+     *
+     * @return string
      */
     public function requiresUserDocText($type)
     {
@@ -208,6 +249,7 @@ trait UserDocs {
             if ($this->requiresUserDoc($type) && (!$this->activeUserDoc($type) || $this->activeUserDoc($type)->status != 1))
                 return false;
         }
+
         return true;
     }
 
@@ -268,7 +310,7 @@ trait UserDocs {
      */
     public function missingDocs($format = 'array')
     {
-        $doc_types = [1 => 'White Card',  3 => 'Contractor Licence', 4 => 'Supervisor Licence'];
+        $doc_types = [1 => 'White Card', 3 => 'Contractor Licence', 4 => 'Supervisor Licence'];
         $missing_docs = [];
         $missing_html = '';
 

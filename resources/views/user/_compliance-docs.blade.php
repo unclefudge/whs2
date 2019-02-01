@@ -86,6 +86,13 @@ $compliantDocs = $user->compliantDocs();
                     <a href="/user/{{ $user->id }}/doc" class="btn btn-warning">Some documents require approval</a>
                 @endif
 
+                {{-- Notify if User is notimated as Supervisor for Company Contract Licence--}}
+                <?php $cl_classes = $user->requiredContractorLicencesSBC(); ?>
+                @if ($cl_classes)
+                    <hr>
+                    <b>Listed as supervisor for following Contractor Licence class(s)</b><br>{{ $cl_classes }}
+                @endif
+
             </div>
         </div>
     @endif

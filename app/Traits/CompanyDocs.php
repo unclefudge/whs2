@@ -8,6 +8,7 @@ use App\User;
 use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
 use App\Models\Misc\ContractorLicence;
+use App\Models\Misc\ContractorLicenceSupervisor;
 use App\Models\Misc\ComplianceOverride;
 use App\Http\Utilities\UserDocTypes;
 use App\Http\Utilities\CompanyDocTypes;
@@ -149,12 +150,87 @@ trait CompanyDocs {
 
     /**
      * Determine if a certain document type is Required
-     *
-     * @return boolean
      */
     public function requiresCompanyDocText($type)
     {
         return ($this->requiresCompanyDoc($type) ? '<span class="font-red">Required</span>' : '');
+    }
+
+    /**
+     * Determine if all Classes on Contractor Licence have a User with matching Supervisor qualification
+     */
+    public function nonCompliantContractorsLicence($user_id = '')
+    {
+        if ($this->requiresCompanyDoc(7)) {
+            $doc = CompanyDoc::where('category_id', 7)->where('for_company_id', $this->id)->where('status', '>', '0')->first();
+            if ($doc) {
+                $super1_missing = '';
+                $missing_docs = [];
+                $number_of_supers = $doc->ref_name;
+                for ($x = 1; $x <= $doc->ref_name; $x ++) {
+                    $super = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
+                    if ($super) {
+                        $super = User::find($super->user_id);
+                        $super_classes = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->get();
+                        foreach ($super_classes as $rec) {
+                            if (!($super->activeUserDoc(3) && in_array($rec->licence_id, explode(',', $super->activeUserDoc(3)->ref_type)))) {
+                                $super1_missing .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                if (isset($missing_docs[$super->name]))
+                                    $missing_docs[$super->name] .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                else
+                                    $missing_docs[$super->name] = ContractorLicence::find($rec->licence_id)->name . ', ';
+                            }
+                        }
+                        if ($missing_docs[$super->name])
+                            $missing_docs[$super->name] = rtrim($missing_docs[$super->name], ', ');
+                    }
+                }
+
+                return $missing_docs;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Determine if all Classes on Supervisors Licence have a User with matching Supervisor qualification
+     */
+    public function nonCompliantSupervisorsLicence($user_id = '')
+    {
+        if ($this->requiresCompanyDoc(7)) {
+            $doc = CompanyDoc::where('category_id', 7)->where('for_company_id', $this->id)->where('status', '>', '0')->first();
+            if ($doc) {
+                $super1_missing = '';
+                $missing_docs = [];
+                for ($x = 1; $x <= $doc->ref_name; $x ++) {
+                    $super = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
+                    if ($super) {
+                        // If User given and doesn't match then skip
+                        if ($user_id && $user_id != $super->user_id)
+                            continue;
+
+                        $super = User::find($super->user_id);
+                        $super_classes = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->get();
+                        foreach ($super_classes as $rec) {
+                            if (!($super->activeUserDoc(4) && in_array($rec->licence_id, explode(',', $super->activeUserDoc(4)->ref_type)))) {
+                                $super1_missing .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                if (isset($missing_docs[$super->name]))
+                                    $missing_docs[$super->name] .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                else
+                                    $missing_docs[$super->name] = ContractorLicence::find($rec->licence_id)->name . ', ';
+                            }
+                        }
+                        if ($missing_docs[$super->name])
+                            $missing_docs[$super->name] = rtrim($missing_docs[$super->name], ', ');
+                    }
+                }
+
+                return $missing_docs;
+            }
+        }
+
+        return [];
     }
 
     /**
@@ -186,6 +262,7 @@ trait CompanyDocs {
             if ($this->requiresCompanyDoc($type) && (!$this->activeCompanyDoc($type) || $this->activeCompanyDoc($type)->status != 1))
                 return false;
         }
+
         return true;
     }
 

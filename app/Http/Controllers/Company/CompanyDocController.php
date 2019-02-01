@@ -121,6 +121,10 @@ class CompanyDocController extends Controller {
         if ($doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
             unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
 
+        // Delete any assigned Supervisors for Contractor Licences
+        if ($doc->category_id == '7')
+            ContractorLicenceSupervisor::where('company_id', $doc->for_company_id)->delete();
+
         $doc->closeToDo();
         $doc->delete();
 
@@ -412,6 +416,10 @@ class CompanyDocController extends Controller {
         ($doc->status == 1) ? $doc->status = 0 : $doc->status = 1;
         $doc->closeToDo();
         $doc->save();
+
+        // Delete any assigned Supervisors for Contractor Licences
+        if ($doc->category_id == '7')
+            ContractorLicenceSupervisor::where('company_id', $doc->for_company_id)->delete();
 
         if ($doc->status == 1)
             Toastr::success("Document restored");
