@@ -182,9 +182,10 @@ trait UserDocs {
             if ($type == 3) return true; // Contractor Licence Required for ALL Sole Traders
         } else {
             // Contractor or Supervisor Licence Required if user is nominated by own company as licence holder/supervisor of their CL
-            if (in_array($type, [3, 4]) && $this->company->activeCompanyDoc(7) && $this->company->activeCompanyDoc(7)->status == 1
-                && $this->requiredContractorLicences()
-            ) return true;
+            // - current users not making users non-compliant if they don't have CL / Super because company nominated them - just a notification
+            //if (in_array($type, [3, 4]) && $this->company->activeCompanyDoc(7) && $this->company->activeCompanyDoc(7)->status == 1
+            //    && $this->requiredContractorLicences()
+            //) return true;
         }
 
         return false;

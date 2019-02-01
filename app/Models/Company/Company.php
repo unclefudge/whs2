@@ -1034,7 +1034,8 @@ class Company extends Model {
     public function taskSelect($prompt = '')
     {
         $array = [];
-        $trades = Trade::where('company_id', Auth::user()->company_id)->where('status', '1')->orderBy('name')->get();
+        //$trades = Trade::whereIn('company_id', [1,3])->where('status', '1')->orderBy('name')->get();
+        $trades = Trade::whereIn('company_id', [1, Auth::user()->company_id])->where('status', '1')->orderBy('name')->get();
 
         foreach ($trades as $trade) {
             $tasks = Task::where('trade_id', $trade->id)->where('status', '1')->orderBy('name')->get();

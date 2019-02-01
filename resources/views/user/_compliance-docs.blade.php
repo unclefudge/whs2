@@ -80,10 +80,34 @@ $compliantDocs = $user->compliantDocs();
                     </div>
                 @endif
 
-                {{-- Non-compliant docs needing Approval --}}
-                @if (Auth::user()->companyDocTypeSelect('view', $user->company, 'all') && count($user->nonCompliantDocs('array', 2)))
-                    <br>
-                    <a href="/user/{{ $user->id }}/doc" class="btn btn-warning">Some documents require approval</a>
+                @if ($user->activeUserDoc(3) || $user->activeUserDoc(4))
+                    <hr>
+                    <b>Additional Documents</b><br>
+                    <div class="row">
+                        @foreach ([3 => 'Contractor Licence', '4' => 'Supervisor Licence'] as $type => $name)
+                            @if ($user->activeUserDoc($type) && $user->activeUserDoc($type)->status == 1)
+                                <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($isCompliant) ? 'color: #26C281' : '' !!}"></i>
+                                    <a href="{!! $user->activeUserDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    @if (!$isCompliant)
+                                        <span class="label label-success label-sm">Accepted</span>
+                                    @endif
+                                </div>
+                            @endif
+
+                            @if ($user->activeUserDoc($type) && $user->activeUserDoc($type)->status == 2)
+                                <div class="col-xs-8"><i class="fa fa-question" style="width:35px; padding: 4px 15px"></i>
+                                    <a href="{!! $user->activeUserDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    @if (!$isCompliant)
+                                        <span class="label label-warning label-sm">Pending Approval</span>
+                                    @endif
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
                 @endif
 
                 {{-- Notify if User is notimated as Supervisor for Company Contract Licence--}}
@@ -91,6 +115,13 @@ $compliantDocs = $user->compliantDocs();
                 @if ($cl_classes)
                     <hr>
                     <b>Listed as supervisor for following Contractor Licence class(s)</b><br>{{ $cl_classes }}
+                @endif
+
+
+                {{-- Non-compliant docs needing Approval --}}
+                @if (Auth::user()->companyDocTypeSelect('view', $user->company, 'all') && count($user->nonCompliantDocs('array', 2)))
+                    <br>
+                    <a href="/user/{{ $user->id }}/doc" class="btn btn-warning">Some documents require approval</a>
                 @endif
 
             </div>
