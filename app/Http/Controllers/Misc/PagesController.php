@@ -92,6 +92,40 @@ class PagesController extends Controller {
     public function quick()
     {
 
+
+        echo "Fix QA Reports Missing Supervisor to Complete Flags<br><br>";
+        $qa_items = \App\Models\Site\SiteQaItem::where('master', 0)->get();
+        $bad = [];
+        $sites = [];
+        foreach ($qa_items as $item) {
+            $master = \App\Models\Site\SiteQaItem::where('id', $item->master_id)->first();
+            if ($master && $item->super != $master->super) {
+                if (!$item->document->status && !$item->sign_by)
+                    $item->super = $master->super;
+                else {
+                    $item->super = $master->super;
+                    $item->done_by = 3;
+                    $on = ($item->super) ? 'Y' : 'N';
+                    echo $on . ':' . $item->document->name . '** ' . $item->name . '**<br>';
+                    $bad[$item->document->id] = '[' . $item->document->status . '] ' . $item->document->updated_at->format('d/m/Y') . ' - ' . $item->document->name . " Site:" . $item->document->site->name;
+                    $sites[$item->document->site->id] = ($item->document->site->completed) ? $item->document->site->name . ' (' . $item->document->site->completed->format('d/m/Y') . ')' : $item->document->site->name;
+                }
+                $item->save();
+            }
+
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+        echo "Total Documents" . count($bad) . '<br>';
+        foreach ($bad as $id => $name)
+            echo "$id: $name<br>";
+
+        echo "<br><br>Total Sites" . count($sites) . '<br>';
+        //asort($sites);
+        //foreach ($sites as $id => $name)
+        //    echo "$id: $name<br>";
+
+
+        /*
         echo "Equipment transfers TASKS<br><br>";
         $todos = \App\Models\Comms\Todo::where('type', 'equipment')->whereDate('created_at', '>', '2019-01-01')->get();
         foreach ($todos as $todo) {
@@ -110,6 +144,7 @@ class PagesController extends Controller {
             echo $location->itemsList();
         }
         echo "<br><br>Completed<br>-------------<br>";
+        */
 
 
         // Import Equipment

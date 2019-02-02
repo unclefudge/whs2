@@ -241,6 +241,7 @@ class CronController extends Controller {
                                      'task_id'    => $item->task_id,
                                      'name'       => $item->name,
                                      'order'      => $item->order,
+                                     'super'      => $item->super,
                                      'master'     => '0',
                                      'master_id'  => $item->id,
                                      'created_by' => '1',
