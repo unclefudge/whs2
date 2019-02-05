@@ -158,7 +158,7 @@ class SiteController extends Controller {
         }
         // Site recently reactivated
         if ($site_request['status'] != 0 && $site->status == 0) {
-            $location = EquipmentLocation::where('site_id', $site->id);
+            $location = EquipmentLocation::where('site_id', $site->id)->first();
             if ($location) {
                 $location->status = 1;
                 $location->save();
