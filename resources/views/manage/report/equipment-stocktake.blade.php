@@ -65,7 +65,7 @@
                                 <thead>
                                 <tr class="mytable-header">
                                     <th width="5%"> #</th>
-                                    <th width="95%"> Locations were stocktake hasn't been performed</th>
+                                    <th width="95%"> Locations where stocktake hasn't been performed</th>
                                 </tr>
                                 </thead>
                             </table>
