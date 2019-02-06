@@ -85,6 +85,22 @@ class Todo extends Model {
     }
 
     /**
+     * A Todoo is assigned to many users - return list separated by comma
+     *
+     * return string
+     */
+    public function assignedToCompanyBySBC()
+    {
+        $string = '';
+        foreach ($this->assignedTo() as $user) {
+            $string .= $user->fullname . ' ('.$user->company->name.'), ';
+        }
+        $string = rtrim($string, ', ');
+
+        return $string;
+    }
+
+    /**
      * A Todoo MAY have a EquipmentLocation
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

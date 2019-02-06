@@ -152,6 +152,14 @@ class EquipmentLocation extends Model {
         return ($this->site_id) ? $this->site->suburb . ' (' .$this->site->code.':' . $this->site->name . ')' : 'Other: '.$this->other;
     }
 
+    /**
+     * Get the Name  (getter)
+     */
+    public function getName5Attribute()
+    {
+        return ($this->site_id) ? $this->site->name .' ('.$this->site->code.')' : 'Other: '.$this->other;
+    }
+
 
     /**
      * The "booting" method of the model.

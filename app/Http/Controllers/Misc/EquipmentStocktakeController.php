@@ -52,12 +52,14 @@ class EquipmentStocktakeController extends Controller {
             return view('errors/404');
 
         foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc)
-                $locations[$loc->id] = $loc->name;
-        asort($locations);
-        $locations = ['1' => 'CAPE COD STORE'] + $locations;
+                $sites[$loc->id] = $loc->name;
+        asort($sites);
+        $sites = ['1' => 'CAPE COD STORE'] + $sites;
 
-        if (!$location)
-            $locations = ['' => 'Select location'] + $locations;
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', null)->get() as $loc)
+            $others[$loc->id] = $loc->name;
+        asort($others);
+
 
         $items = [];
         if ($location) {
@@ -68,7 +70,7 @@ class EquipmentStocktakeController extends Controller {
             });
         }
 
-        return view('misc/equipment/stocktake', compact('location', 'locations', 'items'));
+        return view('misc/equipment/stocktake', compact('location', 'sites', 'others', 'items'));
     }
 
 

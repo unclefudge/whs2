@@ -163,8 +163,10 @@
                                 </div>
                             @endif
                             <div class="row">
-                                <div class="col-md-3 pull-right text-right" style="margin-top: 15px; padding-right: 20px">
-                                    <span class="font-grey-salsa"><span class="font-grey-salsa">version {{ $qa->version }} </span>
+                                <div class="col-md-6 pull-right text-right" style="margin-top: 15px; padding-right: 20px">
+                                    <span class="font-grey-salsa">
+                                        <span class="font-grey-salsa" v-if="xx.qa.master == '0'">version {{ $qa->version }} </span>
+                                        <span class="font-grey-salsa" v-if="xx.qa.master == '1'">Current version {{ $qa->version }}<br> {!! nl2br($qa->notes) !!}</span>
                                 </div>
                             </div>
                             <hr>

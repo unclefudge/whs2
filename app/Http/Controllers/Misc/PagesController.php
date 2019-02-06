@@ -110,7 +110,7 @@ class PagesController extends Controller {
                     $bad[$item->document->id] = '[' . $item->document->status . '] ' . $item->document->updated_at->format('d/m/Y') . ' - ' . $item->document->name . " Site:" . $item->document->site->name;
                     $sites[$item->document->site->id] = ($item->document->site->completed) ? $item->document->site->name . ' (' . $item->document->site->completed->format('d/m/Y') . ')' : $item->document->site->name;
                 }
-                $item->save();
+                //$item->save();
             }
 
         }

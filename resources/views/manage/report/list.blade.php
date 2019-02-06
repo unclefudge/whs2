@@ -82,6 +82,9 @@
                                 <tr>
                                     <td><a href="/manage/report/equipment_transactions">Equipment Transactions</a></td>
                                 </tr>
+                                <tr>
+                                    <td><a href="/manage/report/equipment_stocktake">Equipment Stocktake</a></td>
+                                </tr>
                             @endif
                             @if (Auth::user()->hasRole2('web-admin'))
                                 <tr>

@@ -13,6 +13,8 @@ use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
 use App\Models\Misc\Equipment\Equipment;
 use App\Models\Misc\Equipment\EquipmentLocation;
+use App\Models\Misc\Equipment\EquipmentStocktake;
+use App\Models\Misc\Equipment\EquipmentStocktakeItem;
 use App\Models\Misc\Equipment\EquipmentLog;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -315,7 +317,7 @@ class ReportController extends Controller {
         // Create directory if required
         if (!is_dir(public_path($dir)))
             mkdir(public_path($dir), 0777, true);
-        $output_file = public_path($dir . "/Equipment List " . Carbon::now()->format('YmdHis') . '.pdf');
+        $output_file = public_path($dir . "/Equipment Transactions " . Carbon::now()->format('YmdHis') . '.pdf');
         touch($output_file);
 
         $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') :  Carbon::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
@@ -366,6 +368,94 @@ class ReportController extends Controller {
                 return $trans->action;
             })
             ->rawColumns(['full_name', 'created_at'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /*
+    * Equipment Stocktake Report
+    */
+    public function equipmentStocktake()
+    {
+        //$equipment = EquipmentStocktake::all()->orderBy('name')->get();
+        $equipment = '';
+
+        return view('manage/report/equipment-stocktake', compact('equipment'));
+    }
+
+    /**
+     * Get Equipment Stocktake
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getEquipmentStocktake()
+    {
+        $date_from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
+        $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
+
+        $stocktake = EquipmentStocktake::select([
+            'equipment_stocktake.id', 'equipment_stocktake.location_id', 'equipment_stocktake.created_at', 'equipment_location.id', 'equipment_location.site_id', 'equipment_location.other',
+            'users.id', 'users.username', 'users.firstname', 'users.lastname',
+            DB::raw('CONCAT(users.firstname, " ", users.lastname) AS full_name')
+        ])
+            ->join('equipment_location', 'equipment_stocktake.location_id', '=', 'equipment_location.id')
+            ->join('users', 'users.id', '=', 'equipment_stocktake.created_by')
+            ->whereDate('equipment_stocktake.created_at', '>=', $date_from)
+            ->whereDate('equipment_stocktake.created_at', '<=', $date_to);
+
+        //dd($transactions);
+        $dt = Datatables::of($stocktake)
+            ->editColumn('created_at', function ($stock) {
+                return $stock->created_at->format('d/m/Y');
+            })
+            ->addColumn('location', function ($stock) {
+                return $stock->name;
+            })
+            ->addColumn('summary', function ($stock) {
+                return $stock->summary();
+            })
+            ->rawColumns(['full_name', 'created_at', 'summary'])
+            ->make(true);
+
+        return $dt;
+    }
+
+    /**
+     * Get Equipment Stocktake Not
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getEquipmentStocktakeNot()
+    {
+        $date_from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00')->format('Y-m-d') : '2000-01-01';
+        $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
+
+        $stocktake = EquipmentStocktake::whereDate('equipment_stocktake.created_at', '>=', $date_from)->whereDate('equipment_stocktake.created_at', '<=', $date_to)
+            ->pluck('location_id')->toArray();
+        $locations = EquipmentLocation::where('status', 1)->whereNotIn('id', $stocktake)->get();
+
+        $location_names = [];
+        foreach ($locations as $loc)
+            $location_names[$loc->id] = $loc->name5;
+
+        asort($location_names);
+        //dd($location_names);
+
+        $objects = [];
+        foreach ($location_names as $id => $name)
+            $objects[] = (object) array('id' => $id, 'name' => $name);
+
+        //dd($objects);
+        //dd($transactions);
+        $dt = Datatables::of($objects)
+            ->editColumn('id', '<div class="text-center"><a href="/equipment/stocktake/{{$id}}"><i class="fa fa-search"></i></a></div>')
+            ->editColumn('name', function ($location) {
+                return $location->name;
+            })
+            ->rawColumns(['id', 'name'])
             ->make(true);
 
         return $dt;

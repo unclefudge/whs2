@@ -105,6 +105,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/equipment_transactions', 'Misc\ReportController@equipmentTransactions');
     Route::post('/manage/report/equipment_transactions/report', 'Misc\ReportController@equipmentTransactionsPDF');
     Route::get('/manage/report/equipment/dt/transactions', 'Misc\ReportController@getEquipmentTransactions');
+    Route::get('/manage/report/equipment_stocktake', 'Misc\ReportController@equipmentStocktake');
+    //Route::post('/manage/report/equipment_stocktake/report', 'Misc\ReportController@equipmentStocktakePDF');
+    Route::get('/manage/report/equipment/dt/stocktake', 'Misc\ReportController@getEquipmentStocktake');
+    Route::get('/manage/report/equipment/dt/stocktake-not', 'Misc\ReportController@getEquipmentStocktakeNot');
 
 
     // User Docs

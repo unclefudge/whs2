@@ -145,14 +145,14 @@ class EquipmentController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc) {
-            if (count($loc->items))
-                $locations[$loc->id] = $loc->name;
-        }
-        asort($locations);
-        $locations = ['1' => 'CAPE COD STORE'] + $locations;
-        if (!$location)
-            $locations = ['' => 'Select location'] + $locations;
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc)
+            $sites[$loc->id] = $loc->name;
+        asort($sites);
+        $sites = ['1' => 'CAPE COD STORE'] + $sites;
+
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', null)->get() as $loc)
+            $others[$loc->id] = $loc->name;
+        asort($others);
 
         $items = [];
         if ($location) {
@@ -163,7 +163,7 @@ class EquipmentController extends Controller {
             });
         }
 
-        return view('misc/equipment/transfer-bulk', compact('location', 'locations', 'items'));
+        return view('misc/equipment/transfer-bulk', compact('location', 'sites', 'others', 'items'));
     }
 
     /**

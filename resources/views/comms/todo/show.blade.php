@@ -73,7 +73,7 @@
                                             @endforeach
                                         </ul>
                                         <br>
-                                        <b>Assigned to:</b> {{ $todo->assignedToBySBC() }}
+                                        <b>Assigned to:</b> {!! ($todo->type == 'equipment') ? $todo->assignedToCompanyBySBC() : $todo->assignedToBySBC() !!}
                                         <br><br>
                                     </div>
                                 @endif

@@ -149,6 +149,7 @@ class SiteQaController extends Controller {
         list($major, $minor) = explode('.', $qa->version);
         $minor ++;
         $qa_request['version'] = $major . '.' . $minor;
+        $qa_request['notes'] = "version $major.$minor released ".Carbon::now()->format('d/m/Y')."\r\n".$qa->notes;
 
         $qa->update($qa_request);
 
@@ -389,13 +390,6 @@ class SiteQaController extends Controller {
             ->editColumn('id', '<div class="text-center"><a href="/site/qa/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('name', function ($qa) {
                 $name = $qa->name . ' &nbsp;<span class="font-grey-silver">v' . $qa->version . '</span>';
-                if ($qa->status == 1) {
-                    $now = Carbon::now();
-                    $yearago = $now->subYear()->toDateTimeString();
-                    if ($qa->updated_at < $yearago)
-                        $name .= ' <span class="badge badge-danger badge-roundless">Out of Date</span>';
-                }
-
                 return $name;
             })
             ->editColumn('updated_at', function ($doc) {

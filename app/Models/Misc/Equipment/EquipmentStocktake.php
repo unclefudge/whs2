@@ -71,6 +71,14 @@ class EquipmentStocktake extends Model {
     }
 
     /**
+     * Get the Name  (getter)
+     */
+    public function getNameAttribute()
+    {
+        return $this->location->name;
+    }
+
+    /**
      * Display records last update_by + date
      *
      * @return string

@@ -32,7 +32,17 @@
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('location_id', $errors) !!}">
                                         {!! Form::label('location_id', 'Change Location', ['class' => 'control-label']) !!}
-                                        {!! Form::select('location_id', $locations, ($location) ? $location->id : null, ['class' => 'form-control select2', 'id' => 'location_id']) !!}
+                                        <select id="location_id" name="location_id" class="form-control select2" width="100%">
+                                            <option></option>
+                                            <optgroup label="Sites"></optgroup>
+                                            @foreach ($sites as $id => $name)
+                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                            <optgroup label="Other Locations"></optgroup>
+                                            @foreach ($others as $id => $name)
+                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
                                         {!! fieldErrorMessage('location_id', $errors) !!}
                                     </div>
                                 </div>
@@ -199,7 +209,7 @@
 <script>
     $(document).ready(function () {
         /* Select2 */
-        $("#location_id").select2({placeholder: "Select Site", width: '100%'});
+        $("#location_id").select2({placeholder: "Select location", width: '100%'});
         // Cape Cod Store by default has all items excluded
         if ($("#site_id").val() == 25) {
             $(".itemrow-").addClass("font-grey-cascade");
