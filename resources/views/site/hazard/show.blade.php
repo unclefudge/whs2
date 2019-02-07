@@ -149,9 +149,17 @@
                                                         <br><b>Comments:</b> {{ $todo->comments }}
                                                     @endif
                                                 </td>
-                                                <td>{!! App\User::find($todo->created_by)->full_name  !!}<br>{{ $todo->created_at->format('d/m/Y')}}</td>
-                                                <td>@if ($todo->status) <span class="font-red">Outstanding</span> @else {!! App\User::find($todo->done_by)->full_name  !!}
-                                                    <br>{{ $todo->done_at->format('d/m/Y')}} @endif</td>
+                                                <td>{!! App\User::findOrFail($todo->created_by)->full_name  !!}<br>{{ $todo->created_at->format('d/m/Y')}}</td>
+                                                <?php
+                                                $done_by = App\User::find($todo->done_by);
+                                                $done_at = ($done_by) ? $todo->done_at->format('d/m/Y') : '';
+                                                $done_by = ($done_by) ? $done_by->full_name : '';
+                                                ?>
+                                                <td>@if ($todo->status && !$todo->done_by)
+                                                        <span class="font-red">Outstanding</span>
+                                                    @else
+                                                        {!! $done_by  !!}<br>{{ $done_at }}
+                                                    @endif</td>
                                                 <td>
                                                     @if ($todo->attachment) <a href="{{ $todo->attachmentUrl }}" data-lity class="btn btn-xs blue"><i class="fa fa-picture-o"></i></a> @endif
                                                 </td>
