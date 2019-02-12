@@ -436,7 +436,19 @@ class Company extends Model {
     }
 
     /**
-     *  Delete company from Planner from specified date and replace with generic trade (if possible).
+     *  Last date company was on the planner
+     */
+    public function lastDateOnPlanner()
+    {
+        $planner = SitePlanner::where('entity_type', 'c')->where('entity_id', $this->id)
+            ->where('from', '<', Carbon::today()->format('Y-m-d'))
+            ->orderBy('from', 'desc')->first();
+
+        return ($planner) ? $planner->from : null;
+    }
+
+    /**
+     *  Determine if company is on the planner for a certain trade
      */
     public function onPlannerForTrade($trade_id, $past = false)
     {
