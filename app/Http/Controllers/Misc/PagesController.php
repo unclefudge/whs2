@@ -92,7 +92,18 @@ class PagesController extends Controller {
     public function quick()
     {
 
+        echo "Table of Tradies = Leading Hands<br><br>";
+        $users = \App\Models\Company\Company::find(3)->users(1);
+        echo '<table><td>Username</td><td>Name</td><td>Company</td><td>Email</td></tr>';
+        foreach ($users as $user) {
+            if ($user->hasAnyRole2('ext-leading-hand|tradie|labourers'))
+                echo "<tr><td>$user->username</td><td>$user->fullname</td><td>" . $user->company->name . "</td><td>$user->email</td></tr>";
+        }
 
+        echo "</table>";
+        echo "<br><br>Completed<br>-------------<br>";
+
+        /*
         echo "Fix QA Reports Missing Supervisor to Complete Flags<br><br>";
         $qa_items = \App\Models\Site\SiteQaItem::where('master', 0)->get();
         $bad = [];
@@ -123,6 +134,7 @@ class PagesController extends Controller {
         //asort($sites);
         //foreach ($sites as $id => $name)
         //    echo "$id: $name<br>";
+        */
 
 
         /*
@@ -216,7 +228,7 @@ class PagesController extends Controller {
         $x = 1;
 
         $insert_todo = "INSERT INTO `todo` (`id`, `name`, `info`, `type`, `type_id`, `due_at`, `done_at`, `done_by`, `priority`, `attachment`, `comments`, `status`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`)
-VALUES<br>";
+    VALUES<br>";
         $insert_todo_user = "INSERT INTO `todo_user` (`id`,`todo_id`, `user_id`, `opened`, `opened_at`) VALUES<br>";
         foreach ($todos as $todo) {
             $todo_user = \App\Models\Comms\TodoUser::where('todo_id', $todo->id)->first();
@@ -451,7 +463,8 @@ VALUES<br>";
     }
 
 
-    public function completedQA()
+    public
+    function completedQA()
     {
         echo "Closing completed QA ToDos<br><br>";
         $records = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
@@ -466,7 +479,8 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function refreshQA()
+    public
+    function refreshQA()
     {
         echo "Updating Current QA Reports to match new QA template with Supervisor tick<br><br>";
         $items = \App\Models\Site\SiteQaItem::all();
@@ -501,7 +515,8 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function importCompany(Request $request)
+    public
+    function importCompany(Request $request)
     {
         echo "Importing Companies<br><br>";
         $row = 0;
@@ -588,7 +603,8 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function createPermission()
+    public
+    function createPermission()
     {
         //
         // Creating Permission
@@ -619,7 +635,8 @@ VALUES<br>";
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public function fixplanner()
+    public
+    function fixplanner()
     {
         set_time_limit(120);
 
@@ -726,7 +743,8 @@ VALUES<br>";
 
     }
 
-    public function workDaysBetween($from, $to, $debug = false)
+    public
+    function workDaysBetween($from, $to, $debug = false)
     {
         if ($from == $to)
             return 1;

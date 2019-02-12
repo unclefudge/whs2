@@ -32,11 +32,11 @@
                                             <option></option>
                                             <optgroup label="Sites"></optgroup>
                                             @foreach ($sites as $id => $name)
-                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value={{ $id }} {{ ($location && $location->id == $id) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                             <optgroup label="Other Locations"></optgroup>
                                             @foreach ($others as $id => $name)
-                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value={{ $id }} {{ ($location && $location->id == $id) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                         {!! fieldErrorMessage('location_id', $errors) !!}
