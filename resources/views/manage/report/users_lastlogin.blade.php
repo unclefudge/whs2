@@ -265,6 +265,9 @@
                             @endforeach
                             </tbody>
                         </table>
+
+                        <br>
+                        Note: Dates in <span class="font-red">RED</span> are when the company was most recently on planner
                     </div>
                 </div>
             </div>
