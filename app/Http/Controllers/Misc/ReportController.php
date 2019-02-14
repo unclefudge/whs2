@@ -111,7 +111,31 @@ class ReportController extends Controller {
         $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
         $users = \App\User::where('status', 1)->whereIn('id', $allowed_users)->orderBy('last_login', 'ASC')->get();
 
-        return view('manage/report/users_lastlogin', compact('users'));
+        $date_1_week = Carbon::today()->subWeeks(1)->format('Y-m-d');
+        $date_2_week = Carbon::today()->subWeeks(2)->format('Y-m-d');
+        $date_3_week = Carbon::today()->subWeeks(3)->format('Y-m-d');
+        $date_4_week = Carbon::today()->subWeeks(4)->format('Y-m-d');
+        $date_3_month = Carbon::today()->subMonths(3)->format('Y-m-d');
+        $date_6_month = Carbon::today()->subMonths(6)->format('Y-m-d');
+
+        echo "w1: $date_1_week w2:$date_2_week w3: $date_3_week: w4 $date_4_week m3: $date_3_month m6: $date_6_month<br>";
+
+        $over_1_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
+            ->wheredate('last_login', '<', $date_1_week)->wheredate('last_login', '>=', $date_2_week)->orderBy('last_login', 'ASC')->get();
+        $over_2_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
+            ->wheredate('last_login', '<', $date_2_week)->wheredate('last_login', '>=', $date_3_week)->orderBy('last_login', 'ASC')->get();
+        $over_3_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
+            ->wheredate('last_login', '<', $date_3_week)->wheredate('last_login', '>=', $date_4_week)->orderBy('last_login', 'ASC')->get();
+        $over_4_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
+            ->wheredate('last_login', '<', $date_4_week)->wheredate('last_login', '>=', $date_3_month)->orderBy('last_login', 'ASC')->get();
+        $over_3_month = \App\User::where('status', 1)->whereIn('id', $allowed_users)
+            ->wheredate('last_login', '<', $date_3_month)->wheredate('last_login', '>=', $date_6_month)->orderBy('last_login', 'ASC')->get();
+
+        echo $over_1_week->count().'<br>';
+        //var_dump($over_1_week);
+        //dd('stop');
+
+        return view('manage/report/users_lastlogin', compact('users', 'over_1_week', 'over_2_week', 'over_3_week', 'over_4_week', 'over_3_month'));
     }
 
     public function roleusers()
