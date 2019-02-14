@@ -109,7 +109,7 @@ class ReportController extends Controller {
     public function usersLastLogin()
     {
         $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
-        $users = \App\User::where('status', 1)->whereIn('id', $allowed_users)->orderBy('last_login', 'ASC')->get();
+        $users = \App\User::where('status', 1)->whereIn('id', $allowed_users)->orderBy('company_id', 'ASC')->get();
 
         $date_1_week = Carbon::today()->subWeeks(1)->format('Y-m-d');
         $date_2_week = Carbon::today()->subWeeks(2)->format('Y-m-d');
@@ -121,15 +121,15 @@ class ReportController extends Controller {
         echo "w1: $date_1_week w2:$date_2_week w3: $date_3_week: w4 $date_4_week m3: $date_3_month m6: $date_6_month<br>";
 
         $over_1_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
-            ->wheredate('last_login', '<', $date_1_week)->wheredate('last_login', '>=', $date_2_week)->orderBy('last_login', 'ASC')->get();
+            ->wheredate('last_login', '<', $date_1_week)->wheredate('last_login', '>=', $date_2_week)->orderBy('company_id', 'ASC')->get();
         $over_2_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
-            ->wheredate('last_login', '<', $date_2_week)->wheredate('last_login', '>=', $date_3_week)->orderBy('last_login', 'ASC')->get();
+            ->wheredate('last_login', '<', $date_2_week)->wheredate('last_login', '>=', $date_3_week)->orderBy('company_id', 'ASC')->get();
         $over_3_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
-            ->wheredate('last_login', '<', $date_3_week)->wheredate('last_login', '>=', $date_4_week)->orderBy('last_login', 'ASC')->get();
+            ->wheredate('last_login', '<', $date_3_week)->wheredate('last_login', '>=', $date_4_week)->orderBy('company_id', 'ASC')->get();
         $over_4_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
-            ->wheredate('last_login', '<', $date_4_week)->wheredate('last_login', '>=', $date_3_month)->orderBy('last_login', 'ASC')->get();
+            ->wheredate('last_login', '<', $date_4_week)->wheredate('last_login', '>=', $date_3_month)->orderBy('company_id', 'ASC')->get();
         $over_3_month = \App\User::where('status', 1)->whereIn('id', $allowed_users)
-            ->wheredate('last_login', '<', $date_3_month)->wheredate('last_login', '>=', $date_6_month)->orderBy('last_login', 'ASC')->get();
+            ->wheredate('last_login', '<', $date_3_month)->wheredate('last_login', '>=', $date_6_month)->orderBy('company_id', 'ASC')->get();
 
         echo $over_1_week->count().'<br>';
         //var_dump($over_1_week);
