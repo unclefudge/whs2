@@ -118,7 +118,7 @@ class ReportController extends Controller {
         $date_3_month = Carbon::today()->subMonths(3)->format('Y-m-d');
         $date_6_month = Carbon::today()->subMonths(6)->format('Y-m-d');
 
-        echo "w1: $date_1_week w2:$date_2_week w3: $date_3_week: w4 $date_4_week m3: $date_3_month m6: $date_6_month<br>";
+        //echo "w1: $date_1_week w2:$date_2_week w3: $date_3_week: w4 $date_4_week m3: $date_3_month m6: $date_6_month<br>";
 
         $over_1_week = \App\User::where('status', 1)->whereIn('id', $allowed_users)
             ->wheredate('last_login', '<', $date_1_week)->wheredate('last_login', '>=', $date_2_week)->orderBy('company_id', 'ASC')->get();
@@ -131,7 +131,7 @@ class ReportController extends Controller {
         $over_3_month = \App\User::where('status', 1)->whereIn('id', $allowed_users)
             ->wheredate('last_login', '<', $date_3_month)->wheredate('last_login', '>=', $date_6_month)->orderBy('company_id', 'ASC')->get();
 
-        echo $over_1_week->count().'<br>';
+        //echo $over_1_week->count().'<br>';
         //var_dump($over_1_week);
         //dd('stop');
 
