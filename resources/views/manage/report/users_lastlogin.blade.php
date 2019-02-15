@@ -225,8 +225,8 @@
                                 <?php
                                 $lastDate = ($user->company->lastDateOnPlanner()) ? $user->company->lastDateOnPlanner() : \Carbon\Carbon::now()->subYears(10);
                                 ?>
-                                @if (in_array($user->company->category, [1]) && $user->company->status == 1 && $user->hasAnyRole2('ext-leading-hand|tradie|labourers') &&
-                                (!in_array($user->id, $listed) && $user->last_login && $user->last_login->lt($user->company->lastDateOnPlanner())))
+                                @if (in_array($user->company->category, [1]) && $user->company->status == 1 && $user->last_login && $user->last_login->lt(\Carbon\Carbon::now()->subMonths(6)) &&
+                                $user->hasAnyRole2('ext-leading-hand|tradie|labourers') && (!in_array($user->id, $listed) && $user->last_login->lt($user->company->lastDateOnPlanner())))
                                     <tr>
                                         <td>
                                             <div class="text-center"><a href="/user/{{$user->id}}"><i class="fa fa-search"></i></a></div>
