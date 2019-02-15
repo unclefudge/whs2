@@ -717,7 +717,7 @@ trait UserRolesPermissions {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
 
                 // Site QA Master templates - Only Fudge, Jo, Tara, Rob
-                if ($permissiontype == 'site.qa' && $record->master && in_array($this->id, ['3', '109', '351', '6'])) return true;
+                if ($permissiontype == 'site.qa' && $record->master && $this->hasPermission2('add.site.qa')) return true;    //in_array($this->id, ['3', '109', '351', '6'])) return true;
             }
 
             // Toolbox + WMS

@@ -73,7 +73,7 @@ class SiteQaController extends Controller {
     {
         $qa = SiteQa::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.site.qa', $qa))
             return view('errors/404');
 
@@ -89,7 +89,7 @@ class SiteQaController extends Controller {
     {
         $qa = SiteQa::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site.qa', $qa))
             return view('errors/404');
 
@@ -103,7 +103,7 @@ class SiteQaController extends Controller {
      */
     public function store(SiteQaRequest $request)
     {
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('add.site.qa'))
             return view('errors/404');
 
