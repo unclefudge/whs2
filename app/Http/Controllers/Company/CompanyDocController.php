@@ -575,7 +575,7 @@ class CompanyDocController extends Controller {
                 elseif (Auth::user()->allowed2("view.company.doc", $doc))
                     $actions .= '<a href="/company/' . $company->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
-                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
+                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3]))))
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/company/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
                 return $actions;
