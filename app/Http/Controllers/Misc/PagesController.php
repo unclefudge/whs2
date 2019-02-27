@@ -6,9 +6,24 @@ use DB;
 use PDF;
 use Session;
 use App\User;
+use App\Models\Company\Company;
+use App\Models\Company\CompanyDoc;
+use App\Models\Site\Planner\Trade;
+use App\Models\Site\Planner\Task;
 use App\Models\Site\Site;
-use App\Models\Misc\Equipment\EquipmentLost;
+use App\Models\Site\Planner\SiteAttendance;
+use App\Models\Site\Planner\SiteCompliance;
+use App\Models\Site\Planner\SitePlanner;
+use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\SiteQa;
+use App\Models\Site\SiteQaItem;
+use App\Models\Site\SiteQaAction;
+use App\Models\Safety\ToolboxTalk;
+use App\Models\Safety\WmsDoc;
+use App\Models\Comms\Todo;
+use App\Models\Comms\TodoUser;
+use App\Models\Comms\SafetyTip;
+use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Misc\Permission2;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -97,7 +112,7 @@ class PagesController extends Controller {
         $docs = CompanyDoc::where('status', 1)->whereDate('expiry', '<', $today->format('Y-m-d'))->get();
         if ($docs->count()) {
             foreach ($docs as $doc) {
-                $company = Company::find($doc->for_company_id);
+                $company =  Company::find($doc->for_company_id);
                 echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]<br>";
                 $doc->status = 0;
                 $doc->save();
