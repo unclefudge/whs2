@@ -92,21 +92,17 @@ class PagesController extends Controller {
     public function quick()
     {
 
-        echo "Dead ToDo tasks - QA's<br><br>";
-        $todos = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
-        foreach ($todos as $todo) {
-            $qa = \App\Models\Site\SiteQa::find($todo->type_id);
-            if (!$qa) {
-                echo "DEAD id: $todo->id name: $todo->name<br>";
-                $todo->delete();
-            } else {
-                if (!$qa->status)
-                    echo "Done id: $todo->id name: $todo->name<br>";
+        $today = Carbon::today();
+        echo "<b>Docs being marked as expired</b></br>";
+        $docs = CompanyDoc::where('status', 1)->whereDate('expiry', '<', $today->format('Y-m-d'))->get();
+        if ($docs->count()) {
+            foreach ($docs as $doc) {
+                $company = Company::find($doc->for_company_id);
+                echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]<br>";
+                $doc->status = 0;
+                $doc->save();
             }
         }
-
-        echo "</table>";
-        echo "<br><br>Completed<br>-------------<br>";
 
         /*
         echo "Table of Tradies = Leading Hands<br><br>";

@@ -304,11 +304,14 @@ class CronController extends Controller {
         $records = Todo::where('type', 'qa')->where('status', 1)->get();
         foreach ($records as $rec) {
             $qa = SiteQa::find($rec->type_id);
-            if ($qa->status == 0 || $qa->status == - 1) {
-                echo '[' . $rec->id . '] qaID:' . $rec->type_id . " - " . $qa->status . "<br>";
-                $rec->status = 0;
-                $rec->save();
+            if ($qa) {
+                if ($qa->status == 0 || $qa->status == - 1) {
+                    echo '[' . $rec->id . '] qaID:' . $rec->type_id . " - " . $qa->status . "<br>";
+                    $rec->status = 0;
+                    $rec->save();
+                }
             }
+
         }
         echo "<h4>Completed</h4>";
         $log .= "\nCompleted\n\n\n";
@@ -344,6 +347,21 @@ class CronController extends Controller {
             $week4_ago->format('Y-m-d')    => "Expired 4 weeks ago on " . $week4_ago->format('d/m/Y'),
         ];
 
+        echo "<b>Docs being marked as expired</b></br>";
+        $docs = CompanyDoc::where('status', 1)->whereDate('expiry', '<', $today->format('Y-m-d'))->get();
+        if ($docs->count()) {
+            foreach ($docs as $doc) {
+                $company = Company::find($doc->for_company_id);
+                echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]<br>";
+                $log .= "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]\n";
+                $doc->status = 0;
+                $doc->save();
+            }
+        } else {
+            echo "No expired docs<br><br>";
+            $log .= "No expired docs<br><br>";
+        }
+
         foreach ($dates as $date => $mesg) {
             echo "<br><b>$mesg</b><br>";
             $log .= "$mesg $date\n";
@@ -367,11 +385,6 @@ class CronController extends Controller {
                                 $log .= "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "\n";
                             }
                         } else {
-                            // Expired
-                            if ($doc->status != 0) {
-                                $doc->status = 0;
-                                $doc->save();
-                            }
                             $doc->closeToDo(User::find(1));
                             // Determine if doc hasn't been replaced with newer version
                             if (!$doc->company->activeCompanyDoc($doc->category_id)) {
@@ -550,8 +563,8 @@ class CronController extends Controller {
                             $todo->done_by = 1;
                             $todo->save();
                         } else {
-                            echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
-                            $log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC\n";
+                            //echo "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC<br>";
+                            //$log .= "ToDo [$todo->id] - $todo->name (" . $doc->company->name . ") INACTIVE DOC\n";
                         }
 
                     }
