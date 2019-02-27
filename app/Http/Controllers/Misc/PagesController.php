@@ -92,6 +92,23 @@ class PagesController extends Controller {
     public function quick()
     {
 
+        echo "Dead ToDo tasks - QA's<br><br>";
+        $todos = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
+        foreach ($todos as $todo) {
+            $qa = \App\Models\Site\SiteQa::find($todo->type_id);
+            if (!$qa) {
+                echo "DEAD id: $todo->id name: $todo->name<br>";
+                $todo->delete();
+            } else {
+                if (!$qa->status)
+                    echo "Done id: $todo->id name: $todo->name<br>";
+            }
+        }
+
+        echo "</table>";
+        echo "<br><br>Completed<br>-------------<br>";
+
+        /*
         echo "Table of Tradies = Leading Hands<br><br>";
         $users = \App\Models\Company\Company::find(3)->users(1);
         echo '<table><td>Username</td><td>Name</td><td>Company</td><td>Email</td></tr>';
@@ -102,6 +119,7 @@ class PagesController extends Controller {
 
         echo "</table>";
         echo "<br><br>Completed<br>-------------<br>";
+        */
 
         /*
         echo "Fix QA Reports Missing Supervisor to Complete Flags<br><br>";
