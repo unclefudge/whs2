@@ -168,21 +168,23 @@ trait CompanyDocs {
                 $missing_docs = [];
                 $number_of_supers = $doc->ref_name;
                 for ($x = 1; $x <= $doc->ref_name; $x ++) {
-                    $super = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
-                    if ($super) {
-                        $super = User::find($super->user_id);
-                        $super_classes = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->get();
-                        foreach ($super_classes as $rec) {
-                            if (!($super->activeUserDoc(3) && in_array($rec->licence_id, explode(',', $super->activeUserDoc(3)->ref_type)))) {
-                                $super1_missing .= ContractorLicence::find($rec->licence_id)->name . ', ';
-                                if (isset($missing_docs[$super->name]))
-                                    $missing_docs[$super->name] .= ContractorLicence::find($rec->licence_id)->name . ', ';
-                                else
-                                    $missing_docs[$super->name] = ContractorLicence::find($rec->licence_id)->name . ', ';
+                    $superCL = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
+                    if ($superCL) {
+                        $super = User::find($superCL->user_id);
+                        if ($super) {
+                            $super_classes = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->get();
+                            foreach ($super_classes as $rec) {
+                                if (!($super->activeUserDoc(3) && in_array($rec->licence_id, explode(',', $super->activeUserDoc(3)->ref_type)))) {
+                                    $super1_missing .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                    if (isset($missing_docs[$super->name]))
+                                        $missing_docs["$super->name"] .= ContractorLicence::find($rec->licence_id)->name . ', ';
+                                    else
+                                        $missing_docs["$super->name"] = ContractorLicence::find($rec->licence_id)->name . ', ';
+                                }
                             }
+                            if ($missing_docs && $missing_docs[$super->name])
+                                $missing_docs[$super->name] = rtrim($missing_docs[$super->name], ', ');
                         }
-                        if ($missing_docs[$super->name])
-                            $missing_docs[$super->name] = rtrim($missing_docs[$super->name], ', ');
                     }
                 }
 
