@@ -57,6 +57,19 @@ class CronController extends Controller {
         if ($bytes_written === false) die("Error writing to file");
     }
 
+    static public function verifyNightly()
+    {
+        $log = public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt');
+        //echo "Log: $log<br>";
+        if(strpos(file_get_contents($log), "ALL DONE - NIGHTLY COMPLETE") !== false) {
+            //echo "successful";
+            Mail::to('support@openhands.com.au')->send(new \App\Mail\Misc\VerifyNightly("was Successful"));
+        } else {
+            //echo "failed";
+            Mail::to('support@openhands.com.au')->send(new \App\Mail\Misc\VerifyNightly("Failed"));
+        }
+    }
+
     /*
      * Add non-attendees to the non-compliant list
      */

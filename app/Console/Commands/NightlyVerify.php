@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class NightlyUpdate extends Command
+class NightlyVerify extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:nightly-update';
+    protected $signature = 'app:nightly-verify';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Nightly update of roster + non-compliance';
+    protected $description = 'Verify Nightly update';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,7 @@ class NightlyUpdate extends Command
      */
     public function handle()
     {
-        \Log::info('Nightly update of roster + non-compliance');
-        \App\Http\Controllers\Misc\CronController::nightly();
+        \Log::info('Verifying Nightly');
+        \App\Http\Controllers\Misc\CronController::verifyNightly();
     }
 }

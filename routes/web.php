@@ -418,6 +418,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Cron routes
 Route::get('cron/nightly', 'Misc\CronController@nightly');
+Route::get('cron/nightly-verify', 'Misc\CronController@verifyNightly');
 Route::get('cron/roster', 'Misc\CronController@roster');
 Route::get('cron/qa', 'Misc\CronController@qa');
 Route::get('cron/overdue-todo', 'Misc\CronController@overdueToDo');

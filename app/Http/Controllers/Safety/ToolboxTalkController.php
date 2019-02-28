@@ -188,6 +188,9 @@ class ToolboxTalkController extends Controller {
                     if ($master)
                         $master_version = $master->version;
                 }
+                /*
+                 * Comments out requiring CC Supervisors to get signoff before they give a talk
+                 *
                 if (request('status') == 1 && Auth::user()->isCC() && !Auth::user()->hasPermission2('sig.toolbox') && (!$talk->master_id || $master_version != $tool_request['version'])) {
                     $tool_request['status'] = 2;
                     // Mail notification talk owner
@@ -195,7 +198,7 @@ class ToolboxTalkController extends Controller {
                         Mail::to($talk->owned_by->notificationsUsersType('n.doc.whs.approval'))->send(new \App\Mail\Safety\ToolboxTalkSignoff($talk));
 
                     Toastr::warning("Requesting Sign Off");
-                }
+                }*/
                 $talk->update($tool_request);
 
                 // If regular talk is made active + copy of template determine if template was modified

@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('backup:clean')->weekly()->mondays()->at('00:01');
             $schedule->command('backup:run')->daily()->at('00:02');
             $schedule->command('app:nightly-update')->daily()->at('00:05');
+            $schedule->command('app:nightly-verify')->daily()->at('00:30');
         }
     }
 
