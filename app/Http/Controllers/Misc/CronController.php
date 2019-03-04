@@ -63,7 +63,7 @@ class CronController extends Controller {
         //echo "Log: $log<br>";
         if(strpos(file_get_contents($log), "ALL DONE - NIGHTLY COMPLETE") !== false) {
             //echo "successful";
-            Mail::to('support@openhands.com.au')->send(new \App\Mail\Misc\VerifyNightly("was Successful"));
+            //Mail::to('support@openhands.com.au')->send(new \App\Mail\Misc\VerifyNightly("was Successful"));
         } else {
             //echo "failed";
             Mail::to('support@openhands.com.au')->send(new \App\Mail\Misc\VerifyNightly("Failed"));
