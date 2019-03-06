@@ -88,7 +88,11 @@ class Equipment extends Model {
     public function getTotalAttribute()
     {
         return DB::table('equipment_location_items')->join('equipment_location', 'equipment_location.id', '=', 'equipment_location_items.location_id')
-            ->where('equipment_id', $this->id)->where('equipment_location.status', 1)->sum('qty');
+            ->where('equipment_id', $this->id)->where('equipment_location.status', 1)
+            ->where(function($query) {
+                $query->where('equipment_location.other', null);
+                $query->orWhere('equipment_location.other', 'NOT LIKE', '%Transfer in progress:%');
+            })->sum('qty');
     }
 
     /**

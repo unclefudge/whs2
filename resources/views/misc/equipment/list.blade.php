@@ -74,6 +74,7 @@
                                 </tr>
                                 @foreach ($equip->locations()->sortBy('name') as $location)
                                     <?php $item = $location->equipmentItem($equip->id); ?>
+                                @if (!$location->notes)
                                     <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
                                         <td></td>
                                         <td>{{ $location->name4 }}</td>
@@ -84,6 +85,7 @@
                                             @endif
                                         </td>
                                     </tr>
+                                        @endif
                                 @endforeach
                             @endforeach
                         </table>

@@ -581,21 +581,22 @@ class Company extends Model {
         // Include Primary + Secondary
         if ($this->primary_user) {
             $string .= $this->primary_contact()->fullname . " <span class='badge badge-info badge-roundless'>P</span>";
-            if ($this->primary_contact()->hasPermission2('edit.user.security'))
-                $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
+            //if ($this->primary_contact()->hasPermission2('edit.user.security'))
+            //    $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
             $string .= ', ';
         }
         if ($this->secondary_user) {
             $string .= $this->secondary_contact()->fullname . " <span class='badge badge-info badge-roundless'>S</span>";
-            if ($this->secondary_contact()->hasPermission2('edit.user.security'))
-                $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
+            //if ($this->secondary_contact()->hasPermission2('edit.user.security'))
+            //    $string .= " <span class='badge badge-warning badge-roundless'>Sec</span>";
             $string .= ', ';
         }
 
+        /*
         foreach ($this->seniorUsers() as $user) {
             if ($user->id != $this->primary_user && $user->id != $this->secondary_user)
                 $string .= $user->fullname . " <span class='badge badge-warning badge-roundless'>Sec</span>,";
-        }
+        }*/
 
         return rtrim($string, ', ');
     }

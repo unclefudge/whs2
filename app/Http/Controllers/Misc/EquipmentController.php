@@ -384,18 +384,23 @@ class EquipmentController extends Controller {
         // Check if current qty matches DB
         foreach ($location->items as $item) {
             $qty = request($item->id . '-qty');
-            //echo "checking $item->id-qty [$qty]<br>";
+            echo "checking $item->id-qty [$qty]<br>";
             if ($item->qty > $qty) {
                 // There were less items found at location then expected so
                 // check if 'extra' items are elsewhere and any none 'extra' mark them as missing
-                if (($item->qty - $qty) > $item->equipment->total_excess)
-                    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty - $item->equipment->total_excess));
+                //if (($item->qty - $qty) > $item->equipment->total_excess)
+                //    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty - $item->equipment->total_excess));
             }
-            $this->performTransfer($item, $qty, $site_id, $other);
+            //$this->performTransfer($item, $qty, $site_id, $other);
         }
+
+        dd('stop');
 
         $location->status = 0;
         $location->save();
+
+        // Subtract items
+        $this->subtractItems($item, $qty);
 
         $todo = Todo::find($todo_id);
         $todo->done_by = Auth::user()->id;
@@ -515,9 +520,6 @@ class EquipmentController extends Controller {
             $newLocation->notes = "$location_code:$assign";
             $newLocation->save();
         }
-
-        // Subtract items
-        $this->subtractItems($item, $qty);
     }
 
     /**
@@ -543,11 +545,11 @@ class EquipmentController extends Controller {
         $new_site = ($site_id) ? Site::find($site_id) : null;
         $new_location = ($new_site) ? "$new_site->suburb ($new_site->name)" : $other;
 
-        foreach ($location->items as $item)
-            $this->performTransfer($item, $item->qty, $orig_location->site_id, $orig_location->other);
-
-        $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => null, 'action' => 'X', 'notes' => "Task cancelled to transfer items from $orig_location_name => $new_location"]);
-        $log->save();
+        foreach ($location->items as $item) {
+            //    $this->performTransfer($item, $item->qty, $orig_location->site_id, $orig_location->other);
+            $log = new EquipmentLog(['equipment_id' => $item->equipment_id, 'qty' => $item->qty, 'action' => 'X', 'notes' => "Task cancelled to transfer items from $orig_location_name => $new_location"]);
+            $log->save();
+        }
 
         // Delete ToDoo + Transfer Location
         $todo = Todo::find($todo_id);
