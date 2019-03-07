@@ -24,7 +24,7 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($location, ['action' => ['Misc\EquipmentController@confirmTransfer', $location->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($location, ['action' => ['Misc\EquipmentTransferController@confirmTransfer', $location->id], 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
 

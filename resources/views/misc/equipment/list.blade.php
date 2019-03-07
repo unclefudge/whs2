@@ -49,11 +49,17 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>Current Equipment Allocation <a href="/equipment/0/transfer-bulk" class="btn dark pull-right" id="btn-multiple" style="margin-top: 0px">Bulk Equipment Transfer</a></h3>
-                                <br>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(), 1, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!} </div>
+                        </div>
+                        <br>
 
-                        <table class="table table-bordered order-column">
+
+                        {{-- General Equipment --}}
+                        <table class="table table-bordered order-column" id="table-1">
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"></th>
@@ -62,7 +68,7 @@
                                 <th width="10%"></th>
                             </tr>
                             </thead>
-                            @foreach (\App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get() as $equip)
+                            @foreach (\App\Models\Misc\Equipment\Equipment::where('category_id', 1)->where('status', 1)->orderBy('name')->get() as $equip)
                                 <tr id="equip-{{ $equip->id }}">
                                     <td style="text-align: center">
                                         <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closed-{{ $equip->id}}"></i>
@@ -74,18 +80,63 @@
                                 </tr>
                                 @foreach ($equip->locations()->sortBy('name') as $location)
                                     <?php $item = $location->equipmentItem($equip->id); ?>
-                                @if (!$location->notes)
-                                    <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
-                                        <td></td>
-                                        <td>{{ $location->name4 }}</td>
-                                        <td>{{ ($item) ? $item->qty : 0 }}</td>
-                                        <td>
-                                            @if (!$location->inTransit())
-                                                <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                    @if (!$location->notes)
+                                        <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                            <td></td>
+                                            <td>{{ $location->name4 }}</td>
+                                            <td>{{ ($item) ? $item->qty : 0 }}</td>
+                                            <td>
+                                                @if (!$location->inTransit())
+                                                    <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </table>
+
+                        {{-- Scaffold Equipment --}}
+                        <table class="table table-bordered order-column" id="table-2">
+                            <thead>
+                            <tr class="mytable-header">
+                                <th width="5%"></th>
+                                <th width="90">Photo</th>
+                                <th> Item Name</th>
+                                <th width="5%"> Qty</th>
+                                <th width="10%"></th>
+                            </tr>
+                            </thead>
+                            @foreach (\App\Models\Misc\Equipment\Equipment::where('category_id', 2)->where('status', 1)->orderBy('name')->get() as $equip)
+                                <tr id="equip-{{ $equip->id }}">
+                                    <td style="text-align: center">
+                                        <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closed-{{ $equip->id}}"></i>
+                                        <i class="fa fa-minus-circle" style="color: #e7505a; display: none" id="opened-{{ $equip->id}}"></i>
+                                    </td>
+                                    <td>
+                                        @if ($equip->attachment && file_exists(public_path($equip->attachmentUrl)))
+                                            <img src="{{ $equip->attachmentUrl }}" width="90">
                                         @endif
+                                    </td>
+                                    <td>{{ $equip->name }}</td>
+                                    <td>{{ $equip->total }}</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                @foreach ($equip->locations()->sortBy('name') as $location)
+                                    <?php $item = $location->equipmentItem($equip->id); ?>
+                                    @if (!$location->notes)
+                                        <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ $location->name4 }}</td>
+                                            <td>{{ ($item) ? $item->qty : 0 }}</td>
+                                            <td>
+                                                @if (!$location->inTransit())
+                                                    <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             @endforeach
                         </table>
@@ -140,6 +191,42 @@
     $(document).ready(function () {
         var status = $('#status').val();
 
+        showAllocation();
+
+        function showAllocation() {
+            var num = $('#category_id').val();
+            $('#table-1').hide();
+            $('#table-2').hide();
+            $('#table-3').hide();
+            $('#table-' + num).show();
+        }
+
+        $('#category_id').change(function () {
+            showAllocation();
+        });
+
+        $('.fa-plus-circle').click(function () {
+            var split = this.id.split("-");
+            var id = split[1];
+
+            $('#closed-' + id).hide();
+            $('#opened-' + id).show();
+            $(".location-" + id).show();
+            $("#equip-" + id).addClass('rowHighlight');
+        });
+
+        $('.fa-minus-circle').click(function () {
+            var split = this.id.split("-");
+            var id = split[1];
+
+            $('#closed-' + id).show();
+            $('#opened-' + id).hide();
+            $(".location-" + id).hide();
+            $("#equip-" + id).removeClass('rowHighlight');
+
+        });
+
+
         var table_list2 = $('#table_list2').DataTable({
             pageLength: 100,
             processing: true,
@@ -191,31 +278,6 @@
          [1, "asc"], [2, "asc"], [4, "asc"], [3, "desc"]
          ]
          }); */
-
-        $('select#site_id').change(function () {
-            table_list.ajax.reload();
-        });
-
-        $('.fa-plus-circle').click(function () {
-            var split = this.id.split("-");
-            var id = split[1];
-
-            $('#closed-' + id).hide();
-            $('#opened-' + id).show();
-            $(".location-" + id).show();
-            $("#equip-" + id).addClass('rowHighlight');
-        });
-
-        $('.fa-minus-circle').click(function () {
-            var split = this.id.split("-");
-            var id = split[1];
-
-            $('#closed-' + id).show();
-            $('#opened-' + id).hide();
-            $(".location-" + id).hide();
-            $("#equip-" + id).removeClass('rowHighlight');
-
-        });
     });
 </script>
 @stop

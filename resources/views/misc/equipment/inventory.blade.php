@@ -28,6 +28,12 @@
                             @endif
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                                         1, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}</div>
+                    </div>
+                    <br>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
@@ -76,7 +82,7 @@
             'url': '{!! url('equipment/dt/inventory') !!}',
             'type': 'GET',
             'data': function (d) {
-                d.status = $('#status').val();
+                d.category_id = $('#category_id').val();
             }
         },
         columns: [
@@ -92,6 +98,10 @@
         order: [
             [1, "asc"], [2, "asc"]
         ]
+    });
+
+    $('select#category_id').change(function () {
+        table_list.ajax.reload();
     });
 </script>
 @stop

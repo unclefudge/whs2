@@ -319,22 +319,25 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('safety/doc/wms', 'Safety\WmsController');
 
 
+    // Equipment Transfers
+    Route::get('equipment/dt/transfers', 'Misc\EquipmentTransferController@getTransfers');
+    Route::get('equipment/{id}/transfer', 'Misc\EquipmentTransferController@transfer');
+    Route::post('equipment/{id}/transfer', 'Misc\EquipmentTransferController@transferItem');
+    Route::get('equipment/{id}/transfer-bulk', 'Misc\EquipmentTransferController@transferBulk');
+    Route::post('equipment/{id}/transfer-bulk', 'Misc\EquipmentTransferController@transferBulkItems');
+    Route::get('equipment/{id}/transfer-verify', 'Misc\EquipmentTransferController@verifyTransfer');
+    Route::get('equipment/{id}/transfer-cancel', 'Misc\EquipmentTransferController@cancelTransfer');
+    Route::post('equipment/{id}/transfer-confirm', 'Misc\EquipmentTransferController@confirmTransfer');
+
+
     // Equipment
     Route::get('equipment/dt/allocation', 'Misc\EquipmentController@getAllocation');
-    Route::get('equipment/dt/transfers', 'Misc\EquipmentController@getTransfers');
     Route::get('equipment/dt/inventory', 'Misc\EquipmentController@getInventory');
     Route::get('equipment/dt/missing', 'Misc\EquipmentController@getMissing');
     Route::get('equipment/dt/log', 'Misc\EquipmentController@getLog');
     Route::get('equipment/inventory', 'Misc\EquipmentController@inventory');
     Route::get('equipment/writeoff', 'Misc\EquipmentController@writeoff');
     Route::post('equipment/writeoff', 'Misc\EquipmentController@writeoffItems');
-    Route::get('equipment/{id}/transfer', 'Misc\EquipmentController@transfer');
-    Route::post('equipment/{id}/transfer', 'Misc\EquipmentController@transferItem');
-    Route::get('equipment/{id}/transfer-bulk', 'Misc\EquipmentController@transferBulk');
-    Route::post('equipment/{id}/transfer-bulk', 'Misc\EquipmentController@transferBulkItems');
-    Route::get('equipment/{id}/transfer-verify', 'Misc\EquipmentController@verifyTransfer');
-    Route::get('equipment/{id}/transfer-cancel', 'Misc\EquipmentController@cancelTransfer');
-    Route::post('equipment/{id}/transfer-confirm', 'Misc\EquipmentController@confirmTransfer');
     Route::get('equipment/{id}/delete', 'Misc\EquipmentController@destroy');
     Route::resource('equipment', 'Misc\EquipmentController');
     // Stocktake

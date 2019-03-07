@@ -23,7 +23,8 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('Equipment', ['action' => 'Misc\EquipmentController@store', 'class' => 'horizontal-form']) !!}
+                        {!! Form::model('Equipment', ['action' => 'Misc\EquipmentController@store', 'class' => 'horizontal-form', 'files' => true]) !!}
+
                         @include('form-error')
 
                         <div class="form-body">
@@ -44,6 +45,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                                            <div>
+                                                <span class="btn default btn-file">
+                                                    <span class="fileinput-new"> Upload Photo/Video of issue</span>
+                                                    <span class="fileinput-exists"> Change </span>
+                                                    <input type="file" name="media">
+                                                </span>
+                                                <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput">Remove </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-actions right">
                                 <a href="/equipment/inventory" class="btn default"> Back</a>
                                 <button type="submit" name="save" class="btn green">Save</button>
@@ -60,12 +78,14 @@
 @stop
 
 @section('page-level-plugins-head')
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
+<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
 

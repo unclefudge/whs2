@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        {!! Form::model($item, ['action' => ['Misc\EquipmentController@transferItem', $item->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($item, ['action' => ['Misc\EquipmentTransferController@transferItem', $item->id], 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
 

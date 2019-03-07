@@ -36,11 +36,11 @@
                                             <option></option>
                                             <optgroup label="Sites"></optgroup>
                                             @foreach ($sites as $id => $name)
-                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value="{{ $id }}" {{ ($location && $location->id == $id) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                             <optgroup label="Other Locations"></optgroup>
                                             @foreach ($others as $id => $name)
-                                                <option value={{ $id }} {{ ($location) ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value="{{ $id }}" {{ ($location && $location->id == $id) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                         {!! fieldErrorMessage('location_id', $errors) !!}
@@ -59,138 +59,308 @@
 
                             {{-- Equipment --}}
                             @if ($location)
-                                <table class="table table-striped table-bordered table-hover order-column" id="table_list">
-                                    <thead>
-                                    <tr class="mytable-header">
-                                        <th> Item Name</th>
-                                        <th width="10%"> Expected</th>
-                                        @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
-                                            <th width="10%"> Actual</th>
-                                            <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
-                                        @endif
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if (count($items))
-                                        @foreach($items->sortBy('item_name') as $loc)
-                                            <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
-                                                <td>{{ $loc->item_name }}</td>
-                                                <td>{{ $loc->qty }}</td>
-                                                @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
-                                                    <td>
-                                                        <div class="itemactual-" id="itemactual-{{ $loc->id }}">
-                                                            <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
-                                                                @for ($i = 0; $i < 100; $i++)
-                                                                    <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
-                                                                @endfor
-                                                            </select>
-                                                        </div>
-                                                    </td>
-                                                    <td class="excludeitems">
-                                                        <div class="text-center">
-                                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                                <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
-                                                                <span></span>
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="3">No items found at current loation.</td>
-                                        </tr>
-                                    @endif
-                                    {{-- Additional items --}}
-                                    <div style="display: none" id="add-items">
-                                        <?php
-                                        $max = ($location->site_id && $location->site_id == 25) ? 10 : 3;
-                                        if ($items)
-                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
-                                        else
-                                            $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->toArray()->get();
+                                <div id="equipment_list">
 
-                                        ?>
-                                        @for ($x = 1; $x <= $max; $x++)
-                                            <tr class="add-item" style="display: none">
-                                                <td colspan="2">
-                                                    <div class="form-group {!! fieldHasError("$x-extra_id", $errors) !!}">
-                                                        <select id="{{ $x }}-extra_id" name="{{ $x }}-extra_id" class="form-control bs-select" width="100%">
-                                                            <option value="">Add additional item</option>
-                                                            @foreach ($equipment_list as $item)
-                                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    {{-- General Equipment --}}
+                                    <div class="panel-group accordion scrollable" id="accordion3">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_1" aria-expanded="true"> General </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_3_1" class="panel-collapse collapse" aria-expanded="true" style="">
+                                                <div class="panel-body">
+                                                    <table class="table table-striped table-bordered table-hover order-column">
+                                                        <thead>
+                                                        <tr class="mytable-header">
+                                                            <th> Item Name</th>
+                                                            <th width="10%"> Expected</th>
+                                                            @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                <th width="10%"> Actual</th>
+                                                                <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
+                                                            @endif
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @if (count($items))
+                                                            <?php $x = 0; ?>
+                                                            @foreach($items->sortBy('item_name') as $loc)
+                                                                @if ($loc->equipment->category_id == 1)
+                                                                    <?php $x ++; ?>
+                                                                    <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
+                                                                        <td>{{ $loc->item_name }}</td>
+                                                                        <td>{{ $loc->qty }}</td>
+                                                                        @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                            <td>
+                                                                                <div class="itemactual-" id="itemactual-{{ $loc->id }}">
+                                                                                    <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
+                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                            <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
+                                                                                        @endfor
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="excludeitems">
+                                                                                <div class="text-center">
+                                                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                                                        <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        @endif
+                                                                    </tr>
+                                                                @endif
                                                             @endforeach
-                                                        </select>
-                                                        {!! fieldErrorMessage("$x-extra_id", $errors) !!}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group {!! fieldHasError($x.'-extra_qty', $errors) !!}">
-                                                        <select id="{{ $x }}-extra_qty" name="{{ $x }}-extra_qty" class="form-control bs-select" width="100%">
-                                                            @for ($i = 0; $i < 100; $i++)
-                                                                <option value="{{ $i }}">{{ $i }}</option>
-                                                            @endfor
-                                                        </select>
-                                                        {!! fieldErrorMessage($x.'-extra_qty', $errors) !!}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endfor
-                                    </div>
-                                    </tbody>
-                                </table>
-
-                                {{-- Additional --}}
-                                @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button class="btn blue" id="btn-add-item">Additional equipment at location</button>
-                                            <br><br>
+                                                        @endif
+                                                        @if (count($items) < 1 || $x < 1)
+                                                            <tr>
+                                                                <td colspan="4">No items found at current loation.</td>
+                                                            </tr>
+                                                        @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- Materials Equipment --}}
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_2" aria-expanded="false"> Materials (under development) </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_3_2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                                <div class="panel-body" style="height:200px; overflow-y:auto;">
+                                                    <table class="table table-striped table-bordered table-hover order-column">
+                                                        <thead>
+                                                        <tr class="mytable-header">
+                                                            <th> Item Name</th>
+                                                            <th width="10%"> Expected</th>
+                                                            @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                <th width="10%"> Actual</th>
+                                                                <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
+                                                            @endif
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @if (count($items))
+                                                            <?php $x = 0; ?>
+                                                            @foreach($items->sortBy('item_name') as $loc)
+                                                                @if ($loc->equipment->category_id == 3)
+                                                                    <?php $x ++; ?>
+                                                                    <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
+                                                                        <td>{{ $loc->item_name }}</td>
+                                                                        <td>{{ $loc->qty }}</td>
+                                                                        @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                            <td>
+                                                                                <div class="itemactual-" id="itemactual-{{ $loc->id }}">
+                                                                                    <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
+                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                            <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
+                                                                                        @endfor
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="excludeitems">
+                                                                                <div class="text-center">
+                                                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                                                        <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        @endif
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        @if (count($items) < 1 || $x < 1)
+                                                            <tr>
+                                                                <td colspan="4">No items found at current loation.</td>
+                                                            </tr>
+                                                        @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- Scaffold Equipment --}}
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_3" aria-expanded="false"> Scaffold </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_3_3" class="panel-collapse collapse" aria-expanded="false">
+                                                <div class="panel-body">
+                                                    <table class="table table-striped table-bordered table-hover order-column">
+                                                        <thead>
+                                                        <tr class="mytable-header">
+                                                            <th> Item Name</th>
+                                                            <th width="10%"> Expected</th>
+                                                            @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                <th width="10%"> Actual</th>
+                                                                <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
+                                                            @endif
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @if (count($items))
+                                                            <?php $x = 0; ?>
+                                                            @foreach($items->sortBy('item_name') as $loc)
+                                                                @if ($loc->equipment->category_id == 2)
+                                                                    <?php $x ++; ?>
+                                                                    <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
+                                                                        <td>{{ $loc->item_name }}</td>
+                                                                        <td>{{ $loc->qty }}</td>
+                                                                        @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                                            <td>
+                                                                                <div class="itemactual-" id="itemactual-{{ $loc->id }}">
+                                                                                    <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
+                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                            <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
+                                                                                        @endfor
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="excludeitems">
+                                                                                <div class="text-center">
+                                                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                                                        <input type="checkbox" value="{{ $loc->id }}" name="exclude[]" id="itemcheck-{{ $loc->id }}" class="stockitem">
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        @endif
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        @if (count($items) < 1 || $x < 1)
+                                                            <tr>
+                                                                <td colspan="4">No items found at current loation.</td>
+                                                            </tr>
+                                                        @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                @endif
+
+
+                                    {{-- Additional --}}
+                                    @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn blue" id="btn-add-item">Additional equipment at location</button>
+                                                <br><br>
+                                            </div>
+                                        </div>
+
+
+                                        {{-- Additional items --}}
+                                        <div style="display: none" id="add-items">
+                                            <h3>Additional Items</h3>
+                                            <table class="table table-striped table-bordered table-hover order-column">
+                                                <thead>
+                                                <tr class="mytable-header">
+                                                    <th> Item Name</th>
+                                                    <th width="10%"> Expected</th>
+                                                    @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                                        <th width="10%"> Actual</th>
+                                                        <th width="5%" class="excludeitems"> {!! ($location->site_id == 25) ? 'Include' : 'Exclude' !!}</th>
+                                                    @endif
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php
+                                                $max = ($location->site_id && $location->site_id == 25) ? 10 : 3;
+                                                if ($items)
+                                                    $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                                else
+                                                    $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->toArray()->get();
+
+                                                ?>
+                                                @for ($x = 1; $x <= $max; $x++)
+                                                    <tr class="add-item" style="display: none">
+                                                        <td colspan="2">
+                                                            <div class="form-group {!! fieldHasError("$x-extra_id", $errors) !!}">
+                                                                <select id="{{ $x }}-extra_id" name="{{ $x }}-extra_id" class="form-control select2 sel_add_item" width="100%">
+                                                                    <option value="">Add additional item</option>
+                                                                    @foreach ($equipment_list as $item)
+                                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                {!! fieldErrorMessage("$x-extra_id", $errors) !!}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group {!! fieldHasError($x.'-extra_qty', $errors) !!}">
+                                                                <select id="{{ $x }}-extra_qty" name="{{ $x }}-extra_qty" class="form-control bs-select" width="100%">
+                                                                    @for ($i = 0; $i < 100; $i++)
+                                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                                    @endfor
+                                                                </select>
+                                                                {!! fieldErrorMessage($x.'-extra_qty', $errors) !!}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endfor
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                </div>
+
+
+
                             @endif
-
-                            <div class="form-actions right">
-                                <a href="/equipment/inventory" class="btn default"> Back</a>
-                                @if ($location && Auth::user()->allowed2('edit.equipment.stocktake', $location))
-                                    <button type="submit" name="save" value="save" class="btn green">Save</button>
-                                @endif
-                            </div>
                         </div>
-                        {!! Form::close() !!}
 
-                        {{-- History --}}
-                        @if ($location)
-                            <h3 class="form-section">History</h3>
-                            <table class="table table-striped table-bordered table-hover order-column" id="table_history">
-                                <thead>
-                                <tr class="mytable-header">
-                                    <th width="5%"> #</th>
-                                    <th width="10%"> Date</th>
-                                    <th> By Whom</th>
-                                    <th> Summary</th>
-                                </tr>
-                                </thead>
-                            </table>
-                        @endif
+                        <div class="form-actions right">
+                            <a href="/equipment/inventory" class="btn default"> Back</a>
+                            @if ($location && Auth::user()->allowed2('edit.equipment.stocktake', $location))
+                                <button type="submit" name="save" value="save" class="btn green">Save</button>
+                            @endif
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="loadSpinnerOverlay" id="spinner" style="display: none">
-                                <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
-                            </div>
+                    {!! Form::close() !!}
+
+                    {{-- History --}}
+                    @if ($location)
+                        <h3 class="form-section">History</h3>
+                        <table class="table table-striped table-bordered table-hover order-column" id="table_history">
+                            <thead>
+                            <tr class="mytable-header">
+                                <th width="5%"> #</th>
+                                <th width="10%"> Date</th>
+                                <th> By Whom</th>
+                                <th> Summary</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    @endif
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="loadSpinnerOverlay" id="spinner" style="display: none">
+                            <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- END PAGE CONTENT INNER -->
+    </div>
+    <!-- END PAGE CONTENT INNER -->
     </div>
 @stop
 
 @section('page-level-plugins-head')
+    <link href="/assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/demo/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
@@ -210,6 +380,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#location_id").select2({placeholder: "Select location", width: '100%'});
+        $(".sel_add_item").select2({placeholder: "Add additional item", width: '100%'});
         // Cape Cod Store by default has all items excluded
         if ($("#site_id").val() == 25) {
             $(".itemrow-").addClass("font-grey-cascade");
@@ -221,6 +392,7 @@
         // Add extra items
         $("#btn-add-item").click(function (e) {
             e.preventDefault();
+            $("#add-items").show();
             $(".add-item").show();
             $("#btn-add-item").hide();
         });
@@ -234,7 +406,7 @@
 
         // Location
         $("#location_id").change(function () {
-            $("#table_list").hide();
+            $("#equipment_list").hide();
             $("#btn-add-item").hide();
             $("#spinner").show();
             window.location.href = "/equipment/stocktake/" + $("#location_id").val();

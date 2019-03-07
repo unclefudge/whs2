@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Equipment extends Model {
 
     protected $table = 'equipment';
-    protected $fillable = ['category_id', 'name', 'purchased', 'disposed', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['category_id', 'name', 'purchased', 'disposed', 'attachment', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
      * A Equipment belongs to a category.
@@ -109,6 +109,17 @@ class Equipment extends Model {
     public function getTotalExcessAttribute()
     {
         return $this->total - $this->purchased + $this->disposed + $this->total_lost;
+    }
+
+    /**
+     * Get the Attachment URL (setter)
+     */
+    public function getAttachmentUrlAttribute()
+    {
+        if ($this->attributes['attachment'])
+            return '/filebank/equipment/'. $this->attributes['attachment'];
+
+        return '';
     }
 
 

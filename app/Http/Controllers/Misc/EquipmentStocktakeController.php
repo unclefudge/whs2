@@ -117,6 +117,7 @@ class EquipmentStocktakeController extends Controller {
 
         $exclude = (request('exclude')) ? request('exclude') : [];
 
+        //dd(request()->all());
         // Check if current qty matches DB
         foreach ($items as $item) {
             $qty_now = request($item->id . '-qty');
