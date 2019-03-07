@@ -115,7 +115,8 @@
                                     </td>
                                     <td>
                                         @if ($equip->attachment && file_exists(public_path($equip->attachmentUrl)))
-                                            <img src="{{ $equip->attachmentUrl }}" width="90">
+                                            <a href="{{ $equip->attachmentUrl }}" class="html5lightbox " title="{{ $equip->name }}" data-lityXXX>
+                                                <img src="{{ $equip->attachmentUrl }}" width="90" class="thumbnail img-responsive img-thumbnail"></a>
                                         @endif
                                     </td>
                                     <td>{{ $equip->name }}</td>
@@ -280,4 +281,6 @@
          }); */
     });
 </script>
+
+<script src="/js/libs/html5lightbox/html5lightbox.js" type="text/javascript"></script>
 @stop

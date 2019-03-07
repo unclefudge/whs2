@@ -142,10 +142,10 @@ class EquipmentController extends Controller {
             $path_name = $path . '/' . $name;
             $file->move($path, $name);
 
-            // resize the image to a width of 400 and constrain aspect ratio (auto height)
+            // resize the image to a width of 1024 and constrain aspect ratio (auto height)
             if (exif_imagetype($path_name)) {
                 Image::make(url($path_name))
-                    ->resize(400, null, function ($constraint) {
+                    ->resize(1024, null, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     })
