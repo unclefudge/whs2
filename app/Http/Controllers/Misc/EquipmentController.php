@@ -369,38 +369,39 @@ class EquipmentController extends Controller {
      */
     public function confirmTransfer($id)
     {
-        $location = EquipmentLocation::findOrFail($id);
+        $transLocation = EquipmentLocation::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.equipment', $location))
+        if (!Auth::user()->allowed2('edit.equipment', $transLocation))
             return view('errors/404');
 
-        list($crap, $todo_id) = explode(':', $location->other);
-        list($old_location_id, $type, $details, $user_id) = explode(':', $location->notes);
+        list($crap, $todo_id) = explode(':', $transLocation->other);
+        list($location_id, $type, $details, $user_id) = explode(':', $transLocation->notes);
+
+        $location = EquipmentLocation::findOrFail($location_id);
+
 
         $site_id = ($type == 'site') ? $details : null;
         $other = ($type == 'other') ? $details : null;
 
         // Check if current qty matches DB
-        foreach ($location->items as $item) {
-            $qty = request($item->id . '-qty');
-            echo "checking $item->id-qty [$qty]<br>";
+        foreach ($transLocation->items as $transItem) {
+            $qty = request($transItem->id . '-qty');
+            echo "checking $location->name: $transItem->id-qty [$qty]<br>";
+            $item = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $transItem->equipment_id)->first();
+            if ($item)
+                $this->performTransfer($item, $qty, $site_id, $other);
+
+            /*
             if ($item->qty > $qty) {
                 // There were less items found at location then expected so
                 // check if 'extra' items are elsewhere and any none 'extra' mark them as missing
-                //if (($item->qty - $qty) > $item->equipment->total_excess)
-                //    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty - $item->equipment->total_excess));
-            }
-            //$this->performTransfer($item, $qty, $site_id, $other);
+                if (($item->qty - $qty) > $item->equipment->total_excess)
+                    $this->lostItem($item->location_id, $item->equipment_id, ($item->qty - $qty - $item->equipment->total_excess));
+            }*/
         }
-
-        dd('stop');
-
-        $location->status = 0;
-        $location->save();
-
-        // Subtract items
-        $this->subtractItems($item, $qty);
+        $transLocation->status = 0;
+        $transLocation->save();
 
         $todo = Todo::find($todo_id);
         $todo->done_by = Auth::user()->id;
@@ -566,12 +567,40 @@ class EquipmentController extends Controller {
     public function subtractItems($item, $qty)
     {
         // Subtract items from current location
-        $new_qty = $item->qty - $qty;
-        if ($new_qty) {
-            $item->qty = $item->qty - $qty;
-            $item->save();
-        } else
+        $remain_qty = $item->qty - $qty;
+        if ($remain_qty < 1) {
+            $extra_amount = $remain_qty * - 1;
+            $lost_items = EquipmentLost::where('equipment_id', $item->equipment_id)->orderBy('created_at', 'DESC')->get();
+            if ($extra_amount && $lost_items) {
+                // Found extra item on current site and lost ones of same type
+                foreach ($lost_items as $lost) {
+                    if ($extra_amount) {
+                        if ($lost->qty > $extra_amount) {
+                            // More lost items then found so subtract only found amount
+                            $lost->decrement('qty', $extra_amount);
+                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $extra_amount, 'action' => 'F', 'notes' => "Found $extra_amount items at $location->name"]);
+                            $extra_amount = 0;
+                            break;
+                        } else {
+                            // Found more items then are actually lost so delete full amount from lost item.
+                            $extra_amount = $extra_amount - $lost->qty;
+                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $lost->qty, 'action' => 'F', 'notes' => "Found $lost->qty items at $location->name"]);
+                            $lost->delete();
+                        }
+                        $log->save();
+                    }
+                }
+                if ($extra_amount) {
+                    $equip = Equipment::find($item->equipment_id);
+                    if (($equip->total - ($equip->purchased - $equip->disposed)) > 0)
+                        Toastr::warning("Item: $equip->name increased above actual number of purchased items.");
+                }
+            }
             $item->delete();
+        } else {
+            $item->qty = $remain_qty;
+            $item->save();
+        }
     }
 
     /**
@@ -724,6 +753,7 @@ class EquipmentController extends Controller {
             })
             ->addColumn('items', function ($todo) {
                 $location = EquipmentLocation::find($todo->type_id);
+
                 return $location->itemsListSBC();
             })
             ->addColumn('from', function ($todo) {

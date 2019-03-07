@@ -29,9 +29,7 @@
         @include('company/_header')
 
         <div class="row">
-            {{--}}
             @include('company/_compliance-docs')
-            --}}
 
             <div class="col-lg-6 col-xs-12 col-sm-12">
                 {{-- Company Details --}}

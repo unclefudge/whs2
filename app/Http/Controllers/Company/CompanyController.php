@@ -683,14 +683,13 @@ class CompanyController extends Controller {
                     $name .= "<br><a href='/signup/cancel/$company->id' class='btn btn-xs dark'>Cancel Sign Up & Delete Company</a>";
 
                 }
-                /*
                 if ($company->transient)
                     $name .= ' &nbsp; <span class="label label-sm label-info">' . $company->supervisedBySBC() . '</span>';
                 if (!$company->isCompliant() && $company->status == 1)
                     $name .= ' &nbsp; <span class="label label-sm label-danger">Non Compliant</span>';
                 if ($company->status == 1 && $company->reportsTo()->id == Auth::user()->company_id && (!$company->approved_by || CompanyDoc::where('for_company_id', $company->id)->where('status', 2)->count()))
                     $name .= ' &nbsp; <span class="label label-sm label-warning">Pending Approval</span>';
-                */
+                
                 return $name;
             })
             ->addColumn('trade', function ($company) {
