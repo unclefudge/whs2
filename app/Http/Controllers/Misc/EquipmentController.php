@@ -133,6 +133,7 @@ class EquipmentController extends Controller {
         // Create Item
         $equip_request = request()->all();
         $equip = Equipment::create($equip_request);
+        $qty = request('purchase_qty');
 
         // Handle attached Photo or Video
         if (request()->hasFile('media')) {
@@ -155,6 +156,33 @@ class EquipmentController extends Controller {
 
             $equip->attachment = $name;
             $equip->save();
+        }
+
+        // Purchase new items
+        if ($qty) {
+            $store = EquipmentLocation::where('site_id', 25)->first();
+            // Create Store if not existing
+            if (!$store) {
+                $store = new EquipmentLocation(['site_id' => 25]);
+                $store->save();
+            }
+
+            // Allocate New Item to Store
+            $existing = EquipmentLocationItem::where('location_id', $store->id)->where('equipment_id', $equip->id)->first();
+            if ($existing) {
+                $existing->qty = $existing->qty + $qty;
+                $existing->save();
+            } else
+                $store->items()->save(new EquipmentLocationItem(['location_id' => $store->id, 'equipment_id' => $equip->id, 'qty' => $qty]));
+
+            // Update Purchased Qty
+            $equip->purchased = $equip->purchased + $qty;
+            $equip->save();
+
+            // Update log
+            $log = new EquipmentLog(['equipment_id' => $equip->id, 'qty' => $qty, 'action' => 'P']);
+            $log->notes = 'Purchased ' . $qty . ' items';
+            $equip->log()->save($log);
         }
 
 
@@ -185,6 +213,29 @@ class EquipmentController extends Controller {
         // Update Equipment
         $equip->update(request()->all());
         $qty = request('purchase_qty');
+
+        // Handle attached Photo or Video
+        if (request()->hasFile('media')) {
+            $file = request()->file('media');
+            $path = "filebank/equipment/";
+            $name = 'e' . $equip->id . '.' . strtolower($file->getClientOriginalExtension());
+            $path_name = $path . '/' . $name;
+            $file->move($path, $name);
+
+            // resize the image to a width of 1024 and constrain aspect ratio (auto height)
+            if (exif_imagetype($path_name)) {
+                Image::make(url($path_name))
+                    ->resize(1024, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    })
+                    ->save($path_name);
+            } else
+                Toastr::error("Bad image");
+
+            $equip->attachment = $name;
+            $equip->save();
+        }
 
         // Purchase new items
         if ($qty) {

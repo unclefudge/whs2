@@ -107,6 +107,15 @@ class PagesController extends Controller {
     public function quick()
     {
 
+
+        echo "<b>Users with no role</b></br>";
+        $users = User::where('company_id', 3)->get();
+            foreach ($users as $user) {
+                if ($user->status && !$user->roles2->count())
+                    echo "[$user->id]  Name: $user->fullname  (".$user->company->name.")<br>";
+            }
+
+        /*
         $today = Carbon::today();
         echo "<b>Docs being marked as expired</b></br>";
         $docs = CompanyDoc::where('status', 1)->whereDate('expiry', '<', $today->format('Y-m-d'))->get();
@@ -117,7 +126,7 @@ class PagesController extends Controller {
                 $doc->status = 0;
                 $doc->save();
             }
-        }
+        }*/
 
         /*
         echo "Table of Tradies = Leading Hands<br><br>";

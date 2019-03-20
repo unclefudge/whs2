@@ -266,20 +266,23 @@ class EquipmentTransferController extends Controller {
         }
         $log->save();
 
-        // Check if location exists
-        if ($location) {
-            // Check if location also has existing item to add qty to.
-            $existing = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $item->equipment_id)->first();
-            if ($existing) {
-                $existing->qty = $existing->qty + $qty;
-                $existing->save();
-            } else
-                $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
-        } else {
-            // Create location + add item
-            $loc_request = ['site_id' => $site_id, 'other' => $other];
-            $newLocation = EquipmentLocation::create($loc_request);
-            $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
+        // If Category 3 'Materials' don't transfer but simply subtract items
+        if ($item->equipment->category_id != 3) {
+            // Check if location exists
+            if ($location) {
+                // Check if location also has existing item to add qty to.
+                $existing = EquipmentLocationItem::where('location_id', $location->id)->where('equipment_id', $item->equipment_id)->first();
+                if ($existing) {
+                    $existing->qty = $existing->qty + $qty;
+                    $existing->save();
+                } else
+                    $location->items()->save(new EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
+            } else {
+                // Create location + add item
+                $loc_request = ['site_id' => $site_id, 'other' => $other];
+                $newLocation = EquipmentLocation::create($loc_request);
+                $newLocation->items()->save(new EquipmentLocationItem(['location_id' => $newLocation->id, 'equipment_id' => $item->equipment_id, 'qty' => $qty]));
+            }
         }
         $this->subtractItems($item, $qty); // Subtract items from original location
     }

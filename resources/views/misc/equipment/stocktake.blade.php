@@ -60,7 +60,6 @@
                             {{-- Equipment --}}
                             @if ($location)
                                 <div id="equipment_list">
-
                                     {{-- General Equipment --}}
                                     <div class="panel-group accordion scrollable" id="accordion3">
                                         <div class="panel panel-default">

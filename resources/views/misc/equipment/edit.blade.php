@@ -24,7 +24,7 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($item, ['method' => 'PATCH', 'action' => ['Misc\EquipmentController@update', $item->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($item, ['method' => 'PATCH', 'action' => ['Misc\EquipmentController@update', $item->id], 'class' => 'horizontal-form', 'files' => true]) !!}
 
                         @include('form-error')
 
@@ -71,6 +71,28 @@
                                 </div>
                             </div>
 
+                            {{-- Photo --}}
+                            <img src="{{ $item->attachment }}" alt=""/>
+                            <div class="form-group">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 150px; height: 150px;">
+                                        @if($item->attachment && file_exists(public_path($item->attachmentUrl)))
+                                            <img src="{{ $item->attachmentUrl }}" alt=""/>
+                                        @else
+                                            <img src="/img/no_image.png" alt=""/>
+                                        @endif
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                                    <div>
+                                    <span class="btn default btn-file">
+                                        <span class="fileinput-new"> Select image </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        <input type="file" name="media"> </span>
+                                        <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-actions right">
                                 <a href="/equipment/inventory" class="btn default"> Back</a>
                                 @if (Auth::user()->allowed2('del.equipment', $item))
@@ -94,9 +116,12 @@
 @stop
 
 @section('page-level-plugins-head')
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
+    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}

@@ -96,7 +96,7 @@
                             @endforeach
                         </table>
 
-                        {{-- Scaffold Equipment --}}
+                        {{-- Materials Equipment --}}
                         <table class="table table-bordered order-column" id="table-2">
                             <thead>
                             <tr class="mytable-header">
@@ -116,7 +116,7 @@
                                     <td>
                                         @if ($equip->attachment && file_exists(public_path($equip->attachmentUrl)))
                                             <a href="{{ $equip->attachmentUrl }}" class="html5lightbox " title="{{ $equip->name }}" data-lityXXX>
-                                                <img src="{{ $equip->attachmentUrl }}" width="90" class="thumbnail img-responsive img-thumbnail"></a>
+                                                <img src="{{ $equip->attachmentUrl }}?{{rand(1, 32000)}}" width="90" class="thumbnail img-responsive img-thumbnail"></a>
                                         @endif
                                     </td>
                                     <td>{{ $equip->name }}</td>
@@ -142,31 +142,51 @@
                             @endforeach
                         </table>
 
-                        {{--}}
-                        @foreach (\App\Models\Misc\Equipment\Equipment::where('status', 1)->orderBy('name')->get() as $equip)
-                            <div class="row" style="padding: 5px 5px">
-                                <div class="col-md-3"><i class="fa fa-plus" style="padding-right: 15px"></i> {{ $equip->name }}</div>
-                                <div class="col-md-1">{{ $equip->total }}</div>
-                                <div class="col-md-8"></div>
-                            </div>
-                        @endforeach--}}
-
-                        {{--}}
-                        <table class="table table-striped table-bordered table-hover order-column" id="table_list">
+                        {{-- Scaffold Equipment --}}
+                        <table class="table table-bordered order-column" id="table-3">
                             <thead>
                             <tr class="mytable-header">
-                                <th width="5%"> #</th>
-                                <th> Category</th>
+                                <th width="5%"></th>
+                                <th width="90">Photo</th>
                                 <th> Item Name</th>
                                 <th width="5%"> Qty</th>
-                                <th width="5%"> Site</th>
-                                <th> Suburb</th>
-                                <th> Name</th>
-                                <th> Other</th>
-                                <th width="10%"> Action</th>
+                                <th width="10%"></th>
                             </tr>
                             </thead>
-                        </table> --}}
+                            @foreach (\App\Models\Misc\Equipment\Equipment::where('category_id', 3)->where('status', 1)->orderBy('name')->get() as $equip)
+                                <tr id="equip-{{ $equip->id }}">
+                                    <td style="text-align: center">
+                                        <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closed-{{ $equip->id}}"></i>
+                                        <i class="fa fa-minus-circle" style="color: #e7505a; display: none" id="opened-{{ $equip->id}}"></i>
+                                    </td>
+                                    <td>
+                                        @if ($equip->attachment && file_exists(public_path($equip->attachmentUrl)))
+                                            <a href="{{ $equip->attachmentUrl }}" class="html5lightbox " title="{{ $equip->name }}" data-lityXXX>
+                                                <img src="{{ $equip->attachmentUrl }}?{{rand(1, 32000)}}" width="90" class="thumbnail img-responsive img-thumbnail"></a>
+                                        @endif
+                                    </td>
+                                    <td>{{ $equip->name }}</td>
+                                    <td>{{ $equip->total }}</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                @foreach ($equip->locations()->sortBy('name') as $location)
+                                    <?php $item = $location->equipmentItem($equip->id); ?>
+                                    @if (!$location->notes)
+                                        <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ $location->name4 }}</td>
+                                            <td>{{ ($item) ? $item->qty : 0 }}</td>
+                                            <td>
+                                                @if (!$location->inTransit())
+                                                    <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </table>
                     </div>
                 </div>
             </div>

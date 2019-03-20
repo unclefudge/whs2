@@ -45,6 +45,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- Purchase --}}
+                            <div class="row"  id="purchase-div">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        {!! Form::label('purchase_qty', 'No. of items to purchase', ['class' => 'control-label']) !!}
+                                        <select id="purchase_qty" name="purchase_qty" class="form-control bs-select" width="100%">
+                                            @for ($i = 0; $i < 100; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <br>
+                                    <div class="note note-warning"><b>Note:</b> Purchased items will be initially allocated to CAPE COD STORE</div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
