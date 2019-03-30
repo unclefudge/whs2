@@ -70,7 +70,7 @@
                             </div>
                             <div class="actions">
                                 @if(Auth::user()->hasPermission2('add.site.qa'))
-                                    <a class="btn btn-circle green btn-outline btn-sm" href="/site/qa/category" data-original-title="Add">Categories</a>
+                                    <!--<a class="btn btn-circle green btn-outline btn-sm" href="/site/qa/category" data-original-title="Add">Categories</a>-->
                                     <a class="btn btn-circle green btn-outline btn-sm" href="/site/qa/create" data-original-title="Add">Add</a>
                                 @endif
                             </div>
