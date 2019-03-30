@@ -218,6 +218,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('site/doc/upload', 'Site\SiteDocController@upload');
     Route::resource('site/doc', 'Site\SiteDocController');
 
+    // Site QA Categories
+    Route::get('site/categories/qa/dt/qa_cats', 'Site\SiteQaCategoryController@getQaCategories');
+    Route::resource('site/qa/category', 'Site\SiteQaCategoryController');
+
     // Site Quality Assurance
     Route::get('site/qa/{id}/items', 'Site\SiteQaController@getItems');
     Route::any('site/qa/{id}/update', 'Site\SiteQaController@updateReport');

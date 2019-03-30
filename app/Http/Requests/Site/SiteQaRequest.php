@@ -25,6 +25,7 @@ class SiteQaRequest extends Request {
     {
         return [
             'name' => 'required',
+            'category_id' => 'required',
             'task1' => 'required_with:item1',
             'task2' => 'required_with:item2',
             'task3' => 'required_with:item3',
@@ -57,6 +58,7 @@ class SiteQaRequest extends Request {
     public function messages()
     {
         return [
+            'category_id.required'        => 'The category field is required',
         ];
     }
 

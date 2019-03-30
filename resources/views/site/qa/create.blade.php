@@ -42,7 +42,7 @@
                         <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}">
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
                                         {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -58,18 +58,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('category_id', array_merge(['' => 'Select category'], \App\Models\Site\SiteQaCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
+                                        {!! fieldErrorMessage('category_id', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Items -->
                             <br>
                             <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
-                                <div class="col-md-7">INSPECTION ITEMS</div>
+                                <div class="col-md-6">INSPECTION ITEMS</div>
                                 <div class="col-md-3">TASK TRIGGER</div>
                                 <div class="col-md-2" style="text-align:right">SUPERVISOR<br>COMPLETES</div>
+                                <div class="col-md-1" style="text-align:right">CERTIF-ICATION</div>
                             </div>
                             <br>
-                            <div class="row">
-                                @for ($i = 1; $i <= 15; $i++)
-                                    <div class="col-xs-7">
+                            @for ($i = 1; $i <= 15; $i++)
+                                <div class="row">
+                                    <div class="col-xs-6">
                                         <div class="form-group">{!! Form::textarea("item$i", '', ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
                                     </div>
                                     <div class="col-xs-4">
@@ -93,11 +103,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endfor
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    {!! Form::checkbox("cert$i", 1, null, ['class' => 'mt-checkbox']) !!}
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
 
-                            </div>
-
-                            <!-- Extra Fields -->
+                            {{-- Extra Fields --}}
                             <button class="btn blue" id="more">More Items</button>
                             <div class="row" id="more_items" style="display: none">
                                 @for ($i = 16; $i <= 25; $i++)
@@ -153,9 +172,8 @@
         });
 
         /* Select2 */
-        $(".task_sel").select2({
-            placeholder: "Select task",
-        });
+        $("#category_id").select2({placeholder: "Select category", width: "100%"});
+        $(".task_sel").select2({placeholder: "Select task",});
     });
 </script>
 @stop

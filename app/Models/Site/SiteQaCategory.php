@@ -6,22 +6,29 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class SiteQaItem extends Model {
+class SiteQaCategory extends Model {
 
-    protected $table = 'site_qa_items';
+    protected $table = 'site_qa_categories';
     protected $fillable = [
-        'doc_id', 'name', 'task_id', 'super', 'certification', 'order', 'status', 'master', 'master_id',
-        'sign_by', 'sign_at', 'done_by', 'created_by', 'updated_by', 'created_at', 'updated_at'];
-    protected $dates = ['sign_at'];
+        'type', 'name', 'parent', 'company_id',
+        'status', 'created_by', 'updated_by'];
 
     /**
-     * A Site QA Item belongs to a Site QA Doc
+     * A Category belongs to a Company.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function document()
-    {
-        return $this->belongsTo('App\Models\Site\SiteQa', 'doc_id');
+    public function company() {
+        return $this->belongsTo('App\Models\Company\Company', 'company_id');
+    }
+
+    /**
+     * A Category has many Site QAs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reports() {
+        return $this->hasMany('App\Models\Site\SiteQa', 'category_id');
     }
 
     /**
@@ -31,9 +38,8 @@ class SiteQaItem extends Model {
      */
     public function getOwnedByAttribute()
     {
-        return $this->document->owned_by;
+        return $this->company;
     }
-
     /**
      * Display records last update_by + date
      *

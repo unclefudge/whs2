@@ -17,6 +17,7 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\SiteQa;
 use App\Models\Site\SiteQaItem;
+use App\Models\Site\SiteQaCategory;
 use App\Models\Site\SiteQaAction;
 use App\Models\Safety\ToolboxTalk;
 use App\Models\Safety\WmsDoc;
@@ -108,12 +109,26 @@ class PagesController extends Controller {
     {
 
 
-        echo "<b>Users with no role</b></br>";
-        $users = User::where('company_id', 3)->get();
-            foreach ($users as $user) {
-                if ($user->status && !$user->roles2->count())
-                    echo "[$user->id]  Name: $user->fullname  (".$user->company->name.")<br>";
+        echo "<b>QA cats</b></br>";
+        $qas = SiteQa::all();
+        $map = [1  => 1, 44 => 2, 45 => 3, 46 => 4, 47 => 5, 48 => 6, 49 => 7, 50 => 8, 51 => 9, 52 => 10, 53 => 11, 54 => 12, 55 => 13, 56 => 14, 57 => 15, 58 => 16, 59 => 17, 60 => 18,
+                63 => 19, 64 => 20, 65 => 21, 66 => 22, 67 => 23, 68 => 24, 69 => 25, 70 => 26, 71 => 27, 72 => 28, 73 => 29, 74 => 30, 91 => 31];
+        foreach ($qas as $qa) {
+            if ($qa->master) {
+                $cat = SiteQaCategory::find($map[$qa->id]);
+                //echo "[$qa->id]  Name: $qa->name* - $cat->name<br>";
+                echo "$qa->name*<br>$cat->name<br><br>";
+                $qa->category_id = $cat->id;
+                $qa->save();
+            } else {
+                $cat = SiteQaCategory::find($map[$qa->master_id]);
+                //echo "[$qa->id]  Name: $qa->name* - $cat->name<br>";
+                echo "$qa->name*<br>$cat->name<br><br>";
+                $qa->category_id = $cat->id;
+                $qa->save();
             }
+
+        }
 
         /*
         $today = Carbon::today();

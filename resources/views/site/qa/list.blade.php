@@ -26,9 +26,6 @@
                             <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Quality Assurance Reports</span>
                         </div>
-                        <div class="actions">
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2 pull-right">
@@ -73,9 +70,9 @@
                             </div>
                             <div class="actions">
                                 @if(Auth::user()->hasPermission2('add.site.qa'))
+                                    <a class="btn btn-circle green btn-outline btn-sm" href="/site/qa/category" data-original-title="Add">Categories</a>
                                     <a class="btn btn-circle green btn-outline btn-sm" href="/site/qa/create" data-original-title="Add">Add</a>
                                 @endif
-                                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                             </div>
                         </div>
                         <div class="row">

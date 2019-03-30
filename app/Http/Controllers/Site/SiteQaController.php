@@ -116,13 +116,15 @@ class SiteQaController extends Controller {
         for ($i = 1; $i <= 25; $i ++) {
             if ($request->get("item$i")) {
                 $super = ($request->has("super$i")) ? '1' : '0';
+                $cert = ($request->has("cert$i")) ? '1' : '0';
                 $newItem = SiteQaItem::create(
-                    ['doc_id'  => $newQA->id,
-                     'task_id' => $request->get("task$i"),
-                     'name'    => $request->get("item$i"),
-                     'super'   => $super,
-                     'order'   => $order ++,
-                     'master'  => '1',
+                    ['doc_id'        => $newQA->id,
+                     'task_id'       => $request->get("task$i"),
+                     'name'          => $request->get("item$i"),
+                     'super'         => $super,
+                     'certification' => $super,
+                     'order'         => $order ++,
+                     'master'        => '1',
                     ]);
             }
         }
@@ -149,7 +151,7 @@ class SiteQaController extends Controller {
         list($major, $minor) = explode('.', $qa->version);
         $minor ++;
         $qa_request['version'] = $major . '.' . $minor;
-        $qa_request['notes'] = "version $major.$minor released ".Carbon::now()->format('d/m/Y')."\r\n".$qa->notes;
+        $qa_request['notes'] = "version $major.$minor released " . Carbon::now()->format('d/m/Y') . "\r\n" . $qa->notes;
 
         $qa->update($qa_request);
 
@@ -390,6 +392,7 @@ class SiteQaController extends Controller {
             ->editColumn('id', '<div class="text-center"><a href="/site/qa/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('name', function ($qa) {
                 $name = $qa->name . ' &nbsp;<span class="font-grey-silver">v' . $qa->version . '</span>';
+
                 return $name;
             })
             ->editColumn('updated_at', function ($doc) {
@@ -499,7 +502,7 @@ class SiteQaController extends Controller {
             // Create directory if required
             if (!is_dir(public_path($dir)))
                 mkdir(public_path($dir), 0777, true);
-            $output_file = public_path($dir.'/QA '.sanitizeFilename($site->name).' ('.$site->id.') '.Carbon::now()->format('YmdHis').'.pdf');
+            $output_file = public_path($dir . '/QA ' . sanitizeFilename($site->name) . ' (' . $site->id . ') ' . Carbon::now()->format('YmdHis') . '.pdf');
             touch($output_file);
 
             //return view('pdf/site-qa', compact('site', 'data'));

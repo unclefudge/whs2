@@ -19,10 +19,20 @@ class SiteQa extends Model {
 
     protected $table = 'site_qa';
     protected $fillable = [
-        'name', 'site_id', 'version', 'master', 'master_id',
+        'name', 'site_id', 'version', 'master', 'master_id', 'category_id',
         'supervisor_sign_by', 'supervisor_sign_at', 'manager_sign_by', 'manager_sign_at',
         'notes', 'company_id', 'status', 'share', 'created_by', 'updated_by', 'created_at', 'updated_at'];
     protected $dates = ['supervisor_sign_at', 'manager_sign_at'];
+
+    /**
+     * A Site QA Doc belongs to a Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Site\SiteQaCategory', 'category_id');
+    }
 
     /**
      * A Site QA Doc belongs to a Site - if it's not a template.
