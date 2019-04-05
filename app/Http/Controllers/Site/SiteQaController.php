@@ -83,7 +83,7 @@ class SiteQaController extends Controller {
         $qa = SiteQa::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!(Auth::user()->allowed2('view.site.qa', $qa) || Auth::user()->allowed2('add.site.qa')))
+        if (!Auth::user()->allowed2('view.site.qa', $qa))
             return view('errors/404');
 
         return view('site/qa/show', compact('qa'));
@@ -411,7 +411,7 @@ class SiteQaController extends Controller {
             })
             ->addColumn('action', function ($doc) {
                 $qa = SiteQa::find($doc->id);
-                //if (Auth::user()->allowed2('edit.site.qa', $qa))
+                if (Auth::user()->allowed2('add.site.qa'))
                     return '<a href="/site/qa/' . $qa->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
                 return '<a href="/site/qa/' . $qa->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';

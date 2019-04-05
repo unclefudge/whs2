@@ -651,6 +651,10 @@ trait UserRolesPermissions {
         // SDS add - Only Fudge, Jo, Tara, Rob, Demi
         if (($permission == 'add.sds' || $permission == 'edit.sds' || $permission == 'del.sds') && in_array($this->id, ['3', '109', '351', '6', '424'])) return true;
 
+        // Site QA Master templates
+        if ($permissiontype == 'site.qa' && $record->master && $this->hasPermission2('add.site.qa')) return true;    //in_array($this->id, ['3', '109', '351', '6'])) return true;
+
+
         // Get permission levels
         $company_level = $this->permissionLevel($permission, $this->company_id);
         $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
@@ -716,8 +720,6 @@ trait UserRolesPermissions {
             ) {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
 
-                // Site QA Master templates - Only Fudge, Jo, Tara, Rob
-                if ($permissiontype == 'site.qa' && $record->master && $this->hasPermission2('add.site.qa')) return true;    //in_array($this->id, ['3', '109', '351', '6'])) return true;
             }
 
             // Toolbox + WMS
