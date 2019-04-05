@@ -83,7 +83,7 @@ class SiteQaController extends Controller {
         $qa = SiteQa::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.site.qa', $qa))
+        if (!(Auth::user()->allowed2('view.site.qa', $qa) || Auth::user()->allowed2('add.site.qa')))
             return view('errors/404');
 
         return view('site/qa/show', compact('qa'));
