@@ -120,10 +120,10 @@
                             <button class="btn blue" id="more">More Items</button>
                             <div class="row" id="more_items" style="display: none">
                                 @for ($i = 16; $i <= 25; $i++)
-                                    <div class="col-xs-8">
+                                    <div class="col-md-6">
                                         <div class="form-group">{!! Form::text("item$i", null, ['class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-md-4">
                                         <div class="form-group {!! fieldHasError("task$i", $errors) !!}">
                                             <select id="task{{$i}}" name="task{{$i}}" class="form-control select2 task_sel" style="width: 100%">
                                                 <option value=""></option>
@@ -132,6 +132,26 @@
                                                 @endforeach
                                             </select>
                                             {!! fieldErrorMessage("task$i", $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    {!! Form::checkbox("super$i", 1, null, ['class' => 'mt-checkbox']) !!}
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    {!! Form::checkbox("cert$i", 1, null, ['class' => 'mt-checkbox']) !!}
+                                                    <span></span>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 @endfor

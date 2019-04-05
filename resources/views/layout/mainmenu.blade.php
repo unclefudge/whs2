@@ -94,6 +94,9 @@
                                                         @if (Auth::user()->hasAnyPermissionType('site.qa'))
                                                             <li><a href="/site/qa" class="nav-link"> Quality Assurance </a></li>
                                                         @endif
+                                                        @if (Auth::user()->hasPermission2('add.site.qa'))
+                                                            <li><a href="/site/qa/templates" class="nav-link"> QA Templates </a></li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             @endif

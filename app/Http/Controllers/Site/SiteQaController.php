@@ -50,6 +50,15 @@ class SiteQaController extends Controller {
         return view('site/qa/list');
     }
 
+    public function templates()
+    {
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('add.site.qa'))
+            return view('errors/404');
+
+        return view('site/qa/templates/list');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

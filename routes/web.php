@@ -229,6 +229,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('site/qa/company/{task_id}', 'Site\SiteQaController@getCompaniesForTask');
     Route::get('site/qa/dt/qa_reports', 'Site\SiteQaController@getQaReports');
     Route::get('site/qa/dt/qa_templates', 'Site\SiteQaController@getQaTemplates');
+    Route::get('site/qa/templates', 'Site\SiteQaController@templates');
     Route::resource('site/qa', 'Site\SiteQaController');
     //Route::resource('site/qa/action', 'Site\SiteQaActionController');
 
