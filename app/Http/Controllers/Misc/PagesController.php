@@ -108,6 +108,24 @@ class PagesController extends Controller {
     public function quick()
     {
 
+        echo "<b>Active QA</b></br>";
+        $qas = SiteQa::all();
+        $sites = [];
+        $active = 0;
+        foreach ($qas as $qa) {
+            if (!$qa->master && $qa->status > 0) {
+                $active++;
+                    $sites[$qa->site->code] = $qa->site->name;
+            }
+        }
+        asort($sites);
+
+        echo "<br>Total invidual reports: $active<br><br>Site<br>";
+        foreach ($sites as $id => $name) {
+            echo "$id - $name<br>";
+        }
+
+        /*
 
         echo "<b>QA cats</b></br>";
         $qas = SiteQa::all();
@@ -128,7 +146,7 @@ class PagesController extends Controller {
                 $qa->save();
             }
 
-        }
+        }*/
 
         /*
         $today = Carbon::today();

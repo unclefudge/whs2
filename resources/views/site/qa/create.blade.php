@@ -62,7 +62,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id', array_merge(['' => 'Select category'], \App\Models\Site\SiteQaCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
+                                        {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteQaCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                 </div>

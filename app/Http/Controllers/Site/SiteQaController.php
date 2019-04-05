@@ -122,7 +122,7 @@ class SiteQaController extends Controller {
                      'task_id'       => $request->get("task$i"),
                      'name'          => $request->get("item$i"),
                      'super'         => $super,
-                     'certification' => $super,
+                     'certification' => $cert,
                      'order'         => $order ++,
                      'master'        => '1',
                     ]);
@@ -164,11 +164,13 @@ class SiteQaController extends Controller {
         for ($i = 1; $i <= 25; $i ++) {
             if ($request->get("item$i")) {
                 $super = ($request->has("super$i")) ? '1' : '0';
+                $cert = ($request->has("cert$i")) ? '1' : '0';
                 $newItem = SiteQaItem::create(
                     ['doc_id'  => $qa->id,
                      'task_id' => $request->get("task$i"),
                      'name'    => $request->get("item$i"),
                      'super'   => $super,
+                     'certification' => $cert,
                      'order'   => $order ++,
                      'master'  => '1',
                     ]);

@@ -52,7 +52,7 @@
                                 </div>
                             @endif
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
                                         {!! Form::text('name', $qa->name, ['class' => 'form-control']) !!}
@@ -68,19 +68,30 @@
                                     </div>
                                 </div>
                             </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
+                                            {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                            {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteQaCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
+                                            {!! fieldErrorMessage('category_id', $errors) !!}
+                                            Note: If you change category this won't update any currently active/past QA's
+                                        </div>
+                                    </div>
+                                </div>
 
                             <!-- Items -->
                             <br>
                             <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
-                                <div class="col-md-7">INSPECTION ITEMS</div>
+                                <div class="col-md-6">INSPECTION ITEMS</div>
                                 <div class="col-md-3">TASK TRIGGER</div>
                                 <div class="col-md-2" style="text-align:right">SUPERVISOR<br>COMPLETES</div>
+                                <div class="col-md-1" style="text-align:right">CERTIF-ICATION</div>
                             </div>
                             <br>
                             <!-- Items -->
                             @foreach ($qa->items->sortBy('order') as $item)
                                 <div class="row" id="itemrow{{ $item->order }}">
-                                    <div class="col-md-7">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             {!! Form::textarea("item$item->order", $item->name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $item->order."]) !!}
                                         </div>
@@ -101,6 +112,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    {!! Form::checkbox("cert$item->order", 1, $item->certification, ['class' => 'mt-checkbox']) !!}
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 @endforeach
 
@@ -108,10 +129,10 @@
                                 <button class="btn blue" id="more">More Items</button>
                                 <div class="row" id="more_items" style="display: none">
                                     @for ($i = $qa->items->count() + 1; $i <= 25; $i++)
-                                        <div class="col-xs-8">
+                                        <div class="col-md-6">
                                             <div class="form-group">{!! Form::text("item$i", null, ['class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
                                         </div>
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <div class="form-group {!! fieldHasError("task$i", $errors) !!}">
                                                 <select id="task{{$i}}" name="task{{$i}}" class="form-control select2 task_sel" style="width: 100%">
                                                     <option value=""></option>
@@ -120,6 +141,26 @@
                                                     @endforeach
                                                 </select>
                                                 {!! fieldErrorMessage("task$i", $errors) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <div class="mt-checkbox-list">
+                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                        {!! Form::checkbox("super$i", 1, null, ['class' => 'mt-checkbox']) !!}
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <div class="mt-checkbox-list">
+                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                        {!! Form::checkbox("cert$i", 1, null, ['class' => 'mt-checkbox']) !!}
+                                                        <span></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     @endfor
@@ -167,9 +208,8 @@
         });
 
         /* Select2 */
-        $(".task_sel").select2({
-            placeholder: "Select task",
-        });
+        $("#category_id").select2({placeholder: "Select category", width: "100%"});
+        $(".task_sel").select2({placeholder: "Select task",});
     });
 </script>
 @stop
