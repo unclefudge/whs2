@@ -14,6 +14,7 @@
         @endif
         @if (Auth::user()->hasAnyPermissionType('site.qa'))
             <li><a href="/site/qa">Quality Assurance</a><i class="fa fa-circle"></i></li>
+            <li><a href="/site/qa/templates">Templates</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>Categories</span></li>
     </ul>

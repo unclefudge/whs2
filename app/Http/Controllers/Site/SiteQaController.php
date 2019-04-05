@@ -139,7 +139,7 @@ class SiteQaController extends Controller {
         }
         Toastr::success("Created new template");
 
-        return redirect('/site/qa/');
+        return redirect('/site/qa/templates');
     }
 
     /**
