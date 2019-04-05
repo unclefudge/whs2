@@ -53,7 +53,7 @@
                                     <div class="form-group {!! fieldHasError('status', $errors) !!}">
                                         {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
                                         {!! Form::select('status', ['1' => 'Active', '0' => 'Inactive'],
-                                         null, ['class' => 'form-control bs-select']) !!}
+                                         0, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('status', $errors) !!}
                                     </div>
                                 </div>
