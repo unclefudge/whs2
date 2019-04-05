@@ -652,7 +652,7 @@ trait UserRolesPermissions {
         if (($permission == 'add.sds' || $permission == 'edit.sds' || $permission == 'del.sds') && in_array($this->id, ['3', '109', '351', '6', '424'])) return true;
 
         // Site QA Master templates
-        if ($permissiontype == 'site.qa' && $record->master && $this->hasPermission2('add.site.qa')) return true;    //in_array($this->id, ['3', '109', '351', '6'])) return true;
+        if ($permissiontype == 'site.qa' && $record && $record->master && $this->hasPermission2('add.site.qa')) return true;    //in_array($this->id, ['3', '109', '351', '6'])) return true;
 
 
         // Get permission levels
