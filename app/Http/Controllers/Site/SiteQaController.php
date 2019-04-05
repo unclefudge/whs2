@@ -314,6 +314,7 @@ class SiteQaController extends Controller {
             ->whereIn('q.site_id', $site_list)
             ->where('q.status', $request->get('status'));
 
+        //dd($records);
         $dt = Datatables::of($records)
             ->editColumn('id', '<div class="text-center"><a href="/site/qa/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('sitename', function ($doc) {
@@ -384,7 +385,7 @@ class SiteQaController extends Controller {
             })
             ->rawColumns(['id', 'name', 'updated_at', 'completed', 'action'])
             ->make(true);
-
+        
         return $dt;
     }
 
