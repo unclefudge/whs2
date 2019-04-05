@@ -411,7 +411,7 @@ class SiteQaController extends Controller {
             })
             ->addColumn('action', function ($doc) {
                 $qa = SiteQa::find($doc->id);
-                if (Auth::user()->allowed2('edit.site.qa', $qa))
+                //if (Auth::user()->allowed2('edit.site.qa', $qa))
                     return '<a href="/site/qa/' . $qa->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
                 return '<a href="/site/qa/' . $qa->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
