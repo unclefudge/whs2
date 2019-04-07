@@ -385,7 +385,7 @@ class SiteQaController extends Controller {
             })
             ->rawColumns(['id', 'name', 'updated_at', 'completed', 'action'])
             ->make(true);
-        
+
         return $dt;
     }
 

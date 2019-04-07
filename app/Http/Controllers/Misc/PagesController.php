@@ -108,14 +108,47 @@ class PagesController extends Controller {
     public function quick()
     {
 
-        echo "<b>Active QA</b></br>";
+        echo "<b>Old/New QA's</b></br>";
+        // Old Templates
+        $trigger_ids_old = [];
+        $active_templates_old = SiteQa::where('master', '1')->where('status', '1')->where('company_id', '3')->where('id', '<', 100)->get();
+        foreach ($active_templates_old as $qa) {
+            foreach ($qa->tasks() as $task) {
+                if (isset($trigger_ids_old[$task->id])) {
+                    if (!in_array($qa->id, $trigger_ids_old[$task->id]))
+                        $trigger_ids_old[$task->id][] = $qa->id;
+                } else
+                    $trigger_ids_old[$task->id] = [$qa->id];
+            }
+        }
+        ksort($trigger_ids_old);
+
+        // New Templates
+        $trigger_ids_new = [];
+        $active_templates_new = SiteQa::where('master', '1')->where('status', '0')->where('company_id', '3')->where('id', '>', 100)->get();
+        foreach ($active_templates_new as $qa) {
+            foreach ($qa->tasks() as $task) {
+                if (isset($trigger_ids_new[$task->id])) {
+                    if (!in_array($qa->id, $trigger_ids_new[$task->id]))
+                        $trigger_ids_new[$task->id][] = $qa->id;
+                } else
+                    $trigger_ids_new[$task->id] = [$qa->id];
+            }
+        }
+        ksort($trigger_ids_new);
+
+        echo "<br>OLD<br>";
+        print_r($trigger_ids_old);
+        echo "<br>NEW<br>";
+        print_r($trigger_ids_new);
+
+
         $qas = SiteQa::all();
         $sites = [];
         $active = 0;
         foreach ($qas as $qa) {
             if (!$qa->master && $qa->status > 0) {
-                $active++;
-                    $sites[$qa->site->code] = $qa->site->name;
+                $sites[$qa->site->code] = $qa->site->name;
             }
         }
         asort($sites);

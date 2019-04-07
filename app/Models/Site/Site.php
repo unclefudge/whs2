@@ -174,6 +174,20 @@ class Site extends Model {
     }
 
     /**
+     * A Site has Old or New QA
+     *
+     * @return bool
+     */
+    public function hasOldQa()
+    {
+        $qa = SiteQa::where('site_id', $this->id)->first();
+        if ($qa && $qa->master_id < 100)
+            return true;
+
+        return false;
+    }
+
+    /**
      * A Site has many supervisors
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
