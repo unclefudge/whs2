@@ -244,75 +244,75 @@ class CronController extends Controller {
         $log .= ")\n\n";
 
         $planner = SitePlanner::where('to', '<', $today)->whereIn('site_id', $allowedSites)->orderBy('site_id')->get();
-        //$job_started_from = Carbon::createFromDate('2017', '07', '13');
+        $job_started_from = Carbon::createFromDate('2017', '07', '13');
 
         foreach ($planner as $plan) {
             $site = Site::findOrFail($plan->site_id);
             //$trigger_ids = ($site->hasOldQa()) ? $trigger_ids_old : $trigger_ids_new;
             $trigger_ids = $trigger_ids_old;
             if (isset($trigger_ids[$plan->task_id])) {
-                //$start_date = SitePlanner::where('site_id', $plan->site_id)->where('task_id', '11')->first();
-                //if ($start_date->from->gt($job_started_from)) {
-                foreach ($trigger_ids[$plan->task_id] as $qa_id) {
-                    if (!$site->hasTemplateQa($qa_id)) {
-                        // Create new QA by copying required template
-                        $qa_master = SiteQa::findOrFail($qa_id);
+                $start_date = SitePlanner::where('site_id', $plan->site_id)->where('task_id', '11')->first();
+                if ($start_date->from->gt($job_started_from)) {
+                    foreach ($trigger_ids[$plan->task_id] as $qa_id) {
+                        if (!$site->hasTemplateQa($qa_id)) {
+                            // Create new QA by copying required template
+                            $qa_master = SiteQa::findOrFail($qa_id);
 
-                        // Create new QA Report for Site
-                        $newQA = SiteQa::create([
-                            'name'       => $qa_master->name,
-                            'site_id'    => $site->id,
-                            'version'    => $qa_master->version,
-                            'master'     => '0',
-                            'master_id'  => $qa_master->id,
-                            'company_id' => $qa_master->company_id,
-                            'status'     => '1',
-                            'created_by' => '1',
-                            'updated_by' => '1',
-                        ]);
+                            // Create new QA Report for Site
+                            $newQA = SiteQa::create([
+                                'name'       => $qa_master->name,
+                                'site_id'    => $site->id,
+                                'version'    => $qa_master->version,
+                                'master'     => '0',
+                                'master_id'  => $qa_master->id,
+                                'company_id' => $qa_master->company_id,
+                                'status'     => '1',
+                                'created_by' => '1',
+                                'updated_by' => '1',
+                            ]);
 
-                        // Copy items from template
-                        foreach ($qa_master->items as $item) {
-                            $newItem = SiteQaItem::create(
-                                ['doc_id'     => $newQA->id,
-                                 'task_id'    => $item->task_id,
-                                 'name'       => $item->name,
-                                 'order'      => $item->order,
-                                 'super'      => $item->super,
-                                 'master'     => '0',
-                                 'master_id'  => $item->id,
-                                 'created_by' => '1',
-                                 'updated_by' => '1',
-                                ]);
-                        }
-                        echo "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name<br>";
-                        $log .= "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name\n";
-                        $newQA->createToDo($site->supervisors->pluck('id')->toArray());
-                    } else {
-                        // Existing QA for site - make Active if currently On Hold
-                        $qa = SiteQa::where('site_id', $site->id)->where('master_id', $qa_id)->first();
-                        if ($qa->status == '2') {
-                            // Task just ended on planner yesterday so create ToDoo + Reactive
-                            if ($plan->to->format('Y-m-d') == Carbon::yesterday()->format('Y-m-d')) {
-                                $qa->status = 1;
-                                $qa->save();
-                                $qa->createToDo($site->supervisors->pluck('id')->toArray());
-                                echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - reactived<br>";
-                                $log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - reactived\n";
-                            } else {
-                                //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - on hold<br>";
-                                //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - on hold\n";
+                            // Copy items from template
+                            foreach ($qa_master->items as $item) {
+                                $newItem = SiteQaItem::create(
+                                    ['doc_id'     => $newQA->id,
+                                     'task_id'    => $item->task_id,
+                                     'name'       => $item->name,
+                                     'order'      => $item->order,
+                                     'super'      => $item->super,
+                                     'master'     => '0',
+                                     'master_id'  => $item->id,
+                                     'created_by' => '1',
+                                     'updated_by' => '1',
+                                    ]);
                             }
-                        } elseif ($qa->status == '-1') {
-                            //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - not required<br>";
-                            //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - not required\n";
+                            echo "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name<br>";
+                            $log .= "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name\n";
+                            $newQA->createToDo($site->supervisors->pluck('id')->toArray());
                         } else {
-                            //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - active<br>";
-                            //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - active\n";
+                            // Existing QA for site - make Active if currently On Hold
+                            $qa = SiteQa::where('site_id', $site->id)->where('master_id', $qa_id)->first();
+                            if ($qa->status == '2') {
+                                // Task just ended on planner yesterday so create ToDoo + Reactive
+                                if ($plan->to->format('Y-m-d') == Carbon::yesterday()->format('Y-m-d')) {
+                                    $qa->status = 1;
+                                    $qa->save();
+                                    $qa->createToDo($site->supervisors->pluck('id')->toArray());
+                                    echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - reactived<br>";
+                                    $log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - reactived\n";
+                                } else {
+                                    //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - on hold<br>";
+                                    //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - on hold\n";
+                                }
+                            } elseif ($qa->status == '-1') {
+                                //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - not required<br>";
+                                //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - not required\n";
+                            } else {
+                                //echo "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - active<br>";
+                                //$log .= "Existing QA[$qa->id] Task:$plan->task_code ($plan->task_id) - $qa->name  Site:$site->name - active\n";
+                            }
                         }
                     }
                 }
-                //}
             }
 
             // If Task = Prac Complete (id 265) make all non-completed reports active for given site
