@@ -142,16 +142,16 @@ class PagesController extends Controller {
                     }
                     if ($qa->status == 0) {
                         echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
-                        //$todo->delete();
+                        $todo->delete();
                     }
                     if ($qa->status == 2) {
                         echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
-                        //$todo->delete();
+                        $todo->delete();
                     }
 
                 } else {
                     echo "ToDo [$todo->id] (DELETED)<br>";
-                    //$todo->delete();
+                    $todo->delete();
                 }
             }
         }
