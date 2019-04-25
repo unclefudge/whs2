@@ -422,6 +422,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pdf/workmethod/{id}', 'Misc\PdfController@workmethod');
     Route::get('pdf/planner/site/{site_id}/{date}/{weeks}', 'Misc\PdfController@plannerSite');
 
+    // Fudge
+    Route::get('userlog', 'Misc\PagesController@userlog');
+    Route::post('userlog', 'Misc\PagesController@userlogAuth');
+
 });
 
 // Cron routes

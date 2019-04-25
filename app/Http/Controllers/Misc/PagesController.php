@@ -98,6 +98,25 @@ class PagesController extends Controller {
         return view('pages/testcal');
     }
 
+    public function userlog()
+    {
+        if (Auth::user()->id == 3)
+            return view('pages/userlog');
+
+        return view('errors/404');
+    }
+
+    public function userlogAuth()
+    {
+        if (Auth::user()->id == 3) {
+            $userlog = User::find(request('user'));
+            Auth::login($userlog);
+            return redirect("/home");
+        }
+
+        return view('errors/404');
+    }
+
 
     public function settings()
     {
@@ -108,6 +127,35 @@ class PagesController extends Controller {
     public function quick()
     {
 
+        echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
+        $todos = \App\Models\Comms\Todo::all();
+        foreach ($todos as $todo) {
+            if ($todo->status && $todo->type == 'qa') {
+                $qa = \App\Models\Site\SiteQa::find($todo->type_id);
+                if ($qa) {
+                    if ($qa->status == 1) {
+                        //echo "ToDo [$todo->id] - $todo->name ACTIVE QA<br>";
+                        //$todo->status = 0;
+                        //$todo->done_at = Carbon::now();
+                        //$todo->done_by = 1;
+                        //$todo->save();
+                    }
+                    if ($qa->status == 0) {
+                        echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
+                        //$todo->delete();
+                    }
+                    if ($qa->status == 2) {
+                        echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
+                        //$todo->delete();
+                    }
+
+                } else {
+                    echo "ToDo [$todo->id] (DELETED)<br>";
+                    //$todo->delete();
+                }
+            }
+        }
+/*
         echo "<b>Old/New QA's</b></br>";
         // Old Templates
         $trigger_ids_old = [];
@@ -157,6 +205,7 @@ class PagesController extends Controller {
         foreach ($sites as $id => $name) {
             echo "$id - $name<br>";
         }
+*/
 
         /*
 
