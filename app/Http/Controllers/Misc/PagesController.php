@@ -135,10 +135,6 @@ class PagesController extends Controller {
                 if ($qa) {
                     if ($qa->status == 1) {
                         //echo "ToDo [$todo->id] - $todo->name ACTIVE QA<br>";
-                        //$todo->status = 0;
-                        //$todo->done_at = Carbon::now();
-                        //$todo->done_by = 1;
-                        //$todo->save();
                     }
                     if ($qa->status == 0) {
                         echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";

@@ -404,6 +404,8 @@ class SiteQaController extends Controller {
             ->editColumn('id', '<div class="text-center"><a href="/site/qa/{{$id}}"><i class="fa fa-search"></i></a></div>')
             ->editColumn('name', function ($qa) {
                 $name = $qa->name . ' &nbsp;<span class="font-grey-silver">v' . $qa->version . '</span>';
+                if ($qa->id > 100)
+                    $name .= " <span class='badge badge-warning badge-roundless'>New</span>";
 
                 return $name;
             })
