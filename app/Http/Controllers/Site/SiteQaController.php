@@ -306,7 +306,7 @@ class SiteQaController extends Controller {
     {
         $site_list = Auth::user()->authSites('view.site.qa')->pluck('id')->toArray();
         $records = DB::table('site_qa AS q')
-            ->select(['q.id', 'q.name', 'q.site_id', 'q.version', 'q.company_id', 'q.status', 'q.updated_at',
+            ->select(['q.id', 'q.name', 'q.site_id', 'q.version', 'q.master_id', 'q.company_id', 'q.status', 'q.updated_at',
                 's.name as sitename'])
             ->join('sites AS s', 'q.site_id', '=', 's.id')
             ->where('q.company_id', Auth::user()->company_id)
@@ -329,6 +329,8 @@ class SiteQaController extends Controller {
             })
             ->editColumn('name', function ($doc) {
                 $name = $doc->name . ' &nbsp;<span class="font-grey-silver">v' . $doc->version . '</span>';
+                if (in_array($doc->status, ['1', 2]) && $doc->master_id > 100)
+                    $name .= " <span class='badge badge-warning badge-roundless'>New</span>";
 
                 /*if ($doc->status == 1) {
                     $now = Carbon::now();
