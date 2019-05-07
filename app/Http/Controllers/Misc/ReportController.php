@@ -600,20 +600,24 @@ class ReportController extends Controller {
             ->whereIn('category_id', $categories)
             ->whereDate('expiry', '<=', $days_30)
             ->where('for_company_id', '<>', 3)
+            ->orderByDesc('expiry')
             ->get();
 
         //dd($company_docs->get());
         $expired_docs = [];
+        $expired_docs_company_cat = [];
         foreach ($company_docs as $doc) {
+            $req = ($doc->company->requiresCompanyDoc($doc->category_id)) ? 'req' : 'add';
             if ($doc->company->status) {
                 $exp = 'Replaced';
-                $req = ($doc->company->requiresCompanyDoc($doc->category_id)) ? 'req' : 'add';
                 if ($compliance == 'all' || $compliance == $req) {
-                    if (!$doc->company->activeCompanyDoc($doc->category_id)) {
+                    if (!$doc->company->activeCompanyDoc($doc->category_id) && !in_array("$doc->for_company_id:$doc->category_id", $expired_docs_company_cat)) {
                         $expired_docs[] = $doc->id;
+                        $expired_docs_company_cat[] = "$doc->for_company_id:$doc->category_id";
                         $exp = 'Expired';
-                    } elseif ($doc->expiry->gte(Carbon::today())) {
+                    } elseif ($doc->expiry->gte(Carbon::today()) && !in_array("$doc->for_company_id:$doc->category_id", $expired_docs_company_cat)) {
                         $expired_docs[] = $doc->id;
+                        $expired_docs_company_cat[] = "$doc->for_company_id:$doc->category_id";
                         $exp = 'Near Expiry';
                     }
                     //echo "[$doc->id] " . $doc->company->name . " - $doc->name ($doc->category_id) $exp $req<br>";
