@@ -39,15 +39,29 @@
                                 <div class="col-md-3">
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 0)->orderBy('name')->pluck('name', 'id')->toArray(),
                                           1, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="field-subcat">
+                                    <?php $subcat_array = ['' => 'Select sub-category'] + \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->orderBy('name')->pluck('name', 'id')->toArray(); ?>
+                                    <div class="form-group {!! fieldHasError('subcategory_id', $errors) !!}">
+                                        {!! Form::label('subcategory_id', 'Sub Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('subcategory_id', $subcat_array, 1, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('subcategory_id', $errors) !!}
                                     </div>
                                 </div>
                             </div>
 
                             {{-- Purchase --}}
                             <div class="row"  id="purchase-div">
+                                <div class="col-md-2" id="field-length">
+                                    <div class="form-group">
+                                        {!! Form::label('purchase_length', 'Length', ['class' => 'control-label']) !!}
+                                        {!! Form::text('purchase_length', null, ['class' => 'form-control', 'placeholder' => 'N/A']) !!}
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         {!! Form::label('purchase_qty', 'No. of items to purchase', ['class' => 'control-label']) !!}
@@ -107,7 +121,21 @@
 <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+        $('#category_id').change(function () {
+            displayFields();
+        });
 
+        displayFields();
+
+        function displayFields() {
+            $('#field-subcat').hide()
+            $('#field-length').hide()
+
+            if ($('#category_id').val() == 3) {
+                $('#field-subcat').show();
+                $('#field-length').show();
+            }
+        }
     });
 </script>
 @stop

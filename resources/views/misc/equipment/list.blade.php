@@ -53,7 +53,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(), 1, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!} </div>
+                                {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 0)->orderBy('name')->pluck('name', 'id')->toArray(), 1, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!} </div>
                         </div>
                         <br>
 
@@ -96,7 +96,7 @@
                             @endforeach
                         </table>
 
-                        {{-- Materials Equipment --}}
+                        {{-- Scaffold Equipment --}}
                         <table class="table table-bordered order-column" id="table-2">
                             <thead>
                             <tr class="mytable-header">
@@ -142,31 +142,25 @@
                             @endforeach
                         </table>
 
-                        {{-- Scaffold Equipment --}}
+                        {{-- Materials Equipment --}}
                         <table class="table table-bordered order-column" id="table-3">
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"></th>
-                                <th width="90">Photo</th>
                                 <th> Item Name</th>
                                 <th width="5%"> Qty</th>
                                 <th width="10%"></th>
                             </tr>
                             </thead>
-                            @foreach (\App\Models\Misc\Equipment\Equipment::where('category_id', 3)->where('status', 1)->orderBy('name')->get() as $equip)
+                            <?php $materials_cats = \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->where('status', 1)->pluck('id')->toArray() ?>
+                            @foreach (\App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->where('status', 1)->orderBy('name')->get() as $cat)
                                 <tr id="equip-{{ $equip->id }}">
                                     <td style="text-align: center">
-                                        <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closed-{{ $equip->id}}"></i>
-                                        <i class="fa fa-minus-circle" style="color: #e7505a; display: none" id="opened-{{ $equip->id}}"></i>
+                                        <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closedc-{{ $cat->id}}"></i>
+                                        <i class="fa fa-minus-circle" style="color: #e7505a; display: none" id="openedc-{{ $cat->id}}"></i>
                                     </td>
-                                    <td>
-                                        @if ($equip->attachment && file_exists(public_path($equip->attachmentUrl)))
-                                            <a href="{{ $equip->attachmentUrl }}" class="html5lightbox " title="{{ $equip->name }}" data-lityXXX>
-                                                <img src="{{ $equip->attachmentUrl }}?{{rand(1, 32000)}}" width="90" class="thumbnail img-responsive img-thumbnail"></a>
-                                        @endif
-                                    </td>
-                                    <td>{{ $equip->name }}</td>
-                                    <td>{{ $equip->total }}</td>
+                                    <td>{{ $cat->name }}</td>
+                                    <td></td>
                                     <td>&nbsp;</td>
                                 </tr>
                                 @foreach ($equip->locations()->sortBy('name') as $location)
@@ -228,22 +222,38 @@
 
         $('.fa-plus-circle').click(function () {
             var split = this.id.split("-");
+            var type = split[0];
             var id = split[1];
 
-            $('#closed-' + id).hide();
-            $('#opened-' + id).show();
-            $(".location-" + id).show();
-            $("#equip-" + id).addClass('rowHighlight');
+            if (type[type.length - 1] != 'c') {
+                $('#closed-' + id).hide();
+                $('#opened-' + id).show();
+                $(".location-" + id).show();
+                $("#equip-" + id).addClass('rowHighlight');
+            } else {
+                $('#closedc-' + id).hide();
+                $('#openedc-' + id).show();
+                $(".locationc-" + id).show();
+                $("#equipc-" + id).addClass('rowHighlight');
+            }
         });
 
         $('.fa-minus-circle').click(function () {
             var split = this.id.split("-");
+            var type = split[0];
             var id = split[1];
 
-            $('#closed-' + id).show();
-            $('#opened-' + id).hide();
-            $(".location-" + id).hide();
-            $("#equip-" + id).removeClass('rowHighlight');
+            if (type[type.length - 1] != 'c') {
+                $('#closed-' + id).show();
+                $('#opened-' + id).hide();
+                $(".location-" + id).hide();
+                $("#equip-" + id).removeClass('rowHighlight');
+            } else {
+                $('#closedc-' + id).show();
+                $('#openedc-' + id).hide();
+                $(".locationc-" + id).hide();
+                $("#equipc-" + id).removeClass('rowHighlight');
+            }
 
         });
 

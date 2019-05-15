@@ -36,7 +36,7 @@
                             @if(!$todo->status)
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h3 class="pull-right font-red uppercase" style="margin:0 0 10px;">Completed {!! $todo->done_at->format('d/m/Y') !!}</h3>
+                                        <h3 class="pull-right font-red uppercase" style="margin:0 0 10px;">Completed {!! ($todo->done_at) ? $todo->done_at->format('d/m/Y') : '' !!}</h3>
                                     </div>
                                 </div>
                             @endif

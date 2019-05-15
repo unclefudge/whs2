@@ -329,7 +329,7 @@ class SiteQaController extends Controller {
             })
             ->editColumn('name', function ($doc) {
                 $name = $doc->name . ' &nbsp;<span class="font-grey-silver">v' . $doc->version . '</span>';
-                if (in_array($doc->status, ['1', 2]) && $doc->master_id > 100)
+                if (in_array($doc->status, ['1', '2']) && $doc->master_id > 100)
                     $name .= " <span class='badge badge-warning badge-roundless'>New</span>";
 
                 /*if ($doc->status == 1) {

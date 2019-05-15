@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                            {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 0)->orderBy('name')->pluck('name', 'id')->toArray(),
                                          1, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}</div>
                     </div>
                     <br>

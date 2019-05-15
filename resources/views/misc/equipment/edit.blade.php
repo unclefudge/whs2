@@ -40,7 +40,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::all()->sortBy('name')->pluck('name', 'id')->toArray(),
+                                        {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 0)->orderBy('name')->pluck('name', 'id')->toArray(),
                                           null, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>

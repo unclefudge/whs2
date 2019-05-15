@@ -13,6 +13,7 @@ use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentLocationItem;
 use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Misc\Equipment\EquipmentLog;
+use App\Models\Misc\Equipment\EquipmentCategory;
 use App\Models\Comms\Todo;
 use App\Models\Site\Site;
 use Intervention\Image\Facades\Image;
@@ -128,10 +129,13 @@ class EquipmentController extends Controller {
         if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == 3)
             return view('errors/404');
 
-        request()->validate(['name' => 'required']); // Validate
+        request()->validate(['name' => 'required', 'subcategory_id' => 'required_if:category_id,3'], ['subcategory_id.required_if' => 'The sub-category field is required.']); // Validate
 
         // Create Item
         $equip_request = request()->all();
+        if (request('category_id') == 3)
+            $equip_request['category_id'] = request('subcategory_id');
+
         $equip = Equipment::create($equip_request);
         $qty = request('purchase_qty');
 
@@ -426,12 +430,13 @@ class EquipmentController extends Controller {
      */
     public function getInventory()
     {
+        $cat_ids = array_merge([request('category_id')], EquipmentCategory::where('parent', request('category_id'))->where('status', 1)->pluck('id')->toArray());
         $equipment = Equipment::select([
             'equipment.id', 'equipment.category_id', 'equipment.name', 'equipment.purchased', 'equipment.disposed', 'equipment.status', 'equipment.company_id',
             'equipment_categories.name AS catname'
         ])
             ->join('equipment_categories', 'equipment_categories.id', '=', 'equipment.category_id')
-            ->where('equipment.category_id', request('category_id'))
+            ->whereIn('equipment.category_id', $cat_ids)
             ->where('equipment.status', 1);
 
         $dt = Datatables::of($equipment)
