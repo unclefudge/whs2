@@ -127,7 +127,7 @@
                                             <p>{!! $todo->assignedToBySBC() !!}</p>
                                         @endif
                                         @if(!$todo->status)
-                                            <p class="font-red">COMPLETED BY: {!! \App\User::find($todo->done_by)->fullname !!}</p>
+                                            <p class="font-red">COMPLETED BY: {!! ($todo->done_by) ? \App\User::find($todo->done_by)->fullname : 'unknown'!!}</p>
                                         @endif
                                     </div>
                                 </div>
