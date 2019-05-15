@@ -153,7 +153,7 @@
                                                 <?php
                                                 $done_by = App\User::find($todo->done_by);
                                                 $done_at = ($done_by) ? $todo->done_at->format('d/m/Y') : '';
-                                                $done_by = ($done_by) ? $done_by->full_name : '';
+                                                $done_by = ($done_by) ? $done_by->full_name : 'unknown';
                                                 ?>
                                                 <td>@if ($todo->status && !$todo->done_by)
                                                         <span class="font-red">Outstanding</span>
