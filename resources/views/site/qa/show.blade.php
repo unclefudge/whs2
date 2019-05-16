@@ -211,12 +211,14 @@
             <tbody>
             <template v-for="item in xx.itemList | orderBy item.order">
                 <tr class="@{{ textColour(item)  }}">
+                    {{-- checkbox --}}
                     <td class="text-center" style="padding-top: 15px">
                         <span v-if="xx.qa.master == '1'">@{{ item.order }}.</span>
                         <span v-if="xx.qa.master == '0' && item.status == '-1'">N/A</span>
                         <i v-if="xx.qa.master == '0' && item.sign_by" class="fa fa-check-square-o font-green" style="font-size: 20px; padding-top: 5px"></i>
                         <i v-if="xx.qa.master == '0' && !item.sign_by && !item.status" class="fa fa-square-o font-red" style="font-size: 20px; padding-top: 5px"></i>
                     </td>
+                    {{-- Item --}}
                     <td style="padding-top: 15px;">
                         @{{ item.name }} <span class="font-grey-silver">(@{{ item.task_code }})</span>
                         <div v-if="item.done_by">
@@ -242,6 +244,7 @@
                             <small v-if="xx.qa.master == '0' && item.super == '1' && item.status == '1'">@{{ item.sign_by_name }}</small>
                         </div>
                     </td>
+                    {{-- Sign off --}}
                     <td>
                         @if (!$qa->master)
                             <div v-if="item.sign_by">
@@ -484,9 +487,14 @@
                         .then(function (response) {
                             this.itemsCompleted();
                             toastr.success('Updated record');
-                        }.bind(this)).catch(function (response) {
-                    alert('failed to update item');
-                });
+                        }.bind(this))
+                        .catch(function (response) {
+                            record.status = '';
+                            record.sign_at = '';
+                            record.sign_by = '';
+                            record.sign_by_name = '';
+                            alert('failed to update item');
+                        });
             },
             updateReportDB: function (record, redirect) {
                 this.$http.patch('/site/qa/' + record.id + '/update', record)

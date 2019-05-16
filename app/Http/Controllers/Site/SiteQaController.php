@@ -288,7 +288,6 @@ class SiteQaController extends Controller {
             $item->update($item_request);
         }
 
-
         // Update modified timestamp on QA Doc
         $qa = SiteQa::findOrFail($item->doc_id);
         $qa->touch();
