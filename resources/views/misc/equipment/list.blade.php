@@ -148,28 +148,43 @@
                             <tr class="mytable-header">
                                 <th width="5%"></th>
                                 <th> Item Name</th>
+                                <th width="7%"> Length</th>
                                 <th width="5%"> Qty</th>
                                 <th width="10%"></th>
                             </tr>
                             </thead>
                             <?php $materials_cats = \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->where('status', 1)->pluck('id')->toArray() ?>
                             @foreach (\App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->where('status', 1)->orderBy('name')->get() as $cat)
-                                <tr id="equip-{{ $equip->id }}">
+                                {{-- Sub Categories --}}
+                                <tr id="equipc-{{ $cat->id }}">
                                     <td style="text-align: center">
                                         <i class="fa fa-plus-circle" style="color: #32c5d2;" id="closedc-{{ $cat->id}}"></i>
                                         <i class="fa fa-minus-circle" style="color: #e7505a; display: none" id="openedc-{{ $cat->id}}"></i>
                                     </td>
                                     <td>{{ $cat->name }}</td>
                                     <td></td>
+                                    <td></td>
                                     <td>&nbsp;</td>
                                 </tr>
-                                @foreach ($equip->locations()->sortBy('name') as $location)
-                                    <?php $item = $location->equipmentItem($equip->id); ?>
-                                    @if (!$location->notes)
-                                        <tr class="location-{{ $equip->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                <?php
+                                $equip_ids = \App\Models\Misc\Equipment\Equipment::where('category_id', $cat->id)->where('status', 1)->pluck('id')->toArray();
+                                $location_ids = \App\Models\Misc\Equipment\EquipmentLocationItem::whereIn('equipment_id', $equip_ids)->pluck('location_id')->toArray();
+                                $locations = array_unique($location_ids);
+                                ?>
+                                @foreach ($locations as $loc_id)
+                                    {{-- Location of items --}}
+                                    <?php $location = \App\Models\Misc\Equipment\EquipmentLocation::findOrFail($loc_id); ?>
+                                    <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #ccc" id="locations-{{ $equip->id}}-loc">
+                                        <td></td>
+                                        <td colspan="4"><b>{{ $location->name }}</b></td>
+                                    </tr>
+
+                                    {{-- Items at Location --}}
+                                    @foreach ($location->items->whereIn('equipment_id', $equip_ids) as $item)
+                                        <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
                                             <td></td>
-                                            <td></td>
-                                            <td>{{ $location->name4 }}</td>
+                                            <td>{{ $item->equipment->name }}</td>
+                                            <td>{{ $item->equipment->length }}</td>
                                             <td>{{ ($item) ? $item->qty : 0 }}</td>
                                             <td>
                                                 @if (!$location->inTransit())
@@ -177,7 +192,7 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                    @endif
+                                        @endforeach
                                 @endforeach
                             @endforeach
                         </table>
@@ -188,7 +203,6 @@
     </div>
     <!-- END PAGE CONTENT INNER -->
 @stop
-
 
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
