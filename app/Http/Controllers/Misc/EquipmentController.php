@@ -212,10 +212,15 @@ class EquipmentController extends Controller {
         if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == $equip->company_id)
             return view('errors/404');
 
-        request()->validate(['name' => 'required']); // Validate
+        request()->validate(['name' => 'required', 'subcategory_id' => 'required_if:category_id,3'], ['subcategory_id.required_if' => 'The sub-category field is required.']); // Validate
 
         // Update Equipment
-        $equip->update(request()->all());
+        $equip_request = request()->all();
+        if (request('category_id') == 3)
+            $equip_request['category_id'] = request('subcategory_id');
+
+        $equip->update($equip_request);
+
         $qty = request('purchase_qty');
 
         // Handle attached Photo or Video
@@ -432,7 +437,7 @@ class EquipmentController extends Controller {
     {
         $cat_ids = array_merge([request('category_id')], EquipmentCategory::where('parent', request('category_id'))->where('status', 1)->pluck('id')->toArray());
         $equipment = Equipment::select([
-            'equipment.id', 'equipment.category_id', 'equipment.name', 'equipment.purchased', 'equipment.disposed', 'equipment.status', 'equipment.company_id',
+            'equipment.id', 'equipment.category_id', 'equipment.name', 'equipment.length', 'equipment.purchased', 'equipment.disposed', 'equipment.status', 'equipment.company_id',
             'equipment_categories.name AS catname'
         ])
             ->join('equipment_categories', 'equipment_categories.id', '=', 'equipment.category_id')

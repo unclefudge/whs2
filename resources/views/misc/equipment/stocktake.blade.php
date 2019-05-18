@@ -147,10 +147,10 @@
                                                         @if (count($items))
                                                             <?php $x = 0; ?>
                                                             @foreach($items->sortBy('item_name') as $loc)
-                                                                @if ($loc->equipment->category_id == 3)
+                                                                @if ($loc->equipment->parent_category == 3)
                                                                     <?php $x ++; ?>
                                                                     <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
-                                                                        <td>{{ $loc->item_name }}</td>
+                                                                        <td>{{ $loc->equipment->category->name }} - {{ $loc->item_name }}</td>
                                                                         <td>{{ $loc->qty }}</td>
                                                                         @if (Auth::user()->allowed2('edit.equipment.stocktake', $location))
                                                                             <td>
@@ -277,10 +277,20 @@
                                                 <tbody>
                                                 <?php
                                                 $max = ($location->site_id && $location->site_id == 25) ? 10 : 3;
-                                                if ($items)
-                                                    $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
-                                                else
-                                                    $equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->where('company_id', Auth::user()->company_id)->toArray()->get();
+                                                $gen_cats = [1];
+                                                $sca_cats = [2];
+                                                $mat_cats = \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->pluck('id')->toArray();
+                                                if ($items) {
+                                                    //$equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                                    $equipment_gen = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $gen_cats)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                                    $equipment_sca = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $sca_cats)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                                    $equipment_mat = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $mat_cats)->whereNotIn('id', $items->pluck('equipment_id')->toArray())->get();
+                                                } else {
+                                                    //$equipment_list = \App\Models\Misc\Equipment\Equipment::where('status', 1)->get();
+                                                    $equipment_gen = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $gen_cats)->get();
+                                                    $equipment_sca = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $sca_cats)->get();
+                                                    $equipment_mat = \App\Models\Misc\Equipment\Equipment::where('status', 1)->whereIn('category_id', $mat_cats)->get();
+                                                }
 
                                                 ?>
                                                 @for ($x = 1; $x <= $max; $x++)
@@ -289,9 +299,24 @@
                                                             <div class="form-group {!! fieldHasError("$x-extra_id", $errors) !!}">
                                                                 <select id="{{ $x }}-extra_id" name="{{ $x }}-extra_id" class="form-control select2 sel_add_item" width="100%">
                                                                     <option value="">Add additional item</option>
-                                                                    @foreach ($equipment_list as $item)
-                                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                                                    @endforeach
+                                                                    @if ($equipment_gen->count())
+                                                                        <optgroup label="General"></optgroup>
+                                                                        @foreach ($equipment_gen as $item)
+                                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if ($equipment_mat->count())
+                                                                        <optgroup label="Materials"></optgroup>
+                                                                        @foreach ($equipment_mat as $item)
+                                                                            <option value="{{ $item->id }}">{{ $item->category->name }} - {{ $item->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if ($equipment_sca->count())
+                                                                        <optgroup label="Scaffold"></optgroup>
+                                                                        @foreach ($equipment_sca as $item)
+                                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
                                                                 </select>
                                                                 {!! fieldErrorMessage("$x-extra_id", $errors) !!}
                                                             </div>

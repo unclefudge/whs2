@@ -174,25 +174,27 @@
                                 @foreach ($locations as $loc_id)
                                     {{-- Location of items --}}
                                     <?php $location = \App\Models\Misc\Equipment\EquipmentLocation::findOrFail($loc_id); ?>
-                                    <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #ccc" id="locations-{{ $equip->id}}-loc">
-                                        <td></td>
-                                        <td colspan="4"><b>{{ $location->name }}</b></td>
-                                    </tr>
-
-                                    {{-- Items at Location --}}
-                                    @foreach ($location->items->whereIn('equipment_id', $equip_ids) as $item)
-                                        <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                    @if (!$location->notes)
+                                        <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #ccc" id="locations-{{ $equip->id}}-loc">
                                             <td></td>
-                                            <td>{{ $item->equipment->name }}</td>
-                                            <td>{{ $item->equipment->length }}</td>
-                                            <td>{{ ($item) ? $item->qty : 0 }}</td>
-                                            <td>
-                                                @if (!$location->inTransit())
-                                                    <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
-                                                @endif
-                                            </td>
+                                            <td colspan="4"><b>{{ $location->name }}</b></td>
                                         </tr>
+
+                                        {{-- Items at Location --}}
+                                        @foreach ($location->items->whereIn('equipment_id', $equip_ids) as $item)
+                                            <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
+                                                <td></td>
+                                                <td>{{ $item->equipment->name }}</td>
+                                                <td>{{ ($item->equipment->length) ? $item->equipment->length : 'N/A' }}</td>
+                                                <td>{{ ($item) ? $item->qty : 0 }}</td>
+                                                <td>
+                                                    @if (!$location->inTransit())
+                                                        <a href="/equipment/{{ $item->id }}/transfer" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom">Transfer</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
                                         @endforeach
+                                    @endif
                                 @endforeach
                             @endforeach
                         </table>

@@ -58,8 +58,8 @@
                             <div class="row"  id="purchase-div">
                                 <div class="col-md-2" id="field-length">
                                     <div class="form-group">
-                                        {!! Form::label('purchase_length', 'Length', ['class' => 'control-label']) !!}
-                                        {!! Form::text('purchase_length', null, ['class' => 'form-control', 'placeholder' => 'N/A']) !!}
+                                        {!! Form::label('length', 'Length', ['class' => 'control-label']) !!}
+                                        {!! Form::text('length', null, ['class' => 'form-control', 'placeholder' => 'N/A']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-2">

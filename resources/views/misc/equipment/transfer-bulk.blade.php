@@ -121,7 +121,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="2">No items found at current loation.</td>
+                                                                <td colspan="2">No items found at current location.</td>
                                                             </tr>
                                                         @endif
                                                         </tbody>
@@ -145,6 +145,7 @@
                                                         <thead>
                                                         <tr class="mytable-header">
                                                             <th width="5%"> Qty</th>
+                                                            <th> Sub-category</th>
                                                             <th> Item Name</th>
                                                             <th width="10%"> Transfer</th>
                                                         </tr>
@@ -152,9 +153,10 @@
                                                         <tbody>
                                                         @if (count($items))
                                                             @foreach($items->sortBy('item_name') as $loc)
-                                                                @if ($loc->equipment->category_id == 3)
+                                                                @if ($loc->equipment->parent_category == 3)
                                                                     <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
                                                                         <td>{{ $loc->qty }}</td>
+                                                                        <td>{{ $loc->equipment->category->name }}</td>
                                                                         <td>{{ $loc->item_name }}</td>
                                                                         <td>
                                                                             <div class="itemactual-" id="itemactual-{{ $loc->id }}">
@@ -170,7 +172,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="2">No items found at current loation.</td>
+                                                                <td colspan="2">No items found at current location.</td>
                                                             </tr>
                                                         @endif
                                                         </tbody>
@@ -219,7 +221,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="2">No items found at current loation.</td>
+                                                                <td colspan="2">No items found at current location.</td>
                                                             </tr>
                                                         @endif
                                                         </tbody>

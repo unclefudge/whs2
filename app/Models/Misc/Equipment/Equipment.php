@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Equipment extends Model {
 
     protected $table = 'equipment';
-    protected $fillable = ['category_id', 'name', 'purchased', 'disposed', 'attachment', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
+    protected $fillable = ['category_id', 'name', 'length', 'purchased', 'disposed', 'attachment', 'status', 'company_id', 'created_by', 'created_at', 'updated_at', 'updated_by'];
 
     /**
      * A Equipment belongs to a category.
@@ -20,7 +20,7 @@ class Equipment extends Model {
 
     public function category()
     {
-        return $this->belongTo('App\Models\Misc\Equipment\EquipmentCategory');
+        return $this->belongsTo('App\Models\Misc\Equipment\EquipmentCategory');
     }
 
     /**
@@ -80,6 +80,14 @@ class Equipment extends Model {
         }
 
         return rtrim($string, ', ');
+    }
+
+    /**
+     * Get Parent Category  (getter)
+     */
+    public function getParentCategoryAttribute()
+    {
+        return (!$this->category->parent) ? $this->category_id : $this->category->parent;
     }
 
     /**

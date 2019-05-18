@@ -41,6 +41,7 @@
                                 <th width="5%"> #</th>
                                 <th> Category</th>
                                 <th> Item Name</th>
+                                <th width="10%"> Length</th>
                                 <th width="10%"> Available</th>
                                 <th width="10%"> Missing</th>
                                 <th width="10%"> Puchased</th>
@@ -89,6 +90,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'catname', name: 'equipment_categories.name'},
             {data: 'name', name: 'name'},
+            {data: 'length', name: 'length'},
             {data: 'total', name: 'total'},
             {data: 'lost', name: 'lost'},
             {data: 'purchased', name: 'purchased'},
@@ -100,8 +102,26 @@
         ]
     });
 
-    $('select#category_id').change(function () {
+    updateCols();
+
+    function updateCols() {
+        if ($("#category_id").val() == 3) {
+            table_list.column(3).visible(true);  // Length
+            table_list.column(4).visible(true);  // Available
+            table_list.column(5).visible(false);  // Missing
+            table_list.column(6).visible(false);  // Purchased
+            table_list.column(7).visible(false);  // Disposed
+        } else {
+            table_list.column(3).visible(false);  // Length
+            table_list.column(4).visible(true);  // Available
+            table_list.column(5).visible(true);  // Missing
+            table_list.column(6).visible(true);  // Purchased
+            table_list.column(7).visible(true);  // Disposed
+        }
         table_list.ajax.reload();
+    }
+    $('select#category_id').change(function () {
+        updateCols();
     });
 </script>
 @stop

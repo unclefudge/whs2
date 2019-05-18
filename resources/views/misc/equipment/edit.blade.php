@@ -25,7 +25,7 @@
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
                         {!! Form::model($item, ['method' => 'PATCH', 'action' => ['Misc\EquipmentController@update', $item->id], 'class' => 'horizontal-form', 'files' => true]) !!}
-
+                        <?php $sub_cat = $item->category_id; ?>
                         @include('form-error')
 
                         <div class="form-body">
@@ -41,20 +41,28 @@
                                     <div class="form-group {!! fieldHasError('category_id', $errors) !!}">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
                                         {!! Form::select('category_id', \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 0)->orderBy('name')->pluck('name', 'id')->toArray(),
-                                          null, ['class' => 'form-control bs-select']) !!}
+                                          ($item->category->parent == 0) ? $item->category_id : $item->category->parent, ['class' => 'form-control bs-select']) !!}
                                         {!! fieldErrorMessage('category_id', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        {!! Form::label('total', 'No. of items in stock', ['class' => 'control-label']) !!}
-                                        {!! Form::text('total', null, ['class' => 'form-control', 'readonly']) !!}
+                                <div class="col-md-3" id="field-subcat">
+                                    <?php $subcat_array = ['' => 'Select sub-category'] + \App\Models\Misc\Equipment\EquipmentCategory::where('parent', 3)->orderBy('name')->pluck('name', 'id')->toArray(); ?>
+                                    <div class="form-group {!! fieldHasError('subcategory_id', $errors) !!}">
+                                        {!! Form::label('subcategory_id', 'Sub Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('subcategory_id', $subcat_array, $item->category_id, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('subcategory_id', $errors) !!}
                                     </div>
                                 </div>
                             </div>
 
                             {{-- Purchase --}}
                             <div class="row"  id="purchase-div">
+                                <div class="col-md-2" id="field-length">
+                                    <div class="form-group">
+                                        {!! Form::label('length', 'Length', ['class' => 'control-label']) !!}
+                                        {!! Form::text('length', null, ['class' => 'form-control', 'placeholder' => 'N/A']) !!}
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         {!! Form::label('purchase_qty', 'No. of items to purchase', ['class' => 'control-label']) !!}
@@ -127,6 +135,22 @@
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script>
     $(document).ready(function () {
+        $('#category_id').change(function () {
+            displayFields();
+        });
+
+        displayFields();
+
+        function displayFields() {
+            $('#field-subcat').hide()
+            $('#field-length').hide()
+
+            if ($('#category_id').val() == 3) {
+                $('#field-subcat').show();
+                $('#field-length').show();
+            }
+        }
+
         $("#btn-delete").click(function (e) {
             e.preventDefault();
             swal({

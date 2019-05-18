@@ -266,8 +266,8 @@ class EquipmentTransferController extends Controller {
         }
         $log->save();
 
-        // If Category 3 'Materials' don't transfer but simply subtract items
-        if ($item->equipment->category_id != 3) {
+        // If Category 3 'Materials' don't transfer but simply subtract items EXCEPT when transferring to Store (site_id 25)
+        if ($item->equipment->parent_category != 3 || $site_id == 25) {
             // Check if location exists
             if ($location) {
                 // Check if location also has existing item to add qty to.
@@ -415,13 +415,15 @@ class EquipmentTransferController extends Controller {
                         if ($lost->qty > $extra_amount) {
                             // More lost items then found so subtract only found amount
                             $lost->decrement('qty', $extra_amount);
-                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $extra_amount, 'action' => 'F', 'notes' => "Found $extra_amount items at $location->name"]);
+                            $location_name = $lost->location->name;
+                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $extra_amount, 'action' => 'F', 'notes' => "Found $extra_amount items at $location_name"]);
                             $extra_amount = 0;
                             break;
                         } else {
                             // Found more items then are actually lost so delete full amount from lost item.
                             $extra_amount = $extra_amount - $lost->qty;
-                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $lost->qty, 'action' => 'F', 'notes' => "Found $lost->qty items at $location->name"]);
+                            $location_name = $lost->location->name;
+                            $log = new EquipmentLog(['equipment_id' => $lost->equipment_id, 'qty' => $lost->qty, 'action' => 'F', 'notes' => "Found $lost->qty items at $location_name"]);
                             $lost->delete();
                         }
                         $log->save();
@@ -429,7 +431,7 @@ class EquipmentTransferController extends Controller {
                 }
                 if ($extra_amount) {
                     $equip = Equipment::find($item->equipment_id);
-                    if (($equip->total - ($equip->purchased - $equip->disposed)) > 0)
+                    if (($equip->total - ($equip->purchased - $equip->disposed)) > 0 && in_array($equip->category_id, [1, 2])) // Exclude Material Category from warning mesg
                         Toastr::warning("Item: $equip->name increased above actual number of purchased items.");
                 }
             }
