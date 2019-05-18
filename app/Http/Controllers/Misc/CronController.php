@@ -248,8 +248,7 @@ class CronController extends Controller {
 
         foreach ($planner as $plan) {
             $site = Site::findOrFail($plan->site_id);
-            //$trigger_ids = ($site->hasOldQa()) ? $trigger_ids_old : $trigger_ids_new;
-            $trigger_ids = $trigger_ids_old;
+            $trigger_ids = ($site->hasOldQa()) ? $trigger_ids_old : $trigger_ids_new;
             if (isset($trigger_ids[$plan->task_id])) {
                 $start_date = SitePlanner::where('site_id', $plan->site_id)->where('task_id', '11')->first();
                 if ($start_date->from->gt($job_started_from)) {
