@@ -152,7 +152,12 @@
                                                         </thead>
                                                         <tbody>
                                                         @if (count($items))
-                                                            @foreach($items->sortBy('item_name') as $loc)
+                                                            <?php
+                                                            $sorted = $items->sortBy(function($item) {
+                                                                return $item->item_category_name.'-'.$item->item_name;
+                                                            });
+                                                            ?>
+                                                            @foreach($sorted as $loc)
                                                                 @if ($loc->equipment->parent_category == 3)
                                                                     <tr class="itemrow-" id="itemrow-{{ $loc->id }}">
                                                                         <td>{{ $loc->qty }}</td>

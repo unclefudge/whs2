@@ -58,6 +58,14 @@ class EquipmentLocationItem extends Model {
         return $this->equipment->name;
     }
 
+    /**
+     * Get the Item Total  (getter)
+     */
+    public function getItemCategoryNameAttribute()
+    {
+        return $this->equipment->category->name;
+    }
+
 
     /**
      * The "booting" method of the model.
