@@ -450,9 +450,9 @@ class EquipmentController extends Controller {
             })
             ->addColumn('total', function ($equip) {
                 $str = $equip->total;
-                if ($equip->total_excess > 0)
+                if ($equip->total_excess > 0 && in_array($equip->category_id, [1, 2]))
                     $str = "<span class='label label-warning'>$equip->total</span>";
-                if ($equip->total_excess < 0)
+                if ($equip->total_excess < 0 && in_array($equip->category_id, [1, 2]))
                     $str = "<span class='label label-danger'>$equip->total</span>";
 
                 return $str;
