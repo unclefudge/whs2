@@ -170,6 +170,7 @@
                                 $equip_ids = \App\Models\Misc\Equipment\Equipment::where('category_id', $cat->id)->where('status', 1)->pluck('id')->toArray();
                                 $location_ids = \App\Models\Misc\Equipment\EquipmentLocationItem::whereIn('equipment_id', $equip_ids)->pluck('location_id')->toArray();
                                 $locations = array_unique($location_ids);
+                                rsort($locations);
                                 ?>
                                 @foreach ($locations as $loc_id)
                                     {{-- Location of items --}}

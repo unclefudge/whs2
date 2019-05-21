@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/importcompany', 'Misc\PagesController@importCompany');
     Route::get('/manage/completedqa', 'Misc\PagesController@completedQA');
     Route::get('/manage/create_permission', 'Misc\PagesController@createPermission');
+    Route::get('/manage/importmaterials', 'Misc\PagesController@importMaterials');
 
     // Reports
     Route::get('/manage/report', 'Misc\ReportController@index');

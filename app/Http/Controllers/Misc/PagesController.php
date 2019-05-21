@@ -24,7 +24,12 @@ use App\Models\Safety\WmsDoc;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
 use App\Models\Comms\SafetyTip;
+use App\Models\Misc\Equipment\Equipment;
+use App\Models\Misc\Equipment\EquipmentCategory;
+use App\Models\Misc\Equipment\EquipmentLocation;
+use App\Models\Misc\Equipment\EquipmentLocationItem;
 use App\Models\Misc\Equipment\EquipmentLost;
+use App\Models\Misc\Equipment\EquipmentLog;
 use App\Models\Misc\Permission2;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -111,6 +116,7 @@ class PagesController extends Controller {
         if (Auth::user()->id == 3) {
             $userlog = User::find(request('user'));
             Auth::login($userlog);
+
             return redirect("/home");
         }
 
@@ -151,57 +157,57 @@ class PagesController extends Controller {
                 }
             }
         }
-/*
-        echo "<b>Old/New QA's</b></br>";
-        // Old Templates
-        $trigger_ids_old = [];
-        $active_templates_old = SiteQa::where('master', '1')->where('status', '1')->where('company_id', '3')->where('id', '<', 100)->get();
-        foreach ($active_templates_old as $qa) {
-            foreach ($qa->tasks() as $task) {
-                if (isset($trigger_ids_old[$task->id])) {
-                    if (!in_array($qa->id, $trigger_ids_old[$task->id]))
-                        $trigger_ids_old[$task->id][] = $qa->id;
-                } else
-                    $trigger_ids_old[$task->id] = [$qa->id];
-            }
-        }
-        ksort($trigger_ids_old);
+        /*
+                echo "<b>Old/New QA's</b></br>";
+                // Old Templates
+                $trigger_ids_old = [];
+                $active_templates_old = SiteQa::where('master', '1')->where('status', '1')->where('company_id', '3')->where('id', '<', 100)->get();
+                foreach ($active_templates_old as $qa) {
+                    foreach ($qa->tasks() as $task) {
+                        if (isset($trigger_ids_old[$task->id])) {
+                            if (!in_array($qa->id, $trigger_ids_old[$task->id]))
+                                $trigger_ids_old[$task->id][] = $qa->id;
+                        } else
+                            $trigger_ids_old[$task->id] = [$qa->id];
+                    }
+                }
+                ksort($trigger_ids_old);
 
-        // New Templates
-        $trigger_ids_new = [];
-        $active_templates_new = SiteQa::where('master', '1')->where('status', '0')->where('company_id', '3')->where('id', '>', 100)->get();
-        foreach ($active_templates_new as $qa) {
-            foreach ($qa->tasks() as $task) {
-                if (isset($trigger_ids_new[$task->id])) {
-                    if (!in_array($qa->id, $trigger_ids_new[$task->id]))
-                        $trigger_ids_new[$task->id][] = $qa->id;
-                } else
-                    $trigger_ids_new[$task->id] = [$qa->id];
-            }
-        }
-        ksort($trigger_ids_new);
+                // New Templates
+                $trigger_ids_new = [];
+                $active_templates_new = SiteQa::where('master', '1')->where('status', '0')->where('company_id', '3')->where('id', '>', 100)->get();
+                foreach ($active_templates_new as $qa) {
+                    foreach ($qa->tasks() as $task) {
+                        if (isset($trigger_ids_new[$task->id])) {
+                            if (!in_array($qa->id, $trigger_ids_new[$task->id]))
+                                $trigger_ids_new[$task->id][] = $qa->id;
+                        } else
+                            $trigger_ids_new[$task->id] = [$qa->id];
+                    }
+                }
+                ksort($trigger_ids_new);
 
-        echo "<br>OLD<br>";
-        print_r($trigger_ids_old);
-        echo "<br>NEW<br>";
-        print_r($trigger_ids_new);
+                echo "<br>OLD<br>";
+                print_r($trigger_ids_old);
+                echo "<br>NEW<br>";
+                print_r($trigger_ids_new);
 
 
-        $qas = SiteQa::all();
-        $sites = [];
-        $active = 0;
-        foreach ($qas as $qa) {
-            if (!$qa->master && $qa->status > 0) {
-                $sites[$qa->site->code] = $qa->site->name;
-            }
-        }
-        asort($sites);
+                $qas = SiteQa::all();
+                $sites = [];
+                $active = 0;
+                foreach ($qas as $qa) {
+                    if (!$qa->master && $qa->status > 0) {
+                        $sites[$qa->site->code] = $qa->site->name;
+                    }
+                }
+                asort($sites);
 
-        echo "<br>Total invidual reports: $active<br><br>Site<br>";
-        foreach ($sites as $id => $name) {
-            echo "$id - $name<br>";
-        }
-*/
+                echo "<br>Total invidual reports: $active<br><br>Site<br>";
+                foreach ($sites as $id => $name) {
+                    echo "$id - $name<br>";
+                }
+        */
 
         /*
 
@@ -612,8 +618,7 @@ class PagesController extends Controller {
     }
 
 
-    public
-    function completedQA()
+    public function completedQA()
     {
         echo "Closing completed QA ToDos<br><br>";
         $records = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
@@ -628,16 +633,15 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function refreshQA()
+    public function refreshQA()
     {
         echo "Updating Current QA Reports to match new QA template with Supervisor tick<br><br>";
-        $items = \App\Models\Site\SiteQaItem::all();
+        $items = SiteQaItem::all();
         foreach ($items as $item) {
             if ($item->master_id) {
-                $master = \App\Models\Site\SiteQaItem::find($item->master_id);
-                $doc = \App\Models\Site\SiteQa::find($item->doc_id);
-                $site = \App\Models\Site\Site::find($doc->site_id);
+                $master = SiteQaItem::find($item->master_id);
+                $doc = SiteQa::find($item->doc_id);
+                $site = Site::find($doc->site_id);
 
                 // Has master + master set to super but current QA item isn'tr
                 if ($master && $master->super && !$item->super) {
@@ -649,7 +653,7 @@ class PagesController extends Controller {
                 }
 
                 if (!$item->super) {
-                    $doc_master_item = \App\Models\Site\SiteQaItem::where('doc_id', $doc->master_id)->where('task_id', $item->task_id)
+                    $doc_master_item = SiteQaItem::where('doc_id', $doc->master_id)->where('task_id', $item->task_id)
                         ->where('name', $item->name)->where('super', '1')->first();
                     if ($doc_master_item) {
                         echo "*[$item->id] docID:$item->doc_id $doc->name ($site->name)<br> - $item->name<br><br>";
@@ -664,8 +668,7 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function importCompany(Request $request)
+    public function importCompany(Request $request)
     {
         echo "Importing Companies<br><br>";
         $row = 0;
@@ -675,7 +678,7 @@ class PagesController extends Controller {
                 if ($row == 1) continue;
                 $num = count($data);
 
-                $company = \App\Models\Company\Company::find($data[0]);
+                $company = Company::find($data[0]);
                 if ($company && !($company->id == 120 || $company->id == 121)) {
                     $company->name = $data[1];
                     $company->nickname = $data[2];
@@ -752,8 +755,7 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function createPermission()
+    public function createPermission()
     {
         //
         // Creating Permission
@@ -784,20 +786,19 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
-    public
-    function fixplanner()
+    public function fixplanner()
     {
         set_time_limit(120);
 
         //
         // Sites Without Start Dates
         //
-        $sites = \App\Models\Site\Site::where('status', '1')->orderBy('name')->get();
-        $startJobIDs = \App\Models\Site\Planner\Task::where('code', 'START')->where('status', '1')->pluck('id')->toArray();
+        $sites = Site::where('status', '1')->orderBy('name')->get();
+        $startJobIDs = Task::where('code', 'START')->where('status', '1')->pluck('id')->toArray();
         $array = [];
         // Create array in specific Vuejs 'select' format.
         foreach ($sites as $site) {
-            $planner = \App\Models\Site\Planner\SitePlanner::where('site_id', $site->id)->orderBy('from')->get();
+            $planner = SitePlanner::where('site_id', $site->id)->orderBy('from')->get();
 
             $found = false;
             foreach ($planner as $plan) {
@@ -809,7 +810,7 @@ class PagesController extends Controller {
 
             if (!$found) {
                 $tasks = '0';
-                $planner2 = \App\Models\Site\Planner\SitePlanner::where('site_id', $site->id)->get();
+                $planner2 = SitePlanner::where('site_id', $site->id)->get();
                 if ($planner2)
                     $tasks = $planner2->count();
 
@@ -836,13 +837,13 @@ class PagesController extends Controller {
         //
         echo "<br><br>Tasks that end before they start<br><br>";
 
-        $recs = \App\Models\Site\Planner\SitePlanner::orderBy('site_id')->get();
+        $recs = SitePlanner::orderBy('site_id')->get();
         $count = 0;
         $start = 0;
         foreach ($recs as $rec) {
             if ($rec->to->lt($rec->from)) {
-                $site = \App\Models\Site\Site::find($rec->site_id);
-                $task = \App\Models\Site\Planner\Task::find($rec->task_id);
+                $site = Site::find($rec->site_id);
+                $task = Task::find($rec->task_id);
                 echo "$rec->id F:$rec->from  T:$rec->to site:$site->name   task:$task->name<br>";
                 $count ++;
                 if ($rec->task_id == 11)
@@ -859,12 +860,12 @@ class PagesController extends Controller {
         //
         echo "<br><br>Task with an invaild To/From Date + Days count<br><br>";
 
-        $recs = \App\Models\Site\Planner\SitePlanner::orderBy('id')->get();
+        $recs = SitePlanner::orderBy('id')->get();
         $bad_end = 0;
         $bad_daycount = 0;
         foreach ($recs as $rec) {
-            $site = \App\Models\Site\Site::find($rec->site_id);
-            $task = \App\Models\Site\Planner\Task::find($rec->task_id);
+            $site = Site::find($rec->site_id);
+            $task = Task::find($rec->task_id);
             $taskname = 'NULL';
             if ($task)
                 $taskname = $task->name;
@@ -892,8 +893,7 @@ class PagesController extends Controller {
 
     }
 
-    public
-    function workDaysBetween($from, $to, $debug = false)
+    public function workDaysBetween($from, $to, $debug = false)
     {
         if ($from == $to)
             return 1;
@@ -919,4 +919,68 @@ class PagesController extends Controller {
 
         return $counter;
     }
+
+    public function importMaterials(Request $request)
+    {
+        echo "Importing Materials<br><br>";
+        $row = 0;
+        if (($handle = fopen(public_path("materials.csv"), "r")) !== false) {
+            while (($data = fgetcsv($handle, 5000, ",")) !== false) {
+                $row ++;
+                if ($row == 1) continue;
+                $num = count($data);
+
+                $cat = $data[0];
+                $name = $data[1];
+                $length = $data[2];
+                $qty = $data[3];
+
+                $category = EquipmentCategory::where('name', $cat)->first();
+                if (!$category)
+                    $category = EquipmentCategory::create(['name' => $cat, 'parent' => 3, 'private' => 0, 'status' => 1, 'company_id' => 3]);
+
+                $equip = Equipment::where('category_id', $category->id)->where('name', $name)->where('length', $length)->first();
+
+                if ($equip) {
+                    // Existing
+                } else {
+                    // Create item
+                    $equip_request = [
+                        'category_id' => $category->id,
+                        'name'        => $name,
+                        'length'      => $length,
+                        'status'      => 1
+                    ];
+
+                    var_dump($equip_request);
+                    $equip = Equipment::create($equip_request);
+
+                    $store = EquipmentLocation::where('site_id', 25)->first();
+                    // Allocate New Item to Store
+                    $existing = EquipmentLocationItem::where('location_id', $store->id)->where('equipment_id', $equip->id)->first();
+                    if ($existing) {
+                        $existing->qty = $existing->qty + $qty;
+                        $existing->save();
+                    } else
+                        $store->items()->save(new EquipmentLocationItem(['location_id' => $store->id, 'equipment_id' => $equip->id, 'qty' => $qty]));
+
+                    // Update Purchased Qty
+                    if (is_int($qty)) {
+                        $equip->purchased = $equip->purchased + $qty;
+                        $equip->save();
+                    }
+
+                    // Update log
+                    $log = new EquipmentLog(['equipment_id' => $equip->id, 'qty' => $qty, 'action' => 'P']);
+                    $log->notes = 'Purchased ' . $qty . ' items';
+                    $equip->log()->save($log);
+                }
+
+
+            }
+            fclose($handle);
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+    }
+
 }

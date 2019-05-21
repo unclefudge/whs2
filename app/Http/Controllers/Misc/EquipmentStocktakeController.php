@@ -65,6 +65,7 @@ class EquipmentStocktakeController extends Controller {
         if ($location) {
             // Get items then filter out 'deleted'
             $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
+            //dd($all_items);
             $items = $all_items->filter(function ($item) {
                 if ($item->equipment->status) return $item;
             });
