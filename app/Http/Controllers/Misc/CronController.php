@@ -284,8 +284,9 @@ class CronController extends Controller {
                                      'updated_by' => '1',
                                     ]);
                             }
-                            echo "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name<br>";
-                            $log .= "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name\n";
+                            $newTemplate = ($qa_master->id > 100) ? ' *NEW*' : '';
+                            echo "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name $newTemplate<br>";
+                            $log .= "Created QA [$newQA->id] Task:$plan->task_code ($plan->task_id) - $newQA->name - Site:$site->name $newTemplate\n";
                             $newQA->createToDo($site->supervisors->pluck('id')->toArray());
                         } else {
                             // Existing QA for site - make Active if currently On Hold

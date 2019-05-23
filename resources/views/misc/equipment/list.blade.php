@@ -182,7 +182,7 @@
                                         </tr>
 
                                         {{-- Items at Location --}}
-                                        @foreach ($location->items->whereIn('equipment_id', $equip_ids) as $item)
+                                        @foreach ($location->items->whereIn('equipment_id', $equip_ids)->sortBy('item_name') as $item)
                                             <tr class="locationc-{{ $cat->id}}" style="display: none; background-color: #fbfcfd" id="locations-{{ $equip->id}}-{{ $item->id }}">
                                                 <td></td>
                                                 <td>{{ $item->equipment->name }}</td>
