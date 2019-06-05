@@ -334,12 +334,15 @@ class SiteDocController extends Controller {
     /**
      * Get Risks current user is authorised to manage + Process datatables ajax request.
      */
-    public function getDocsType(Request $request, $type)
+    public function getDocsType($type)
     {
+        //dd(request()->all());
+        $status = (request('status')) ? request('status') : 1;
+        $site_id = ($status == 1) ? request('site_id') : request('site_id2');
         $records = SiteDoc::select(['id', 'type', 'site_id', 'attachment', 'name',])
             ->where('type', $type)
-            ->where('site_id', '=', $request->get('site_id'))
-            ->where('status', '1');
+            ->where('site_id', '=', $site_id)
+            ->where('status', 1);
 
         $dt = Datatables::of($records)
             ->editColumn('id', '<div class="text-center"><a href="/filebank/site/{{$site_id}}/docs/{{$attachment}}"><i class="fa fa-file-text-o"></i></a></div>')

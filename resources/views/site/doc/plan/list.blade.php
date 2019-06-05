@@ -35,11 +35,30 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="sites_active">
                             <div class="form-group">
-                                {!! Form::label('site_id', '&nbsp;', ['class' => 'control-label']) !!}
+                                {!! Form::label('site_id', 'Sites', ['class' => 'control-label']) !!}
                                 <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
-                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id')) !!}
+                                    <optgroup label="Active Sites"> </optgroup>
+                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), -1) !!}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="sites_upcoming">
+                            <div class="form-group">
+                                {!! Form::label('site_id2', 'Sites', ['class' => 'control-label']) !!}
+                                <select id="site_id2" name="site_id2" class="form-control select2" style="width:100%" placeholder="Select site">
+                                    <optgroup label="Upcoming Sites"> </optgroup>
+                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id2'), -1) !!}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                <select name="status" id="status" class="form-control bs-select">
+                                    <option value="1" selected>Active</option>
+                                    <option value="-1">Upcoming</option>
                                 </select>
                             </div>
                         </div>
@@ -82,36 +101,62 @@
 
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({
-            placeholder: "Select Site",
+        $("#site_id").select2({placeholder: "Select Site",});
+        $("#site_id2").select2({placeholder: "Select Site",});
+
+        $('#status').change(function () {
+            updateFields();
+        });
+
+        function updateFields() {
+            $("#sites_active").hide();
+            $("#sites_upcoming").hide();
+
+            if ($("#status").val() == '-1')
+                $("#sites_upcoming").show();
+            else
+                $("#sites_active").show();
+        }
+
+        updateFields();
+
+        var site_id = $('#site_id').val();
+
+        var table1 = $('#table1').DataTable({
+            pageLength: 100,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '{!! url('site/doc/type/dt/PLAN') !!}',
+                'type': 'GET',
+                'data': function (d) {
+                    d.site_id = $('#site_id').val();
+                    d.site_id2 = $('#site_id2').val();
+                    d.status = $('#status').val();
+                }
+            },
+            columns: [
+                {data: 'id', name: 'id', orderable: false, searchable: false},
+                {data: 'name', name: 'name'},
+            ],
+            order: [
+                [1, "asc"]
+            ]
+        });
+
+        $('#site_id').change(function () {
+            table1.ajax.reload();
+        });
+        $('#site_id2').change(function () {
+            table1.ajax.reload();
+        });
+        $('#status').change(function () {
+            table1.ajax.reload();
         });
 
     });
 
-    var site_id = $('#site_id').val();
 
-    var table1 = $('#table1').DataTable({
-        pageLength: 100,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            'url': '{!! url('site/doc/type/dt/PLAN') !!}',
-            'type': 'GET',
-            'data': function (d) {
-                d.site_id = $('#site_id').val();
-            }
-        },
-        columns: [
-            {data: 'id', name: 'id', orderable: false, searchable: false},
-            {data: 'name', name: 'name'},
-        ],
-        order: [
-            [1, "asc"]
-        ]
-    });
 
-    $('#site_id').change(function () {
-        table1.ajax.reload();
-    });
 </script>
 @stop

@@ -31,23 +31,22 @@
                             @if(Auth::user()->hasAnyPermission2('add.site.doc|add.safety.doc'))
                                 <button type="submit" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">Add</button>
                             @endif
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4" id="site_active">
+                        <div class="col-md-6" id="site_active">
                             <div class="form-group">
                                 <!--<label for="site_id_active" class="control-label">Active Sites ({!! Auth::user()->company->sites(1)->count() !!})</label>-->
                                 {!! Form::select('site_id_active', Auth::user()->company->sitesSelect('ALL', 1), null, ['class' => 'form-control select2', 'id' => 'site_id_active']) !!}
                             </div>
                         </div>
-                        <div class="col-md-4" id="site_completed">
+                        <div class="col-md-6" id="site_completed">
                             <div class="form-group">
                                 <!--<label for="site_id_completed" class="control-label">Completed Sites ({!! Auth::user()->company->sites('0')->count() !!})</label>-->
                                 {!! Form::select('site_id_completed', Auth::user()->company->sitesSelect('ALL', 0), null, ['class' => 'form-control select2', 'id' => 'site_id_completed']) !!}
                             </div>
                         </div>
-                        <div class="col-md-4" id="site_upcoming">
+                        <div class="col-md-6" id="site_upcoming">
                             <div class="form-group">
                                 <!--<label for="site_id_all" class="control-label">Any Site ({!! Auth::user()->company->sites()->count() !!})</label>-->
                                 {!! Form::select('site_id_upcoming', Auth::user()->company->sitesSelect('ALL', -1), null, ['class' => 'form-control select2', 'id' => 'site_id_all']) !!}
