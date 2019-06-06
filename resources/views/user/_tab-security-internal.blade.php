@@ -448,6 +448,13 @@ $rec = $user;
                             <td width="15%">{!! permSelect('del.site.doc', 'del', $rec, $cid, $dis) !!}</td>
                             <td width="15%"></td>
                         </tr>
+                        @if($cc)
+                            <tr>
+                                <td>Upcoming Plans<br><span class="font-grey-silver">Cape Cod Only</span></td>
+                                <td width="15%">{!! permSelect('view.site.doc.upcoming', 'all', $rec, $cid) !!}</td>
+                                <td width="60%" colspan="4"></td>
+                            </tr>
+                        @endif
                         <tr>
                             <td>Asbestos Notifications</td>
                             <td width="15%">{!! permSelect('view.site.asbestos', 'super', $rec, $cid, $dis) !!}</td>

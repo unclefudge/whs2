@@ -39,29 +39,31 @@
                             <div class="form-group">
                                 {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
                                 <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
-                                    <optgroup label="Active Sites"> </optgroup>
-                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), -1) !!}
+                                    <optgroup label="Active Sites"></optgroup>
+                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), 1) !!}
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6" id="sites_upcoming">
-                            <div class="form-group">
-                                {!! Form::label('site_id2', 'Site', ['class' => 'control-label']) !!}
-                                <select id="site_id2" name="site_id2" class="form-control select2" style="width:100%" placeholder="Select site">
-                                    <optgroup label="Upcoming Sites"> </optgroup>
-                                    {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id2'), -1) !!}
-                                </select>
+                        @if (Auth::user()->hasPermission2('view.site.doc.upcoming'))
+                            <div class="col-md-6" id="sites_upcoming">
+                                <div class="form-group">
+                                    {!! Form::label('site_id2', 'Site', ['class' => 'control-label']) !!}
+                                    <select id="site_id2" name="site_id2" class="form-control select2" style="width:100%" placeholder="Select site">
+                                        <optgroup label="Upcoming Sites"></optgroup>
+                                        {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id2'), -1) !!}
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                <select name="status" id="status" class="form-control bs-select">
-                                    <option value="1" selected>Active</option>
-                                    <option value="-1">Upcoming</option>
-                                </select>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                    <select name="status" id="status" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        <option value="-1">Upcoming</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="portlet-body">
                         <table class="table table-striped table-bordered table-hover order-column" id="table1">
@@ -155,7 +157,6 @@
         });
 
     });
-
 
 
 </script>
