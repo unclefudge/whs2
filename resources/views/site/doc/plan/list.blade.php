@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-md-6" id="sites_active">
                             <div class="form-group">
-                                {!! Form::label('site_id', 'Sites', ['class' => 'control-label']) !!}
+                                {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
                                 <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
                                     <optgroup label="Active Sites"> </optgroup>
                                     {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), -1) !!}
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-6" id="sites_upcoming">
                             <div class="form-group">
-                                {!! Form::label('site_id2', 'Sites', ['class' => 'control-label']) !!}
+                                {!! Form::label('site_id2', 'Site', ['class' => 'control-label']) !!}
                                 <select id="site_id2" name="site_id2" class="form-control select2" style="width:100%" placeholder="Select site">
                                     <optgroup label="Upcoming Sites"> </optgroup>
                                     {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id2'), -1) !!}
