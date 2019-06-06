@@ -217,17 +217,24 @@ class TodoController extends Controller {
         if (!Auth::user()->allowed2('edit.todo', $todo))
             return view('errors/404');
 
+        //dd($todo_request);
         $todo->update($todo_request);
 
         // Recently closed Hazard ToDo
         if ($todo->type == 'hazard' && $old_status && !$todo->status) {
             $action = Action::create(['action' => "Completed task: $todo->info", 'table' => 'site_hazards', 'table_id' => $todo->type_id]);
             $todo->emailToDoCompleted();
+            $todo->done_by = Auth::user()->id;
+            $todo->done_at = Carbon::now()->toDateTimeString();
+            $todo->save();
         }
         // Re-opened Hazard ToDo
         if ($todo->type == 'hazard' && !$old_status && $todo->status) {
             $action = Action::create(['action' => "Re-opened task: $todo->info", 'table' => 'site_hazards', 'table_id' => $todo->type_id]);
             $todo->emailToDo();
+            $todo->done_by = 0;
+            $todo->done_at = null;
+            $todo->save();
         }
 
         if ($request->get('delete_attachment') && $todo->attachment) {
