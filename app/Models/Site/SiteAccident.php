@@ -4,6 +4,8 @@ namespace App\Models\Site;
 
 use Mail;
 use App\User;
+use App\Models\Misc\Action;
+use App\Models\Comms\Todo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,6 +38,29 @@ class SiteAccident extends Model {
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');
+    }
+
+    /**
+     * A SiteAccident has many Actions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actions()
+    {
+        return $this->hasMany('App\Models\Misc\Action', 'table_id')->where('table', $this->table);
+    }
+
+    /**
+     * A SiteAccident 'may' have multiple ToDoos
+     *
+     * @return Collection
+     */
+    public function todos($status = '')
+    {
+        if ($status)
+            return Todo::where('status', $status)->where('type', 'accident')->where('type_id', $this->id)->get();
+
+        return Todo::where('type', 'accident')->where('type_id', $this->id)->get();
     }
 
     /**

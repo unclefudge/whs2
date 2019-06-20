@@ -57,7 +57,7 @@ class SiteHazard extends Model {
     }
 
     /**
-     * A SiteHazards Talk 'may' have multiple ToDoos
+     * A SiteHazard 'may' have multiple ToDoos
      *
      * @return Collection
      */
@@ -68,10 +68,9 @@ class SiteHazard extends Model {
 
         return Todo::where('type', 'hazard')->where('type_id', $this->id)->get();
     }
+
     /**
      * Update Status
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function updateStatus($status)
     {

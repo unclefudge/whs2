@@ -16,6 +16,7 @@ use App\Models\Misc\Action;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
 use App\Models\Site\SiteHazard;
+use App\Models\Site\SiteAccident;
 use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentLocationItem;
 use App\Models\Misc\Equipment\EquipmentLog;
@@ -179,6 +180,14 @@ class TodoController extends Controller {
 
             return redirect('/site/hazard/' . $todo->type_id);
         }
+        if ($todo->type == 'accident') {
+            $accident = SiteAccident::find($todo->type_id);
+            $action = Action::create(['action' => "Created task: $todo->info", 'table' => 'site_accidents', 'table_id' => $todo->type_id]);
+            $accident->touch(); // update timestamp
+            $todo->emailToDo();
+
+            return redirect('/site/accident/' . $todo->type_id);
+        }
 
         return redirect('/todo');
     }
@@ -220,17 +229,19 @@ class TodoController extends Controller {
         //dd($todo_request);
         $todo->update($todo_request);
 
-        // Recently closed Hazard ToDo
-        if ($todo->type == 'hazard' && $old_status && !$todo->status) {
-            $action = Action::create(['action' => "Completed task: $todo->info", 'table' => 'site_hazards', 'table_id' => $todo->type_id]);
+        // Recently closed Hazard/Accident ToDo
+        if (in_array($todo->type, ['hazard', 'accident']) && $old_status && !$todo->status) {
+            $table = ($todo->type == 'hazard') ? 'site_hazards' : 'site_accidents';
+            $action = Action::create(['action' => "Completed task: $todo->info", 'table' => $table, 'table_id' => $todo->type_id]);
             $todo->emailToDoCompleted();
             $todo->done_by = Auth::user()->id;
             $todo->done_at = Carbon::now()->toDateTimeString();
             $todo->save();
         }
-        // Re-opened Hazard ToDo
-        if ($todo->type == 'hazard' && !$old_status && $todo->status) {
-            $action = Action::create(['action' => "Re-opened task: $todo->info", 'table' => 'site_hazards', 'table_id' => $todo->type_id]);
+        // Re-opened Hazard/Accident ToDo
+        if (in_array($todo->type, ['hazard', 'accident']) && !$old_status && $todo->status) {
+            $table = ($todo->type == 'hazard') ? 'site_hazards' : 'site_accidents';
+            $action = Action::create(['action' => "Re-opened task: $todo->info", 'table' => $table, 'table_id' => $todo->type_id]);
             $todo->emailToDo();
             $todo->done_by = 0;
             $todo->done_at = null;

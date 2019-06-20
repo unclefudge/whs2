@@ -42,7 +42,12 @@
                                     <div class="form-group {!! fieldHasError('name', $errors) !!}">
                                         {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
                                         @if ($type)
-                                            <input type="text" name="name" class="form-control" readonly value="Site Hazard Task @ {!! \App\Models\Site\SiteHazard::find($type_id)->site->name !!}">
+                                            @if ($type == 'hazard')
+                                                <input type="text" name="name" class="form-control" readonly value="Site Hazard Task @ {!! \App\Models\Site\SiteHazard::find($type_id)->site->name !!}">
+                                            @endif
+                                            @if ($type == 'accident')
+                                                <input type="text" name="name" class="form-control" readonly value="Site Accident Task @ {!! \App\Models\Site\SiteAccident::find($type_id)->site->name !!}">
+                                            @endif
                                         @else
                                             {!! Form::text('name', null, ['class' => 'form-control']) !!}
                                         @endif
