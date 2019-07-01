@@ -321,7 +321,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             @if (Auth::user()->isCompany($accident->site->company_id))
                                 <div class="row">

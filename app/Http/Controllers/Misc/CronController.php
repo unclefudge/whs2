@@ -391,6 +391,8 @@ class CronController extends Controller {
                 $company = Company::find($doc->for_company_id);
                 echo "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]<br>";
                 $log .= "id[$doc->id] $company->name_alias ($doc->name) [" . $doc->expiry->format('d/m/Y') . "]\n";
+                $doc->updated_by = 1;
+                $doc->updated_at = Carbon::now()->toDateTimeString();
                 $doc->status = 0;
                 $doc->save();
             }

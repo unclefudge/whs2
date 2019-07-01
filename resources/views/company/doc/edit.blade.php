@@ -282,6 +282,18 @@
                                         {!! fieldErrorMessage('singleimage', $errors) !!}
                                     </div>
 
+                                    @if (Auth::user()->isCompany($doc->company_id))
+                                        @if ($doc->approved_by)
+                                            <div style="padding-left: 20px">
+                                                Document approved by {{ $doc->approvedBy->name }} on {{ $doc->approved_at->format('d/m/Y') }}
+                                            </div>
+                                        @endif
+                                            @if ($doc->status == 0)
+                                                <div style="padding-left: 20px">
+                                                    {{--}}Document archived by {{ $doc->updatedBy->name }} on {{ $doc->updated_at->format('d/m/Y') }} --}}
+                                                </div>
+                                            @endif
+                                    @endif
                                 </div>
 
                             </div>
@@ -467,8 +479,8 @@
                 var selected2 = '';
                 var selected3 = '';
                 /*if (!jQuery.inArray(index, super_class1)) {selected1 = ' selected';}
-                if (!jQuery.inArray(index, super_class2)) {selected2 = ' selected';}
-                if (!jQuery.inArray(index, super_class3)) {selected3 = ' selected';}*/
+                 if (!jQuery.inArray(index, super_class2)) {selected2 = ' selected';}
+                 if (!jQuery.inArray(index, super_class3)) {selected3 = ' selected';}*/
                 $("#lic_type1").append('<option value="' + index + '"' + selected1 + '>' + value + '</option>');
                 $("#lic_type2").append('<option value="' + index + '"' + selected2 + '>' + value + '</option>');
                 $("#lic_type3").append('<option value="' + index + '"' + selected3 + '>' + value + '</option>');

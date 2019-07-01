@@ -54,6 +54,26 @@ class CompanyDoc extends Model {
     }
 
     /**
+     * A Company Doc was approved by a user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo('App\User', 'approved_by');
+    }
+
+    /**
+     * A Company Doc was updated by a user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'approved_by');
+    }
+
+    /**
      * A Document belongs to a Category.  (sometimes - Some Reports do)
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
