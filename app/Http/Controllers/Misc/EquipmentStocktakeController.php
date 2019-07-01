@@ -45,14 +45,26 @@ class EquipmentStocktakeController extends Controller {
      */
     public function show($id)
     {
-        $location = EquipmentLocation::find($id);
+        if (preg_match('/^newloc/', $id)) {
+            // Create New Location for Site ID
+            list($crap, $site_id) = explode('-', $id);
+            $location = new EquipmentLocation(['site_id' => $site_id]);
+            $location->save();
+        } else
+            $location = EquipmentLocation::find($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
         foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc)
-                $sites[$loc->id] = $loc->name;
+            $sites[$loc->id] = $loc->name;
+        // Active Site but current no equipment
+        foreach (Auth::user()->authSites('view.site', 1) as $site) {
+            $name = "$site->suburb ($site->name)";
+            if (!in_array($name, $sites) && !in_array($site->id, [25, 92, 366])) // Store, Conference, OnLeave
+                $sites["newloc-$site->id"] = "$name";
+        }
         asort($sites);
         $sites = ['1' => 'CAPE COD STORE'] + $sites;
 
@@ -98,6 +110,7 @@ class EquipmentStocktakeController extends Controller {
      */
     public function update($id)
     {
+        dd(request()->all());
         $location = EquipmentLocation::findOrFail($id);
 
         // Check authorisation and throw 404 if not

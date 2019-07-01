@@ -383,8 +383,6 @@
 @stop
 
 @section('page-level-plugins-head')
-    <link href="/assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/demo/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>

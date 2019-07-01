@@ -52,11 +52,12 @@
                                 <div class="col-md-2">
                                     <div class="form-group {!! fieldHasError('type', $errors) !!}">
                                         {!! Form::label('type', 'Transfer to', ['class' => 'control-label']) !!}
-                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'super' => 'Supervisor', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
                                         {!! fieldErrorMessage('type', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-8">
+                                    {{-- Site --}}
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}" style="{{ fieldHasError('site_id', $errors) ? '' : 'display:none' }}" id="site-div">
                                         {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
                                         <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
@@ -64,11 +65,23 @@
                                         </select>
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
+                                    {{-- Supervisor --}}
+                                    <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="super-div">
+                                        {!! Form::label('super', 'Supervisor', ['class' => 'control-label']) !!}
+                                        <select id="super" name="super" class="form-control bs-select" style="width:100%">
+                                            @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
+                                                <option value="{{ $super->name }}">{{ $super->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        {!! fieldErrorMessage('super', $errors) !!}
+                                    </div>
+                                    {{-- Other --}}
                                     <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('other', $errors) ? '' : 'display:none' }}" id="other-div">
                                         {!! Form::label('other', 'Specify Other Location', ['class' => 'control-label']) !!}
                                         {!! Form::text('other', null, ['class' => 'form-control']) !!}
                                         {!! fieldErrorMessage('other', $errors) !!}
                                     </div>
+                                    {{-- Disposal --}}
                                     <div class="form-group {!! fieldHasError('reason', $errors) !!}" style="{{ fieldHasError('reason', $errors) ? '' : 'display:none' }}" id="dispose-div">
                                         {!! Form::label('reason', 'Reason for disposal', ['class' => 'control-label']) !!}
                                         {!! Form::text('reason', null, ['class' => 'form-control']) !!}
@@ -135,6 +148,7 @@
 
         $("#type").change(function () {
             $('#site-div').hide();
+            $('#super-div').hide();
             $('#other-div').hide();
             $('#dispose-div').hide();
             $('#assign-div').hide();
@@ -147,6 +161,11 @@
 
             if ($("#type").val() == 'site') {
                 $('#site-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'super') {
+                $('#super-div').show();
                 $('#assign-div').show();
             }
 

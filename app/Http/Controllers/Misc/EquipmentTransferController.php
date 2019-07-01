@@ -115,7 +115,7 @@ class EquipmentTransferController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment', $item))
             return view('errors/404');
 
-        $rules = ['type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other', 'reason' => 'required_if:type,dispose'];
+        $rules = ['type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other','reason' => 'required_if:type,dispose'];
         $mesg = [
             'type.required'      => 'The transfer to field is required',
             'site.required_if'   => 'The site field is required',
@@ -128,7 +128,9 @@ class EquipmentTransferController extends Controller {
         $old_location = $item->location->name;
         $qty = request('qty');
         $site_id = (request('type') == "store" || request('type') == "site") ? request('site_id') : null;
-        $other = (request('type') == "other") ? request('other') : null;
+        $other = null;
+        if (in_array(request('type'), ['other','super']))
+            $other = (request('type') == "other") ? request('other') : request('super');
 
         // Move items to New location
         if (request('type') == "dispose") { // Dispose
