@@ -311,6 +311,7 @@
 
                             <hr>
 
+                        {{--}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group {!! fieldHasError('extra_info', $errors) !!}">
@@ -321,6 +322,7 @@
                                     </div>
                                 </div>
                             </div>
+                            --}}
 
 
                             @if (Auth::user()->isCompany($accident->site->company_id))
