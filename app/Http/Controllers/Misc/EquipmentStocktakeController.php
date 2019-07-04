@@ -110,7 +110,7 @@ class EquipmentStocktakeController extends Controller {
      */
     public function update($id)
     {
-        dd(request()->all());
+        //dd(request()->all());
         $location = EquipmentLocation::findOrFail($id);
 
         // Check authorisation and throw 404 if not
