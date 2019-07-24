@@ -9,15 +9,17 @@
                     <img src="/img/logo-capstone.png" height="100">
                 @elseif (Auth::user()->company_id == 210 || Auth::user()->parent_company == 210)
                     <img src="/img/logo-blue-eco.png" height="100">
+                @elseif (Auth::user()->company_id == 302 || Auth::user()->parent_company == 302)
+                    <img src="/img/logo-shanshel.png" height="100">
                 @else
                     <img src="/img/logo-capecod.png" height="100">
                 @endif
             </div>
             <div class="col-md-4 col-sm-6 col-xs-12 footer-block">
                 <h2>Contact</h2>
-                @if (in_array(Auth::user()->company_id, [41,198, 210]) || in_array(Auth::user()->parent_company, [41, 198, 210]))
+                @if (in_array(Auth::user()->company_id, [41,198, 210, 302]) || in_array(Auth::user()->parent_company, [41, 198, 210, 302]))
                     <address class="margin-bottom-40">
-                        @if (in_array(Auth::user()->company_id, [41,198, 210]))
+                        @if (in_array(Auth::user()->company_id, [41,198, 210, 302]))
                             Phone: {{ Auth::user()->company->phone }}<br>
                             Email: <a href="mailto:{{ Auth::user()->company->email }}">{{ Auth::user()->company->email }}</a>
                         @else
@@ -34,8 +36,8 @@
             </div>
 
             <div class="col-md-4 col-sm-6 col-xs-12 footer-block">
-                @if (in_array(Auth::user()->company_id, [41,198, 210]) || in_array(Auth::user()->parent_company, [41, 198, 210]))
-                    @if (in_array(Auth::user()->company_id, [41,198, 210]))
+                @if (in_array(Auth::user()->company_id, [41,198, 210, 302]) || in_array(Auth::user()->parent_company, [41, 198, 210, 302]))
+                    @if (in_array(Auth::user()->company_id, [41,198, 210, 302]))
                         <h2>{{ Auth::user()->company->name }}</h2>
                         <p>ABN {{ Auth::user()->company->abn }}<br></p>
                     @else
