@@ -33,20 +33,13 @@
                         <div class="caption">
                             <i class="fa fa-file-text-o "></i>
                             <span class="caption-subject font-green-haze bold uppercase">Accident Report</span>
-                            <span class="caption-helper"> - ID: {{ $accident->id }}</span>
+                            <span class="caption-helper"> ID: {{ $accident->id }}</span>
                         </div>
                         <div class="actions">
                             <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        <!-- BEGIN FORM-->
-                        {!! Form::model($accident, ['method' => 'PATCH', 'action' => ['Site\SiteAccidentController@update', $accident->id], 'class' => 'horizontal-form']) !!}
-                        <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $accident->id }}">
-                        <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $accident->status }}">
-                        <input v-model="xx.record_resdate" type="hidden" id="record_resdate" value="{{ $accident->resolved_at }}">
-
                         @include('form-error')
 
                         <div class="form-body">
@@ -79,7 +72,7 @@
                                          'data-off-text'=>'Closed', 'data-off-color'=>'danger',
                                          (Auth::user()->allowed2('del.site.accident', $accident)) ? '' : 'readonly'
                                          ]) !!}
-                                        <p class="myswitch-label" style="font-size: 14px;">&nbsp; Status</p>
+                                        <p class="myswitch-label" style="font-size: 14px;">&nbsp; Status </p>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +108,7 @@
                             <div class="col-md-4">
                                 <div class="form-group {!! fieldHasError('date', $errors) !!}">
                                     {!! Form::label('date', 'Date / Time of Incident', ['class' => 'control-label']) !!}
-                                    @if ($accident->status &&  Auth::user()->id == $accident->created_by && 1 == 2)
+                                    @if ($accident->status && Auth::user()->id == $accident->created_by && 1 == 2)
                                         <div class="input-group date form_datetime">
                                             {!! Form::text('date', $accident->date->format('d F Y - H:i'), ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
                                             <span class="input-group-btn">
@@ -311,20 +304,23 @@
 
                             <hr>
 
-                        {{--}}
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('extra_info', $errors) !!}">
-                                        {!! Form::label('extra_info', 'Additional Information', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('extra_info', $accident->extra_info, ['rows' => '3', 'class' => 'form-control',
-                                        ($accident->status) ? '' : 'readonly']) !!}
-                                        {!! fieldErrorMessage('extra_info', $errors) !!}
+                            {{--}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('extra_info', $errors) !!}">
+                                            {!! Form::label('extra_info', 'Additional Information', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('extra_info', $accident->extra_info, ['rows' => '3', 'class' => 'form-control',
+                                            ($accident->status) ? '' : 'readonly']) !!}
+                                            {!! fieldErrorMessage('extra_info', $errors) !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            --}}
+                                --}}
 
-
+                            {!! Form::model($accident, ['method' => 'PATCH', 'action' => ['Site\SiteAccidentController@update', $accident->id], 'class' => 'horizontal-form']) !!}
+                            <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $accident->id }}">
+                            <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $accident->status }}">
+                            <input v-model="xx.record_resdate" type="hidden" id="record_resdate" value="{{ $accident->resolved_at }}">
                             @if (Auth::user()->isCompany($accident->site->company_id))
                                 <div class="row">
                                     <div class="col-md-12">
@@ -347,9 +343,9 @@
                                     @endif
                                 @endif
                             </div>
+                            {!! Form::close() !!}
                         @endif
                     </div>
-                    {!! Form::close() !!} <!-- END FORM-->
                 </div>
             </div>
         </div>
@@ -404,7 +400,8 @@
                         </tbody>
                     </table>
 
-                    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre> -->
+                    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
+                    -->
 
                 </div>
             </div>
@@ -431,7 +428,6 @@
 <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <!--<script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>-->
-
 <script src="/js/libs/moment.min.js" type="text/javascript"></script>
 
 <!-- Vue -->
@@ -440,6 +436,7 @@
 <script src="/js/vue-modal-component.js"></script>
 <script>
     Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
+    $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}});
 
     var host = window.location.hostname;
     var dev = true;
@@ -514,6 +511,7 @@
                     fullname: this.xx.created_by_fullname,
                 };
 
+                console.log(actiondata);
                 this.$http.post('/action', actiondata)
                         .then(function (response) {
                             toastr.success('Created new action ');

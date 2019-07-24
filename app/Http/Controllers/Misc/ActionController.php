@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Misc;
 use DB;
 use Session;
 use App\Models\Misc\Action;
+use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
 use App\Models\Site\SiteAsbestos;
 use App\Models\Site\SiteQa;
@@ -53,6 +54,7 @@ class ActionController extends Controller {
         if ($request->ajax()) {
             $action = Action::create($request->all());
             switch ($request->get('table')) {
+                case 'site_accidents': $record = SiteAccident::find($request->get('table_id')); break;
                 case 'site_hazards': $record = SiteHazard::find($request->get('table_id')); break;
                 case 'site_asbestos': $record = SiteAsbestos::find($request->get('table_id')); break;
                 case 'site_qa': $record = SiteQa::find($request->get('table_id')); break;

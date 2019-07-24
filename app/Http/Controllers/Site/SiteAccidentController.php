@@ -101,7 +101,7 @@ class SiteAccidentController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(SiteAccidentRequest $request, $id)
+    public function update($id)
     {
         $accident = SiteAccident::findOrFail($id);
 
@@ -109,14 +109,17 @@ class SiteAccidentController extends Controller {
         if (!Auth::user()->allowed2('edit.site.accident', $accident))
             return view('errors/404');
 
-        $accident_request = $request->all();
+        $this->validate(request(), ['notes' => 'required_without:status'], ['notes.required_without' => 'Please provide notes before you close the accident report']);
+
+        dd(request()->all());
+        $accident_request = request()->all();
 
         // Format date from datetime picker to mysql format
-        $date = new Carbon (preg_replace('/-/', '', $request->get('date')));
+        $date = new Carbon (preg_replace('/-/', '', request('date')));
         $accident_request['date'] = $date->toDateTimeString();
 
         // If Status closed 'field not present' set to 0
-        if (!$request->has('status'))
+        if (!request()->has('status'))
             $accident_request['status'] = '0';
 
         // If status was modified then update resolved date

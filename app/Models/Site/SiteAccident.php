@@ -84,6 +84,26 @@ class SiteAccident extends Model {
     }
 
     /**
+     * Email Action Notification
+     */
+    public function emailAction($action, $important = false)
+    {
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
+
+        if (\App::environment('prod')) {
+            $email_list = $this->site->company->notificationsUsersEmailType('n.site.accident');
+            $email_supers = $this->site->supervisorsEmails();
+            $email_to = array_unique(array_merge($email_list, $email_supers), SORT_REGULAR);
+        }
+
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteAccidentAction($this, $action));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteAccidentAction($this, $action));
+    }
+
+    /**
      * Get the owner of record   (getter)
      *
      * @return string;
