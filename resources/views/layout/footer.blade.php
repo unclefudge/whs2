@@ -58,7 +58,7 @@
 <div class="page-footer">
     <div class="container">
         Licensed to
-        @if (in_array(Auth::user()->company_id, [41,198, 210]) || in_array(Auth::user()->parent_company, [41, 198, 210]))
+        @if (in_array(Auth::user()->company_id, [41,198, 210, 302]) || in_array(Auth::user()->parent_company, [41, 198, 210, 302]))
             @if (in_array(Auth::user()->company_id, [41,198, 210]))
                 {{ Auth::user()->company->name }}
             @else
