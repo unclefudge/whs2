@@ -52,7 +52,7 @@ class EquipmentStocktake extends Model {
         $excluded = '';
         $included = '';
         foreach ($this->items as $item) {
-            if ($item->qty_actual == NULL) {
+            if ($item->qty_actual === NULL) {
                 $excluded .= "$item->item_name, ";
             } else {
                 $included .= "$item->item_name, ";

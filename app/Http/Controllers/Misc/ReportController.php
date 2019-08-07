@@ -420,8 +420,8 @@ class ReportController extends Controller {
         $date_to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00')->format('Y-m-d') : Carbon::tomorrow()->format('Y-m-d');
 
         $stocktake = EquipmentStocktake::select([
-            'equipment_stocktake.id', 'equipment_stocktake.location_id', 'equipment_stocktake.created_at', 'equipment_location.id', 'equipment_location.site_id', 'equipment_location.other',
-            'users.id', 'users.username', 'users.firstname', 'users.lastname',
+            'equipment_stocktake.id', 'equipment_stocktake.location_id', 'equipment_stocktake.created_at', 'equipment_location.id AS loc_id', 'equipment_location.site_id', 'equipment_location.other',
+            'users.id AS uid', 'users.username', 'users.firstname', 'users.lastname',
             DB::raw('CONCAT(users.firstname, " ", users.lastname) AS full_name')
         ])
             ->join('equipment_location', 'equipment_stocktake.location_id', '=', 'equipment_location.id')
@@ -429,10 +429,10 @@ class ReportController extends Controller {
             ->whereDate('equipment_stocktake.created_at', '>=', $date_from)
             ->whereDate('equipment_stocktake.created_at', '<=', $date_to);
 
-        //dd($transactions);
+        //dd($stocktake);
         $dt = Datatables::of($stocktake)
             ->editColumn('created_at', function ($stock) {
-                return $stock->created_at->format('d/m/Y');
+                return "<a href='/equipment/stocktake/view/$stock->id' target=_blank >".$stock->created_at->format('d/m/Y')."</a>";
             })
             ->addColumn('location', function ($stock) {
                 return $stock->name;

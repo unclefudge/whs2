@@ -5,7 +5,7 @@
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
         <li><a href="/equipment">Equipment Allocation</a><i class="fa fa-circle"></i></li>
         @if (Auth::user()->allowed2('add.equipment'))
-            <li><a href="/equipment/stocktake">Stocktake</a><i class="fa fa-circle"></i></li>
+            <li><a href="/equipment/stocktake/0">Stocktake</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>View</span></li>
     </ul>
