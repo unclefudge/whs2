@@ -238,7 +238,7 @@ class ReportController extends Controller {
     {
         // Store + Other Sites
         $locations = [1 => 'other'];
-        $locations_other = EquipmentLocation::where('site_id', null)->orderBy('other')->pluck('id')->toArray();
+        $locations_other = EquipmentLocation::where('site_id', null)->where('status', 1)->orderBy('other')->pluck('id')->toArray();
         foreach ($locations_other as $loc)
             $locations[$loc] = 'other';
 
@@ -249,7 +249,7 @@ class ReportController extends Controller {
             if (!$site->supervisorsSBC())
                 $sites_without_super[] = $site->id;
         }
-        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->pluck('id')->toArray();
+        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->where('status', 1)->pluck('id')->toArray();
         foreach ($locations_nosuper as $loc)
             $locations[$loc] = 'no-super';
 
@@ -258,7 +258,7 @@ class ReportController extends Controller {
         foreach ($supervisors as $super) {
             $sites = $super->supervisorsSites()->sortBy('code')->pluck('id')->toArray();
             foreach ($sites as $site) {
-                $location = EquipmentLocation::where('site_id', $site)->where('site_id', '<>', 25)->first();
+                $location = EquipmentLocation::where('site_id', $site)->where('status', 1)->where('site_id', '<>', 25)->first();
                 if ($location)
                     $locations[$location->id] = $super->name;
             }
@@ -276,7 +276,7 @@ class ReportController extends Controller {
     {
         // Store + Other Sites
         $locations = [1 => 'other'];
-        $locations_other = EquipmentLocation::where('site_id', null)->orderBy('other')->pluck('id')->toArray();
+        $locations_other = EquipmentLocation::where('site_id', null)->where('status', 1)->orderBy('other')->pluck('id')->toArray();
         foreach ($locations_other as $loc)
             $locations[$loc] = 'other';
 
@@ -287,7 +287,7 @@ class ReportController extends Controller {
             if (!$site->supervisorsSBC())
                 $sites_without_super[] = $site->id;
         }
-        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->pluck('id')->toArray();
+        $locations_nosuper = EquipmentLocation::whereIn('site_id', $sites_without_super)->where('status', 1)->pluck('id')->toArray();
         foreach ($locations_nosuper as $loc)
             $locations[$loc] = 'no-super';
 
@@ -296,7 +296,7 @@ class ReportController extends Controller {
         foreach ($supervisors as $super) {
             $sites = $super->supervisorsSites()->sortBy('code')->pluck('id')->toArray();
             foreach ($sites as $site) {
-                $location = EquipmentLocation::where('site_id', $site)->where('site_id', '<>', 25)->first();
+                $location = EquipmentLocation::where('site_id', $site)->where('status', 1)->where('site_id', '<>', 25)->first();
                 if ($location)
                     $locations[$location->id] = $super->name;
             }

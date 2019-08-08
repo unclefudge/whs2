@@ -133,18 +133,6 @@ class PagesController extends Controller {
     public function quick()
     {
 
-        $users = \App\User::all();
-        echo "<table>";
-         echo "<tr><td>User</td><td>Company</td><td>Trades</td</tr>";
-        foreach ($users as $user) {
-            $status = ($user->status) ? "Active" : "Inactive";
-            $roles = $user->rolesSBC();
-            $roles .= ($roles) ? ",". $user->parentRolesSBC() : $user->parentRolesSBC();
-            $roles = ltrim($roles, ',');
-           echo "<tr><td>$user->name</td><td>".$user->company->name."</td><td>".$user->company->tradesSkilledInSBC()."</td><td>$roles</td><td>$status</td></tr>";
-        }
-        echo "</table>";
-
         /*echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
         $todos = \App\Models\Comms\Todo::all();
         foreach ($todos as $todo) {

@@ -503,7 +503,9 @@ class EquipmentTransferController extends Controller {
                 return $site_other_id;
             })
             ->addColumn('assigned_to', function ($todo) {
-                return $todo->assignedToBySBC();
+                $to = $todo->assignedToBySBC();
+                $by = $todo->createdBy->name;
+                return "To: $to<br>By: $by";
             })
             ->addColumn('action', function ($todo) {
                 $action = '';
@@ -511,7 +513,7 @@ class EquipmentTransferController extends Controller {
 
                 return $action;
             })
-            ->rawColumns(['items', 'created_by', 'action'])
+            ->rawColumns(['items', 'created_by', 'action', 'assigned_to'])
             ->make(true);
 
         return $dt;

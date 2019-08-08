@@ -40,7 +40,7 @@
                                 <th> Items</th>
                                 <th> From</th>
                                 <th> To</th>
-                                <th> Assigned To</th>
+                                <th> Assigned To / By</th>
                                 <th width="10%"> Action</th>
                             </tr>
                             </thead>

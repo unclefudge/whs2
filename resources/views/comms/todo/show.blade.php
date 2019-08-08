@@ -73,7 +73,7 @@
                                             @endforeach
                                         </ul>
                                         <br>
-                                        <b>Assigned to:</b> {!! ($todo->type == 'equipment') ? $todo->assignedToCompanyBySBC() : $todo->assignedToBySBC() !!}
+                                        <b>Assigned to:</b> {!! ($todo->type == 'equipment') ? $todo->assignedToCompanyBySBC() : $todo->assignedToBySBC() !!}<br>
                                         <br><br>
                                     </div>
                                 @endif
@@ -86,6 +86,7 @@
                                             {!! Form::textarea('s_comments', $todo->comments, ['rows' => '4', 'class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
+                                    <div class="pull-right">Created by: {{ $todo->createdBy->name }}</div><br><br>
                                 </div>
                             </div>
 
