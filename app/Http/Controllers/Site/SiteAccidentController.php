@@ -111,7 +111,7 @@ class SiteAccidentController extends Controller {
 
         $this->validate(request(), ['notes' => 'required_without:status'], ['notes.required_without' => 'Please provide notes before you close the accident report']);
 
-        dd(request()->all());
+        //dd(request()->all());
         $accident_request = request()->all();
 
         // Format date from datetime picker to mysql format
