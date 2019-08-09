@@ -25,6 +25,9 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Equipment Allocation</span>
                         </div>
                         <div class="actions">
+                            @if (Auth::user()->allowed2('add.equipment'))
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/other-location" data-original-title="Stocktake">Other Locations</a>
+                                @endif
                             @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/equipment/stocktake/0" data-original-title="Stocktake">Stocktake</a>
                             @endif

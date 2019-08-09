@@ -84,9 +84,12 @@ class EquipmentTransferController extends Controller {
     public function verifyTransfer($id)
     {
         $location = EquipmentLocation::findOrFail($id);
+        list ($trans, $todo_id,) = explode(':', $location->other);
+        $todo = Todo::findOrFail($todo_id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.equipment', $location))
+        // User allowed to edit the equipment or has a ToDoo assigned to them for transfer
+        if (!(Auth::user()->allowed2('edit.equipment', $location) || in_array(Auth::user()->id, $todo->assignedTo()->pluck('id')->toArray())))
             return view('errors/404');
 
         list ($from_id, $type, $details, $user) = explode(':', $location->notes);
@@ -206,9 +209,12 @@ class EquipmentTransferController extends Controller {
     public function confirmTransfer($id)
     {
         $transLocation = EquipmentLocation::findOrFail($id);
+        list ($trans, $todo_id,) = explode(':', $transLocation->other);
+        $todo = Todo::findOrFail($todo_id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.equipment', $transLocation))
+        // User allowed to edit the equipment or has a ToDoo assigned to them for transfer
+        if (!(Auth::user()->allowed2('edit.equipment', $transLocation) || in_array(Auth::user()->id, $todo->assignedTo()->pluck('id')->toArray())))
             return view('errors/404');
 
         list($crap, $todo_id) = explode(':', $transLocation->other);

@@ -335,6 +335,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('equipment/{id}/transfer-cancel', 'Misc\EquipmentTransferController@cancelTransfer');
     Route::post('equipment/{id}/transfer-confirm', 'Misc\EquipmentTransferController@confirmTransfer');
 
+    // Locations Other
+    Route::get('equipment/other-location/dt/other', 'Misc\EquipmentLocationOtherController@getOther');
+    Route::get('equipment/other-location/view/{id}', 'Misc\EquipmentLocationOtherController@showStocktake');
+    Route::resource('equipment/other-location', 'Misc\EquipmentLocationOtherController');
 
     // Equipment
     Route::get('equipment/dt/allocation', 'Misc\EquipmentController@getAllocation');
@@ -350,6 +354,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('equipment/stocktake/dt/stocktake', 'Misc\EquipmentStocktakeController@getStocktake');
     Route::get('equipment/stocktake/view/{id}', 'Misc\EquipmentStocktakeController@showStocktake');
     Route::resource('equipment/stocktake', 'Misc\EquipmentStocktakeController');
+
 
 
     // Configuration
