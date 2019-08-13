@@ -78,7 +78,7 @@
                                     {{-- Other --}}
                                     <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('other', $errors) ? '' : 'display:none' }}" id="other-div">
                                         {!! Form::label('other', 'Specify Other Location', ['class' => 'control-label']) !!}
-                                        {!! Form::text('other', null, ['class' => 'form-control']) !!}
+                                        {!! Form::select('other', \App\Models\Misc\Equipment\EquipmentLocationOther::where('status', 1)->pluck('name', 'name')->toArray(), null, ['class' => 'form-control bs-select', 'id' => 'other']) !!}
                                         {!! fieldErrorMessage('other', $errors) !!}
                                     </div>
                                     {{-- Disposal --}}

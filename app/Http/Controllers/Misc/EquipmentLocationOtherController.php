@@ -54,7 +54,7 @@ class EquipmentLocationOtherController extends Controller {
         if (!Auth::user()->allowed2('add.equipment'))
             return view('errors/404');
 
-        return view('misc/equipment/create');
+        return view('misc/equipment/other/create');
     }
 
     /**
@@ -80,13 +80,13 @@ class EquipmentLocationOtherController extends Controller {
      */
     public function edit($id)
     {
-        $item = Equipment::findOrFail($id);
+        $other = EquipmentLocationOther::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == $item->company_id)
+        if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == $other->company_id)
             return view('errors/404');
 
-        return view('misc/equipment/edit', compact('item'));
+        return view('misc/equipment/other/edit', compact('other'));
     }
 
     /**
@@ -100,74 +100,14 @@ class EquipmentLocationOtherController extends Controller {
         if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == 3)
             return view('errors/404');
 
-        request()->validate(['name' => 'required', 'subcategory_id' => 'required_if:category_id,3'], ['subcategory_id.required_if' => 'The sub-category field is required.']); // Validate
+        request()->validate(['name' => 'required']); // Validate
 
-        // Create Item
-        $equip_request = request()->all();
-        if (request('category_id') == 3)
-            $equip_request['category_id'] = request('subcategory_id');
+        // Create Location
+        //dd(request()->all());
+        $equip = EquipmentLocationOther::create(request()->all());
+        Toastr::success("Created location");
 
-        $equip = Equipment::create($equip_request);
-        $qty = request('purchase_qty');
-
-        // Handle attached Photo or Video
-        if (request()->hasFile('media')) {
-            $file = request()->file('media');
-            $path = "filebank/equipment/";
-            $name = 'e' . $equip->id . '.' . strtolower($file->getClientOriginalExtension());
-            $path_name = $path . '/' . $name;
-            $file->move($path, $name);
-
-            // resize the image to a width of 1024 and constrain aspect ratio (auto height)
-            if (exif_imagetype($path_name)) {
-                Image::make(url($path_name))
-                    ->resize(1024, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->save($path_name);
-            } else
-                Toastr::error("Bad image");
-
-            $equip->attachment = $name;
-            $equip->save();
-        }
-
-        // Purchase new items
-        if ($qty) {
-            $store = EquipmentLocation::where('site_id', 25)->first();
-            // Create Store if not existing
-            if (!$store) {
-                $store = new EquipmentLocation(['site_id' => 25]);
-                $store->save();
-            }
-
-            // Allocate New Item to Store
-            $existing = EquipmentLocationItem::where('location_id', $store->id)->where('equipment_id', $equip->id)->first();
-            if ($existing) {
-                $existing->qty = $existing->qty + $qty;
-                $existing->save();
-            } else
-                $store->items()->save(new EquipmentLocationItem(['location_id' => $store->id, 'equipment_id' => $equip->id, 'qty' => $qty]));
-
-            // Update Purchased Qty
-            $equip->purchased = $equip->purchased + $qty;
-            $equip->save();
-
-            // Update log
-            $log = new EquipmentLog(['equipment_id' => $equip->id, 'qty' => $qty, 'action' => 'P']);
-            $log->notes = 'Purchased ' . $qty . ' items';
-            $equip->log()->save($log);
-        }
-
-
-        // Create New Transaction for log
-        $trans = new EquipmentLog(['equipment_id' => $equip->id, 'action' => 'N', 'notes' => 'Created item']);
-        $equip->log()->save($trans);
-
-        Toastr::success("Created item");
-
-        return redirect('/equipment/inventory');
+        return redirect('/equipment/other-location');
     }
 
     /**
@@ -177,76 +117,19 @@ class EquipmentLocationOtherController extends Controller {
      */
     public function update($id)
     {
-        $equip = Equipment::findOrFail($id);
+        $other = EquipmentLocationOther::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == $equip->company_id)
+        if (!Auth::user()->allowed2('add.equipment') && Auth::user()->company_id == $other->company_id)
             return view('errors/404');
 
-        request()->validate(['name' => 'required', 'subcategory_id' => 'required_if:category_id,3'], ['subcategory_id.required_if' => 'The sub-category field is required.']); // Validate
+        request()->validate(['name' => 'required']); // Validate
 
-        // Update Equipment
-        $equip_request = request()->all();
-        if (request('category_id') == 3)
-            $equip_request['category_id'] = request('subcategory_id');
-
-        $equip->update($equip_request);
-
-        $qty = request('purchase_qty');
-
-        // Handle attached Photo or Video
-        if (request()->hasFile('media')) {
-            $file = request()->file('media');
-            $path = "filebank/equipment/";
-            $name = 'e' . $equip->id . '.' . strtolower($file->getClientOriginalExtension());
-            $path_name = $path . '/' . $name;
-            $file->move($path, $name);
-
-            // resize the image to a width of 1024 and constrain aspect ratio (auto height)
-            if (exif_imagetype($path_name)) {
-                Image::make(url($path_name))
-                    ->resize(1024, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->save($path_name);
-            } else
-                Toastr::error("Bad image");
-
-            $equip->attachment = $name;
-            $equip->save();
-        }
-
-        // Purchase new items
-        if ($qty) {
-            $store = EquipmentLocation::where('site_id', 25)->first();
-            // Create Store if not existing
-            if (!$store) {
-                $store = new EquipmentLocation(['site_id' => 25]);
-                $store->save();
-            }
-
-            // Allocate New Item to Store
-            $existing = EquipmentLocationItem::where('location_id', $store->id)->where('equipment_id', $equip->id)->first();
-            if ($existing) {
-                $existing->qty = $existing->qty + $qty;
-                $existing->save();
-            } else
-                $store->items()->save(new EquipmentLocationItem(['location_id' => $store->id, 'equipment_id' => $equip->id, 'qty' => $qty]));
-
-            // Update Purchased Qty
-            $equip->purchased = $equip->purchased + $qty;
-            $equip->save();
-
-            // Update log
-            $log = new EquipmentLog(['equipment_id' => $equip->id, 'qty' => $qty, 'action' => 'P']);
-            $log->notes = 'Purchased ' . $qty . ' items';
-            $equip->log()->save($log);
-        }
+        $other->update(request()->all());
 
         Toastr::success("Saved changes");
 
-        return redirect("/equipment/inventory");
+        return redirect("/equipment/other-location");
     }
 
     /**
@@ -256,17 +139,17 @@ class EquipmentLocationOtherController extends Controller {
      */
     public function destroy($id)
     {
-        $item = Equipment::findOrFail($id);
+        $other = EquipmentLocationOther::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("del.equipment", $item))
+        if (!Auth::user()->allowed2("del.equipment", $other))
             return view('errors/404');
 
-        $item->status = 0;
-        $item->save();
-        Toastr::error("Deleted item");
+        $other->status = 0;
+        $other->save();
+        Toastr::error("Deleted location");
 
-        return redirect("/equipment/inventory");
+        return redirect("/equipment/other-location");
     }
 
     /**
@@ -280,7 +163,7 @@ class EquipmentLocationOtherController extends Controller {
                 return '<div class="text-center"><a href="/equipment/' . $other->id . '"><i class="fa fa-search"></i></a></div>';
             })
             ->addColumn('action', function ($other) {
-                return (Auth::user()->hasPermission2('add.equipment')) ? '<a href="/equipment/' . $other->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>' : '';
+                return (Auth::user()->hasPermission2('add.equipment')) ? '<a href="/equipment/other-location/' . $other->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>' : '';
             })
             ->rawColumns(['id', 'total', 'action'])
             ->make(true);

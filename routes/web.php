@@ -337,7 +337,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Locations Other
     Route::get('equipment/other-location/dt/other', 'Misc\EquipmentLocationOtherController@getOther');
-    Route::get('equipment/other-location/view/{id}', 'Misc\EquipmentLocationOtherController@showStocktake');
+    Route::get('equipment/other-location/{id}/delete', 'Misc\EquipmentLocationOtherController@destroy');
     Route::resource('equipment/other-location', 'Misc\EquipmentLocationOtherController');
 
     // Equipment
