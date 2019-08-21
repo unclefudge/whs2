@@ -426,7 +426,16 @@ trait UserRolesPermissions {
         if ($parent_level == '20') $parent_ids = []; // Own Company
         if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
 
-        $merged_ids = array_merge($company_ids, $parent_ids);
+        // Parent Company
+        $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
+        $parent_parent_ids = [];
+        if ($parent_level == '99') $parent_parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // All
+        if ($parent_level == '50') $parent_parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
+        if ($parent_level == '30') $parent_parent_ids = $this->company->reportsTo()->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+        if ($parent_level == '20') $parent_parent_ids = []; // Own Company
+        if ($parent_level == '1') $parent_parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
+
+        $merged_ids = array_merge($company_ids, $parent_ids, $parent_parent_ids);
 
         return ($status != '') ? Site::where('status', $status)->whereIn('id', $merged_ids)->get() : Site::whereIn('id', $merged_ids)->orderBy('name')->get();
         //return ($status != '') ? Site::where('status', $status)->whereIn('id', $merged_ids)->orderBy('name')->get() : Site::whereIn('id', $merged_ids)->orderBy('name')->get();
@@ -552,6 +561,36 @@ trait UserRolesPermissions {
                     $options .= "<option value='$site_id' $sel_tag>$text</option>";
                 }
                 if ($headers || ($this->company->parent_company && $this->company->subscription))
+                    $options .= '</optgroup>';
+            }
+        }
+
+        // Parent Company Parent
+        if ($this->company->parent_company && $this->company->reportsTo()->parent_company) {
+            $parent_level = $this->permissionLevel($permission, $this->company->reportsTo()->id);
+            $parent_ids = [];
+            if ($parent_level == '99') $parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // All
+            if ($parent_level == '50') $parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // Our Company
+            if ($parent_level == '30') $parent_ids = $this->company->reportsTo()->sitesPlannedFor()->pluck('id')->toArray(); // Planned for
+            if ($parent_level == '20') $parent_ids = []; // Own Company
+            if ($parent_level == '1') $parent_ids = $this->company->reportsTo()->reportsTo()->sites()->pluck('id')->toArray(); // Delete / Sign Off All
+            $sites_parent = Site::where('status', $status)->whereIn('id', $parent_ids)->get();
+
+            $sites_parent_array = [];
+            if ($sites_parent) {
+                foreach ($sites_parent as $site)
+                    $sites_parent_array[$site->id] = "$site->suburb - $site->address ($site->name)";
+            }
+            asort($sites_parent_array);
+
+            if (count($sites_parent_array)) {
+                if ($headers || ($this->company->reportsTo()->parent_company && $this->company->reportsTo()->subscription))
+                    $options .= '<optgroup label="' . $this->company->reportsTo()->reportsTo()->name . '">';
+                foreach ($sites_parent_array as $site_id => $text) {
+                    $sel_tag = ($selected == $site_id) ? ' selected ' : '';
+                    $options .= "<option value='$site_id' $sel_tag>$text</option>";
+                }
+                if ($headers || ($this->company->reportsTo()->parent_company && $this->company->reportsTo()->subscription))
                     $options .= '</optgroup>';
             }
         }

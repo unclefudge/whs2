@@ -49,6 +49,9 @@
                             <tr>
                                 <td><a href="/manage/report/users_noemail">Users without emails</a></td>
                             <tr>
+                            <tr>
+                                <td><a href="/manage/report/users_nowhitecard">Users without white card</a></td>
+                            <tr>
                                 <td><a href="/manage/report/users_lastlogin">Users Last Login</a></td>
                             </tr>
                             </tr>

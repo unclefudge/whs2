@@ -106,6 +106,26 @@ class ReportController extends Controller {
         return view('manage/report/users_noemail', compact('users'));
     }
 
+    public function users_nowhitecard()
+    {
+        $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();
+        $active_users = \App\User::where('status', 1)->whereIn('id', $allowed_users)->get();
+        $users = [];
+        $users_sorted = [];
+        foreach ($active_users as $user)
+            $users_sorted[$user->id] = $user->company->name_alias;
+
+        asort($users_sorted);
+        foreach ($users_sorted as $uid => $company) {
+            $user = User::find($uid);
+            if ($user && $user->requiresUserDoc(1) && !$user->activeUserDoc(1))
+                $users[] = $user;
+        }
+        //dd($users);
+
+        return view('manage/report/users_nowhitecard', compact('users'));
+    }
+
     public function usersLastLogin()
     {
         $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();

@@ -6,7 +6,7 @@
         @if (Auth::user()->hasAnyPermissionType('manage.report'))
             <li><a href="/manage/report">Management Reports</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Users without whitecard</span></li>
+        <li><span>Users without white card</span></li>
     </ul>
     @stop
 
@@ -20,7 +20,7 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Users Without Email</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Users Without White card</span>
                         </div>
                         <div class="actions">
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
@@ -31,22 +31,20 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
-                                <th> Username</th>
                                 <th> Name</th>
                                 <th> Company</th>
-                                <th> Role(s)</th>
+                                <th> Trades(s)</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($users as $user)
-                                <tr @if(!$user->status) class="font-red" @endif>
+                                <tr>
                                     <td>
                                         <div class="text-center"><a href="/user/{{$user->id}}"><i class="fa fa-search"></i></a></div>
                                     </td>
-                                    <td>{{ $user->username }}</td>
                                     <td>{{ $user->fullname }}</td>
                                     <td>{{ $user->company->name_alias }}</td>
-                                    <td>{{ $user->rolesSBC() }}</td>
+                                    <td>{{ $user->tradesSkilledInSBC() }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
