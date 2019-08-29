@@ -46,6 +46,11 @@
             </div>
             <hr class="field-hr">
             <div class="row">
+                <div class="col-md-3">Superannuation:</div>
+                <div class="col-xs-9">@if($company->superannuation) {{ $company->superannuation }} @else - @endif</div>
+            </div>
+            <hr class="field-hr">
+            <div class="row">
                 <div class="col-md-3">Creditor Code:</div>
                 <div class="col-xs-9">{{ ($company->creditor_code) ? $company->creditor_code : '-' }}</div>
             </div>

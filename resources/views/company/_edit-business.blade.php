@@ -72,6 +72,17 @@
             </div>
             <hr class="field-hr">
             <div class="row">
+                <div class="form-group {!! fieldHasError('superannuation', $errors) !!}">
+                    {!! Form::label('superannuation', 'Superannuation:', ['class' => 'col-md-3 control-label']) !!}
+                    <div class="col-md-9">
+                        {!! Form::select('superannuation', ['' => 'Select option', 'Liable' => 'Liable', 'Non Liable' => 'Non Liable'], $company->superannuation, ['class' => 'form-control bs-select']) !!}
+                        {!! fieldErrorMessage('superannuation', $errors) !!}
+                        <span class="help-block"> Only viewable by parent company</span>
+                    </div>
+                </div>
+            </div>
+            <hr class="field-hr">
+            <div class="row">
                 <div class="form-group {!! fieldHasError('creditor_code', $errors) !!}">
                     {!! Form::label('creditor_code', 'Creditor Code:', ['class' => 'col-md-3 control-label']) !!}
                     <div class="col-md-9">

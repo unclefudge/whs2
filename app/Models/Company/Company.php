@@ -29,7 +29,7 @@ class Company extends Model {
     protected $fillable = [
         'name', 'nickname', 'slug', 'email', 'phone', 'logo_banner', 'logo_profile',
         'address', 'address2', 'suburb', 'state', 'postcode', 'country', 'primary_user', 'secondary_user',
-        'abn', 'gst', 'business_entity', 'sub_group', 'payroll_tax', 'creditor_code', 'category',
+        'abn', 'gst', 'business_entity', 'sub_group', 'payroll_tax', 'creditor_code', 'superannuation', 'category',
         'lic_override', 'licence_no', 'licence_type', 'licence_expiry',
         'transient', 'maxjobs', 'notes', 'parent_company', 'subscription', 'signup_key', 'signup_step',
         'status', 'created_by', 'updated_by', 'approved_by', 'approved_at'];
