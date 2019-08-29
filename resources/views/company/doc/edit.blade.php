@@ -57,6 +57,8 @@
                                             <ul>
                                                 <li>{!! nl2br($doc->reject) !!}</li>
                                             </ul>
+
+                                            <br><b>Please correct the details and click &nbsp;<span class="btn blue btn-outline btn-primary btn-xs">Change File</span>&nbsp; to upload a different file (if required).</b>
                                         </div>
                                     @endif
                                 </div>
