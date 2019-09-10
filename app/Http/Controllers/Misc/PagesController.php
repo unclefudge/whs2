@@ -133,7 +133,7 @@ class PagesController extends Controller {
     public function quick()
     {
 
-        /*echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
+        echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
         $todos = \App\Models\Comms\Todo::all();
         foreach ($todos as $todo) {
             if ($todo->status && $todo->type == 'qa') {
@@ -156,7 +156,7 @@ class PagesController extends Controller {
                     $todo->delete();
                 }
             }
-        }*/
+        }
         /*
                 echo "<b>Old/New QA's</b></br>";
                 // Old Templates
@@ -309,55 +309,6 @@ class PagesController extends Controller {
             $user = \App\User::find($location->created_by);
             echo "<br>[$location->id] Location created by $user->fullname (".$location->created_at->format('d/m/Y g:i a').")<br>";
             echo $location->itemsList();
-        }
-        echo "<br><br>Completed<br>-------------<br>";
-        */
-
-
-        // Import Equipment
-        /*
-        echo "Importing Equipment<br><br>";
-        $row = 0;
-        if (($handle = fopen(public_path("equipment.csv"), "r")) !== false) {
-            while (($data = fgetcsv($handle, 5000, ",")) !== false) {
-                $row ++;
-                if ($row == 1) continue;
-                $num = count($data);
-
-                $name = $data[0];
-                $purchased = $data[1];
-                $project = $data[2];
-                $qty = $data[3];
-
-                echo "<br>$qty $name - $project<br>";
-
-                $equipment = \App\Models\Misc\Equipment\Equipment::where('name', $name)->first();
-                if (!$equipment)
-                    $equipment = \App\Models\Misc\Equipment\Equipment::create(['name' => $name, 'purchased' => $purchased, 'category_id' => 1])->first();
-
-                $site_id = $other = null;
-                if ($project == 'STORE')
-                    $site_id = 25;
-                elseif ($project[0] == 'Z')
-                    $other = $project;
-                else {
-                    $site = \App\Models\Site\Site::where('code', $project)->first();
-                    if ($site)
-                        $site_id = $site->id;
-                    else
-                        echo "***** NO SITE ******<br>";
-                }
-
-                $location = \App\Models\Misc\Equipment\EquipmentLocation::where('site_id', $site_id)->where('other', $other)->first();
-                if (!$location) {
-                    $location = new  \App\Models\Misc\Equipment\EquipmentLocation(['site_id' => $site_id, 'other' => $other]);
-                    $location->save();
-                    echo "Created Location S:$site_id O:$other<br>";
-                }
-                $location->items()->save(new \App\Models\Misc\Equipment\EquipmentLocationItem(['location_id' => $location->id, 'equipment_id' => $equipment->id, 'qty' => $qty]));
-                echo "Added item E:$equipment->id to Loc:$location->id ($qty)<br>";
-            }
-            fclose($handle);
         }
         echo "<br><br>Completed<br>-------------<br>";
         */
