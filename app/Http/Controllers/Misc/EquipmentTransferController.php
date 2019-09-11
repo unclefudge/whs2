@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use DB;
+use Mail;
 use Session;
 use App\User;
 use App\Models\Misc\Equipment\Equipment;
@@ -118,7 +119,7 @@ class EquipmentTransferController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment', $item))
             return view('errors/404');
 
-        $rules = ['type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other','reason' => 'required_if:type,dispose'];
+        $rules = ['type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other', 'reason' => 'required_if:type,dispose'];
         $mesg = [
             'type.required'      => 'The transfer to field is required',
             'site.required_if'   => 'The site field is required',
@@ -132,7 +133,7 @@ class EquipmentTransferController extends Controller {
         $qty = request('qty');
         $site_id = (request('type') == "store" || request('type') == "site") ? request('site_id') : null;
         $other = null;
-        if (in_array(request('type'), ['other','super']))
+        if (in_array(request('type'), ['other', 'super']))
             $other = (request('type') == "other") ? request('other') : request('super');
 
         // Move items to New location
@@ -293,6 +294,14 @@ class EquipmentTransferController extends Controller {
             }
         }
         $this->subtractItems($item, $qty); // Subtract items from original location
+
+        if (!($item->equipment->parent_category != 3 || $site_id == 25)) {
+            // Email Notification of Material transfer
+            if ($site_id) {
+                $site = Site::find($site_id);
+                Mail::to("construct@capecod.com.au")->send(new \App\Mail\Misc\EquipmentMaterialTransfer($site, $item, $qty));
+            }
+        }
     }
 
     /**
@@ -511,6 +520,7 @@ class EquipmentTransferController extends Controller {
             ->addColumn('assigned_to', function ($todo) {
                 $to = $todo->assignedToBySBC();
                 $by = $todo->createdBy->name;
+
                 return "To: $to<br>By: $by";
             })
             ->addColumn('action', function ($todo) {
