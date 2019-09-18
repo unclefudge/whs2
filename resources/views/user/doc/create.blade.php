@@ -26,7 +26,7 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-dark bold uppercase"> Upload Documents <span class="font-red">UNDER DEVELOPMENT</span> </span>
+                            <span class="caption-subject font-dark bold uppercase"> Upload Documents</span>
                         </div>
                     </div>
                     <div class="portlet-body form">

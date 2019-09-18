@@ -127,7 +127,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_2" aria-expanded="false"> Materials (under development) </a>
+                                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_2" aria-expanded="false"> Materials</a>
                                                 </h4>
                                             </div>
                                             <div id="collapse_3_2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
