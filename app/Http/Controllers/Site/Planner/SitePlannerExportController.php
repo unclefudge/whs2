@@ -704,6 +704,9 @@ class SitePlannerExportController extends Controller {
      */
     public function jobstartPDF(Request $request)
     {
+        //
+        //  This is a copy of the cron job each thursday
+        //
         $today = Carbon::now()->format('Y-m-d');
         $planner = DB::table('site_planner AS p')
             ->select(['p.id', 'p.site_id', 'p.entity_type', 'p.entity_id', 'p.task_id', 'p.from', 't.code'])

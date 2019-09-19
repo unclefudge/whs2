@@ -50,6 +50,9 @@ class CronController extends Controller {
         if (Carbon::today()->isMonday())
             CronController::overdueToDo();
 
+        if (Carbon::today()->isFriday())
+            CronController::emailJobstart();
+
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
         $log .= "\nALL DONE - NIGHTLY COMPLETE\n\n\n";
 
@@ -676,6 +679,75 @@ class CronController extends Controller {
                 $toolbox->emailOverdue();
             }
         }
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
+
+
+    /*
+    * Check for overdue ToDoo
+    */
+    static public function emailJobstart()
+    {
+        $log = '';
+        echo "<h2>Email Jobstart</h2>";
+        $log .= "Email Jobstart\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $emails = implode("; ", Auth::user()->company->notificationsUsersEmailType('n.site.jobstartexport'));
+        echo "Sending email to $emails";
+        $log .= "Sending email to $emails";
+
+        $today = Carbon::now()->format('Y-m-d');
+        $planner = DB::table('site_planner AS p')
+            ->select(['p.id', 'p.site_id', 'p.entity_type', 'p.entity_id', 'p.task_id', 'p.from', 't.code'])
+            ->join('trade_task as t', 'p.task_id', '=', 't.id')
+            ->whereDate('p.from', '>=', $today)
+            ->where('t.code', 'START')
+            ->orderBy('p.from')->get();
+
+        //dd($planner);
+        $startdata = [];
+        foreach ($planner as $plan) {
+            $site = Site::findOrFail($plan->site_id);
+            $entity_name = "Carpenter";
+            if ($plan->entity_type == 'c')
+                $entity_name = Company::find($plan->entity_id)->name;
+            $startdata[] = [
+                'date'            => Carbon::createFromFormat('Y-m-d H:i:s', $plan->from)->format('M j'),
+                'code'            => $site->code,
+                'name'            => $site->name,
+                'company'         => $entity_name,
+                'supervisor'      => $site->supervisorsSBC(),
+                'contract_sent'   => ($site->contract_sent) ? $site->contract_sent->format('d/m/Y') : '-',
+                'contract_signed' => ($site->contract_signed) ? $site->contract_signed->format('d/m/Y') : '-',
+                'deposit_paid'    => ($site->deposit_paid) ? $site->deposit_paid->format('d/m/Y') : '-',
+                'eng'             => ($site->engineering) ? 'Y' : '-',
+                'cc'              => ($site->construction) ? 'Y' : '-',
+                'hbcf'            => ($site->hbcf) ? 'Y' : '-',
+                'consultant'      => $site->consultant_name,
+            ];
+        }
+
+        $email_list = Auth::user()->company->notificationsUsersEmailType('n.site.jobstartexport');
+        $data = [
+            'user_fullname'     => Auth::user()->fullname,
+            'user_company_name' => Auth::user()->company->name,
+            'startdata'         => $startdata
+        ];
+        Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
+            $user_email = Auth::user()->email;
+            ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
+
+            $m->from($send_from, Auth::user()->fullname);
+            $m->to($email_list);
+            $m->subject('Upcoming Job Start Dates');
+        });
+
 
         echo "<h4>Completed</h4>";
         $log .= "\nCompleted\n\n\n";
