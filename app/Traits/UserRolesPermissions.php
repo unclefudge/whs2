@@ -2,6 +2,7 @@
 namespace App\Traits;
 
 use DB;
+use Auth;
 use Session;
 use App\User;
 use App\Models\Company\Company;
@@ -666,7 +667,7 @@ trait UserRolesPermissions {
         // User Documents
         if ($permissiontype == 'user.doc') {
             if ($action == 'add') {
-                if ($this->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')) return true;
+                if (($permission == 'add.user.doc' && $this->id = Auth::user()->id) || $this->hasAnyPermission2('add.docs.acc.pub|add.docs.acc.pri|add.docs.adm.pub|add.docs.adm.pri|add.docs.con.pub|add.docs.con.pri|add.docs.whs.pub|add.docs.whs.pri')) return true;
             } else {
                 $category = UserDocCategory::find($record->category_id);
                 $doc_permission = ($category->private) ? "$action.docs.$category->type.pri" : "$action.docs.$category->type.pub";

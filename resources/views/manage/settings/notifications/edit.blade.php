@@ -62,6 +62,12 @@
                         {!! notificationSelect($notificationTypes::type('n.swms.approval'), 'SWMS Approval', 'SWMS requires approval', 'SWMS documents', 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
 
 
+                        @if (Auth::user()->isCC())
+                            {{-- Email Lists --}}
+                            <h3 class="font-green form-section">Report Email Lists</h3>
+                            {!! notificationSelect($notificationTypes::type('n.site.jobstartexport'), 'Job Start Export', 'Job Start Export', 'Default list to email Job Start Export ') !!}
+                        @endif
+
 
                         <div class="form-actions right">
                             <a href="/settings" class="btn default"> Back</a>

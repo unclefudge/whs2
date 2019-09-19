@@ -192,7 +192,6 @@ class UserDocController extends Controller {
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
         $doc->status = 1;
-        /*
         $doc->status = 2;
         $category = UserDocCategory::find($doc->category_id);
         $pub_pri = ($category->private) ? 'pri' : 'pub';
@@ -204,7 +203,7 @@ class UserDocController extends Controller {
             // Create approval ToDoo
             if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
                 $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
-        }*/
+        }
         $doc->save();
 
         return redirect("user/$user->id/doc/upload");

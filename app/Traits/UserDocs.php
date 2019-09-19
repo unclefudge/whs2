@@ -67,20 +67,25 @@ trait UserDocs {
         $single = DB::table('user_docs_categories')->whereIn('company_id', ['1', '3'])->where('multiple', 0)->pluck('id')->toArray();
         //$single = DB::table('user_docs_categories')->whereIn('company_id', ['1', Auth::user()->company_id])->where('multiple', 0)->pluck('id')->toArray();
         foreach (UserDocTypes::all() as $doc_type => $doc_name) {
+
+            //******
+            //  Have suspended the need to have user doc public/private permissions to allow users to upload their own documents.
+            //******
+
             // Public Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
+            //if ($this->hasPermission2("$action.docs.$doc_type.pub") || $this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (UserDocTypes::docs($doc_type, 0)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $this->activeUserDoc($id)))
                         $array[$id] = $name;
                 }
-            }
+            //}
             // Private Docs
-            if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
+            //if ($this->hasPermission2("$action.docs.$doc_type.pri")) {
                 foreach (UserDocTypes::docs($doc_type, 1)->pluck('name', 'id')->toArray() as $id => $name) {
                     if (!($action == 'add' && in_array($id, $single) && $this->activeUserDoc($id)))
                         $array[$id] = $name;
                 }
-            }
+            //}
         }
 
         asort($array);

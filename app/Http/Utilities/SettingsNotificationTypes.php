@@ -19,7 +19,8 @@ class SettingsNotificationTypes {
         '12' => 'n.doc.acc.approval',
         '13' => 'n.site.jobstart',
         '14' => 'n.swms.approval',
-        '15' => 'n.site.status'
+        '15' => 'n.site.status',
+        '16' => 'n.site.jobstartexport'
     ];
 
 
