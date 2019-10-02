@@ -448,6 +448,7 @@ Route::get('cron/email-jobstart', 'Misc\CronController@emailJobstart');
 
 Route::get('test/cal', 'Misc\PagesController@testcal');
 Route::get('manage/updateroles', 'Misc\PagesController@updateRoles');
+Route::get('manage/import-payroll', 'Misc\PagesController@importPayroll');
 
 // PHP Info
 Route::get('php-info', function () {

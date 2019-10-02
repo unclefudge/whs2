@@ -50,7 +50,7 @@ class CronController extends Controller {
         if (Carbon::today()->isMonday())
             CronController::overdueToDo();
 
-        if (Carbon::today()->isFriday())
+        //if (Carbon::today()->isFriday())
             CronController::emailJobstart();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
@@ -698,7 +698,8 @@ class CronController extends Controller {
         $log .= "Email Jobstart\n";
         $log .= "------------------------------------------------------------------------\n\n";
 
-        $emails = implode("; ", Auth::user()->company->notificationsUsersEmailType('n.site.jobstartexport'));
+        $cc = Company::find(3);
+        $emails = implode("; ", $cc->notificationsUsersEmailType('n.site.jobstartexport'));
         echo "Sending email to $emails";
         $log .= "Sending email to $emails";
 
@@ -733,17 +734,15 @@ class CronController extends Controller {
             ];
         }
 
-        $email_list = Auth::user()->company->notificationsUsersEmailType('n.site.jobstartexport');
+        $email_list = $cc->notificationsUsersEmailType('n.site.jobstartexport');
         $data = [
             'user_fullname'     => Auth::user()->fullname,
             'user_company_name' => Auth::user()->company->name,
             'startdata'         => $startdata
         ];
         Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
-            $user_email = Auth::user()->email;
-            ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
-
-            $m->from($send_from, Auth::user()->fullname);
+            $send_from = 'do-not-reply@safeworksite.com.au';
+            $m->from($send_from, 'Safe Worksite');
             $m->to($email_list);
             $m->subject('Upcoming Job Start Dates');
         });

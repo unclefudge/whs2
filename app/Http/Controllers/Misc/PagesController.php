@@ -871,7 +871,8 @@ class PagesController extends Controller {
         return $counter;
     }
 
-    public function importMaterials(Request $request)
+
+    public function importMaterials()
     {
         echo "Importing Materials<br><br>";
         $row = 0;
@@ -926,6 +927,78 @@ class PagesController extends Controller {
                     $log->notes = 'Purchased ' . $qty . ' items';
                     $equip->log()->save($log);
                 }
+
+
+            }
+            fclose($handle);
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+    }
+
+    public function importPayroll()
+    {
+        echo "Importing Payroll<br><br>";
+        $row = 0;
+        if (($handle = fopen(public_path("payroll.csv"), "r")) !== false) {
+            while (($data = fgetcsv($handle, 5000, ",")) !== false) {
+                $row ++;
+                if ($row == 1) continue;
+                $num = count($data);
+
+                $cid = $data[0];
+                $company = Company::find($cid);
+                $name = $data[1];
+                $entity = $data[2];
+                $staff = $data[3];
+                $gst = $data[4];
+                $payroll = $data[5];
+                if ($payroll == 'Liable')
+                    $pid = 8;
+                else
+                    $pid = substr($payroll, - 2, 1);
+
+                $mod = false;
+                if ($company) {
+                    echo "<br>$name - $entity - $staff - $gst - $payroll<br>";
+                    //echo "<br>$name<br>"; // - $entity - $staff - $gst - $payroll<br>";
+                    if ($name != $company->name) {
+                        echo "*** Updating Name: $company->name => $name ***<br>";
+                        $company->name = $name;
+                        $mod = true;
+                    }
+
+                    if (array_search($entity, \App\Http\Utilities\CompanyEntityTypes::all()) != $company->business_entity) {
+                        echo "*** Updating Business Entity: " . \App\Http\Utilities\CompanyEntityTypes::name($company->business_entity) . " => $entity ***<br>";
+                        $company->business_entity = array_search($entity, \App\Http\Utilities\CompanyEntityTypes::all());
+                        $mod = true;
+                    }
+
+                    if (($gst == "Yes" && $company->gst == 0) || ($gst == "No" && $company->gst == 1)) {
+                        echo "*** Updating GST: to $gst ***<br>";
+                        $company->gst = ($gst == 'Yes') ? 1 : 0;
+                        $mod = true;
+                    }
+
+                    if ($pid != $company->payroll_tax) {
+                        if (!$company->payroll_tax)
+                            echo "*** Updating Payroll Tax: None  => $payroll ***<br>";
+                        elseif ($company->payroll_tax == 8)
+                            echo "*** Updating Payroll Tax: Liable => $payroll ***<br>";
+                        else
+                            echo "*** Updating Payroll Tax: Exempt ($company->payroll_tax)  => $payroll ***<br>";
+                        $company->payroll_tax = $pid;
+                        $mod = true;
+                    }
+
+                    if ($mod) {
+                     echo "NEW: $company->name - ent($company->business_entity) - gst($company->gst) - pay($company->payroll_tax)<br>";
+                    }
+
+                } else {
+                    echo "*****************************<br>INVAILD COMPANY ID ($cid)   $name - $entity - $staff - $gst - $payroll<br>*****************************<br>";
+                }
+
+                echo "<br>";
 
 
             }
