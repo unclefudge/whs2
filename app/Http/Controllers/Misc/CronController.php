@@ -50,7 +50,7 @@ class CronController extends Controller {
         if (Carbon::today()->isMonday())
             CronController::overdueToDo();
 
-        //if (Carbon::today()->isFriday())
+        if (Carbon::today()->isFriday())
             CronController::emailJobstart();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
@@ -700,6 +700,7 @@ class CronController extends Controller {
 
         $cc = Company::find(3);
         $emails = implode("; ", $cc->notificationsUsersEmailType('n.site.jobstartexport'));
+        $emails = 'fudge@jordan.net.au';
         echo "Sending email to $emails";
         $log .= "Sending email to $emails";
 
