@@ -937,7 +937,7 @@ class PagesController extends Controller {
 
     public function importPayroll()
     {
-        echo "Importing Payroll<br><br>";
+        echo "Importing Payroll<br>---------------------<br><br>";
         $row = 0;
         if (($handle = fopen(public_path("payroll.csv"), "r")) !== false) {
             while (($data = fgetcsv($handle, 5000, ",")) !== false) {
@@ -959,39 +959,40 @@ class PagesController extends Controller {
 
                 $mod = false;
                 if ($company) {
-                    echo "<br>$name - $entity - $staff - $gst - $payroll<br>";
-                    //echo "<br>$name<br>"; // - $entity - $staff - $gst - $payroll<br>";
+                    //echo "<br>$name - $entity - $staff - $gst - $payroll<br>";
+                    echo "<br>$name<br>---------------------------------------------------------<br>";
                     if ($name != $company->name) {
-                        echo "*** Updating Name: $company->name => $name ***<br>";
+                        echo "- Updating Name: $company->name => $name<br>";
                         $company->name = $name;
                         $mod = true;
                     }
 
                     if (array_search($entity, \App\Http\Utilities\CompanyEntityTypes::all()) != $company->business_entity) {
-                        echo "*** Updating Business Entity: " . \App\Http\Utilities\CompanyEntityTypes::name($company->business_entity) . " => $entity ***<br>";
+                        echo "- Updating Business Entity: " . \App\Http\Utilities\CompanyEntityTypes::name($company->business_entity) . " => $entity<br>";
                         $company->business_entity = array_search($entity, \App\Http\Utilities\CompanyEntityTypes::all());
                         $mod = true;
                     }
 
                     if (($gst == "Yes" && $company->gst == 0) || ($gst == "No" && $company->gst == 1)) {
-                        echo "*** Updating GST: to $gst ***<br>";
+                        echo "- Updating GST: to $gst<br>";
                         $company->gst = ($gst == 'Yes') ? 1 : 0;
                         $mod = true;
                     }
 
                     if ($pid != $company->payroll_tax) {
                         if (!$company->payroll_tax)
-                            echo "*** Updating Payroll Tax: None  => $payroll ***<br>";
+                            echo "- Updating Payroll Tax: None  => $payroll<br>";
                         elseif ($company->payroll_tax == 8)
-                            echo "*** Updating Payroll Tax: Liable => $payroll ***<br>";
+                            echo "- Updating Payroll Tax: Liable => $payroll<br>";
                         else
-                            echo "*** Updating Payroll Tax: Exempt ($company->payroll_tax)  => $payroll ***<br>";
+                            echo "- Updating Payroll Tax: Exempt ($company->payroll_tax)  => $payroll<br>";
                         $company->payroll_tax = $pid;
                         $mod = true;
                     }
 
                     if ($mod) {
-                     echo "NEW: $company->name - ent($company->business_entity) - gst($company->gst) - pay($company->payroll_tax)<br>";
+                        //echo "NEW: $company->name - ent($company->business_entity) - gst($company->gst) - pay($company->payroll_tax)<br>";
+                        //$company->save();
                     }
 
                 } else {

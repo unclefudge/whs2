@@ -736,8 +736,8 @@ class CronController extends Controller {
 
         $email_list = $cc->notificationsUsersEmailType('n.site.jobstartexport');
         $data = [
-            'user_fullname'     => Auth::user()->fullname,
-            'user_company_name' => Auth::user()->company->name,
+            'user_fullname'     => "Auto Generated",
+            'user_company_name' => "Cape Cod",
             'startdata'         => $startdata
         ];
         Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
