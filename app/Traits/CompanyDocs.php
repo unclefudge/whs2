@@ -213,13 +213,13 @@ trait CompanyDocs {
                 $super1_missing = '';
                 $missing_docs = [];
                 for ($x = 1; $x <= $doc->ref_name; $x ++) {
-                    $super = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
-                    if ($super) {
+                    $superCL = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->first();
+                    if ($superCL) {
                         // If User given and doesn't match then skip
-                        if ($user_id && $user_id != $super->user_id)
+                        if ($user_id && $user_id != $superCL->user_id)
                             continue;
 
-                        $super = User::find($super->user_id);
+                        $super = User::find($superCL->user_id);
                         $super_classes = ContractorLicenceSupervisor::where('doc_id', $doc->id)->where('super', $x)->get();
                         foreach ($super_classes as $rec) {
                             if (!($super->activeUserDoc(4) && in_array($rec->licence_id, explode(',', $super->activeUserDoc(4)->ref_type)))) {
@@ -230,7 +230,7 @@ trait CompanyDocs {
                                     $missing_docs[$super->name] = ContractorLicence::find($rec->licence_id)->name . ', ';
                             }
                         }
-                        if ($missing_docs[$super->name])
+                        if ($missing_docs && $missing_docs[$super->name])
                             $missing_docs[$super->name] = rtrim($missing_docs[$super->name], ', ');
                     }
                 }
