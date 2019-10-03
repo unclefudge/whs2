@@ -583,21 +583,21 @@ class PagesController extends Controller {
                     }
                     if ($qa->status == 0) {
                         echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
-                        $rec->status = 0;
-                        $rec->save();
+                        $todo->status = 0;
+                        $todo->save();
                         // $todo->delete();
                     }
                     if ($qa->status == 2) {
                         echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
-                        $rec->status = 0;
-                        $rec->save();
+                        $todo->status = 0;
+                        $todo->save();
                         // $todo->delete();
                     }
 
                 } else {
                     echo "ToDo [$todo->id] (DELETED)<br>";
-                    $rec->status = 0;
-                    $rec->save();
+                    $todo->status = 0;
+                    $todo->save();
                     // $todo->delete();
                 }
             }
