@@ -147,6 +147,7 @@ class SupportTicketController extends Controller {
         $ticket->priority = $priority;
         $action_request = ['action' => "Changed ticket priority from $old to " . $ticket->priority_text];
         $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+        $action->emailAction();
         $ticket->save();
         Toastr::success("Updated priority to " . $ticket->priority_text);
 
@@ -191,11 +192,13 @@ class SupportTicketController extends Controller {
             $ticket->eta = null;
             $action_request = ['action' => 'Re-opened ticket'];
             $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+            $action->emailAction();
             Toastr::success("Re-opened ticket");
         } else {
             $ticket->resolved_at = Carbon::now();
             $action_request = ['action' => 'Resolved ticket'];
             $action = $ticket->actions()->save(new SupportTicketAction($action_request));
+            $action->emailAction();
             Toastr::success("Resolved ticket");
         }
         $ticket->save();
