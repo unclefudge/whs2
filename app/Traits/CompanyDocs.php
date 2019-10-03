@@ -108,8 +108,8 @@ trait CompanyDocs {
         // Categories                          | PL  |WC/SA| SUB | PTC | CL  |
         // 0  Unallocated                      |_____|_____|_____|_____|_____|
         // 1  Subcontractor (On Site Trade)    |__X__|__X__|__X__|__X__|__X__|
-        // 2  Service Provider (On Site trade  |__X__|__X__|_____|_____|__X__|
-        // 3  Service Provider (Off Site)      |_____|__X__|_____|_____|_____|
+        // 2  Service Provider (On Site trade  |__X__|__X__|__X__|_____|__X__|
+        // 3  Service Provider (Off Site)      |_____|__X__|__X__|_____|_____|
         // 4  Supply & Fit                     |__X__|__X__|_____|_____|__X__|
         // 5  Supply Only                      |__X__|_____|_____|_____|_____|
         // 6  Consultant                       |__X__|__X__|__X__|_____|_____|
@@ -132,15 +132,22 @@ trait CompanyDocs {
         if ($this->category == 1 && (in_array($type, [1, 4]) || ($this->parent_company == 3 && $type == 5))) return true; // Requires PL, Sub, + PTC (CC Only)
         if ($this->category == 1 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true;
 
-        // Service Provider (On Site Trades) or Supply & Fit
-        if (in_array($this->category, [2, 4]) && $type == 1) return true; // Requires PL
-        if (in_array($this->category, [2, 4]) && $type == 7 && $this->tradeRequiresContractorsLicence()) return true;
+        // Service Provider (On Site Trades)
+        if ($this->category == 2 && in_array($type, [1, 4])) return true; // Requires PL + Sub
+        if ($this->category == 2 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true;
+
+        // Service Provider (Off Site)
+        if ($this->category == 3 && $type == 4) return true; // Requires Sub
+
+        // Supply & Fit
+        if ($this->category == 4 && $type == 1) return true; // Requires PL
+        if ($this->category == 4 && $type == 7 && $this->tradeRequiresContractorsLicence()) return true;
 
         // Supply Only
         if ($this->category == 5 && $type == 1) return true; // Requires PL
 
         // Consultant
-        if ($this->category == 6 && in_array($type, [1, 4])) return true; // Requires PL + PTC
+        if ($this->category == 6 && in_array($type, [1, 4])) return true; // Requires PL + Sub
 
         // Builder
         if ($this->category == 7 && in_array($type, [1, 7])) return true; // Requires PL + BL

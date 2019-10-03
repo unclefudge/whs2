@@ -992,7 +992,7 @@ class PagesController extends Controller {
 
                     if ($mod) {
                         //echo "NEW: $company->name - ent($company->business_entity) - gst($company->gst) - pay($company->payroll_tax)<br>";
-                        //$company->save();
+                        $company->save();
                     }
 
                 } else {
