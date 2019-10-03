@@ -132,31 +132,32 @@ class PagesController extends Controller {
 
     public function quick()
     {
+        echo "<b>Fixing toolbox images </b></br>";
+        $toolboxs = ToolboxTalk::all();
 
-        echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
-        $todos = \App\Models\Comms\Todo::all();
-        foreach ($todos as $todo) {
-            if ($todo->status && $todo->type == 'qa') {
-                $qa = \App\Models\Site\SiteQa::find($todo->type_id);
-                if ($qa) {
-                    if ($qa->status == 1) {
-                        //echo "ToDo [$todo->id] - $todo->name ACTIVE QA<br>";
-                    }
-                    if ($qa->status == 0) {
-                        echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
-                        $todo->delete();
-                    }
-                    if ($qa->status == 2) {
-                        echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
-                        $todo->delete();
-                    }
-
-                } else {
-                    echo "ToDo [$todo->id] (DELETED)<br>";
-                    $todo->delete();
-                }
+        foreach ($toolboxs as $toolbox) {
+            if (preg_match('/safeworksite.net/', $toolbox->overview)) {
+                $toolbox->overview = preg_replace('/safeworksite.net/', 'safeworksite.com.au', $toolbox->overview);
+                echo "O[$toolbox->id] $toolbox->name<br>";
+                $toolbox->save();
+            }
+            if (preg_match('/safeworksite.net/', $toolbox->hazards)) {
+                $toolbox->hazards = preg_replace('/safeworksite.net/', 'safeworksite.com.au', $toolbox->hazards);
+                echo "H[$toolbox->id] $toolbox->name<br>";
+                $toolbox->save();
+            }
+            if (preg_match('/safeworksite.net/', $toolbox->controls)) {
+                $toolbox->controls = preg_replace('/safeworksite.net/', 'safeworksite.com.au', $toolbox->controls);
+                echo "C[$toolbox->id] $toolbox->name<br>";
+                $toolbox->save();
+            }
+            if (preg_match('/safeworksite.net/', $toolbox->further)) {
+                $toolbox->further = preg_replace('/safeworksite.net/', 'safeworksite.com.au', $toolbox->further);
+                echo "F[$toolbox->id] $toolbox->name<br>";
+                $toolbox->save();
             }
         }
+
         /*
                 echo "<b>Old/New QA's</b></br>";
                 // Old Templates
@@ -571,18 +572,40 @@ class PagesController extends Controller {
 
     public function completedQA()
     {
-        echo "Closing completed QA ToDos<br><br>";
-        $records = \App\Models\Comms\Todo::where('type', 'qa')->where('status', 1)->get();
-        foreach ($records as $rec) {
-            $qa = \App\Models\Site\SiteQa::find($rec->type_id);
-            if ($qa->status == 0 || $qa->status == - 1) {
-                echo '[' . $rec->id . '] qaID:' . $rec->type_id . " - " . $qa->status . "<br>";
-                $rec->status = 0;
-                $rec->save();
+        echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
+        $todos = \App\Models\Comms\Todo::all();
+        foreach ($todos as $todo) {
+            if ($todo->status && $todo->type == 'qa') {
+                $qa = \App\Models\Site\SiteQa::find($todo->type_id);
+                if ($qa) {
+                    if ($qa->status == 1) {
+                        //echo "ToDo [$todo->id] - $todo->name ACTIVE QA<br>";
+                    }
+                    if ($qa->status == 0) {
+                        echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
+                        $rec->status = 0;
+                        $rec->save();
+                        // $todo->delete();
+                    }
+                    if ($qa->status == 2) {
+                        echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
+                        $rec->status = 0;
+                        $rec->save();
+                        // $todo->delete();
+                    }
+
+                } else {
+                    echo "ToDo [$todo->id] (DELETED)<br>";
+                    $rec->status = 0;
+                    $rec->save();
+                    // $todo->delete();
+                }
             }
         }
         echo "<br><br>Completed<br>-------------<br>";
     }
+
+
 
     public function refreshQA()
     {
