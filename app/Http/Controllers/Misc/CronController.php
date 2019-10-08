@@ -53,7 +53,7 @@ class CronController extends Controller {
         if (Carbon::today()->isMonday())
             CronController::overdueToDo();
 
-        if (Carbon::today()->isFriday())
+        if (Carbon::today()->isThursday())
             CronController::emailJobstart();
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
