@@ -46,6 +46,9 @@ class CronController extends Controller {
         CronController::expiredCompanyDoc();
         CronController::expiredSWMS();
         CronController::archiveToolbox();
+        CronController::completedQA();
+        CronController::brokenQaItem();
+
         // Only run on week days otherwise get same email multiple times over weekend
         if (Carbon::today()->isMonday())
             CronController::overdueToDo();
@@ -677,6 +680,80 @@ class CronController extends Controller {
                 echo "id[$toolbox->id] $toolbox->name<br>";
                 $log .= "id[$toolbox->id] $toolbox->name\n";
                 $toolbox->emailOverdue();
+            }
+        }
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
+
+    public function completedQA()
+    {
+        $log = '';
+        echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
+        $log .= "\nTodo QA doc completed/hold but still active\n";
+        $todos = Todo::all();
+        foreach ($todos as $todo) {
+            if ($todo->status && $todo->type == 'qa') {
+                $qa = SiteQa::find($todo->type_id);
+                if ($qa) {
+                    if ($qa->status == 1) {
+                        //echo "ToDo [$todo->id] - $todo->name ACTIVE QA<br>";
+                    }
+                    if ($qa->status == 0) {
+                        echo "ToDo [$todo->id] - $todo->name COMPLETED QA<br>";
+                        $log .= "ToDo [$todo->id] - $todo->name COMPLETED QA\n";
+                        $todo->status = 0;
+                        $todo->save();
+                        // $todo->delete();
+                    }
+                    if ($qa->status == 2) {
+                        echo "ToDo [$todo->id] - $todo->name HOLD QA<br>";
+                        $log .= "ToDo [$todo->id] - $todo->name HOLD QA\n";
+                        $todo->status = 0;
+                        $todo->save();
+                        // $todo->delete();
+                    }
+
+                } else {
+                    echo "ToDo [$todo->id] (DELETED)<br>";
+                    $log .= "ToDo [$todo->id] (DELETED)\n";
+                    $todo->status = 0;
+                    $todo->save();
+                    // $todo->delete();
+                }
+            }
+        }
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
+
+    public function brokenQaItem() {
+        $log = '';
+        echo "<br><br>Fixing broken QA items<br><br>";
+        $log .= "\nFixing broken QA items\n";
+        $qas = SiteQa::where('status', '>', 0)->where('master', 0)->get();
+
+        foreach ($qas as $qa) {
+            foreach($qa->items as $item) {
+                if ($item->done_by === NULL && $item->status == 0 && $item->sign_by) {
+                    echo "<br>[$qa->id] $qa->name (".$qa->site->name.")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
+                    $log .= "\n[$qa->id] $qa->name (".$qa->site->name.")\n- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]\n";
+                    $item->status = 1;
+
+                    // Check Planner which company did the task
+                    $planned_task = SitePlanner::where('site_id', $qa->site_id)->where('task_id', $item->task_id)->first();
+                    if ($planned_task && $planned_task->entity_type == 'c' && !$item->super)
+                        $item->done_by = $planned_task->entity_id;
+
+                    $item->save();
+                }
             }
         }
 

@@ -132,6 +132,26 @@ class PagesController extends Controller {
 
     public function quick()
     {
+        echo "<b>Fixing broken QA items </b></br>";
+        $qas = SiteQa::where('status', '>', 0)->where('master', 0)->get();
+
+        foreach ($qas as $qa) {
+            foreach($qa->items as $item) {
+                if ($item->done_by === NULL && $item->status == 0 && $item->sign_by) {
+                    echo "<br>[$qa->id] $qa->name (".$qa->site->name.")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
+                    $item->status = 1;
+
+                    // Check Planner which company did the task
+                    $planned_task = SitePlanner::where('site_id', $qa->site_id)->where('task_id', $item->task_id)->first();
+                    if ($planned_task && $planned_task->entity_type == 'c' && !$item->super)
+                        $item->done_by = $planned_task->entity_id;
+
+                    $item->save();
+                }
+            }
+        }
+
+        /*
         echo "<b>Fixing toolbox images </b></br>";
         $toolboxs = ToolboxTalk::all();
 
@@ -156,7 +176,7 @@ class PagesController extends Controller {
                 echo "F[$toolbox->id] $toolbox->name<br>";
                 $toolbox->save();
             }
-        }
+        }*/
 
         /*
                 echo "<b>Old/New QA's</b></br>";

@@ -86,7 +86,7 @@
                                             {!! Form::textarea('s_comments', $todo->comments, ['rows' => '4', 'class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
-                                    <div class="pull-right">Created by: {{ $todo->createdBy->name }}</div><br><br>
+                                    <div class="pull-right">Created by: {{ ($todo->createdBy) ? $todo->createdBy->name : 'SafeWorksite' }}</div><br><br>
                                 </div>
                             </div>
 
