@@ -690,7 +690,7 @@ class CronController extends Controller {
         if ($bytes_written === false) die("Error writing to file");
     }
 
-    public function completedQA()
+    static public function completedQA()
     {
         $log = '';
         echo "<br><br>Todo QA doc completed/hold but still active<br><br>";
@@ -734,7 +734,7 @@ class CronController extends Controller {
         if ($bytes_written === false) die("Error writing to file");
     }
 
-    public function brokenQaItem() {
+    static public function brokenQaItem() {
         $log = '';
         echo "<br><br>Fixing broken QA items<br><br>";
         $log .= "\nFixing broken QA items\n";
