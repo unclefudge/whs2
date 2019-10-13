@@ -766,7 +766,7 @@ class CronController extends Controller {
 
 
     /*
-    * Check for overdue ToDoo
+    * Email Jobstart
     */
     static public function emailJobstart()
     {
