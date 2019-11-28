@@ -381,6 +381,19 @@ class Company extends Model {
     }
 
     /**
+     * A list of users this company has authority over
+     * ie company has authority own staff + child companies
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function onsiteUsers($status = '')
+    {
+        $company_list = $this->companies()->whereIn('category', [1,2])->pluck('id')->toArray();
+
+        return ($status != '') ? User::where('status', $status)->whereIn('company_id', $company_list)->get() : User::whereIn('company_id', $company_list)->get();
+    }
+
+    /**
      * A dropdown list of staff for this company.
      *
      * @return array

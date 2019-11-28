@@ -42,6 +42,56 @@
                                         {!! fieldErrorMessage('location_id', $errors) !!}
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="form-group {!! fieldHasError('type', $errors) !!}">
+                                        {!! Form::label('type', 'Transfer to', ['class' => 'control-label']) !!}
+                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'super' => 'Supervisor', 'user' => 'Onsite User', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                                        {!! fieldErrorMessage('type', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    {{-- Site --}}
+                                    <div class="form-group {!! fieldHasError('site_id', $errors) !!}" style="{{ fieldHasError('site_id', $errors) ? '' : 'display:none' }}" id="site-div">
+                                        {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
+                                        <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
+                                            {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id')) !!}
+                                        </select>
+                                        {!! fieldErrorMessage('site_id', $errors) !!}
+                                    </div>
+                                    {{-- Supervisor --}}
+                                    <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="super-div">
+                                        {!! Form::label('super', 'Supervisor', ['class' => 'control-label']) !!}
+                                        <select id="super" name="super" class="form-control bs-select" style="width:100%">
+                                            @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
+                                                <option value="{{ $super->name }}">{{ $super->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        {!! fieldErrorMessage('super', $errors) !!}
+                                    </div>
+                                    {{-- Onsite User --}}
+                                    <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="user-div">
+                                        {!! Form::label('user', 'Onsite User', ['class' => 'control-label']) !!}
+                                        <select id="user" name="user" class="form-control select2" style="width:100%">
+                                            @foreach (Auth::user()->company->reportsTo()->onsiteUsers('1')->sortBy('name') as $onsiteuser)
+                                                <option value="{{ $onsiteuser->name }}">{{ $onsiteuser->name }} ({{ $onsiteuser->company->name }})</option>
+                                            @endforeach
+                                        </select>
+                                        {!! fieldErrorMessage('user', $errors) !!}
+                                    </div>
+                                    {{-- Other --}}
+                                    <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('other', $errors) ? '' : 'display:none' }}" id="other-div">
+                                        {!! Form::label('other', 'Specify Other Location', ['class' => 'control-label']) !!}
+                                        {!! Form::select('other', \App\Models\Misc\Equipment\EquipmentLocationOther::where('status', 1)->pluck('name', 'name')->toArray(), null, ['class' => 'form-control bs-select', 'id' => 'other']) !!}
+                                        {!! fieldErrorMessage('other', $errors) !!}
+                                    </div>
+                                    {{-- Disposal --}}
+                                    <div class="form-group {!! fieldHasError('reason', $errors) !!}" style="{{ fieldHasError('reason', $errors) ? '' : 'display:none' }}" id="dispose-div">
+                                        {!! Form::label('reason', 'Reason for disposal', ['class' => 'control-label']) !!}
+                                        {!! Form::text('reason', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('reason', $errors) !!}
+                                    </div>
+                                </div>
+                                {{--}}
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
                                         {!! Form::label('site_id', 'Transfer To', ['class' => 'control-label']) !!}
@@ -51,7 +101,7 @@
                                         </select>
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
-                                </div>
+                                </div>--}}
                             </div>
                             @if (Auth::user()->isCC())
                                 <div class="row">
@@ -277,6 +327,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#site_id").select2({placeholder: "Select Site"});
+        $("#user").select2({placeholder: "Select User", width: '100%'});
         $("#location_id").select2({placeholder: "Select Site"});
         $("#assign").select2({placeholder: "Select User", width: '100%'});
 
@@ -289,7 +340,46 @@
             window.location.href = "/equipment/" + $("#location_id").val() + "/transfer-bulk";
         });
 
+        $("#type").change(function () {
+            $('#site-div').hide();
+            $('#super-div').hide();
+            $('#user-div').hide();
+            $('#other-div').hide();
+            $('#dispose-div').hide();
+            $('#assign-div').hide();
 
+            if ($("#type").val() == 'store') {
+                $('#site_id').val(25);
+                $('#site_id').trigger('change');
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'site') {
+                $('#site-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'super') {
+                $('#super-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'user') {
+                $('#user-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'other') {
+                $('#other-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'dispose')
+                $('#dispose-div').show();
+        });
+
+
+        /*
         $("#type").change(function () {
             $('#site-div').hide();
             $('#other-div').hide();
@@ -314,7 +404,7 @@
 
             if ($("#type").val() == 'dispose')
                 $('#dispose-div').show();
-        });
+        });*/
     });
 </script>
 @stop

@@ -133,8 +133,14 @@ class EquipmentTransferController extends Controller {
         $qty = request('qty');
         $site_id = (request('type') == "store" || request('type') == "site") ? request('site_id') : null;
         $other = null;
-        if (in_array(request('type'), ['other', 'super']))
-            $other = (request('type') == "other") ? request('other') : request('super');
+        if (in_array(request('type'), ['other', 'super', 'user'])) {
+            if (request('type') == "other")
+                $other = request('type');
+            if (request('type') == "super")
+                $other = request('super');
+            if (request('type') == "user")
+                $other = request('user');
+        }
 
         // Move items to New location
         if (request('type') == "dispose") { // Dispose
@@ -166,9 +172,15 @@ class EquipmentTransferController extends Controller {
      */
     public function transferBulkItems($id)
     {
-        $rules = ['location_id' => 'required', 'site_id' => 'required:site'];
-        $mesg = ['location_id.required' => 'The transfer from field is required', 'site.required_if' => 'The transfer to field is required'];
+        $rules = ['location_id' => 'required', 'type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other', 'reason' => 'required_if:type,dispose'];
+        $mesg = [
+            'type.required'      => 'The transfer to field is required',
+            'site.required_if'   => 'The site field is required',
+            'other.required_if'  => 'The other location field is required',
+            'reason.required_if' => 'The reason field is required',
+        ];
         request()->validate($rules, $mesg); // Validate
+
 
         $location = EquipmentLocation::findOrFail($id);
 
@@ -179,6 +191,18 @@ class EquipmentTransferController extends Controller {
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.equipment', $location))
             return view('errors/404');
+
+
+        $site_id = (request('type') == "store" || request('type') == "site") ? request('site_id') : null;
+        $other = null;
+        if (in_array(request('type'), ['other', 'super', 'user'])) {
+            if (request('type') == "other")
+                $other = request('type');
+            if (request('type') == "super")
+                $other = request('super');
+            if (request('type') == "user")
+                $other = request('user');
+        }
 
         // Get items then filter out 'deleted'
         $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
@@ -192,9 +216,9 @@ class EquipmentTransferController extends Controller {
             $qty = request($item->id . '-qty');
             if ($qty) {
                 if (request('assign'))
-                    $this->assignTransfer($item, $qty, request('site_id'), null, request('assign'), request('due_at')); // Assign transfer to user
+                    $this->assignTransfer($item, $qty, $site_id, $other, request('assign'), request('due_at')); // Assign transfer to user
                 else
-                    $this->performTransfer($item, $qty, request('site_id'), null);  // Transfer items now
+                    $this->performTransfer($item, $qty, $site_id, $other);  // Transfer items now
             }
         }
 
@@ -271,7 +295,7 @@ class EquipmentTransferController extends Controller {
             $location = EquipmentLocation::where('site_id', $site_id)->first();
         } else {  // Other
             $log->notes = "Transferred $qty items from $old_location => $other";
-            $location = EquipmentLocation::where('other', $other)->first();
+            $location = EquipmentLocation::where('other', $other)->where('status', 1)->first();
         }
         $log->save();
 
@@ -453,6 +477,12 @@ class EquipmentTransferController extends Controller {
                 }
             }
             $item->delete();
+
+            // Make location inactive if type Other
+            if (!$item->location->site_id) {
+                $item->location->status = 0;
+                $item->location->save();
+            }
         } else {
             $item->qty = $remain_qty;
             $item->save();

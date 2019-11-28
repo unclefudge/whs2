@@ -95,7 +95,15 @@ class ReportController extends Controller {
         $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
         $companies = \App\Models\Company\Company::where('created_at', '>', '2016-08-27 12:00:00')->whereIn('id', $allowed_companies)->orderBy('created_at', 'DESC')->get();
 
-        return view('manage/report/newcompanies', compact('companies'));
+        return view('manage/report/company_contactinfo', compact('companies'));
+    }
+
+    public function companyContactInfo()
+    {
+        $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
+        $companies = \App\Models\Company\Company::whereIn('id', $allowed_companies)->orderBy('name')->get();
+
+        return view('manage/report/companycontactinfo', compact('companies'));
     }
 
     public function users_noemail()

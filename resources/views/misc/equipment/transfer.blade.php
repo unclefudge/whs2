@@ -52,7 +52,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group {!! fieldHasError('type', $errors) !!}">
                                         {!! Form::label('type', 'Transfer to', ['class' => 'control-label']) !!}
-                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'super' => 'Supervisor', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
+                                        {!! Form::select('type', ['' => 'Select action', 'store' => 'Store', 'site' => 'Site', 'super' => 'Supervisor', 'user' => 'Onsite User', 'other' => 'Other location', 'dispose' => 'Dispose'], null, ['class' => 'form-control bs-select', 'id' => 'type']) !!}
                                         {!! fieldErrorMessage('type', $errors) !!}
                                     </div>
                                 </div>
@@ -74,6 +74,16 @@
                                             @endforeach
                                         </select>
                                         {!! fieldErrorMessage('super', $errors) !!}
+                                    </div>
+                                    {{-- Onsite User --}}
+                                    <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="user-div">
+                                        {!! Form::label('user', 'Onsite User', ['class' => 'control-label']) !!}
+                                        <select id="user" name="user" class="form-control select2" style="width:100%">
+                                            @foreach (Auth::user()->company->reportsTo()->onsiteUsers('1')->sortBy('name') as $onsiteuser)
+                                                <option value="{{ $onsiteuser->name }}">{{ $onsiteuser->name }} ({{ $onsiteuser->company->name }})</option>
+                                            @endforeach
+                                        </select>
+                                        {!! fieldErrorMessage('user', $errors) !!}
                                     </div>
                                     {{-- Other --}}
                                     <div class="form-group {!! fieldHasError('other', $errors) !!}" style="{{ fieldHasError('other', $errors) ? '' : 'display:none' }}" id="other-div">
@@ -144,11 +154,13 @@
     $(document).ready(function () {
         /* Select2 */
         $("#site_id").select2({placeholder: "Select Site"});
+        $("#user").select2({placeholder: "Select User", width: '100%'});
         $("#assign").select2({placeholder: "Select User", width: '100%'});
 
         $("#type").change(function () {
             $('#site-div').hide();
             $('#super-div').hide();
+            $('#user-div').hide();
             $('#other-div').hide();
             $('#dispose-div').hide();
             $('#assign-div').hide();
@@ -166,6 +178,11 @@
 
             if ($("#type").val() == 'super') {
                 $('#super-div').show();
+                $('#assign-div').show();
+            }
+
+            if ($("#type").val() == 'user') {
+                $('#user-div').show();
                 $('#assign-div').show();
             }
 
