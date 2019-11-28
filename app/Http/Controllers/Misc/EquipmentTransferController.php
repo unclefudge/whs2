@@ -184,10 +184,6 @@ class EquipmentTransferController extends Controller {
 
         $location = EquipmentLocation::findOrFail($id);
 
-        // Verify not transfer to/from aren't same location
-        if ($location->site_id == request('site_id'))
-            return back()->withErrors(['samelocation' => "The From and To locations can't be the same"]);
-
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.equipment', $location))
             return view('errors/404');
@@ -203,6 +199,12 @@ class EquipmentTransferController extends Controller {
             if (request('type') == "user")
                 $other = request('user');
         }
+
+        // Verify not transfer to/from aren't same location
+        if ($site_id &&  $location->site_id == $site_id)
+            return back()->withErrors(['samelocation' => "The From and To locations can't be the same site"]);
+        elseif ($location->other == $other)
+            return back()->withErrors(['samelocation' => "The From and To locations can't be the same"]);
 
         // Get items then filter out 'deleted'
         $all_items = EquipmentLocationItem::where('location_id', $location->id)->get();
