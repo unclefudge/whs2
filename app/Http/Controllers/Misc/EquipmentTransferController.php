@@ -201,9 +201,9 @@ class EquipmentTransferController extends Controller {
         }
 
         // Verify not transfer to/from aren't same location
-        if ($site_id &&  $location->site_id == $site_id)
+        if ($site_id && $location->site_id == $site_id)
             return back()->withErrors(['samelocation' => "The From and To locations can't be the same site"]);
-        elseif ($location->other == $other)
+        elseif ($other && $location->other == $other)
             return back()->withErrors(['samelocation' => "The From and To locations can't be the same"]);
 
         // Get items then filter out 'deleted'
