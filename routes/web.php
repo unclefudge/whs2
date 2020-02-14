@@ -233,7 +233,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('site/qa/dt/qa_templates', 'Site\SiteQaController@getQaTemplates');
     Route::get('site/qa/templates', 'Site\SiteQaController@templates');
     Route::resource('site/qa', 'Site\SiteQaController');
-    //Route::resource('site/qa/action', 'Site\SiteQaActionController');
+
+    // Site Maintenance
+    Route::get('site/maintenance/dt/maintenance', 'Site\SiteMaintenanceController@getMaintenance');
+    Route::any('site/maintenance/upload', 'Site\SiteMaintenanceController@uploadAttachment');
+    Route::get('site/maintenance/data/prac_completion/{site_id}', 'Site\SiteMaintenanceController@getPracCompletion');
+    Route::get('site/maintenance/data/site_super/{site_id}', 'Site\SiteMaintenanceController@getSiteSupervisor');
+    Route::resource('site/maintenance', 'Site\SiteMaintenanceController');
+
 
     // Site Asbestos Register
     Route::get('site/asbestos/dt/list', 'Site\SiteAsbestosController@getReports');

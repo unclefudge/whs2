@@ -37,6 +37,8 @@
                                     <h3 class="pull-right font-blue uppercase" style="margin:0 0 10px;">Upcoming Site</h3>
                                 @elseif($site->status == '0')
                                     <h3 class="pull-right font-red uppercase" style="margin:0 0 10px;">Completed Site</h3>
+                                @elseif($site->status == '2')
+                                    <h3 class="pull-right font-red uppercase" style="margin:0 0 10px;">Maintenance</h3>
                                 @endif
                             </div>
                         </div>
@@ -61,7 +63,7 @@
                             <div class="col-md-3 pull-right">
                                 <div class="form-group {!! fieldHasError('status', $errors) !!}">
                                     {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                    {!! Form::select('status', ['-1' => 'Upcoming', '1' => 'Active', '0' => 'Completed'],
+                                    {!! Form::select('status', ['-1' => 'Upcoming', '1' => 'Active', '2' => 'Maintenance', '0' => 'Completed'],
                                      $site->status, ['class' => 'form-control bs-select']) !!}
                                     {!! fieldErrorMessage('status', $errors) !!}
                                 </div>

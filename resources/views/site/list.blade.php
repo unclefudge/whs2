@@ -35,6 +35,7 @@
                                         <option value="-1">Upcoming</option>
                                         <option value="0">Completed</option>
                                     @endif
+                                    <option value="2">Maintenance</option>
                                 </select>
                             </div>
                         </div>
@@ -113,7 +114,7 @@
 
     $('select#site_group').change(function () {
         if ($('#site_group').val() == 0 || $('#site_group').val() == {{ Auth::user()->company_id}}) {
-            var newOptions = {"Active": "1", "Upcoming": "-1", "Completed": "0"};
+            var newOptions = {"Active": "1", "Upcoming": "-1", "Completed": "0", "Maintenance": "2"};
 
             var $el = $("#status");
             $el.empty(); // remove old options
