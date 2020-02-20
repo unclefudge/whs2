@@ -94,7 +94,7 @@
                                                                             <td>
                                                                                 <div class="itemactual-" id="itemactual-{{ $loc->id }}">
                                                                                     <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
-                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                        @for ($i = 0; $i < 1000; $i++)
                                                                                             <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
                                                                                         @endfor
                                                                                     </select>
@@ -156,7 +156,7 @@
                                                                             <td>
                                                                                 <div class="itemactual-" id="itemactual-{{ $loc->id }}">
                                                                                     <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
-                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                        @for ($i = 0; $i < 1000; $i++)
                                                                                             <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
                                                                                         @endfor
                                                                                     </select>
@@ -218,7 +218,7 @@
                                                                             <td>
                                                                                 <div class="itemactual-" id="itemactual-{{ $loc->id }}">
                                                                                     <select id="{{ $loc->id }}-qty" name="{{ $loc->id }}-qty" class="form-control bs-select" width="100%">
-                                                                                        @for ($i = 0; $i < 100; $i++)
+                                                                                        @for ($i = 0; $i < 1000; $i++)
                                                                                             <option value="{{ $i }}" @if ($i == $loc->qty) selected @endif>{{ $i }}</option>
                                                                                         @endfor
                                                                                     </select>
@@ -324,7 +324,7 @@
                                                         <td>
                                                             <div class="form-group {!! fieldHasError($x.'-extra_qty', $errors) !!}">
                                                                 <select id="{{ $x }}-extra_qty" name="{{ $x }}-extra_qty" class="form-control bs-select" width="100%">
-                                                                    @for ($i = 0; $i < 100; $i++)
+                                                                    @for ($i = 0; $i < 1000; $i++)
                                                                         <option value="{{ $i }}">{{ $i }}</option>
                                                                     @endfor
                                                                 </select>
