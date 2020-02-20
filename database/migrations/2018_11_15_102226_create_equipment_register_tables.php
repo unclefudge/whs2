@@ -20,8 +20,8 @@ class CreateEquipmentRegisterTables extends Migration
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable();
             $table->string('name', 100)->nullable();
-            $table->tinyInteger('purchased')->unsigned()->default(0);
-            $table->tinyInteger('disposed')->unsigned()->default(0);
+            $table->integer('purchased')->unsigned()->default(0);
+            $table->integer('disposed')->unsigned()->default(0);
             $table->tinyInteger('status')->default(1);
             $table->text('notes')->nullable();
 
@@ -82,7 +82,7 @@ class CreateEquipmentRegisterTables extends Migration
             $table->increments('id');
             $table->integer('location_id')->unsigned()->nullable();
             $table->integer('equipment_id')->unsigned()->nullable();
-            $table->tinyInteger('qty')->nullable();
+            $table->integer('qty')->nullable();
 
             // Foreign keys
             $table->integer('company_id')->unsigned()->default(0);
@@ -144,7 +144,7 @@ class CreateEquipmentRegisterTables extends Migration
             $table->increments('id');
             $table->integer('location_id')->unsigned()->nullable();
             $table->integer('equipment_id')->unsigned()->nullable();
-            $table->tinyInteger('qty')->nullable();
+            $table->integer('qty')->nullable();
             $table->text('notes')->nullable();
 
             // Foreign keys
@@ -164,7 +164,7 @@ class CreateEquipmentRegisterTables extends Migration
         Schema::create('equipment_log', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('equipment_id')->unsigned()->default(0);
-            $table->tinyInteger('qty')->nullable();
+            $table->integer('qty')->nullable();
             $table->string('action', 5)->nullable();
             $table->text('notes')->nullable();
 
