@@ -1,10 +1,5 @@
+@inject('companyTypes', 'App\Http\Utilities\CompanyTypes')
 @extends('layout')
-
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-users"></i> New Companies</h1>
-    </div>
-@stop
 
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
@@ -12,7 +7,7 @@
         @if (Auth::user()->hasAnyPermissionType('manage.report'))
             <li><a href="/manage/report">Management Reports</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>New Companies</span></li>
+        <li><span>Company Contact Info</span></li>
     </ul>
     @stop
 
@@ -26,10 +21,7 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> New Companies List</span>
-                        </div>
-                        <div class="actions">
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
+                            <span class="caption-subject bold uppercase font-green-haze"> Company Contact Info</span>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -38,11 +30,11 @@
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
                                 <th> Name</th>
-                                <th> Address</th>
+                                <th> Trades</th>
+                                <th> Primary</th>
                                 <th> Phone</th>
                                 <th> Email</th>
-                                <th> Created By</th>
-                                <th> Date</th>
+                                <th> Users</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -50,11 +42,12 @@
                                 <tr>
                                     <td><div class="text-center"><a href="/company/{{ $company->id }}"><i class="fa fa-search"></i></a></div></td>
                                     <td>{{ $company->name }} {!! ($company->nickname) ? "<span class='font-grey-cascade'><br>$company->nickname</span>" : '' !!}</td>
-                                    <td>{{ $company->address }} {{ $company->SuburbStatePostcode }}</td>
-                                    <td>{{ $company->phone }}</td>
-                                    <td>{{ $company->email }}</td>
-                                    <td>{{ $company->createdBy->fullname }}</td>
-                                    <td>{{ $company->created_at->format('d/m/Y') }}</td>
+                                    {{--}}<td><b>{{ (preg_match('/[0-9]/', $company->category)) ? $companyTypes::name($company->category) : $company->tradesSkilledInSBC() }}</b> {{ $company->tradesSkilledInSBC() }}</td>--}}
+                                    <td>{{ $company->tradesSkilledInSBC() }}</td>
+                                    <td>{{ ($company->primary_user) ? $company->primary_contact()->fullname : '-' }}</td>
+                                    <td>{{ ($company->primary_user && $company->primary_contact()->phone) ? $company->primary_contact()->phone : $company->phone }}</td>
+                                    <td>{{ ($company->primary_user && $company->primary_contact()->email) ? $company->primary_contact()->email : $company->email }}</td>
+                                    <td>{{ $company->staffSBC() }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

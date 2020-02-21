@@ -427,6 +427,21 @@ class Company extends Model {
     }
 
     /**
+     * A collection of staff with 'status'
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function staffSBC()
+    {
+        $string = '';
+        foreach ($this->staffStatus(1) as $user) {
+            $string .= $user->full_name . ', ';
+        }
+
+        return rtrim($string, ', ');
+    }
+
+    /**
      * Deactivate all active staff
      */
     public function deactivateAllStaff()
