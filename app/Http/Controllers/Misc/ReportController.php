@@ -106,6 +106,14 @@ class ReportController extends Controller {
         return view('manage/report/company_contactinfo', compact('companies'));
     }
 
+    public function companySWMS()
+    {
+        $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
+        $companies = \App\Models\Company\Company::whereIn('id', $allowed_companies)->orderBy('name')->get();
+
+        return view('manage/report/company_swms', compact('companies'));
+    }
+
     public function users_noemail()
     {
         $allowed_users = Auth::user()->company->users(1)->pluck('id')->toArray();

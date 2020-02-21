@@ -50,6 +50,9 @@
                                 <td><a href="/manage/report/company_contactinfo">Company Contact Info</a></td>
                             </tr>
                             <tr>
+                                <td><a href="/manage/report/company_swms">Company SWMS</a></td>
+                            </tr>
+                            <tr>
                                 <td><a href="/manage/report/users_noemail">Users without emails</a></td>
                             <tr>
                             <tr>
