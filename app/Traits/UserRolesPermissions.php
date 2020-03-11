@@ -12,6 +12,7 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
 use App\Models\Company\CompanyDocCategory;
+use App\Models\User\UserDocCategory;
 use App\Http\Utilities\CompanyDocTypes;
 use Carbon\Carbon;
 
@@ -674,15 +675,25 @@ trait UserRolesPermissions {
                 // User has 'All' permission to this record
                 if ($this->permissionLevel($doc_permission, $record->company_id) == 99 || $this->permissionLevel($doc_permission, $record->company_id) == 1) return true;  // User has 'All' permission to this record
 
+                // CC has authority over User doc
+                $cc = Company::find(3);
+                $cc_child = (in_array($record->company_id, flatten_array($cc->subCompanies(3)))) ? true : false;
+                if ($cc_child && ($this->permissionLevel($doc_permission, 3) == 99 || $this->permissionLevel($doc_permission, 3) == 1)) return true;  // User has 'All' permission to this record
+
+
                 // Document is For User Company but isn't the owner of it
                 // Only allowed to edit/delete documents with status pending/rejected ie. 2 or 3
-
-                /*
                 if ($record->for_company_id == $this->company_id && $record->company_id != $this->company_id) {
                     if ($action == 'view' || $record->status == '2' || $record->status == '3') {
                         if ($this->permissionLevel($doc_permission, $record->company_id) == 20) return true; // User has 'Own Company' permission so record must be 'for' their company
                     }
-                }*/
+                }
+
+                // Document is for User, User is Primary Contact for User
+                if ($record->user_id == Auth::user()->id || $record->company->primary_user == Auth::user()->id) {
+                    if ($action == 'view' || $record->status == '2' || $record->status == '3')
+                        return true;
+                }
             }
 
             return false;

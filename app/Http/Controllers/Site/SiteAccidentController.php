@@ -126,6 +126,7 @@ class SiteAccidentController extends Controller {
         if ($accident->status != $accident_request['status'])
             $accident_request['resolved_at'] = ($accident_request['status']) ? null : Carbon::now()->toDateTimeString();
 
+        //dd($accident_request);
         $accident->update($accident_request);
         Toastr::success("Updated accident report");
 

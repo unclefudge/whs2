@@ -43,6 +43,7 @@
                         @include('form-error')
 
                         <div class="form-body">
+                            {!! Form::model($accident, ['method' => 'PATCH', 'action' => ['Site\SiteAccidentController@update', $accident->id], 'class' => 'horizontal-form']) !!}
                             <div class="row">
                                 <div class="col-md-8">
                                     <table class="table col2-table">
@@ -317,7 +318,7 @@
                                 </div>
                                 --}}
 
-                            {!! Form::model($accident, ['method' => 'PATCH', 'action' => ['Site\SiteAccidentController@update', $accident->id], 'class' => 'horizontal-form']) !!}
+
                             <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $accident->id }}">
                             <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $accident->status }}">
                             <input v-model="xx.record_resdate" type="hidden" id="record_resdate" value="{{ $accident->resolved_at }}">

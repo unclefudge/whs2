@@ -92,7 +92,7 @@ class UserDoc extends Model {
         if ($user_list) {
             $todo = Todo::create($todo_request);
             $todo->assignUsers($user_list);
-            $todo->emailToDo();
+            //$todo->emailToDo();
         }
 
     }

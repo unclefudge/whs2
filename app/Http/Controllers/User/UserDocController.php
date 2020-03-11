@@ -83,21 +83,21 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($cid, $id)
+    public function edit($uid, $id)
     {
-        $company = Company::findOrFail($cid);
-        $doc = CompanyDoc::findOrFail($id);
+        $user = User::findOrFail($uid);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("edit.company.doc", $doc)) {
+        if (!Auth::user()->allowed2("edit.user.doc", $doc)) {
             // If allowed to view then redirect to View only
-            if (Auth::user()->allowed2("view.company.doc", $doc))
-                return redirect("company/$company->id/doc/$doc->id");
+            if (Auth::user()->allowed2("view.user.doc", $doc))
+                return redirect("user/$user->id/doc/$doc->id");
+
             return view('errors/404');
         }
 
-
-        return view('company/doc/edit', compact('company', 'doc'));
+        return view('user/doc/edit', compact('user', 'doc'));
     }
 
     /**
@@ -107,18 +107,20 @@ class UserDocController extends Controller {
      */
     public function destroy($id)
     {
-        $doc = CompanyDoc::findOrFail($id);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("del.company.doc", $doc))
+        if (!Auth::user()->allowed2("del.user.doc", $doc))
             return json_encode("failed");
 
         // Delete attached file
-        if ( $doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
+        /*
+        if ($doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
             unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
 
         $doc->closeToDo();
         $doc->delete();
+        */
 
         return json_encode('success');
     }
@@ -167,6 +169,7 @@ class UserDocController extends Controller {
 
         // Create User Doc
         //dd($doc_request);
+
         $doc = UserDoc::create($doc_request);
 
         // Handle attached file
@@ -191,7 +194,6 @@ class UserDocController extends Controller {
         //$doc->closeToDo();
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
-        $doc->status = 1;
         $doc->status = 2;
         $category = UserDocCategory::find($doc->category_id);
         $pub_pri = ($category->private) ? 'pri' : 'pub';
@@ -201,8 +203,19 @@ class UserDocController extends Controller {
             $doc->status = 1;
         } else {
             // Create approval ToDoo
-            if ($doc->category->type == 'acc' || $doc->category->type == 'whs')
-                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
+            if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
+                $doc_owner_notify = $doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval');
+                if (!$doc_owner_notify) // in cases of company without a subscription
+                    $doc_owner_notify = ($doc->owned_by->primary_user) ? [$doc->owned_by->primary_contact()->id] : [];
+
+                // Allow CapeCod to also approve if this doc is owned by a child of theirs
+                $cc = Company::find(3);
+                $cc_notify = [];
+                if (in_array($doc->owned_by->id, flatten_array($cc->subCompanies(3))))
+                    $cc_notify = $cc->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval');
+
+                $doc->createApprovalToDo(array_merge($doc_owner_notify, $cc_notify));
+            }
         }
         $doc->save();
 
@@ -454,10 +467,10 @@ class UserDocController extends Controller {
                 $user = User::find($doc->user_id);
                 $expiry = ($doc->expiry) ? $doc->expiry->format('d/m/Y') : '';
 
-                //if (Auth::user()->allowed2("edit.company.doc", $doc))
-                //    $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                if (Auth::user()->allowed2("edit.user.doc", $doc))
+                   $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '/edit' . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
                 //elseif (Auth::user()->allowed2("view.company.doc", $doc))
-                    $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
+                $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
                 if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
                     $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/user/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
