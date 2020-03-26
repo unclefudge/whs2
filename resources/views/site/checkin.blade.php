@@ -46,6 +46,21 @@
                             <div class="row">
                                 <div class="col-sm-2 col-xs-4 text-center">
                                     <div class="form-group {!! fieldHasError('transient', $errors) !!}">
+                                        {!! Form::checkbox('question18', '1', false,
+                                         ['class' => 'make-switch', 'data-size' => 'small',
+                                         'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                         'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-sm-10 col-xs-8">
+                                    <div style="background-color: #ed6b75; color:#FFF; padding: 5px 10px"><b>I have read, understood and will adhere to the principles required to manage the risk of COVID-19</b> &nbsp; &nbsp; <a
+                                                class="btn default" href="/filebank/doc/COVID-19 Construction Site Risk Management Principles.pdf">view</a></div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-2 col-xs-4 text-center">
+                                    <div class="form-group {!! fieldHasError('transient', $errors) !!}">
                                         {!! Form::checkbox('question4', '1', false,
                                          ['class' => 'make-switch', 'data-size' => 'small',
                                          'data-on-text'=>'Yes', 'data-on-color'=>'success',
