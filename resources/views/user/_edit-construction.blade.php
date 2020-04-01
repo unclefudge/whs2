@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model('company', ['method' => 'POST', 'action' => ['UserController@updateConstruction', $user->id]]) !!}
+        {!! Form::model('user', ['method' => 'POST', 'action' => ['UserController@updateConstruction', $user->id]]) !!}
         {{--Licence Required --}}
         <div class="row">
             <div class="form-group">
