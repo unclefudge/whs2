@@ -691,9 +691,13 @@ trait UserRolesPermissions {
 
                 // Document is for User, User is Primary Contact for User
                 if ($record->user_id == Auth::user()->id || $record->company->primary_user == Auth::user()->id) {
-                    if ($action == 'view' || $record->status == '2' || $record->status == '3')
+                    if ($action == 'view' || $record->company->primary_user == Auth::user()->id)
+                        return true;
+
+                    if ($record->user_id == Auth::user()->id && ($record->status == '2' || $record->status == '3'))
                         return true;
                 }
+
             }
 
             return false;

@@ -116,12 +116,6 @@
                                             {!! fieldErrorMessage('lic_type', $errors) !!}
                                         </div>
                                     @endif
-                                    {{-- Asbestos Class --}}
-                                    <div class="form-group {!! fieldHasError('asb_type', $errors) !!}" style="display: none" id="fields_asb_class">
-                                        {!! Form::label('asb_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                        {!! Form::select('asb_type', ['' => 'Select class', 'A' => 'Class A', 'B' => 'Class B'], null, ['class' => 'form-control bs-select', 'readonly']) !!}
-                                        {!! fieldErrorMessage('asb_type', $errors) !!}
-                                    </div>
 
                                     @if (in_array($doc->category_id, [2, 3]))
                                         {{-- Expiry --}}
@@ -181,8 +175,8 @@
                                     @if ($doc->status != 0)
                                         <button type="submit" class="btn green" id="but_save">Save</button>
                                         <button type="submit" class="btn green" id="but_upload" style="display: none">Upload</button>
-                                    @elseif (!$doc->status && Auth::user()->allowed2('del.company.doc', $doc))
-                                        <a href="/company/{{ $company->id }}/doc/archive/{{ $doc->id }}" class="btn red" id="but_save">Re-activate</a>
+                                    @elseif (!$doc->status && Auth::user()->allowed2('del.user.doc', $doc))
+                                        <a href="/user/{{ $doc->user_id }}/doc/archive/{{ $doc->id }}" class="btn red" id="but_save">Re-activate</a>
                                     @endif
                                 @endif
                             </div>

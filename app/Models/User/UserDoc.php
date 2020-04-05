@@ -128,7 +128,7 @@ class UserDoc extends Model {
 
         // Get a list of Document ID's of same type as this Document ie Workers Comp
         // so we can close any ToDoo related to this type of document
-        $similiar_docs = DB::table('users_docs')->select('id')->where('category_id', $this->category_id)->where('user_id', $this->user_id)->where('company_id', $this->company_id)->get();
+        $similiar_docs = DB::table('user_docs')->select('id')->where('category_id', $this->category_id)->where('user_id', $this->user_id)->where('company_id', $this->company_id)->get();
         $id_array = [];
         foreach ($similiar_docs as $doc)
             $id_array[] = $doc->id;
@@ -183,6 +183,8 @@ class UserDoc extends Model {
         elseif ($email_to)
             Mail::to($email_to)->send(new \App\Mail\User\UserDocExpired($this));
     }
+
+
 
 
     /**

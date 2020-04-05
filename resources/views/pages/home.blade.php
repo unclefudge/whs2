@@ -361,6 +361,32 @@
                                 @endforeach
                             @endif
 
+                            {{-- User Docs --}}
+                            @if (Auth::user()->todoType('user doc', 1)->count())
+                                <h4>User Documents</h4>
+                                @foreach(Auth::user()->todoType('user doc', 1) as $todo)
+                                    <li>
+                                        <a href="{{ $todo->url() }}" class="task-title">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="label label-sm label-success">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc"> {{ $todo->name }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+
                             {{-- Site Maintenance ToDoo's --}}
                             @if (Auth::user()->todoType('maintenance', 1)->count())
                                 <h4>Site Maintenance Requests</h4>

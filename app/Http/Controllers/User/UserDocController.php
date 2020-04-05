@@ -105,7 +105,7 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uid, $id)
     {
         $doc = UserDoc::findOrFail($id);
 
@@ -114,13 +114,11 @@ class UserDocController extends Controller {
             return json_encode("failed");
 
         // Delete attached file
-        /*
-        if ($doc->attachment && file_exists(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment)))
-            unlink(public_path('/filebank/company/' . $doc->company_id . '/docs/' . $doc->attachment));
+        if ($doc->attachment && file_exists(public_path('/filebank/user/' . $doc->user_id . '/docs/' . $doc->attachment)))
+            unlink(public_path('/filebank/user/' . $doc->user_id . '/docs/' . $doc->attachment));
 
         $doc->closeToDo();
         $doc->delete();
-        */
 
         return json_encode('success');
     }
@@ -227,37 +225,18 @@ class UserDocController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(CompanyDocRequest $request, $cid, $id)
+    public function update(UserDocRequest $request, $uid, $id)
     {
-        $company = Company::find($cid);
-        $doc = CompanyDoc::findOrFail($id);
+        $user = User::find($uid);
+        $doc = UserDoc::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2("edit.company.doc", $doc))
+        if (!Auth::user()->allowed2("edit.user.doc", $doc))
             return view('errors/404');
 
         $doc_request = request()->all();
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
-
-        // Calculate Test & Tag expiry
-        if (request('category_id') == '6') {
-            $doc_request['expiry'] = Carbon::createFromFormat('d/m/Y H:i', request('tag_date') . '00:00')->addMonths(request('tag_type'))->toDateTimeString();
-            $doc_request['ref_type'] = request('tag_type');
-        }
-
-        // Convert licence type into CSV
-        if (request('category_id') == '7') {
-            $doc_request['ref_no'] = request('lic_no');
-            $doc_request['ref_type'] = implode(',', request('lic_type'));
-        }
-
-        // Reassign Asbestos Licence to correct category
-        if (request('category_id') == '8')
-            $doc_request['ref_type'] = request('asb_type');
-
-        // Reassign Additional Licences to correct name
-        if (request('category_id') == '9')
-            $doc_request['name'] = request('name'); //'Additional Licence';
+        $doc_request['issued'] = (request('issued')) ? Carbon::createFromFormat('d/m/Y H:i', request('issued') . '00:00')->toDateTimeString() : null;
 
         // Verify if document is rejected
         $doc_request['reject'] = '';
@@ -269,18 +248,18 @@ class UserDocController extends Controller {
             $doc->emailReject();
             Toastr::error("Document rejected");
 
-            return redirect("company/$company->id/doc/$doc->id/edit");
+            return redirect("user/$user->id/doc/$doc->id/edit");
         }
 
         if ($doc->category_id < 21) {
             // Determine Status of Doc
             // If uploaded by User with 'authorise' permissions set to active otherwise set pending
-            $company = Company::findOrFail($doc->for_company_id);
-            $category = CompanyDocCategory::find($doc->category_id);
+            $company = Company::findOrFail($doc->company_id);
+            $category = UserDocCategory::find($doc->category_id);
             $pub_pri = ($category->private) ? 'pri' : 'pub';
             if (request()->has('status') && request('status') == 0)
                 $doc_request['status'] = 0;
-            else if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $company->reportsTo()->id)) {
+            else if (Auth::user()->permissionLevel("sig.docs.$category->type.$pub_pri", $company->reportsTo()->id) || $company->primary_user == Auth::user()->id) {
                 $doc_request['approved_by'] = Auth::user()->id;
                 $doc_request['approved_at'] = Carbon::now()->toDateTimeString();
                 $doc_request['status'] = 1;
@@ -296,18 +275,29 @@ class UserDocController extends Controller {
         if ($doc->category_id < 21) {
             $doc->closeToDo();
             // Create approval ToDoo
-            if ($doc->status == 2 && ($doc->category->type == 'acc' || $doc->category->type == 'whs'))
-                $doc->createApprovalToDo($doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval'));
+            if ($doc->status == 2 && $doc->category->type == 'acc' || $doc->category->type == 'whs') {
+                $doc_owner_notify = $doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval');
+                if (!$doc_owner_notify) // in cases of company without a subscription
+                    $doc_owner_notify = ($doc->owned_by->primary_user) ? [$doc->owned_by->primary_contact()->id] : [];
+
+                // Allow CapeCod to also approve if this doc is owned by a child of theirs
+                $cc = Company::find(3);
+                $cc_notify = [];
+                if (in_array($doc->owned_by->id, flatten_array($cc->subCompanies(3))))
+                    $cc_notify = $cc->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval');
+
+                $doc->createApprovalToDo(array_merge($doc_owner_notify, $cc_notify));
+            }
         }
 
         // Handle attached file
         if (request()->hasFile('singlefile')) {
             // Delete previous file
-            if ($doc->attachment && file_exists(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment)))
-                unlink(public_path('filebank/company/' . $doc->for_company_id . '/docs/' . $doc->attachment));
+            if ($doc->attachment && file_exists(public_path('filebank/user/' . $doc->user_id . '/docs/' . $doc->attachment)))
+                unlink(public_path('filebank/user/' . $doc->user_id . '/docs/' . $doc->attachment));
 
             $file = $request->file('singlefile');
-            $path = "filebank/company/" . $doc->for_company_id . '/docs';
+            $path = "filebank/user/" . $doc->user_id . '/docs';
             $name = sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
             // Ensure filename is unique by adding counter to similiar filenames
             $count = 1;
@@ -319,7 +309,7 @@ class UserDocController extends Controller {
         }
         Toastr::success("Updated document");
 
-        return redirect("company/$company->id/doc/$doc->id/edit");
+        return redirect("user/$user->id/doc/$doc->id/edit");
     }
 
     /**
@@ -370,7 +360,6 @@ class UserDocController extends Controller {
         if ($doc->status == 1)
             Toastr::success("Document restored");
         else {
-            //$doc->emailArchived();
             Toastr::success("Document achived");
         }
 
@@ -472,8 +461,8 @@ class UserDocController extends Controller {
                 //elseif (Auth::user()->allowed2("view.company.doc", $doc))
                 $actions .= '<a href="/user/' . $user->id . '/doc/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
 
-                if (Auth::user()->allowed2("del.company.doc", $doc) && ($doc->category_id > 20 || (in_array($doc->status, [2, 3])) && Auth::user()->company_id == $doc->for_company_id))
-                    $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/user/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
+                if (Auth::user()->allowed2("del.user.doc", $doc))
+                    $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/user/' . $doc->user_id . '/doc/' . $doc->id . '" data-name="' . $doc->name . '"><i class="fa fa-trash"></i></button>';
 
 
                 return $actions;

@@ -120,8 +120,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/{uid}/doc/upload', 'User\UserDocController@create');
     Route::post('user/{uid}/doc/reject/{id}', 'User\UserDocController@reject');
     Route::get('user/{uid}/doc/archive/{id}', 'User\UserDocController@archive');
-    //Route::post('user/{uid}/doc/reject/{id}', 'User\UserDocController@reject');
-    //Route::get('user/{uid}/doc/archive/{id}', 'User\UserDocController@archive');
+    //Route::delete('user/{uid}/doc/{id}', 'User\UserDocController@destroy');
     //Route::get('user/{uid}/doc/cats/{department}', 'User\UserDocController@getCategories');
     Route::resource('user/{uid}/doc', 'User\UserDocController');
 

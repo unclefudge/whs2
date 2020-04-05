@@ -17,7 +17,7 @@
                 <li>
                     <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
 
-                        <?php $todo_types = ['qa', 'toolbox', 'hazard', 'company doc', 'company ptc', 'general', 'swms', 'equipment']; ?>
+                        <?php $todo_types = ['qa', 'toolbox', 'hazard', 'company doc', 'company ptc', 'user doc', 'general', 'swms', 'equipment']; ?>
                         @foreach ($todo_types as $type)
                             @foreach(Auth::user()->todoType($type, 1) as $todo)
                                 <li>
