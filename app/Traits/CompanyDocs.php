@@ -115,6 +115,11 @@ trait CompanyDocs {
         // 6  Consultant                       |__X__|__X__|__X__|_____|_____|
         // 7  Builder                          |__X__|__X__|_____|_____|_____|
 
+        // Ignore docs for some split companys (NRW Carpentry 2 (202)
+        if (in_array($this->id, [202]))
+            return false;
+
+
         // If System == False then check for any Compliance Overrides
         if (!$system) {
             $override = ComplianceOverride::where('type', "cd$type")->where('for_company_id', $this->id)->where('status', 1)->first();
