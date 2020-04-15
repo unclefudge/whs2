@@ -1277,7 +1277,7 @@ class Company extends Model {
         }, ucfirst($this->attributes['name']));
         $this->attributes['name'] = preg_replace('/Pty/', 'PTY', $this->attributes['name']);
         $this->attributes['name'] = preg_replace('/Ltd/', 'LTD', $this->attributes['name']);
-        $this->attributes['slug'] = getUniqueSlug($this, $value);
+        //$this->attributes['slug'] = getUniqueSlug($this, $value);
     }
 
     /**
