@@ -106,9 +106,9 @@
                                             {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control', 'readonly']) !!}
                                             {!! fieldErrorMessage('lic_no', $errors) !!}
                                         </div>
-                                        <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
-                                            {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                            {!! Form::text('lic_no', $user->contractorLicenceSBC(), ['class' => 'form-control', 'readonly']) !!}
+                                        <div class="form-group {!! fieldHasError('cl_type', $errors) !!}">
+                                            {!! Form::label('cl_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::text('cl_type', $user->contractorLicenceSBC(), ['class' => 'form-control', 'readonly']) !!}
                                             {{--
                                             <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple readonly>
                                                 {!! $user->contractorLicenceOptions() !!}

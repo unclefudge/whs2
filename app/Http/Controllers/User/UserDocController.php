@@ -189,7 +189,7 @@ class UserDocController extends Controller {
         Toastr::success("Uploaded document");
 
         // Closing any outstanding todoos associated with this doc category ie. expired docs
-        //$doc->closeToDo();
+        $doc->closeToDo();
 
         // If uploaded by User with 'authorise' permissions set to active other set pending
         $doc->status = 2;
@@ -275,7 +275,7 @@ class UserDocController extends Controller {
         if ($doc->category_id < 21) {
             $doc->closeToDo();
             // Create approval ToDoo
-            if ($doc->status == 2 && $doc->category->type == 'acc' || $doc->category->type == 'whs') {
+            if ($doc->status == 2 && ($doc->category->type == 'acc' || $doc->category->type == 'whs')) {
                 $doc_owner_notify = $doc->owned_by->notificationsUsersTypeArray('n.doc.' . $doc->category->type . '.approval');
                 if (!$doc_owner_notify) // in cases of company without a subscription
                     $doc_owner_notify = ($doc->owned_by->primary_user) ? [$doc->owned_by->primary_contact()->id] : [];

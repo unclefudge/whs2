@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Comms\Todo;
 use App\Models\Company\Company;
 use Carbon\Carbon;
+use nilsenj\Toastr\Facades\Toastr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -123,6 +124,7 @@ class UserDoc extends Model {
      */
     public function closeToDo($user = '')
     {
+
         if (!$user)
             $user = Auth::user();
 
@@ -135,6 +137,7 @@ class UserDoc extends Model {
 
         $todos = Todo::where('type', 'user doc')->whereIn('type_id', $id_array)->where('status', '1')->get();
         foreach ($todos as $todo) {
+            Toastr::success("Close ToDo $todo->id");
             $todo->status = 0;
             $todo->done_at = Carbon::now();
             $todo->done_by = $user->id;
