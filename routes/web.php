@@ -79,6 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/completedqa', 'Misc\PagesController@completedQA');
     Route::get('/manage/create_permission', 'Misc\PagesController@createPermission');
     Route::get('/manage/importmaterials', 'Misc\PagesController@importMaterials');
+    Route::get('/manage/disabled_tasks', 'Misc\PagesController@disabledTasks');
 
     // Reports
     Route::get('/manage/report', 'Misc\ReportController@index');

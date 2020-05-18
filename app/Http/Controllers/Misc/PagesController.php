@@ -136,9 +136,9 @@ class PagesController extends Controller {
         $qas = SiteQa::where('status', '>', 0)->where('master', 0)->get();
 
         foreach ($qas as $qa) {
-            foreach($qa->items as $item) {
-                if ($item->done_by === NULL && $item->status == 0 && $item->sign_by) {
-                    echo "<br>[$qa->id] $qa->name (".$qa->site->name.")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
+            foreach ($qa->items as $item) {
+                if ($item->done_by === null && $item->status == 0 && $item->sign_by) {
+                    echo "<br>[$qa->id] $qa->name (" . $qa->site->name . ")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
                     $item->status = 1;
 
                     // Check Planner which company did the task
@@ -626,7 +626,6 @@ class PagesController extends Controller {
     }
 
 
-
     public function refreshQA()
     {
         echo "Updating Current QA Reports to match new QA template with Supervisor tick<br><br>";
@@ -1049,6 +1048,43 @@ class PagesController extends Controller {
             fclose($handle);
         }
         echo "<br><br>Completed<br>-------------<br>";
+    }
+
+    public function disabledTasks()
+    {
+
+        echo "List of Disabled Tasks currently still in use<br>--------------------------------------------------------<br><br>";
+
+        $tasks = Task::where('status', 0)->get();
+        $qas = SiteQa::where('status', 1)->where('master', 1)->get();
+
+
+        foreach ($tasks as $task) {
+            $found = 0;
+
+            // Check Active QAs
+            foreach ($qas as $qa) {
+                // Loop each task
+                foreach ($qa->tasks() as $t) {
+                    if ($t->id == $task->id) {
+                        if (!$found)
+                            echo "<br><br>Task (id: $task->id) $task->name:<br>";
+                        $found = 1;
+                        echo "- QA Template (id: $qa->id) $qa->name<br>";
+                    }
+                }
+            }
+
+            // Check Future Planner
+            $planner = SitePlanner::whereDate('from', '>', today()->format('Y-m-d'))->where('task_id', $task->id)->get();
+            foreach ($planner as $plan) {
+                if (!$found)
+                    echo "<br><br>Task (id: $task->id) $task->name:<br>";
+                $found = 1;
+                $site = Site::find($plan->site_id);
+                echo "- Site (id: $site->id) $site->name planned for ". $plan->to->format('d/m/Y') ."<br>";
+            }
+        }
     }
 
 }
