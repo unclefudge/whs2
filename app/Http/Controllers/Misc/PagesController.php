@@ -1080,7 +1080,7 @@ class PagesController extends Controller {
             $planner = SitePlanner::whereDate('from', '>', today()->format('Y-m-d'))->where('task_id', $task->id)->get();
             foreach ($planner as $plan) {
                 if (!$found)
-                    echo "<br><br>Task (id: $task->id) $task->name:<br>";
+                    echo "<br><br>Task (id: $task->id) $trade->name - $task->name ($task->code):<br>";
                 $found = 1;
                 $site = Site::find($plan->site_id);
                 echo "- Site (id: $site->id) $site->name planned for ". $plan->to->format('d/m/Y') ."<br>";
