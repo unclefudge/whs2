@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Route::post('/manage/report/equipment_stocktake/report', 'Misc\ReportController@equipmentStocktakePDF');
     Route::get('/manage/report/equipment/dt/stocktake', 'Misc\ReportController@getEquipmentStocktake');
     Route::get('/manage/report/equipment/dt/stocktake-not', 'Misc\ReportController@getEquipmentStocktakeNot');
+    Route::get('/manage/report/qa/{id}', 'Misc\ReportController@QAdebug');
 
 
     // User Docs

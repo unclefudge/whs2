@@ -7,6 +7,9 @@ use PDF;
 use Session;
 use App\User;
 use App\Models\Site\Site;
+use App\Models\Site\SiteQa;
+use App\Models\Site\SiteQaItem;
+use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
@@ -16,6 +19,8 @@ use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentStocktake;
 use App\Models\Misc\Equipment\EquipmentStocktakeItem;
 use App\Models\Misc\Equipment\EquipmentLog;
+use App\Models\Comms\ToDo;
+use App\Models\Comms\ToDoUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -600,6 +605,22 @@ class ReportController extends Controller {
     public function expiredCompanyDocs()
     {
         return view('manage/report/expired_company_docs');
+    }
+
+    /*
+     * QA Debug
+     */
+    public function QAdebug($id)
+    {
+        $qa = SiteQa::find($id);
+        $task_ids = [];
+        foreach ($qa->items as $item) {
+            if (!in_array($item->task_id, $task_ids))
+                $task_ids[] = $item->task_id;
+        }
+        $planner = SitePlanner::where('site_id', $qa->site_id)->whereIn('task_id', $task_ids)->get();
+        $todos = ToDo::where('type', 'qa')->where('type_id', $id)->get();
+        return view('manage/report/qa_debug', compact('qa', 'planner', 'todos'));
     }
 
     /**

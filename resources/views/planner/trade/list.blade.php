@@ -51,7 +51,8 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            @if (Auth::user()->id == 2)
+                            @if (Auth::user()->id == 2 || 1 )
+
                                 <div class="row">
                                     <div class="col-md-4 pull-right" style="padding-bottom: 10px">
                                         <button v-on:click="store.showDisabled = ! store.showDisabled" class="btn grey pull-right">
