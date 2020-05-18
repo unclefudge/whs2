@@ -1061,6 +1061,7 @@ class PagesController extends Controller {
 
         foreach ($tasks as $task) {
             $found = 0;
+            $trade = Trade::find($task->trade_id);
 
             // Check Active QAs
             foreach ($qas as $qa) {
@@ -1068,7 +1069,7 @@ class PagesController extends Controller {
                 foreach ($qa->tasks() as $t) {
                     if ($t->id == $task->id) {
                         if (!$found)
-                            echo "<br><br>Task (id: $task->id) $task->name:<br>";
+                            echo "<br><br>Task (id: $task->id) $trade->name - $task->name:<br>";
                         $found = 1;
                         echo "- QA Template (id: $qa->id) $qa->name<br>";
                     }
