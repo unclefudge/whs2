@@ -1069,7 +1069,7 @@ class PagesController extends Controller {
                 foreach ($qa->tasks() as $t) {
                     if ($t->id == $task->id) {
                         if (!$found)
-                            echo "<br><br>Task (id: $task->id) $trade->name - $task->name:<br>";
+                            echo "<br><br>Task (id: $task->id) $trade->name - $task->name ($task->code):<br>";
                         $found = 1;
                         echo "- QA Template (id: $qa->id) $qa->name<br>";
                     }
