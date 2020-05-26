@@ -167,7 +167,7 @@ class SiteQaCategoryController extends Controller {
 
         $dt = Datatables::of($records)
             ->addColumn('reports', function ($cat) {
-                $reports = implode(', ',$cat->reports->where('master', 1)->pluck('name')->toArray());
+                $reports = implode(', ',$cat->reports->where('master', 1)->where('status', 1)->pluck('name')->toArray());
                 return $reports;
             })
             ->addColumn('action', function ($cat) {
