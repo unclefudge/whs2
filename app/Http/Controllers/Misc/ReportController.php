@@ -20,7 +20,7 @@ use App\Models\Misc\Equipment\EquipmentStocktake;
 use App\Models\Misc\Equipment\EquipmentStocktakeItem;
 use App\Models\Misc\Equipment\EquipmentLog;
 use App\Models\Comms\Todo;
-use App\Models\Comms\ToDoUser;
+use App\Models\Comms\TodoUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
