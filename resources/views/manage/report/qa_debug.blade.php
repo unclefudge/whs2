@@ -69,7 +69,14 @@
                             <div class="row">
                                 <div class="col-xs-5">
                                     <p>JOB NAME: @if ($qa->site) {{ $qa->site->name }} @endif<br>
-                                        ADDRESS: @if ($qa->site) {{ $qa->site->full_address }} @endif</p>
+                                        ADDRESS: @if ($qa->site) {{ $qa->site->full_address }} @endif<br>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <p>MASTER TEMPLATE: {{ $qa->master_id}}<br>
+                                    </p>
                                 </div>
                             </div>
                             <hr>

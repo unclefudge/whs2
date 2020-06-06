@@ -201,6 +201,7 @@ class CronController extends Controller {
             $allowedSites = Auth::user()->company->sites('1')->pluck('id')->toArray();
 
         $today = Carbon::today()->format('Y-m-d');
+        $last7days = Carbon::today()->subDays(7)->format('Y-m-d');
 
         // Old Templates
         $trigger_ids_old = [];
@@ -249,7 +250,7 @@ class CronController extends Controller {
         echo ")<br><br>";
         $log .= ")\n\n";
 
-        $planner = SitePlanner::where('to', '<', $today)->whereIn('site_id', $allowedSites)->orderBy('site_id')->get();
+        $planner = SitePlanner::where('to', '<', $today)->where('to', '>', $last7days)->whereIn('site_id', $allowedSites)->orderBy('site_id')->get();
         $job_started_from = Carbon::createFromDate('2017', '07', '13');
 
         foreach ($planner as $plan) {
