@@ -96,6 +96,96 @@
         @endforeach
         </tbody>
     </table>
+
+    <br>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 style="margin: 0px">Electrican Drive By Dates</h3>
+        </div>
+    </div>
+    <hr style="margin: 5px 0px 15px 0px">
+
+    <table class="table table-striped table-bordered table-hover order-column" id="table1" style="padding: 0px; margin: 0px">
+        <thead>
+        <tr style="background-color: #f0f6fa; font-weight: bold; overflow: hidden;">
+            <th width="5%" class="pad5">Drive By Date</th>
+            <th width="5%" class="pad5">Job #</th>
+            <th width="15%" class="pad5">Site</th>
+            <th width="15%" class="pad5">Supervisor</th>
+            <th class="pad5">Company Allocated</th>
+            <th width="5%" class="pad5">Contract Sent</th>
+            <th width="5%" class="pad5">Contract Signed</th>
+            <th width="5%" class="pad5">Deposit Paid</th>
+            <th width="3%" class="pad5">ENG</th>
+            <th width="3%" class="pad5">CC</th>
+            <th width="3%" class="pad5">HBCF</th>
+            <th width="15%" class="pad5">Consultant</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($electdata as $row)
+            <tr>
+                <td class="pad5">{!! $row['date'] !!}</td>
+                <td class="pad5">{!! $row['code'] !!}</td>
+                <td class="pad5">{!! $row['name'] !!}</td>
+                <td class="pad5">{!! $row['supervisor'] !!}</td>
+                <td class="pad5">{!! $row['company'] !!}</td>
+                <td class="pad5">{!! $row['contract_sent'] !!}</td>
+                <td class="pad5">{!! $row['contract_signed'] !!}</td>
+                <td class="pad5">{!! $row['deposit_paid'] !!}</td>
+                <td class="pad5">{!! $row['eng'] !!}</td>
+                <td class="pad5">{!! $row['cc'] !!}</td>
+                <td class="pad5">{!! $row['hbcf'] !!}</td>
+                <td class="pad5">{!! $row['consultant'] !!}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    <br>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 style="margin: 0px">Plumber Drive By Dates</h3>
+        </div>
+    </div>
+    <hr style="margin: 5px 0px 15px 0px">
+
+    <table class="table table-striped table-bordered table-hover order-column" id="table1" style="padding: 0px; margin: 0px">
+        <thead>
+        <tr style="background-color: #f0f6fa; font-weight: bold; overflow: hidden;">
+            <th width="5%" class="pad5">Drive By Date</th>
+            <th width="5%" class="pad5">Job #</th>
+            <th width="15%" class="pad5">Site</th>
+            <th width="15%" class="pad5">Supervisor</th>
+            <th class="pad5">Company Allocated</th>
+            <th width="5%" class="pad5">Contract Sent</th>
+            <th width="5%" class="pad5">Contract Signed</th>
+            <th width="5%" class="pad5">Deposit Paid</th>
+            <th width="3%" class="pad5">ENG</th>
+            <th width="3%" class="pad5">CC</th>
+            <th width="3%" class="pad5">HBCF</th>
+            <th width="15%" class="pad5">Consultant</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($plumbdata as $row)
+            <tr>
+                <td class="pad5">{!! $row['date'] !!}</td>
+                <td class="pad5">{!! $row['code'] !!}</td>
+                <td class="pad5">{!! $row['name'] !!}</td>
+                <td class="pad5">{!! $row['supervisor'] !!}</td>
+                <td class="pad5">{!! $row['company'] !!}</td>
+                <td class="pad5">{!! $row['contract_sent'] !!}</td>
+                <td class="pad5">{!! $row['contract_signed'] !!}</td>
+                <td class="pad5">{!! $row['deposit_paid'] !!}</td>
+                <td class="pad5">{!! $row['eng'] !!}</td>
+                <td class="pad5">{!! $row['cc'] !!}</td>
+                <td class="pad5">{!! $row['hbcf'] !!}</td>
+                <td class="pad5">{!! $row['consultant'] !!}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

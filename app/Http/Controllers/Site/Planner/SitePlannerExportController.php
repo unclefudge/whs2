@@ -738,8 +738,68 @@ class SitePlannerExportController extends Controller {
             ];
         }
 
+        $planner = DB::table('site_planner AS p')
+            ->select(['p.id', 'p.site_id', 'p.entity_type', 'p.entity_id', 'p.task_id', 'p.from', 't.code'])
+            ->join('trade_task as t', 'p.task_id', '=', 't.id')
+            ->whereDate('p.from', '>=', $today)
+            ->where('t.id', 51)
+            ->orderBy('p.from')->get();
+
+        //dd($planner);
+        $electdata = [];
+        foreach ($planner as $plan) {
+            $site = Site::findOrFail($plan->site_id);
+            $entity_name = "Electrician";
+            if ($plan->entity_type == 'c')
+                $entity_name = Company::find($plan->entity_id)->name;
+            $electdata[] = [
+                'date'            => Carbon::createFromFormat('Y-m-d H:i:s', $plan->from)->format('M j'),
+                'code'            => $site->code,
+                'name'            => $site->name,
+                'company'         => $entity_name,
+                'supervisor'      => $site->supervisorsSBC(),
+                'contract_sent'   => ($site->contract_sent) ? $site->contract_sent->format('d/m/Y') : '-',
+                'contract_signed' => ($site->contract_signed) ? $site->contract_signed->format('d/m/Y') : '-',
+                'deposit_paid'    => ($site->deposit_paid) ? $site->deposit_paid->format('d/m/Y') : '-',
+                'eng'             => ($site->engineering) ? 'Y' : '-',
+                'cc'              => ($site->construction) ? 'Y' : '-',
+                'hbcf'            => ($site->hbcf) ? 'Y' : '-',
+                'consultant'      => $site->consultant_name,
+            ];
+        }
+
+        $planner = DB::table('site_planner AS p')
+            ->select(['p.id', 'p.site_id', 'p.entity_type', 'p.entity_id', 'p.task_id', 'p.from', 't.code'])
+            ->join('trade_task as t', 'p.task_id', '=', 't.id')
+            ->whereDate('p.from', '>=', $today)
+            ->where('t.id', 86)
+            ->orderBy('p.from')->get();
+
+        //dd($planner);
+        $plumbdata = [];
+        foreach ($planner as $plan) {
+            $site = Site::findOrFail($plan->site_id);
+            $entity_name = "Plumber";
+            if ($plan->entity_type == 'c')
+                $entity_name = Company::find($plan->entity_id)->name;
+            $plumbdata[] = [
+                'date'            => Carbon::createFromFormat('Y-m-d H:i:s', $plan->from)->format('M j'),
+                'code'            => $site->code,
+                'name'            => $site->name,
+                'company'         => $entity_name,
+                'supervisor'      => $site->supervisorsSBC(),
+                'contract_sent'   => ($site->contract_sent) ? $site->contract_sent->format('d/m/Y') : '-',
+                'contract_signed' => ($site->contract_signed) ? $site->contract_signed->format('d/m/Y') : '-',
+                'deposit_paid'    => ($site->deposit_paid) ? $site->deposit_paid->format('d/m/Y') : '-',
+                'eng'             => ($site->engineering) ? 'Y' : '-',
+                'cc'              => ($site->construction) ? 'Y' : '-',
+                'hbcf'            => ($site->hbcf) ? 'Y' : '-',
+                'consultant'      => $site->consultant_name,
+            ];
+        }
+
         //return view('pdf/plan-jobstart', compact('startdata'));
-        $pdf = PDF::loadView('pdf/plan-jobstart', compact('startdata'));
+        $pdf = PDF::loadView('pdf/plan-jobstart', compact('startdata', 'electdata', 'plumbdata'));
         $pdf->setPaper('A4', 'landscape');
         //->setOption('page-width', 200)->setOption('page-height', 287)
         //->setOption('margin-bottom', 10)
