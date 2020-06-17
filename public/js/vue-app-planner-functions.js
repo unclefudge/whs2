@@ -474,6 +474,14 @@ function addStartTaskToPlanner(plan, site_id, date) {
         id: '', site_id: site_id, entity_type: 't', entity_id: 2, entity_name: 'Carpenter', task_id: 4, task_code: 'LF',
         task_name: 'Lay Floor', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 5), days: 4
     };
+    var electDriveby = {
+        id: '', site_id: site_id, entity_type: 't', entity_id: 4, entity_name: 'Electrician', task_id: 51, task_code: 'DB',
+        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 5), days: 1
+    };
+    var plumbDriveby = {
+        id: '', site_id: site_id, entity_type: 't', entity_id: 8, entity_name: 'Plumber', task_id: 86, task_code: 'DB',
+        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 5), days: 1
+    };
     // 4 days after
     var floorInspect = {
         id: '', site_id: site_id, entity_type: 'c', entity_id: 23, entity_name: 'Essential Certifiers', task_id: 183, task_code: 'Fl',
@@ -509,6 +517,8 @@ function addStartTaskToPlanner(plan, site_id, date) {
     addTaskToPlanner(plan, roofMaint);
     addTaskToPlanner(plan, startCarp);
     addTaskToPlanner(plan, layFloor);
+    addTaskToPlanner(plan, electDriveby);
+    addTaskToPlanner(plan, plumbDriveby);
     addTaskToPlanner(plan, floorInspect);
     addTaskToPlanner(plan, frameRoof);
     addTaskToPlanner(plan, loadPlatform);
