@@ -136,6 +136,9 @@
                             @endif
 
                             <div class="form-actions right">
+                                @if($todo->type == 'maintenance')
+                                    <a href="/site/maintenance/{{$todo->type_id}}" class="btn green">View Maintenance Request</a>
+                                @endif
                                 @if($todo->type == 'toolbox')
                                     <a href="/safety/doc/toolbox2/{{$todo->type_id}}" class="btn green">View Toolbox Talk</a>
                                 @endif

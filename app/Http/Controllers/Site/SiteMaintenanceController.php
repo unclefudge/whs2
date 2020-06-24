@@ -47,7 +47,17 @@ class SiteMaintenanceController extends Controller {
         //if (!Auth::user()->hasAnyPermissionType('site.maintenance'))
         //    return view('errors/404');
 
-        return view('site/maintenance/list');
+        $under_review = DB::table('site_maintenance AS m')
+            ->select(['m.id', 'm.site_id', 'm.super_id', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+                DB::raw('CONCAT(u.firstname, " ", u.lastname) AS super_name'),
+                DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
+                DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
+                's.code as sitecode', 's.name as sitename', 'u.firstname as firstname'])
+            ->join('sites AS s', 'm.site_id', '=', 's.id')
+            ->join('users AS u', 'm.super_id', '=', 'u.id')
+            ->where('m.status', 2)->get();
+
+        return view('site/maintenance/list', compact('under_review'));
     }
 
     /**

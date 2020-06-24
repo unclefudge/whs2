@@ -36,6 +36,16 @@ class SiteMaintenance extends Model {
     }
 
     /**
+     * A Site Maintenance 'may' have been signed by a Supervisor user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function supervisor()
+    {
+        return $this->belongsTo('App\User', 'super_id');
+    }
+
+    /**
      * A Site Maintenance has many Items.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany

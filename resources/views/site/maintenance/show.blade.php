@@ -11,8 +11,8 @@
         @if (Auth::user()->hasAnyPermissionType('site'))
             <li><a href="/site">Sites</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><a href="/site/qa">Quality Assurance</a><i class="fa fa-circle"></i></li>
-        <li><span>View Report</span></li>
+        <li><a href="/site/maintenance">Maintenance</a><i class="fa fa-circle"></i></li>
+        <li><span>View Request</span></li>
     </ul>
 @stop
 
@@ -34,9 +34,6 @@
                             <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
                             <span class="caption-helper">ID: {{ $main->id }}</span>
-                        </div>
-                        <div class="actions">
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -69,80 +66,66 @@
                                 </div>
                             @endif
                             --}}
-                            <div class="row hidden-sm hidden-xs">
-                                <div class="col-xs-7">
-                                    <img src="/img/logo-capecod2-med.png">
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>JOB NAME: @if ($main->site) {{ $main->site->name }} @endif<br>
-                                        ADDRESS: @if ($main->site) {{ $main->site->full_address }} @endif</p>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-top: 10px">
-                                <div class="col-xs-12 ">
-                                    <br>
-                                    <h2 style="margin: 0px"><b>{{ $main->name }}</b>
-                                        @if ($main->master)
-                                            <span class="pull-right font-red hidden-sm hidden-xs">TEMPLATE</span>
-                                            <span class="text-center font-red visible-sm visible-xs">TEMPLATE</span>
-                                        @else
-                                            @if($main->status == '-1')
-                                                <span class="pull-right font-red hidden-sm hidden-xs">NOT REQUIRED</span>
-                                                <span class="text-center font-red visible-sm visible-xs">NOT REQUIRED</span>
-                                            @endif
-                                            @if($main->status == '0')
-                                                <span class="pull-right font-red hidden-sm hidden-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                                <span class="text-center font-red visible-sm visible-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                            @endif
-                                            @if($main->status == '1' && Auth::user()->allowed2('edit.site.qa', $main))
-                                                <button v-if="xx.qa.status == 1 && xx.qa.items_done == 0" class="btn red pull-right" v-on:click="$root.$broadcast('updateReportStatus', '-1')"> Page Not
-                                                    Required
-                                                </button>
-                                            @endif
-                                            @if($main->status == '2')
-                                                <span class="pull-right font-red hidden-sm hidden-xs">ON HOLD</span>
-                                                <span class="text-center font-red visible-sm visible-xs">ON HOLD</span>
-                                            @endif
-                                        @endif
-                                    </h2>
-                                </div>
-                                <div class="col-xs-12 "> {{--}}
-                                    <p>Item Tasks: {{ $main->tasksSBC() }}</p> --}}
-                                </div>
-                            </div>
-
-                            <!-- List QA -->
                             <div class="row">
-                                <div class="col-md-12">
-                                    <app-qa></app-qa>
+                                <div class="col-xs-4">
+                                    <p><h4>Job Details</h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
+                                    @if ($main->site) {{ $main->site->full_address }}<br> @endif
+                                    @if ($main->site) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif
+                                    </p>
                                 </div>
+                                <div class="col-xs-8"></div>
+                                <h2 style="margin: 0px; padding-right: 20px"><b>{{ $main->name }}</b>
+                                    @if($main->status == '-1')
+                                        <span class="pull-right font-red hidden-sm hidden-xs">NOT REQUIRED</span>
+                                        <span class="text-center font-red visible-sm visible-xs">NOT REQUIRED</span>
+                                    @endif
+                                    @if($main->status == '0')
+                                        <span class="pull-right font-red hidden-sm hidden-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
+                                        <span class="text-center font-red visible-sm visible-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
+                                    @endif
+                                    @if($main->status == '1')
+                                        <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
+                                        <span class="text-center font-red visible-sm visible-xs">ACTIVE</span>
+                                    @endif
+                                    @if($main->status == '2')
+                                        <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
+                                        <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
+                                    @endif
+                                </h2>
+                                <br><br><br>
+                                    <span style="padding-right:20px; float:right">
+                                        @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
+                                        @if ($main->super_id)<b>Supervisor:</b> {{ $main->supervisor->name }} @endif
+                                    </span>
                             </div>
-
-
-                            <div class="row">
-                                <div class="col-md-6 pull-right text-right" style="margin-top: 15px; padding-right: 20px">
-                                    <span class="font-grey-salsa">
-                                        <span class="font-grey-salsa" v-if="xx.qa.master == '0'">version {{ $main->version }} </span>
-                                        <span class="font-grey-salsa" v-if="xx.qa.master == '1'">Current version {{ $main->version }}<br> {!! nl2br($main->notes) !!}</span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="pull-right" style="min-height: 50px">
-                                <a href="/site/qa" class="btn default"> Back</a>
-                                @if (!$main->master && Auth::user()->allowed2('edit.site.qa', $main))
-                                    <button v-if="xx.qa.status == 1 && xx.qa.items_total != 0 && xx.qa.items_done != xx.qa.items_total" class="btn blue"
-                                            v-on:click="$root.$broadcast('updateReportStatus', 2)"> Place On Hold
-                                    </button>
-                                    <button v-if="xx.qa.status == 2 || xx.qa.status == -1 " class="btn green" v-on:click="$root.$broadcast('updateReportStatus', 1)"> Make Active</button>
-                                @endif
-                            </div>
-                            <br><br>
                         </div>
+
+                        <!-- List QA -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <app-qa></app-qa>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="pull-right" style="min-height: 50px">
+                            <a href="/site/qa" class="btn default"> Back</a>
+                            @if (!$main->master && Auth::user()->allowed2('edit.site.qa', $main))
+                                <button v-if="xx.qa.status == 1 && xx.qa.items_total != 0 && xx.qa.items_done != xx.qa.items_total" class="btn blue"
+                                        v-on:click="$root.$broadcast('updateReportStatus', 2)"> Place On Hold
+                                </button>
+                                <button v-if="xx.qa.status == 2 || xx.qa.status == -1 " class="btn green" v-on:click="$root.$broadcast('updateReportStatus', 1)"> Make Active</button>
+                            @endif
+                        </div>
+                        <br><br>
                     </div>
                 </div>
-
             </div>
+
         </div>
+    </div>
     </div>
 
     <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>

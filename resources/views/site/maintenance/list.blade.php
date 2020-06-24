@@ -12,6 +12,53 @@
 
 @section('content')
     <div class="page-content-inner">
+        @if ($under_review)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption font-dark">
+                                <i class="icon-layers"></i>
+                                <span class="caption-subject bold uppercase font-green-haze"> Under Review</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table class="table table-striped table-bordered table-hover order-column" id="under_review">
+                                <thead>
+                                <tr class="mytable-header">
+                                    <th width="5%"> #</th>
+                                    <th width="7%"> Site</th>
+                                    <th> Name</th>
+                                    <th> Supervisor</th>
+                                    <th width="10%"> Prac Comp</th>
+                                    <th width="10%"> Reported</th>
+                                    <th width="5%"></th>
+                                </tr>
+                                </thead>
+                                @foreach ($under_review as $rec)
+                                    <tr>
+                                        <td>
+                                            <div class="text-center"><a href="/site/maintenance/{{ $rec->id }}"><i class="fa fa-search"></i></a></div>
+                                        </td>
+                                        <td> {{ $rec->sitecode }}</td>
+                                        <td> {{ $rec->sitename }}</td>
+                                        <td> {{ $rec->super_name }}</td>
+                                        <td> {{ $rec->completed_date }}</td>
+                                        <td> {{ $rec->created_date }}</td>
+                                        <td>
+                                            <a href="/site/maintenance/{{ $rec->id }}" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">
@@ -31,7 +78,6 @@
                             <div class="form-group">
                                 <select name="status1" id="status1" class="form-control bs-select">
                                     <option value="1" selected>Active</option>
-                                    <option value="2">Under Review</option>
                                     <option value="0">Closed</option>
                                     <option value="-1">Not Required</option>
                                 </select>
