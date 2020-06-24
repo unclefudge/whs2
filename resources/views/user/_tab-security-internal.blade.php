@@ -501,7 +501,7 @@ $rec = $user;
                         <tr>
                             <td>Safety Data Sheets (SDS)</td>
                             <td width="15%">{!! permSelect('view.sds', 'all', $rec, $cid, $dis) !!}</td>
-                            @if (true)
+                            @if ($cc)
                                 <td width="15%">{!! permSelect('edit.sds', 'all', $rec, $cid, $dis) !!}</td>
                                 <td width="15%">{!! permSelect('add.sds', 'add', $rec, $cid, $dis) !!}</td>
                                 <td width="15%">{!! permSelect('del.sds', 'del', $rec, $cid, $dis) !!}</td>
