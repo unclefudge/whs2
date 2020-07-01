@@ -25,10 +25,10 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Safety Data Sheets</span>
                         </div>
                         <div class="actions">
-                            @if(in_array(Auth::user()->id, ['3', '109', '351', '6'])) {{-- Fudge, Jo, Tara, Rob --}}
+                            @if(Auth::user()->allowed2('add.sds'))
+                            {{--}}@if(in_array(Auth::user()->id, ['3', '109', '351', '6'])) {{-- Fudge, Jo, Tara, Rob --}}
                                 <button type="submit" class="btn btn-circle green btn-outline btn-sm" data-original-title="Add">Add</button>
                             @endif
-                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                         </div>
                     </div>
                     <div class="row">

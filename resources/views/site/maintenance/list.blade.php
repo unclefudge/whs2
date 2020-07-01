@@ -47,7 +47,7 @@
                                         <td> {{ $rec->completed_date }}</td>
                                         <td> {{ $rec->created_date }}</td>
                                         <td>
-                                            <a href="/site/maintenance/{{ $rec->id }}" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
+                                            <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach

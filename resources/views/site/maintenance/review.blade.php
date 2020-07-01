@@ -38,34 +38,10 @@
                     </div>
                     <div class="portlet-body">
                         <div class="page-content-inner">
-                            {{--}}
-                            <input v-model="xx.qa.id" type="hidden" id="qa_id" value="{{ $main->id }}">
-                            <input v-model="xx.qa.name" type="hidden" id="qa_name" value="{{ $main->name }}">
-                            <input v-model="xx.qa.site_id" type="hidden" id="qa_site_id" value="{{ $main->site_id }}">
-                            <input v-model="xx.qa.status" type="hidden" id="qa_status" value="{{ $main->status }}">
-                            <input v-model="xx.qa.master" type="hidden" id="qa_master" value="{{ $main->master }}">
-                            <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
-                            <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $main->status }}">
-                            <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
-                            <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
-                            <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
-                            <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.qa', $main) }}">
-                            <input v-model="xx.user_manager" type="hidden" id="user_manager"
-                                   value="{!! (!$main->master && in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
-                            <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('del.site.qa') }}">
-                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.qa', $main) }}">
+                            {!! Form::model($main, ['action' => ['Site\SiteMaintenanceController@review', $main->id], 'class' => 'horizontal-form']) !!}
 
+                            @include('form-error')
 
-                            <!-- Fullscreen devices -->
-                            @if ($main->status && $main->items->count() == $main->itemsCompleted()->count())
-                                <div class="col-md-12 note note-warning">
-                                    <p>All items have been completed and report requires
-                                        <button class="btn btn-xs btn-outline dark disabled">Sign Off</button>
-                                        at the bottom
-                                    </p>
-                                </div>
-                            @endif
-                            --}}
                             <div class="row">
                                 <div class="col-xs-4">
                                     <p><h4>Job Details</h4>
@@ -77,22 +53,8 @@
                                 </div>
                                 <div class="col-xs-8"></div>
                                 <h2 style="margin: 0px; padding-right: 20px"><b>{{ $main->name }}</b>
-                                    @if($main->status == '-1')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">NOT REQUIRED</span>
-                                        <span class="text-center font-red visible-sm visible-xs">NOT REQUIRED</span>
-                                    @endif
-                                    @if($main->status == '0')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                        <span class="text-center font-red visible-sm visible-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                    @endif
-                                    @if($main->status == '1')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
-                                        <span class="text-center font-red visible-sm visible-xs">ACTIVE</span>
-                                    @endif
-                                    @if($main->status == '2')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
-                                        <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
-                                    @endif
+                                    <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
+                                    <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
                                 </h2>
                                 <br><br><br>
                                     <span style="padding-right:20px; float:right">
@@ -100,85 +62,77 @@
                                         @if ($main->super_id)<b>Supervisor:</b> {{ $main->supervisor->name }} @endif
                                     </span>
                             </div>
-                        </div>
 
-                        {{-- Under Review - asign to super --}}
-                        @if($main->status == '2')
-                            <hr>
-                            <h4>Assign Request to visit client</h4>
-                            <div class="row">
-                                {{-- Assign to --}}
-                                {{--
-                                <div class="col-md-3" id="assign2-div">
-                                    <div class="form-group">
-                                        {!! Form::label('Assign to', 'Assign to :', ['class' => 'control-label']) !!}
-                                        {!! Form::select('assign_to', ['' => 'Select action', 'super' => 'Supervisor', 'company' => 'Company'], '', ['class' => 'form-control bs-select', 'id' => 'assign_to']) !!}
-                                    </div>
-                                </div>--}}
 
-                                <div class="col-md-4">
-                                    {{-- Supervisor --}}
+                            {{-- Under Review - asign to super --}}
+                            @if($main->category_id == '0')
+                                <hr>
+                                <h4>Assign Request to visit client</h4>
+                                <div class="row">
+                                    {{-- Assign to --}}
                                     {{--
-                                    <div class="form-group {!! fieldHasError('super', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="super-div">
-                                        {!! Form::label('super', 'Supervisor', ['class' => 'control-label']) !!}
-                                        <select id="super" name="super" class="form-control bs-select" style="width:100%">
-                                            @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
-                                                <option value="{{ $super->id }}">{{ $super->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        {!! fieldErrorMessage('super', $errors) !!}
+                                    <div class="col-md-3" id="assign2-div">
+                                        <div class="form-group">
+                                            {!! Form::label('Assign to', 'Assign to :', ['class' => 'control-label']) !!}
+                                            {!! Form::select('assign_to', ['' => 'Select action', 'super' => 'Supervisor', 'company' => 'Company'], '', ['class' => 'form-control bs-select', 'id' => 'assign_to']) !!}
+                                        </div>
                                     </div>--}}
 
-                                    {{-- Company --}}
-                                    <div class="form-group {!! fieldHasError('company', $errors) !!}" style="{{ fieldHasError('company', $errors) ? '' : 'display:show' }}" id="company-div">
-                                        {!! Form::label('company', 'Assign to', ['class' => 'control-label']) !!}
-                                        <select id="company" name="company" class="form-control select2" style="width:100%">
-                                            @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        {!! fieldErrorMessage('company', $errors) !!}
-                                    </div>
-                                </div>
+                                    <div class="col-md-4">
+                                        {{-- Supervisor --}}
+                                        {{--
+                                        <div class="form-group {!! fieldHasError('super', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="super-div">
+                                            {!! Form::label('super', 'Supervisor', ['class' => 'control-label']) !!}
+                                            <select id="super" name="super" class="form-control bs-select" style="width:100%">
+                                                @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
+                                                    <option value="{{ $super->id }}">{{ $super->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {!! fieldErrorMessage('super', $errors) !!}
+                                        </div>--}}
 
-                                {{-- Planner Date --}}
-                                <div class="col-md-3 ">
-                                    <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
-                                        {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
-                                        <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
-                                            <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
+                                        {{-- Company --}}
+                                        <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
+                                            {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
+                                            <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
+                                                <option value="">Select Supervisor/Company</option>
+                                                @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
+                                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {!! fieldErrorMessage('company_id', $errors) !!}
+                                        </div>
+                                    </div>
+
+                                    {{-- Planner Date --}}
+                                    <div class="col-md-3 ">
+                                        <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
+                                            {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
+                                            <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
                                             <span class="input-group-btn">
                                                 <button class="btn default" type="button">
                                                     <i class="fa fa-calendar"></i>
                                                 </button>
                                             </span>
+                                            </div>
                                         </div>
                                     </div>
+                                    {{-- task Maintenance cat:15  task:171 --}}
+
                                 </div>
-
-
-
-                            </div>
                             @endif
-
-                                    <!-- List QA -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <app-qa></app-qa>
-                                </div>
-                            </div>
 
                             <hr>
                             <div class="pull-right" style="min-height: 50px">
-                                <a href="/site/qa" class="btn default"> Back</a>
-                                @if (!$main->master && Auth::user()->allowed2('edit.site.qa', $main))
-                                    <button v-if="xx.qa.status == 1 && xx.qa.items_total != 0 && xx.qa.items_done != xx.qa.items_total" class="btn blue"
-                                            v-on:click="$root.$broadcast('updateReportStatus', 2)"> Place On Hold
-                                    </button>
-                                    <button v-if="xx.qa.status == 2 || xx.qa.status == -1 " class="btn green" v-on:click="$root.$broadcast('updateReportStatus', 1)"> Make Active</button>
+                                <a href="/site/maintenance" class="btn default"> Back</a>
+                                @if (true)
+                                    <button type="submit" name="save" class="btn blue"> Assign Request</button>
                                 @endif
                             </div>
                             <br><br>
+                            {!! Form::close() !!}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,21 +140,6 @@
         </div>
     </div>
     </div>
-
-    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
-    -->
-
-    <!-- loading Spinner -->
-    {{--}}
-    <div v-show="xx.spinner" style="background-color: #FFF; padding: 20px;">
-        <div class="loadSpinnerOverlay">
-            <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
-        </div>
-    </div>--}}
-
-
-    @include('misc/actions-modal')
-
 @stop
 
 
@@ -225,18 +164,17 @@
 <script src="/js/vue-modal-component.js"></script>
 <script src="/js/vue-app-basic-functions.js"></script>--}}
 
-<!--<script src="/js/vue-app-qa.js"></script>-->
+        <!--<script src="/js/vue-app-qa.js"></script>-->
 
 <script>
     $(document).ready(function () {
         /* Select2 */
-        $("#company").select2({placeholder: "Select Company", width: '100%'});
+        $("#company_id").select2({placeholder: "Select Company", width: '100%'});
         $("#assign").select2({placeholder: "Select User", width: '100%'});
 
         $("#assign_to").change(function () {
             $('#super-div').hide();
             $('#company-div').hide();
-
 
             if ($("#assign_to").val() == 'super') {
                 $('#super-div').show();

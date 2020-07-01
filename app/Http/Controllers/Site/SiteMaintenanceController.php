@@ -87,7 +87,10 @@ class SiteMaintenanceController extends Controller {
         //if (!Auth::user()->allowed2('view.site.maintenance', $main))
         //    return view('errors/404');
 
-        return view('site/maintenance/show', compact('main'));
+        if ($main->status == 2)
+            return view('site/maintenance/review', compact('main'));
+        else
+            return view('site/maintenance/show', compact('main'));
     }
 
     /**
@@ -97,13 +100,16 @@ class SiteMaintenanceController extends Controller {
      */
     public function edit($id)
     {
-        $qa = SiteQa::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.site.maintenance', $qa))
-            return view('errors/404');
+        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
+        //    return view('errors/404');
 
-        return view('site/maintenance/edit', compact('qa'));
+        if ($main->status == 2)
+            return view('site/maintenance/review', compact('main'));
+        else
+            return view('site/maintenance/edit', compact('main'));
     }
 
     /**
@@ -177,6 +183,37 @@ class SiteMaintenanceController extends Controller {
         Toastr::success("Created Maintenance Request");
 
         return redirect('/site/maintenance');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function review($id)
+    {
+        $main = SiteMaintenance::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('edit.site.qa', $qa))
+        //    return view('errors/404');
+
+        $rules = ['company_id' => 'required', 'visit_date' => 'required'];
+        $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
+        request()->validate($rules, $mesg); // Validate
+
+        $main_request = request()->all();
+        dd($main_request);
+
+        $main->update($main_request);
+
+        // Add to planner
+
+
+        // Delete ToDoo
+
+
+        Toastr::success("Assigned Request");
+
+        return redirect('site/maintenance/' . $main->id . '/edit');
     }
 
     /**

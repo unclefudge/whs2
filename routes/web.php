@@ -242,6 +242,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('site/maintenance/upload', 'Site\SiteMaintenanceController@uploadAttachment');
     Route::get('site/maintenance/data/prac_completion/{site_id}', 'Site\SiteMaintenanceController@getPracCompletion');
     Route::get('site/maintenance/data/site_super/{site_id}', 'Site\SiteMaintenanceController@getSiteSupervisor');
+    Route::post('site/maintenance/{id}', 'Site\SiteMaintenanceController@review');
     Route::resource('site/maintenance', 'Site\SiteMaintenanceController');
 
 
