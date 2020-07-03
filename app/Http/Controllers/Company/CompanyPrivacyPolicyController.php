@@ -41,10 +41,10 @@ class CompanyPrivacyPolicyController extends Controller {
     {
         //dd('here');
         $company = Company::findOrFail($cid);
-        $ptc = CompanyDocPeriodTrade::find($id);
+        $policy = CompanyDocPrivacyPolicy::find($id);
 
-        if ($ptc)
-            return view('company/doc/ptc-show', compact('company', 'ptc'));
+        if ($policy)
+            return view('company/doc/privacy-show', compact('company', 'policy'));
 
         return view('errors/404');
     }
@@ -113,12 +113,13 @@ class CompanyPrivacyPolicyController extends Controller {
         $pdf = PDF::loadView('pdf/company-privacy', compact('policy', 'company'));
         $pdf->setPaper('a4');
         $pdf->save(public_path("$path/$filename"));
-        return $pdf->stream();
+        //return $pdf->stream();
 
         // Create Company Doc
         $doc = CompanyDoc::create([
             'category_id'    => 5,
             'name'           => 'Privacy Policy',
+            'attachment'     => $filename,
             'ref_no'         => $policy->id,
             'status'         => 1,
             'for_company_id' => $policy->for_company_id,
@@ -197,7 +198,6 @@ class CompanyPrivacyPolicyController extends Controller {
 
         return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");
     }
-
 
 
     /**

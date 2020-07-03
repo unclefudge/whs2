@@ -137,6 +137,21 @@
         </tr>
     </table>
 
+    {{--  3.2 Security --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.2</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Security</h4>
+                <p>Information that we collect may be stored, processed in or transferred between parties located within and outside of Australia.</p>
+                <p>Although we don’t send personal information overseas you should be aware your personal information may be loaded to the cloud for storage or access and it is possible that suppliers we deal with may outsource functions using overseas contractors or
+                    companies that process these services using offshore resources.</p>
+                <p>Cape Cod is committed to ensuring that the information you provide to us is kept securely. In order to prevent unauthorised access or disclosure, we have put in place suitable physical, electronic and managerial procedures to safeguard and secure
+                    information and protect it from misuse, interference and loss.</p>
+                The transmission and exchange of information is carried out at your own risk. We cannot guarantee the security of any information that you transmit to or receive from us.
+            </td>
+        </tr>
+    </table>
 
 
     {{-- Page 2 --}}
@@ -151,9 +166,82 @@
         </div>
     </div>
 
+    {{-- 3.3 Disclosure --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.3</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Disclosure of Personal Information</h4>
+                <p>Except as required by law, Cape Cod discloses personal information only for purposes that are reasonably related to Cape Cod’s Business and Association activities, and for which we have your actual consent or where you would reasonably expect Cape Cod to do
+                    so.</p>
+                <p>Cape Cod will not disclose your personal information to third parties for payment, profit or advantage without your consent.</p>
+                Cape Cod may disclose personal information to third parties, from time to time, to assist in conducting business, including:
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
+                    <li>contractors that perform functions on our behalf such as Design Consultants and Trades that are engaged to provide the service you have requested;</li>
+                    <li>technology service providers including internet service providers or cloud service providers;</li>
+                    <li>couriers such as Australia Post;</li>
+                    <li>data processors that analyse our website traffic or usage;</li>
+                    <li>agents that perform functions on our behalf, such as mailouts, debt collection, marketing or advertising;</li>
+                    <li>where a person consents to the disclosure in writing or where that person would reasonably expect Cape Cod to do so; and</li>
+                    <li>to persons, entities or courts as required under the law.</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
+
+    {{-- 3.4 Direct Marketing --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.4</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Direct Marketing to You</h4>
+                <p>We will not send you unsolicited commercial electronic messages in contravention of the Spam Act 2003.</p>
+                We may use the non-sensitive information you gave us for the purpose of promoting and marketing our Business to you if we:
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
+                    <li>use the information that you reasonably expected us to use for promoting and marketing our Business to you; and</li>
+                    <li>provide you a simple method to unsubscribe.</li>
+                </ol>
+                We will not contact you to promote or market our Business if you requested us not to.
+            </td>
+        </tr>
+    </table>
+
+    {{-- 3.5 Accessing and Correcting --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.5</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Accessing and Correcting Your Personal Information</h4>
+                You may request access to your personal information that we hold and we will:
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
+                    <li>verify your identity;</li>
+                    <li>inform you of, and if you agree, charge you the reasonable cost of meeting your request, if any, but not for the request itself; and</li>
+                    <li>on receipt of payment, if any, and within a reasonable period, comply with your request.</li>
+                </ol>
+                You may request to correct your personal information that we hold and we will update your personal information so that it is up-to-date, accurate, complete, relevant and not misleading.
+            </td>
+        </tr>
+    </table>
+
+    {{-- 3.6 How to Contact Us --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.6</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">How to Contact Us</h4>
+                If you would like to access or correct your personal information, please contact our Privacy Officer by:
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
+                    <li>email: inform@capecod.com.au</li>
+                    <li>writing to: Privacy Officer, Cape Cod Australia, PO Box 2002, North Parramatta NSW 1750; or</li>
+                    <li>phone: 02 9849 4444.</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
 
 
     {{-- Signature --}}
+    {{--}}
     <br><br><br><br>
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 280px; border-bottom: 1px solid #eee; border-top: 0px; background-color: #eee; padding:10px;">{!! nl2br($policy->contractor_signed_name) !!}</span>
@@ -162,7 +250,7 @@
     <div style="width: 100%; display: table;">
         <span style="display: table-cell; width: 300px; border-top: 0px">Trade Contractor's Signature</span>
         <span style="display: table-cell;">&nbsp;</span>
-    </div>
+    </div>--}}
 
 
     {{-- Page 3 --}}
@@ -170,9 +258,59 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <h4 style="margin: 0px">Period Trade Contract Conditions</h4>
-            <hr style="margin: 5px 0px 5px 0px">
+            <h3 style="margin: 0px">Privacy Policy
+                <small>continued</small>
+                <span class="pull-right" style="font-size:18px"></span></h3>
+            <hr style="margin: 5px 0px 10px 0px">
         </div>
+    </div>
+
+    {{-- 3.7 Complaints --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">3.7</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Complaints</h4>
+                If you believe we have breached the Australian Privacy Principles under the Privacy Act 1988 or a registered Australian Privacy Principles Code, you may lodge a complaint as follows:
+                <ol type="a" style="padding-left:25px; margin-bottom: 5px">
+                    <li>firstly, contact us in writing to the email or postal address in clause 3.6 and include the following in your complaint:
+                        <ul style="padding-left:25px; margin-bottom: 5px">
+                            <li>your contact details;</li>
+                            <li>section or provision of the Australian Privacy Principles or Code that you believe we breached; and</li>
+                            <li>• our practice or policy that you believe breaches the relevant Australian Privacy Principle or Code,</li>
+                        </ul>
+                    </li>
+                    you must allow us a reasonable time, about 30 days, to reply to your complaint; and
+                    <li>secondly, you may complain to the Office of the Australian Information Commissioner if:</li>
+                    <ul style="padding-left:25px; margin-bottom: 5px">
+                        <li>you are not satisfied with our response; or</li>
+                        <li>we do not respond to you within a reasonable time without sufficient explanation.</li>
+                    </ul>
+                </ol>
+            </td>
+        </tr>
+    </table>
+
+    {{-- 4 Notifiable Data Breaches --}}
+    <table class="table" style="padding: 0px; margin: 0px">
+        <tr>
+            <td width="5%" style="margin:5px 0 0 0; padding: 5px 0px; border: 0px"><h5 style="margin: 0px">4.</h5></td>
+            <td class="pad5" style="border: 0px">
+                <h4 style="margin: 0px">Notifiable Data Breaches</h4>
+                Cape Cod will notify the Office of the Australian Information Commissioner (OAIC) and affected individuals if Cape Cod has a data breach within the meaning of the Act.
+            </td>
+        </tr>
+    </table>
+
+    <br><br><br><br>
+    {{-- Signature --}}
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 280px; border-bottom: 1px solid #eee; border-top: 0px; background-color: #eee; padding:10px;">{!! nl2br($policy->contractor_signed_name) !!}</span>
+        <span style="display: table-cell;">&nbsp;</span>
+    </div>
+    <div style="width: 100%; display: table;">
+        <span style="display: table-cell; width: 300px; border-top: 0px">Trade Contractor's Signature</span>
+        <span style="display: table-cell;">&nbsp;</span>
     </div>
 </div>
 </body>

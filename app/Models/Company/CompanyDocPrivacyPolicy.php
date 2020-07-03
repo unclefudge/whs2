@@ -16,7 +16,7 @@ class CompanyDocPrivacyPolicy extends Model {
 
     protected $table = 'company_doc_privacy';
     protected $fillable = [
-        'date', 'contractor_signed_id', 'contractor_signed_at', 'contractor_signed_name',
+        'date', 'attachment', 'contractor_signed_id', 'contractor_signed_at', 'contractor_signed_name',
         'share', 'notes', 'for_company_id', 'company_id', 'status', 'created_by', 'updated_by'];
     protected $dates = ['date', 'contractor_signed_at'];
 

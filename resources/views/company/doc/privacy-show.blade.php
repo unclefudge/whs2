@@ -16,7 +16,6 @@
 
         @include('company/_header')
 
-
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -24,13 +23,16 @@
                         <div class="caption">
                             <span class="caption-subject font-dark bold uppercase"> Privacy Policy </span>
                         </div>
+                        @if ($policy->status == 1)
+                            <div class="actions">
+                                <a class="btn btn-circle green btn-outline btn-sm" href="{{ $policy->attachment_url }}" data-original-title="Upload">View PDF</a>
+                            </div>
+                        @endif
                     </div>
                     <div class="portlet-body form">
-                        <!-- BEGIN FORM-->
-                        {!! Form::model('CompanyPrivacyPolicy', ['action' => ['Company\CompanyPrivacyPolicyController@store', $company->id], 'class' => 'horizontal-form']) !!}
-                        @include('form-error')
 
                         <div class="form-body">
+
                             {{-- 1. Purpose --}}
                             <table class="table" style="padding: 0px; margin: 0px">
                                 <tr>
@@ -222,31 +224,28 @@
                                 </tr>
                             </table>
 
-
                             {{-- Signature --}}
                             <br><br><br>
                             <div class="row">
-                                <div class="form-group">
+                                <div class="form-group {!! fieldHasError('contractor_signed_name', $errors) !!}">
                                     {!! Form::label('contractor_signed_name', "Trade Contractor's Signature", ['class' => 'col-md-3 control-label']) !!}
-                                    <div class="col-md-6" style="display: none" id="contractor_signed_name_field">
-                                        {!! Form::textarea('contractor_signed_name', null, ['rows' => '3', 'class' => 'form-control', 'readonly']) !!}
-                                        <span class="help-block">By signing this policy you accept the above as your digital signature.</span>
+                                    <div class="col-md-6">
+                                        {!! Form::textarea('contractor_signed_name', $policy->contractor_signed_name, ['rows' => '3', 'class' => 'form-control', 'disabled']) !!}
+                                        {!! fieldErrorMessage('contractor_signed_name', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <a data-original-title="Assign Users" data-toggle="modal" href="#modal_sign_contractor">
-                                        <button type="button" class="btn green" id="sign_contractor"> Sign Policy</button>
-                                    </a>
-                                </div>
                             </div>
+                            <br>
 
-                            <br><br>
-                            <div><b>Once you have signed this policy please click the "Submit" button to complete the submission.</b></div>
 
                             <br><br>
                             <div class="form-actions right">
                                 <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
-                                <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
+                                @if (($company->activeCompanyDoc('12') && $company->activeCompanyDoc('5')->status == 1))
+                                    <a href="#modal_archive" class="btn green" data-toggle="modal" id="sign_archive" style="display: none;">Submit</a>
+                                @else
+                                    <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -256,35 +255,41 @@
         </div>
     </div>
 
-    <!-- Sign Contractors Modal -->
-    <div id="modal_sign_contractor" class="modal fade bs-modal-sm" tabindex="-1" role="basic" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form action="#" method="POST" name="form_sign_contractor" id="form_sign_contractor">
+
+
+
+    {{-- Archive Modal --}}
+    @if (($company->activeCompanyDoc('12')))
+        <div id="modal_archive" class="modal fade bs-modal-sm" id="basic" tabindex="-1" role="modal_archive" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title text-center"><b>Sign Contract</b></h4>
+                        <h4 class="modal-title">Replace Existing Contract</h4>
                     </div>
                     <div class="modal-body">
-                        <p class="text-center">By signing this contract you accept the name entered below as your digital signature.<br></p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    {!! Form::label('signed_name', 'Enter your Full Name', ['class' => 'control-label']) !!}
-                                    {!! Form::text('signed_name', null, ['class' => 'form-control']) !!}
-                                </div>
-                            </div>
+                        {!! Form::model($policy, ['method' => 'PATCH', 'action' => ['Company\CompanyPeriodTradeController@update', $company->id, $policy->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::hidden('archive', $company->activeCompanyDoc('12')->id, ['class' => 'form-control']) !!}
+
+                        <textarea name="principle_signed_name2" id="principle_signed_name2" rows="3" class="form-control" readonly="" style="display:none"></textarea>
+
+                        <div class="text-center">
+                            <b>{{ $company->name }}</b> currently has the following valid contract<br><br>
+                            <a href="{!! $company->activeCompanyDoc('12')->attachment_url !!}" target="_blank">Period Trade Contract<br>
+                                expiry {!! ($company->activeCompanyDoc('12')) ? $company->activeCompanyDoc('12')->expiry->format('d/m/Y') : '' !!}</a><br><br>
+                            <span class="font-red"><b>By signing & accepting this contract it will archive the old one.</b></span><br><br>
                         </div>
-                        <br>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn green" name="archive_doc" value="archive">Accept</button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn green" data-dismiss="modal" id="sign_contractor_accept">Sign</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 @stop
 
 @section('page-level-plugins-head')
@@ -303,15 +308,18 @@
             var email = "{!! (Auth::user()->email) ?  ' ('.Auth::user()->email.')' : '' !!}";
             var date = moment().format('DD/MM/YYYY, h:mm:ss a');
             var signed_string = name + "\n" + 'Digitally signed by ' + user + email + "\nDate: " + date;
-            $('#contractor_signed_name').val(signed_string);
+            $('#principle_signed_name').val(signed_string);
             if (name != '') {
                 $('#submit').show();
-                $('#contractor_signed_name_field').show();
+                $('#sign_archive').show();
             } else {
-                $('#contractor_signed_name').val('');
-                $('#contractor_signed_name_field').hide();
+                $('#principle_signed_name').val('');
                 $('#submit').hide();
             }
+        });
+
+        $('#sign_archive').on('click', function () {
+            $('#principle_signed_name2').val($('#principle_signed_name').val())
         });
     });
 
