@@ -155,6 +155,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('company/{cid}/doc/subcontractor-statement/reject/{id}', 'Company\CompanySubcontractorStatementController@reject');
     Route::resource('company/{cid}/doc/subcontractor-statement', 'Company\CompanySubcontractorStatementController');
 
+    // Privacy Policy
+    Route::post('company/{cid}/doc/privacy-policy/reject/{id}', 'Company\CompanyPrivacyPolicyController@reject');
+    Route::resource('company/{cid}/doc/privacy-policy', 'Company\CompanyPrivacyPolicyController');
+
     // Company Docs
     //Route::any('company/doc/create', 'Company\CompanyDocController@create');
     //Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
