@@ -5,6 +5,7 @@ $sub1 = ($user->company->reportsTo()->subscription > 0) ? 1 : 0;
 $sub2 = ($user->company->reportsTo()->subscription > 1) ? 1 : 0;
 $plan = ($user->company->reportsTo()->addon('planner')) ? 1 : 0;
 $cc = ($user->company->reportsTo()->id == '3') ? 1 : 0;
+$be = ($user->company->reportsTo()->id == '210') ? 1 : 0; // Blue Eco
 $cid = $user->company->reportsTo()->id;
 $dis = false;
 $rec = $user;

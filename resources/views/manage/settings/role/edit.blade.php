@@ -4,6 +4,7 @@ $sub1 = (Auth::user()->company->subscription > 0) ? 1 : 0;
 $sub2 = (Auth::user()->company->subscription > 1) ? 1 : 0;
 $plan = (Auth::user()->company->addon('planner')) ? 1 : 0;
 $cc = (Auth::user()->isCC()) ? 1 : 0;
+$be = ($user->company->id == '210') ? 1 : 0; // Blue Eco
 
 $dis = (Auth::user()->allowed2('edit.settings', $role)) ? false : true;
 $cid = Auth::user()->company_id;
@@ -236,7 +237,7 @@ $cc = 1;*/
                                                 <td width="15%">{!! permSelect('edit.company.leave', 'own', $rec, $cid, $dis) !!}</td>
                                                 <td width="45%" colspan="3"></td>
                                             </tr>
-                                            @if ($cc)
+                                            @if ($cc || $be)
                                                 <tr>
                                                     <td>Compliance Management <a href="javascript:;" class="popovers" data-container="body" data-trigger="hover"
                                                                                  data-content="Grants ability to override the default compliance requirements in regards to documents for individual companies. To be used sparingly"
