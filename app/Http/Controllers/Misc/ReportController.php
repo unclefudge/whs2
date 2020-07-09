@@ -264,7 +264,7 @@ class ReportController extends Controller {
                         // Create ToDoo and assign to Primary User
                         $todo = Todo::create($todo_request);
                         $todo->assignUsers($company->primary_user);
-                        //$todo->emailToDo();
+                        $todo->emailToDo();
 
                         $sent_to_user[$company->id] = $company->primary_contact()->fullname;
                         $sent_to_company[$company->id] = $company->name;
