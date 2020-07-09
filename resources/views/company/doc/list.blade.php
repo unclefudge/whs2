@@ -43,9 +43,11 @@
                                             <li>
                                                 <a href="/company/{{ $company->id }}/doc/subcontractor-statement/create">Subcontractor's Statement</a>
                                             </li>
-                                            <li>
-                                                <a href="/company/{{ $company->id }}/doc/privacy-policy/create">Privacy Policy</a>
-                                            </li>
+                                            @if (!$company->activeCompanyDoc('12'))
+                                                <li>
+                                                    <a href="/company/{{ $company->id }}/doc/privacy-policy/create">Privacy Policy</a>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 @endif

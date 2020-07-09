@@ -169,6 +169,9 @@
                                     <?php $doc = \App\Models\Company\CompanyDocPeriodTrade::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/period-trade-contract/{{ $doc->id }}" class="btn dark">View Document</a>
                                 @endif
+                                    @if($todo->type == 'company privacy')
+                                        <a href="/company/{{ Auth::user()->company_id }}/doc/privacy-policy/create" class="btn dark">View Document</a>
+                                    @endif
                                 @if($todo->type == 'user doc')
                                     <?php $doc = \App\Models\User\UserDoc::find($todo->type_id) ?>
                                     <a href="/user/{{ $doc->user_id }}/doc/{{ $doc->id }}/edit" class="btn dark">View Document</a>

@@ -70,7 +70,7 @@ class CompanyDoc extends Model {
      */
     public function updatedBy()
     {
-        return $this->belongsTo('App\User', 'approved_by');
+        return $this->belongsTo('App\User', 'updated_by');
     }
 
     /**

@@ -241,7 +241,7 @@
                             <br><br>
                             <div class="form-actions right">
                                 <a href="/company/{{ $company->id }}/doc" class="btn default"> Back</a>
-                                @if (($company->activeCompanyDoc('12') && $company->activeCompanyDoc('5')->status == 1))
+                                @if (($company->activeCompanyDoc('12') && $company->activeCompanyDoc('12')->status == 1))
                                     <a href="#modal_archive" class="btn green" data-toggle="modal" id="sign_archive" style="display: none;">Submit</a>
                                 @else
                                     <button type="submit" name="save" value="save" class="btn green" id="submit" style="display: none;">Submit</button>
@@ -259,6 +259,7 @@
 
 
     {{-- Archive Modal --}}
+    {{--}}
     @if (($company->activeCompanyDoc('12')))
         <div id="modal_archive" class="modal fade bs-modal-sm" id="basic" tabindex="-1" role="modal_archive" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -289,7 +290,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endif --}}
 @stop
 
 @section('page-level-plugins-head')

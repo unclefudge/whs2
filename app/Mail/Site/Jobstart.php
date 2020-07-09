@@ -12,7 +12,7 @@ class Jobstart extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 
-    public $site, $newdate, $olddate;
+    public $site, $newdate, $olddate;//, $supers;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,7 @@ class Jobstart extends Mailable implements ShouldQueue {
     public function __construct(Site $site, $newdate, $olddate = null)
     {
         $this->site = $site;
+        //$this->supers = $site->supervisorsSBC();
         $this->newdate = $newdate;
         $this->olddate = $olddate;
     }
@@ -33,6 +34,8 @@ class Jobstart extends Mailable implements ShouldQueue {
      */
     public function build()
     {
+        //$this->supers = $this->site->supervisorsSBC();
+
         return $this->markdown('emails/site/jobstart')->subject('SafeWorksite - Job Start Notification');
     }
 }

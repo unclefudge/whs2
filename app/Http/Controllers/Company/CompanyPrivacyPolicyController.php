@@ -117,7 +117,7 @@ class CompanyPrivacyPolicyController extends Controller {
 
         // Create Company Doc
         $doc = CompanyDoc::create([
-            'category_id'    => 5,
+            'category_id'    => 12,
             'name'           => 'Privacy Policy',
             'attachment'     => $filename,
             'ref_no'         => $policy->id,
@@ -138,95 +138,7 @@ class CompanyPrivacyPolicyController extends Controller {
      */
     public function update($cid, $id)
     {
-        $company = Company::findOrFail($cid);
-        $ptc = CompanyDocPeriodTrade::findOrFail($id);
 
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.company.doc'))
-            return view('errors/404');
-
-        $ptc_request = request()->all();
-        // Archive old contract if required
-        if (request('archive')) {
-            $ptc_request['principle_signed_name'] = request('principle_signed_name2');
-            $old_ptc = CompanyDoc::findOrFail(request('archive'));
-            $old_ptc->status = 0;
-            $old_ptc->save();
-        }
-        $ptc_request['principle_signed_id'] = Auth::user()->id;
-        $ptc_request['principle_signed_at'] = Carbon::now();
-        $ptc_request['status'] = 1;
-
-        // Set + create create directory if required
-        $path = "filebank/company/$company->id/docs";
-        if (!file_exists($path))
-            mkdir($path, 0777, true);
-
-        // Ensure filename is unique by adding counter to similiar filenames
-        $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '.pdf';
-        $count = 1;
-        while (file_exists(public_path("$path/$filename")))
-            $filename = sanitizeFilename($company->name) . '-PTC-' . $ptc->date->format('d-m-Y') . '-' . $count ++ . '.pdf';
-
-        $ptc_request['attachment'] = $filename;
-
-        //dd($ptc_request);
-        $ptc->update($ptc_request);
-        $ptc->closeToDo();
-
-        //
-        // Generate PDF
-        //
-        //return view('pdf/company-tradecontract', compact('ptc', 'company'));
-        $pdf = PDF::loadView('pdf/company-tradecontract', compact('ptc', 'company'));
-        $pdf->setPaper('a4');
-        $pdf->save(public_path("$path/$filename"));
-        //return $pdf->stream();
-
-        // Update Company Doc
-        $doc = CompanyDoc::where('category_id', 5)->where('ref_no', $ptc->id)->where('company_id', $ptc->company_id)->where('for_company_id', $ptc->for_company_id)->first();
-        if ($doc) {
-            $doc->attachment = $filename;
-            $doc->status = 1;
-            $doc->approved_by = $ptc->principle_signed_id;
-            $doc->approved_at = $ptc->principle_signed_at;
-            $doc->save();
-        }
-
-
-        Toastr::success("Signed contract");
-
-        return redirect("/company/$company->id/doc/period-trade-contract/$ptc->id");
     }
-
-
-    /**
-     * Create PDF
-     */
-    public function tradecontractPDF($cid)
-    {
-        $company = Company::findOrFail($cid);
-
-        // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.company', $company))
-            return view('errors/404');
-
-        //$data[] = ['company_name' => 'cname', 'status' => 'status',];
-        //return view('pdf/company-tradecontract', compact('data', 'company'));
-        //$pdf = PDF::loadView('pdf/company-tradecontract', compact('data', 'company'));
-        $pdf = PDF::loadView('pdf/company-tradecontract', compact('company'));
-        $pdf->setPaper('a4');
-        //$pdf->setOption('page-width', 200)->setOption('page-height', 287);
-        //$pdf->setOption('margin-bottom', 10);
-        //->setOption('footer-font-size', '7')
-        //->setOption('footer-left', utf8_decode('Document created ' . date('\ d/m/Y\ ')))
-        //->setOption('footer-center', utf8_decode('Page [page] / [topage]'))
-        //->setOption('footer-right', utf8_decode("Initials:     "))
-        //->setOrientation('portrait');
-
-        //if ($request->has('view_pdf'))
-        return $pdf->stream();
-    }
-
 
 }

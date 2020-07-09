@@ -92,7 +92,7 @@ class CompanyDocPrivacyPolicy extends Model {
         if (!$user)
             $user = Auth::user();
 
-        $todos = Todo::where('type', 'company privacy')->where('company_id', $this->company->id)->where('status', '1')->get();
+        $todos = Todo::where('type', 'company privacy')->where('type_id', $this->company->id)->where('status', '1')->get();
         foreach ($todos as $todo) {
             $todo->status = 0;
             $todo->done_at = Carbon::now();

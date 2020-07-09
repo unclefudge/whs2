@@ -142,6 +142,7 @@ class ReportController extends Controller {
             if ($user && $user->requiresUserDoc(1) && !$user->activeUserDoc(1))
                 $users[] = $user;
         }
+
         //dd($users);
 
         return view('manage/report/users_nowhitecard', compact('users'));
@@ -228,6 +229,55 @@ class ReportController extends Controller {
         }
 
         return view('manage/report/company_users', compact('all_companies', 'user_companies'));
+    }
+
+    public function companyPrivacy()
+    {
+        $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
+        $companies = \App\Models\Company\Company::whereIn('id', $allowed_companies)->orderBy('name')->get();
+
+        return view('manage/report/company_privacy', compact('companies'));
+    }
+
+    public function companyPrivacySend()
+    {
+        $allowed_companies = Auth::user()->company->companies(1)->pluck('id')->toArray();
+        $companies = \App\Models\Company\Company::whereIn('id', $allowed_companies)->orderBy('name')->get();
+
+        $sent_to_company = [];
+        $sent_to_user = [];
+        foreach ($companies as $company) {
+            if (!$company->activeCompanyDoc(12)) {
+                $todo = Todo::where('type', 'company privacy')->where('type_id', $company->id)->where('status', '1')->first();
+                if (!$todo) {
+                    // Create ToDoo
+                    $todo_request = [
+                        'type'       => 'company privacy',
+                        'type_id' => $company->id,
+                        'name'       => 'Cope Cod Privacy Policy Sign Off',
+                        'info'       => 'Please read and sign you have read Cape Cod Privacy Policy',
+                        'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
+                        'company_id' => 3,
+                    ];
+
+                    if ($company->primary_user) {
+                        // Create ToDoo and assign to Primary User
+                        $todo = Todo::create($todo_request);
+                        $todo->assignUsers($company->primary_user);
+                        //$todo->emailToDo();
+
+                        $sent_to_user[$company->id] = $company->primary_contact()->fullname;
+                        $sent_to_company[$company->id] = $company->name;
+                        if ($company->nickname)
+                            $sent_to_company[$company->id] .= "<span class='font-grey-cascade'><br>$company->nickname</span>";
+                    }
+
+                }
+
+            }
+        }
+
+        return view('manage/report/company_privacy_send', compact('companies', 'sent_to_company', 'sent_to_user'));
     }
 
     /*
@@ -385,7 +435,7 @@ class ReportController extends Controller {
         $output_file = public_path($dir . "/Equipment Transactions " . Carbon::now()->format('YmdHis') . '.pdf');
         touch($output_file);
 
-        $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') :  Carbon::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+        $from = (request('from')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('from') . ' 00:00:00') : Carbon::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
         $to = (request('to')) ? Carbon::createFromFormat('d/m/Y H:i:s', request('to') . ' 00:00:00') : Carbon::tomorrow();
 
         //return view('pdf/equipment-transactions', compact('transactions', 'from', 'to'));
@@ -430,6 +480,7 @@ class ReportController extends Controller {
                 if ($trans->action == 'D') return 'Disposal';
                 if ($trans->action == 'W') return 'Write Off';
                 if ($trans->action == 'N') return 'New Item';
+
                 return $trans->action;
             })
             ->rawColumns(['full_name', 'created_at'])
@@ -473,7 +524,7 @@ class ReportController extends Controller {
         //dd($stocktake);
         $dt = Datatables::of($stocktake)
             ->editColumn('created_at', function ($stock) {
-                return "<a href='/equipment/stocktake/view/$stock->id' target=_blank >".$stock->created_at->format('d/m/Y')."</a>";
+                return "<a href='/equipment/stocktake/view/$stock->id' target=_blank >" . $stock->created_at->format('d/m/Y') . "</a>";
             })
             ->addColumn('location', function ($stock) {
                 return $stock->name;
@@ -620,6 +671,7 @@ class ReportController extends Controller {
         }
         $planner = SitePlanner::where('site_id', $qa->site_id)->whereIn('task_id', $task_ids)->get();
         $todos = ToDo::where('type', 'qa')->where('type_id', $id)->get();
+
         return view('manage/report/qa_debug', compact('qa', 'planner', 'todos'));
     }
 

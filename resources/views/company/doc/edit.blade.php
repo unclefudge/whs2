@@ -392,7 +392,7 @@
                         <div class="text-center">
                             <b>{{ $company->name }}</b> currently has the following valid document.<br><br>
                             <a href="{!! ($company->activeCompanyDoc($doc->category_id)) ? $company->activeCompanyDoc($doc->category_id)->attachment_url : '' !!} " target="_blank">{{ $doc->name }}<br>
-                                expiry {!! ($company->activeCompanyDoc($doc->category_id)) ? $company->activeCompanyDoc($doc->category_id)->expiry->format('d/m/Y') : '' !!}</a><br><br>
+                                expiry {!! ($company->activeCompanyDoc($doc->category_id) && $company->activeCompanyDoc($doc->category_id)->expiry) ? $company->activeCompanyDoc($doc->category_id)->expiry->format('d/m/Y') : '' !!}</a><br><br>
                             <span class="font-red"><b>By approving this document it will archive the old one.</b></span><br><br>
                         </div>
 

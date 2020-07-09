@@ -95,6 +95,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/missing_company_info', 'Misc\ReportController@missingCompanyInfo');
     Route::get('/manage/report/company_users', 'Misc\ReportController@companyUsers');
     Route::get('/manage/report/company_contactinfo', 'Misc\ReportController@companyContactInfo');
+    Route::get('/manage/report/company_privacy', 'Misc\ReportController@companyPrivacy');
+    Route::get('/manage/report/company_privacy_send', 'Misc\ReportController@companyPrivacySend');
     Route::get('/manage/report/company_swms', 'Misc\ReportController@companySWMS');
     Route::get('/manage/report/licence_override', 'Misc\ReportController@licenceOverride');
     Route::get('/manage/report/attendance', 'Misc\ReportController@attendance');
