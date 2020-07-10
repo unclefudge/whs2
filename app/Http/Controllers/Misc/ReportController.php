@@ -253,8 +253,8 @@ class ReportController extends Controller {
                     // Create ToDoo
                     $todo_request = [
                         'type'       => 'company privacy',
-                        'type_id' => $company->id,
-                        'name'       => 'Cope Cod Privacy Policy Sign Off',
+                        'type_id'    => $company->id,
+                        'name'       => 'Cape Cod Privacy Policy Sign Off',
                         'info'       => 'Please read and sign you have read Cape Cod Privacy Policy',
                         'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
                         'company_id' => 3,
