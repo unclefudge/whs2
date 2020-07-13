@@ -139,7 +139,7 @@ class PagesController extends Controller {
         foreach ($sws as $doc) {
             if ($doc->company->status == 0) {
                 echo $doc->company->name . ' - Inactive<br>';
-                $doc->status = 0;
+                $doc->status = -1;
                 $doc->save();
             }
         }
