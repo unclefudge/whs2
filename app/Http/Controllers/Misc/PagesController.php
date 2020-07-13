@@ -132,6 +132,20 @@ class PagesController extends Controller {
 
     public function quick()
     {
+
+        echo "<b>Archiving SWMS for inactive companies </b></br>";
+        $sws = WmsDoc::where('status', '>', 0)->where('master', 0)->get();
+
+        foreach ($sws as $doc) {
+            if ($doc->company->status == 0) {
+                echo $doc->company->name . ' - Inactive<br>';
+                $doc->status = 0;
+                $doc->save();
+            }
+        }
+
+
+        /*
         echo "<b>Fixing broken QA items </b></br>";
         $qas = SiteQa::where('status', '>', 0)->where('master', 0)->get();
 
@@ -150,6 +164,7 @@ class PagesController extends Controller {
                 }
             }
         }
+        */
 
         /*
         echo "<b>Fixing toolbox images </b></br>";
