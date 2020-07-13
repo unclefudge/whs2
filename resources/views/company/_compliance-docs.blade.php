@@ -32,7 +32,7 @@ $compliantDocs = $company->compliantDocs();
 
                         @foreach ($compliantDocs as $type => $name)
                             {{-- Accepted --}}
-                            @if (e)$company->activeCompanyDoc($typ && $company->activeCompanyDoc($type)->status == 1)
+                            @if ($company->activeCompanyDoc($type) && $company->activeCompanyDoc($type)->status == 1)
                                 <div class="col-xs-8"><i class="fa fa-check" style="width:35px; padding: 4px 15px; {!! ($isCompliant) ? 'color: #26C281' : '' !!}"></i>
                                     <a href="{!! $company->activeCompanyDoc($type)->attachment_url !!}" class="linkDark" target="_blank">{{ $name }}</a>
                                 </div>
