@@ -201,6 +201,7 @@ class SiteMaintenanceController extends Controller {
         request()->validate($rules, $mesg); // Validate
 
         $main_request = request()->all();
+
         dd($main_request);
 
         $main->update($main_request);
