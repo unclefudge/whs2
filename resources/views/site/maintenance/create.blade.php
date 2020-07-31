@@ -63,7 +63,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
+                                    <div class="form-group {!! fieldHasError('super_id', $errors) !!}">
                                         {!! Form::label('super_id', 'Supervisor', ['class' => 'control-label']) !!}
                                         <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
                                             <option value="">Select Supervisor</option>
@@ -140,11 +140,49 @@
 
         $('#multifile-div').hide();
 
+        updateFields();
+
         // On Change Site ID
         $("#site_id").change(function () {
+            updateFields();
+
+        });
+
+        /* Bootstrap Fileinput */
+        $("#multifile").fileinput({
+            //uploadUrl: "/site/maintenance/upload/", // server upload action
+            uploadAsync: true,
+            //allowedFileExtensions: ["image"],
+            allowedFileTypes: ["image"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn red",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            layoutTemplates: {
+                main1: '<div class="input-group {class}">\n' +
+                '   {caption}\n' +
+                '   <div class="input-group-btn">\n' +
+                '       {remove}\n' +
+                '       {browse}\n' +
+                '   </div>\n' +
+                '</div>\n' +
+                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
+                '{preview}\n'
+            },
+        });
+
+        /*
+        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+            data.form.append("site_id", $("#site_id").val());
+        });*/
+
+        function updateFields() {
             var site_id = $("#site_id").select2("val");
             $("#completed").val('');
             $('#multifile-div').hide();
+
             if (site_id != '') {
                 $('#multifile-div').show();
                 $.ajax({
@@ -180,37 +218,7 @@
                     },
                 })
             }
-        });
-
-        /* Bootstrap Fileinput */
-        $("#multifile").fileinput({
-            //uploadUrl: "/site/maintenance/upload/", // server upload action
-            uploadAsync: true,
-            //allowedFileExtensions: ["image"],
-            allowedFileTypes: ["image"],
-            browseClass: "btn blue",
-            browseLabel: "Browse",
-            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
-            //removeClass: "btn red",
-            removeLabel: "",
-            removeIcon: "<i class=\"fa fa-trash\"></i> ",
-            layoutTemplates: {
-                main1: '<div class="input-group {class}">\n' +
-                '   {caption}\n' +
-                '   <div class="input-group-btn">\n' +
-                '       {remove}\n' +
-                '       {browse}\n' +
-                '   </div>\n' +
-                '</div>\n' +
-                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
-                '{preview}\n'
-            },
-        });
-
-        /*
-        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
-            data.form.append("site_id", $("#site_id").val());
-        });*/
+        }
     });
 </script>
 @stop

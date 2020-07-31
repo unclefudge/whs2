@@ -439,7 +439,15 @@ trait UserRolesPermissions {
 
         $merged_ids = array_merge($company_ids, $parent_ids, $parent_parent_ids);
 
-        return ($status != '') ? Site::where('status', $status)->whereIn('id', $merged_ids)->get() : Site::whereIn('id', $merged_ids)->orderBy('name')->get();
+        if ($status != '') {
+            if (is_array($status))
+                return Site::whereIn('status', $status)->whereIn('id', $merged_ids)->get();
+            else
+                return Site::where('status', $status)->whereIn('id', $merged_ids)->get();
+        } else
+            return Site::whereIn('id', $merged_ids)->orderBy('name')->get();
+
+
         //return ($status != '') ? Site::where('status', $status)->whereIn('id', $merged_ids)->orderBy('name')->get() : Site::whereIn('id', $merged_ids)->orderBy('name')->get();
     }
 

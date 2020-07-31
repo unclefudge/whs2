@@ -476,11 +476,11 @@ function addStartTaskToPlanner(plan, site_id, date) {
     };
     var electDriveby = {
         id: '', site_id: site_id, entity_type: 't', entity_id: 4, entity_name: 'Electrician', task_id: 51, task_code: 'DB',
-        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 5), days: 1
+        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 2), days: 1
     };
     var plumbDriveby = {
         id: '', site_id: site_id, entity_type: 't', entity_id: 8, entity_name: 'Plumber', task_id: 86, task_code: 'DB',
-        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 5), days: 1
+        task_name: 'Drive By', from: nextWorkDate(date, '+', 2), to: nextWorkDate(date, '+', 2), days: 1
     };
     // 4 days after
     var floorInspect = {

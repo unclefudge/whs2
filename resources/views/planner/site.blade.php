@@ -48,7 +48,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::select('site_id', Auth::user()->authSitesSelect('view.site.planner', '1', 'prompt', 'started'),
+                                    {!! Form::select('site_id', Auth::user()->authSitesSelect('view.site.planner', [1,2], 'prompt', 'started'),
                                             ($site) ? $site->id : null, ['class' => 'form-control bs-select', 'id' => 'site_id',]) !!}
                                 </div>
                             </div>
@@ -59,6 +59,11 @@
                                         <option value="start" @if($site_start == 'start') selected @endif>Start of Job</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-md-3 pull-right">
+                                @if ($site && $site->status == 2)
+                                    <h3 class="pull-right font-red uppercase" style="margin:0 0 10px;">Maintenance</h3>
+                                @endif
                             </div>
                         </div>
 
@@ -392,7 +397,7 @@
 
             <br><br>
             <hr>
-            <<!--<pre v-if="xx.dev">@{{ xx.day_date }}<br>@{{ xx.day_eid }}<br>@{{ xx.day_eid2 }}<br>@{{ xx.other_sites }}
+            <!--<pre v-if="xx.dev">@{{ xx.day_date }}<br>@{{ xx.day_eid }}<br>@{{ xx.day_eid2 }}<br>@{{ xx.other_sites }}
                     <br>plan@{{ xx.day_plan | json}}<br>str@{{ xx.connected_tasks | json}}</pre>
             -->
 

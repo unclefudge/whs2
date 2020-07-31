@@ -17,6 +17,7 @@ use App\Models\Site\SiteMaintenance;
 use App\Models\Site\SiteMaintenanceItem;
 use App\Models\Site\SiteMaintenanceDoc;
 use App\Models\Site\Planner\SitePlanner;
+use App\Models\Misc\Action;
 use App\Models\Company\Company;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
@@ -109,7 +110,7 @@ class SiteMaintenanceController extends Controller {
         if ($main->status == 2)
             return view('site/maintenance/review', compact('main'));
         else
-            return view('site/maintenance/edit', compact('main'));
+            return view('site/maintenance/show', compact('main'));
     }
 
     /**
@@ -200,70 +201,89 @@ class SiteMaintenanceController extends Controller {
         $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
         request()->validate($rules, $mesg); // Validate
 
+        $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
         $main_request = request()->all();
 
-        dd($main_request);
+        $company = Company::find(request('company_id'));
+
+        if (!request('visited')) {
+            // Add to Client Visit planner
+            $newPlanner = SitePlanner::create(array(
+                'site_id'     => $main->site_id,
+                'from'        => $visit_date->format('Y-m-d') . ' 00:00:00',
+                'to'          => $visit_date->format('Y-m-d') . ' 00:00:00',
+                'days'        => 1,
+                'entity_type' => 'c',
+                'entity_id'   => request('company_id'),
+                'task_id'     => '524' // Client Visit
+            ));
+            $action = Action::create(['action' => "$company->name assigned to visit client on " . request('visit_date'), 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            Toastr::success("Assigned Request");
+
+            // Delete Todoo
+            $main->closeToDo(Auth::user()->id);
+
+        } else {
+            if ($main->items->count() > 0) // Items updated
+                $action = Action::create(['action' => "Items updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            else  // Items added
+                $action = Action::create(['action' => "Items added by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+
+            // Update Items
+            $order = 1;
+            for ($i = 1; $i <= 25; $i ++) {
+                $item = $main->item($i);
+                if (request("item$i")) {
+                    if ($item) {
+                        $item->name = request("item$i");
+                        $item->order = $order;
+                        $item->save();
+                    } else
+                        SiteMaintenanceItem::create(['main_id' => $main->id, 'name' => request("item$i"), 'order' => $order, 'status' => 0]);
+                    $order ++;
+                } elseif ($item)
+                    $item->delete();
+            }
+
+            // Status Updated
+            if (request('status') == 1)  // Maintenance Request Accepted
+                $action = Action::create(['action' => "Maintenance Request approved by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            elseif (request('status') == - 1)  // Maintenance Request Declined
+                $action = Action::create(['action' => "Maintenance Request declined by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+            //dd($main_request);
+            Toastr::success("Updated Request");
+        }
 
         $main->update($main_request);
 
-        // Add to planner
-
-
-        // Delete ToDoo
-
-
-        Toastr::success("Assigned Request");
-
-        return redirect('site/maintenance/' . $main->id . '/edit');
+        return (request('status') == 2) ? redirect('site/maintenance/' . $main->id . '/edit') : redirect('site/maintenance/' . $main->id);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(SiteQaRequest $request, $id)
+    public function update($id)
     {
-        $qa = SiteQa::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.site.qa', $qa))
-            return view('errors/404');
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('edit.site.qa', $qa))
+        //    return view('errors/404');
 
-        $qa_request = $request->all();
-        //dd($qa_request);
+        $rules = ['warranty' => 'required', 'category_id' => 'required'];
+        $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
+        //request()->validate($rules, $mesg); // Validate
 
-        // Increment minor version
-        list($major, $minor) = explode('.', $qa->version);
-        $minor ++;
-        $qa_request['version'] = $major . '.' . $minor;
-        $qa_request['notes'] = "version $major.$minor released " . Carbon::now()->format('d/m/Y') . "\r\n" . $qa->notes;
+        $main_request = request()->all();
+        //dd($main_request);
+        $main->update($main_request);
 
-        $qa->update($qa_request);
 
-        // Delete existing Items
-        foreach ($qa->items as $item)
-            SiteQaItem::where('doc_id', $qa->id)->delete();
+        Toastr::success("Updated Request");
 
-        // Re-create new ones
-        $order = 1;
-        for ($i = 1; $i <= 25; $i ++) {
-            if ($request->get("item$i")) {
-                $super = ($request->has("super$i")) ? '1' : '0';
-                $cert = ($request->has("cert$i")) ? '1' : '0';
-                $newItem = SiteQaItem::create(
-                    ['doc_id'        => $qa->id,
-                     'task_id'       => $request->get("task$i"),
-                     'name'          => $request->get("item$i"),
-                     'super'         => $super,
-                     'certification' => $cert,
-                     'order'         => $order ++,
-                     'master'        => '1',
-                    ]);
-            }
-        }
-
-        Toastr::success("Updated Report");
-
-        return redirect('site/maintenance/' . $qa->id . '/edit');
+        return redirect('site/maintenance/' . $main->id);
     }
 
 

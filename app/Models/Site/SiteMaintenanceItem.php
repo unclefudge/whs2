@@ -1,46 +1,27 @@
 <?php
 
 namespace App\Models\Site;
+
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
-class SiteMaintenanceDoc extends Model {
+class SiteMaintenanceItem extends Model {
 
-    protected $table = 'site_maintenance_docs';
+    protected $table = 'site_maintenance_items';
     protected $fillable = [
-        'type', 'main_id', 'name', 'attachment',
-        'notes', 'status', 'created_by', 'updated_by'];
+        'main_id', 'name', 'task_id', 'super', 'order', 'status', 'master', 'master_id',
+        'sign_by', 'sign_at', 'done_by', 'created_by', 'updated_by', 'created_at', 'updated_at'];
+    protected $dates = ['sign_at'];
 
     /**
-     * A Site Maintenance Doc belongs to a Site Maintenance
+     * A Site Maintenance Item belongs to a Site Maintenance
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function maintenance()
     {
         return $this->belongsTo('App\Models\Site\SiteMaintenance', 'main_id');
-    }
-
-    /**
-     * Get the Attachment URL (setter)
-     */
-    public function getAttachmentUrlAttribute()
-    {
-        if ($this->attributes['attachment'])
-            return '/filebank/site/'.$this->maintenance->site_id."/maintenance/".$this->attributes['attachment'];
-        return '';
-    }
-
-    /**
-     * Get the owner of record   (getter)
-     *
-     * @return string;
-     */
-    public function getOwnedByAttribute()
-    {
-        return $this->site->company;
     }
 
     /**
@@ -78,4 +59,6 @@ class SiteMaintenanceDoc extends Model {
             });
         }
     }
+
 }
+

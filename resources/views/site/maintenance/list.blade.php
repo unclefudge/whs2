@@ -33,10 +33,12 @@
                                     <th> Supervisor</th>
                                     <th width="10%"> Prac Comp</th>
                                     <th width="10%"> Reported</th>
+                                    <th width="10%"> Client Visit</th>
                                     <th width="5%"></th>
                                 </tr>
                                 </thead>
                                 @foreach ($under_review as $rec)
+                                    <?php $main = App\Models\Site\SiteMaintenance::find($rec->id) ?>
                                     <tr>
                                         <td>
                                             <div class="text-center"><a href="/site/maintenance/{{ $rec->id }}"><i class="fa fa-search"></i></a></div>
@@ -46,6 +48,7 @@
                                         <td> {{ $rec->super_name }}</td>
                                         <td> {{ $rec->completed_date }}</td>
                                         <td> {{ $rec->created_date }}</td>
+                                        <td> {{ ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' }}</td>
                                         <td>
                                             <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
                                         </td>

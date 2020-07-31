@@ -48,7 +48,7 @@
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
-                                    @if ($main->site) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif
+                                    @if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif
                                     </p>
                                 </div>
                                 <div class="col-xs-8"></div>
@@ -64,33 +64,14 @@
                             </div>
 
 
-                            {{-- Under Review - asign to super --}}
-                            @if($main->category_id == '0')
-                                <hr>
+                            <hr>
+
+                            @if(!$main->nextClientVisit())
+                                {{-- Under Review - asign to super --}}
+                                <input type="hidden" name="visited" value="0">
                                 <h4>Assign Request to visit client</h4>
                                 <div class="row">
-                                    {{-- Assign to --}}
-                                    {{--
-                                    <div class="col-md-3" id="assign2-div">
-                                        <div class="form-group">
-                                            {!! Form::label('Assign to', 'Assign to :', ['class' => 'control-label']) !!}
-                                            {!! Form::select('assign_to', ['' => 'Select action', 'super' => 'Supervisor', 'company' => 'Company'], '', ['class' => 'form-control bs-select', 'id' => 'assign_to']) !!}
-                                        </div>
-                                    </div>--}}
-
                                     <div class="col-md-4">
-                                        {{-- Supervisor --}}
-                                        {{--
-                                        <div class="form-group {!! fieldHasError('super', $errors) !!}" style="{{ fieldHasError('super', $errors) ? '' : 'display:none' }}" id="super-div">
-                                            {!! Form::label('super', 'Supervisor', ['class' => 'control-label']) !!}
-                                            <select id="super" name="super" class="form-control bs-select" style="width:100%">
-                                                @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
-                                                    <option value="{{ $super->id }}">{{ $super->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            {!! fieldErrorMessage('super', $errors) !!}
-                                        </div>--}}
-
                                         {{-- Company --}}
                                         <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
                                             {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
@@ -118,15 +99,138 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- task Maintenance cat:15  task:171 --}}
+                                </div>
+                            @else
+                                {{-- Under Review - client appointment set --}}
+                                <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
+                                <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
+                                <input type="hidden" name="visited" value="1">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Client Appointment Assigned</h4>
+                                        <div class="row">
+                                            <div class="col-md-3">Date</div>
+                                            <div class="col-md-9">{{ $main->nextClientVisit()->from->format('d/m/Y') }} </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">Company</div>
+                                            <div class="col-md-9">{{ $main->nextClientVisit()->company->name }} </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if ($main->docs->count())
+                                            <h4>Gallery</h4>
+                                            <?php $doc_count = 0; ?>
+                                            @foreach ($main->docs as $doc)
+                                                <div style="width: 60px">
+                                                    <a href="{{ $doc->AttachmentUrl }}" class="html5lightbox " title="{{ $doc->name }}" data-lityXXX>
+                                                        <img src="{{ $doc->AttachmentUrl }}" class="thumbnail img-responsive img-thumbnail"></a>
+                                                </div>
+                                                <?php $doc_count ++; ?>
+                                                @if ($doc_count == 5)
+                                                    <br>
+                                                @endif
+                                            @endforeach
+                                        @endif
+
+                                    </div>
 
                                 </div>
+
+                                <hr>
+                                <h4>Maintenance Request Details</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group {!! fieldHasError('super_id', $errors) !!}">
+                                            {!! Form::label('super_id', 'Supervisor', ['class' => 'control-label']) !!}
+                                            <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
+                                                <option value="">Select Supervisor</option>
+                                                @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
+                                                    <option value="{{ $super->id }}" {{ ($main->super_id == $super->id) ? 'selected' : '' }} >{{ $super->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {!! fieldErrorMessage('super_id', $errors) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                            {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Items -->
+                                <br>
+                                <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
+                                    <div class="col-md-12">MAINTENANCE ITEMS</div>
+                                </div>
+                                <br>
+                                <?php
+                                $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                                ?>
+                                @for ($i = 1; $i <= $first_count; $i++)
+                                    <?php
+                                    $item = $main->item($i);
+                                    $item_name = ($item) ? $item->name : '';
+                                    ?>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                        </div>
+                                    </div>
+                                @endfor
+
+                                {{-- Extra Fields --}}
+                                <button class="btn blue" id="more">More Items</button>
+                                <div class="row" id="more_items" style="display: none">
+                                    @for ($i = $first_count + 1; $i <= 25; $i++)
+                                        <div class="col-md-12">
+                                            <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                        </div>
+                                    @endfor
+                                </div>
                             @endif
+
+                            {{-- Notes --}}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Notes
+                                        {{-- Show add if user has permission to edit maintenance --}}
+                                        {{--}}
+                                        @if (Auth::user()->allowed2('edit.site.qa', $qa))
+                                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                                        @endif --}}
+                                    </h3>
+                                    <table class="table table-striped table-bordered table-nohover order-column">
+                                        <thead>
+                                        <tr class="mytable-header">
+                                            <th width="10%">Date</th>
+                                            <th> Action</th>
+                                            <th width="20%"> Name</th>
+                                            <th width="5%"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach ($main->actions as $action)
+                                            <tr>
+                                                <td>{{  $action->created_at->format('d/m/Y') }}</td>
+                                                <td>{!! $action->action !!}</td>
+                                                <td>{{ $action->user->fullname }}</td>
+                                                <td></td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 
                             <hr>
                             <div class="pull-right" style="min-height: 50px">
                                 <a href="/site/maintenance" class="btn default"> Back</a>
-                                @if (true)
+                                @if ($main->nextClientVisit())
+                                    <button type="submit" name="save" class="btn blue"> Save</button>
+                                @else
                                     <button type="submit" name="save" class="btn blue"> Assign Request</button>
                                 @endif
                             </div>
@@ -147,30 +251,24 @@
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">var html5lightbox_options = {watermark: "", watermarklink: ""};</script>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/js/moment.min.js" type="text/javascript"></script>
+    <script src="/js/libs/html5lightbox/html5lightbox.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
-{{--}}
-<script src="/js/libs/vue.1.0.24.js " type="text/javascript"></script>
-<script src="/js/libs/vue-strap.min.js"></script>
-<script src="/js/libs/vue-resource.0.7.0.js " type="text/javascript"></script>
-<script src="/js/vue-modal-component.js"></script>
-<script src="/js/vue-app-basic-functions.js"></script>--}}
-
-        <!--<script src="/js/vue-app-qa.js"></script>-->
-
 <script>
     $(document).ready(function () {
         /* Select2 */
         $("#company_id").select2({placeholder: "Select Company", width: '100%'});
         $("#assign").select2({placeholder: "Select User", width: '100%'});
+        $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
 
         $("#assign_to").change(function () {
             $('#super-div').hide();
@@ -184,257 +282,32 @@
                 $('#company-div').show();
             }
         });
-    });
-</script>
-{{--}}
-<script>
-    var xx = {
-        dev: dev,
-        qa: {id: '', name: '', site_id: '', status: '', items_total: 0, items_done: 0},
-        spinner: false, showSignOff: false, showAction: false,
-        record: {},
-        action: '', loaded: false,
-        table_name: 'site_qa', table_id: '', record_status: '', record_resdate: '',
-        created_by: '', created_by_fullname: '',
-        done_by: '',
-        itemList: [],
-        actionList: [], sel_checked: [], sel_checked2: [], sel_company: [],
-    };
 
-    //
-    // QA Items
-    //
-    Vue.component('app-qa', {
-        template: '#qa-template',
+        $("#status").change(function () {
+            updateFields()
+        });
 
-        created: function () {
-            this.getQA();
-        },
-        data: function () {
-            return {xx: xx};
-        },
-        events: {
-            'updateReportStatus': function (status) {
-                this.xx.qa.status = status;
-                this.updateReportDB(this.xx.qa, true);
-            },
-            'signOff': function (type) {
-                this.xx.qa.signoff = type;
-                this.updateReportDB(this.xx.qa, true);
-            },
-        },
-        components: {
-            confirmSignoff: VueStrap.modal,
-        },
-        filters: {
-            formatDate: function (date) {
-                return moment(date).format('DD/MM/YYYY');
-            },
-        },
-        methods: {
-            getQA: function () {
-                this.xx.spinner = true;
-                setTimeout(function () {
-                    this.xx.load_plan = true;
-                    $.getJSON('/site/qa/' + this.xx.qa.id + '/items', function (data) {
-                        this.xx.itemList = data[0];
-                        this.xx.sel_checked = data[1];
-                        this.xx.sel_checked2 = data[2];
-                        this.xx.spinner = false;
-                        this.itemsCompleted();
-                    }.bind(this));
-                }.bind(this), 100);
-            },
-            itemsCompleted: function () {
-                this.xx.qa.items_total = 0;
-                this.xx.qa.items_done = 0;
-                for (var i = 0; i < this.xx.itemList.length; i++) {
-                    if (this.xx.itemList[i]['status'] == 1 || this.xx.itemList[i]['status'] == -1) {
-                        this.xx.qa.items_done++;
-                    }
-                    this.xx.qa.items_total++;
-                }
-            },
-            itemStatus: function (record) {
-                if (record.status == '1') {
-                    record.sign_at = moment().format('YYYY-MM-DD');
-                    record.sign_by = this.xx.user_id;
-                    record.sign_by_name = this.xx.user_fullname;
-                }
-                this.updateItemDB(record);
-            },
-            itemStatusReset: function (record) {
-                record.status = '';
-                record.sign_at = '';
-                record.sign_by = '';
-                record.sign_by_name = '';
-                this.updateItemDB(record);
-            },
-            itemCompany: function (record) {
-                this.xx.sel_company = [];
-                // Get Company list
-                $.getJSON('/site/qa/company/' + record.task_id, function (companies) {
-                    this.xx.sel_company = companies;
-                    this.xx.done_by = record.done_by;
-                    this.xx.showSignOff = true;
-                    this.xx.record = record;
+        $("#more").click(function (e) {
+            e.preventDefault();
+            $('#more').hide();
+            $('#more_items').show();
+        });
 
-                }.bind(this));
-            },
-            updateItemCompany: function (record, response) {
-                if (response) {
-                    record.done_by = this.xx.done_by;
-                    //alert('by:'+record.done_by);
+        updateFields();
 
-                    // Get company name + licence from dropdown menu array
-                    var company = objectFindByKey(this.xx.sel_company, 'value', record.done_by);
-                    record.done_by_company = company.text;
-                    record.dony_by_licence = company.licence;
+        function updateInfo() {
+            $('#super-div').hide();
+            $('#company-div').hide();
 
-                    // Get original item from list
-                    var obj = objectFindByKey(this.xx.itemList, 'id', record.id);
-                    obj = record;
-                    this.updateItemDB(obj);
-                }
-                this.xx.record = {};
-                this.xx.done_by = '';
-                this.xx.showSignOff = false;
-            },
-            updateItemDB: function (record) {
-                //alert('update item id:'+record.id+' task:'+record.task_id+' by:'+record.done_by);
-                this.$http.patch('/site/qa/item/' + record.id, record)
-                        .then(function (response) {
-                            this.itemsCompleted();
-                            toastr.success('Updated record');
-                        }.bind(this))
-                        .catch(function (response) {
-                            record.status = '';
-                            record.sign_at = '';
-                            record.sign_by = '';
-                            record.sign_by_name = '';
-                            alert('failed to update item');
-                        });
-            },
-            updateReportDB: function (record, redirect) {
-                this.$http.patch('/site/qa/' + record.id + '/update', record)
-                        .then(function (response) {
-                            this.itemsCompleted();
-                            if (redirect)
-                                window.location.href = '/site/qa/' + record.id;
-                            toastr.success('Updated record');
-
-                        }.bind(this)).catch(function (response) {
-                    alert('failed to update report');
-                });
-            },
-            textColour: function (record) {
-                if (record.status == '-1')
-                    return 'font-grey-silver';
-                if (record.status == '0' && record.signed_by != '0' && !this.xx.qa.master)
-                    return 'leaveBG';
-                return '';
-            },
-            doNothing: function () {
-                //
-            },
-        },
-    });
-
-
-    Vue.component('app-actions', {
-        template: '#actions-template',
-        props: ['table', 'table_id', 'status'],
-
-        created: function () {
-            this.getActions();
-        },
-        data: function () {
-            return {xx: xx, actionList: []};
-        },
-        events: {
-            'addActionEvent': function (action) {
-                this.actionList.push(action);
-            },
-        },
-        methods: {
-            getActions: function () {
-                $.getJSON('/action/' + this.xx.table_name + '/' + this.table_id, function (actions) {
-                    this.actionList = actions;
-                }.bind(this));
-            },
-        },
-    });
-
-    Vue.component('ActionModal', {
-        template: '#actionModal-template',
-        props: ['show'],
-        data: function () {
-            var action = {};
-            return {xx: xx, action: action, oAction: ''};
-        },
-        events: {
-            'add-action-modal': function () {
-                var newaction = {};
-                this.oAction = '';
-                this.action = newaction;
-                this.xx.action = 'add';
-                this.show = true;
-            },
-            'edit-action-modal': function (action) {
-                this.oAction = action.action;
-                this.action = action;
-                this.xx.action = 'edit';
-                this.show = true;
+            if ($("#assign_to").val() == 'super') {
+                $('#super-div').show();
             }
-        },
-        methods: {
-            close: function () {
-                this.show = false;
-                this.action.action = this.oAction;
-            },
-            addAction: function (action) {
-                var actiondata = {
-                    action: action.action,
-                    table: this.xx.table_name,
-                    table_id: this.xx.table_id,
-                    niceDate: moment().format('DD/MM/YY'),
-                    created_by: this.xx.created_by,
-                    fullname: this.xx.created_by_fullname,
-                };
 
-                console.log(actiondata);
-                this.$http.post('/action', actiondata)
-                        .then(function (response) {
-                            toastr.success('Created new action ');
-                            actiondata.id = response.data.id;
-                            this.$dispatch('addActionEvent', actiondata);
-                        }.bind(this))
-                        .catch(function (response) {
-                            alert('failed adding new action');
-                        });
-
-                this.close();
-            },
-            updateAction: function (action) {
-                this.$http.patch('/action/' + action.id, action)
-                        .then(function (response) {
-                            toastr.success('Saved Action');
-                        }.bind(this))
-                        .catch(function (response) {
-                            alert('failed to save action [' + action.id + ']');
-                        });
-                this.show = false;
-            },
+            if ($("#assign_to").val() == 'company') {
+                $('#company-div').show();
+            }
         }
     });
-
-
-
-    var myApp = new Vue({
-        el: 'body',
-        data: {xx: xx},
-    });
 </script>
---}}
 @stop
 

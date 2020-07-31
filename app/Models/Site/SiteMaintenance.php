@@ -7,6 +7,7 @@ use Mail;
 use App\User;
 use App\Models\Company\Company;
 use App\Models\Misc\Action;
+use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\Task;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
@@ -46,6 +47,16 @@ class SiteMaintenance extends Model {
     }
 
     /**
+     * A Site Maintenance has many Docs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function docs()
+    {
+        return $this->hasMany('App\Models\Site\SiteMaintenanceDoc', 'main_id');
+    }
+
+    /**
      * A Site Maintenance has many Items.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
@@ -53,6 +64,15 @@ class SiteMaintenance extends Model {
     public function items()
     {
         return $this->hasMany('App\Models\Site\SiteMaintenanceItem', 'main_id');
+    }
+
+    /**
+     * A Site Maintenance Item.
+     *
+     */
+    public function item($order)
+    {
+        return SiteMaintenanceItem::where('main_id', $this->id)->where('order', $order)->first();
     }
 
     /**
@@ -68,7 +88,7 @@ class SiteMaintenance extends Model {
     }
 
     /**
-     * A Site Maintenance ht has many Actions
+     * A Site Maintenance has many Actions
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -111,6 +131,20 @@ class SiteMaintenance extends Model {
             $count ++;
 
         return $count;
+    }
+
+    /**
+     * Determine if a report has been signed by 1 or 2
+     *
+     * @return integer
+     */
+    public function nextClientVisit()
+    {
+        $today = Carbon::now();
+        $visit = SitePlanner::where('from', '>=', $today->format('Y-m-d'))->where('site_id', $this->site_id)->where('task_id', 524)->orderBy('from')->first();
+
+        return $visit;
+        //return ($visit) ? $visit->from : null;
     }
 
 
@@ -189,7 +223,7 @@ class SiteMaintenance extends Model {
      */
     public function closeToDo($user)
     {
-        $todos = Todo::where('type', 'qa')->where('type_id', $this->id)->where('status', '1')->get();
+        $todos = Todo::where('type', 'maintenance')->where('type_id', $this->id)->where('status', '1')->get();
         foreach ($todos as $todo) {
             $todo->status = 0;
             $todo->done_at = Carbon::now();

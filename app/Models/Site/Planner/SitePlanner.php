@@ -43,6 +43,16 @@ class SitePlanner extends Model {
     }
 
     /**
+     * A SitePlanner belongs to a company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function company()
+    {
+        return ($this->entity_type == 'c') ? $this->belongsTo('App\Models\Company\Company', 'entity_id') : null;
+    }
+
+    /**
      * Get the owner of record   (getter)
      *
      * @return string;
