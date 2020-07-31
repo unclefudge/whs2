@@ -204,8 +204,8 @@
             <thead>
             <tr class="mytable-header">
                 <th width="5%"></th>
-                <th> Inspection Item</th>
-                <th width="15%"> @if (!$qa->master)Checked Date @else Supervisor<br>Completed @endif</th>
+                <th> Maintenance Item</th>
+                <th width="15%"> Checked Date</th>
             </tr>
             </thead>
             <tbody>

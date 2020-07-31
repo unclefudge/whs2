@@ -244,6 +244,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('site/qa', 'Site\SiteQaController');
 
     // Site Maintenance
+    Route::get('site/maintenance/{id}/items', 'Site\SiteMaintenanceController@getItems');
     Route::get('site/maintenance/dt/maintenance', 'Site\SiteMaintenanceController@getMaintenance');
     Route::any('site/maintenance/upload', 'Site\SiteMaintenanceController@uploadAttachment');
     Route::get('site/maintenance/data/prac_completion/{site_id}', 'Site\SiteMaintenanceController@getPracCompletion');

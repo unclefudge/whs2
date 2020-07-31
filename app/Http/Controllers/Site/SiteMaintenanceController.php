@@ -617,12 +617,12 @@ class SiteMaintenanceController extends Controller {
     {
         //if ($request->ajax()) {
 
-        $qa = SiteQa::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($id);
 
         $items = [];
         $users = [];
         $companies = [];
-        foreach ($qa->items as $item) {
+        foreach ($main->items as $item) {
             $array = [];
             $array['id'] = $item->id;
             $array['order'] = $item->order;
@@ -630,20 +630,20 @@ class SiteMaintenanceController extends Controller {
             $array['super'] = $item->super;
 
             // Task Info
-            $array['task_id'] = $item->task_id;
-            $task = Task::find($item->task_id);
+            //$array['task_id'] = $item->task_id;
+            //$task = Task::find($item->task_id);
             //$array['task_name'] = $task->name;
-            $array['task_code'] = $task->code;
+            //$array['task_code'] = $task->code;
 
             // Done By
             if ($item->done_by)
                 $array['done_by'] = $item->done_by;
             else {
                 // Check Planner which company did the task
-                $planned_task = SitePlanner::where('site_id', $qa->site_id)->where('task_id', $item->task_id)->first();
-                if ($planned_task && $planned_task->entity_type == 'c' && !$item->super)
-                    $array['done_by'] = $planned_task->entity_id;
-                else
+                //$planned_task = SitePlanner::where('site_id', $main->site_id)->where('task_id', $item->task_id)->first();
+                //if ($planned_task && $planned_task->entity_type == 'c' && !$item->super)
+                //    $array['done_by'] = $planned_task->entity_id;
+                //else
                     $array['done_by'] = '';
             }
 

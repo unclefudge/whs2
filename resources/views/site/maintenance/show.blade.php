@@ -42,22 +42,21 @@
                             {!! Form::model($main, ['method' => 'PATCH', 'action' => ['Site\SiteMaintenanceController@update', $main->id], 'class' => 'horizontal-form']) !!}
 
                             @include('form-error')
-                            {{--}}
-                            <input v-model="xx.qa.id" type="hidden" id="qa_id" value="{{ $main->id }}">
-                            <input v-model="xx.qa.name" type="hidden" id="qa_name" value="{{ $main->name }}">
-                            <input v-model="xx.qa.site_id" type="hidden" id="qa_site_id" value="{{ $main->site_id }}">
-                            <input v-model="xx.qa.status" type="hidden" id="qa_status" value="{{ $main->status }}">
-                            <input v-model="xx.qa.master" type="hidden" id="qa_master" value="{{ $main->master }}">
+
+                            <input v-model="xx.main.id" type="hidden" id="main_id" value="{{ $main->id }}">
+                            <input v-model="xx.main.name" type="hidden" id="main_name" value="{{ $main->name }}">
+                            <input v-model="xx.main.site_id" type="hidden" id="main_site_id" value="{{ $main->site_id }}">
+                            <input v-model="xx.main.status" type="hidden" id="main_status" value="{{ $main->status }}">
                             <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
                             <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $main->status }}">
                             <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
                             <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
                             <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
-                            <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.qa', $main) }}">
+                            <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.main', $main) }}">
                             <input v-model="xx.user_manager" type="hidden" id="user_manager"
-                                   value="{!! (!$main->master && in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
-                            <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('del.site.qa') }}">
-                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.qa', $main) }}">
+                                   value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
+                            <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('del.site.main') }}">
+                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.main', $main) }}">
 
 
                             <!-- Fullscreen devices -->
@@ -69,7 +68,7 @@
                                     </p>
                                 </div>
                             @endif
-                            --}}
+
                             <div class="row">
                                 <div class="col-xs-4">
                                     <p><h4>Job Details</h4>
@@ -149,18 +148,18 @@
                         <!-- List QA -->
                         <div class="row">
                             <div class="col-md-12">
-                                <app-qa></app-qa>
+                                <app-main></app-main>
                             </div>
                         </div>
 
                         <hr>
                         <div class="pull-right" style="min-height: 50px">
                             <a href="/site/maintenance" class="btn default"> Back</a>
-                            @if (!$main->master && Auth::user()->allowed2('edit.site.qa', $main))
-                                <button v-if="xx.qa.status == 1 && xx.qa.items_total != 0 && xx.qa.items_done != xx.qa.items_total" class="btn blue"
+                            @if (!$main->master && Auth::user()->allowed2('edit.site.main', $main))
+                                <button v-if="xx.main.status == 1 && xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="btn blue"
                                         v-on:click="$root.$broadcast('updateReportStatus', 2)"> Place On Hold
                                 </button>
-                                <button v-if="xx.qa.status == 2 || xx.qa.status == -1 " class="btn green" v-on:click="$root.$broadcast('updateReportStatus', 1)"> Make Active</button>
+                                <button v-if="xx.main.status == 2 || xx.main.status == -1 " class="btn green" v-on:click="$root.$broadcast('updateReportStatus', 1)"> Make Active</button>
                             @endif
                         </div>
                         <br><br>
@@ -172,19 +171,179 @@
     </div>
     </div>
 
-    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
+    <pre v-if="xx.dev">@{{ $data | json }}</pre>
     -->
 
     <!-- loading Spinner -->
-    {{--}}
     <div v-show="xx.spinner" style="background-color: #FFF; padding: 20px;">
         <div class="loadSpinnerOverlay">
             <div class="loadSpinner"><i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom"></i> Loading...</div>
         </div>
-    </div>--}}
+    </div>
+
+    <template id="main-template">
+        <!-- QA Items -->
+        <table v-show="xx.itemList.length" class="table table-striped table-bordered table-nohover order-column">
+            <thead>
+            <tr class="mytable-header">
+                <th width="5%"></th>
+                <th> Inspection Item</th>
+                <th width="15%"> Completed</th>
+                <th width="15%"> Checked</th>
+            </tr>
+            </thead>
+            <tbody>
+            <template v-for="item in xx.itemList | orderBy item.order">
+                <tr class="@{{ textColour(item)  }}">
+                    {{-- checkbox --}}
+                    <td class="text-center" style="padding-top: 15px">
+                        <span v-if="item.status == '-1'">N/A</span>
+                        <i v-if="item.sign_by" class="fa fa-check-square-o font-green" style="font-size: 20px; padding-top: 5px"></i>
+                        <i v-if="!item.sign_by && !item.status" class="fa fa-square-o font-red" style="font-size: 20px; padding-top: 5px"></i>
+                    </td>
+                    {{-- Item --}}
+                    <td style="padding-top: 15px;">
+                        @{{ item.name }} <span class="font-grey-silver">(@{{ item.task_code }})</span>
+                        <div v-if="item.done_by">
+                            <small v-if="item.status == '0' || item.status == ''">
+                                @if (Auth::user()->allowed2('edit.site.main', $main))
+                                    <a v-on:click="itemCompany(item)">@{{ item.done_by_company }} (licence. @{{ item.done_by_licence }})</a>
+                                @else
+                                    @{{ item.done_by_company }} (licence. @{{ item.done_by_licence }})
+                                @endif
+                            </small>
+                            <small v-if="item.status == '1' ">@{{ item.done_by_company }} (licence. @{{ item.done_by_licence }}) &nbsp;
+                                <a v-if="xx.user_signoff && xx.main.status != 0" v-on:click="itemCompany(item)"> <i class="fa fa-pencil-square-o font-blue"> Edit</i></a>
+                            </small>
+                        </div>
+                        <div v-else>
+                            <small v-if="item.super == '0' && (item.status == '0' || item.status == '')">
+                                @if (Auth::user()->allowed2('edit.site.main', $main))
+                                    <a v-on:click="itemCompany(item)">Assign company</a>
+                                @endif
+                            </small>
+
+                            <small v-if="item.super == '1' && (item.status == '0' || item.status == '')">To be completed by Supervisor</small>
+                            <small v-if="item.super == '1' && item.status == '1'">@{{ item.sign_by_name }}</small>
+                        </div>
+                    </td>
+                    {{-- Completed --}}
+                    <td>
+                        <div v-if="item.sign_by">
+                            @{{ item.sign_at | formatDate }}<br>@{{ item.sign_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
+                        </div>
+                        <div v-else>
+                            @if (!$main->isSigned()) {{--}} && Auth::user()->allowed2('edit.site.main', $main)) --}}
+                            <select v-if="item.done_by || item.super" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                                <option v-for="option in xx.sel_checked" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
+                            </select>
+                            <select v-else v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                                <option v-for="option in xx.sel_checked2" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
+                            </select>
+                            @endif
+                        </div>
+
+                    </td>
+                    {{-- Checked --}}
+                    <td>
+                            <div v-if="item.sign_by">
+                                @{{ item.sign_at | formatDate }}<br>@{{ item.sign_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
+                            </div>
+                            <div v-else>
+                                @if (!$main->isSigned()) {{--}} && Auth::user()->allowed2('edit.site.main', $main)) --}}
+                                    <select v-if="item.done_by || item.super" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                                        <option v-for="option in xx.sel_checked" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
+                                    </select>
+                                    <select v-else v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                                        <option v-for="option in xx.sel_checked2" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
+                                    </select>
+                                @endif
+                            </div>
+                    </td>
+                </tr>
+            </template>
+            </tbody>
+        </table>
+        <!--
+           Confirm Item Checked Modal
+         -->
+        <confirm-Signoff :show.sync="xx.showSignOff" effect="fade">
+            <div slot="modal-header" class="modal-header">
+                <h4 class="modal-title text-center"><b>Update Item Company</b></h4>
+            </div>
+            <div slot="modal-body" class="modal-body">
+                <p><b>@{{ xx.record.name }}</b></p>
+                Completed by
+                <div class="row" style="padding-bottom: 10px">
+                    <div class="col-md-8">
+                        <select-picker :name.sync="xx.done_by" :options.sync="xx.sel_company" :function="doNothing"></select-picker>
+                    </div>
+                </div>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn dark btn-outline" v-on:click="xx.showSignOff = false">&nbsp; No &nbsp;</button>
+                <button type="button" class="btn btn-success" v-on:click="updateItemCompany(xx.record, true)" :disabled="! xx.done_by"
+                ">&nbsp; Save &nbsp;</button>
+            </div>
+        </confirm-Signoff>
+    </template>
 
 
-    @include('misc/actions-modal')
+    <template id="actions-template">
+        <action-modal></action-modal>
+        <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
+        <input v-model="xx.created_by" type="hidden" id="created_by" value="{{ Auth::user()->id }}">
+        <input v-model="xx.created_by_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
+
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Notes
+                        {{-- Show add if user has permission to edit maintenance --}}
+                        @if (Auth::user()->allowed2('edit.site.main', $main))
+                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                        @endif
+                    </h3>
+                    <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">
+                        <thead>
+                        <tr class="mytable-header">
+                            <th width="10%">Date</th>
+                            <th> Action</th>
+                            <th width="20%"> Name</th>
+                            <th width="5%"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template v-for="action in actionList">
+                            <tr>
+                                <td>@{{ action.niceDate }}</td>
+                                <td>@{{ action.action }}</td>
+                                <td>@{{ action.fullname }}</td>
+                                <td>
+                                    <!--<button v-show="xx.record_status != 0" class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                                        <i class="fa fa-plus"></i> <span class="hidden-xs hidden-sm>"> Assign Task</span>
+                                    </button>-->
+                                    <!--
+                                    <button v-show="action.created_by == xx.created_by" v-on:click="$root.$broadcast('edit-action-modal', action)"
+                                            class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                                        <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
+                                    </button>
+                                    -->
+                                </td>
+                            </tr>
+                        </template>
+                        </tbody>
+                    </table>
+
+                    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre> -->
+
+                </div>
+            </div>
+        </div>
+    </template>
+
+{{--}}
+    @include('misc/actions-modal') --}}
 
 @stop
 
@@ -203,12 +362,11 @@
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
-{{--}}
 <script src="/js/libs/vue.1.0.24.js " type="text/javascript"></script>
 <script src="/js/libs/vue-strap.min.js"></script>
 <script src="/js/libs/vue-resource.0.7.0.js " type="text/javascript"></script>
 <script src="/js/vue-modal-component.js"></script>
-<script src="/js/vue-app-basic-functions.js"></script>--}}
+<script src="/js/vue-app-basic-functions.js"></script>
 
         <!--<script src="/js/vue-app-qa.js"></script>-->
 
@@ -233,15 +391,14 @@
         });
     });
 </script>
-{{--}}
 <script>
     var xx = {
         dev: dev,
-        qa: {id: '', name: '', site_id: '', status: '', items_total: 0, items_done: 0},
+        main: {id: '', name: '', site_id: '', status: '', items_total: 0, items_done: 0},
         spinner: false, showSignOff: false, showAction: false,
         record: {},
         action: '', loaded: false,
-        table_name: 'site_qa', table_id: '', record_status: '', record_resdate: '',
+        table_name: 'site_maintenance', table_id: '', record_status: '', record_resdate: '',
         created_by: '', created_by_fullname: '',
         done_by: '',
         itemList: [],
@@ -251,23 +408,23 @@
     //
     // QA Items
     //
-    Vue.component('app-qa', {
-        template: '#qa-template',
+    Vue.component('app-main', {
+        template: '#main-template',
 
         created: function () {
-            this.getQA();
+            this.getMain();
         },
         data: function () {
             return {xx: xx};
         },
         events: {
             'updateReportStatus': function (status) {
-                this.xx.qa.status = status;
-                this.updateReportDB(this.xx.qa, true);
+                this.xx.main.status = status;
+                this.updateReportDB(this.xx.main, true);
             },
             'signOff': function (type) {
-                this.xx.qa.signoff = type;
-                this.updateReportDB(this.xx.qa, true);
+                this.xx.main.signoff = type;
+                this.updateReportDB(this.xx.main, true);
             },
         },
         components: {
@@ -279,11 +436,11 @@
             },
         },
         methods: {
-            getQA: function () {
+            getMain: function () {
                 this.xx.spinner = true;
                 setTimeout(function () {
                     this.xx.load_plan = true;
-                    $.getJSON('/site/qa/' + this.xx.qa.id + '/items', function (data) {
+                    $.getJSON('/site/maintenance/' + this.xx.main.id + '/items', function (data) {
                         this.xx.itemList = data[0];
                         this.xx.sel_checked = data[1];
                         this.xx.sel_checked2 = data[2];
@@ -293,13 +450,13 @@
                 }.bind(this), 100);
             },
             itemsCompleted: function () {
-                this.xx.qa.items_total = 0;
-                this.xx.qa.items_done = 0;
+                this.xx.main.items_total = 0;
+                this.xx.main.items_done = 0;
                 for (var i = 0; i < this.xx.itemList.length; i++) {
                     if (this.xx.itemList[i]['status'] == 1 || this.xx.itemList[i]['status'] == -1) {
-                        this.xx.qa.items_done++;
+                        this.xx.main.items_done++;
                     }
-                    this.xx.qa.items_total++;
+                    this.xx.main.items_total++;
                 }
             },
             itemStatus: function (record) {
@@ -377,7 +534,7 @@
             textColour: function (record) {
                 if (record.status == '-1')
                     return 'font-grey-silver';
-                if (record.status == '0' && record.signed_by != '0' && !this.xx.qa.master)
+                if (record.status == '0' && record.signed_by != '0')
                     return 'leaveBG';
                 return '';
             },
@@ -482,6 +639,5 @@
         data: {xx: xx},
     });
 </script>
---}}
 @stop
 
