@@ -209,6 +209,9 @@
                                                     @if (Auth::user()->hasAnyPermissionType('trade.planner'))
                                                         <li><a href="/planner/transient" class="nav-link"> Labourer Planner </a></li>
                                                     @endif
+                                                    @if (Auth::user()->hasAnyPermissionType('site.maintenance'))
+                                                        <li><a href="/site/maintenance" class="nav-link"> Maintenace Requests </a></li>
+                                                    @endif
                                                 </ul>
                                             </div>
                                             <div class="col-md-4 hidden-sm hidden-xs"></div>
