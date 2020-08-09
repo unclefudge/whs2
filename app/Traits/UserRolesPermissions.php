@@ -777,9 +777,9 @@ trait UserRolesPermissions {
             }
 
 
-            // Site (Doc, QA, Asbestos, Export) + Attendance + Compliance + Safety Doc
+            // Site (Doc, QA, Asbestos, Export, Maintenance) + Attendance + Compliance + Safety Doc
             if ($permissiontype == 'site.doc' || $permissiontype == 'site.qa' || $permissiontype == 'site.asbestos' || $permissiontype == 'site.export' ||
-                $permissiontype == 'roster' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
+                $permissiontype == 'site.maintenance' || $permissiontype == 'roster' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
             ) {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
 

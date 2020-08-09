@@ -20,7 +20,7 @@ class SiteMaintenance extends Model {
 
     protected $table = 'site_maintenance';
     protected $fillable = [
-        'site_id', 'super_id', 'completed', 'category_id', 'warranty', 'goodwill',
+        'site_id', 'super_id', 'completed', 'category_id', 'warranty', 'goodwill', 'assigned_to', 'further_works',
         'supervisor_sign_by', 'supervisor_sign_at', 'manager_sign_by', 'manager_sign_at',
         'notes', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
     protected $dates = ['completed', 'supervisor_sign_at', 'manager_sign_at'];
@@ -44,6 +44,16 @@ class SiteMaintenance extends Model {
     public function supervisor()
     {
         return $this->belongsTo('App\User', 'super_id');
+    }
+
+    /**
+     * A Site Maintenance 'may' have been assigned to a Company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function assignedTo()
+    {
+        return $this->belongsTo('App\Models\Company\Company', 'assigned_to');
     }
 
     /**
@@ -85,6 +95,18 @@ class SiteMaintenance extends Model {
         });
 
         return $completed;
+    }
+
+    /**
+     * Determine if a all items are completed
+     */
+    public function itemsChecked()
+    {
+        $checked = $this->items->filter(function ($item) {
+            return $item->sign_by != null;
+        });
+
+        return $checked;
     }
 
     /**
@@ -197,19 +219,19 @@ class SiteMaintenance extends Model {
     }
 
     /**
-     * Create ToDoo for QA Report and assign to given user(s)
+     * Create ToDoo for Maintenance Report and assign to given user(s)
      */
     public function createManagerSignOffToDo($user_list)
     {
         $site = Site::findOrFail($this->site_id);
         $todo_request = [
-            'type'       => 'qa',
+            'type'       => 'site_maintenance',
             'type_id'    => $this->id,
-            'name'       => 'QA Sign Off - ' . $this->name . ' (' . $site->name . ')',
+            'name'       => 'Maintenance Request Sign Off - ' . $this->name . ' (' . $site->name . ')',
             'info'       => 'Please sign off on completed items',
             'priority'   => '1',
             'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
-            'company_id' => $this->company_id,
+            'company_id' => '3',
         ];
 
         // Create ToDoo and assign to Site Supervisors
@@ -283,10 +305,12 @@ class SiteMaintenance extends Model {
             $email_to = $this->site->supervisorsEmails();
         }
 
+        /*
         if ($email_to && $email_user)
-            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteQaAction($this, $action));
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteMaintenanceAction($this, $action));
         elseif ($email_to)
-            Mail::to($email_to)->send(new \App\Mail\Site\SiteQaAction($this, $action));
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteMaintenanceAction($this, $action));
+        */
     }
 
 

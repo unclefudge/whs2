@@ -370,6 +370,13 @@ $rec = $user;
                                 <td width="15%">{!! permSelect('sig.site.qa', 'sig', $rec, $cid) !!}</td>
                             </tr>
                         @endif
+                        <tr>
+                            <td>Maintenance Requests</td>
+                            <td width="15%">{!! permSelect('view.site.maintenance', 'super.plan', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('edit.site.maintenance', 'super.plan', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('add.site.maintenance', 'add', $rec, $cid) !!}</td>
+                            <td width="30%" colspan="2">&nbsp;</td>
+                        </tr>
                     </table>
 
                     <h5 class="font-green-haze" style="font-size: 16px">Other Documents

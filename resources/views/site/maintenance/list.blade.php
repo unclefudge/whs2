@@ -50,7 +50,9 @@
                                         <td> {{ $rec->created_date }}</td>
                                         <td> {{ ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' }}</td>
                                         <td>
-                                            <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
+                                            @if(Auth::user()->allowed2('edit.site.maintenance', $main))
+                                                <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -71,7 +73,7 @@
                             <span class="caption-subject bold uppercase font-green-haze"> Maintenance Register</span>
                         </div>
                         <div class="actions">
-                            @if(Auth::user()->allowed2('add.user'))
+                            @if(Auth::user()->allowed2('add.site.maintenance'))
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/site/maintenance/create" data-original-title="Add">Add</a>
                             @endif
                         </div>
@@ -81,8 +83,8 @@
                             <div class="form-group">
                                 <select name="status1" id="status1" class="form-control bs-select">
                                     <option value="1" selected>Active</option>
-                                    <option value="0">Closed</option>
-                                    <option value="-1">Not Required</option>
+                                    <option value="0">Completed</option>
+                                    <option value="-1">Declined</option>
                                 </select>
                             </div>
                         </div>
@@ -97,6 +99,7 @@
                                 <th> Supervisor</th>
                                 <th width="10%"> Prac Comp</th>
                                 <th width="10%"> Reported</th>
+                                <th width="10%"> Completed</th>
                                 <th width="5%"></th>
                             </tr>
                             </thead>
@@ -141,6 +144,7 @@
             {data: 'super_name', name: 'super_name'},
             {data: 'completed_date', name: 'm.completed', orderable: false, searchable: false},
             {data: 'created_date', name: 'm.created_at'},
+            {data: 'completed', name: 'completed', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [

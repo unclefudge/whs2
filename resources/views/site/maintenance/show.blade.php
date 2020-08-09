@@ -1,4 +1,5 @@
 @inject('maintenanceCategories', 'App\Http\Utilities\maintenanceCategories')
+@inject('maintenanceWarranty', 'App\Http\Utilities\maintenanceWarranty')
 @extends('layout')
 
 @section('pagetitle')
@@ -47,22 +48,24 @@
                             <input v-model="xx.main.name" type="hidden" id="main_name" value="{{ $main->name }}">
                             <input v-model="xx.main.site_id" type="hidden" id="main_site_id" value="{{ $main->site_id }}">
                             <input v-model="xx.main.status" type="hidden" id="main_status" value="{{ $main->status }}">
+                            <input v-model="xx.main.warranty" type="hidden" id="main_status" value="{{ $main->warranty }}">
+                            <input v-model="xx.main.signed" type="hidden" id="main_signed" value="{{ $main->isSigned() }}">
                             <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
                             <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $main->status }}">
                             <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
                             <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
                             <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
-                            <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('edit.site.main', $main) }}">
-                            <input v-model="xx.user_manager" type="hidden" id="user_manager"
-                                   value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray())) ? 1 : 0  !!}">
-                            <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('del.site.main') }}">
-                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.main', $main) }}">
+                            <input v-model="xx.user_manager" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('sig.site.maintenance', $main) }}">
+                            <input v-model="xx.user_supervisor" type="hidden" id="user_manager"
+                                   value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray()) || Auth::user()->hasPermission2('sig.site.maintenance')) ? 1 : 0  !!}">
+                            <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('sig.site.maintenance') }}">
+                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.maintenance', $main) }}">
 
 
                             <!-- Fullscreen devices -->
-                            @if ($main->status && $main->items->count() == $main->itemsCompleted()->count())
+                            @if ($main->status && $main->items->count() == $main->itemsChecked()->count())
                                 <div class="col-md-12 note note-warning">
-                                    <p>All items have been completed and report requires
+                                    <p>All items have been completed and request requires
                                         <button class="btn btn-xs btn-outline dark disabled">Sign Off</button>
                                         at the bottom
                                     </p>
@@ -85,8 +88,8 @@
                                         <span class="text-center font-red visible-sm visible-xs">DECLINED</span>
                                     @endif
                                     @if($main->status == '0')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                        <span class="text-center font-red visible-sm visible-xs">CLOSED {{ $main->updated_at->format('d/m/Y') }}</span>
+                                        <span class="pull-right font-red hidden-sm hidden-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
+                                        <span class="text-center font-red visible-sm visible-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
                                     @endif
                                     @if($main->status == '1')
                                         <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
@@ -108,12 +111,27 @@
                             <hr>
                             <h4>Maintenace Details</h4>
                             <div class="row">
-
                                 {{-- Warranty --}}
-                                <div class="col-md-3 ">
+                                <div class="col-md-2 ">
                                     <div class="form-group">
                                         {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
-                                        {!! Form::select('warranty', ['Defect' => 'Defect', 'Prac' => 'Prac', 'Other' => 'Other'], $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('warranty', $maintenanceWarranty::all(), $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
+                                        @else
+                                            {!! Form::text('warranty_text', $maintenanceWarranty::name($main->warranty), ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- Goodwill --}}
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        {!! Form::label('goodwill', 'Goodwill', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('goodwill', ['1' => 'Yes', '0' => 'No'], $main->goodwill, ['class' => 'form-control bs-select', 'id' => 'goodwill']) !!}
+                                        @else
+                                            {!! Form::text('goodwill_text', ($main->goodwill) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
                                     </div>
                                 </div>
 
@@ -121,7 +139,11 @@
                                 <div class="col-md-3 ">
                                     <div class="form-group">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id', $maintenanceCategories::all(), $main->category_id, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('category_id', $maintenanceCategories::all(), $main->category_id, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                        @else
+                                            {!! Form::text('category_text', $maintenanceCategories::name($main->category_id), ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
                                     </div>
                                 </div>
 
@@ -129,26 +151,80 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
                                         {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
-                                        <select id="assigned_to" name="assigned_to" class="form-control select2" style="width:100%">
-                                            @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                            @endforeach
-                                        </select>
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            <select id="assigned_to" name="assigned_to" class="form-control select2" style="width:100%">
+                                                <option value="">Select company</option>
+                                                @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
+                                                    <option value="{{ $company->id }}" {!! ($company->id == $main->assigned_to) ? 'selected' : ''  !!}>{{ $company->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            {!! Form::text('assigned_text', ($main->assignedTo) ? $main->assignedTo->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
                                         {!! fieldErrorMessage('assigned_to', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <button type="submit" name="save" class="btn blue" style="margin-top: 25px"> Save</button>
-                                </div>
+                                @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                    <div class="col-md-1">
+                                        <button type="submit" name="save" class="btn blue" style="margin-top: 25px"> Save</button>
+                                    </div>
+                                @endif
                             </div>
 
                             {!! Form::close() !!}
                         </div>
 
-                        <!-- List QA -->
+                        <!-- List Items -->
                         <div class="row">
                             <div class="col-md-12">
                                 <app-main></app-main>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <app-actions :table_id="{{ $main->id }}"></app-actions>
+                            </div>
+                        </div>
+
+                        <!-- Sign Off -->
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5><b>MAINTENANCE REQUEST ELECTRONIC SIGN-OFF</b></h5>
+                                <p>The above maintenance items have been checked by the site construction supervisor and conform to the Cape Cod standard set.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right">Site Supervisor:</div>
+                            <div class="col-sm-9">
+                                @if ($main->supervisor_sign_by)
+                                    {!! \App\User::find($main->supervisor_sign_by)->full_name !!}, &nbsp;{{ $main->supervisor_sign_at->format('d/m/Y') }}
+                                @else
+                                    <button v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_supervisor" v-on:click="$root.$broadcast('signOff', 'super')"
+                                            class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">Sign Off
+                                    </button>
+                                    <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && !xx.user_supervisor" class="font-red">Pending</span>
+                                    <span v-if="xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="font-grey-silver">Waiting for items to be completed</span>
+                                @endif
+                            </div>
+                            <div class="col-sm-3 text-right">Site Manager:</div>
+                            <div class="col-sm-9">
+                                @if ($main->manager_sign_by)
+                                    {!! \App\User::find($main->manager_sign_by)->full_name !!}, &nbsp;{{ $main->manager_sign_at->format('d/m/Y') }}
+                                @else
+                                    @if ($main->supervisor_sign_by)
+                                        <button v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && (xx.user_manager == 1 || xx.user_signoff)"
+                                                v-on:click="$root.$broadcast('signOff', 'manager')"
+                                                class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">Sign Off
+                                        </button>
+                                        <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_manager == 0 && !xx.user_signoff" class="font-red">Pending</span>
+                                    @else
+                                        <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total" class="font-red">Waiting for Site Supervisor Sign Off</span>
+                                        <span v-if="xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="font-grey-silver">Waiting for items to be completed</span>
+                                    @endif
+                                @endif
                             </div>
                         </div>
 
@@ -187,7 +263,7 @@
             <thead>
             <tr class="mytable-header">
                 <th width="5%"></th>
-                <th> Inspection Item</th>
+                <th> Maintenance Item</th>
                 <th width="15%"> Completed</th>
                 <th width="15%"> Checked</th>
             </tr>
@@ -198,67 +274,42 @@
                     {{-- checkbox --}}
                     <td class="text-center" style="padding-top: 15px">
                         <span v-if="item.status == '-1'">N/A</span>
-                        <i v-if="item.sign_by" class="fa fa-check-square-o font-green" style="font-size: 20px; padding-top: 5px"></i>
-                        <i v-if="!item.sign_by && !item.status" class="fa fa-square-o font-red" style="font-size: 20px; padding-top: 5px"></i>
+                        <i v-if="item.done_by" class="fa fa-check-square-o font-green" style="font-size: 20px; padding-top: 5px"></i>
+                        <i v-if="!item.done_by && !item.status" class="fa fa-square-o font-red" style="font-size: 20px; padding-top: 5px"></i>
                     </td>
                     {{-- Item --}}
                     <td style="padding-top: 15px;">
-                        @{{ item.name }} <span class="font-grey-silver">(@{{ item.task_code }})</span>
-                        <div v-if="item.done_by">
-                            <small v-if="item.status == '0' || item.status == ''">
-                                @if (Auth::user()->allowed2('edit.site.main', $main))
-                                    <a v-on:click="itemCompany(item)">@{{ item.done_by_company }} (licence. @{{ item.done_by_licence }})</a>
-                                @else
-                                    @{{ item.done_by_company }} (licence. @{{ item.done_by_licence }})
-                                @endif
-                            </small>
-                            <small v-if="item.status == '1' ">@{{ item.done_by_company }} (licence. @{{ item.done_by_licence }}) &nbsp;
-                                <a v-if="xx.user_signoff && xx.main.status != 0" v-on:click="itemCompany(item)"> <i class="fa fa-pencil-square-o font-blue"> Edit</i></a>
-                            </small>
-                        </div>
-                        <div v-else>
-                            <small v-if="item.super == '0' && (item.status == '0' || item.status == '')">
-                                @if (Auth::user()->allowed2('edit.site.main', $main))
-                                    <a v-on:click="itemCompany(item)">Assign company</a>
-                                @endif
-                            </small>
-
-                            <small v-if="item.super == '1' && (item.status == '0' || item.status == '')">To be completed by Supervisor</small>
-                            <small v-if="item.super == '1' && item.status == '1'">@{{ item.sign_by_name }}</small>
-                        </div>
+                        @{{ item.name }}
+                        <small v-if="item.status == '1' || item.status == '-1'" class="font-grey-silver">
+                            <br>@{{ item.done_by_company }}
+                        </small>
+                        <!--<pre v-if="xx.dev">@{{ item | json }}</pre> -->
                     </td>
                     {{-- Completed --}}
                     <td>
-                        <div v-if="item.sign_by">
-                            @{{ item.sign_at | formatDate }}<br>@{{ item.sign_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
+                        <div v-if="item.done_by">
+                            @{{ item.done_at | formatDate }}<br>@{{ item.done_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
                         </div>
                         <div v-else>
-                            @if (!$main->isSigned()) {{--}} && Auth::user()->allowed2('edit.site.main', $main)) --}}
-                            <select v-if="item.done_by || item.super" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                            <select v-if="!item.done_by && xx.user_edit && xx.main.signed == 0" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
                                 <option v-for="option in xx.sel_checked" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
                             </select>
-                            <select v-else v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
-                                <option v-for="option in xx.sel_checked2" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
-                            </select>
-                            @endif
                         </div>
 
                     </td>
                     {{-- Checked --}}
                     <td>
+                        <div v-if="!item.done_by"></div>
+                        <div v-if="item.done_by">
                             <div v-if="item.sign_by">
-                                @{{ item.sign_at | formatDate }}<br>@{{ item.sign_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
+                                @{{ item.sign_at | formatDate }}<br>@{{ item.sign_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemSignReset(item)"><i class="fa fa-times font-red"></i></a>
                             </div>
                             <div v-else>
-                                @if (!$main->isSigned()) {{--}} && Auth::user()->allowed2('edit.site.main', $main)) --}}
-                                    <select v-if="item.done_by || item.super" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
-                                        <option v-for="option in xx.sel_checked" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
-                                    </select>
-                                    <select v-else v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
-                                        <option v-for="option in xx.sel_checked2" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
-                                    </select>
-                                @endif
+                                <select v-if="xx.user_supervisor == 1 && xx.main.signed == 0" v-model="item.super" class='form-control' v-on:change="itemSign(item)">
+                                    <option v-for="option in xx.sel_checked2" value="@{{ option.value }}">@{{ option.text }}</option>
+                                </select>
                             </div>
+                        </div>
                     </td>
                 </tr>
             </template>
@@ -300,9 +351,9 @@
                 <div class="col-md-12">
                     <h3>Notes
                         {{-- Show add if user has permission to edit maintenance --}}
-                        @if (Auth::user()->allowed2('edit.site.main', $main))
-                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
-                        @endif
+                        {{--}}@if (Auth::user()->allowed2('edit.site.main', $main)) --}}
+                        <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                        {{--}}@endif --}}
                     </h3>
                     <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">
                         <thead>
@@ -342,8 +393,7 @@
         </div>
     </template>
 
-{{--}}
-    @include('misc/actions-modal') --}}
+    @include('misc/actions-modal')
 
 @stop
 
@@ -368,25 +418,17 @@
 <script src="/js/vue-modal-component.js"></script>
 <script src="/js/vue-app-basic-functions.js"></script>
 
-        <!--<script src="/js/vue-app-qa.js"></script>-->
-
 <script>
     $(document).ready(function () {
         /* Select2 */
         $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
-        $("#assign").select2({placeholder: "Select User", width: '100%'});
 
-        $("#assign_to").change(function () {
-            $('#super-div').hide();
-            $('#company-div').hide();
+        $("#warranty").change(function () {
+            //alert('gg');
+            $('#goodwill-div').hide();
 
-
-            if ($("#assign_to").val() == 'super') {
-                $('#super-div').show();
-            }
-
-            if ($("#assign_to").val() == 'company') {
-                $('#company-div').show();
+            if ($("warranty").val() == 'other') {
+                $('#goodwill-div').show();
             }
         });
     });
@@ -394,7 +436,7 @@
 <script>
     var xx = {
         dev: dev,
-        main: {id: '', name: '', site_id: '', status: '', items_total: 0, items_done: 0},
+        main: {id: '', name: '', site_id: '', status: '', warranty: '', signed: '', items_total: 0, items_done: 0},
         spinner: false, showSignOff: false, showAction: false,
         record: {},
         action: '', loaded: false,
@@ -453,7 +495,7 @@
                 this.xx.main.items_total = 0;
                 this.xx.main.items_done = 0;
                 for (var i = 0; i < this.xx.itemList.length; i++) {
-                    if (this.xx.itemList[i]['status'] == 1 || this.xx.itemList[i]['status'] == -1) {
+                    if ((this.xx.itemList[i]['status'] == 1 || this.xx.itemList[i]['status'] == -1) && this.xx.itemList[i]['sign_by']) {
                         this.xx.main.items_done++;
                     }
                     this.xx.main.items_total++;
@@ -461,19 +503,35 @@
             },
             itemStatus: function (record) {
                 if (record.status == '1') {
-                    record.sign_at = moment().format('YYYY-MM-DD');
-                    record.sign_by = this.xx.user_id;
-                    record.sign_by_name = this.xx.user_fullname;
+                    record.done_at = moment().format('YYYY-MM-DD');
+                    record.done_by = this.xx.user_id;
+                    record.done_by_name = this.xx.user_fullname;
                 }
                 this.updateItemDB(record);
             },
             itemStatusReset: function (record) {
                 record.status = '';
+                record.done_at = '';
+                record.done_by = '';
+                record.done_by_name = '';
+                this.updateItemDB(record);
+            },
+            itemSign: function (record) {
+                if (record.super == '1') {
+                    record.sign_at = moment().format('YYYY-MM-DD');
+                    record.sign_by = this.xx.user_id;
+                    record.sign_by_name = this.xx.user_fullname;
+                    this.updateItemDB(record);
+                } else
+                    this.itemStatusReset(record);
+            },
+            itemSignReset: function (record) {
                 record.sign_at = '';
                 record.sign_by = '';
                 record.sign_by_name = '';
                 this.updateItemDB(record);
             },
+            /*
             itemCompany: function (record) {
                 this.xx.sel_company = [];
                 // Get Company list
@@ -484,7 +542,7 @@
                     this.xx.record = record;
 
                 }.bind(this));
-            },
+            },*/
             updateItemCompany: function (record, response) {
                 if (response) {
                     record.done_by = this.xx.done_by;
@@ -506,25 +564,25 @@
             },
             updateItemDB: function (record) {
                 //alert('update item id:'+record.id+' task:'+record.task_id+' by:'+record.done_by);
-                this.$http.patch('/site/qa/item/' + record.id, record)
+                this.$http.patch('/site/maintenance/item/' + record.id, record)
                         .then(function (response) {
                             this.itemsCompleted();
                             toastr.success('Updated record');
                         }.bind(this))
                         .catch(function (response) {
                             record.status = '';
-                            record.sign_at = '';
-                            record.sign_by = '';
-                            record.sign_by_name = '';
+                            record.done_at = '';
+                            record.done_by = '';
+                            record.done_by_name = '';
                             alert('failed to update item');
                         });
             },
             updateReportDB: function (record, redirect) {
-                this.$http.patch('/site/qa/' + record.id + '/update', record)
+                this.$http.patch('/site/maintenance/' + record.id + '/update', record)
                         .then(function (response) {
                             this.itemsCompleted();
                             if (redirect)
-                                window.location.href = '/site/qa/' + record.id;
+                                window.location.href = '/site/maintenance/' + record.id;
                             toastr.success('Updated record');
 
                         }.bind(this)).catch(function (response) {
@@ -631,7 +689,6 @@
             },
         }
     });
-
 
 
     var myApp = new Vue({

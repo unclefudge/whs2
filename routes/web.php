@@ -245,11 +245,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Maintenance
     Route::get('site/maintenance/{id}/items', 'Site\SiteMaintenanceController@getItems');
+    Route::any('site/maintenance/{id}/update', 'Site\SiteMaintenanceController@updateReport');
+    Route::any('site/maintenance/item/{id}', 'Site\SiteMaintenanceController@updateItem');
     Route::get('site/maintenance/dt/maintenance', 'Site\SiteMaintenanceController@getMaintenance');
     Route::any('site/maintenance/upload', 'Site\SiteMaintenanceController@uploadAttachment');
     Route::get('site/maintenance/data/prac_completion/{site_id}', 'Site\SiteMaintenanceController@getPracCompletion');
     Route::get('site/maintenance/data/site_super/{site_id}', 'Site\SiteMaintenanceController@getSiteSupervisor');
-    Route::post('site/maintenance/{id}/review', 'Site\SiteMaintenanceController@review');
+    Route::any('site/maintenance/{id}/review', 'Site\SiteMaintenanceController@review');
     Route::resource('site/maintenance', 'Site\SiteMaintenanceController');
 
 

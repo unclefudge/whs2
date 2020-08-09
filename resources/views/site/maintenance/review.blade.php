@@ -63,50 +63,68 @@
                                     </span>
                             </div>
 
-
                             <hr>
 
                             @if(!$main->nextClientVisit())
                                 {{-- Under Review - asign to super --}}
                                 <input type="hidden" name="visited" value="0">
-                                <h4>Assign Request to visit client</h4>
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        {{-- Company --}}
-                                        <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
-                                            {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
-                                            <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
-                                                <option value="">Select Supervisor/Company</option>
-                                                @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            {!! fieldErrorMessage('company_id', $errors) !!}
+                                    <div class="col-md-7"><h4>Assign Request to visit client</h4></div>
+                                    <div class="col-md-5">@if ($main->docs->count()) <h4>Gallery</h4> @endif</div>
+                                </div>
+                                @if(Auth::user()->allowed2('sig.site.maintenance', $main))
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {{-- Company --}}
+                                            <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
+                                                {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
+                                                <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
+                                                    <option value="">Select Supervisor/Company</option>
+                                                    @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
+                                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                {!! fieldErrorMessage('company_id', $errors) !!}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {{-- Planner Date --}}
-                                    <div class="col-md-3 ">
-                                        <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
-                                            {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
-                                            <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
-                                                <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
+                                        {{-- Planner Date --}}
+                                        <div class="col-md-3 ">
+                                            <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
+                                                {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
+                                                <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                    <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
                                             <span class="input-group-btn">
                                                 <button class="btn default" type="button">
                                                     <i class="fa fa-calendar"></i>
                                                 </button>
                                             </span>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        {{-- Gallery --}}
+                                        <div class="col-md-5">
+                                            @include('site/maintenance/_gallery')
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            Waiting to be assigned by authorised supervisor.
+                                        </div>
+                                        <div class="col-md-5">
+                                            @include('site/maintenance/_gallery')
+                                        </div>
+                                    </div>
+                                @endif
                             @else
                                 {{-- Under Review - client appointment set --}}
                                 <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
                                 <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
                                 <input type="hidden" name="visited" value="1">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-7">
                                         <h4>Client Appointment Assigned</h4>
                                         <div class="row">
                                             <div class="col-md-3">Date</div>
@@ -117,24 +135,12 @@
                                             <div class="col-md-9">{{ $main->nextClientVisit()->company->name }} </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         @if ($main->docs->count())
                                             <h4>Gallery</h4>
-                                            <?php $doc_count = 0; ?>
-                                            @foreach ($main->docs as $doc)
-                                                <div style="width: 60px">
-                                                    <a href="{{ $doc->AttachmentUrl }}" class="html5lightbox " title="{{ $doc->name }}" data-lityXXX>
-                                                        <img src="{{ $doc->AttachmentUrl }}" class="thumbnail img-responsive img-thumbnail"></a>
-                                                </div>
-                                                <?php $doc_count ++; ?>
-                                                @if ($doc_count == 5)
-                                                    <br>
-                                                @endif
-                                            @endforeach
+                                            @include('site/maintenance/_gallery')
                                         @endif
-
                                     </div>
-
                                 </div>
 
                                 <hr>
@@ -143,19 +149,25 @@
                                     <div class="col-md-3">
                                         <div class="form-group {!! fieldHasError('super_id', $errors) !!}">
                                             {!! Form::label('super_id', 'Supervisor', ['class' => 'control-label']) !!}
-                                            <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
-                                                <option value="">Select Supervisor</option>
-                                                @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
-                                                    <option value="{{ $super->id }}" {{ ($main->super_id == $super->id) ? 'selected' : '' }} >{{ $super->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            @if (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                                <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
+                                                    <option value="">Select Supervisor</option>
+                                                    @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
+                                                        <option value="{{ $super->id }}" {{ ($main->super_id == $super->id) ? 'selected' : '' }} >{{ $super->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                {!! Form::text('super_id_text', $main->supervisor->full_name, ['class' => 'form-control', 'readonly']) !!}
+                                            @endif
                                             {!! fieldErrorMessage('super_id', $errors) !!}
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                            {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                            @if (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                                {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                                {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +224,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($main->actions as $action)
+                                        @foreach ($main->actions->sortByDesc('created_at') as $action)
                                             <tr>
                                                 <td>{{  $action->created_at->format('d/m/Y') }}</td>
                                                 <td>{!! $action->action !!}</td>
@@ -230,7 +242,7 @@
                                 <a href="/site/maintenance" class="btn default"> Back</a>
                                 @if ($main->nextClientVisit())
                                     <button type="submit" name="save" class="btn blue"> Save</button>
-                                @else
+                                @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
                                     <button type="submit" name="save" class="btn blue"> Assign Request</button>
                                 @endif
                             </div>

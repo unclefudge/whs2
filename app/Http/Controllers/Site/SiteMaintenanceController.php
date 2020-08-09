@@ -45,8 +45,8 @@ class SiteMaintenanceController extends Controller {
     public function index()
     {
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->hasAnyPermissionType('site.maintenance'))
-        //    return view('errors/404');
+        if (!Auth::user()->hasAnyPermissionType('site.maintenance'))
+            return view('errors/404');
 
         $under_review = DB::table('site_maintenance AS m')
             ->select(['m.id', 'm.site_id', 'm.super_id', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
@@ -69,8 +69,8 @@ class SiteMaintenanceController extends Controller {
     public function create()
     {
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('add.site.maintenance'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.site.maintenance'))
+            return view('errors/404');
 
         return view('site/maintenance/create');
     }
@@ -85,8 +85,8 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('view.site.maintenance', $main))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('view.site.maintenance', $main))
+            return view('errors/404');
 
         if ($main->status == 2)
             return view('site/maintenance/review', compact('main'));
@@ -104,8 +104,8 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.site.maintenance', $main))
+            return view('errors/404');
 
         if ($main->status == 2)
             return view('site/maintenance/review', compact('main'));
@@ -121,8 +121,8 @@ class SiteMaintenanceController extends Controller {
     public function store()
     {
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('add.site.maintenance'))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.site.maintenance'))
+            return view('errors/404');
 
         request()->validate(['site_id' => 'required', 'super_id' => 'required'], ['site_id.required' => 'The site field is required.', 'super_id.required' => 'The supervisor field is required.']); // Validate
 
@@ -194,17 +194,19 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.qa', $qa))
+        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
         //    return view('errors/404');
 
         $rules = ['company_id' => 'required', 'visit_date' => 'required'];
         $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
         request()->validate($rules, $mesg); // Validate
+        //dd('here');
 
         $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
         $main_request = request()->all();
 
         $company = Company::find(request('company_id'));
+
 
         if (!request('visited')) {
             // Add to Client Visit planner
@@ -221,7 +223,7 @@ class SiteMaintenanceController extends Controller {
             Toastr::success("Assigned Request");
 
             // Delete Todoo
-            $main->closeToDo(Auth::user()->id);
+            $main->closeToDo(Auth::user());
 
         } else {
             if ($main->items->count() > 0) // Items updated
@@ -269,8 +271,8 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.qa', $qa))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.site.maintenance', $main))
+            return view('errors/404');
 
         $rules = ['warranty' => 'required', 'category_id' => 'required'];
         $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
@@ -292,59 +294,58 @@ class SiteMaintenanceController extends Controller {
      */
     public function updateReport(Request $request, $id)
     {
-        $qa = SiteQa::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($id);
+
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('edit.site.qa', $qa))
+        if (!Auth::user()->allowed2('edit.site.maintenance', $main))
             return view('errors/404');
 
         // Only Allow Ajax requests
         if ($request->ajax()) {
-            $qa_request = $request->all();
+            $main_request = $request->all();
 
             // Determine if report being signed off
             $signoff = $request->get('signoff');
             if ($signoff == 'super') {
-                $qa_request['supervisor_sign_by'] = Auth::user()->id;
-                $qa_request['supervisor_sign_at'] = Carbon::now();
+                $main_request['supervisor_sign_by'] = Auth::user()->id;
+                $main_request['supervisor_sign_at'] = Carbon::now();
 
                 // Close any outstanding ToDos for supervisors and Create one for Area Super / Con Mgr
-                $qa->closeToDo(Auth::user());
-                if (!$qa->manager_sign_by) {
-                    $site = Site::findOrFail($qa->site_id);
-                    $qa->createManagerSignOffToDo($site->areaSupervisors()->pluck('id')->toArray());
+                $main->closeToDo(Auth::user());
+                if (!$main->manager_sign_by) {
+                    $site = Site::findOrFail($main->site_id);
+                    $main->createManagerSignOffToDo($site->areaSupervisors()->pluck('id')->toArray());
                 }
             }
             if ($signoff == 'manager') {
-                $qa_request['manager_sign_by'] = Auth::user()->id;
-                $qa_request['manager_sign_at'] = Carbon::now();
+                $main_request['manager_sign_by'] = Auth::user()->id;
+                $main_request['manager_sign_at'] = Carbon::now();
                 // Close any outstanding ToDos for Area Super / Con Mgr
-                $qa->closeToDo(Auth::user());
+                $main->closeToDo(Auth::user());
             }
 
             // If report was placed On Hold then auto add an Action + close ToDoo
-            if ($request->get('status') == 2 && $qa->status != 2)
-                $qa->moveToHold(Auth::user());
+            //if ($request->get('status') == 2 && $main->status != 2)
+            //    $main->moveToHold(Auth::user());
 
             // If report was reactived then auto add an Action + create ToDoo
-            if ($request->get('status') == 1 && $qa->status != 1)
-                $qa->moveToActive(Auth::user());
+            //if ($request->get('status') == 1 && $main->status != 1)
+            //    $main->moveToActive(Auth::user());
 
             // If report was marked Not Required then close ToDoo
-            if ($request->get('status') == - 1)
-                $qa->closeToDo(Auth::user());
+            //if ($request->get('status') == - 1)
+            //    $main->closeToDo(Auth::user());
 
-            $qa->update($qa_request);
+            $main->update($main_request);
 
             // Determine if Report Signed Off and if so mark completed
-            if ($qa->supervisor_sign_by && $qa->manager_sign_by) {
-                $qa->status = 0;
-                $qa->save();
-                if ($qa->master_id == '74' && $qa->owned_by->notificationsUsersType('n.site.qa.handover')) // Only email if QA is Handover template  ie. final QA on site
-                    Mail::to($qa->owned_by->notificationsUsersType('n.site.qa.handover'))->send(new \App\Mail\Site\SiteQaHandover($qa));
+            if ($main->supervisor_sign_by && $main->manager_sign_by) {
+                $main->status = 0;
+                $main->save();
             }
             Toastr::success("Updated Report");
 
-            return $qa;
+            return $main;
         }
 
         return view('errors/404');
@@ -356,36 +357,44 @@ class SiteMaintenanceController extends Controller {
      */
     public function updateItem(Request $request, $id)
     {
-        $item = SiteQaItem::findOrFail($id);
-        $qa = SiteQa::findOrFail($item->doc_id);
+        $item = SiteMaintenanceItem::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($item->main_id);
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.qa', $qa))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('edit.site.maintenance', $main))
+            return view('errors/404');
 
-        $item_request = $request->only(['status', 'done_by']);
+        $item_request = $request->only(['status', 'done_by', 'sign_by']);
         //dd($item_request);
 
         // Update resolve date if just modified
         if (!request('status')) {
             $item->status = 0;
-            $item->sign_by = null;
-            $item->sign_at = null;
-            //echo 'no stat';
-            //dd($item_request);
+            $item->done_by = null;
+            $item->done_at = null;
             $item->save();
         } else {
-            //echo "stat";
+            // Item completed
             if ($item_request['status'] == 1 && $item->status != 1) {
+                $item_request['done_by'] = Auth::user()->id;
+                $item_request['done_at'] = Carbon::now()->toDateTimeString();
+            }
+            // Item signed off
+            if ($item_request['sign_by'] && !$item->sign_by) {
                 $item_request['sign_by'] = Auth::user()->id;
                 $item_request['sign_at'] = Carbon::now()->toDateTimeString();
+            }
+            // item marked incomplete
+            if (!$item_request['sign_by'] && $item->sign_by) {
+                $item_request['sign_by'] = null;
+                $item_request['sign_at'] = null;
             }
             //dd($item_request);
             $item->update($item_request);
         }
 
         // Update modified timestamp on QA Doc
-        $qa = SiteQa::findOrFail($item->doc_id);
-        $qa->touch();
+        $main = SiteMaintenance::findOrFail($item->main_id);
+        $main->touch();
 
         Toastr::success("Updated record");
 
@@ -483,8 +492,30 @@ class SiteMaintenanceController extends Controller {
             ->editColumn('supervisor', function ($doc) {
                 return $doc->super_name;
             })
+            ->addColumn('completed', function ($doc) {
+                $main = SiteMaintenance::find($doc->id);
+                $total = $main->items()->count();
+                $completed = $main->itemsCompleted()->count();
+                $pending = '';
+                if ($main->status != 0) {
+                    if (Auth::user()->allowed2('edit.site.maintenance', $main)) {
+                        if ($total == $completed && $total != 0) {
+                            $label_type = ($main->supervisor_sign_by && $main->manager_sign_by) ? 'label-success' : 'label-warning';
+                            if (!$main->supervisor_sign_by)
+                                $pending = '<br><span class="badge badge-info badge-roundless pull-right">Pending Supervisor</span>';
+                            elseif (!$main->manager_sign_by)
+                                $pending = '<br><span class="badge badge-primary badge-roundless pull-right">Pending Manager</span>';
+                        } else
+                            $label_type = 'label-danger';
+
+                        return '<span class="label pull-right ' . $label_type . '">' . $completed . ' / ' . $total . '</span>' . $pending;
+                    }
+                }
+
+                return '<span class="label pull-right label-success">' . $completed . ' / ' . $total . '</span>';
+            })
             ->addColumn('action', function ($doc) {
-                if (($doc->status && Auth::user()->allowed2('edit.site.qa', $doc)) || (!$doc->status && Auth::user()->allowed2('sig.site.qa', $doc)))
+                if (($doc->status && Auth::user()->allowed2('edit.site.maintenance', $doc)) || (!$doc->status && Auth::user()->allowed2('sig.site.maintenance', $doc)))
                     return '<a href="/site/maintenance/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
 
                 return '<a href="/site/maintenance/' . $doc->id . '" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-search"></i> View</a>';
@@ -635,33 +666,28 @@ class SiteMaintenanceController extends Controller {
             //$array['task_name'] = $task->name;
             //$array['task_code'] = $task->code;
 
-            // Done By
-            if ($item->done_by)
-                $array['done_by'] = $item->done_by;
-            else {
-                // Check Planner which company did the task
-                //$planned_task = SitePlanner::where('site_id', $main->site_id)->where('task_id', $item->task_id)->first();
-                //if ($planned_task && $planned_task->entity_type == 'c' && !$item->super)
-                //    $array['done_by'] = $planned_task->entity_id;
-                //else
-                    $array['done_by'] = '';
-            }
 
+            // Done By
+            $array['done_at'] = '';
+            $array['done_by'] = '';
+            $array['done_by_name'] = '';
             $array['done_by_company'] = '';
             $array['done_by_licence'] = '';
-            if ($array['done_by']) {
-                // Company Info - Array of unique companies (store previous companies to speed up)
-                if (isset($companies[$item->done_by])) {
-                    $company = $companies[$array['done_by']];
+            if ($item->done_by) {
+                // User Info - Array of unique users (store previous users to speed up)
+                if (isset($users[$item->done_by])) {
+                    $user_rec = $users[$item->done_by];
                 } else {
-                    $company = Company::find($array['done_by']);
-                    $companies[$array['done_by']] = (object) ['id' => $company->id, 'name_alias' => $company->name_alias, 'licence_no' => $company->licence_no];
+                    $user = User::find($item->done_by);
+                    $users[$item->done_by] = (object) ['id' => $user->id, 'full_name' => $user->full_name, 'company_name' => $user->company->name_alias];
+                    $user_rec = $users[$item->done_by];
                 }
-                //$array['done_by'] = $item->done_by;
-                $array['done_by_company'] = $company->name_alias;
-                $array['done_by_licence'] = $company->licence_no;
-            }
 
+                $array['done_at'] = $item->done_at->format('Y-m-d');
+                $array['done_by'] = $user_rec->id;
+                $array['done_by_name'] = $user_rec->full_name;
+                $array['done_by_company'] = $user_rec->company_name;
+            }
 
             // Signed By
             $array['sign_at'] = '';
@@ -680,6 +706,8 @@ class SiteMaintenanceController extends Controller {
                 $array['sign_by'] = $user->id;
                 $array['sign_by_name'] = $user->full_name;
             }
+
+
             $array['status'] = $item->status;
             $items[] = $array;
         };
@@ -687,10 +715,11 @@ class SiteMaintenanceController extends Controller {
 
         $actions = [];
         $actions[] = ['value' => '', 'text' => 'Select Action'];
-        $actions[] = ['value' => '1', 'text' => 'Sign Off'];
+        $actions[] = ['value' => '1', 'text' => 'Completed'];
         $actions[] = ['value' => '-1', 'text' => 'Mark N/A'];
         $actions2[] = ['value' => '', 'text' => 'Select Action'];
-        $actions2[] = ['value' => '-1', 'text' => 'Mark N/A'];
+        $actions2[] = ['value' => '0', 'text' => 'Incomplete'];
+        $actions2[] = ['value' => '1', 'text' => 'Sign Off'];
 
         $json = [];
         $json[] = $items;

@@ -9,6 +9,7 @@ use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
 use App\Models\Site\SiteAsbestos;
 use App\Models\Site\SiteQa;
+use App\Models\Site\SiteMaintenance;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,6 +59,7 @@ class ActionController extends Controller {
                 case 'site_hazards': $record = SiteHazard::find($request->get('table_id')); break;
                 case 'site_asbestos': $record = SiteAsbestos::find($request->get('table_id')); break;
                 case 'site_qa': $record = SiteQa::find($request->get('table_id')); break;
+                case 'site_maintenance': $record = SiteMaintenance::find($request->get('table_id')); break;
             }
             $record->emailAction($action);
 

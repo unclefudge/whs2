@@ -10,9 +10,9 @@ class SiteMaintenanceItem extends Model {
 
     protected $table = 'site_maintenance_items';
     protected $fillable = [
-        'main_id', 'name', 'task_id', 'super', 'order', 'status', 'master', 'master_id',
-        'sign_by', 'sign_at', 'done_by', 'created_by', 'updated_by', 'created_at', 'updated_at'];
-    protected $dates = ['sign_at'];
+        'main_id', 'name', 'task_id', 'super', 'order', 'attachment', 'status', 'master', 'master_id',
+        'sign_by', 'sign_at', 'done_by', 'done_at', 'created_by', 'updated_by', 'created_at', 'updated_at'];
+    protected $dates = ['sign_at', 'done_at'];
 
     /**
      * A Site Maintenance Item belongs to a Site Maintenance
