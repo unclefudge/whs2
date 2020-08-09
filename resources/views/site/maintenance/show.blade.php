@@ -1,5 +1,5 @@
-@inject('maintenanceCategories', 'App\Http\Utilities\maintenanceCategories')
-@inject('maintenanceWarranty', 'App\Http\Utilities\maintenanceWarranty')
+@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
+@inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
 @section('pagetitle')
