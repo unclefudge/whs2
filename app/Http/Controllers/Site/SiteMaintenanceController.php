@@ -159,6 +159,18 @@ class SiteMaintenanceController extends Controller {
                 $doc->save();
             }
         }
+
+        $action = Action::create(['action' => "Maintenance Request created by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
+
+
+        // Add Request Items
+        $order = 1;
+        for ($i = 1; $i <= 25; $i ++) {
+            if (request("item$i")) {
+                SiteMaintenanceItem::create(['main_id' => $newMain->id, 'name' => request("item$i"), 'order' => $order, 'status' => 0]);
+                $order ++;
+            }
+        }
         //dd($main_request);
 
         // Update Site Status
@@ -225,38 +237,36 @@ class SiteMaintenanceController extends Controller {
             // Delete Todoo
             $main->closeToDo(Auth::user());
 
-        } else {
-            if ($main->items->count() > 0) // Items updated
-                $action = Action::create(['action' => "Items updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
-            else  // Items added
-                $action = Action::create(['action' => "Items added by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
-
-
-            // Update Items
-            $order = 1;
-            for ($i = 1; $i <= 25; $i ++) {
-                $item = $main->item($i);
-                if (request("item$i")) {
-                    if ($item) {
-                        $item->name = request("item$i");
-                        $item->order = $order;
-                        $item->save();
-                    } else
-                        SiteMaintenanceItem::create(['main_id' => $main->id, 'name' => request("item$i"), 'order' => $order, 'status' => 0]);
-                    $order ++;
-                } elseif ($item)
-                    $item->delete();
-            }
-
-            // Status Updated
-            if (request('status') == 1)  // Maintenance Request Accepted
-                $action = Action::create(['action' => "Maintenance Request approved by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
-            elseif (request('status') == - 1)  // Maintenance Request Declined
-                $action = Action::create(['action' => "Maintenance Request declined by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
-
-            //dd($main_request);
-            Toastr::success("Updated Request");
         }
+
+        // Update Items
+        $order = 1;
+        $current_items = $main->items->count();
+        for ($i = 1; $i <= 25; $i ++) {
+            $item = $main->item($i);
+            if (request("item$i")) {
+                if ($item) {
+                    $item->name = request("item$i");
+                    $item->order = $order;
+                    $item->save();
+                } else
+                    SiteMaintenanceItem::create(['main_id' => $main->id, 'name' => request("item$i"), 'order' => $order, 'status' => 0]);
+                $order ++;
+            } elseif ($item)
+                $item->delete();
+        }
+
+        if ($current_items != ($order - 1)) // Items updated
+            $action = Action::create(['action' => "Items updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+        // Status Updated
+        if (request('status') == 1)  // Maintenance Request Accepted
+            $action = Action::create(['action' => "Maintenance Request approved by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+        elseif (request('status') == - 1)  // Maintenance Request Declined
+            $action = Action::create(['action' => "Maintenance Request declined by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+        //dd($main_request);
+        Toastr::success("Updated Request");
 
         $main->update($main_request);
 

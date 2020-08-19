@@ -31,6 +31,8 @@ use App\Models\Misc\Equipment\EquipmentLocationItem;
 use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Misc\Equipment\EquipmentLog;
 use App\Models\Misc\Permission2;
+use App\Models\Support\SupportTicket;
+use App\Models\Support\SupportTicketAction;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -132,7 +134,19 @@ class PagesController extends Controller {
 
     public function quick()
     {
+        echo "<b>Export of Dev Support Tickets </b></br>";
+        $tickets = SupportTicket::where('status', 1)->where('type', 1)->get();
 
+        echo "<table st><br>";
+        echo "<tr><td width='5%'><b>ID</b></td><td width='5%'><b>NAME</b></td><td><b>ACTIONS</b></td></tr>";
+        foreach ($tickets as $ticket) {
+            echo "<tr style='outline: thin solid'><td>$ticket->id</td><td>$ticket->name</td><td>&nbsp;</td></tr>";
+            foreach ($ticket->actions as $action) {
+                echo "<tr style='outline: thin dotted'><td>&nbsp;</td><td>".$action->created_at->format('d/m/Y')."\n".$action->user->firstname."</td><td>$action->action</td></tr>";
+            }
+        }
+        echo "</table>";
+        /*
         echo "<b>Archiving SWMS for inactive companies </b></br>";
         $sws = WmsDoc::where('status', '>', 0)->where('master', 0)->get();
 
@@ -142,7 +156,7 @@ class PagesController extends Controller {
                 $doc->status = -1;
                 $doc->save();
             }
-        }
+        }*/
 
 
         /*

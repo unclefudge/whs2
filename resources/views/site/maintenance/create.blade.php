@@ -27,10 +27,6 @@
                             <span class="caption-subject font-green-haze bold uppercase">Create Maintenance Request</span>
                             <span class="caption-helper"></span>
                         </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
-                        </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
@@ -84,7 +80,7 @@
                             <!-- Multi File upload -->
                             <div id="multifile-div">
                                 <div class="note note-warning">
-                                     Multiple photos/images can be uploaded with this maintenance request.
+                                    Multiple photos/images can be uploaded with this maintenance request.
                                     {{--}}<ul>
                                         <li>Once you have selected your files upload them by clicking
                                             <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
@@ -98,6 +94,33 @@
                                             <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Items -->
+                            <div id="items-div">
+                                <br>
+                                <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
+                                    <div class="col-md-12">MAINTENANCE ITEMS</div>
+                                </div>
+                                <br>
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">{!! Form::textarea("item$i", '', ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                        </div>
+                                    </div>
+                                @endfor
+
+                                {{-- Extra Fields --}}
+                                <button class="btn blue" id="more">More Items</button>
+                                <div class="row" id="more_items" style="display: none">
+                                    @for ($i = 10 + 1; $i <= 25; $i++)
+                                        <div class="col-md-12">
+                                            <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                        </div>
+                                    @endfor
                                 </div>
                             </div>
                         </div>
@@ -138,14 +161,17 @@
         $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
         $("#category_id").select2({placeholder: "Select category", width: "100%"});
 
-        $('#multifile-div').hide();
-
         updateFields();
 
         // On Change Site ID
         $("#site_id").change(function () {
             updateFields();
+        });
 
+        $("#more").click(function (e) {
+            e.preventDefault();
+            $('#more').hide();
+            $('#more_items').show();
         });
 
         /* Bootstrap Fileinput */
@@ -174,17 +200,19 @@
         });
 
         /*
-        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
-            data.form.append("site_id", $("#site_id").val());
-        });*/
+         $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+         data.form.append("site_id", $("#site_id").val());
+         });*/
 
         function updateFields() {
             var site_id = $("#site_id").select2("val");
             $("#completed").val('');
             $('#multifile-div').hide();
+            $('#items-div').hide();
 
             if (site_id != '') {
                 $('#multifile-div').show();
+                $('#items-div').show();
                 $.ajax({
                     url: '/site/data/details/' + site_id,
                     type: 'GET',
@@ -200,9 +228,9 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
-                        var year = data.date.substring(0,4);
-                        var month = data.date.substring(5,7);
-                        var day = data.date.substring(8,10);
+                        var year = data.date.substring(0, 4);
+                        var month = data.date.substring(5, 7);
+                        var day = data.date.substring(8, 10);
                         $("#completed").val(day + '/' + month + '/' + year);
                     },
                 })

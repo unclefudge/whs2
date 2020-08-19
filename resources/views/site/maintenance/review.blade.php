@@ -171,38 +171,39 @@
                                         </div>
                                     </div>
                                 </div>
+                            @endif
 
-                                <!-- Items -->
-                                <br>
-                                <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
-                                    <div class="col-md-12">MAINTENANCE ITEMS</div>
-                                </div>
-                                <br>
+
+                            {{-- Items --}}
+                            <br>
+                            <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
+                                <div class="col-md-12">MAINTENANCE ITEMS</div>
+                            </div>
+                            <br>
+                            <?php
+                            $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                            ?>
+                            @for ($i = 1; $i <= $first_count; $i++)
                                 <?php
-                                $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                                $item = $main->item($i);
+                                $item_name = ($item) ? $item->name : '';
                                 ?>
-                                @for ($i = 1; $i <= $first_count; $i++)
-                                    <?php
-                                    $item = $main->item($i);
-                                    $item_name = ($item) ? $item->name : '';
-                                    ?>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    </div>
+                                </div>
+                            @endfor
+
+                            {{-- Extra Fields --}}
+                            <button class="btn blue" id="more">More Items</button>
+                            <div class="row" id="more_items" style="display: none">
+                                @for ($i = $first_count + 1; $i <= 25; $i++)
+                                    <div class="col-md-12">
+                                        <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
                                     </div>
                                 @endfor
-
-                                {{-- Extra Fields --}}
-                                <button class="btn blue" id="more">More Items</button>
-                                <div class="row" id="more_items" style="display: none">
-                                    @for ($i = $first_count + 1; $i <= 25; $i++)
-                                        <div class="col-md-12">
-                                            <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
-                                        </div>
-                                    @endfor
-                                </div>
-                            @endif
+                            </div>
 
                             {{-- Notes --}}
                             <div class="row">
