@@ -3,7 +3,7 @@
 
 {{ $doc->company->name }} document **{{ $doc->name }}** {!! ($doc->expiry->lt(\Carbon\Carbon::today())) ? "has Expired " . $doc->expiry->format('d/m/Y') : "due to expire " . $doc->expiry->format('d/m/Y'); !!}
 
-Please follow up with {{ $doc->company->name }} and ensure they upload a current version.
+Please ensure an updated version of the document is uploaded to SafeWorksite.
 
 @component('mail::button', ['url' => config('app.url').'/company/'.$doc->for_company_id.'/doc'])
 View Documents
