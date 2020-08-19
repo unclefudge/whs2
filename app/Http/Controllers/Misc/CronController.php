@@ -424,7 +424,7 @@ class CronController extends Controller {
                             // Due in 2 weeks
                             //if (count($company->seniorUsers())) $doc->createExpiredToDo($company->seniorUsers()->pluck('id')->toArray(), false);
 
-                            // Email Parent Company
+                            // Email SeniorUsers + Parent Company
                             if ($doc->category->type == 'acc' || $doc->category->type == 'whs') {
                                 $doc->emailExpired($company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval'), false);
                                 echo "Emailed " . implode("; ", $company->reportsTo()->notificationsUsersEmailType('n.doc.' . $doc->category->type . '.approval')) . "<br>";

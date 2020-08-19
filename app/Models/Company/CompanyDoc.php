@@ -229,7 +229,7 @@ class CompanyDoc extends Model {
         }
 
         if ($email_to && $email_user)
-            Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
+            Mail::to($email_to)->cc($email_user)->send(new \App\Mail\Company\CompanyDocExpired($this));
         elseif ($email_to)
             Mail::to($email_to)->send(new \App\Mail\Company\CompanyDocExpired($this));
     }

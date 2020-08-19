@@ -230,6 +230,7 @@ class UserDocController extends Controller {
         $user = User::find($uid);
         $doc = UserDoc::findOrFail($id);
 
+        //dd($request->all());
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2("edit.user.doc", $doc))
             return view('errors/404');
@@ -237,6 +238,28 @@ class UserDocController extends Controller {
         $doc_request = request()->all();
         $doc_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
         $doc_request['issued'] = (request('issued')) ? Carbon::createFromFormat('d/m/Y H:i', request('issued') . '00:00')->toDateTimeString() : null;
+
+        // Convert licence type into CSV - Drivers/Contractors
+        if (request('category_id') == '2') {
+            $doc_request['ref_no'] = request('lic_no');
+            $doc_request['ref_type'] = request('drivers_type');
+        }
+
+        // Convert Contractor licence type into CSV
+        if (request('category_id') == '3') {
+            $doc_request['ref_no'] = request('lic_no');
+            $doc_request['ref_type'] = request('cl_type');
+        }
+
+        // Convert Supervisor licence type into CSV
+        if (request('category_id') == '4') {
+            $doc_request['ref_no'] = request('lic_no');
+            $doc_request['ref_type'] = request('super_type');
+        }
+
+        // Reassign Asbestos Licence to correct category
+        if (request('category_id') == '9')
+            $doc_request['ref_type'] = request('asb_type');
 
         // Verify if document is rejected
         $doc_request['reject'] = '';

@@ -89,14 +89,14 @@
                                             {!! Form::text('lic_no', $doc->ref_no, ['class' => 'form-control', 'readonly']) !!}
                                             {!! fieldErrorMessage('lic_no', $errors) !!}
                                         </div>
-                                        <div class="form-group {!! fieldHasError('lic_type', $errors) !!}">
-                                            {!! Form::label('lic_type', 'Class(s)', ['class' => 'control-label']) !!}
-                                            {!! Form::text('lic_no', $doc->ref_type, ['class' => 'form-control', 'readonly']) !!}
+                                        <div class="form-group {!! fieldHasError('drivers_type', $errors) !!}">
+                                            {!! Form::label('drivers_type', 'Class(s)', ['class' => 'control-label']) !!}
+                                            {!! Form::text('drivers_type', $doc->ref_type, ['class' => 'form-control', 'readonly']) !!}
                                             {{--
-                                            <select id="lic_type" name="lic_type[]" class="form-control select2" width="100%" multiple readonly>
+                                            <select id="drivers_type" name="drivers_type[]" class="form-control select2" width="100%" multiple readonly>
                                                 {!! $user->driversLicenceOptions() !!}
-                                            </select>--}}
-                                            {!! fieldErrorMessage('lic_type', $errors) !!}
+                                            </select> --}}
+                                            {!! fieldErrorMessage('drivers_type', $errors) !!}
                                         </div>
                                     @endif
                                     {{-- Contractor Lic No + Class--}}
