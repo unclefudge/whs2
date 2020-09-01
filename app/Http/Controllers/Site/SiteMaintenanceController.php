@@ -483,7 +483,7 @@ class SiteMaintenanceController extends Controller {
     public function getMaintenance()
     {
         $records = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
                 's.code as sitecode', 's.name as sitename'])
@@ -498,6 +498,10 @@ class SiteMaintenanceController extends Controller {
             })
             ->editColumn('sitename', function ($doc) {
                 return $doc->sitename;
+            })
+            ->editColumn('assigned_to', function ($doc) {
+                $d = SiteMaintenance::find($doc->id);
+                return ($d->assignedTo) ? $d->assignedTo->name : '-';
             })
             ->addColumn('completed', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);

@@ -96,7 +96,7 @@
                                 <th width="5%"> #</th>
                                 <th width="7%"> Site</th>
                                 <th> Name</th>
-                                <th> Supervisor</th>
+                                <th> Assigned To</th>
                                 <th width="10%"> Prac Comp</th>
                                 <th width="10%"> Reported</th>
                                 <th width="10%"> Completed</th>
@@ -141,7 +141,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
-            {data: 'supervisor', name: 'supervisor'},
+            {data: 'assigned_to', name: 's.assigned_to'},
             {data: 'completed_date', name: 'm.completed', orderable: false, searchable: false},
             {data: 'created_date', name: 'm.created_at'},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},
