@@ -1,10 +1,7 @@
+@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
+@inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-file-text-o"></i> Site Maintenance Request</h1>
-    </div>
-@stop
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -22,6 +19,14 @@
         font-weight: 600;
         color: #333 !important;
     }
+
+    .file-preview {
+        height: 250px !important;
+    }
+
+    ..file-drop-zone {
+        height: 250px !important;
+    }
 </style>
 
 @section('content')
@@ -32,229 +37,271 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request R</span>
                             <span class="caption-helper">ID: {{ $main->id }}</span>
                         </div>
                     </div>
-                    <div class="portlet-body">
+                    <div class="portlet-body form">
                         <div class="page-content-inner">
-                            {!! Form::model($main, ['action' => ['Site\SiteMaintenanceController@review', $main->id], 'class' => 'horizontal-form']) !!}
-
+                            {!! Form::model($main, ['action' => ['Site\SiteMaintenanceController@review', $main->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                            <input type="hidden" name="site_id" id="site_id" value="{{ $main->site_id }}">
                             @include('form-error')
 
+                            {{-- Progress Steps --}}
+                            <div class="mt-element-step hidden-sm hidden-xs">
+                                <div class="row step-thin" id="steps">
+                                    <div class="col-md-3 mt-step-col first done">
+                                        <div class="mt-step-number bg-white font-grey">1</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Create</div>
+                                        <div class="mt-step-content font-grey-cascade">Create Request</div>
+                                    </div>
+                                    <div class="col-md-3 mt-step-col done">
+                                        <div class="mt-step-number bg-white font-grey">2</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
+                                        <div class="mt-step-content font-grey-cascade">Add photos</div>
+                                    </div>
+                                    <div class="col-md-3 mt-step-col {{ ($main->step == 3) ? 'active' : 'done' }}">
+                                        <div class="mt-step-number bg-white font-grey">3</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Visit Client</div>
+                                        <div class="mt-step-content font-grey-cascade">Schedule visit</div>
+                                    </div>
+                                    <div class="col-md-3 mt-step-col last {{ ($main->step == 4) ? 'active' : '' }}">
+                                        <div class="mt-step-number bg-white font-grey">4</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Review</div>
+                                        <div class="mt-step-content font-grey-cascade">Approve/Decline</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
                             <div class="row">
-                                <div class="col-xs-4">
+                                <div class="col-md-5">
                                     <p><h4>Job Details</h4>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
-                                    @if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif
+                                    {{--@if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif --}}
+                                    <br>
+                                    @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
+                                    @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
                                     </p>
                                 </div>
-                                <div class="col-xs-8"></div>
-                                <h2 style="margin: 0px; padding-right: 20px"><b>{{ $main->name }}</b>
-                                    <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
-                                    <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
-                                </h2>
-                                <br><br><br>
-                                    <span style="padding-right:20px; float:right">
-                                        @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
-                                        @if ($main->super_id)<b>Supervisor:</b> {{ $main->supervisor->name }} @endif
-                                    </span>
+                                <div class="col-md-1"></div>
+
+                                <div class="col-md-6">
+                                    <p><h4>Client Details</h4>  </p>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
+                                    @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
+                                    @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
+                                    @if($main->nextClientVisit())
+                                        <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
+                                    @endif
+                                </div>
                             </div>
 
-                            <hr>
+                            {{-- Gallery --}}
+                            <h4>Photos</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @include('site/maintenance/_gallery')
+                                </div>
+                            </div>
+
+                            {{-- Maintenance deyails --}}
+                            <h4>Maintenance Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                {{-- Category --}}
+                                <div class="col-md-3 ">
+                                    <div class="form-group">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('category_id', $maintenanceCategories::all(), $main->category_id, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                        @else
+                                            {!! Form::text('category_text', $maintenanceCategories::name($main->category_id), ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- Warranty --}}
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('warranty', $maintenanceWarranty::all(), $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
+                                        @else
+                                            {!! Form::text('warranty_text', $maintenanceWarranty::name($main->warranty), ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- Assigned To --}}
+                                <div class="col-md-4">
+                                    <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}">
+                                        {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            <select id="assigned_to" name="assigned_to" class="form-control select2" style="width:100%">
+                                                <option value="">Select company</option>
+                                                @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
+                                                    <option value="{{ $company->id }}" {!! ($company->id == $main->assigned_to) ? 'selected' : ''  !!}>{{ $company->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            {!! Form::text('assigned_text', ($main->assignedTo) ? $main->assignedTo->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                        {!! fieldErrorMessage('assigned_to', $errors) !!}
+                                    </div>
+                                </div>
+
+                                {{-- Status --}}
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @if (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                            {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
 
                             @if(!$main->nextClientVisit())
                                 {{-- Under Review - asign to super --}}
-                                <input type="hidden" name="visited" value="0">
-                                <div class="row">
-                                    <div class="col-md-7"><h4>Assign Request to visit client</h4></div>
-                                    <div class="col-md-5">@if ($main->docs->count()) <h4>Gallery</h4> @endif</div>
-                                </div>
-                                @if(Auth::user()->allowed2('sig.site.maintenance', $main))
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            {{-- Company --}}
-                                            <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
-                                                {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
-                                                <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
-                                                    <option value="">Select Supervisor/Company</option>
-                                                    @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                {!! fieldErrorMessage('company_id', $errors) !!}
-                                            </div>
-                                        </div>
+                                <div class="note note-warning">
+                                    <h4>Assign Request to visit client</h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px; border-color: #000000">
+                                    <input type="hidden" name="visited" value="0">
 
-                                        {{-- Planner Date --}}
-                                        <div class="col-md-3 ">
-                                            <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
-                                                {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
-                                                <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
-                                                    <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
+                                    @if(Auth::user()->allowed2('sig.site.maintenance', $main))
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{-- Company --}}
+                                                <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
+                                                    {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
+                                                    <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
+                                                        <option value="">Select Supervisor/Company</option>
+                                                        @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
+                                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    {!! fieldErrorMessage('company_id', $errors) !!}
+                                                </div>
+                                            </div>
+
+                                            {{-- Planner Date --}}
+                                            <div class="col-md-3 ">
+                                                <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
+                                                    {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
+                                                    <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                        <input type="text" class="form-control" value="{!! nextWorkDate(\Carbon\Carbon::today(), '+', 3)->format('d/m/Y') !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
                                             <span class="input-group-btn">
                                                 <button class="btn default" type="button">
                                                     <i class="fa fa-calendar"></i>
                                                 </button>
                                             </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        {{-- Gallery --}}
-                                        <div class="col-md-5">
-                                            @include('site/maintenance/_gallery')
+                                    @else
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                Waiting to be assigned by authorised supervisor.
+                                            </div>
                                         </div>
-                                    </div>
-                                @else
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            Waiting to be assigned by authorised supervisor.
-                                        </div>
-                                        <div class="col-md-5">
-                                            @include('site/maintenance/_gallery')
-                                        </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
                             @else
                                 {{-- Under Review - client appointment set --}}
                                 <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
                                 <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
                                 <input type="hidden" name="visited" value="1">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h4>Client Appointment Assigned</h4>
-                                        <div class="row">
-                                            <div class="col-md-3">Date</div>
-                                            <div class="col-md-9">{{ $main->nextClientVisit()->from->format('d/m/Y') }} </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3">Company</div>
-                                            <div class="col-md-9">{{ $main->nextClientVisit()->company->name }} </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        @if ($main->docs->count())
-                                            <h4>Gallery</h4>
-                                            @include('site/maintenance/_gallery')
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <hr>
-                                <h4>Maintenance Request Details</h4>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group {!! fieldHasError('super_id', $errors) !!}">
-                                            {!! Form::label('super_id', 'Supervisor', ['class' => 'control-label']) !!}
-                                            @if (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                                <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
-                                                    <option value="">Select Supervisor</option>
-                                                    @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
-                                                        <option value="{{ $super->id }}" {{ ($main->super_id == $super->id) ? 'selected' : '' }} >{{ $super->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            @else
-                                                {!! Form::text('super_id_text', $main->supervisor->full_name, ['class' => 'form-control', 'readonly']) !!}
-                                            @endif
-                                            {!! fieldErrorMessage('super_id', $errors) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            @if (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                                {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                                {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
+                        </div>
+                        @endif
 
 
-                            {{-- Items --}}
-                            <br>
-                            <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
-                                <div class="col-md-12">MAINTENANCE ITEMS</div>
-                            </div>
-                            <br>
+                        {{-- Items --}}
+                        <br>
+                        <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
+                            <div class="col-md-12">MAINTENANCE ITEMS</div>
+                        </div>
+                        <br>
+                        <?php
+                        $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                        ?>
+                        @for ($i = 1; $i <= $first_count; $i++)
                             <?php
-                            $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                            $item = $main->item($i);
+                            $item_name = ($item) ? $item->name : '';
                             ?>
-                            @for ($i = 1; $i <= $first_count; $i++)
-                                <?php
-                                $item = $main->item($i);
-                                $item_name = ($item) ? $item->name : '';
-                                ?>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
-                                    </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                </div>
+                            </div>
+                        @endfor
+
+                        {{-- Extra Fields --}}
+                        <button class="btn blue" id="more">More Items</button>
+                        <div class="row" id="more_items" style="display: none">
+                            @for ($i = $first_count + 1; $i <= 25; $i++)
+                                <div class="col-md-12">
+                                    <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
                                 </div>
                             @endfor
-
-                            {{-- Extra Fields --}}
-                            <button class="btn blue" id="more">More Items</button>
-                            <div class="row" id="more_items" style="display: none">
-                                @for ($i = $first_count + 1; $i <= 25; $i++)
-                                    <div class="col-md-12">
-                                        <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
-                                    </div>
-                                @endfor
-                            </div>
-
-                            {{-- Notes --}}
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>Notes
-                                        {{-- Show add if user has permission to edit maintenance --}}
-                                        {{--}}
-                                        @if (Auth::user()->allowed2('edit.site.qa', $qa))
-                                            <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
-                                        @endif --}}
-                                    </h3>
-                                    <table class="table table-striped table-bordered table-nohover order-column">
-                                        <thead>
-                                        <tr class="mytable-header">
-                                            <th width="10%">Date</th>
-                                            <th> Action</th>
-                                            <th width="20%"> Name</th>
-                                            <th width="5%"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($main->actions->sortByDesc('created_at') as $action)
-                                            <tr>
-                                                <td>{{  $action->created_at->format('d/m/Y') }}</td>
-                                                <td>{!! $action->action !!}</td>
-                                                <td>{{ $action->user->fullname }}</td>
-                                                <td></td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <hr>
-                            <div class="pull-right" style="min-height: 50px">
-                                <a href="/site/maintenance" class="btn default"> Back</a>
-                                @if ($main->nextClientVisit())
-                                    <button type="submit" name="save" class="btn blue"> Save</button>
-                                @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                    <button type="submit" name="save" class="btn blue"> Assign Request</button>
-                                @endif
-                            </div>
-                            <br><br>
-                            {!! Form::close() !!}
                         </div>
+
+
+                        {{-- Notes --}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Notes
+                                    {{-- Show add if user has permission to edit maintenance --}}
+                                    {{--}}
+                                    @if (Auth::user()->allowed2('edit.site.qa', $qa))
+                                        <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                                    @endif --}}
+                                </h3>
+                                <table class="table table-striped table-bordered table-nohover order-column">
+                                    <thead>
+                                    <tr class="mytable-header">
+                                        <th width="10%">Date</th>
+                                        <th> Action</th>
+                                        <th width="20%"> Name</th>
+                                        <th width="5%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($main->actions->sortByDesc('created_at') as $action)
+                                        <tr>
+                                            <td>{{  $action->created_at->format('d/m/Y') }}</td>
+                                            <td>{!! $action->action !!}</td>
+                                            <td>{{ $action->user->fullname }}</td>
+                                            <td></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="pull-right" style="min-height: 50px">
+                            <a href="/site/maintenance" class="btn default"> Back</a>
+                            @if ($main->step == 3)
+                                <button type="submit" name="save" class="btn blue"> Assign Request</button>
+                            @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                <button type="submit" name="save" class="btn blue"> Save</button>
+                            @endif
+                        </div>
+                        <br><br>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
-
         </div>
+
+    </div>
     </div>
     </div>
 @stop
@@ -263,12 +310,14 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">var html5lightbox_options = {watermark: "", watermarklink: ""};</script>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/js/libs/fileinput.min.js"></script>
     <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/js/moment.min.js" type="text/javascript"></script>
     <script src="/js/libs/html5lightbox/html5lightbox.js" type="text/javascript"></script>
@@ -276,29 +325,13 @@
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         /* Select2 */
         $("#company_id").select2({placeholder: "Select Company", width: '100%'});
-        $("#assign").select2({placeholder: "Select User", width: '100%'});
+        $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
         $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
-
-        $("#assign_to").change(function () {
-            $('#super-div').hide();
-            $('#company-div').hide();
-
-            if ($("#assign_to").val() == 'super') {
-                $('#super-div').show();
-            }
-
-            if ($("#assign_to").val() == 'company') {
-                $('#company-div').show();
-            }
-        });
-
-        $("#status").change(function () {
-            updateFields()
-        });
 
         $("#more").click(function (e) {
             e.preventDefault();
@@ -306,20 +339,41 @@
             $('#more_items').show();
         });
 
-        updateFields();
 
-        function updateInfo() {
-            $('#super-div').hide();
-            $('#company-div').hide();
+        /* Bootstrap Fileinput */
+        $("#multifile").fileinput({
+            uploadUrl: "/site/maintenance/upload/", // server upload action
+            uploadAsync: true,
+            //allowedFileExtensions: ["image"],
+            allowedFileTypes: ["image"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn red",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn dark",
+            uploadIcon: "<i class=\"fa fa-upload\"></i> ",
+            uploadExtraData: {
+                "site_id": site_id,
+            },
+            layoutTemplates: {
+                main1: '<div class="input-group {class}">\n' +
+                '   {caption}\n' +
+                '   <div class="input-group-btn">\n' +
+                '       {remove}\n' +
+                '       {upload}\n' +
+                '       {browse}\n' +
+                '   </div>\n' +
+                '</div>\n' +
+                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
+                '{preview}\n'
+            },
+        });
 
-            if ($("#assign_to").val() == 'super') {
-                $('#super-div').show();
-            }
-
-            if ($("#assign_to").val() == 'company') {
-                $('#company-div').show();
-            }
-        }
+        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+            data.form.append("site_id", $("#site_id").val());
+        });
     });
 </script>
 @stop

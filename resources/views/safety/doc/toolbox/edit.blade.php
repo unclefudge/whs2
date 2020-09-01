@@ -23,7 +23,7 @@
                     <div class="mt-step-title uppercase font-grey-cascade">Create</div>
                     <div class="mt-step-content font-grey-cascade">Create Talk</div>
                 </div>
-                <div class="col-md-3 mt-step-col active">
+                <div class="col-md-3 mt-step-col {{ ($main->step == 2) ? 'active' : '') }}active">
                     <div class="mt-step-number bg-white font-grey">2</div>
                     <div class="mt-step-title uppercase font-grey-cascade">Draft</div>
                     <div class="mt-step-content font-grey-cascade">Add content</div>

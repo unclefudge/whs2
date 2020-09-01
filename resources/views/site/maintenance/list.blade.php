@@ -45,7 +45,7 @@
                                         </td>
                                         <td> {{ $rec->sitecode }}</td>
                                         <td> {{ $rec->sitename }}</td>
-                                        <td> {{ $rec->super_name }}</td>
+                                        <td> {{ $rec->supervisor }}</td>
                                         <td> {{ $rec->completed_date }}</td>
                                         <td> {{ $rec->created_date }}</td>
                                         <td> {{ ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' }}</td>
@@ -141,7 +141,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
-            {data: 'super_name', name: 'super_name'},
+            {data: 'supervisor', name: 'supervisor'},
             {data: 'completed_date', name: 'm.completed', orderable: false, searchable: false},
             {data: 'created_date', name: 'm.created_at'},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},

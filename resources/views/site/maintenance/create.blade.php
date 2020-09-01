@@ -1,10 +1,7 @@
+@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
+@inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-file-text-o"></i> Quality Assurance Reports</h1>
-    </div>
-@stop
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -24,7 +21,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-pencil "></i>
-                            <span class="caption-subject font-green-haze bold uppercase">Create Maintenance Request</span>
+                            <span class="caption-subject font-green-haze bold uppercase">Maintenance Request</span>
                             <span class="caption-helper"></span>
                         </div>
                     </div>
@@ -33,7 +30,36 @@
                         {!! Form::model('SiteQa', ['action' => 'Site\SiteMaintenanceController@store', 'class' => 'horizontal-form', 'files' => true]) !!}
                         @include('form-error')
 
+                        {{-- Progress Steps --}}
+                        <div class="mt-element-step hidden-sm hidden-xs">
+                            <div class="row step-thin" id="steps">
+                                <div class="col-md-3 mt-step-col first active">
+                                    <div class="mt-step-number bg-white font-grey">1</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Create</div>
+                                    <div class="mt-step-content font-grey-cascade">Create Request</div>
+                                </div>
+                                <div class="col-md-3 mt-step-col">
+                                    <div class="mt-step-number bg-white font-grey">2</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
+                                    <div class="mt-step-content font-grey-cascade">Add photos</div>
+                                </div>
+                                <div class="col-md-3 mt-step-col">
+                                    <div class="mt-step-number bg-white font-grey">3</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Visit Client</div>
+                                    <div class="mt-step-content font-grey-cascade">Schedule visit</div>
+                                </div>
+                                <div class="col-md-3 mt-step-col last">
+                                    <div class="mt-step-number bg-white font-grey">4</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Review</div>
+                                    <div class="mt-step-content font-grey-cascade">Approve/Decline</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-body">
+
+                            <h4>Site Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
@@ -59,15 +85,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group {!! fieldHasError('super_id', $errors) !!}">
-                                        {!! Form::label('super_id', 'Supervisor', ['class' => 'control-label']) !!}
-                                        <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
-                                            <option value="">Select Supervisor</option>
-                                            @foreach (Auth::user()->company->reportsTo()->supervisors()->sortBy('name') as $super)
-                                                <option value="{{ $super->id }}">{{ $super->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        {!! fieldErrorMessage('super_id', $errors) !!}
+                                    <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
+                                        {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
+                                        {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('supervisor', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -77,15 +98,65 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            <h4>Client Contact Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {!! fieldHasError('contact_name', $errors) !!}">
+                                        {!! Form::label('contact_name', 'Name', ['class' => 'control-label']) !!}
+                                        {!! Form::text('contact_name', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('contact_name', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group {!! fieldHasError('contact_phone', $errors) !!}">
+                                        {!! Form::label('contact_phone', 'Phone', ['class' => 'control-label']) !!}
+                                        {!! Form::text('contact_phone', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('contact_phone', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group {!! fieldHasError('contact_email', $errors) !!}">
+                                        {!! Form::label('contact_email', 'Email', ['class' => 'control-label']) !!}
+                                        {!! Form::text('contact_email', null, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('contact_email', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <h4>Request Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                {{-- Category --}}
+                                <div class="col-md-3 ">
+                                    <div class="form-group">
+                                        {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
+                                        {!! Form::select('category_id', $maintenanceCategories::all(), null, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                    </div>
+                                </div>
+
+                                {{-- Warranty --}}
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
+                                        {!! Form::select('warranty', $maintenanceWarranty::all(), null, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Multi File upload -->
+                            {{--}}
                             <div id="multifile-div">
                                 <div class="note note-warning">
                                     Multiple photos/images can be uploaded with this maintenance request.
-                                    {{--}}<ul>
+                                    <ul>
                                         <li>Once you have selected your files upload them by clicking
                                             <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
                                         </li>
-                                    </ul>--}}
+                                    </ul>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -95,10 +166,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
 
 
-                            <!-- Items -->
+                                    <!-- Items -->
                             <div id="items-div">
                                 <br>
                                 <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
@@ -158,8 +229,8 @@
     $(document).ready(function () {
         /* Select2 */
         $("#site_id").select2({placeholder: "Select Site", width: "100%"});
-        $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
         $("#category_id").select2({placeholder: "Select category", width: "100%"});
+        //$("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
 
         updateFields();
 
@@ -175,6 +246,32 @@
         });
 
         /* Bootstrap Fileinput */
+        /*
+         $("#multifile").fileinput({
+         //uploadUrl: "/site/maintenance/upload/", // server upload action
+         uploadAsync: true,
+         //allowedFileExtensions: ["image"],
+         allowedFileTypes: ["image"],
+         browseClass: "btn blue",
+         browseLabel: "Browse",
+         browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+         //removeClass: "btn red",
+         removeLabel: "",
+         removeIcon: "<i class=\"fa fa-trash\"></i> ",
+         layoutTemplates: {
+         main1: '<div class="input-group {class}">\n' +
+         '   {caption}\n' +
+         '   <div class="input-group-btn">\n' +
+         '       {remove}\n' +
+         '       {browse}\n' +
+         '   </div>\n' +
+         '</div>\n' +
+         '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
+         '{preview}\n'
+         },
+         }); */
+
+        /* Bootstrap Fileinput */
         $("#multifile").fileinput({
             //uploadUrl: "/site/maintenance/upload/", // server upload action
             uploadAsync: true,
@@ -186,17 +283,27 @@
             //removeClass: "btn red",
             removeLabel: "",
             removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn dark",
+            uploadIcon: "<i class=\"fa fa-upload\"></i> ",
+            uploadExtraData: {
+                "site_id": site_id,
+            },
             layoutTemplates: {
                 main1: '<div class="input-group {class}">\n' +
                 '   {caption}\n' +
                 '   <div class="input-group-btn">\n' +
                 '       {remove}\n' +
+                '       {upload}\n' +
                 '       {browse}\n' +
                 '   </div>\n' +
                 '</div>\n' +
                 '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
                 '{preview}\n'
             },
+        });
+
+        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+            data.form.append("site_id", $("#site_id").val());
         });
 
         /*
@@ -220,6 +327,7 @@
                     success: function (data) {
                         $("#suburb").val(data.suburb);
                         $("#code").val(data.code);
+                        console.log(data.suburb);
                     },
                 })
 
@@ -241,10 +349,11 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        $("#super_id").val(data);
-                        $('#super_id').trigger('change.select2');
+                        $("#supervisor").val(data);
+                        //$('#supervisor').trigger('change.select2');
                     },
                 })
+                //alert('h');
             }
         }
     });

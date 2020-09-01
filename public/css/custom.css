@@ -46,6 +46,30 @@
     border-width: 0;
 }
 
+/* Metronic Thin Steps Done colour */
+.mt-element-step .step-thin .done .mt-step-number {
+    color: #ffffff; !important;
+    background-color: #333333 !important;
+    /*border-color: #555555 !important;
+    background-color: #555555 !important;*/
+}
+
+.mt-element-step .step-thin .done {
+    color: #ffffff; !important;
+    background-color: #333333 !important;
+    /*border-color: #555555 !important;
+    background-color: #555555 !important;*/
+}
+
+.mt-element-step .step-thin .done .mt-step-content, .mt-element-step .step-thin .done .mt-step-title {
+    color: #ffffff !important;
+    background-color: #333333 !important;
+}
+
+.mt-element-step .step-thin .done .mt-step-title::after, .mt-element-step .step-thin .done .mt-step-title::before {
+    background-color: #333333 !important;
+}
+
 /* Metronic Line Steps Done colour */
 .mt-element-step .step-line .done .mt-step-number {
     color: #FFFFFF !important;

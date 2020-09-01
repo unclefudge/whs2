@@ -210,7 +210,7 @@
                                                         <li><a href="/planner/transient" class="nav-link"> Labourer Planner </a></li>
                                                     @endif
                                                     @if (Auth::user()->hasAnyPermissionType('site.maintenance'))
-                                                        <li><a href="/site/maintenance" class="nav-link"> Maintenace Requests </a></li>
+                                                        <li><a href="/site/maintenance" class="nav-link"> Maintenance Requests </a></li>
                                                     @endif
                                                 </ul>
                                             </div>

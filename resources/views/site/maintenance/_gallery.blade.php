@@ -7,7 +7,7 @@
                 <img src="{{ $doc->AttachmentUrl }}" class="thumbnail img-responsive img-thumbnail"></a>
         </div>
         <?php $doc_count ++; ?>
-        @if ($doc_count == 5)
+        @if ($doc_count == 10)
             <br>
         @endif
     @endforeach

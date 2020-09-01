@@ -49,13 +49,11 @@ class SiteMaintenanceController extends Controller {
             return view('errors/404');
 
         $under_review = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.super_id', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
-                DB::raw('CONCAT(u.firstname, " ", u.lastname) AS super_name'),
+            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
-                's.code as sitecode', 's.name as sitename', 'u.firstname as firstname'])
+                's.code as sitecode', 's.name as sitename'])
             ->join('sites AS s', 'm.site_id', '=', 's.id')
-            ->join('users AS u', 'm.super_id', '=', 'u.id')
             ->where('m.status', 2)->get();
 
         return view('site/maintenance/list', compact('under_review'));
@@ -88,7 +86,9 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('view.site.maintenance', $main))
             return view('errors/404');
 
-        if ($main->status == 2)
+        if ($main->step == 2)
+            return view('site/maintenance/photos', compact('main'));
+        elseif ($main->step == 3 || $main->step == 4)
             return view('site/maintenance/review', compact('main'));
         else
             return view('site/maintenance/show', compact('main'));
@@ -107,7 +107,9 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('edit.site.maintenance', $main))
             return view('errors/404');
 
-        if ($main->status == 2)
+        if ($main->step == 2)
+            return view('site/maintenance/photos', compact('main'));
+        elseif ($main->step == 3 || $main->step == 4)
             return view('site/maintenance/review', compact('main'));
         else
             return view('site/maintenance/show', compact('main'));
@@ -124,41 +126,17 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('add.site.maintenance'))
             return view('errors/404');
 
-        request()->validate(['site_id' => 'required', 'super_id' => 'required'], ['site_id.required' => 'The site field is required.', 'super_id.required' => 'The supervisor field is required.']); // Validate
+        request()->validate(['site_id' => 'required', 'supervisor' => 'required'], ['site_id.required' => 'The site field is required.', 'supervisor.required' => 'The supervisor field is required.']); // Validate
 
         $site_id = request('site_id');
         $main_request = request()->except('multifile');
         $main_request['completed'] = (request('completed')) ? Carbon::createFromFormat('d/m/Y H:i', request('completed') . '00:00')->toDateTimeString() : null;
         $main_request['status'] = 2; // set new request to 'Under Review'
+        $main_request['step'] = 2; // set new request to step 2 'Add Photos'
 
         //dd($main_request);
         // Create Maintenance Request
         $newMain = SiteMaintenance::create($main_request);
-
-        // Handle file upload
-        if (request('multifile')) {
-            $files = request()->file('multifile');
-            foreach ($files as $file) {
-                $path = "filebank/site/$site_id/maintenance";
-                $name = $site_id . '-' . sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
-
-                // Ensure filename is unique by adding counter to similiar filenames
-                $count = 1;
-                while (file_exists(public_path("$path/$name")))
-                    $name = $site_id . '-' . sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
-                $file->move($path, $name);
-
-                $doc_request = request()->only('type', 'site_id');
-                $doc_request['name'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
-                // Create SitMaintenanceDoc
-                $doc = SiteMaintenanceDoc::create($doc_request);
-                $doc->main_id = $newMain->id;
-                $doc->type = 'photo';
-                $doc->attachment = $name;
-                $doc->save();
-            }
-        }
 
         $action = Action::create(['action' => "Maintenance Request created by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
 
@@ -178,25 +156,44 @@ class SiteMaintenanceController extends Controller {
         $site->status = 2;
         $site->save();
 
+        Toastr::success("Created Maintenance Request");
+
+        return redirect('/site/maintenance/' . $newMain->id . '/edit');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function photos($id)
+    {
+        $main = SiteMaintenance::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
+        //    return view('errors/404');
+
+        $main->step = 3;
+        $main->save();
+
         // Create ToDoo for assignment to Supervisor
         $todo_request = [
             'type'       => 'maintenance',
-            'type_id'    => $newMain->id,
-            'name'       => 'Site Maintenance Client Request - ' . $site->name,
+            'type_id'    => $main->id,
+            'name'       => 'Site Maintenance Client Request - ' . $main->site->name,
             'info'       => 'Please review request and assign to supervisor',
             'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
-            'company_id' => $site->owned_by->id,
+            'company_id' => $main->site->owned_by->id,
         ];
 
-        // Create ToDoo and assign to Site Supervisors
         $user_list = [3, 7]; // Fudge + Gary
         $todo = Todo::create($todo_request);
         $todo->assignUsers($user_list);
 
-        Toastr::success("Created Maintenance Request");
+        Toastr::success("Updated Request");
 
-        return redirect('/site/maintenance');
+        return redirect('site/maintenance/' . $main->id . '/edit');
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -212,13 +209,13 @@ class SiteMaintenanceController extends Controller {
         $rules = ['company_id' => 'required', 'visit_date' => 'required'];
         $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
         request()->validate($rules, $mesg); // Validate
-        //dd('here');
+        //dd(request()->all());
 
         $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
         $main_request = request()->all();
+        $main_request['step'] = 4;
 
         $company = Company::find(request('company_id'));
-
 
         if (!request('visited')) {
             // Add to Client Visit planner
@@ -260,9 +257,10 @@ class SiteMaintenanceController extends Controller {
             $action = Action::create(['action' => "Items updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
 
         // Status Updated
-        if (request('status') == 1)  // Maintenance Request Accepted
+        if (request('status') == 1) {  // Maintenance Request Accepted
+            $main_request['step'] = 5;
             $action = Action::create(['action' => "Maintenance Request approved by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
-        elseif (request('status') == - 1)  // Maintenance Request Declined
+        } elseif (request('status') == - 1)  // Maintenance Request Declined
             $action = Action::create(['action' => "Maintenance Request declined by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
 
         //dd($main_request);
@@ -431,8 +429,10 @@ class SiteMaintenanceController extends Controller {
     public function getSiteSupervisor()
     {
         $site = Site::find(request('site_id'));
+        $supers = [$site->supervisorsSBC()];
 
-        return ($site) ? $site->supervisors->first()->id : '';
+
+        return ($site) ? $supers : '';
     }
 
     /**
@@ -446,6 +446,8 @@ class SiteMaintenanceController extends Controller {
         //if (!(Auth::user()->allowed2('add.safety.doc') || Auth::user()->allowed2('add.site.doc')))
         //    return json_encode("failed");
 
+        //dd('here');
+        //dd(request()->all());
         // Handle file upload
         $files = $request->file('multifile');
         foreach ($files as $file) {
@@ -458,13 +460,13 @@ class SiteMaintenanceController extends Controller {
                 $name = $request->get('site_id') . '-' . sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
             $file->move($path, $name);
 
-            $doc_request = $request->only('type', 'site_id');
+            $doc_request = $request->only('site_id');
             $doc_request['name'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $doc_request['company_id'] = Auth::user()->company_id;
 
-            // Create SitMaintenanceDoc
+            // Create SiteMaintenanceDoc
             $doc = SiteMaintenanceDoc::create($doc_request);
-            $doc->main_id = $this->id;
+            $doc->main_id = $request->get('main_id');
             $doc->type = 'photo';
             $doc->attachment = $name;
             $doc->save();
@@ -481,13 +483,11 @@ class SiteMaintenanceController extends Controller {
     public function getMaintenance()
     {
         $records = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.super_id', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
-                DB::raw('CONCAT(u.firstname, " ", u.lastname) AS super_name'),
+            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
-                's.code as sitecode', 's.name as sitename', 'u.firstname as firstname'])
+                's.code as sitecode', 's.name as sitename'])
             ->join('sites AS s', 'm.site_id', '=', 's.id')
-            ->join('users AS u', 'm.super_id', '=', 'u.id')
             ->where('m.status', request('status'));
 
         //dd($records);
@@ -498,9 +498,6 @@ class SiteMaintenanceController extends Controller {
             })
             ->editColumn('sitename', function ($doc) {
                 return $doc->sitename;
-            })
-            ->editColumn('supervisor', function ($doc) {
-                return $doc->super_name;
             })
             ->addColumn('completed', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);

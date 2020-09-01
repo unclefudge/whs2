@@ -2,11 +2,6 @@
 @inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
-@section('pagetitle')
-    <div class="page-title">
-        <h1><i class="fa fa-file-text-o"></i> Site Maintenance Request</h1>
-    </div>
-@stop
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
@@ -34,7 +29,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request2</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
                             <span class="caption-helper">ID: {{ $main->id }}</span>
                         </div>
                     </div>
@@ -73,57 +68,73 @@
                             @endif
 
                             <div class="row">
-                                <div class="col-xs-4">
-                                    <p><h4>Job Details</h4>
+                                <div class="col-md-5">
+                                    <div class="row">
+                                        <div class="col-md-12"><h4>Job Details</h4></div>
+                                    </div>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
-                                    @if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif
-                                    </p>
+                                    <br>
+                                    @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
+                                    @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
                                 </div>
-                                <div class="col-xs-8"></div>
-                                <h2 style="margin: 0px; padding-right: 20px"><b>{{ $main->name }}</b>
-                                    @if($main->status == '-1')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">DECLINED</span>
-                                        <span class="text-center font-red visible-sm visible-xs">DECLINED</span>
-                                    @endif
-                                    @if($main->status == '0')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                        <span class="text-center font-red visible-sm visible-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
-                                    @endif
-                                    @if($main->status == '1')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
-                                        <span class="text-center font-red visible-sm visible-xs">ACTIVE</span>
-                                    @endif
-                                    @if($main->status == '2')
-                                        <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
-                                        <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
-                                    @endif
-                                </h2>
-                                <br><br><br>
-                                    <span style="padding-right:20px; float:right">
-                                        @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
-                                        @if ($main->super_id)<b>Supervisor:</b> {{ $main->supervisor->name }} @endif
-                                    </span>
-                            </div>
+                                <div class="col-md-1"></div>
 
-                            {{-- Under Review - asign to super --}}
-                            <hr>
-                            <h4>Maintenace Details</h4>
-                            <div class="row">
-                                {{-- Warranty --}}
-                                <div class="col-md-2 ">
-                                    <div class="form-group">
-                                        {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
-                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
-                                            {!! Form::select('warranty', $maintenanceWarranty::all(), $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
-                                        @else
-                                            {!! Form::text('warranty_text', $maintenanceWarranty::name($main->warranty), ['class' => 'form-control', 'readonly']) !!}
-                                        @endif
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6"><h4>Client Details</h4></div>
+                                        <div class="col-md-6">
+
+                                            <h2 style="margin: 0px; padding-right: 20px">
+                                                @if($main->status == '-1')
+                                                    <span class="pull-right font-red hidden-sm hidden-xs">DECLINED</span>
+                                                    <span class="text-center font-red visible-sm visible-xs">DECLINED</span>
+                                                @endif
+                                                @if($main->status == '0')
+                                                    <span class="pull-right font-red hidden-sm hidden-xs"><small class="font-red">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</small></span>
+                                                    <span class="text-center font-red visible-sm visible-xs">COMPLETED {{ $main->updated_at->format('d/m/Y') }}</span>
+                                                @endif
+                                                @if($main->status == '1')
+                                                    <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
+                                                    <span class="text-center font-red visible-sm visible-xs">ACTIVE</span>
+                                                @endif
+                                                @if($main->status == '2')
+                                                    <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
+                                                    <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
+                                                @endif
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
+                                    @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
+                                    @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
+                                    @if($main->nextClientVisit())
+                                        <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
+                                    @endif
+                                </div>
+                            </div>
+                            <br>
+
+                            {{-- Photos --}}
+                            @if ($main->docs->count())
+                                <br>
+                                <h4>Photos</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('site/maintenance/_gallery')
                                     </div>
                                 </div>
+                            @endif
 
+                            {{-- Under Review - asign to super --}}
+                            <h4>Maintenance Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
                                 {{-- Goodwill --}}
+                                {{--}}
                                 <div class="col-md-2 ">
                                     <div class="form-group">
                                         {!! Form::label('goodwill', 'Goodwill', ['class' => 'control-label']) !!}
@@ -133,7 +144,7 @@
                                             {!! Form::text('goodwill_text', ($main->goodwill) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
-                                </div>
+                                </div>--}}
 
                                 {{-- Category --}}
                                 <div class="col-md-3 ">
@@ -147,8 +158,20 @@
                                     </div>
                                 </div>
 
+                                {{-- Warranty --}}
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('warranty', $maintenanceWarranty::all(), $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
+                                        @else
+                                            {!! Form::text('warranty_text', $maintenanceWarranty::name($main->warranty), ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                    </div>
+                                </div>
+
                                 {{-- Assigned To --}}
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
                                         {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
                                         @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
@@ -532,17 +555,17 @@
                 this.updateItemDB(record);
             },
             /*
-            itemCompany: function (record) {
-                this.xx.sel_company = [];
-                // Get Company list
-                $.getJSON('/site/qa/company/' + record.task_id, function (companies) {
-                    this.xx.sel_company = companies;
-                    this.xx.done_by = record.done_by;
-                    this.xx.showSignOff = true;
-                    this.xx.record = record;
+             itemCompany: function (record) {
+             this.xx.sel_company = [];
+             // Get Company list
+             $.getJSON('/site/qa/company/' + record.task_id, function (companies) {
+             this.xx.sel_company = companies;
+             this.xx.done_by = record.done_by;
+             this.xx.showSignOff = true;
+             this.xx.record = record;
 
-                }.bind(this));
-            },*/
+             }.bind(this));
+             },*/
             updateItemCompany: function (record, response) {
                 if (response) {
                     record.done_by = this.xx.done_by;
