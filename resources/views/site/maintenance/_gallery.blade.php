@@ -12,4 +12,6 @@
         @endif
     @endforeach
 </div>
+    @else
+    <div>No photos found<br><br></div>
 @endif

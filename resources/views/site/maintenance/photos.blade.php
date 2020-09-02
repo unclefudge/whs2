@@ -66,7 +66,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <p><h4>Job Details</h4>
+                                    <p><h4>Site Details</h4>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
@@ -93,31 +93,36 @@
                             <div id="multifile-div">
                                 <h4>Photos</h4>
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                <div class="note note-warning">
-                                    Multiple photos/images can be uploaded with this maintenance request.
-                                    <ul>
-                                        <li>Once you have selected your files upload them by clicking
-                                            <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label class="control-label">Select Files</label>
-                                            <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
+                                @if(Auth::user()->allowed2('add.site.maintenance'))
+                                    <div class="note note-warning">
+                                        Multiple photos/images can be uploaded with this maintenance request.
+                                        <ul>
+                                            <li>Once you have selected your files upload them by clicking
+                                                <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Select Files</label>
+                                                <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="row">
+                                        <div class="col-md-12">You don't have permission to upload photos
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
 
                             <hr>
                             <div class="pull-right" style="min-height: 50px">
                                 <a href="/site/maintenance" class="btn default"> Back</a>
-                                @if ($main->step == 2)
-                                    <button type="submit" name="save" class="btn blue"> Save</button>
-                                @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                    <button type="submit" name="save" class="btn blue"> Assign Request</button>
+                                @if(Auth::user()->allowed2('add.site.maintenance'))
+                                    <button type="submit" name="save" class="btn blue"> Next Step</button>
                                 @endif
                             </div>
                             <br><br>

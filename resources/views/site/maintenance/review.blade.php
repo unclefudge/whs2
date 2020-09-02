@@ -37,13 +37,14 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request R</span>
+                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
                             <span class="caption-helper">ID: {{ $main->id }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="page-content-inner">
                             {!! Form::model($main, ['action' => ['Site\SiteMaintenanceController@review', $main->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                            <input type="hidden" name="main_id" id="main_id" value="{{ $main->id }}">
                             <input type="hidden" name="site_id" id="site_id" value="{{ $main->site_id }}">
                             @include('form-error')
 
@@ -75,40 +76,113 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <p><h4>Job Details</h4>
+                                    <h4>Site Details
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>
+                                        @endif
+                                    </h4>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
                                     {{--@if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif --}}
                                     <br>
                                     @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
-                                    @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
-                                    </p>
+                                    <div id="site-show">
+                                        @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
+                                    </div>
+                                    <div id="site-edit">
+                                        <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
+                                            {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
+                                            {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('supervisor', $errors) !!}
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="col-md-1"></div>
 
+                                {{-- Client Contact --}}
                                 <div class="col-md-6">
-                                    <p><h4>Client Details</h4>  </p>
+                                    <h4>Client Details
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-client">Edit</button>
+                                        @endif
+                                    </h4>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                    @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
-                                    @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
-                                    @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
-                                    @if($main->nextClientVisit())
-                                        <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
-                                    @endif
+                                    <div id="client-show">
+                                        @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
+                                        @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
+                                        @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
+                                        @if($main->nextClientVisit())
+                                            <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
+                                        @endif
+                                    </div>
+                                    <div id="client-edit">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group {!! fieldHasError('contact_name', $errors) !!}">
+                                                    {!! Form::label('contact_name', 'Name', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_name', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_name', $errors) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group {!! fieldHasError('contact_phone', $errors) !!}">
+                                                    {!! Form::label('contact_phone', 'Phone', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_phone', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_phone', $errors) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group {!! fieldHasError('contact_email', $errors) !!}">
+                                                    {!! Form::label('contact_email', 'Email', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_email', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_email', $errors) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             {{-- Gallery --}}
-                            <h4>Photos</h4>
+                            <br>
+                            <h4>Photos
+                                @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                @endif
+                            </h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @include('site/maintenance/_gallery')
+                            <div id="photos-show">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('site/maintenance/_gallery')
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="photos-edit">
+                                <div class="note note-warning">
+                                    Multiple photos/images can be uploaded with this maintenance request.
+                                    <ul>
+                                        <li>Once you have selected your files upload them by clicking
+                                            <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Files</label>
+                                            <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {{-- Maintenance deyails --}}
+                            {{-- Maintenance details --}}
                             <h4>Maintenance Details</h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
@@ -236,31 +310,42 @@
                             ?>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                        <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    @elseif ($item_name)
+                                        <div>&nbsp; {{ $i }}. &nbsp; {{ $item_name }}</div>
+                                    @endif
                                 </div>
                             </div>
                         @endfor
 
                         {{-- Extra Fields --}}
-                        <button class="btn blue" id="more">More Items</button>
-                        <div class="row" id="more_items" style="display: none">
-                            @for ($i = $first_count + 1; $i <= 25; $i++)
-                                <div class="col-md-12">
-                                    <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
-                                </div>
-                            @endfor
-                        </div>
+                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                            <button class="btn blue" id="more">More Items</button>
+                            <div class="row" id="more_items" style="display: none">
+                                @for ($i = $first_count + 1; $i <= 25; $i++)
+                                    <div class="col-md-12">
+                                        <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    </div>
+                                @endfor
+                            </div>
+                        @endif
 
 
                         {{-- Notes --}}
+                        {{-- Actions --}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <app-actions :table_id="{{ $main->id }}"></app-actions>
+                            </div>
+                        </div>
+                        {{--}}
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>Notes
-                                    {{-- Show add if user has permission to edit maintenance --}}
-                                    {{--}}
-                                    @if (Auth::user()->allowed2('edit.site.qa', $qa))
+                                    @if (Auth::user()->allowed2('edit.site.maintenance', $main))
                                         <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
-                                    @endif --}}
+                                    @endif
                                 </h3>
                                 <table class="table table-striped table-bordered table-nohover order-column">
                                     <thead>
@@ -283,15 +368,17 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>--}}
 
                         <hr>
                         <div class="pull-right" style="min-height: 50px">
                             <a href="/site/maintenance" class="btn default"> Back</a>
-                            @if ($main->step == 3)
-                                <button type="submit" name="save" class="btn blue"> Assign Request</button>
-                            @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                <button type="submit" name="save" class="btn blue"> Save</button>
+                            @if(Auth::user()->allowed2('edit.site.maintenance', $main))
+                                @if ($main->step == 3)
+                                    <button type="submit" name="save" class="btn blue"> Assign Request</button>
+                                @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                    <button type="submit" name="save" class="btn blue"> Save</button>
+                                @endif
                             @endif
                         </div>
                         <br><br>
@@ -304,6 +391,61 @@
     </div>
     </div>
     </div>
+
+    <template id="actions-template">
+        <action-modal></action-modal>
+        <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
+        <input v-model="xx.created_by" type="hidden" id="created_by" value="{{ Auth::user()->id }}">
+        <input v-model="xx.created_by_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
+
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Notes
+                        {{-- Show add if user has permission to edit maintenance --}}
+                        @if (Auth::user()->allowed2('edit.site.maintenance', $main))
+                            <button v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                        @endif
+                    </h3>
+                    <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">
+                        <thead>
+                        <tr class="mytable-header">
+                            <th width="10%">Date</th>
+                            <th> Action</th>
+                            <th width="20%"> Name</th>
+                            <th width="5%"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template v-for="action in actionList">
+                            <tr>
+                                <td>@{{ action.niceDate }}</td>
+                                <td>@{{ action.action }}</td>
+                                <td>@{{ action.fullname }}</td>
+                                <td>
+                                    <!--<button v-show="xx.record_status != 0" class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                                        <i class="fa fa-plus"></i> <span class="hidden-xs hidden-sm>"> Assign Task</span>
+                                    </button>-->
+                                    <!--
+                                    <button v-show="action.created_by == xx.created_by" v-on:click="$root.$broadcast('edit-action-modal', action)"
+                                            class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">
+                                        <i class="fa fa-pencil"></i> <span class="hidden-xs hidden-sm>">Edit</span>
+                                    </button>
+                                    -->
+                                </td>
+                            </tr>
+                        </template>
+                        </tbody>
+                    </table>
+
+                    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre> -->
+
+                </div>
+            </div>
+        </div>
+    </template>
+
+    @include('misc/actions-modal')
 @stop
 
 
@@ -326,7 +468,16 @@
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+<script src="/js/libs/vue.1.0.24.js " type="text/javascript"></script>
+<script src="/js/libs/vue-strap.min.js"></script>
+<script src="/js/libs/vue-resource.0.7.0.js " type="text/javascript"></script>
+<script src="/js/vue-modal-component.js"></script>
+<script src="/js/vue-app-basic-functions.js"></script>
 <script>
+    $.ajaxSetup({
+        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
+    });
+
     $(document).ready(function () {
         /* Select2 */
         $("#company_id").select2({placeholder: "Select Company", width: '100%'});
@@ -337,6 +488,39 @@
             e.preventDefault();
             $('#more').hide();
             $('#more_items').show();
+        });
+
+        $('#site-edit').hide();
+        $('#client-edit').hide();
+        $('#photos-edit').hide();
+        $('#view-photos').hide();
+
+        $("#edit-site").click(function (e) {
+            e.preventDefault();
+            $('#edit-site').hide();
+            $('#site-show').hide();
+            $('#site-edit').show();
+        });
+
+        $("#edit-client").click(function (e) {
+            e.preventDefault();
+            $('#edit-client').hide();
+            $('#client-show').hide();
+            $('#client-edit').show();
+        });
+        $("#edit-photos").click(function (e) {
+            e.preventDefault();
+            $('#edit-photos').hide();
+            $('#view-photos').show();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#view-photos").click(function (e) {
+            e.preventDefault();
+            $('#edit-photos').show();
+            $('#view-photos').hide();
+            $('#photos-show').show();
+            $('#photos-edit').hide();
         });
 
 
@@ -356,6 +540,7 @@
             uploadIcon: "<i class=\"fa fa-upload\"></i> ",
             uploadExtraData: {
                 "site_id": site_id,
+                "main_id": main_id,
             },
             layoutTemplates: {
                 main1: '<div class="input-group {class}">\n' +
@@ -373,7 +558,115 @@
 
         $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
             data.form.append("site_id", $("#site_id").val());
+            data.form.append("main_id", $("#main_id").val());
         });
+    });
+</script>
+<script>
+    var host = window.location.hostname;
+    var dev = true;
+    if (host == 'safeworksite.com.au')
+        dev = false;
+
+    var xx = {
+        dev: dev,
+        action: '', loaded: false,
+        table_name: 'site_maintenance', table_id: '', record_status: '', record_resdate: '',
+        created_by: '', created_by_fullname: '',
+    };
+
+    Vue.component('app-actions', {
+        template: '#actions-template',
+        props: ['table', 'table_id', 'status'],
+
+        created: function () {
+            this.getActions();
+        },
+        data: function () {
+            return {xx: xx, actionList: []};
+        },
+        events: {
+            'addActionEvent': function (action) {
+                //this.actionList.push(action);
+                this.actionList.unshift(action);
+            },
+        },
+        methods: {
+            getActions: function () {
+                $.getJSON('/action/' + this.xx.table_name + '/' + this.table_id, function (actions) {
+                    this.actionList = actions;
+                }.bind(this));
+            },
+        },
+    });
+
+    Vue.component('ActionModal', {
+        template: '#actionModal-template',
+        props: ['show'],
+        data: function () {
+            var action = {};
+            return {xx: xx, action: action, oAction: ''};
+        },
+        events: {
+            'add-action-modal': function () {
+                var newaction = {};
+                this.oAction = '';
+                this.action = newaction;
+                this.xx.action = 'add';
+                this.show = true;
+            },
+            'edit-action-modal': function (action) {
+                this.oAction = action.action;
+                this.action = action;
+                this.xx.action = 'edit';
+                this.show = true;
+            }
+        },
+        methods: {
+            close: function () {
+                this.show = false;
+                this.action.action = this.oAction;
+            },
+            addAction: function (action) {
+                var actiondata = {
+                    action: action.action,
+                    table: this.xx.table_name,
+                    table_id: this.xx.table_id,
+                    niceDate: moment().format('DD/MM/YY'),
+                    created_by: this.xx.created_by,
+                    fullname: this.xx.created_by_fullname,
+                };
+
+                console.log(actiondata);
+                this.$http.post('/action', actiondata)
+                        .then(function (response) {
+                            toastr.success('Created new action ');
+                            actiondata.id = response.data.id;
+                            this.$dispatch('addActionEvent', actiondata);
+                        }.bind(this))
+                        .catch(function (response) {
+                            alert('failed adding new action');
+                        });
+
+                this.close();
+            },
+            updateAction: function (action) {
+                this.$http.patch('/action/' + action.id, action)
+                        .then(function (response) {
+                            toastr.success('Saved Action');
+                        }.bind(this))
+                        .catch(function (response) {
+                            alert('failed to save action [' + action.id + ']');
+                        });
+                this.show = false;
+            },
+        }
+    });
+
+
+    var myApp = new Vue({
+        el: 'body',
+        data: {xx: xx},
     });
 </script>
 @stop

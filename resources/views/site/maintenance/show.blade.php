@@ -36,14 +36,16 @@
                     <div class="portlet-body">
                         <div class="page-content-inner">
                             {!! Form::model($main, ['method' => 'PATCH', 'action' => ['Site\SiteMaintenanceController@update', $main->id], 'class' => 'horizontal-form']) !!}
+                            <input type="hidden" id="site_id" value="{{ $main->site_id }}">
 
                             @include('form-error')
 
                             <input v-model="xx.main.id" type="hidden" id="main_id" value="{{ $main->id }}">
                             <input v-model="xx.main.name" type="hidden" id="main_name" value="{{ $main->name }}">
                             <input v-model="xx.main.site_id" type="hidden" id="main_site_id" value="{{ $main->site_id }}">
+
                             <input v-model="xx.main.status" type="hidden" id="main_status" value="{{ $main->status }}">
-                            <input v-model="xx.main.warranty" type="hidden" id="main_status" value="{{ $main->warranty }}">
+                            <input v-model="xx.main.warranty" type="hidden" id="main_warranty" value="{{ $main->warranty }}">
                             <input v-model="xx.main.signed" type="hidden" id="main_signed" value="{{ $main->isSigned() }}">
                             <input v-model="xx.table_id" type="hidden" id="table_id" value="{{ $main->id }}">
                             <input v-model="xx.record_status" type="hidden" id="record_status" value="{{ $main->status }}">
@@ -70,22 +72,38 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="row">
-                                        <div class="col-md-12"><h4>Job Details</h4></div>
+                                        <div class="col-md-12">
+                                            <h4>Site Details
+                                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>
+                                            </h4>
+                                        </div>
                                     </div>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                     @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
                                     <br>
                                     @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
-                                    @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
+                                    <div id="site-show">
+                                        @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
+                                    </div>
+                                    <div id="site-edit">
+                                        <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
+                                            {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
+                                            {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('supervisor', $errors) !!}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-1"></div>
 
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <div class="col-md-6"><h4>Client Details</h4></div>
                                         <div class="col-md-6">
-
+                                            <h4>Client Details
+                                                <button class="btn dark btn-outline btn-sm" style="margin: -10px 0px 0px 100px; border: 0px" id="edit-client">Edit</button>
+                                            </h4>
+                                        </div>
+                                        <div class="col-md-6">
                                             <h2 style="margin: 0px; padding-right: 20px">
                                                 @if($main->status == '-1')
                                                     <span class="pull-right font-red hidden-sm hidden-xs">DECLINED</span>
@@ -107,27 +125,78 @@
                                         </div>
                                     </div>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                    @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
-                                    @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
-                                    @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
-                                    @if($main->nextClientVisit())
-                                        <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
-                                    @endif
+                                    <div id="client-show">
+                                        @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
+                                        @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
+                                        @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
+                                        @if($main->nextClientVisit())
+                                            <br><b>Scheduled Visit:</b> {{ $main->nextClientVisit()->company->name }} &nbsp; ({{ $main->nextClientVisit()->from->format('d/m/Y') }})<br>
+                                        @endif
+                                    </div>
+                                    <div id="client-edit">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group {!! fieldHasError('contact_name', $errors) !!}">
+                                                    {!! Form::label('contact_name', 'Name', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_name', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_name', $errors) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group {!! fieldHasError('contact_phone', $errors) !!}">
+                                                    {!! Form::label('contact_phone', 'Phone', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_phone', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_phone', $errors) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group {!! fieldHasError('contact_email', $errors) !!}">
+                                                    {!! Form::label('contact_email', 'Email', ['class' => 'control-label']) !!}
+                                                    {!! Form::text('contact_email', null, ['class' => 'form-control']) !!}
+                                                    {!! fieldErrorMessage('contact_email', $errors) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <br>
 
-                            {{-- Photos --}}
-                            @if ($main->docs->count())
-                                <br>
-                                <h4>Photos</h4>
-                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+
+                            {{-- Gallery --}}
+                            <br>
+                            <h4>Photos
+                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                            </h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div id="photos-show">
                                 <div class="row">
                                     <div class="col-md-12">
                                         @include('site/maintenance/_gallery')
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+                            <div id="photos-edit">
+                                <div class="note note-warning">
+                                    Multiple photos/images can be uploaded with this maintenance request.
+                                    <ul>
+                                        <li>Once you have selected your files upload them by clicking
+                                            <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Files</label>
+                                            <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             {{-- Under Review - asign to super --}}
                             <h4>Maintenance Details</h4>
@@ -197,21 +266,21 @@
                             {!! Form::close() !!}
                         </div>
 
-                        <!-- List Items -->
+                        {{-- List Items --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <app-main></app-main>
                             </div>
                         </div>
 
-                        <!-- Actions -->
+                        {{-- Actions --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <app-actions :table_id="{{ $main->id }}"></app-actions>
                             </div>
                         </div>
 
-                        <!-- Sign Off -->
+                        {{-- Sign Off --}}
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
@@ -424,11 +493,13 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/js/libs/fileinput.min.js"></script>
     <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/js/moment.min.js" type="text/javascript"></script>
 @stop
@@ -442,6 +513,10 @@
 <script src="/js/vue-app-basic-functions.js"></script>
 
 <script>
+    $.ajaxSetup({
+        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
+    });
+
     $(document).ready(function () {
         /* Select2 */
         $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
@@ -453,6 +528,76 @@
             if ($("warranty").val() == 'other') {
                 $('#goodwill-div').show();
             }
+        });
+
+        $('#site-edit').hide();
+        $('#client-edit').hide();
+        $('#photos-edit').hide();
+        $('#view-photos').hide();
+
+        $("#edit-site").click(function (e) {
+            e.preventDefault();
+            $('#edit-site').hide();
+            $('#site-show').hide();
+            $('#site-edit').show();
+        });
+
+        $("#edit-client").click(function (e) {
+            e.preventDefault();
+            $('#edit-client').hide();
+            $('#client-show').hide();
+            $('#client-edit').show();
+        });
+        $("#edit-photos").click(function (e) {
+            e.preventDefault();
+            $('#edit-photos').hide();
+            $('#view-photos').show();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#view-photos").click(function (e) {
+            e.preventDefault();
+            $('#edit-photos').show();
+            $('#view-photos').hide();
+            $('#photos-show').show();
+            $('#photos-edit').hide();
+        });
+
+        /* Bootstrap Fileinput */
+        $("#multifile").fileinput({
+            uploadUrl: "/site/maintenance/upload/", // server upload action
+            uploadAsync: true,
+            //allowedFileExtensions: ["image"],
+            allowedFileTypes: ["image"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn red",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn dark",
+            uploadIcon: "<i class=\"fa fa-upload\"></i> ",
+            uploadExtraData: {
+                "site_id": site_id,
+                "main_id": main_id,
+            },
+            layoutTemplates: {
+                main1: '<div class="input-group {class}">\n' +
+                '   {caption}\n' +
+                '   <div class="input-group-btn">\n' +
+                '       {remove}\n' +
+                '       {upload}\n' +
+                '       {browse}\n' +
+                '   </div>\n' +
+                '</div>\n' +
+                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
+                '{preview}\n'
+            },
+        });
+
+        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+            data.form.append("site_id", $("#site_id").val());
+            data.form.append("main_id", $("#main_id").val());
         });
     });
 </script>
@@ -638,7 +783,8 @@
         },
         events: {
             'addActionEvent': function (action) {
-                this.actionList.push(action);
+                //this.actionList.push(action);
+                this.actionList.unshift(action);
             },
         },
         methods: {

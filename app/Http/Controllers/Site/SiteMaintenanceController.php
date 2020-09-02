@@ -137,7 +137,6 @@ class SiteMaintenanceController extends Controller {
         //dd($main_request);
         // Create Maintenance Request
         $newMain = SiteMaintenance::create($main_request);
-
         $action = Action::create(['action' => "Maintenance Request created by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
 
 
@@ -169,8 +168,8 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
-        //    return view('errors/404');
+        if (!Auth::user()->allowed2('add.site.maintenance'))
+            return view('errors/404');
 
         $main->step = 3;
         $main->save();
@@ -203,8 +202,8 @@ class SiteMaintenanceController extends Controller {
         $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        //if (!Auth::user()->allowed2('edit.site.maintenance', $main))
-        //    return view('errors/404');
+        if (!(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main)))
+            return view('errors/404');
 
         $rules = ['company_id' => 'required', 'visit_date' => 'required'];
         $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
@@ -282,14 +281,13 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('edit.site.maintenance', $main))
             return view('errors/404');
 
-        $rules = ['warranty' => 'required', 'category_id' => 'required'];
-        $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
+        //$rules = ['warranty' => 'required', 'category_id' => 'required'];
+        //$mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
         //request()->validate($rules, $mesg); // Validate
 
         $main_request = request()->all();
         //dd($main_request);
         $main->update($main_request);
-
 
         Toastr::success("Updated Request");
 
@@ -331,18 +329,6 @@ class SiteMaintenanceController extends Controller {
                 // Close any outstanding ToDos for Area Super / Con Mgr
                 $main->closeToDo(Auth::user());
             }
-
-            // If report was placed On Hold then auto add an Action + close ToDoo
-            //if ($request->get('status') == 2 && $main->status != 2)
-            //    $main->moveToHold(Auth::user());
-
-            // If report was reactived then auto add an Action + create ToDoo
-            //if ($request->get('status') == 1 && $main->status != 1)
-            //    $main->moveToActive(Auth::user());
-
-            // If report was marked Not Required then close ToDoo
-            //if ($request->get('status') == - 1)
-            //    $main->closeToDo(Auth::user());
 
             $main->update($main_request);
 
@@ -416,7 +402,6 @@ class SiteMaintenanceController extends Controller {
     {
         $completed = SitePlanner::where('site_id', request('site_id'))->where('task_id', 265)->get()->last();
         if ($completed) {
-            //return ($completed->to->format('d/m/Y'));
             return $completed->to;
         }
 
@@ -431,7 +416,6 @@ class SiteMaintenanceController extends Controller {
         $site = Site::find(request('site_id'));
         $supers = [$site->supervisorsSBC()];
 
-
         return ($site) ? $supers : '';
     }
 
@@ -443,7 +427,7 @@ class SiteMaintenanceController extends Controller {
     public function uploadAttachment(Request $request)
     {
         // Check authorisation and throw 404 if not
-        //if (!(Auth::user()->allowed2('add.safety.doc') || Auth::user()->allowed2('add.site.doc')))
+        //if (!(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main)))
         //    return json_encode("failed");
 
         //dd('here');
@@ -501,6 +485,7 @@ class SiteMaintenanceController extends Controller {
             })
             ->editColumn('assigned_to', function ($doc) {
                 $d = SiteMaintenance::find($doc->id);
+
                 return ($d->assignedTo) ? $d->assignedTo->name : '-';
             })
             ->addColumn('completed', function ($doc) {
@@ -544,114 +529,6 @@ class SiteMaintenanceController extends Controller {
     public function exportQA()
     {
         return view('site/export/qa');
-    }
-
-    public function qaPDF(Request $request)
-    {
-        $site = Site::find(request('site_id'));
-        if ($site) {
-            $completed = 1;
-            $data = [];
-            $users = [];
-            $companies = [];
-            $site_qa = SiteQa::where('site_id', $site->id)->where('status', '<>', '-1')->where('company_id', '3')->get();
-            foreach ($site_qa as $qa) {
-                $obj_qa = (object) [];
-                $obj_qa->id = $qa->id;
-                $obj_qa->name = $qa->name;
-                $obj_qa->status = $qa->status;
-                // Signed By Super
-                $obj_qa->super_sign_by = '';
-                if ($qa->supervisor_sign_by) {
-                    if (!isset($users[$qa->supervisor_sign_by]))
-                        $users[$qa->supervisor_sign_by] = User::find($qa->supervisor_sign_by);
-                    $obj_qa->super_sign_by = $users[$qa->supervisor_sign_by]->fullname;
-                } else
-                    $completed = 0;
-                $obj_qa->super_sign_at = ($qa->supervisor_sign_by) ? $qa->supervisor_sign_at->format('d/m/Y') : '';
-                // Signed By Manager
-                $obj_qa->manager_sign_by = '';
-                if ($qa->manager_sign_by) {
-                    if (!isset($users[$qa->manager_sign_by]))
-                        $users[$qa->manager_sign_by] = User::find($qa->manager_sign_by);
-                    $obj_qa->manager_sign_by = $users[$qa->manager_sign_by]->fullname;
-                } else
-                    $completed = 0;
-                $obj_qa->manager_sign_at = ($qa->manager_sign_by) ? $qa->manager_sign_at->format('d/m/Y') : '';
-                $obj_qa->items = [];
-                $obj_qa->actions = [];
-
-                // Items
-                foreach ($qa->items as $item) {
-                    $obj_qa->items[$item->order]['id'] = $item->id;
-                    $obj_qa->items[$item->order]['name'] = $item->name;
-                    $obj_qa->items[$item->order]['status'] = $item->status;
-                    $obj_qa->items[$item->order]['done_by'] = '';
-                    $obj_qa->items[$item->order]['sign_by'] = '';
-                    $obj_qa->items[$item->order]['sign_at'] = '';
-
-                    // Item Completed + Signed Off
-                    if ($item->status == '1') {
-                        // Get User Signed
-                        if (!isset($users[$item->sign_by]))
-                            $users[$item->sign_by] = User::find($item->sign_by);
-                        $user_signed = $users[$item->sign_by];
-                        // Get Company
-                        $company = $user_signed->company;
-                        if ($item->done_by) {
-                            if (!isset($companies[$item->done_by]))
-                                $companies[$item->done_by] = Company::find($item->done_by);
-                            $company = $companies[$item->done_by];
-                        }
-                        $obj_qa->items[$item->order]['done_by'] = $company->name_alias . " (lic. $company->licence_no)";
-                        $obj_qa->items[$item->order]['sign_by'] = $user_signed->fullname;
-                        $obj_qa->items[$item->order]['sign_at'] = $item->sign_at->format('d/m/Y');
-                    }
-                }
-
-                // Action
-                foreach ($qa->actions as $action) {
-                    if (!preg_match('/^Moved report to/', $action->action)) {
-                        $obj_qa->actions[$action->id]['action'] = $action->action;
-                        if (!isset($users[$action->created_by]))
-                            $users[$action->created_by] = User::find($action->created_by);
-                        $obj_qa->actions[$action->id]['created_by'] = $users[$action->created_by]->fullname;
-                        $obj_qa->actions[$action->id]['created_at'] = $action->created_at->format('d/m/Y');
-                    }
-                }
-                $data[] = $obj_qa;
-            }
-
-            //dd($data);
-            $dir = '/filebank/tmp/report/' . Auth::user()->company_id;
-            // Create directory if required
-            if (!is_dir(public_path($dir)))
-                mkdir(public_path($dir), 0777, true);
-            $output_file = public_path($dir . '/QA ' . sanitizeFilename($site->name) . ' (' . $site->id . ') ' . Carbon::now()->format('YmdHis') . '.pdf');
-            touch($output_file);
-
-            //return view('pdf/site-qa', compact('site', 'data'));
-            //return PDF::loadView('pdf/site-qa', compact('site', 'data'))->setPaper('a4')->stream();
-            // Queue the job to generate PDF
-            SiteQaPdf::dispatch(request('site_id'), $data, $output_file);
-        }
-
-        return redirect('/manage/report/recent');
-
-        if ($request->has('email_pdf')) {
-            /*$file = public_path('filebank/tmp/jobstart-' . Auth::user()->id  . '.pdf');
-            if (file_exists($file))
-                unlink($file);
-            $pdf->save($file);*/
-
-            if ($request->get('email_list')) {
-                $email_list = explode(';', $request->get('email_list'));
-                $email_list = array_map('trim', $email_list); // trim white spaces
-
-
-                return view('planner/export/qa');
-            }
-        }
     }
 
 
@@ -740,26 +617,4 @@ class SiteMaintenanceController extends Controller {
         return $json;
         //}
     }
-
-    /**
-     * Get Companies with that can do Specific Task
-     */
-    public function getCompaniesForTask(Request $request, $task_id)
-    {
-        $trade_id = Task::find($task_id)->trade_id;
-        $company_list = Auth::user()->company->companies('1')->pluck('id')->toArray();
-        $companies = Company::select(['companys.id', 'companys.name', 'companys.licence_no'])->join('company_trade', 'companys.id', '=', 'company_trade.company_id')
-            ->where('companys.status', '1')->where('company_trade.trade_id', $trade_id)
-            ->whereIn('companys.id', $company_list)->orderBy('name')->get();
-
-        $array = [];
-        $array[] = ['value' => '', 'text' => 'Select company'];
-        // Create array in specific Vuejs 'select' format.
-        foreach ($companies as $company) {
-            $array[] = ['value' => $company->id, 'text' => $company->name_alias, 'licence' => $company->licence_no];
-        }
-
-        return $array;
-    }
-
 }
