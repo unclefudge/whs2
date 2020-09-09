@@ -2,7 +2,7 @@
 
 namespace App\Http\Utilities;
 
-class Ozstates {
+class OzStates {
 
     protected static $ozstates = [
         'ACT' => 'ACT',

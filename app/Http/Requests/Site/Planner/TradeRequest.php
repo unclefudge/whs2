@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Site\Planner;
 
 use App\Http\Requests\Request;
 

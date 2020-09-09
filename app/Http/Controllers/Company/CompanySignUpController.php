@@ -26,7 +26,7 @@ use nilsenj\Toastr\Facades\Toastr;
  * Class CompanySignupController
  * @package App\Http\Controllers
  */
-class CompanySignupController extends Controller {
+class CompanySignUpController extends Controller {
 
     /**
      * Display a listing of the resource.
