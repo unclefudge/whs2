@@ -1,4 +1,4 @@
-@inject('ozstates', 'App\Http\Utilities\Ozstates')
+@inject('ozstates', 'App\Http\Utilities\OzStates')
 @inject('licenceTypes', 'App\Http\Utilities\LicenceTypes')
 @inject('payrollTaxTypes', 'App\Http\Utilities\PayrollTaxTypes')
 @inject('companyTypes', 'App\Http\Utilities\CompanyTypes')

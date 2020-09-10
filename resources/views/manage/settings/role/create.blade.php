@@ -1,4 +1,4 @@
-@inject('ozstates', 'App\Http\Utilities\Ozstates')
+@inject('ozstates', 'App\Http\Utilities\OzStates')
 
 @extends('layout')
 

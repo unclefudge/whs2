@@ -1,4 +1,4 @@
-@inject('ozstates', 'App\Http\Utilities\Ozstates')
+@inject('ozstates', 'App\Http\Utilities\OzStates')
 @inject('companyEntity', 'App\Http\Utilities\CompanyEntityTypes')
 @inject('companyDocTypes', 'App\Http\Utilities\CompanyDocTypes')
 @extends('layout')
