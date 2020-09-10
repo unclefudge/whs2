@@ -91,17 +91,18 @@
                                         @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
                                     </div>
                                     <div id="site-edit">
-                                        <div class="form-group {!! fieldHasError('completed', $errors) !!}">
-                                            {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
-                                            {!! Form::text('completed', ($main->completed) ? $main->completed->format('d/m/Y') : null, ['class' => 'form-control', 'placeholder' => 'dd/mm/yyyy']) !!}
-                                            {!! fieldErrorMessage('completed', $errors) !!}
-                                        </div>
                                         <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
                                             {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
                                             {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}
                                             {!! fieldErrorMessage('supervisor', $errors) !!}
                                         </div>
+                                        <div class="form-group {!! fieldHasError('completed', $errors) !!}">
+                                            {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
+                                            {!! Form::text('completed', null, ['class' => 'form-control', 'placeholder' => 'dd/mm/yyyy']) !!}
+                                            {!! fieldErrorMessage('completed', $errors) !!}
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div class="col-md-1"></div>
 
@@ -311,6 +312,44 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{--
+                        <br>
+                        <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
+                            <div class="col-md-12">MAINTENANCE ITEMS</div>
+                        </div>
+                        <br>
+                        <?php
+                        $first_count = ($main->items->count() > 10) ? $main->items->count() : 10;
+                        ?>
+                        @for ($i = 1; $i <= $first_count; $i++)
+                            <?php
+                            $item = $main->item($i);
+                            $item_name = ($item) ? $item->name : '';
+                            ?>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                        <div class="form-group">{!! Form::textarea("item$i", $item_name, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    @elseif ($item_name)
+                                        <div>&nbsp; {{ $i }}. &nbsp; {{ $item_name }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endfor
+
+
+                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                            <button class="btn blue" id="more">More Items</button>
+                            <div class="row" id="more_items" style="display: none">
+                                @for ($i = $first_count + 1; $i <= 25; $i++)
+                                    <div class="col-md-12">
+                                        <div class="form-group">{!! Form::textarea("item$i", null, ['rows' => '2', 'class' => 'form-control', 'placeholder' => "Item $i."]) !!}</div>
+                                    </div>
+                                @endfor
+                            </div>
+                        @endif
+                        --}}
 
 
                         {{-- Notes --}}

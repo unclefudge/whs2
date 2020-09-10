@@ -87,6 +87,11 @@
                                         @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
                                     </div>
                                     <div id="site-edit">
+                                        <div class="form-group {!! fieldHasError('completed', $errors) !!}">
+                                            {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
+                                            {!! Form::text('completed', ($main->completed) ? $main->completed->format('d/m/Y') : null, ['class' => 'form-control', 'placeholder' => 'dd/mm/yyyy']) !!}
+                                            {!! fieldErrorMessage('completed', $errors) !!}
+                                        </div>
                                         <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
                                             {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
                                             {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}

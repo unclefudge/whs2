@@ -84,12 +84,15 @@
                                                 </div>
                                             @endif
                                             {{-- Site Info Document --}}
-                                            @if (Auth::user()->hasAnyPermissionType('site.attendance|site.qa'))
+                                            @if (Auth::user()->hasAnyPermissionType('site.attendance|site.qa|site.maintenance'))
                                                 <div class="col-md-2">
                                                     <ul class="mega-menu-submenu">
                                                         <li><h3 class="h3-submenu">Reports</h3></li>
                                                         @if (Auth::user()->hasAnyPermissionType('site.attendance'))
                                                             <li><a href="/site/attendance" class="nav-link"> Site Attendanace </a></li>
+                                                        @endif
+                                                        @if (Auth::user()->hasAnyPermissionType('site.maintenance'))
+                                                            <li><a href="/site/maintenance" class="nav-link"> Maintenance Requests </a></li>
                                                         @endif
                                                         @if (Auth::user()->hasAnyPermissionType('site.qa'))
                                                             <li><a href="/site/qa" class="nav-link"> Quality Assurance </a></li>
@@ -208,9 +211,6 @@
                                                     <li><h3 class="h3-submenu">&nbsp;</h3></li>
                                                     @if (Auth::user()->hasAnyPermissionType('trade.planner'))
                                                         <li><a href="/planner/transient" class="nav-link"> Labourer Planner </a></li>
-                                                    @endif
-                                                    @if (Auth::user()->hasAnyPermissionType('site.maintenance'))
-                                                        <li><a href="/site/maintenance" class="nav-link"> Maintenance Requests </a></li>
                                                     @endif
                                                 </ul>
                                             </div>

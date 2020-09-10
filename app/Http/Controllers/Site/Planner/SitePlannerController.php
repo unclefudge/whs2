@@ -1355,9 +1355,10 @@ class SitePlannerController extends Controller {
         $site = Site::find(request('site_id'));
         $newdate = Carbon::createFromFormat('Y-m-d H:i:s', request('newdate') . ' 00:00:00')->format('d/m/Y');
         $olddate = (request('olddate')) ? Carbon::createFromFormat('Y-m-d H:i:s', request('olddate') . ' 00:00:00')->format('d/m/Y') : null;
+        $supers = $site->supervisorsSBC();
 
         if ($site->company->notificationsUsersType('n.site.jobstart'))
-            Mail::to($site->company->notificationsUsersType('n.site.jobstart'))->send(new \App\Mail\Site\Jobstart($site, $newdate, $olddate));
+            Mail::to($site->company->notificationsUsersType('n.site.jobstart'))->send(new \App\Mail\Site\Jobstart($site, $newdate, $olddate, $supers));
 
     }
 

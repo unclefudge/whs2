@@ -126,7 +126,13 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('add.site.maintenance'))
             return view('errors/404');
 
-        request()->validate(['site_id' => 'required', 'supervisor' => 'required'], ['site_id.required' => 'The site field is required.', 'supervisor.required' => 'The supervisor field is required.']); // Validate
+        $rules = ['site_id' => 'required', 'supervisor' => 'required', 'completed' => 'required', 'item1' => 'required'];
+        $mesg = [
+            'site_id.required'    => 'The site field is required.',
+            'supervisor.required' => 'The supervisor field is required.',
+            'completed.required'  => 'The prac completed field is required.',
+            'item1.required'      => 'The item field is required.'];
+        request()->validate($rules, $mesg); // Validate
 
         $site_id = request('site_id');
         $main_request = request()->except('multifile');
@@ -141,13 +147,14 @@ class SiteMaintenanceController extends Controller {
 
 
         // Add Request Items
-        $order = 1;
+        SiteMaintenanceItem::create(['main_id' => $newMain->id, 'name' => request("item1"), 'order' => 1, 'status' => 0]);
+        /*$order = 1;
         for ($i = 1; $i <= 25; $i ++) {
             if (request("item$i")) {
                 SiteMaintenanceItem::create(['main_id' => $newMain->id, 'name' => request("item$i"), 'order' => $order, 'status' => 0]);
                 $order ++;
             }
-        }
+        }*/
         //dd($main_request);
 
         // Update Site Status
@@ -211,8 +218,22 @@ class SiteMaintenanceController extends Controller {
         //dd(request()->all());
 
         $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
-        $main_request = request()->all();
+        $main_request = request()->except('completed');
+
+        // Verify prac completed date
+        if (request('completed')) {
+            if (preg_match("/(\d{2})\/(\d{2})\/(\d{4})$/", request('completed'), $matches)) {
+                list($dd, $mm, $yyyy) = explode('/', request('completed'));
+                if (checkdate($mm, $dd, $yyyy))
+                    $main_request['completed'] = Carbon::createFromFormat('d/m/Y H:i:s', request('completed') . ' 00:00:00');
+                else
+                    return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+            } else
+                return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+        }
+
         $main_request['step'] = 4;
+        //dd($main_request);
 
         $company = Company::find(request('company_id'));
 
@@ -236,6 +257,13 @@ class SiteMaintenanceController extends Controller {
         }
 
         // Update Items
+        $item1 = $main->items->first();
+        if ($item1->name != request("item1")) { // Items updated
+            $action = Action::create(['action' => "Item details updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $item1->name = request("item1");
+            $item1->save();
+        }
+        /*
         $order = 1;
         $current_items = $main->items->count();
         for ($i = 1; $i <= 25; $i ++) {
@@ -254,6 +282,7 @@ class SiteMaintenanceController extends Controller {
 
         if ($current_items != ($order - 1)) // Items updated
             $action = Action::create(['action' => "Items updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+        */
 
         // Status Updated
         if (request('status') == 1) {  // Maintenance Request Accepted
@@ -281,12 +310,25 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('edit.site.maintenance', $main))
             return view('errors/404');
 
-        //$rules = ['warranty' => 'required', 'category_id' => 'required'];
-        //$mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
-        //request()->validate($rules, $mesg); // Validate
+        $rules = ['supervisor' => 'required', 'completed' => 'required'];
+        $mesg = ['supervisor.required' => 'The supervisor field is required.', 'completed.required'  => 'The prac completed field is required.'];
+        request()->validate($rules, $mesg); // Validate
 
         $main_request = request()->all();
         //dd($main_request);
+
+        // Verify prac completed date
+        if (request('completed')) {
+            if (preg_match("/(\d{2})\/(\d{2})\/(\d{4})$/", request('completed'), $matches)) {
+                list($dd, $mm, $yyyy) = explode('/', request('completed'));
+                if (checkdate($mm, $dd, $yyyy))
+                    $main_request['completed'] = Carbon::createFromFormat('d/m/Y H:i:s', request('completed') . ' 00:00:00');
+                else
+                    return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+            } else
+                return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+        }
+
         $main->update($main_request);
 
         Toastr::success("Updated Request");

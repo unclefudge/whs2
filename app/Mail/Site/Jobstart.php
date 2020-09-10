@@ -12,17 +12,17 @@ class Jobstart extends Mailable implements ShouldQueue {
 
     use Queueable, SerializesModels;
 
-    public $site, $newdate, $olddate;//, $supers;
+    public $site, $newdate, $olddate, $supers;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Site $site, $newdate, $olddate = null)
+    public function __construct(Site $site, $newdate, $olddate = null, $supers)
     {
         $this->site = $site;
-        //$this->supers = $site->supervisorsSBC();
+        $this->supers = $supers;
         $this->newdate = $newdate;
         $this->olddate = $olddate;
     }

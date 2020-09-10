@@ -92,9 +92,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group">
+                                    <div class="form-group {!! fieldHasError('completed', $errors) !!}">
                                         {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
-                                        {!! Form::text('completed', null, ['class' => 'form-control', 'readonly']) !!}
+                                        <div class="input-group date date-picker">
+                                            {!! Form::text('completed', '', ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", 'readonly']) !!}
+                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                        </div>
+                                        {!! fieldErrorMessage('completed', $errors) !!}
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +175,21 @@
 
                                     <!-- Items -->
                             <div id="items-div">
+
+                                <h4>Maintenance Item</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    {{-- Item Details  --}}
+                                    <div class="col-md-12 ">
+                                        <div class="form-group {!! fieldHasError('item1', $errors) !!}">
+                                            {!! Form::label('item1', 'Item details', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea("item1", null, ['rows' => '5', 'class' => 'form-control', 'placeholder' => "Specific details of maintenance request."]) !!}
+                                            {!! fieldErrorMessage('item1', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{--
                                 <br>
                                 <div class="row" style="border: 1px solid #e7ecf1; padding: 10px 0px; margin: 0px; background: #f0f6fa; font-weight: bold">
                                     <div class="col-md-12">MAINTENANCE ITEMS</div>
@@ -184,7 +203,7 @@
                                     </div>
                                 @endfor
 
-                                {{-- Extra Fields --}}
+
                                 <button class="btn blue" id="more">More Items</button>
                                 <div class="row" id="more_items" style="display: none">
                                     @for ($i = 10 + 1; $i <= 25; $i++)
@@ -193,6 +212,7 @@
                                         </div>
                                     @endfor
                                 </div>
+                                --}}
                             </div>
                         </div>
                         <div class="form-actions right">
@@ -211,16 +231,19 @@
 @section('page-level-plugins-head')
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"/>
     <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
 @stop
 
 @section('page-level-plugins')
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/js/libs/fileinput.min.js"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
 <script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
 <script>
     $.ajaxSetup({
         headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
@@ -239,22 +262,23 @@
             updateFields();
         });
 
+        /*
         $("#more").click(function (e) {
             e.preventDefault();
             $('#more').hide();
             $('#more_items').show();
-        });
+        });*/
 
 
         function updateFields() {
             var site_id = $("#site_id").select2("val");
             $("#completed").val('');
-            $('#multifile-div').hide();
-            $('#items-div').hide();
+            //$('#multifile-div').hide();
+            //$('#items-div').hide();
 
             if (site_id != '') {
-                $('#multifile-div').show();
-                $('#items-div').show();
+                //$('#multifile-div').show();
+                //$('#items-div').show();
                 $.ajax({
                     url: '/site/data/details/' + site_id,
                     type: 'GET',
