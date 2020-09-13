@@ -28,7 +28,7 @@
                         <div class="caption">
                             <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request PP</span>
-                            <span class="caption-helper">ID: {{ $main->id }}</span>
+                            <span class="caption-helper">ID: {{ $main->code }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">

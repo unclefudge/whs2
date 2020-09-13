@@ -1,4 +1,3 @@
-@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
 @inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
@@ -30,7 +29,7 @@
                         <div class="caption">
                             <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
-                            <span class="caption-helper">ID: {{ $main->id }}</span>
+                            <span class="caption-helper">ID: {{ $main->code }}</span>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -74,7 +73,8 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h4>Site Details
-                                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>
+                                                @if ($main->status > 0) (
+                                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>@endif
                                             </h4>
                                         </div>
                                     </div>
@@ -105,7 +105,8 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h4>Client Details
-                                                <button class="btn dark btn-outline btn-sm" style="margin: -10px 0px 0px 100px; border: 0px" id="edit-client">Edit</button>
+                                                @if ($main->status > 0)
+                                                    <button class="btn dark btn-outline btn-sm" style="margin: -10px 0px 0px 100px; border: 0px" id="edit-client">Edit</button>@endif
                                             </h4>
                                         </div>
                                         <div class="col-md-6">
@@ -125,6 +126,10 @@
                                                 @if($main->status == '2')
                                                     <span class="pull-right font-red hidden-sm hidden-xs">UNDER REVIEW</span>
                                                     <span class="text-center font-red visible-sm visible-xs">UNDER REVIEW</span>
+                                                @endif
+                                                @if($main->status == '3')
+                                                    <span class="pull-right font-red hidden-sm hidden-xs">ON HOLD</span>
+                                                    <span class="text-center font-red visible-sm visible-xs">ON HOLD</span>
                                                 @endif
                                             </h2>
                                         </div>
@@ -173,8 +178,10 @@
                             {{-- Gallery --}}
                             <br>
                             <h4>Photos
-                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
-                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                @if ($main->status > 0)
+                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                @endif
                             </h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div id="photos-show">
@@ -225,9 +232,9 @@
                                     <div class="form-group">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
                                         @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
-                                            {!! Form::select('category_id', $maintenanceCategories::all(), $main->category_id, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                            {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteMaintenanceCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                         @else
-                                            {!! Form::text('category_text', $maintenanceCategories::name($main->category_id), ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::text('category_text', \App\Models\Site\SiteMaintenanceCategory::find($main->category_id)->name, ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
                                 </div>
@@ -375,13 +382,7 @@
                         <i v-if="!item.done_by && !item.status" class="fa fa-square-o font-red" style="font-size: 20px; padding-top: 5px"></i>
                     </td>
                     {{-- Item --}}
-                    <td style="padding-top: 15px;">
-                        @{{ item.name }}
-                        <small v-if="item.status == '1' || item.status == '-1'" class="font-grey-silver">
-                            <br>@{{ item.done_by_company }}
-                        </small>
-                        <!--<pre v-if="xx.dev">@{{ item | json }}</pre> -->
-                    </td>
+                    <td style="padding-top: 15px;">@{{ item.name }}</td>
                     {{-- Completed --}}
                     <td>
                         <div v-if="item.done_by">
@@ -525,6 +526,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
+        $("#category_id").select2({placeholder: "Select category", width: "100%"});
 
         $("#warranty").change(function () {
             //alert('gg');

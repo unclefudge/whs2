@@ -1,4 +1,3 @@
-@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
 @inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
@@ -72,14 +71,14 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('suburb', 'Suburb', ['class' => 'control-label']) !!}
-                                        {!! Form::text('suburb', null, ['class' => 'form-control', 'readonly']) !!}
+                                        {!! Form::label('site_suburb', 'Suburb', ['class' => 'control-label']) !!}
+                                        {!! Form::text('site_suburb', null, ['class' => 'form-control', 'readonly']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        {!! Form::label('code', 'Site No.', ['class' => 'control-label']) !!}
-                                        {!! Form::text('code', null, ['class' => 'form-control', 'readonly']) !!}
+                                        {!! Form::label('site_code', 'Site No.', ['class' => 'control-label']) !!}
+                                        {!! Form::text('site_code', null, ['class' => 'form-control', 'readonly']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +137,7 @@
                                 <div class="col-md-3 ">
                                     <div class="form-group">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        {!! Form::select('category_id', $maintenanceCategories::all(), null, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                        {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteMaintenanceCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                     </div>
                                 </div>
 
@@ -284,8 +283,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
-                        $("#suburb").val(data.suburb);
-                        $("#code").val(data.code);
+                        $("#site_suburb").val(data.suburb);
+                        $("#site_code").val(data.code);
                         console.log(data.suburb);
                     },
                 })

@@ -1,4 +1,3 @@
-@inject('maintenanceCategories', 'App\Http\Utilities\MaintenanceCategories')
 @inject('maintenanceWarranty', 'App\Http\Utilities\MaintenanceWarranty')
 @extends('layout')
 
@@ -38,7 +37,7 @@
                         <div class="caption">
                             <i class="icon-layers"></i>
                             <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
-                            <span class="caption-helper">ID: {{ $main->id }}</span>
+                            <span class="caption-helper">ID: {{ $main->code }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -195,7 +194,7 @@
                                     <div class="form-group">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
                                         @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
-                                            {!! Form::select('category_id', $maintenanceCategories::all(), $main->category_id, ['class' => 'form-control bs-select', 'id' => 'category_id']) !!}
+                                            {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteMaintenanceCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                         @else
                                             {!! Form::text('category_text', $maintenanceCategories::name($main->category_id), ['class' => 'form-control', 'readonly']) !!}
                                         @endif
@@ -462,6 +461,7 @@
     $(document).ready(function () {
         /* Select2 */
         $("#company_id").select2({placeholder: "Select Company", width: '100%'});
+        $("#category_id").select2({placeholder: "Select category", width: "100%"});
         $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
         $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
 

@@ -6,10 +6,10 @@ class MaintenanceWarranty {
 
     protected static $maintenanceWarranty = [
         ''  => 'Select type',
-        'Defect'  => 'Defect (12 mths)',
-        'Struct'  => 'Structural (10yrs)',
-        'Prac'  => 'Outstanding Prac',
-        'Other'  => 'Other',
+        'DEFECT'  => 'Defect (12 mths)',
+        'STRUCT'  => 'Structural (10yrs)',
+        'PRAC'  => 'Outstanding Prac',
+        'OTHER'  => 'Other',
     ];
 
 

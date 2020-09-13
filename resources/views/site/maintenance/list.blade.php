@@ -83,6 +83,7 @@
                             <div class="form-group">
                                 <select name="status1" id="status1" class="form-control bs-select">
                                     <option value="1" selected>Active</option>
+                                    <option value="3" selected>On Hold</option>
                                     <option value="0">Completed</option>
                                     <option value="-1">Declined</option>
                                 </select>

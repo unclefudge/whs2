@@ -142,7 +142,7 @@ class PagesController extends Controller {
         foreach ($tickets as $ticket) {
             echo "<tr style='outline: thin solid'><td>$ticket->id</td><td>$ticket->name</td><td>&nbsp;</td></tr>";
             foreach ($ticket->actions as $action) {
-                echo "<tr style='outline: thin dotted'><td>&nbsp;</td><td>".$action->created_at->format('d/m/Y')."\n".$action->user->firstname."</td><td>$action->action</td></tr>";
+                echo "<tr style='outline: thin dotted'><td>&nbsp;</td><td>" . $action->created_at->format('d/m/Y') . "\n" . $action->user->firstname . "</td><td>$action->action</td></tr>";
             }
         }
         echo "</table>";
@@ -1079,6 +1079,155 @@ class PagesController extends Controller {
         echo "<br><br>Completed<br>-------------<br>";
     }
 
+    public function importMaintenance()
+    {
+        echo "Importing Maintenance<br>---------------------<br><br>";
+        $row = 0;
+        if (($handle = fopen(public_path("maintenance.csv"), "r")) !== false) {
+            while (($data = fgetcsv($handle, 5000, ",")) !== false) {
+                $row ++;
+                //if ($row == 1) continue;
+                $num = count($data);
+
+                $status = ($data[0] && $data[0] == 'OPEN') ? 1 : 0;
+                $id = substr($data[1], 1);
+                $job = $data[2];
+                $site = Site::where('code', $job)->first();
+                $job_name = $data[3];
+                $job_suburb = $data[4];
+                $prac_complete = $data[5];
+                if ($data[5] && preg_match('/\d+\/\d+\/\d+/', $data[5]))
+                    $prac_date = Carbon::createFromFormat('d/m/y H:i', $data[5] . '00:00')->toDateTimeString();
+                $super = ucwords(strtolower($data[6]));;
+                $created = $data[7];
+                if ($data[7] && preg_match('/\d+\/\d+\/\d+/', $data[7]))
+                    $created_date = Carbon::createFromFormat('d/m/y H:i', $data[7] . '00:00')->toDateTimeString();
+                $client_name = $data[8];
+                $client_phone = $data[9];
+                $client_email = $data[10];
+                $item = $data[11];
+                $warranty = $data[12];
+                switch ($warranty) {
+                    case 'GBT':
+                        $company_id = 29;
+                        break;
+                    case 'Scott Bartley Plumbing' :
+                        $company_id = 69;
+                        break;
+                    case 'NEXT POINT' :
+                        $company_id = 108;
+                        break;
+                    case 'Josh Lay' :
+                        $company_id = 289;
+                        break;
+                    case 'Philip Dougty' :
+                        $company_id = 219;
+                        break;
+                    case 'Andrew Cashmore' :
+                        $company_id = 105;
+                        break;
+                    default :
+                        $company_id = 3;
+                }
+                $cat = $data[13];
+                $cat_id = \App\Models\Site\SiteMaintenanceCategory::where('name', $cat)->first();
+                $company = $data[14];
+                switch ($company) {
+                    case 'GBT':
+                        $company_id = 29;
+                        break;
+                    case 'Scott Bartley Plumbing' :
+                        $company_id = 69;
+                        break;
+                    case 'NEXT POINT' :
+                        $company_id = 108;
+                        break;
+                    case 'Josh Lay' :
+                        $company_id = 289;
+                        break;
+                    case 'Philip Dougty' :
+                        $company_id = 219;
+                        break;
+                    case 'Andrew Cashmore' :
+                        $company_id = 105;
+                        break;
+                    default :
+                        $company_id = 3;
+                }
+                $assigned = Company::find($company_id);
+                $res = ($data[15] && preg_match('/\d+\/\d+\/\d+/', $data[15])) ? Carbon::createFromFormat('d/m/y H:i', $data[15] . '00:00')->toDateTimeString() : null;
+                $futher = $data[16];
+                if ($futher) {
+                    $futher = ($futher == 'YES') ? 1 : 0;
+                } else
+                    $futher = null;
+
+                $notes = $data[17];
+
+                if (!$site) {
+                    echo "<br><br>Creating SITE $job ($job_name)<br>";
+                    $site = Site::create(['name' => $job_name, 'code' => $job, 'suburb' => $job_suburb, 'client_phone' => $client_phone, 'client_phone_desc' => $client_name, 'company_id' => 3, 'status' => 2]);
+                }
+                echo "<br><br>$id : $job : $site->name ($job_name) : $site->suburb ($job_suburb)<br>";
+                //echo "$prac_complete ($prac_date) : $super : $created_date<br>";
+                //echo "$client_name : $client_phone : $client_email<br>";
+                //echo "-----<br>".nl2br($item)."<br>--------<br>";
+                echo "$warranty : $cat ($cat_id->name)<br>";
+                echo "$company ($assigned->name)<br>";
+
+                // Create item
+                $main_request = [
+                    'site_id'       => $site->id,
+                    'code'          => $id,
+                    'completed'     => $prac_date,
+                    'warranty'      => $warranty,
+                    'category_id'   => $cat_id->id,
+                    'contact_name'  => $client_name,
+                    'contact_email' => $client_email,
+                    'contact_phone' => $client_phone,
+                    'step'          => 5,
+                    'assigned_to'   => $assigned->id,
+                    'further_works' => $futher,
+                    'supervisor'    => $super,
+                    'status'        => $status,
+                    'created_by'    => 3,
+                    'created_at'    => $created_date,
+                    'updated_by'    => 3,
+                    'updated_at'    => '2020-09-18 00:00:00',
+
+                ];
+
+                if ($status == 0) {
+                    $main_request['supervisor_sign_by'] = 7;
+                    $main_request['supervisor_sign_at'] = $res;
+                    $main_request['manager_sign_by'] = 7;
+                    $main_request['manager_sign_at'] = $res;
+                    $main_request['updated_by'] = 7;
+                    $main_request['updated_at'] = $res;
+                }
+
+                var_dump($main_request);
+                $main = \App\Models\Site\SiteMaintenance::create($main_request);
+                $action = \App\Models\Misc\Action::create(['action' => "Maintenance Request created by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+                if ($status == 1)
+                    $main_item = \App\Models\Site\SiteMaintenanceItem::create(['main_id' => $main->id, 'name' => $item, 'order' => 1, 'status' => 0]);
+                else
+                    $main_item = \App\Models\Site\SiteMaintenanceItem::create(['main_id' => $main->id, 'name' => $item, 'order' => 1, 'sign_by' => 7, 'sign_at' => $res, 'done_by' => $assigned->id, 'done_at' => $res, 'status' => 1]);
+
+                // Put Site into maintenance mode
+                $site->status = 2;
+                $site->save();
+
+                echo "<br>";
+
+
+            }
+            fclose($handle);
+        }
+        echo "<br><br>Completed<br>-------------<br>";
+    }
+
     public function disabledTasks()
     {
 
@@ -1112,7 +1261,7 @@ class PagesController extends Controller {
                     echo "<br><br>Task (id: $task->id) $trade->name - $task->name ($task->code):<br>";
                 $found = 1;
                 $site = Site::find($plan->site_id);
-                echo "- Site (id: $site->id) $site->name planned for ". $plan->to->format('d/m/Y') ."<br>";
+                echo "- Site (id: $site->id) $site->name planned for " . $plan->to->format('d/m/Y') . "<br>";
             }
         }
     }

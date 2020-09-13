@@ -143,7 +143,9 @@ class SiteMaintenanceController extends Controller {
         //dd($main_request);
         // Create Maintenance Request
         $newMain = SiteMaintenance::create($main_request);
-        $action = Action::create(['action' => "Maintenance Request created by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
+        $newMain->code = $newMain->id + 1352; // Generate new incremental code with 1352 off set to maintain sequence
+        $newMain->save();
+        $action = Action::create(['action' => "Maintenance Request created.", 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
 
 
         // Add Request Items
@@ -259,7 +261,7 @@ class SiteMaintenanceController extends Controller {
         // Update Items
         $item1 = $main->items->first();
         if ($item1->name != request("item1")) { // Items updated
-            $action = Action::create(['action' => "Item details updated by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Item details updated.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
             $item1->name = request("item1");
             $item1->save();
         }
@@ -287,9 +289,9 @@ class SiteMaintenanceController extends Controller {
         // Status Updated
         if (request('status') == 1) {  // Maintenance Request Accepted
             $main_request['step'] = 5;
-            $action = Action::create(['action' => "Maintenance Request approved by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Maintenance Request approved.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         } elseif (request('status') == - 1)  // Maintenance Request Declined
-            $action = Action::create(['action' => "Maintenance Request declined by " . Auth::user()->fullname, 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Maintenance Request declined.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
 
         //dd($main_request);
         Toastr::success("Updated Request");

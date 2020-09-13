@@ -20,7 +20,7 @@ class SiteMaintenance extends Model {
 
     protected $table = 'site_maintenance';
     protected $fillable = [
-        'site_id', 'super_id', 'supervisor', 'completed', 'category_id', 'warranty', 'goodwill', 'assigned_to', 'further_works',
+        'site_id', 'code', 'super_id', 'supervisor', 'completed', 'category_id', 'warranty', 'goodwill', 'assigned_to', 'further_works',
         'contact_name', 'contact_phone', 'contact_email', 'step',
         'supervisor_sign_by', 'supervisor_sign_at', 'manager_sign_by', 'manager_sign_at',
         'notes', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
