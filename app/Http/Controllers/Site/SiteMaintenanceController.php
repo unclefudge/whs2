@@ -49,7 +49,7 @@ class SiteMaintenanceController extends Controller {
             return view('errors/404');
 
         $under_review = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
                 's.code as sitecode', 's.name as sitename'])
@@ -126,17 +126,19 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('add.site.maintenance'))
             return view('errors/404');
 
-        $rules = ['site_id' => 'required', 'supervisor' => 'required', 'completed' => 'required', 'item1' => 'required'];
+        $rules = ['site_id' => 'required', 'supervisor' => 'required', 'completed' => 'required', 'reported' => 'required', 'item1' => 'required'];
         $mesg = [
             'site_id.required'    => 'The site field is required.',
             'supervisor.required' => 'The supervisor field is required.',
             'completed.required'  => 'The prac completed field is required.',
+            'reported.required'  => 'The reported field is required.',
             'item1.required'      => 'The item field is required.'];
         request()->validate($rules, $mesg); // Validate
 
         $site_id = request('site_id');
         $main_request = request()->except('multifile');
         $main_request['completed'] = (request('completed')) ? Carbon::createFromFormat('d/m/Y H:i', request('completed') . '00:00')->toDateTimeString() : null;
+        $main_request['reported'] = (request('reported')) ? Carbon::createFromFormat('d/m/Y H:i', request('reported') . '00:00')->toDateTimeString() : null;
         $main_request['status'] = 2; // set new request to 'Under Review'
         $main_request['step'] = 2; // set new request to step 2 'Add Photos'
 
@@ -230,6 +232,18 @@ class SiteMaintenanceController extends Controller {
         //dd(request()->all());
 
         $main_request = request()->except('completed');
+
+        // Verify reported date
+        if (request('reported')) {
+            if (preg_match("/(\d{2})\/(\d{2})\/(\d{4})$/", request('reported'), $matches)) {
+                list($dd, $mm, $yyyy) = explode('/', request('reported'));
+                if (checkdate($mm, $dd, $yyyy))
+                    $main_request['reported'] = Carbon::createFromFormat('d/m/Y H:i:s', request('reported') . ' 00:00:00');
+                else
+                    return back()->withErrors(['reported' => "Invalid reported date. Required format dd/mm/yyyy"]);
+            } else
+                return back()->withErrors(['reported' => "Invalid reported date. Required format dd/mm/yyyy"]);
+        }
 
         // Verify prac completed date
         if (request('completed')) {
@@ -523,8 +537,8 @@ class SiteMaintenanceController extends Controller {
     public function getMaintenance()
     {
         $records = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
-                DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
+            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+                DB::raw('DATE_FORMAT(m.reported, "%d/%m/%y") AS reported_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
                 's.code as sitecode', 's.name as sitename'])
             ->join('sites AS s', 'm.site_id', '=', 's.id')

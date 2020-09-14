@@ -62,9 +62,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group {!! fieldHasError('site_id', $errors) !!}">
-                                        {!! Form::label('site_id', 'Completed Sites', ['class' => 'control-label']) !!}
+                                        {!! Form::label('site_id', 'Completed/Maintenance Sites', ['class' => 'control-label']) !!}
                                         <select id="site_id" name="site_id" class="form-control select2" style="width:100%">
+                                            <optgroup label="Completed Sites"></optgroup>
                                             {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), 0) !!}
+                                            <optgroup label="Maintenance Sites"></optgroup>
+                                            {!! Auth::user()->authSitesSelect2Options('view.site', old('site_id'), 2) !!}
                                         </select>
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>

@@ -140,7 +140,7 @@
         },
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
-            {data: 'created_date', name: 'm.created_at'},
+            {data: 'reported_date', name: 'm.reported'},
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
             {data: 'assigned_to', name: 's.assigned_to'},

@@ -85,11 +85,17 @@
                                     @if ($main->site) {{ $main->site->full_address }}<br> @endif
                                     {{--@if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif --}}
                                     <br>
-                                    @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
                                     <div id="site-show">
+                                        @if ($main->reported)<b>Reported:</b> {{ $main->reported->format('d/m/Y') }}<br> @endif
+                                        @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
                                         @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
                                     </div>
                                     <div id="site-edit">
+                                        <div class="form-group {!! fieldHasError('reported', $errors) !!}">
+                                            {!! Form::label('reported', 'Reported', ['class' => 'control-label']) !!}
+                                            {!! Form::text('reported', ($main->reported) ? $main->reported->format('d/m/Y') : null, ['class' => 'form-control', 'placeholder' => 'dd/mm/yyyy']) !!}
+                                            {!! fieldErrorMessage('reported', $errors) !!}
+                                        </div>
                                         <div class="form-group {!! fieldHasError('completed', $errors) !!}">
                                             {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
                                             {!! Form::text('completed', ($main->completed) ? $main->completed->format('d/m/Y') : null, ['class' => 'form-control', 'placeholder' => 'dd/mm/yyyy']) !!}
@@ -97,7 +103,7 @@
                                         </div>
                                         <div class="form-group {!! fieldHasError('supervisor', $errors) !!}">
                                             {!! Form::label('supervisor', 'Supervisor', ['class' => 'control-label']) !!}
-                                            {!! Form::text('supervisor', null, ['class' => 'form-control']) !!}
+                                            {!! Form::text('supervisor', $main->supervisor, ['class' => 'form-control']) !!}
                                             {!! fieldErrorMessage('supervisor', $errors) !!}
                                         </div>
                                     </div>
@@ -466,11 +472,11 @@
         $("#super_id").select2({placeholder: "Select Supervisor", width: "100%"});
 
         /*
-        $("#more").click(function (e) {
-            e.preventDefault();
-            $('#more').hide();
-            $('#more_items').show();
-        });*/
+         $("#more").click(function (e) {
+         e.preventDefault();
+         $('#more').hide();
+         $('#more_items').show();
+         });*/
 
         $('#site-edit').hide();
         $('#client-edit').hide();

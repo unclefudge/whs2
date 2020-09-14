@@ -24,7 +24,7 @@ class SiteMaintenance extends Model {
         'contact_name', 'contact_phone', 'contact_email', 'step', 'reported', 'resolved',
         'supervisor_sign_by', 'supervisor_sign_at', 'manager_sign_by', 'manager_sign_at',
         'notes', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
-    protected $dates = ['completed', 'supervisor_sign_at', 'manager_sign_at'];
+    protected $dates = ['completed', 'reported', 'resolved', 'supervisor_sign_at', 'manager_sign_at'];
 
 
     /**
