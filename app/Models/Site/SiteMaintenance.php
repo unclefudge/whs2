@@ -21,7 +21,7 @@ class SiteMaintenance extends Model {
     protected $table = 'site_maintenance';
     protected $fillable = [
         'site_id', 'code', 'super_id', 'supervisor', 'completed', 'category_id', 'warranty', 'goodwill', 'assigned_to', 'further_works',
-        'contact_name', 'contact_phone', 'contact_email', 'step',
+        'contact_name', 'contact_phone', 'contact_email', 'step', 'reported', 'resolved',
         'supervisor_sign_by', 'supervisor_sign_at', 'manager_sign_by', 'manager_sign_at',
         'notes', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
     protected $dates = ['completed', 'supervisor_sign_at', 'manager_sign_at'];
@@ -47,6 +47,16 @@ class SiteMaintenance extends Model {
     {
         return $this->belongsTo('App\User', 'super_id');
     }*/
+
+    /**
+     * A Site Maintenance belongs to a SiteMaintenanceCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Site\SiteMaintenanceCategory', 'category_id');
+    }
 
     /**
      * A Site Maintenance 'may' have been assigned to a Company.

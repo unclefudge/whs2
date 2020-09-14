@@ -193,10 +193,10 @@
                                 <div class="col-md-3 ">
                                     <div class="form-group">
                                         {!! Form::label('category_id', 'Category', ['class' => 'control-label']) !!}
-                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                        @if ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
                                             {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteMaintenanceCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                         @else
-                                            {!! Form::text('category_text', $maintenanceCategories::name($main->category_id), ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::text('category_text', $main->category->name, ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
                                 </div>
@@ -205,7 +205,7 @@
                                 <div class="col-md-2 ">
                                     <div class="form-group">
                                         {!! Form::label('warranty', 'Warranty', ['class' => 'control-label']) !!}
-                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                        @if ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
                                             {!! Form::select('warranty', $maintenanceWarranty::all(), $main->warranty, ['class' => 'form-control bs-select', 'id' => 'warranty']) !!}
                                         @else
                                             {!! Form::text('warranty_text', $maintenanceWarranty::name($main->warranty), ['class' => 'form-control', 'readonly']) !!}
@@ -353,9 +353,9 @@
                         <div class="pull-right" style="min-height: 50px">
                             <a href="/site/maintenance" class="btn default"> Back</a>
                             @if(Auth::user()->allowed2('edit.site.maintenance', $main))
-                                @if ($main->step == 3)
+                                @if ($main->step == 3 && Auth::user()->allowed2('sig.site.maintenance', $main))
                                     <button type="submit" name="save" class="btn blue"> Assign Request</button>
-                                @elseif (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                @elseif (Auth::user()->allowed2('edit.site.maintenance', $main))
                                     <button type="submit" name="save" class="btn blue"> Save</button>
                                 @endif
                             @endif
@@ -383,7 +383,7 @@
                     <h3>Notes
                         {{-- Show add if user has permission to edit maintenance --}}
                         @if (Auth::user()->allowed2('edit.site.maintenance', $main))
-                            <button v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
+                            <button v-on:click.prevent="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
                         @endif
                     </h3>
                     <table v-show="actionList.length" class="table table-striped table-bordered table-nohover order-column">

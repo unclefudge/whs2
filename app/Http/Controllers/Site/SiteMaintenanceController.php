@@ -49,7 +49,7 @@ class SiteMaintenanceController extends Controller {
             return view('errors/404');
 
         $under_review = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
                 's.code as sitecode', 's.name as sitename'])
@@ -145,7 +145,7 @@ class SiteMaintenanceController extends Controller {
         $newMain = SiteMaintenance::create($main_request);
         $newMain->code = $newMain->id + 1352; // Generate new incremental code with 1352 off set to maintain sequence
         $newMain->save();
-        $action = Action::create(['action' => "Maintenance Request created.", 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
+        $action = Action::create(['action' => "Maintenance Request created", 'table' => 'site_maintenance', 'table_id' => $newMain->id]);
 
 
         // Add Request Items
@@ -214,12 +214,21 @@ class SiteMaintenanceController extends Controller {
         if (!(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main)))
             return view('errors/404');
 
-        $rules = ['company_id' => 'required', 'visit_date' => 'required'];
-        $mesg = ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
+        $rules = ['site_id' => 'required', 'supervisor' => 'required', 'completed' => 'required', 'item1' => 'required'];
+        $mesg = [
+            'site_id.required'    => 'The site field is required.',
+            'supervisor.required' => 'The supervisor field is required.',
+            'completed.required'  => 'The prac completed field is required.',
+            'item1.required'      => 'The item field is required.'];
+
+        if (Auth::user()->allowed2('sig.site.maintenance', $main)) {
+            $rules = $rules + ['company_id' => 'required', 'visit_date' => 'required'];
+            $mesg = $mesg + ['company_id.required' => 'The assign to field is required', 'visit_date.required' => 'The visit date field is required'];
+            $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
+        }
         request()->validate($rules, $mesg); // Validate
         //dd(request()->all());
 
-        $visit_date = Carbon::createFromFormat('d/m/Y H:i:s', request('visit_date') . ' 00:00:00');
         $main_request = request()->except('completed');
 
         // Verify prac completed date
@@ -239,7 +248,7 @@ class SiteMaintenanceController extends Controller {
 
         $company = Company::find(request('company_id'));
 
-        if (!request('visited')) {
+        if (!request('visited') && Auth::user()->allowed2('sig.site.maintenance', $main)) {
             // Add to Client Visit planner
             $newPlanner = SitePlanner::create(array(
                 'site_id'     => $main->site_id,
@@ -255,13 +264,12 @@ class SiteMaintenanceController extends Controller {
 
             // Delete Todoo
             $main->closeToDo(Auth::user());
-
         }
 
         // Update Items
         $item1 = $main->items->first();
         if ($item1->name != request("item1")) { // Items updated
-            $action = Action::create(['action' => "Item details updated.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Item details updated", 'table' => 'site_maintenance', 'table_id' => $main->id]);
             $item1->name = request("item1");
             $item1->save();
         }
@@ -289,9 +297,9 @@ class SiteMaintenanceController extends Controller {
         // Status Updated
         if (request('status') == 1) {  // Maintenance Request Accepted
             $main_request['step'] = 5;
-            $action = Action::create(['action' => "Maintenance Request approved.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Maintenance Request approved", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         } elseif (request('status') == - 1)  // Maintenance Request Declined
-            $action = Action::create(['action' => "Maintenance Request declined.", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Maintenance Request declined", 'table' => 'site_maintenance', 'table_id' => $main->id]);
 
         //dd($main_request);
         Toastr::success("Updated Request");
@@ -313,7 +321,7 @@ class SiteMaintenanceController extends Controller {
             return view('errors/404');
 
         $rules = ['supervisor' => 'required', 'completed' => 'required'];
-        $mesg = ['supervisor.required' => 'The supervisor field is required.', 'completed.required'  => 'The prac completed field is required.'];
+        $mesg = ['supervisor.required' => 'The supervisor field is required.', 'completed.required' => 'The prac completed field is required.'];
         request()->validate($rules, $mesg); // Validate
 
         $main_request = request()->all();
@@ -372,6 +380,10 @@ class SiteMaintenanceController extends Controller {
                 $main_request['manager_sign_at'] = Carbon::now();
                 // Close any outstanding ToDos for Area Super / Con Mgr
                 $main->closeToDo(Auth::user());
+
+                // Update Site Status back to completed
+                $main->site->status = 0;
+                $main->site->save();
             }
 
             $main->update($main_request);
@@ -511,7 +523,7 @@ class SiteMaintenanceController extends Controller {
     public function getMaintenance()
     {
         $records = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
                 's.code as sitecode', 's.name as sitename'])
@@ -520,7 +532,10 @@ class SiteMaintenanceController extends Controller {
 
         //dd($records);
         $dt = Datatables::of($records)
-            ->editColumn('id', '<div class="text-center"><a href="/site/maintenance/{{$id}}"><i class="fa fa-search"></i></a></div>')
+            //->editColumn('id', '<div class="text-center"><a href="/site/maintenance/{{$id}}"><i class="fa fa-search"></i></a></div>')
+            ->editColumn('id', function ($doc) {
+                return "<div class='text-center'><a href='/site/maintenance/$doc->id'>M$doc->code</a></div>";
+            })
             ->editColumn('site_id', function ($doc) {
                 return $doc->sitecode;
             })

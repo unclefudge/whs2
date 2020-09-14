@@ -1164,6 +1164,13 @@ class PagesController extends Controller {
 
                 $notes = $data[17];
 
+                if ($status == 0) {
+                    $site->status = 0;
+                    $site->save();
+                }
+
+                /*
+
                 if (!$site) {
                     echo "<br><br>Creating SITE $job ($job_name)<br>";
                     $site = Site::create(['name' => $job_name, 'code' => $job, 'suburb' => $job_suburb, 'client_phone' => $client_phone, 'client_phone_desc' => $client_name, 'company_id' => 3, 'status' => 2]);
@@ -1218,6 +1225,7 @@ class PagesController extends Controller {
                 // Put Site into maintenance mode
                 $site->status = 2;
                 $site->save();
+                */
 
                 echo "<br>";
 

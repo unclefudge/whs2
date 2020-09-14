@@ -73,7 +73,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h4>Site Details
-                                                @if ($main->status > 0) (
+                                                @if ($main->status > 0)
                                                 <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>@endif
                                             </h4>
                                         </div>

@@ -90,7 +90,7 @@
                                         {!! fieldErrorMessage('supervisor', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group {!! fieldHasError('completed', $errors) !!}">
                                         {!! Form::label('completed', 'Prac Completed', ['class' => 'control-label']) !!}
                                         <div class="input-group date date-picker">
@@ -98,6 +98,16 @@
                                             <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
                                         </div>
                                         {!! fieldErrorMessage('completed', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group {!! fieldHasError('reported', $errors) !!}">
+                                        {!! Form::label('reported', 'Reported', ['class' => 'control-label']) !!}
+                                        <div class="input-group date date-picker">
+                                            {!! Form::text('reported', \Carbon\Carbon::now()->format('d/m/Y'), ['class' => 'form-control form-control-inline', 'style' => 'background:#FFF', 'data-date-format' => "dd-mm-yyyy", 'readonly']) !!}
+                                            <span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span>
+                                        </div>
+                                        {!! fieldErrorMessage('reported', $errors) !!}
                                     </div>
                                 </div>
                             </div>

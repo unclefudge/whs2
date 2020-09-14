@@ -6,7 +6,7 @@
         @if (Auth::user()->hasAnyPermissionType('site'))
             <li><a href="/site">Sites</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Maintenance Register2</span></li>
+        <li><span>Maintenance Register</span></li>
     </ul>
 @stop
 
@@ -28,11 +28,11 @@
                                 <thead>
                                 <tr class="mytable-header">
                                     <th width="5%"> #</th>
+                                    <th width="10%"> Reported</th>
                                     <th width="7%"> Site</th>
                                     <th> Name</th>
                                     <th> Supervisor</th>
                                     <th width="10%"> Prac Comp</th>
-                                    <th width="10%"> Reported</th>
                                     <th width="10%"> Client Visit</th>
                                     <th width="5%"></th>
                                 </tr>
@@ -41,13 +41,13 @@
                                     <?php $main = App\Models\Site\SiteMaintenance::find($rec->id) ?>
                                     <tr>
                                         <td>
-                                            <div class="text-center"><a href="/site/maintenance/{{ $rec->id }}"><i class="fa fa-search"></i></a></div>
+                                            <div class="text-center"><a href="/site/maintenance/{{ $rec->id }}">M{{$rec->code}}</a></div>
                                         </td>
+                                        <td> {{ $rec->created_date }}</td>
                                         <td> {{ $rec->sitecode }}</td>
                                         <td> {{ $rec->sitename }}</td>
                                         <td> {{ $rec->supervisor }}</td>
                                         <td> {{ $rec->completed_date }}</td>
-                                        <td> {{ $rec->created_date }}</td>
                                         <td> {{ ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' }}</td>
                                         <td>
                                             @if(Auth::user()->allowed2('edit.site.maintenance', $main))
@@ -83,7 +83,7 @@
                             <div class="form-group">
                                 <select name="status1" id="status1" class="form-control bs-select">
                                     <option value="1" selected>Active</option>
-                                    <option value="3" selected>On Hold</option>
+                                    <option value="3">On Hold</option>
                                     <option value="0">Completed</option>
                                     <option value="-1">Declined</option>
                                 </select>
@@ -95,11 +95,11 @@
                             <thead>
                             <tr class="mytable-header">
                                 <th width="5%"> #</th>
+                                <th width="10%"> Reported</th>
                                 <th width="7%"> Site</th>
                                 <th> Name</th>
                                 <th> Assigned To</th>
                                 <th width="10%"> Prac Comp</th>
-                                <th width="10%"> Reported</th>
                                 <th width="10%"> Completed</th>
                                 <th width="5%"></th>
                             </tr>
@@ -140,11 +140,11 @@
         },
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
+            {data: 'created_date', name: 'm.created_at'},
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
             {data: 'assigned_to', name: 's.assigned_to'},
             {data: 'completed_date', name: 'm.completed', orderable: false, searchable: false},
-            {data: 'created_date', name: 'm.created_at'},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
