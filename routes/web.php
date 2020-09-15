@@ -243,6 +243,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('site/qa/templates', 'Site\SiteQaController@templates');
     Route::resource('site/qa', 'Site\SiteQaController');
 
+    // Site Maintenance Categories
+    Route::get('site/categories/maintenance/dt/main_cats', 'Site\SiteMaintenanceCategoryController@getMainCategories');
+    Route::resource('site/maintenance/category', 'Site\SiteMaintenanceCategoryController');
+
     // Site Maintenance
     Route::get('site/maintenance/{id}/items', 'Site\SiteMaintenanceController@getItems');
     Route::any('site/maintenance/{id}/update', 'Site\SiteMaintenanceController@updateReport');

@@ -74,6 +74,7 @@
                         </div>
                         <div class="actions">
                             @if(Auth::user()->allowed2('add.site.maintenance'))
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/maintenance/category" data-original-title="Add">Categories</a>
                                 <a class="btn btn-circle green btn-outline btn-sm" href="/site/maintenance/create" data-original-title="Add">Add</a>
                             @endif
                         </div>

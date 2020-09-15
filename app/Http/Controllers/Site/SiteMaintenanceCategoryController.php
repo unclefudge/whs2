@@ -13,17 +13,15 @@ use App\User;
 use App\Models\Site\Planner\Task;
 use App\Models\Site\Planner\Trade;
 use App\Models\Site\Site;
-use App\Models\Site\SiteQa;
-use App\Models\Site\SiteQaItem;
-use App\Models\Site\SiteQaCategory;
-use App\Models\Site\SiteQaAction;
+use App\Models\Site\SiteMaintenance;
+use App\Models\Site\SiteMaintenanceItem;
+use App\Models\Site\SiteMaintenanceCategory;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Company\Company;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
 use App\Jobs\SiteQaPdf;
 use App\Http\Requests;
-use App\Http\Requests\Site\SiteQaRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -72,13 +70,13 @@ class SiteMaintenanceCategoryController extends Controller {
      */
     public function show($id)
     {
-        $qa = SiteQa::findOrFail($id);
+        $main = SiteMaintenance::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('view.site.maintenance', $qa))
+        if (!Auth::user()->allowed2('view.site.maintenance', $main))
             return view('errors/404');
 
-        return view('site/maintenance/show', compact('qa'));
+        return view('site/maintenance/show', compact('main'));
     }
 
     /**
@@ -88,13 +86,13 @@ class SiteMaintenanceCategoryController extends Controller {
      */
     public function edit($id)
     {
-        $cat = SiteQaCategory::findOrFail($id);
+        $cat = SiteMaintenanceCategory::findOrFail($id);
 
         // Check authorisation and throw 404 if not
-        if (!Auth::user()->allowed2('add.site.qa'))
+        if (!Auth::user()->allowed2('add.site.maintenance'))
             return view('errors/404');
 
-        return view('site/qa/category/edit', compact('cat'));
+        return view('site/maintenance/category/edit', compact('cat'));
     }
 
     /**
@@ -163,7 +161,7 @@ class SiteMaintenanceCategoryController extends Controller {
      */
     public function getMainCategories()
     {
-        $records = SiteMaintenanceCategory::where('status', 1);
+        $records = SiteMaintenanceCategory::where('status', 1)->orderBy('name');
 
         $dt = Datatables::of($records)
             ->addColumn('reports', function ($cat) {
@@ -171,8 +169,8 @@ class SiteMaintenanceCategoryController extends Controller {
                 return $reports;
             })
             ->addColumn('action', function ($cat) {
-                $actions = '<a href="/site/qa/category/' . $cat->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
-                $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/site/qa/category/' . $cat->id . '" data-name="' . $cat->name . '"><i class="fa fa-trash"></i></button>';
+                $actions = '<a href="/site/maintenance/category/' . $cat->id . '/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>';
+                $actions .= '<button class="btn dark btn-xs sbold uppercase margin-bottom btn-delete " data-remote="/site/maintenance/category/' . $cat->id . '" data-name="' . $cat->name . '"><i class="fa fa-trash"></i></button>';
                 return $actions;
             })
             ->rawColumns(['id', 'name', 'reports', 'updated_at', 'action'])
