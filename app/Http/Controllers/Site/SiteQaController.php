@@ -244,7 +244,7 @@ class SiteQaController extends Controller {
             if ($qa->supervisor_sign_by && $qa->manager_sign_by) {
                 $qa->status = 0;
                 $qa->save();
-                if ($qa->master_id == '74' && $qa->owned_by->notificationsUsersType('n.site.qa.handover')) // Only email if QA is Handover template  ie. final QA on site
+                if ($qa->master_id == '2581' && $qa->owned_by->notificationsUsersType('n.site.qa.handover')) // Only email if QA is Handover template  ie. final QA on site
                     Mail::to($qa->owned_by->notificationsUsersType('n.site.qa.handover'))->send(new \App\Mail\Site\SiteQaHandover($qa));
             }
             Toastr::success("Updated Report");

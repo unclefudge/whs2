@@ -558,7 +558,7 @@ $cc = 1;*/
                                                 </tr>
                                                 <tr>
                                                     <td>Maintenance Requests<br><span class="font-grey-silver">Cape Cod Only</span></td>
-                                                    <td width="15%">{!! permSelect('view.site.maintenance', 'super', $rec, $cid, $dis) !!}</td>
+                                                    <td width="15%">{!! permSelect('view.site.maintenance', 'super.plan', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('edit.site.maintenance', 'super', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('add.site.maintenance', 'add', $rec, $cid, $dis) !!}</td>
                                                     <td width="15%">{!! permSelect('del.site.maintenance', 'res', $rec, $cid, $dis) !!}</td>

@@ -776,10 +776,17 @@ trait UserRolesPermissions {
                 if ($action == 'view' && $permissiontype == 'site.hazard' && Session::has('siteID') && Session::get('siteID') == $record->site_id) return true;
             }
 
+            // Site Maintenance
+            if ($permissiontype == 'site.maintenance') {
+                if ($action == 'view' && $this->permissionLevel($permission, 3) == 30 && $record->assigned_to == $this->company_id) return true; // Request is Assigned to user's company
+                if ($this->permissionLevel($permission, 3) == 99 || $this->permissionLevel($permission, 3) == 1) return true;  // User has 'All' permission to this record
+                if ($this->permissionLevel($permission, 3) == 40 && $record->super_id == $this->id) return true; // User has 'Supervisor For' permission to this record
+            }
+
 
             // Site (Doc, QA, Asbestos, Export, Maintenance) + Attendance + Compliance + Safety Doc
             if ($permissiontype == 'site.doc' || $permissiontype == 'site.qa' || $permissiontype == 'site.asbestos' || $permissiontype == 'site.export' ||
-                $permissiontype == 'site.maintenance' || $permissiontype == 'roster' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
+                $permissiontype == 'roster' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
             ) {
                 if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
 

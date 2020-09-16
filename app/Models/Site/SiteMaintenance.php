@@ -42,11 +42,10 @@ class SiteMaintenance extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-    /*
-     public function supervisor()
+     public function supervisorAssigned()
     {
         return $this->belongsTo('App\User', 'super_id');
-    }*/
+    }
 
     /**
      * A Site Maintenance belongs to a SiteMaintenanceCategory
@@ -268,39 +267,22 @@ class SiteMaintenance extends Model {
 
 
     /**
-     * Email Overdue
+     * Email Assigned
      */
-    /*
-    public function emailOverdue()
+    public function emailAssigned($user)
     {
-        if (\App::environment('prod')) {
-            $email_roles = $this->site->company->notificationsUsersEmailType('n.site.qa');
-            $email_seniors = $this->site->areaSupervisorsEmails();
-            $email_to = array_unique(array_merge($email_roles, $email_seniors), SORT_REGULAR);
-        } else if (\App::environment('local', 'dev')) {
-            $email_to = [env('EMAIL_ME')];
-        }
+        $email_to = [env('EMAIL_DEV')];
+        $email_user = (Auth::check() && validEmail(Auth::user()->email)) ? Auth::user()->email : '';
 
-        $user_fullname = 'Safeworksite';
-        $user_company_name = 'Safeworksite';
+        if (\App::environment('prod'))
+            $email_to = (validEmail($user->email)) ? $user->email : '';
 
-        $data = [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'site_name'         => $this->site->name,
-            'supers'            => $this->site->supervisorsSBC(),
-            'url'               => URL::to('/') . '/site/qa/' . $this->id,
-            'user_fullname'     => $user_fullname,
-            'user_company_name' => $user_company_name,
-        ];
+        if ($email_to && $email_user)
+            Mail::to($email_to)->cc([$email_user])->send(new \App\Mail\Site\SiteMaintenanceAssigned($this));
+        elseif ($email_to)
+            Mail::to($email_to)->send(new \App\Mail\Site\SiteMaintenanceAssigned($this));
 
-        Mail::send('emails/siteQA-overdue', $data, function ($m) use ($email_to) {
-            $m->from('do-not-reply@safeworksite.com.au');
-            $m->to($email_to);
-            $m->subject('Quality Assurance Overdue Notification');
-        });
-    }*/
-
+    }
 
     /**
      * Email Action Notification

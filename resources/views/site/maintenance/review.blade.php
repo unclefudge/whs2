@@ -50,26 +50,22 @@
                             {{-- Progress Steps --}}
                             <div class="mt-element-step hidden-sm hidden-xs">
                                 <div class="row step-thin" id="steps">
-                                    <div class="col-md-3 mt-step-col first done">
+                                    <div class="col-md-4 mt-step-col first done">
                                         <div class="mt-step-number bg-white font-grey">1</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Create</div>
-                                        <div class="mt-step-content font-grey-cascade">Create Request</div>
+                                        <div class="mt-step-content font-grey-cascade">Create request</div>
                                     </div>
-                                    <div class="col-md-3 mt-step-col done">
+                                    <div class="col-md-4 mt-step-col done">
                                         <div class="mt-step-number bg-white font-grey">2</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
                                         <div class="mt-step-content font-grey-cascade">Add photos</div>
                                     </div>
-                                    <div class="col-md-3 mt-step-col {{ ($main->step == 3) ? 'active' : 'done' }}">
+                                    <div class="col-md-4 mt-step-col last active">
                                         <div class="mt-step-number bg-white font-grey">3</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Visit Client</div>
-                                        <div class="mt-step-content font-grey-cascade">Schedule visit</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
+                                        <div class="mt-step-content font-grey-cascade">Assign supervisor</div>
                                     </div>
-                                    <div class="col-md-3 mt-step-col last {{ ($main->step == 4) ? 'active' : '' }}">
-                                        <div class="mt-step-number bg-white font-grey">4</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Review</div>
-                                        <div class="mt-step-content font-grey-cascade">Approve/Decline</div>
-                                    </div>
+
                                 </div>
                             </div>
                             <hr>
@@ -220,6 +216,7 @@
                                 </div>
 
                                 {{-- Assigned To --}}
+                                {{--}}
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}">
                                         {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
@@ -235,9 +232,10 @@
                                         @endif
                                         {!! fieldErrorMessage('assigned_to', $errors) !!}
                                     </div>
-                                </div>
+                                </div>--}}
 
                                 {{-- Status --}}
+                                {{--}}
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         @if (Auth::user()->allowed2('sig.site.maintenance', $main))
@@ -245,33 +243,37 @@
                                             {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
                                         @endif
                                     </div>
-                                </div>
+                                </div>--}}
                             </div>
 
-                            @if(!$main->nextClientVisit())
+                            @if(!$main->super_id)
                                 {{-- Under Review - asign to super --}}
                                 <div class="note note-warning">
-                                    <h4>Assign Request to visit client</h4>
+                                    <h4>Assign Request to Supervisor</h4>
                                     <hr style="padding: 0px; margin: 0px 0px 10px 0px; border-color: #000000">
                                     <input type="hidden" name="visited" value="0">
 
                                     @if(Auth::user()->allowed2('sig.site.maintenance', $main))
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                {{-- Company --}}
-                                                <div class="form-group {!! fieldHasError('company_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
-                                                    {!! Form::label('company_id', 'Assign to', ['class' => 'control-label']) !!}
-                                                    <select id="company_id" name="company_id" class="form-control select2" style="width:100%">
-                                                        <option value="">Select Supervisor/Company</option>
-                                                        @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                            <div class="col-md-5">
+                                                {{-- Supervisor --}}
+                                                <div class="form-group {!! fieldHasError('super_id', $errors) !!}" style="{{ fieldHasError('company_id', $errors) ? '' : 'display:show' }}" id="company-div">
+                                                    {!! Form::label('super_id', 'Assign to', ['class' => 'control-label']) !!}
+                                                    <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
+                                                        <option value=""></option>
+                                                        <optgroup label="Cape Code Supervisors"></optgroup>
+                                                        @foreach (Auth::user()->company->supervisors()->sortBy('name') as $super)
+                                                            <option value="{{ $super->id }}">{{ $super->name }}</option>
                                                         @endforeach
+                                                        <optgroup label="External Users"></optgroup>
+                                                        <option value="75">Geoff Barbuto (G.B.T Carpentry Services)</option>
                                                     </select>
-                                                    {!! fieldErrorMessage('company_id', $errors) !!}
+                                                    {!! fieldErrorMessage('super_id', $errors) !!}
                                                 </div>
                                             </div>
 
                                             {{-- Planner Date --}}
+                                            {{--}}
                                             <div class="col-md-3 ">
                                                 <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
                                                     {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
@@ -284,7 +286,7 @@
                                             </span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     @else
                                         <div class="row">
@@ -296,11 +298,13 @@
                                 </div>
                             @else
                                 {{-- Under Review - client appointment set --}}
+                            {{--}}
                                 <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
                                 <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
-                                <input type="hidden" name="visited" value="1">
+                                <input type="hidden" name="visited" value="1"> --}}
+                            @endif
                         </div>
-                        @endif
+
 
 
                         {{-- Items --}}

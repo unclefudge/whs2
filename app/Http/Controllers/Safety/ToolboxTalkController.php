@@ -467,8 +467,7 @@ class ToolboxTalkController extends Controller {
     /**
      * Get Talks current user is authorised to manage + Process datatables ajax request.
      */
-    public
-    function getToolbox(Request $request)
+    public function getToolbox(Request $request)
     {
         // Toolboxs assigned to user
         $toolbox_user = Auth::user()->toolboxs()->pluck('id')->toArray();
@@ -555,8 +554,7 @@ class ToolboxTalkController extends Controller {
     /**
      * Get Talks current user is authorised to manage + Process datatables ajax request.
      */
-    public
-    function getToolboxTemplates(Request $request)
+    public function getToolboxTemplates(Request $request)
     {
         $records = DB::table('toolbox_talks AS t')
             ->select(['t.id', 't.name', 't.version', 't.for_company_id', 't.company_id', 't.status', 't.updated_at', 'c.name AS company_name'])
@@ -605,8 +603,7 @@ class ToolboxTalkController extends Controller {
     /**
      * Copy Template from Master
      */
-    private
-    function copyTemplate($master_id, $talk_id)
+    private function copyTemplate($master_id, $talk_id)
     {
         $master = ToolboxTalk::find($master_id);
         $talk = ToolboxTalk::find($talk_id);
@@ -626,8 +623,7 @@ class ToolboxTalkController extends Controller {
         $talk->save();
     }
 
-    public
-    function diffArray($old, $new)
+    public function diffArray($old, $new)
     {
         $matrix = array();
         $maxlen = 0;
@@ -650,8 +646,7 @@ class ToolboxTalkController extends Controller {
             $this->diffArray(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
 
-    public
-    function htmlDiff($old, $new)
+    public function htmlDiff($old, $new)
     {
         $ret = '';
         $diff = $this->diffArray(explode(' ', $old), explode(' ', $new));

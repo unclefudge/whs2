@@ -11,6 +11,7 @@ use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteRoster;
 use App\Models\Site\SiteAccident;
 use App\Models\Site\SiteHazard;
+use App\Models\Site\SiteMaintenance;
 use App\Models\User\UserDoc;
 use App\Models\Company\Company;
 use App\Models\Company\CompanySupervisor;
@@ -267,6 +268,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $q->whereIn('created_by', $user_list);
             $q->orWhereIn('site_id', $site_list);
         })->get();
+    }
+
+    /**
+     * A list of Site Accidents this user is allowed to view
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function maintenanceRequests($status = '')
+    {
+        if ($this->permissionLevel('view.site.maintenance', 3) == 99) // User has 'All' permission to requests
+            return SiteMaintenance::where('status', '=', $status)->get();
+
+        if ($this->permissionLevel('view.site.maintenance', 3) == 40) // User is 'Supervisor For' requests
+            return SiteMaintenance::where('status', '=', $status)->where('super_id', $this->id)->get();
+
+        if ($this->permissionLevel('view.site.maintenance', 3) == 30) // User is 'Planned For' requests
+            return SiteMaintenance::where('status', '=', $status)->where('assigned_to', $this->company_id)->get();
+
+        return null;
     }
 
 

@@ -51,11 +51,11 @@
                             <input v-model="xx.user_id" type="hidden" id="user_id" value="{{ Auth::user()->id }}">
                             <input v-model="xx.user_fullname" type="hidden" id="fullname" value="{{ Auth::user()->fullname }}">
                             <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
-                            <input v-model="xx.user_manager" type="hidden" id="user_supervisor" value="{{ Auth::user()->allowed2('sig.site.maintenance', $main) }}">
-                            <input v-model="xx.user_supervisor" type="hidden" id="user_manager"
+                            <input v-model="xx.user_manager" type="hidden" id="user_manager" value="{{ Auth::user()->allowed2('sig.site.maintenance', $main) }}">
+                            <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor"
                                    value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray()) || Auth::user()->hasPermission2('sig.site.maintenance')) ? 1 : 0  !!}">
                             <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('sig.site.maintenance') }}">
-                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ Auth::user()->allowed2('edit.site.maintenance', $main) }}">
+                            <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ (Auth::user()->allowed2('edit.site.maintenance', $main) || $main->super_id == Auth::user()->id) ? 1 : 0 }}">
 
 
                             <!-- Fullscreen devices -->
@@ -74,7 +74,7 @@
                                         <div class="col-md-12">
                                             <h4>Site Details
                                                 @if ($main->status > 0)
-                                                <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>@endif
+                                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-site">Edit</button>@endif
                                             </h4>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
                                         @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
                                             {!! Form::select('category_id', (['' => 'Select category'] + \App\Models\Site\SiteMaintenanceCategory::all()->sortBy('name')->pluck('name' ,'id')->toArray()), null, ['class' => 'form-control select2', 'title' => 'Select category', 'id' => 'category_id']) !!}
                                         @else
-                                            {!! Form::text('category_text', \App\Models\Site\SiteMaintenanceCategory::find($main->category_id)->name, ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::text('category_text', ($main->category_id) ? \App\Models\Site\SiteMaintenanceCategory::find($main->category_id)->name : 'Select Category', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                     </div>
                                 </div>
@@ -251,11 +251,36 @@
                                     </div>
                                 </div>
 
-                                {{-- Assigned To --}}
+                                {{-- Assigned To Super --}}
+                                <div class="col-md-5">
+                                    <div class="form-group {!! fieldHasError('super_id', $errors) !!}" style="{{ fieldHasError('super_id', $errors) ? '' : 'display:show' }}" id="company-div">
+                                        {!! Form::label('super_id', 'Assigned to Supervisor', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {{-- Supervisor --}}
+                                            <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
+                                                <option value=""></option>
+                                                <optgroup label="Cape Code Supervisors"></optgroup>
+                                                @foreach (Auth::user()->company->supervisors()->sortBy('name') as $super)
+                                                    <option value="{{ $super->id }}" {{ ($super->id == $main->super_id) ? 'selected' : '' }}>{{ $super->name }}</option>
+                                                @endforeach
+                                                <optgroup label="External Users"></optgroup>
+                                                <option value="75" {{ ('75' == $main->super_id) ? 'selected' : '' }}>Geoff Barbuto (G.B.T Carpentry Services)</option>
+                                            </select>
+                                            {!! fieldErrorMessage('super_id', $errors) !!}
+                                        @else
+                                            {!! Form::text('assigned_super_ text', ($main->super_id) ? $main->supervisorAssigned->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                        {!! fieldErrorMessage('super_id', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                {{-- Assigned To Trade --}}
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
-                                        {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
-                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+                                        {!! Form::label('assigned_to', 'Assigned to company', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
                                             <select id="assigned_to" name="assigned_to" class="form-control select2" style="width:100%">
                                                 <option value="">Select company</option>
                                                 @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
@@ -268,7 +293,26 @@
                                         {!! fieldErrorMessage('assigned_to', $errors) !!}
                                     </div>
                                 </div>
-                                @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
+
+                                {{-- Planner Date --}}
+                                {{--}}
+                                <div class="col-md-3 ">
+                                    <div class="form-group {!! fieldHasError('visit_date', $errors) !!}">
+                                        {!! Form::label('visit_date', 'Visit Date', ['class' => 'control-label']) !!}
+                                        @if ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <div class="input-group input-medium date date-picker" data-date-format="dd/mm/yyyy" data-date-start-date="+0d" data-date-reset>
+                                                <input type="text" class="form-control" value="{!! ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' !!}" readonly style="background:#FFF" id="visit_date" name="visit_date">
+                                            <span class="input-group-btn">
+                                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            </div>
+                                        @else
+                                            {!! Form::text('visit_text', ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '', ['class' => 'form-control', 'readonly']) !!}
+                                        @endif
+                                    </div>
+                                </div>--}}
+
+                                @if ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
                                     <div class="col-md-1">
                                         <button type="submit" name="save" class="btn blue" style="margin-top: 25px"> Save</button>
                                     </div>
@@ -306,10 +350,10 @@
                                 @if ($main->supervisor_sign_by)
                                     {!! \App\User::find($main->supervisor_sign_by)->full_name !!}, &nbsp;{{ $main->supervisor_sign_at->format('d/m/Y') }}
                                 @else
-                                    <button v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_supervisor" v-on:click="$root.$broadcast('signOff', 'super')"
+                                    <button v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_supervisor == 1" v-on:click="$root.$broadcast('signOff', 'super')"
                                             class=" btn blue btn-xs btn-outline sbold uppercase margin-bottom">Sign Off
                                     </button>
-                                    <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && !xx.user_supervisor" class="font-red">Pending</span>
+                                    <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_supervisor == 0" class="font-red">Pending</span>
                                     <span v-if="xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="font-grey-silver">Waiting for items to be completed</span>
                                 @endif
                             </div>
@@ -351,7 +395,7 @@
     </div>
     </div>
 
-    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
+    <pre v-if="xx.dev">@{{ $data | json }}</pre>
     -->
 
     <!-- loading Spinner -->
@@ -369,7 +413,7 @@
                 <th width="5%"></th>
                 <th> Maintenance Item</th>
                 <th width="15%"> Completed</th>
-                <th width="15%"> Checked</th>
+                {{--}}<th width="15%"> Checked</th>--}}
             </tr>
             </thead>
             <tbody>
@@ -389,13 +433,14 @@
                             @{{ item.done_at | formatDate }}<br>@{{ item.done_by_name }} <a v-if="xx.main.status != 0" v-on:click="itemStatusReset(item)"><i class="fa fa-times font-red"></i></a>
                         </div>
                         <div v-else>
-                            <select v-if="!item.done_by && xx.user_edit && xx.main.signed == 0" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
+                            <select v-if="!item.done_by && xx.user_edit == 1 && xx.main.signed == 0" v-model="item.status" class='form-control' v-on:change="itemStatus(item)">
                                 <option v-for="option in xx.sel_checked" value="@{{ option.value }}" selected="@{{option.value == item.status}}">@{{ option.text }}</option>
                             </select>
                         </div>
 
                     </td>
                     {{-- Checked --}}
+                    {{--}}
                     <td>
                         <div v-if="!item.done_by"></div>
                         <div v-if="item.done_by">
@@ -408,7 +453,7 @@
                                 </select>
                             </div>
                         </div>
-                    </td>
+                    </td>--}}
                 </tr>
             </template>
             </tbody>
@@ -525,7 +570,8 @@
 
     $(document).ready(function () {
         /* Select2 */
-        $("#assigned_to").select2({placeholder: "Select Company", width: '100%'});
+        $("#super_id").select2({placeholder: "Select supervisor", width: '100%'});
+        $("#assigned_to").select2({placeholder: "Select company", width: '100%'});
         $("#category_id").select2({placeholder: "Select category", width: "100%"});
 
         $("#warranty").change(function () {
@@ -670,7 +716,7 @@
                 this.xx.main.items_total = 0;
                 this.xx.main.items_done = 0;
                 for (var i = 0; i < this.xx.itemList.length; i++) {
-                    if ((this.xx.itemList[i]['status'] == 1 || this.xx.itemList[i]['status'] == -1) && this.xx.itemList[i]['sign_by']) {
+                    if ((this.xx.itemList[i]['status'] == 1)) { // || this.xx.itemList[i]['status'] == -1)) && this.xx.itemList[i]['sign_by']) {
                         this.xx.main.items_done++;
                     }
                     this.xx.main.items_total++;

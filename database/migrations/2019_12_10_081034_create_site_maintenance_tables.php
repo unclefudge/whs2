@@ -23,7 +23,7 @@ class CreateSiteMaintenanceTables extends Migration
             $table->integer('super_id')->unsigned()->nullable();
             $table->string('warranty', 100)->nullable();
             $table->tinyInteger('goodwill')->unsigned()->default(0);
-            $table->tinyInteger('category_id')->unsigned()->default(0);
+            $table->tinyInteger('category_id')->unsigned()->nullable();
             $table->integer('supervisor_sign_by')->unsigned()->nullable();
             $table->timestamp('supervisor_sign_at')->nullable();
             $table->integer('manager_sign_by')->unsigned();

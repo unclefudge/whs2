@@ -41,25 +41,20 @@
                             {{-- Progress Steps --}}
                             <div class="mt-element-step hidden-sm hidden-xs">
                                 <div class="row step-thin" id="steps">
-                                    <div class="col-md-3 mt-step-col first done">
+                                    <div class="col-md-4 mt-step-col first done">
                                         <div class="mt-step-number bg-white font-grey">1</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Create</div>
-                                        <div class="mt-step-content font-grey-cascade">Create Request</div>
+                                        <div class="mt-step-content font-grey-cascade">Create request</div>
                                     </div>
-                                    <div class="col-md-3 mt-step-col active">
+                                    <div class="col-md-4 mt-step-col active">
                                         <div class="mt-step-number bg-white font-grey">2</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
                                         <div class="mt-step-content font-grey-cascade">Add photos</div>
                                     </div>
-                                    <div class="col-md-3 mt-step-col">
+                                    <div class="col-md-4 mt-step-col last">
                                         <div class="mt-step-number bg-white font-grey">3</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Visit Client</div>
-                                        <div class="mt-step-content font-grey-cascade">Schedule visit</div>
-                                    </div>
-                                    <div class="col-md-3 mt-step-col last">
-                                        <div class="mt-step-number bg-white font-grey">4</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Review</div>
-                                        <div class="mt-step-content font-grey-cascade">Approve/Decline</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
+                                        <div class="mt-step-content font-grey-cascade">Assign supervisor</div>
                                     </div>
                                 </div>
                             </div>
