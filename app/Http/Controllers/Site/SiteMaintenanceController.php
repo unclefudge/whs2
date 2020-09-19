@@ -432,6 +432,9 @@ class SiteMaintenanceController extends Controller {
                 // Update Site Status back to completed
                 $main->site->status = 0;
                 $main->site->save();
+
+                $email_list = $main->site->company->notificationsUsersEmailType('n.site.maintenance.completed');
+                if ($email_list) Mail::to($email_list)->send(new \App\Mail\Site\SiteMaintenanceCompleted($main));
             }
 
             //dd($main_request);

@@ -20,7 +20,8 @@ class SettingsNotificationTypes {
         '13' => 'n.site.jobstart',
         '14' => 'n.swms.approval',
         '15' => 'n.site.status',
-        '16' => 'n.site.jobstartexport'
+        '16' => 'n.site.jobstartexport',
+        '17' => 'n.site.maintenance.completed'
     ];
 
 
