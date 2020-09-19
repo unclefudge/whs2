@@ -53,7 +53,7 @@
                             <input v-model="xx.company_id" type="hidden" id="company_id" value="{{ Auth::user()->company->reportsTo()->id }}">
                             <input v-model="xx.user_manager" type="hidden" id="user_manager" value="{{ Auth::user()->allowed2('sig.site.maintenance', $main) }}">
                             <input v-model="xx.user_supervisor" type="hidden" id="user_supervisor"
-                                   value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray()) || Auth::user()->hasPermission2('sig.site.maintenance')) ? 1 : 0  !!}">
+                                   value="{!! (in_array(Auth::user()->id, $main->site->areaSupervisors()->pluck('id')->toArray()) || $main->super_id == Auth::user()->id || Auth::user()->hasPermission2('sig.site.maintenance')) ? 1 : 0  !!}">
                             <input v-model="xx.user_signoff" type="hidden" id="user_signoff" value="{{ Auth::user()->hasPermission2('sig.site.maintenance') }}">
                             <input v-model="xx.user_edit" type="hidden" id="user_edit" value="{{ (Auth::user()->allowed2('edit.site.maintenance', $main) || $main->super_id == Auth::user()->id) ? 1 : 0 }}">
 
@@ -254,7 +254,7 @@
                                 {{-- Assigned To Super --}}
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('super_id', $errors) !!}" style="{{ fieldHasError('super_id', $errors) ? '' : 'display:show' }}" id="company-div">
-                                        {!! Form::label('super_id', 'Assigned to Supervisor', ['class' => 'control-label']) !!}
+                                        {!! Form::label('super_id', 'Assigned Task Owner', ['class' => 'control-label']) !!}
                                         @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
                                             {{-- Supervisor --}}
                                             <select id="super_id" name="super_id" class="form-control select2" style="width:100%">
@@ -345,7 +345,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3 text-right">Site Supervisor:</div>
+                            <div class="col-sm-3 text-right">Task Owner:</div>
                             <div class="col-sm-9">
                                 @if ($main->supervisor_sign_by)
                                     {!! \App\User::find($main->supervisor_sign_by)->full_name !!}, &nbsp;{{ $main->supervisor_sign_at->format('d/m/Y') }}
@@ -357,7 +357,7 @@
                                     <span v-if="xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="font-grey-silver">Waiting for items to be completed</span>
                                 @endif
                             </div>
-                            <div class="col-sm-3 text-right">Site Manager:</div>
+                            <div class="col-sm-3 text-right">Construction Manager:</div>
                             <div class="col-sm-9">
                                 @if ($main->manager_sign_by)
                                     {!! \App\User::find($main->manager_sign_by)->full_name !!}, &nbsp;{{ $main->manager_sign_at->format('d/m/Y') }}
@@ -369,7 +369,7 @@
                                         </button>
                                         <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total && xx.user_manager == 0 && !xx.user_signoff" class="font-red">Pending</span>
                                     @else
-                                        <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total" class="font-red">Waiting for Site Supervisor Sign Off</span>
+                                        <span v-if="xx.main.items_total != 0 && xx.main.items_done == xx.main.items_total" class="font-red">Waiting for Task Owner Sign Off</span>
                                         <span v-if="xx.main.items_total != 0 && xx.main.items_done != xx.main.items_total" class="font-grey-silver">Waiting for items to be completed</span>
                                     @endif
                                 @endif
