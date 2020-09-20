@@ -251,7 +251,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Assigned To Super --}}
+                                {{-- Assigned Task Owner --}}
                                 <div class="col-md-5">
                                     <div class="form-group {!! fieldHasError('super_id', $errors) !!}" style="{{ fieldHasError('super_id', $errors) ? '' : 'display:show' }}" id="company-div">
                                         {!! Form::label('super_id', 'Assigned Task Owner', ['class' => 'control-label']) !!}
@@ -271,6 +271,18 @@
                                             {!! Form::text('assigned_super_ text', ($main->super_id) ? $main->supervisorAssigned->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                         {!! fieldErrorMessage('super_id', $errors) !!}
+                                    </div>
+                                </div>
+
+                                {{-- Status --}}
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                                        @if (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                            {!! Form::select('status', ['1' => 'Active', '-1' => 'Decline',  '3' => 'On Hold'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                            @elseif ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            {!! Form::select('status', ['1' => 'Active', '3' => 'On Hold'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -386,6 +386,15 @@ class SiteMaintenanceController extends Controller {
                 $main->emailAssigned($company->primary_contact());
         }
 
+        // Add note if change of Status
+        if (request('status') && $main->status != 3 && request('status') == 3)
+            $action = Action::create(['action' => "Request has been placed On Hold", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+        if (request('status') && $main->status != 1 && request('status') == 1)
+            $action = Action::create(['action' => "Request has been Re-Activated", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+        if (request('status') && $main->status != -1 && request('status') == -1)
+            $action = Action::create(['action' => "Request has been Declined", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+
         //dd($main_request);
         $main->update($main_request);
 
@@ -433,7 +442,10 @@ class SiteMaintenanceController extends Controller {
                 $main->site->status = 0;
                 $main->site->save();
 
-                $email_list = $main->site->company->notificationsUsersEmailType('n.site.maintenance.completed');
+                $email_list = [env('EMAIL_DEV')];
+                if (\App::environment('prod'))
+                    $email_list = $main->site->company->notificationsUsersEmailType('n.site.maintenance.completed');
+
                 if ($email_list) Mail::to($email_list)->send(new \App\Mail\Site\SiteMaintenanceCompleted($main));
             }
 
@@ -583,7 +595,7 @@ class SiteMaintenanceController extends Controller {
     public function getMaintenance()
     {
         $requests = Auth::user()->maintenanceRequests(request('status'));
-        $request_ids = ($requests) ?  Auth::user()->maintenanceRequests(request('status'))->pluck('id')->toArray() : [];
+        $request_ids = ($requests) ? Auth::user()->maintenanceRequests(request('status'))->pluck('id')->toArray() : [];
 
         $records = DB::table('site_maintenance AS m')
             ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
