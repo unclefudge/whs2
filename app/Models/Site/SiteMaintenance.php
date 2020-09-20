@@ -207,28 +207,6 @@ class SiteMaintenance extends Model {
         $site = Site::findOrFail($this->site_id);
         $this->createToDo($site->supervisors->pluck('id')->toArray());
     }
-
-    /**
-     * Create ToDoo for QA Report and assign to given user(s)
-     */
-    public function createToDo($user_list)
-    {
-        $site = Site::findOrFail($this->site_id);
-        $todo_request = [
-            'type'       => 'qa',
-            'type_id'    => $this->id,
-            'name'       => 'Quality Assurance - ' . $this->name . ' (' . $site->name . ')',
-            'info'       => 'Please sign off on completed items',
-            'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
-            'company_id' => $this->company_id,
-        ];
-
-        // Create ToDoo and assign to Site Supervisors
-        $todo = Todo::create($todo_request);
-        $todo->assignUsers($user_list);
-        //$todo->emailToDo();
-    }
-
     /**
      * Create ToDoo for Maintenance Report and assign to given user(s)
      */
@@ -236,7 +214,7 @@ class SiteMaintenance extends Model {
     {
         $site = Site::findOrFail($this->site_id);
         $todo_request = [
-            'type'       => 'site_maintenance',
+            'type'       => 'maintenance',
             'type_id'    => $this->id,
             'name'       => 'Maintenance Request Sign Off - ' . $this->name . ' (' . $site->name . ')',
             'info'       => 'Please sign off on completed items',
