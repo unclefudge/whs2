@@ -23,7 +23,7 @@ use Yajra\Datatables\Datatables;
 use nilsenj\Toastr\Facades\Toastr;
 
 /**
- * Class CompanySignupController
+ * Class CompanySignUpController
  * @package App\Http\Controllers
  */
 class CompanySignUpController extends Controller {

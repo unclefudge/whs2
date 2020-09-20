@@ -50,7 +50,7 @@
                     <div class="portlet-body form">
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($company, ['method' => 'POST', 'action' => ['Company\CompanySignupController@companyUpdate', $company->id]]) !!}
+                                {!! Form::model($company, ['method' => 'POST', 'action' => ['Company\CompanySignUpController@companyUpdate', $company->id]]) !!}
                                 {!! Form::hidden('signup_step', 3) !!}
                                 <div class="form-body">
                                     <h1 class="sbold hidden-sm hidden-xs" style="margin: -20px 0 15px 0">{{ $company->name }}</h1>

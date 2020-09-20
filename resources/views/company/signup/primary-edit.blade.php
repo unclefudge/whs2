@@ -45,7 +45,7 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($user, ['method' => 'POST  ', 'action' => ['Company\CompanySignupController@userUpdate', $user->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($user, ['method' => 'POST  ', 'action' => ['Company\CompanySignUpController@userUpdate', $user->id], 'class' => 'horizontal-form']) !!}
                         @include('form-error')
 
                         <div class="form-body">
