@@ -268,7 +268,7 @@
                                             </select>
                                             {!! fieldErrorMessage('super_id', $errors) !!}
                                         @else
-                                            {!! Form::text('assigned_super_ text', ($main->super_id) ? $main->supervisorAssigned->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::text('assigned_super_text', ($main->super_id) ? $main->taskOwner->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                         {!! fieldErrorMessage('super_id', $errors) !!}
                                     </div>
