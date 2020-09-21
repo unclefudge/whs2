@@ -38,16 +38,6 @@ class SiteMaintenance extends Model {
     }
 
     /**
-     * A Site Maintenance 'may' have been signed by a Supervisor user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-     public function supervisorAssigned()
-    {
-        return $this->belongsTo('App\User', 'super_id');
-    }
-
-    /**
      * A Site Maintenance belongs to a SiteMaintenanceCategory
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
@@ -55,6 +45,16 @@ class SiteMaintenance extends Model {
     public function category()
     {
         return $this->belongsTo('App\Models\Site\SiteMaintenanceCategory', 'category_id');
+    }
+
+    /**
+     * A Site Maintenance 'may' have been signed by a Supervisor user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+     public function taskOwner()
+    {
+        return $this->belongsTo('App\User', 'super_id');
     }
 
     /**

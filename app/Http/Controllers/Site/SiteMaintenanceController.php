@@ -56,6 +56,7 @@ class SiteMaintenanceController extends Controller {
             ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.created_at, "%d/%m/%y") AS created_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
+                DB::raw('DATE_FORMAT(m.updated_at, "%d/%m/%y") AS updated_date'),
                 's.code as sitecode', 's.name as sitename'])
             ->join('sites AS s', 'm.site_id', '=', 's.id')
             ->whereIn('m.id', $request_ids)
@@ -598,9 +599,10 @@ class SiteMaintenanceController extends Controller {
         $request_ids = ($requests) ? Auth::user()->maintenanceRequests(request('status'))->pluck('id')->toArray() : [];
 
         $records = DB::table('site_maintenance AS m')
-            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
+            ->select(['m.id', 'm.site_id', 'm.code', 'm.supervisor', 'm.assigned_to', 'm.super_id', 'm.completed', 'm.reported', 'm.warranty', 'm.goodwill', 'm.category_id', 'm.status', 'm.updated_at', 'm.created_at',
                 DB::raw('DATE_FORMAT(m.reported, "%d/%m/%y") AS reported_date'),
                 DB::raw('DATE_FORMAT(m.completed, "%d/%m/%y") AS completed_date'),
+                DB::raw('DATE_FORMAT(m.updated_at, "%d/%m/%y") AS updated_date'),
                 's.code as sitecode', 's.name as sitename'])
             ->join('sites AS s', 'm.site_id', '=', 's.id')
             ->whereIn('m.id', $request_ids)
@@ -618,10 +620,10 @@ class SiteMaintenanceController extends Controller {
             ->editColumn('sitename', function ($doc) {
                 return $doc->sitename;
             })
-            ->editColumn('assigned_to', function ($doc) {
+            ->editColumn('super_id', function ($doc) {
                 $d = SiteMaintenance::find($doc->id);
 
-                return ($d->assignedTo) ? $d->assignedTo->name : '-';
+                return ($d->super_id) ? $d->taskOwner->name : '-';
             })
             ->addColumn('completed', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);

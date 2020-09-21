@@ -32,8 +32,7 @@
                                     <th width="7%"> Site</th>
                                     <th> Name</th>
                                     <th> Supervisor</th>
-                                    <th width="10%"> Prac Comp</th>
-                                    <th width="10%"> Client Visit</th>
+                                    <th width="10%"> Updated</th>
                                     <th width="5%"></th>
                                 </tr>
                                 </thead>
@@ -47,8 +46,7 @@
                                         <td> {{ $rec->sitecode }}</td>
                                         <td> {{ $rec->sitename }}</td>
                                         <td> {{ $rec->supervisor }}</td>
-                                        <td> {{ $rec->completed_date }}</td>
-                                        <td> {{ ($main->nextClientVisit()) ? $main->nextClientVisit()->from->format('d/m/Y') : '' }}</td>
+                                        <td> {{ $rec->updated_date }}</td>
                                         <td>
                                             @if(Auth::user()->allowed2('edit.site.maintenance', $main))
                                                 <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
@@ -99,8 +97,8 @@
                                 <th width="10%"> Reported</th>
                                 <th width="7%"> Site</th>
                                 <th> Name</th>
-                                <th> Assigned To</th>
-                                <th width="10%"> Prac Comp</th>
+                                <th> Task Owner</th>
+                                <th width="10%"> Updated</th>
                                 <th width="10%"> Completed</th>
                                 <th width="5%"></th>
                             </tr>
@@ -144,8 +142,8 @@
             {data: 'reported_date', name: 'm.reported'},
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
-            {data: 'assigned_to', name: 's.assigned_to'},
-            {data: 'completed_date', name: 'm.completed', orderable: false, searchable: false},
+            {data: 'super_id', name: 's.super_id'},
+            {data: 'updated_date', name: 'm.updated_at', orderable: false, searchable: false},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
