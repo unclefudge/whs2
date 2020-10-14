@@ -34,8 +34,8 @@
                                     @if (Auth::user()->company->subscription)
                                         <option value="-1">Upcoming</option>
                                         <option value="0">Completed</option>
+                                        <option value="2">Maintenance</option>
                                     @endif
-                                    <option value="2">Maintenance</option>
                                 </select>
                             </div>
                         </div>

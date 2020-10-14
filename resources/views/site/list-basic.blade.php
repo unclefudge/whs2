@@ -29,6 +29,20 @@
                                 </div>
                             </div>
                         @endif
+                            <div class="col-md-2 pull-right">
+                                <div class="form-group">
+                                    <select name="status" id="status" class="form-control bs-select">
+                                        <option value="1" selected>Active</option>
+                                        @if (Auth::user()->hasAnyRole2('mgt-general-manager|con-construction-manager|web-admin'))
+                                            <option value="-1">Upcoming</option>
+                                        @endif
+                                        @if (Auth::user()->hasAnyRole2('mgt-general-manager|con-construction-manager|web-admin|con-supervisor') || Auth::user()->company_id == 29) <!-- GBT -->
+                                            <option value="0">Completed</option>
+                                            <option value="2">Maintenance</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
 
                     </div>
                     <div class="portlet-body">
@@ -80,7 +94,7 @@
             'type': 'GET',
             'data': function (d) {
                 d.site_group = $('#site_group').val();
-                d.status = 1;
+                d.status = $('#status').val();;
             }
         },
         columns: [
