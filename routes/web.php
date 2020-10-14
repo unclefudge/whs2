@@ -51,16 +51,16 @@ Route::post('/password/reset', 'Auth\PasswordResetController@reset');
 // Logged in Routes
 Route::group(['middleware' => 'auth'], function () {
     // Signup routes.. Post Login
-    Route::get('/signup/user/{id}', 'Company\CompanySignupController@userEdit');         // Step 1
-    Route::post('/signup/user/{id}', 'Company\CompanySignupController@userUpdate');
-    Route::get('/signup/company/{id}', 'Company\CompanySignupController@companyEdit');   // Step 2
-    Route::post('/signup/company/{id}', 'Company\CompanySignupController@companyUpdate');
-    Route::get('/signup/workers/{id}', 'Company\CompanySignupController@workersEdit');   // Step 3
-    Route::post('/signup/workers/{id}', 'Company\CompanySignupController@workersUpdate');
-    Route::get('/signup/summary/{id}', 'Company\CompanySignupController@summary');       // Step 4
-    Route::get('/signup/documents/{id}', 'Company\CompanySignupController@documents');   // Step 5
-    Route::get('/signup/welcome/{id}', 'Company\CompanySignupController@welcome');       // Resend welcome email
-    Route::get('/signup/cancel/{id}', 'Company\CompanySignupController@cancel');       // Resend welcome email
+    Route::get('/signup/user/{id}', 'Company\CompanySignUpController@userEdit');         // Step 1
+    Route::post('/signup/user/{id}', 'Company\CompanySignUpController@userUpdate');
+    Route::get('/signup/company/{id}', 'Company\CompanySignUpController@companyEdit');   // Step 2
+    Route::post('/signup/company/{id}', 'Company\CompanySignUpController@companyUpdate');
+    Route::get('/signup/workers/{id}', 'Company\CompanySignUpController@workersEdit');   // Step 3
+    Route::post('/signup/workers/{id}', 'Company\CompanySignUpController@workersUpdate');
+    Route::get('/signup/summary/{id}', 'Company\CompanySignUpController@summary');       // Step 4
+    Route::get('/signup/documents/{id}', 'Company\CompanySignUpController@documents');   // Step 5
+    Route::get('/signup/welcome/{id}', 'Company\CompanySignUpController@welcome');       // Resend welcome email
+    Route::get('/signup/cancel/{id}', 'Company\CompanySignUpController@cancel');       // Resend welcome email
 
     // Site Checkin
     Route::get('checkin', 'Site\SiteCheckinController@checkin');
