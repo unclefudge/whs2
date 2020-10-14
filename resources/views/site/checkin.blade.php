@@ -260,6 +260,20 @@
                             <div class="row">
                                 <div class="col-sm-2 col-xs-4 text-center">
                                     <div class="form-group">
+                                        {!! Form::checkbox('question19', '1', false,
+                                         ['class' => 'make-switch', 'data-size' => 'small',
+                                         'data-on-text'=>'Yes', 'data-on-color'=>'success',
+                                         'data-off-text'=>'No', 'data-off-color'=>'danger']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-sm-10 col-xs-8">
+                                    I will <b>not make changes to any scaffold or Fall Protection</b> without express permission from the site supervisor
+                                </div>
+                            </div>
+                            <div class="row visible-xs">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-sm-2 col-xs-4 text-center">
+                                    <div class="form-group">
                                         {!! Form::checkbox('question6', '1', false,
                                          ['class' => 'make-switch', 'data-size' => 'small',
                                          'data-on-text'=>'Yes', 'data-on-color'=>'success',
