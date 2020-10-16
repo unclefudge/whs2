@@ -117,6 +117,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/equipment/dt/stocktake', 'Misc\ReportController@getEquipmentStocktake');
     Route::get('/manage/report/equipment/dt/stocktake-not', 'Misc\ReportController@getEquipmentStocktakeNot');
     Route::get('/manage/report/qa/{id}', 'Misc\ReportController@QAdebug');
+    Route::get('/manage/report/maintenance_no_action', 'Misc\ReportController@maintenanceNoAction');
+    Route::get('/manage/report/maintenance_on_hold', 'Misc\ReportController@maintenanceOnHold');
 
 
     // User Docs

@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Site\Site;
 use App\Models\Site\SiteQa;
 use App\Models\Site\SiteQaItem;
+use App\Models\Site\SiteMaintenance;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Company\Company;
@@ -19,6 +20,7 @@ use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentStocktake;
 use App\Models\Misc\Equipment\EquipmentStocktakeItem;
 use App\Models\Misc\Equipment\EquipmentLog;
+use App\Models\Misc\Action;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
 use App\Http\Requests;
@@ -673,6 +675,25 @@ class ReportController extends Controller {
         $todos = ToDo::where('type', 'qa')->where('type_id', $id)->get();
 
         return view('manage/report/qa_debug', compact('qa', 'planner', 'todos'));
+    }
+
+    public function maintenanceNoAction()
+    {
+        $active_requests = SiteMaintenance::where('status', 1 )->orderBy('reported')->get();
+        $mains = [];
+        foreach ($active_requests as $main) {
+            if ($main->lastUpdated()->lt(Carbon::now()->subDays(14)))
+                $mains[] = $main;
+        }
+
+        return view('manage/report/maintenance_no_action', compact('mains'));
+    }
+
+    public function maintenanceOnHold()
+    {
+        $mains = SiteMaintenance::where('status', 3 )->orderBy('reported')->get();
+
+        return view('manage/report/maintenance_no_action', compact('mains'));
     }
 
     /**

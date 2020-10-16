@@ -302,6 +302,19 @@ class SiteMaintenance extends Model {
     }
 
     /**
+     * Last Action
+     *
+     * @return string
+     */
+    public function lastAction()
+    {
+        $lastAction = $this->actions->sortBy('updated_at')->last();
+
+        return ($lastAction) ? $lastAction->action : '';
+
+    }
+
+    /**
      * Display records last update_by + date
      *
      * @return string

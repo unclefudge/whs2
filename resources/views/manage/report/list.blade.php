@@ -33,15 +33,29 @@
                         <table class="table table-striped table-bordered table-hover order-column" id="table_list">
                             <thead>
                             <tr class="mytable-header">
-                                <th> Name</th>
+                                <th> Miscelleous</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td><a href="/manage/report/recent">Recent Reports</a></td>
                             </tr>
+                            <tr style="background-color: #f0f6fa">
+                                <th> User</th>
+                            </tr>
                             <tr>
                                 <td><a href="/manage/report/newusers">New Users</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="/manage/report/users_noemail">Users without emails</a></td>
+                            <tr>
+                            <tr>
+                                <td><a href="/manage/report/users_nowhitecard">Users without white card</a></td>
+                            <tr>
+                                <td><a href="/manage/report/users_lastlogin">Users Last Login</a></td>
+                            </tr>
+                            <tr style="background-color: #f0f6fa">
+                                <th> Company</th>
                             </tr>
                             <tr>
                                 <td><a href="/manage/report/newcompanies">New Companies</a></td>
@@ -56,34 +70,32 @@
                                 <td><a href="/manage/report/company_privacy">Company Privacy Policy</a></td>
                             </tr>
                             <tr>
-                                <td><a href="/manage/report/users_noemail">Users without emails</a></td>
-                            <tr>
-                            <tr>
-                                <td><a href="/manage/report/users_nowhitecard">Users without white card</a></td>
-                            <tr>
-                                <td><a href="/manage/report/users_lastlogin">Users Last Login</a></td>
+                                <td><a href="/manage/report/company_users">Company Staff</a></td>
                             </tr>
-                            </tr>
-                            <tr>
-                                <td><a href="/manage/report/roleusers">Roles assigned to Users</a></td>
-                            </tr>
-                            <tr>
-                                <td><a href="/manage/report/users_extra_permissions">Users with extra permissions (on top of what is provided by their role)</a></td>
                             <tr>
                                 <td><a href="/manage/report/missing_company_info">Companies with missing information or expired documents</a></td>
                             </tr>
                             <tr>
-                                <td><a href="/manage/report/company_users">Company Staff</a></td>
+                                <td><a href="/manage/report/expired_company_docs">Expired Company Documents</a></td>
+                            </tr>
+                            <tr style="background-color: #f0f6fa">
+                                <th> Site</th>
                             </tr>
                             <tr>
                                 <td><a href="/manage/report/attendance">Attendance</a></td>
                             </tr>
+                            <tr style="background-color: #f0f6fa">
+                                <th> Maintenance Requests</th>
+                            </tr>
                             <tr>
-                                <td><a href="/manage/report/expired_company_docs">Expired Company Documents</a></td>
+                                <td><a href="/manage/report/maintenance_no_action">No Action 14 days</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="/manage/report/maintenance_on_hold">On Hold</a></td>
                             </tr>
                             @if (Auth::user()->isCC())
-                                <tr>
-                                    <td><a href="/manage/report/payroll">Payroll</a></td>
+                                <tr style="background-color: #f0f6fa">
+                                    <th> Equipment</th>
                                 </tr>
                                 <tr>
                                     <td><a href="/manage/report/equipment">Equipment List</a></td>
@@ -97,8 +109,26 @@
                                 <tr>
                                     <td><a href="/manage/report/equipment_stocktake">Equipment Stocktake</a></td>
                                 </tr>
+                                <tr style="background-color: #f0f6fa">
+                                    <th> Accounting</th>
+                                </tr>
+                                <tr>
+                                    <td><a href="/manage/report/payroll">Payroll</a></td>
+                                </tr>
                             @endif
+                            <tr style="background-color: #f0f6fa">
+                                <th> Security</th>
+                            </tr>
+                            <tr>
+                                <td><a href="/manage/report/roleusers">Roles assigned to Users</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="/manage/report/users_extra_permissions">Users with extra permissions (on top of what is provided by their role)</a></td>
+                            </tr>
                             @if (Auth::user()->hasRole2('web-admin'))
+                                <tr style="background-color: #f0f6fa">
+                                    <th> Website Admin</th>
+                                </tr>
                                 <tr>
                                     <td><a href="/manage/report/nightly">Nightly Log</a></td>
                                 </tr>
