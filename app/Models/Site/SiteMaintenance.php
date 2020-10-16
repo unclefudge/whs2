@@ -52,7 +52,7 @@ class SiteMaintenance extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-     public function taskOwner()
+    public function taskOwner()
     {
         return $this->belongsTo('App\User', 'super_id');
     }
@@ -207,6 +207,7 @@ class SiteMaintenance extends Model {
         $site = Site::findOrFail($this->site_id);
         $this->createToDo($site->supervisors->pluck('id')->toArray());
     }
+
     /**
      * Create ToDoo for Maintenance Report and assign to given user(s)
      */
@@ -285,6 +286,20 @@ class SiteMaintenance extends Model {
         */
     }
 
+    /**
+     * Last updated (record or action)
+     *
+     * @return Carbon date
+     */
+    public function lastUpdated()
+    {
+        $lastAction = $this->actions->sortBy('updated_at')->last();
+
+        if ($lastAction && $lastAction->updated_at->gt($this->updated_at))
+            return $lastAction->updated_at;
+        else
+            return $this->updated_at;
+    }
 
     /**
      * Display records last update_by + date

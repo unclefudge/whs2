@@ -143,7 +143,7 @@
             {data: 'site_id', name: 'm.site_id'},
             {data: 'sitename', name: 's.name'},
             {data: 'super_id', name: 's.super_id'},
-            {data: 'updated_date', name: 'm.updated_at', orderable: false, searchable: false},
+            {data: 'last_updated', name: 'last_updated', orderable: false, searchable: false},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],

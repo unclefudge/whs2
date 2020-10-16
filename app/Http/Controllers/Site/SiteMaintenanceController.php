@@ -625,6 +625,10 @@ class SiteMaintenanceController extends Controller {
 
                 return ($d->super_id) ? $d->taskOwner->name : '-';
             })
+            ->addColumn('last_updated', function ($doc) {
+                $main = SiteMaintenance::find($doc->id);
+                return $main->lastUpdated()->format('d/m/Y');
+            })
             ->addColumn('completed', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);
                 $total = $main->items()->count();
