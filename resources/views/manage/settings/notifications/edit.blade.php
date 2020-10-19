@@ -67,8 +67,8 @@
                             {{-- Email Lists --}}
                             <h3 class="font-green form-section">Report Email Lists</h3>
                             {!! notificationSelect($notificationTypes::type('n.site.jobstartexport'), 'Job Start Export', 'Job Start Export', 'Default list to email Job Start Export ') !!}
-                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.noaction'), 'Maintenance No Actions', 'Maintenance Request No Actions', 'No Actions for 14 days on Maintenance Request') !!}
-                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.onhold'), 'Maintenance On Hold', 'Maintenance Request On Hold', 'Maintenance Requests currently On Hold') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.noaction'), 'Maintenance No Actions', 'Maintenance Request No Actions', 'No Actions for 14 days on Maintenance Request', 'Report sent fortnightly (Monday)') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.onhold'), 'Maintenance On Hold', 'Maintenance Request On Hold', 'Maintenance Requests currently On Hold', 'Report sent fortnightly (Monday)') !!}
                         @endif
 
 
