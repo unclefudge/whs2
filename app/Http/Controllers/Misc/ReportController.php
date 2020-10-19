@@ -693,7 +693,7 @@ class ReportController extends Controller {
     {
         $mains = SiteMaintenance::where('status', 3 )->orderBy('reported')->get();
 
-        return view('manage/report/maintenance_no_action', compact('mains'));
+        return view('manage/report/maintenance_onhold', compact('mains'));
     }
 
     /**

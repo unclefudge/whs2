@@ -32,7 +32,7 @@
                                 <th> Site</th>
                                 <th> Name</th>
                                 <th width="15%"> Task Owner</th>
-                                <th width="10%"> Last Contact Date</th>
+                                <th width="10%"> Last Action</th>
                                 <th> Last Note</th>
                             </tr>
                             </thead>
@@ -44,8 +44,8 @@
                                     <td>{{ $main->site->code }}</td>
                                     <td>{{ $main->site->name }}</td>
                                     <td>{{ $main->taskOwner->name }}</td>
-                                    <td>{{ $main->lastUpdated()->format('d/m/Y') }}</td>
-                                    <td>{{ $main->lastAction() }}</td>
+                                    <td>{{ ($main->lastAction()) ? $main->lastAction()->updated_at->format('d/m/Y') : $main->created_at->format('d/m/Y') }}</td>
+                                    <td>{{ $main->lastActionNote() }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

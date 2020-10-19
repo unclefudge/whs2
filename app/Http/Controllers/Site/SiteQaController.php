@@ -246,6 +246,8 @@ class SiteQaController extends Controller {
                 $qa->save();
                 if ($qa->master_id == '2581' && $qa->owned_by->notificationsUsersType('n.site.qa.handover')) // Only email if QA is Handover template  ie. final QA on site
                     Mail::to($qa->owned_by->notificationsUsersType('n.site.qa.handover'))->send(new \App\Mail\Site\SiteQaHandover($qa));
+                if ($qa->master_id == '2752' && $qa->owned_by->notificationsUsersType('n.site.qa.super.photo')) // Only email if QA is Supervisor Photo Checklist template  ie. final QA on site
+                    Mail::to($qa->owned_by->notificationsUsersType('n.site.super.photo'))->send(new \App\Mail\Site\SiteQaSuperPhoto($qa));
             }
             Toastr::success("Updated Report");
 

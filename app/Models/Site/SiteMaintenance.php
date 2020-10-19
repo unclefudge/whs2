@@ -304,9 +304,19 @@ class SiteMaintenance extends Model {
     /**
      * Last Action
      *
-     * @return string
+     * @return instance of Action
      */
     public function lastAction()
+    {
+        return $this->actions->sortBy('updated_at')->last();
+    }
+
+    /**
+     * Last Action Note
+     *
+     * @return string
+     */
+    public function lastActionNote()
     {
         $lastAction = $this->actions->sortBy('updated_at')->last();
 

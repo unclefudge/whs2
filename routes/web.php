@@ -472,6 +472,7 @@ Route::get('cron/expired-companydoc', 'Misc\CronController@expiredCompanyDoc');
 Route::get('cron/expired-swms', 'Misc\CronController@expiredSWMS');
 Route::get('cron/archive-toolbox', 'Misc\CronController@archiveToolbox');
 Route::get('cron/email-jobstart', 'Misc\CronController@emailJobstart');
+Route::get('cron/email-fortnight', 'Misc\CronController@emailFortnightlyReports');
 
 Route::get('test/cal', 'Misc\PagesController@testcal');
 Route::get('manage/updateroles', 'Misc\PagesController@updateRoles');
@@ -481,6 +482,10 @@ Route::get('manage/import-maintenance', 'Misc\PagesController@importMaintenance'
 // PHP Info
 Route::get('php-info', function () {
     phpinfo();
+});
+
+Route::get('test/email', function () {
+    return view('emails/blank');
 });
 
 

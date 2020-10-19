@@ -278,11 +278,24 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                        @if (Auth::user()->allowed2('sig.site.maintenance', $main))
+                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
                                             {!! Form::select('status', ['1' => 'Active', '-1' => 'Decline',  '3' => 'On Hold'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
-                                            @elseif ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
+                                        @elseif ($main->status && Auth::user()->allowed2('edit.site.maintenance', $main))
                                             {!! Form::select('status', ['1' => 'Active', '3' => 'On Hold'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
+                                        @else
+                                            {!! Form::text('status_text', ($main->status == 0) ? 'Completed' : 'Declined', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row note note-warning" id="onhold-div" style="{{ fieldHasError('onhold_reason', $errors) ? 'display:show' : 'display:none' }}">
+                                {{-- On Hold Reason --}}
+                                <div class="col-md-12">
+                                    <div class="form-group {!! fieldHasError('onhold_reason', $errors) !!}" style="{{ fieldHasError('onhold_reason', $errors) ? '' : 'display:show' }}" id="onhold_reason-div">
+                                        {!! Form::label('onhold_reason', 'Please specify the reason for placing request ON HOLD', ['class' => 'control-label']) !!}
+                                        {!! Form::text('onhold_reason', null, ['class' => 'form-control', 'id' => 'onhold_reason']) !!}
+                                        {!! fieldErrorMessage('onhold_reason', $errors) !!}
                                     </div>
                                 </div>
                             </div>
@@ -587,6 +600,14 @@
         $("#super_id").select2({placeholder: "Select supervisor", width: '100%'});
         $("#assigned_to").select2({placeholder: "Select company", width: '100%'});
         $("#category_id").select2({placeholder: "Select category", width: "100%"});
+
+        $("#status").change(function () {
+            $('#onhold-div').hide();
+
+            if ($("#status").val() == '3') {
+                $('#onhold-div').show();
+            }
+        });
 
         $("#warranty").change(function () {
             //alert('gg');

@@ -46,7 +46,7 @@
                                         <td> {{ $rec->sitecode }}</td>
                                         <td> {{ $rec->sitename }}</td>
                                         <td> {{ $rec->supervisor }}</td>
-                                        <td> {{ $rec->updated_date }}</td>
+                                        <td> {{ ($main->lastAction()) ? $main->lastAction()->updated_at->format('d/m/Y') : $main->created_at->format('d/m/Y') }}</td>
                                         <td>
                                             @if(Auth::user()->allowed2('edit.site.maintenance', $main))
                                                 <a href="/site/maintenance/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>

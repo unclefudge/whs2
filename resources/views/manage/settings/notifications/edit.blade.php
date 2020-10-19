@@ -52,7 +52,8 @@
                         @if (Auth::user()->isCC())
                             {!! notificationSelect($notificationTypes::type('n.site.asbestos'), 'Asbestos Notification', 'Site Asbestos', 'lodgement, updated', 'Automatically includes relevant Site/Area Supervisors') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.qa.handover'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
-                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.completed'), 'Maintenance Request Completed', 'Maintenance Request Completed', 'Maintenance completed') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.qa.super.photo'), 'QA Supervisor Photo Checklist', 'Site Quality Assurance', 'QA Supervisor Photo Checklist Completion') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.completed'), 'Maintenance Request Completed', 'Maintenance Request', 'Maintenance completed') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.jobstart'), 'Job Start', 'Job Start', 'Job Start created / updated') !!}
                         @endif
 
@@ -62,11 +63,12 @@
                         {!! notificationSelect($notificationTypes::type('n.doc.whs.approval'), 'WHS Approval', 'WHS document requires approval', $companyDocTypes::docNames('whs', 0), 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
                         {!! notificationSelect($notificationTypes::type('n.swms.approval'), 'SWMS Approval', 'SWMS requires approval', 'SWMS documents', 'Companies are automatically notified 2 weeks prior document expiry + every week after expiry for 1 month<br>Users above are notified 2 weeks prior document expiry + 2 weeks after.') !!}
 
-
                         @if (Auth::user()->isCC())
                             {{-- Email Lists --}}
                             <h3 class="font-green form-section">Report Email Lists</h3>
                             {!! notificationSelect($notificationTypes::type('n.site.jobstartexport'), 'Job Start Export', 'Job Start Export', 'Default list to email Job Start Export ') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.noaction'), 'Maintenance No Actions', 'Maintenance Request No Actions', 'No Actions for 14 days on Maintenance Request') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.maintenance.report.onhold'), 'Maintenance On Hold', 'Maintenance Request On Hold', 'Maintenance Requests currently On Hold') !!}
                         @endif
 
 

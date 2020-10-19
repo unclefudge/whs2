@@ -201,7 +201,7 @@ class SiteMaintenanceController extends Controller {
             'company_id' => $main->site->owned_by->id,
         ];
 
-        $user_list = [3, 7]; // Fudge + Gary
+        $user_list = [7]; // Gary
         $todo = Todo::create($todo_request);
         $todo->assignUsers($user_list);
 
@@ -354,8 +354,8 @@ class SiteMaintenanceController extends Controller {
         if (!Auth::user()->allowed2('edit.site.maintenance', $main))
             return view('errors/404');
 
-        $rules = ['supervisor' => 'required', 'completed' => 'required'];
-        $mesg = ['supervisor.required' => 'The supervisor field is required.', 'completed.required' => 'The prac completed field is required.'];
+        $rules = ['supervisor' => 'required', 'completed' => 'required', 'onhold_reason' => 'required_if:status,3'];
+        $mesg = ['supervisor.required' => 'The supervisor field is required.', 'completed.required' => 'The prac completed field is required.', 'onhold_reason.required_if' => 'A reason is required to place request On Hold.'];
         request()->validate($rules, $mesg); // Validate
 
         $main_request = request()->all();
@@ -378,6 +378,7 @@ class SiteMaintenanceController extends Controller {
         if (request('super_id') && request('super_id') != $main->super_id) {
             $super = User::find($main_request['super_id']);
             $main->emailAssigned($super);
+            $action = Action::create(['action' => "Assigned Task Owner updated to $super->name", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         }
 
         // Email if Company Assigned is updated
@@ -385,15 +386,23 @@ class SiteMaintenanceController extends Controller {
             $company = Company::find($main_request['assigned_to']);
             if ($company && $company->primary_contact())
                 $main->emailAssigned($company->primary_contact());
+            $action = Action::create(['action' => "Company assigned to request updated to $company->name", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         }
 
         // Add note if change of Status
         if (request('status') && $main->status != 3 && request('status') == 3)
-            $action = Action::create(['action' => "Request has been placed On Hold", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+            $action = Action::create(['action' => "Request has been placed On Hold for the following reason: \n".request('onhold_reason'), 'table' => 'site_maintenance', 'table_id' => $main->id]);
         if (request('status') && $main->status != 1 && request('status') == 1)
             $action = Action::create(['action' => "Request has been Re-Activated", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         if (request('status') && $main->status != -1 && request('status') == -1)
             $action = Action::create(['action' => "Request has been Declined", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+
+        // Add note if change of Category
+        if (request('category_id') && request('category_id') != $main->category_id) {
+            $from = SiteMaintenanceCategory::find($main->category_id)->name;
+            $to = SiteMaintenanceCategory::find(request('category_id'))->name;
+            $action = Action::create(['action' => "Request category updated from $from to $to", 'table' => 'site_maintenance', 'table_id' => $main->id]);
+        }
 
 
         //dd($main_request);
@@ -432,6 +441,7 @@ class SiteMaintenanceController extends Controller {
                     $site = Site::findOrFail($main->site_id);
                     $main->createManagerSignOffToDo($site->areaSupervisors()->pluck('id')->toArray());
                 }
+                $action = Action::create(['action' => "Request has been signed off by Task Owner", 'table' => 'site_maintenance', 'table_id' => $main->id]);
             }
             if ($signoff == 'manager') {
                 $main_request['manager_sign_by'] = Auth::user()->id;
@@ -442,6 +452,8 @@ class SiteMaintenanceController extends Controller {
                 // Update Site Status back to completed
                 $main->site->status = 0;
                 $main->site->save();
+
+                $action = Action::create(['action' => "Request has been signed off by Construction Manager", 'table' => 'site_maintenance', 'table_id' => $main->id]);
 
                 $email_list = [env('EMAIL_DEV')];
                 if (\App::environment('prod'))
@@ -492,6 +504,7 @@ class SiteMaintenanceController extends Controller {
             $item->sign_by = null;
             $item->sign_at = null;
             $item->save();
+            $action = Action::create(['action' => "Maintenance Item has been mark as NOT completed", 'table' => 'site_maintenance', 'table_id' => $main->id]);
         } else {
             // Item completed
             if ($item_request['status'] == 1 && $item->status != 1) {
@@ -499,6 +512,7 @@ class SiteMaintenanceController extends Controller {
                 $item_request['done_at'] = Carbon::now()->toDateTimeString();
                 $item_request['sign_by'] = Auth::user()->id;
                 $item_request['sign_at'] = Carbon::now()->toDateTimeString();
+                $action = Action::create(['action' => "Maintenance Item has been completed", 'table' => 'site_maintenance', 'table_id' => $main->id]);
             }
             /*
             // Item signed off
@@ -627,7 +641,7 @@ class SiteMaintenanceController extends Controller {
             })
             ->addColumn('last_updated', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);
-                return $main->lastUpdated()->format('d/m/Y');
+                return ($main->lastAction()) ? $main->lastAction()->updated_at->format('d/m/Y') : $main->created_at->format('d/m/Y');
             })
             ->addColumn('completed', function ($doc) {
                 $main = SiteMaintenance::find($doc->id);

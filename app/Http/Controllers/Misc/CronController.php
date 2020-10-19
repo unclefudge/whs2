@@ -14,6 +14,7 @@ use App\Models\Company\CompanyDoc;
 use App\Models\Site\Planner\Trade;
 use App\Models\Site\Planner\Task;
 use App\Models\Site\Site;
+use App\Models\Site\SiteMaintenance;
 use App\Models\Site\Planner\SiteAttendance;
 use App\Models\Site\Planner\SiteCompliance;
 use App\Models\Site\Planner\SitePlanner;
@@ -55,6 +56,12 @@ class CronController extends Controller {
 
         if (Carbon::today()->isThursday())
             CronController::emailJobstart();
+
+        // Fortnightly on Mondays starting 26 Oct 2020
+        $start_monday = Carbon::createFromFormat('Y-m-d', '2020-10-26');
+        if (Carbon::today()->isMonday() && $start_monday->diffInDays(Carbon::now()) % 2 == 0)
+            CronController::emailFortnightlyReports();
+
 
         echo "<h1>ALL DONE - NIGHTLY COMPLETE</h1>";
         $log .= "\nALL DONE - NIGHTLY COMPLETE\n\n\n";
@@ -735,17 +742,18 @@ class CronController extends Controller {
         if ($bytes_written === false) die("Error writing to file");
     }
 
-    static public function brokenQaItem() {
+    static public function brokenQaItem()
+    {
         $log = '';
         echo "<br><br>Fixing broken QA items<br><br>";
         $log .= "\nFixing broken QA items\n";
         $qas = SiteQa::where('status', '>', 0)->where('master', 0)->get();
 
         foreach ($qas as $qa) {
-            foreach($qa->items as $item) {
-                if ($item->done_by === NULL && $item->status == 0 && $item->sign_by) {
-                    echo "<br>[$qa->id] $qa->name (".$qa->site->name.")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
-                    $log .= "\n[$qa->id] $qa->name (".$qa->site->name.")\n- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]\n";
+            foreach ($qa->items as $item) {
+                if ($item->done_by === null && $item->status == 0 && $item->sign_by) {
+                    echo "<br>[$qa->id] $qa->name (" . $qa->site->name . ")<br>- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]<br>";
+                    $log .= "\n[$qa->id] $qa->name (" . $qa->site->name . ")\n- $item->name doneBy[$item->done_by] signBy[$item->sign_by] status[$item->status]\n";
                     $item->status = 1;
 
                     // Check Planner which company did the task
@@ -778,7 +786,6 @@ class CronController extends Controller {
 
         $cc = Company::find(3);
         $emails = implode("; ", $cc->notificationsUsersEmailType('n.site.jobstartexport'));
-        $emails = 'fudge@jordan.net.au';
         echo "Sending email to $emails";
         $log .= "Sending email to $emails";
 
@@ -825,6 +832,73 @@ class CronController extends Controller {
             $m->to($email_list);
             $m->subject('Upcoming Job Start Dates');
         });
+
+
+        echo "<h4>Completed</h4>";
+        $log .= "\nCompleted\n\n\n";
+
+        $bytes_written = File::append(public_path('filebank/log/nightly/' . Carbon::now()->format('Ymd') . '.txt'), $log);
+        if ($bytes_written === false) die("Error writing to file");
+    }
+
+    /*
+    * Email Fortnightly Reports
+    */
+    static public function emailFortnightlyReports()
+    {
+        $log = '';
+        echo "<h2>Email Fortnightly Reports</h2>";
+        $log .= "Email Fortnightly Reports\n";
+        $log .= "------------------------------------------------------------------------\n\n";
+
+        $cc = Company::find(3);
+        $email_list = $cc->notificationsUsersEmailType('n.site.maintenance.report.noaction');
+        $emails = implode("; ", $email_list);
+        echo "Sending No Actions email to $emails";
+        $log .= "Sending No Actions email to $emails";
+
+        //
+        // Active Requests with No Action 14 Days
+        //
+        $active_requests = SiteMaintenance::where('status', 1)->orderBy('reported')->get();
+        $mains = [];
+        foreach ($active_requests as $main) {
+            if ($main->lastUpdated()->lt(Carbon::now()->subDays(14)))
+                $mains[] = $main;
+        }
+
+        $data = ['data' => $mains];
+
+        if ($email_list) {
+            Mail::send('emails/site/maintenance-noaction', $data, function ($m) use ($email_list, $data) {
+                $send_from = 'do-not-reply@safeworksite.com.au';
+                $m->from($send_from, 'Safe Worksite');
+                $m->to($email_list);
+                $m->cc('support@openhands.com.au');
+                $m->subject('Maintenance Requests No Action');
+            });
+        }
+
+
+        //
+        // On Hold Requests
+        //
+        $email_list = $cc->notificationsUsersEmailType('n.site.maintenance.report.onhold');
+        $emails = implode("; ", $email_list);
+        echo "Sending On Hold email to $emails";
+        $log .= "Sending On Hold email to $emails";
+        $hold_requests = SiteMaintenance::where('status', 3)->orderBy('reported')->get();
+        $data = ['data' => $hold_requests];
+
+        if ($email_list) {
+            Mail::send('emails/site/maintenance-onhold', $data, function ($m) use ($email_list, $data) {
+                $send_from = 'do-not-reply@safeworksite.com.au';
+                $m->from($send_from, 'Safe Worksite');
+                $m->to($email_list);
+                $m->cc('support@openhands.com.au');
+                $m->subject('Maintenance Requests On Hold');
+            });
+        }
 
 
         echo "<h4>Completed</h4>";
