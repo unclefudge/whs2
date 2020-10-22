@@ -688,6 +688,12 @@ trait UserRolesPermissions {
                 $cc_child = (in_array($record->company_id, flatten_array($cc->subCompanies(3)))) ? true : false;
                 if ($cc_child && ($this->permissionLevel($doc_permission, 3) == 99 || $this->permissionLevel($doc_permission, 3) == 1)) return true;  // User has 'All' permission to this record
 
+                // BlueEcho has authority over User doc
+                $be = Company::find(210);
+                $be_child = (in_array($record->company_id, flatten_array($be->subCompanies(210)))) ? true : false;
+                if ($cc_child && ($this->permissionLevel($doc_permission, 210) == 99 || $this->permissionLevel($doc_permission, 210) == 1)) return true;  // User has 'All' permission to this record
+
+
 
                 // Document is For User Company but isn't the owner of it
                 // Only allowed to edit/delete documents with status pending/rejected ie. 2 or 3
