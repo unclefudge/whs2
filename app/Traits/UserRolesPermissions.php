@@ -783,8 +783,15 @@ trait UserRolesPermissions {
                 if ($this->permissionLevel($permission, 3) == 40 && $record->super_id == $this->id) return true; // User has 'Supervisor For' permission to this record
             }
 
+            // Site Inspection Reports
+            if ($permissiontype == 'site.inspection') {
+                if ($action == 'view' && $this->permissionLevel($permission, 3) == 30 && $record->assigned_to == $this->company_id) return true; // Request is Assigned to user's company
+                if ($this->permissionLevel($permission, 3) == 99 || $this->permissionLevel($permission, 3) == 1) return true;  // User has 'All' permission to this record
+                if ($this->authSites($permission)->contains('id', $record->site_id)) return true;
+            }
 
-            // Site (Doc, QA, Asbestos, Export, Maintenance) + Attendance + Compliance + Safety Doc
+
+            // Site (Doc, QA, Asbestos, Export) + Attendance + Compliance + Safety Doc
             if ($permissiontype == 'site.doc' || $permissiontype == 'site.qa' || $permissiontype == 'site.asbestos' || $permissiontype == 'site.export' ||
                 $permissiontype == 'roster' || $permissiontype == 'compliance' || $permissiontype == 'safety.doc'
             ) {

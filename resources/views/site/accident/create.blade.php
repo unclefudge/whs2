@@ -59,7 +59,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('date', $errors) !!}">
                                         {!! Form::label('date', 'Date / Time of Incident', ['class' => 'control-label']) !!}
-                                        <div class="input-group date form_datetime form_datetime bs-datetime date-picker" data-date-end-date="0d"> <!-- bs-datetime -->
+                                        <div class="input-group date form_datetime form_datetime bs-datetime" data-date-end-date="0d"> <!-- bs-datetime -->
                                             {!! Form::text('date', null, ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
                                             <span class="input-group-addon">
                                                 <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
@@ -199,6 +199,7 @@
     <script src="../assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>-->
 
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>

@@ -267,6 +267,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('site/asbestos/{id}/status/{status}', 'Site\SiteAsbestosController@updateStatus');
     Route::resource('site/asbestos', 'Site\SiteAsbestosController');
 
+    // Site Inspection Electical Register
+    Route::get('site/inspection/electrical/dt/list', 'Site\SiteInspectionElectricalController@getInspections');
+    //Route::get('site/inspection/electrical/{id}/status/{status}', 'Site\SiteInspectionElectricalController@updateStatus');
+    Route::resource('site/inspection/electrical', 'Site\SiteInspectionElectricalController');
+
     // Report Actions
     Route::get('report/actions/{type}/{id}', 'Misc\ReportActionController@index');
     Route::post('report/actions/{type}/{id}', 'Misc\ReportActionController@store');

@@ -233,13 +233,13 @@ class SiteMaintenance extends Model {
     /**
      * Close any outstanding ToDoo for this QA
      */
-    public function closeToDo($user)
+    public function closeToDo()
     {
         $todos = Todo::where('type', 'maintenance')->where('type_id', $this->id)->where('status', '1')->get();
         foreach ($todos as $todo) {
             $todo->status = 0;
             $todo->done_at = Carbon::now();
-            $todo->done_by = $user->id;
+            $todo->done_by = Auth::user()->id;
             $todo->save();
         }
     }

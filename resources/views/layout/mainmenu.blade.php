@@ -102,8 +102,16 @@
                                                         @endif
                                                     </ul>
                                                 </div>
+                                                <div class="col-md-2">
+                                                    <ul class="mega-menu-submenu">
+                                                        <li><h3 class="h3-submenu">&nbsp;</h3></li>
+                                                        @if (Auth::user()->hasAnyPermissionType('site.inspection'))
+                                                            <li><a href="/site/inspection/electrical" class="nav-link"> Electrical Inspection </a></li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
                                             @endif
-                                            <div class="col-md-3 hidden-sm hidden-xs pull-right"><img src="/img/think-safety.png"></div>
+                                            <!--<div class="col-md-3 hidden-sm hidden-xs pull-right"><img src="/img/think-safety.png"></div>-->
                                         </div>
                                         <div class="row hidden-sm hidden-xs" style="background:#444d58; border-top: 1px solid grey; padding:10px; margin-bottom: -50px">
                                             <div class="col-md-4">&nbsp;</div>

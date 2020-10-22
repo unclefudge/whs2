@@ -371,6 +371,12 @@ $rec = $user;
                             </tr>
                         @endif
                         <tr>
+                            <td>Inspection Reports</td>
+                            <td width="15%">{!! permSelect('view.site.inspection', 'super.plan', $rec, $cid) !!}</td>
+                            <td width="15%">{!! permSelect('edit.site.inspection', 'super', $rec, $cid) !!}</td>
+                            <td width="45%" colspan="3">&nbsp;</td>
+                        </tr>
+                        <tr>
                             <td>Maintenance Requests</td>
                             <td width="15%">{!! permSelect('view.site.maintenance', 'super.plan', $rec, $cid) !!}</td>
                             <td width="15%">{!! permSelect('edit.site.maintenance', 'super', $rec, $cid) !!}</td>

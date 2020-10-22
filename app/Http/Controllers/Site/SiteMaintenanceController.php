@@ -273,7 +273,7 @@ class SiteMaintenanceController extends Controller {
             Toastr::success("Assigned Request");
 
             // Delete Todoo
-            $main->closeToDo(Auth::user());
+            $main->closeToDo();
 
             // Add to Client Visit planner
             /*
@@ -436,7 +436,7 @@ class SiteMaintenanceController extends Controller {
                 $main_request['supervisor_sign_at'] = Carbon::now();
 
                 // Close any outstanding ToDos for supervisors and Create one for Area Super / Con Mgr
-                $main->closeToDo(Auth::user());
+                $main->closeToDo();
                 if (!$main->manager_sign_by) {
                     $site = Site::findOrFail($main->site_id);
                     $main->createManagerSignOffToDo($site->areaSupervisors()->pluck('id')->toArray());
@@ -447,7 +447,7 @@ class SiteMaintenanceController extends Controller {
                 $main_request['manager_sign_by'] = Auth::user()->id;
                 $main_request['manager_sign_at'] = Carbon::now();
                 // Close any outstanding ToDos for Area Super / Con Mgr
-                $main->closeToDo(Auth::user());
+                $main->closeToDo();
 
                 // Update Site Status back to completed
                 $main->site->status = 0;
