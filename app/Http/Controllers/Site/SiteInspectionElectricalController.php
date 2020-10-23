@@ -140,8 +140,14 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->allowed2('edit.site.inspection', $report))
             return view('errors/404');
 
-        $rules = ['client_name' => 'required', 'client_address' => 'required'];
-        $mesg = ['client_name.required'    => 'The client name field is required.', 'client_address.required' => 'The client address field is required.'];
+        $rules = ['client_name' => 'required',
+                  'client_address' => 'required',
+                  'inspected_name' => 'required_if:status,0',
+                  'inspected_lic' => 'required_if:status,0'];
+        $mesg = ['client_name.required'    => 'The client name field is required.',
+                 'client_address.required' => 'The client address field is required.',
+                 'inspected_name.required_if' => 'The inspection carried out by field is required.',
+                 'inspected_lic.required_if' => 'The licence no. field is required.'];
         request()->validate($rules, $mesg); // Validate
 
         //dd(request()->all());
@@ -152,8 +158,13 @@ class SiteInspectionElectricalController extends Controller {
         $report_request['inspected_at'] = $inspected_at->toDateTimeString();
 
         // On completion close any outstanding ToDoos
-        if (request('status') == 0 && $report->status != 0)
+        if (request('status') == 0 && $report->status != 0) {
             $report->closeToDo();
+            $report_request['inspected_by'] = Auth::user()->id;
+        } elseif (request('status') == 1) {
+            $report_request['inspected_name'] = null;
+            $report_request['inspected_lic'] = null;
+        }
 
         // Create ToDoo for change of assigned company
         if (request('assigned_to') != $report->assigned_to) {

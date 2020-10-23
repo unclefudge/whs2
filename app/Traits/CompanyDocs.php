@@ -70,6 +70,17 @@ trait CompanyDocs {
     }
 
     /**
+     * Contractor Licence No. (if active)
+     *
+     * @return string
+     */
+    public function contractorLicence()
+    {
+        $doc = CompanyDoc::where('category_id', 7)->where('for_company_id', $this->id)->where('status', '1')->first();
+        return ($doc && $doc->ref_no) ? $doc->ref_no : '';
+    }
+
+    /**
      * Contractor Licence Class SBC
      *
      * @return string

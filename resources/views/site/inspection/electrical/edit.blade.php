@@ -120,6 +120,24 @@
                                 </div>
                             </div>
 
+                            {{-- Inspectors Name + Lic--}}
+                            <div class="row note note-warning" id="inspector-div" style="{{ (fieldHasError('inspected_name', $errors) || fieldHasError('inspected_lic', $errors)) ? 'display:show' : 'display:none' }}">
+                                <div class="col-md-4">
+                                    <div class="form-group {!! fieldHasError('inspected_name', $errors) !!}">
+                                        {!! Form::label('inspected_name', 'Inspection carried out by', ['class' => 'control-label']) !!}
+                                        {!! Form::text('inspected_name', Auth::user()->name, ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('inspected_name', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group {!! fieldHasError('inspected_lic', $errors) !!}">
+                                        {!! Form::label('inspected_lic', 'Licence No.', ['class' => 'control-label']) !!}
+                                        {!! Form::text('inspected_lic', Auth::user()->company->contractorLicence(), ['class' => 'form-control']) !!}
+                                        {!! fieldErrorMessage('inspected_lic', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+
                             {{-- Existing --}}
                             <h4 class="font-green-haze">Condition of existing wiring</h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
@@ -238,18 +256,14 @@
         $("#site_id").select2({placeholder: "Select Site"});
         $("#assigned_to").select2({placeholder: "Select Company"});
 
-        updateFields();
+        $("#status").change(function () {
+            $('#inspector-div').hide();
 
-        function updateFields() {
-            var site_id = $("#site_id").select2("val");
-        }
-
+            if ($("#status").val() == '0') {
+                $('#inspector-div').show();
+            }
+        });
     });
-
-    // Force datepicker to not be able to select dates after today
-    //$('.bs-datetime').datetimepicker({
-    //    endDate: new Date()
-    //});
 </script>
 @stop
 

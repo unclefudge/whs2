@@ -85,10 +85,10 @@
                                     {!! Form::text('assigned_name', $report->assignedTo->name, ['class' => 'form-control', 'readonly']) !!}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group {!! fieldHasError('date', $errors) !!}">
                                     {!! Form::label('inspected_at', 'Date / Time of Inspection', ['class' => 'control-label']) !!}
-                                    {!! Form::text('inspected_at', ($report->inspected_at) ? $report->inspected_at->format('d F Y - H:i') : '', ['class' => 'form-control', 'readonly']) !!}
+                                    {!! Form::text('inspected_at', ($report->inspected_at) ? $report->inspected_at->format('d/m/Y g:i a') : '', ['class' => 'form-control', 'readonly']) !!}
                                 </div>
                             </div>
                             {{-- Status --}}
@@ -99,6 +99,22 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($report->status == 0)
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        {!! Form::label('inspected_name', 'Inspection carried out by', ['class' => 'control-label']) !!}
+                                        {!! Form::text('inspected_name', $report->inspected_name, ['class' => 'form-control', 'readonly']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        {!! Form::label('inspected_lic', 'Licence No.', ['class' => 'control-label']) !!}
+                                        {!! Form::text('inspected_lic', $report->inspected_lic, ['class' => 'form-control', 'readonly']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Existing --}}
                         <h4 class="font-green-haze">Condition of existing wiring</h4>
