@@ -36,7 +36,7 @@
                             {!! Form::model($report, ['method' => 'PATCH', 'action' => ['Site\SiteInspectionElectricalController@update', $report->id], 'class' => 'horizontal-form']) !!}
 
                             <div class="row">
-                                <div class="col-md-6">{!! Form::text('site_name', $report->site->name, ['class' => 'form-control', 'readonly']) !!}</div>
+                                <div class="col-md-6"><h3 style="margin: 0px"> {{ $report->site->name }}</h3></div>
                                 <div class="col-md-6">
                                     <h2 style="margin: 0px; padding-right: 20px">
                                         @if($report->status == '0')
@@ -54,35 +54,38 @@
                             <h4 class="font-green-haze">Job details</h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
-                                <div class="col-md-6"></div>
-                                <div class="col-md-6"></div>
+                                {{-- Inspection --}}
+                                <div class="col-md-6">
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-4"><b>Date</b></div>
+                                        <div class="col-md-8">{{ ($report->inspected_at) ?  $report->inspected_at->format('d/m/Y g:i a') : '' }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 0px 5px;">
+                                        <div class="col-md-4">Inspection carried out by</div>
+                                        <div class="col-md-8">{{ ($report->assignedTo) ? $report->assignedTo->name : '' }}<br>Licence No. {{ $report->inspected_lic }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-4"><b>Signature</b></div>
+                                        <div class="col-md-8">{{ $report->inspected_name }}</div>
+                                    </div>
+                                </div>
+                                {{-- Client --}}
+                                <div class="col-md-6">
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-2"><b>Client</b></div>
+                                        <div class="col-md-10">{{ $report->client_name }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 0px 5px;">
+                                        <div class="col-md-2 hidden-sm hidden-xs">&nbsp;</div>
+                                        <div class="col-md-10">{{ $report->client_address }}<br><br></div>
+                                    </div>
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-2 hidden-sm hidden-xs">&nbsp;</div>
+                                        <div class="col-md-10">Client contact was made: &nbsp; {{ ($report->client_contacted) ? 'Yes' : 'No' }}</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row" style="padding: 5px;">
-                                <div class="col-md-2"><b>Date</b></div>
-                                <div class="col-md-4">{{ ($report->inspected_at) ?  $report->inspected_at->format('d/m/Y g:i a') : '' }}</div>
-                                <div class="col-md-1"><b>Client</b></div>
-                                <div class="col-md-5">{{ $report->client_name }}</div>
-                            </div>
-                            <div class="row" style="padding: 0px 5px">
-                                <div class="col-md-2">Inspection carried out by</div>
-                                <div class="col-md-4">{{ ($report->assignedTo) ? $report->assignedTo->name : '' }}</div>
-                                <div class="col-md-1">&nbsp;</div>
-                                <div class="col-md-5">{{ $report->client_address }}</div>
-                            </div>
-                            <div class="row" style="padding: 0px 5px">
-                                <div class="col-md-2">&nbsp;</div>
-                                <div class="col-md-3">Licence No. {{ $report->inspected_lic }}</div>
-                                <div class="col-md-7"></div>
-                            </div>
-                            <div class="row" style="padding: 5px;">
-                                <div class="col-md-2"><b>Signature</b></div>
-                                <div class="col-md-4">{{ $report->inspected_name }}</div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-5">Client contact was made: &nbsp; {{ ($report->client_contacted) ? 'Yes' : 'No' }}</div>
-                            </div>
-                            <br>
                             <hr>
-
 
                             {{-- Existing --}}
                             @if ($report->existing)
