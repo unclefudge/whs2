@@ -48,8 +48,8 @@
                                     </div>
                                     <div class="col-md-4 mt-step-col active">
                                         <div class="mt-step-number bg-white font-grey">2</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
-                                        <div class="mt-step-content font-grey-cascade">Add photos</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                                        <div class="mt-step-content font-grey-cascade">Add Photos/Documents</div>
                                     </div>
                                     <div class="col-md-4 mt-step-col last">
                                         <div class="mt-step-number bg-white font-grey">3</div>
@@ -90,7 +90,7 @@
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                 @if(Auth::user()->allowed2('add.site.maintenance'))
                                     <div class="note note-warning">
-                                        Multiple photos/images can be uploaded with this maintenance request.
+                                        Multiple documents/photos/images can be uploaded with this maintenance request.
                                         <ul>
                                             <li>Once you have selected your files upload them by clicking
                                                 <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
@@ -205,7 +205,7 @@
             uploadUrl: "/site/maintenance/upload/", // server upload action
             uploadAsync: true,
             //allowedFileExtensions: ["image"],
-            allowedFileTypes: ["image"],
+            //allowedFileTypes: ["image"],
             browseClass: "btn blue",
             browseLabel: "Browse",
             browseIcon: "<i class=\"fa fa-folder-open\"></i> ",

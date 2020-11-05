@@ -16,8 +16,21 @@
                 </li>
                 <li>
                     <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                        @foreach (TODO_TYPES as $type => $name)
+                            @foreach(Auth::user()->todoType($type, 1) as $todo)
+                                <li>
+                                    <a href="{{ $todo->url() }}">
+                                        <span class="time">{!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '' !!}</span>
+                                    <span class="details">
+                                        <span class="badge badge-success badge-roundless"><i class="fa fa-plus"></i></span>
+                                    <span style="line-height: 25px">&nbsp; {{ $todo->name }} {{ $todo->id }}:</span>
+                                </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endforeach
 
-                        <?php $todo_types = ['qa', 'toolbox', 'hazard', 'company doc', 'company ptc', 'company privacy', 'user doc', 'general', 'swms', 'equipment']; ?>
+                        <?php $todo_types = ['company doc', 'company ptc', 'company privacy']; ?>
                         @foreach ($todo_types as $type)
                             @foreach(Auth::user()->todoType($type, 1) as $todo)
                                 <li>

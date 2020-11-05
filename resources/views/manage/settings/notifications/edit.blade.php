@@ -54,6 +54,7 @@
                             {!! notificationSelect($notificationTypes::type('n.site.qa.handover'), 'QA Handover Completion', 'Site Quality Assurance', 'Handover Completion') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.qa.super.photo'), 'QA Supervisor Photo Checklist', 'Site Quality Assurance', 'QA Supervisor Photo Checklist Completion') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.maintenance.completed'), 'Maintenance Request Completed', 'Maintenance Request', 'Maintenance completed') !!}
+                            {!! notificationSelect($notificationTypes::type('n.site.inspection.completed'), 'Inspection Report Completed', 'Inspection Report', 'Inspection completed') !!}
                             {!! notificationSelect($notificationTypes::type('n.site.jobstart'), 'Job Start', 'Job Start', 'Job Start created / updated') !!}
                         @endif
 

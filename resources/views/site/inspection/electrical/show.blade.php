@@ -82,7 +82,7 @@
                             <div class="col-md-4">
                                 <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
                                     {!! Form::label('assigned_to', 'Assigned to company', ['class' => 'control-label']) !!}
-                                    {!! Form::text('assigned_name', $report->assignedTo->name, ['class' => 'form-control', 'readonly']) !!}
+                                    {!! Form::text('assigned_name', ($report->assignedTo) ? $report->assignedTo->name : '', ['class' => 'form-control', 'readonly']) !!}
                                 </div>
                             </div>
                             <div class="col-md-2">

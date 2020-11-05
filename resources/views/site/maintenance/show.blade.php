@@ -177,21 +177,33 @@
 
                             {{-- Gallery --}}
                             <br>
-                            <h4>Photos
-                                @if ($main->status > 0)
-                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
-                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
-                                @endif
-                            </h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div id="photos-show">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        @include('site/maintenance/_gallery')
-                                    </div>
+                            <div class="row"  id="photos-show">
+                                <div class="col-md-7">
+                                    <h4>Photos
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                        @endif</h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/maintenance/_gallery')
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4" id="docs-show">
+                                    <h4>Documents
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-docs">Edit</button>
+                                        @endif
+                                    </h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/maintenance/_docs')
                                 </div>
                             </div>
+
                             <div id="photos-edit">
+                                <h4>Photos / Documents
+                                    @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                        <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                    @endif</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                 <div class="note note-warning">
                                     Multiple photos/images can be uploaded with this maintenance request.
                                     <ul>
@@ -621,7 +633,6 @@
         $('#site-edit').hide();
         $('#client-edit').hide();
         $('#photos-edit').hide();
-        $('#view-photos').hide();
 
         $("#edit-site").click(function (e) {
             e.preventDefault();
@@ -638,15 +649,16 @@
         });
         $("#edit-photos").click(function (e) {
             e.preventDefault();
-            $('#edit-photos').hide();
-            $('#view-photos').show();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#edit-docs").click(function (e) {
+            e.preventDefault();
             $('#photos-show').hide();
             $('#photos-edit').show();
         });
         $("#view-photos").click(function (e) {
             e.preventDefault();
-            $('#edit-photos').show();
-            $('#view-photos').hide();
             $('#photos-show').show();
             $('#photos-edit').hide();
         });

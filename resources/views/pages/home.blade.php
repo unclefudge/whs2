@@ -211,226 +211,27 @@
                                 </li>
                             @endif
 
-                            {{-- SWMS TooDo's --}}
-                            @if (Auth::user()->todoType('swms', 1)->count())
-                                <h4>Safe Work Method Statements</h4>
-                                @foreach(Auth::user()->todoType('swms', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm @if($todo->priority) label-danger @else label-success @endif">
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
-                            {{-- QA ToDoo's --}}
-                            @if (Auth::user()->todoType('qa', 1)->count())
-                                <h4>Quality Assurance Reports</h4>
-                                @foreach(Auth::user()->todoType('qa', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm @if($todo->priority) label-danger @else label-success @endif">
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
-
-                            {{-- Toolbox ToDoo's --}}
-                            @if (Auth::user()->todoType('toolbox', 1)->count())
-                                <h4>Toolbox Talks</h4>
-                                @foreach(Auth::user()->todoType('toolbox', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
-
-                            {{-- Equipment Transfer --}}
-                            @if (Auth::user()->todoType('equipment', 1)->count())
-                                <h4>Equipment Transfer</h4>
-                                @foreach(Auth::user()->todoType('equipment', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
+                            {{-- Outstanding ToDoo Tasks for user --}}
+                            @foreach (TODO_TYPES AS $todo_type => $todo_name)
+                                @if (Auth::user()->todoType($todo_type, 1)->count())
+                                    <h4>{{$todo_name}}</h4>
+                                    @foreach(Auth::user()->todoType($todo_type, 1) as $todo)
+                                        @include('pages/_home-todo')
+                                    @endforeach
+                                @endif
+                            @endforeach
 
                             {{-- Company Docs --}}
                             @if (Auth::user()->todoType('company doc', 1)->count() || Auth::user()->todoType('company ptc', 1)->count() || Auth::user()->todoType('company privacy', 1)->count())
                                 <h4>Company Documents</h4>
                                 @foreach(Auth::user()->todoType('company doc', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    @include('pages/_home-todo')
                                 @endforeach
                                 @foreach(Auth::user()->todoType('company ptc', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    @include('pages/_home-todo')
                                 @endforeach
                                 @foreach(Auth::user()->todoType('company privacy', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
-
-                            {{-- User Docs --}}
-                            @if (Auth::user()->todoType('user doc', 1)->count())
-                                <h4>User Documents</h4>
-                                @foreach(Auth::user()->todoType('user doc', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm label-success">
-                                                            <i class="fa fa-bookmark"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @endif
-
-                            {{-- Site Maintenance ToDoo's --}}
-                            @if (Auth::user()->todoType('maintenance', 1)->count())
-                                <h4>Site Maintenance Requests</h4>
-                                @foreach(Auth::user()->todoType('maintenance', 1) as $todo)
-                                    <li>
-                                        <a href="{{ $todo->url() }}" class="task-title">
-                                            <div class="col1">
-                                                <div class="cont">
-                                                    <div class="cont-col1">
-                                                        <div class="label label-sm @if($todo->priority) label-danger @else label-success @endif">
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cont-col2">
-                                                        <div class="desc"> {{ $todo->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col2">
-                                                <div class="date"> {!! ($todo->due_at) ? $todo->due_at->format('d/m/Y') : '-'!!}</div>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    @include('pages/_home-todo')
                                 @endforeach
                             @endif
                         </ul>
@@ -551,7 +352,7 @@
                         </div>
                         <div class="actions">
                             @if (Auth::user()->hasPermission2('view.equipment.stocktake'))
-                            <a class="btn btn-circle btn-outline btn-default" href="/equipment/stocktake/{{ ($worksite->equipmentLocation) ? $worksite->equipmentLocation->id : 0 }}" data-original-title="" title=""> Stocktake</a>
+                                <a class="btn btn-circle btn-outline btn-default" href="/equipment/stocktake/{{ ($worksite->equipmentLocation) ? $worksite->equipmentLocation->id : 0 }}" data-original-title="" title=""> Stocktake</a>
                             @endif
                             <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
                         </div>

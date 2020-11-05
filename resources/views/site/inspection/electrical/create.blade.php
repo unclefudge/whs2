@@ -71,13 +71,6 @@
                                         {!! fieldErrorMessage('client_address', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group {!! fieldHasError('client_contacted', $errors) !!}">
-                                        {!! Form::label('client_contacted', 'Contact was made ', ['class' => 'control-label']) !!}
-                                        {!! Form::select('client_contacted', ['' => 'Select option', '1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('client_contacted', $errors) !!}
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="form-actions right">

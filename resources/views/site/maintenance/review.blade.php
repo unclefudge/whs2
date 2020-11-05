@@ -57,8 +57,8 @@
                                     </div>
                                     <div class="col-md-4 mt-step-col done">
                                         <div class="mt-step-number bg-white font-grey">2</div>
-                                        <div class="mt-step-title uppercase font-grey-cascade">Photos</div>
-                                        <div class="mt-step-content font-grey-cascade">Add photos</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                                        <div class="mt-step-content font-grey-cascade">Add Photos/Documents</div>
                                     </div>
                                     <div class="col-md-4 mt-step-col last active">
                                         <div class="mt-step-number bg-white font-grey">3</div>
@@ -154,21 +154,33 @@
 
                             {{-- Gallery --}}
                             <br>
-                            <h4>Photos
-                                @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
-                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
-                                    <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
-                                @endif
-                            </h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div id="photos-show">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        @include('site/maintenance/_gallery')
-                                    </div>
+                            <div class="row"  id="photos-show">
+                                <div class="col-md-7">
+                                    <h4>Photos
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                        @endif</h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/maintenance/_gallery')
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4" id="docs-show">
+                                    <h4>Documents
+                                        @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-docs">Edit</button>
+                                        @endif
+                                    </h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/maintenance/_docs')
                                 </div>
                             </div>
+
                             <div id="photos-edit">
+                                <h4>Photos / Documents
+                                    @if(Auth::user()->allowed2('add.site.maintenance') || Auth::user()->allowed2('edit.site.maintenance', $main))
+                                        <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                    @endif</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                 <div class="note note-warning">
                                     Multiple photos/images can be uploaded with this maintenance request.
                                     <ul>
@@ -214,36 +226,6 @@
                                         @endif
                                     </div>
                                 </div>
-
-                                {{-- Assigned To --}}
-                                {{--}}
-                                <div class="col-md-4">
-                                    <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}">
-                                        {!! Form::label('assigned_to', 'Assigned to', ['class' => 'control-label']) !!}
-                                        @if ($main->status && Auth::user()->allowed2('sig.site.maintenance', $main))
-                                            <select id="assigned_to" name="assigned_to" class="form-control select2" style="width:100%">
-                                                <option value="">Select company</option>
-                                                @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                    <option value="{{ $company->id }}" {!! ($company->id == $main->assigned_to) ? 'selected' : ''  !!}>{{ $company->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        @else
-                                            {!! Form::text('assigned_text', ($main->assignedTo) ? $main->assignedTo->name : 'Unassigned', ['class' => 'form-control', 'readonly']) !!}
-                                        @endif
-                                        {!! fieldErrorMessage('assigned_to', $errors) !!}
-                                    </div>
-                                </div>--}}
-
-                                {{-- Status --}}
-                                {{--}}
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        @if (Auth::user()->allowed2('sig.site.maintenance', $main))
-                                            {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                            {!! Form::select('status', ['-1' => 'Decline', '1' => 'Accept', '2' => 'Under Review'], $main->status, ['class' => 'form-control bs-select', 'id' => 'status']) !!}
-                                        @endif
-                                    </div>
-                                </div>--}}
                             </div>
 
                             @if(!$main->super_id)
@@ -298,13 +280,12 @@
                                 </div>
                             @else
                                 {{-- Under Review - client appointment set --}}
-                            {{--}}
-                                <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
-                                <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
-                                <input type="hidden" name="visited" value="1"> --}}
+                                {{--}}
+                                    <input type="hidden" name="company_id" value="{{ $main->nextClientVisit()->company->id }}">
+                                    <input type="hidden" name="visit_date" value="{{ $main->nextClientVisit()->from->format('d/m/Y') }}">
+                                    <input type="hidden" name="visited" value="1"> --}}
                             @endif
                         </div>
-
 
 
                         {{-- Items --}}
@@ -328,36 +309,6 @@
                                 <app-actions :table_id="{{ $main->id }}"></app-actions>
                             </div>
                         </div>
-                        {{--
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>Notes
-                                    @if (Auth::user()->allowed2('edit.site.maintenance', $main))
-                                        <button v-show="xx.record_status == '1'" v-on:click="$root.$broadcast('add-action-modal')" class="btn btn-circle green btn-outline btn-sm pull-right" data-original-title="Add">Add</button>
-                                    @endif
-                                </h3>
-                                <table class="table table-striped table-bordered table-nohover order-column">
-                                    <thead>
-                                    <tr class="mytable-header">
-                                        <th width="10%">Date</th>
-                                        <th> Action</th>
-                                        <th width="20%"> Name</th>
-                                        <th width="5%"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach ($main->actions->sortByDesc('created_at') as $action)
-                                        <tr>
-                                            <td>{{  $action->created_at->format('d/m/Y') }}</td>
-                                            <td>{!! $action->action !!}</td>
-                                            <td>{{ $action->user->fullname }}</td>
-                                            <td></td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>--}}
 
                         <hr>
                         <div class="pull-right" style="min-height: 50px">
@@ -485,7 +436,6 @@
         $('#site-edit').hide();
         $('#client-edit').hide();
         $('#photos-edit').hide();
-        $('#view-photos').hide();
 
         $("#edit-site").click(function (e) {
             e.preventDefault();
@@ -502,15 +452,16 @@
         });
         $("#edit-photos").click(function (e) {
             e.preventDefault();
-            $('#edit-photos').hide();
-            $('#view-photos').show();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#edit-docs").click(function (e) {
+            e.preventDefault();
             $('#photos-show').hide();
             $('#photos-edit').show();
         });
         $("#view-photos").click(function (e) {
             e.preventDefault();
-            $('#edit-photos').show();
-            $('#view-photos').hide();
             $('#photos-show').show();
             $('#photos-edit').hide();
         });
@@ -521,7 +472,7 @@
             uploadUrl: "/site/maintenance/upload/", // server upload action
             uploadAsync: true,
             //allowedFileExtensions: ["image"],
-            allowedFileTypes: ["image"],
+            //allowedFileTypes: ["image"],
             browseClass: "btn blue",
             browseLabel: "Browse",
             browseIcon: "<i class=\"fa fa-folder-open\"></i> ",

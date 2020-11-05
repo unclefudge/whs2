@@ -83,10 +83,9 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->allowed2('add.site.accident'))
             return view('errors/404');
 
-        $rules = ['site_id' => 'required', 'assigned_to' => 'required', 'client_name' => 'required', 'client_address' => 'required'];
+        $rules = ['site_id' => 'required', 'client_name' => 'required', 'client_address' => 'required'];
         $mesg = [
             'site_id.required'        => 'The site field is required.',
-            'assigned_to.required'    => 'The assigned to company field is required.',
             'client_name.required'    => 'The client name field is required.',
             'client_address.required' => 'The client address field is required.'
         ];
@@ -98,10 +97,26 @@ class SiteInspectionElectricalController extends Controller {
         // Create Report
         $report = SiteInspectionElectrical::create($report_request);
 
-        // Create ToDoo for assigned company
-        $company = Company::find(request('assigned_to'));
-        if ($company)
-            $report->createAssignedToDo($company->staff->pluck('id')->toArray());
+        if ($report->assigned_to) {
+            // Create ToDoo for assigned company
+            $company = Company::find($report->assigned_to);
+            if ($company)
+                $report->createAssignedToDo($company->staff->pluck('id')->toArray());
+        } else {
+            // Create ToDoo for Construction Manager to assign to company
+            $todo_request = [
+                'type'       => 'inspection_electrical',
+                'type_id'    => $report->id,
+                'name'       => 'Site Inspection Electical Created - ' . $report->site->name,
+                'info'       => 'Please review inspection and assign to a company',
+                'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
+                'company_id' => $report->site->owned_by->id,
+            ];
+
+            $user_list = DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray(); // Construction Manager
+            $todo = Todo::create($todo_request);
+            $todo->assignUsers($user_list);
+        }
 
         Toastr::success("Created electrical report");
 
@@ -122,9 +137,9 @@ class SiteInspectionElectricalController extends Controller {
             return view('errors/404');
 
         if ($report->status && Auth::user()->allowed2('edit.site.inspection', $report))
-            return redirect('/site/inspection/electrical/'. $report->id . '/edit');
+            return redirect('/site/inspection/electrical/' . $report->id . '/edit');
 
-        return view('/site/inspection/electrical/show',  compact('report'));
+        return view('/site/inspection/electrical/show', compact('report'));
     }
 
     /**
@@ -140,14 +155,20 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->allowed2('edit.site.inspection', $report))
             return view('errors/404');
 
-        $rules = ['client_name' => 'required',
+        $rules = ['client_name'    => 'required',
                   'client_address' => 'required',
                   'inspected_name' => 'required_if:status,0',
-                  'inspected_lic' => 'required_if:status,0'];
-        $mesg = ['client_name.required'    => 'The client name field is required.',
-                 'client_address.required' => 'The client address field is required.',
+                  'inspected_lic'  => 'required_if:status,0'];
+        $mesg = ['client_name.required'       => 'The client name field is required.',
+                 'client_address.required'    => 'The client address field is required.',
                  'inspected_name.required_if' => 'The inspection carried out by field is required.',
-                 'inspected_lic.required_if' => 'The licence no. field is required.'];
+                 'inspected_lic.required_if'  => 'The licence no. field is required.'];
+
+        if (in_array(Auth::user()->id, DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray())) {
+            $rules = $rules + ['assigned_to'    => 'required'];
+            $mesg = $mesg + ['assigned_to.required'       => 'The assigned to company field is required.'];
+        }
+
         request()->validate($rules, $mesg); // Validate
 
         //dd(request()->all());
@@ -161,6 +182,11 @@ class SiteInspectionElectricalController extends Controller {
         if (request('status') == 0 && $report->status != 0) {
             $report->closeToDo();
             $report_request['inspected_by'] = Auth::user()->id;
+
+            // Email completed notification
+            $email_list = (\App::environment('prod')) ? $report->site->company->notificationsUsersEmailType('n.site.inspection.completed') : [env('EMAIL_DEV')];
+            if ($email_list) Mail::to($email_list)->send(new \App\Mail\Site\SiteInspectionElectricalCompleted($report));
+
         } elseif (request('status') == 1) {
             $report_request['inspected_name'] = null;
             $report_request['inspected_lic'] = null;
@@ -208,6 +234,7 @@ class SiteInspectionElectricalController extends Controller {
             })
             ->editColumn('assigned_to', function ($inspect) {
                 $r = SiteInspectionElectrical::find($inspect->id);
+
                 return ($r->assigned_to) ? $r->assignedTo->name : '-';
             })
             ->rawColumns(['view', 'action'])

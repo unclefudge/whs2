@@ -24,7 +24,8 @@ class SettingsNotificationTypes {
         '17' => 'n.site.maintenance.completed',
         '18' => 'n.site.maintenance.report.noaction',
         '19' => 'n.site.maintenance.report.onhold',
-        '20' => 'n.site.qa.super.photo'
+        '20' => 'n.site.qa.super.photo',
+        '21' => 'n.site.inspection.completed'
     ];
 
 

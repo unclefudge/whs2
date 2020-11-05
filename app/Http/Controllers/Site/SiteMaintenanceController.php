@@ -22,6 +22,7 @@ use App\Models\Misc\Action;
 use App\Models\Company\Company;
 use App\Models\Comms\Todo;
 use App\Models\Comms\TodoUser;
+use App\Models\Misc\Role2;
 use App\Jobs\SiteQaPdf;
 use App\Http\Requests;
 use App\Http\Requests\Site\SiteQaRequest;
@@ -141,6 +142,30 @@ class SiteMaintenanceController extends Controller {
             'item1.required'      => 'The item field is required.'];
         request()->validate($rules, $mesg); // Validate
 
+        // Verify reported date
+        if (request('reported')) {
+            if (preg_match("/(\d{2})\/(\d{2})\/(\d{4})$/", request('reported'), $matches)) {
+                list($dd, $mm, $yyyy) = explode('/', request('reported'));
+                if (checkdate($mm, $dd, $yyyy))
+                    $main_request['reported'] = Carbon::createFromFormat('d/m/Y H:i:s', request('reported') . ' 00:00:00');
+                else
+                    return back()->withErrors(['reported' => "Invalid reported date. Required format dd/mm/yyyy"]);
+            } else
+                return back()->withErrors(['reported' => "Invalid reported date. Required format dd/mm/yyyy"]);
+        }
+
+        // Verify prac completed date
+        if (request('completed')) {
+            if (preg_match("/(\d{2})\/(\d{2})\/(\d{4})$/", request('completed'), $matches)) {
+                list($dd, $mm, $yyyy) = explode('/', request('completed'));
+                if (checkdate($mm, $dd, $yyyy))
+                    $main_request['completed'] = Carbon::createFromFormat('d/m/Y H:i:s', request('completed') . ' 00:00:00');
+                else
+                    return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+            } else
+                return back()->withErrors(['completed' => "Invalid Prac Completed date. Required format dd/mm/yyyy"]);
+        }
+
         $site_id = request('site_id');
         $main_request = request()->except('multifile');
         $main_request['completed'] = (request('completed')) ? Carbon::createFromFormat('d/m/Y H:i', request('completed') . '00:00')->toDateTimeString() : null;
@@ -201,7 +226,7 @@ class SiteMaintenanceController extends Controller {
             'company_id' => $main->site->owned_by->id,
         ];
 
-        $user_list = [7]; // Gary
+        $user_list = DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray(); // Construction Manager
         $todo = Todo::create($todo_request);
         $todo->assignUsers($user_list);
 
@@ -590,11 +615,12 @@ class SiteMaintenanceController extends Controller {
             $doc_request = $request->only('site_id');
             $doc_request['name'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $doc_request['company_id'] = Auth::user()->company_id;
+            $doc_request['type'] = (in_array(strtolower($file->getClientOriginalExtension()), ['jpg', 'jpeg', 'gif', 'png'])) ? 'photo' : 'doc';
 
             // Create SiteMaintenanceDoc
             $doc = SiteMaintenanceDoc::create($doc_request);
             $doc->main_id = $request->get('main_id');
-            $doc->type = 'photo';
+            //
             $doc->attachment = $name;
             $doc->save();
         }

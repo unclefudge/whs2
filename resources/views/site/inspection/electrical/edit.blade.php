@@ -65,13 +65,6 @@
                                         {!! fieldErrorMessage('client_address', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group {!! fieldHasError('client_contacted', $errors) !!}">
-                                        {!! Form::label('client_contacted', 'Contact was made ', ['class' => 'control-label']) !!}
-                                        {!! Form::select('client_contacted', ['' => 'Select option', '1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control bs-select']) !!}
-                                        {!! fieldErrorMessage('client_contacted', $errors) !!}
-                                    </div>
-                                </div>
                             </div>
 
                             <h4 class="font-green-haze">Inspection details</h4>
@@ -81,8 +74,11 @@
                                 <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
                                         {!! Form::label('assigned_to', 'Assigned to company', ['class' => 'control-label']) !!}
-                                        @if(Auth::user()->allowed2('add.site.inspection'))
+                                        @if(Auth::user()->allowed2('sig.site.inspection'))
                                             <select id="assigned_to" name="assigned_to" class="form-control bs-select" style="width:100%">
+                                                @if (!$report->assigned_to)
+                                                    <option value="">Select company</option>
+                                                @endif
                                                 @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
                                                     @if (in_array('4', $company->tradesSkilledIn->pluck('id')->toArray()))
                                                         <option value="{{ $company->id }}" {{ ($report->assigned_to && $report->assigned_to == $company->id) ? 'selected' : '' }}>{{ $company->name }}</option>
@@ -90,13 +86,14 @@
                                                 @endforeach
                                             </select>
                                         @else
-                                            {!! Form::text('assigned_name', $report->assignedTo->name, ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::text('assigned_name', ($report->assignedTo) ? $report->assignedTo->name : '', ['class' => 'form-control', 'readonly']) !!}
                                         @endif
                                         {!! fieldErrorMessage('assigned_to', $errors) !!}
                                     </div>
                                 </div>
+                                {{-- Inspection Date/Time --}}
                                 <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('date', $errors) !!}">
+                                    <div class="form-group {!! fieldHasError('inspected_at', $errors) !!}" style="{{ (!$report->assigned_to) ? 'display:none' : '' }}" id="inspected_at-div">
                                         {!! Form::label('inspected_at', 'Date / Time of Inspection', ['class' => 'control-label']) !!}
                                         <div class="input-group date form_datetime form_datetime bs-datetime" data-date-end-date="0d"> <!-- bs-datetime -->
                                             {!! Form::text('inspected_at', ($report->inspected_at) ? $report->inspected_at->format('d F Y - H:i') : '', ['class' => 'form-control', 'readonly', 'style' => 'background:#FFF']) !!}
@@ -107,6 +104,16 @@
                                         {!! fieldErrorMessage('inspected_at', $errors) !!}
                                     </div>
                                 </div>
+
+                                {{-- Client contacted --}}
+                                <div class="col-md-2">
+                                    <div class="form-group {!! fieldHasError('client_contacted', $errors) !!}">
+                                        {!! Form::label('client_contacted', 'Client contacted', ['class' => 'control-label']) !!}
+                                        {!! Form::select('client_contacted', ['' => 'Select option', '1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control bs-select']) !!}
+                                        {!! fieldErrorMessage('client_contacted', $errors) !!}
+                                    </div>
+                                </div>
+
                                 {{-- Status --}}
                                 <div class="col-md-2 pull-right">
                                     <div class="form-group">
@@ -138,78 +145,80 @@
                                 </div>
                             </div>
 
-                            {{-- Existing --}}
-                            <h4 class="font-green-haze">Condition of existing wiring</h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('existing', $errors) !!}">
-                                        {!! Form::label('existing', 'The existing wiring was found to be', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('existing', null, ['rows' => '5', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('existing', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Required --}}
-                            <h4 class="font-green-haze">Required work to meet compliance</h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('required', $errors) !!}">
-                                        {!! Form::label('required', 'The following work is required so that Existing Electrical Wiring will comply to the requirements of S.A.A Codes and the local Council', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('required', null, ['rows' => '5', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('required', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('required_cost', $errors) !!}">
-                                        {!! Form::label('required_cost', 'Cost of required work (incl GST)', ['class' => 'control-label']) !!}
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                            {!! Form::text('required_cost', null, ['class' => 'form-control']) !!}
+                            <div id="report-div" style="{{ (!$report->assigned_to) ? 'display:none' : '' }}">
+                                {{-- Existing --}}
+                                <h4 class="font-green-haze">Condition of existing wiring</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('existing', $errors) !!}">
+                                            {!! Form::label('existing', 'The existing wiring was found to be', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('existing', null, ['rows' => '5', 'class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('existing', $errors) !!}
                                         </div>
-                                        {!! fieldErrorMessage('required_cost', $errors) !!}
                                     </div>
                                 </div>
-                            </div>
 
-                            {{-- Required --}}
-                            <h4 class="font-green-haze">Recommended works</h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('recommend', $errors) !!}">
-                                        {!! Form::label('recommend', 'Work not esstial but strongly recommended to be carried out to prevent the necessity of costly maintenance in the future when access to same', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('recommend', null, ['rows' => '5', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('recommend', $errors) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('recommend_cost', $errors) !!}">
-                                        {!! Form::label('recommend_cost', 'Cost of recommended work (incl GST)', ['class' => 'control-label']) !!}
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                            {!! Form::text('recommend_cost', null, ['class' => 'form-control']) !!}
+                                {{-- Required --}}
+                                <h4 class="font-green-haze">Required work to meet compliance</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('required', $errors) !!}">
+                                            {!! Form::label('required', 'The following work is required so that Existing Electrical Wiring will comply to the requirements of S.A.A Codes and the local Council', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('required', null, ['rows' => '5', 'class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('required', $errors) !!}
                                         </div>
-                                        {!! fieldErrorMessage('recommend_cost', $errors) !!}
                                     </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group {!! fieldHasError('required_cost', $errors) !!}">
+                                            {!! Form::label('required_cost', 'Cost of required work (incl GST)', ['class' => 'control-label']) !!}
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                {!! Form::text('required_cost', null, ['class' => 'form-control']) !!}
+                                            </div>
+                                            {!! fieldErrorMessage('required_cost', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <!-- Additional -->
-                            <h4 class="font-green-haze">Additional Notes</h4>
-                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                        {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
-                                        {!! Form::textarea('notes', null, ['rows' => '10', 'class' => 'form-control']) !!}
-                                        {!! fieldErrorMessage('notes', $errors) !!}
+                                {{-- Required --}}
+                                <h4 class="font-green-haze">Recommended works</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('recommend', $errors) !!}">
+                                            {!! Form::label('recommend', 'Work not esstial but strongly recommended to be carried out to prevent the necessity of costly maintenance in the future when access to same', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('recommend', null, ['rows' => '5', 'class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('recommend', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group {!! fieldHasError('recommend_cost', $errors) !!}">
+                                            {!! Form::label('recommend_cost', 'Cost of recommended work (incl GST)', ['class' => 'control-label']) !!}
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                {!! Form::text('recommend_cost', null, ['class' => 'form-control']) !!}
+                                            </div>
+                                            {!! fieldErrorMessage('recommend_cost', $errors) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Additional -->
+                                <h4 class="font-green-haze">Additional Notes</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group {!! fieldHasError('notes', $errors) !!}">
+                                            {!! Form::label('notes', 'Notes', ['class' => 'control-label']) !!}
+                                            {!! Form::textarea('notes', null, ['rows' => '10', 'class' => 'form-control']) !!}
+                                            {!! fieldErrorMessage('notes', $errors) !!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

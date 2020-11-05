@@ -5,6 +5,14 @@
  */
 
 define("VALID_EMAIL_PATTERN", '/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD');
+define('TODO_TYPES', ['swms'                  => 'Safe Work Method Statements',
+                      'qa'                    => 'Quality Assurance Reports',
+                      'toolbox'               => 'Toolbox Talks',
+                      'equipment'             => 'Equipment Transfer',
+                      'maintenance'           => 'Site Maintenance Requests',
+                      'inspection_electrical' => 'Electrical Inspection Reports',
+                      'inspection_plumbing'   => 'Plumbing Inspection Reports',
+                      'user doc'              => 'User Documents']);
 
 function validEmail($email)
 {
@@ -66,6 +74,7 @@ function flatten_array($arg)
         return array_merge($c, flatten_array($a));
     }, []) : [$arg];
 }
+
 /*
 function companyTradesSBC ($slug) {
 
@@ -312,7 +321,8 @@ function llllink_to($body, $path, $type)
 EOT;
 }
 
-function scandir_datesort($dir) {
+function scandir_datesort($dir)
+{
     $ignored = array('.', '..', '.svn', '.htaccess');
 
     $files = array();
@@ -489,7 +499,8 @@ function nextWorkDate($date, $direction, $days)
  * This function takes two strings and formats them in a "diff" format that is familiar to most developers.
  * This function can bu used to compare lines of files, or properties of objects. But the root is this function:
  */
-function get_decorated_diff($old, $new){
+function get_decorated_diff($old, $new)
+{
     $from_start = strspn($old ^ $new, "\0");
     $from_end = strspn(strrev($old) ^ strrev($new), "\0");
 
@@ -503,6 +514,7 @@ function get_decorated_diff($old, $new){
 
     $new = "$start<ins style='background-color:#ccffcc'>$new_diff</ins>$end";
     $old = "$start<del style='background-color:#ffcccc'>$old_diff</del>$end";
-    return array("old"=>$old, "new"=>$new);
+
+    return array("old" => $old, "new" => $new);
 }
 
