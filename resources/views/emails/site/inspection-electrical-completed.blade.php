@@ -18,7 +18,7 @@ A inspection report has been completed for {{ $report->site->name }}.
 
 
 
-@component('mail::button', ['url' => config('app.url').'/site/inspection/electrical'.$report->id])
+@component('mail::button', ['url' => config('app.url').'/site/inspection/electrical/'.$report->id])
 View Report
 @endcomponent
 

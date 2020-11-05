@@ -4,7 +4,7 @@
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
         @if (Auth::user()->company->subscription)
-            <li><a href="/site/inspection/electrical">Electrical Inspection</a><i class="fa fa-circle"></i></li>
+            <li><a href="/site/inspection/electrical">Plumbing Inspection Reports</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>Create Report</span></li>
     </ul>
@@ -17,12 +17,12 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-green-haze bold uppercase">Create Electrical Inspection Report</span>
+                            <span class="caption-subject font-green-haze bold uppercase">Create Plumbing Inspection Report</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model('SiteInspectionElectrical', ['action' => 'Site\SiteInspectionElectricalController@store', 'class' => 'horizontal-form']) !!}
+                        {!! Form::model('SiteInspectionPlumbing', ['action' => 'Site\SiteInspectionPlumbingController@store', 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
                         <div class="form-body">
@@ -45,7 +45,7 @@
                                         <select id="assigned_to" name="assigned_to" class="form-control bs-select" style="width:100%">
                                             <option value="">Select company</option>
                                             @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                @if (in_array('4', $company->tradesSkilledIn->pluck('id')->toArray()))
+                                                @if (in_array('8', $company->tradesSkilledIn->pluck('id')->toArray()))
                                                     <option value="{{ $company->id }}" {{ (old('assigned_to') && old('assigned_to') == $company->id) ? 'selected' : '' }}>{{ $company->name }}</option>
                                                 @endif
                                             @endforeach
@@ -74,7 +74,7 @@
                             </div>
 
                             <div class="form-actions right">
-                                <a href="/site/inspection/electrical" class="btn default"> Back</a>
+                                <a href="/site/inspection/plumbing" class="btn default"> Back</a>
                                 <button type="submit" class="btn green"> Save</button>
                             </div>
                         </div>

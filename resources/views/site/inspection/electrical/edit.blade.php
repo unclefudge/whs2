@@ -4,7 +4,7 @@
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
         @if (Auth::user()->company->subscription)
-            <li><a href="/site/inspection/electrical">Site Inspection Electrical</a><i class="fa fa-circle"></i></li>
+            <li><a href="/site/inspection/electrical">Electrical Inspection Report</a><i class="fa fa-circle"></i></li>
         @endif
         <li><span>Edit Report</span></li>
     </ul>
@@ -17,7 +17,7 @@
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-green-haze bold uppercase">Site Inspection Electrical Report</span>
+                            <span class="caption-subject font-green-haze bold uppercase">Electrical Inspection Report</span>
                             <span class="caption-helper"> ID: {{ $report->id }}</span>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
                                 {{-- Inspection Date/Time --}}
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group {!! fieldHasError('inspected_at', $errors) !!}" style="{{ (!$report->assigned_to) ? 'display:none' : '' }}" id="inspected_at-div">
                                         {!! Form::label('inspected_at', 'Date / Time of Inspection', ['class' => 'control-label']) !!}
                                         <div class="input-group date form_datetime form_datetime bs-datetime" data-date-end-date="0d"> <!-- bs-datetime -->
@@ -106,7 +106,7 @@
                                 </div>
 
                                 {{-- Client contacted --}}
-                                <div class="col-md-2">
+                                <div class="col-md-2" style="{{ (!$report->assigned_to) ? 'display:none' : '' }}">
                                     <div class="form-group {!! fieldHasError('client_contacted', $errors) !!}">
                                         {!! Form::label('client_contacted', 'Client contacted', ['class' => 'control-label']) !!}
                                         {!! Form::select('client_contacted', ['' => 'Select option', '1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control bs-select']) !!}

@@ -11,19 +11,22 @@ use Illuminate\Support\Facades\Auth;
 use nilsenj\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
-class SiteInspectionElectrical extends Model {
+class SiteInspectionPlumbing extends Model {
 
-    protected $table = 'site_inspection_electrical';
+    protected $table = 'site_inspection_plumbing';
     protected $fillable = [
         'site_id', 'client_name', 'client_address', 'client_contacted', 'assigned_to', 'inspected_by', 'inspected_at', 'inspected_name', 'inspected_lic',
-        'existing', 'required', 'required_cost', 'recommend', 'recommend_cost', 'notes', 'status',
-        'created_by', 'updated_by', 'created_at', 'updated_at'
+        'pressure', 'pressure_reduction', 'pressure_cost', 'pressure_notes', 'hammer', 'hammer_notes', 'hotwater_type', 'hotwater_lowered',
+        'fuel_type', 'gas_position', 'gas_pipes', 'gas_lines', 'gas_notes', 'existing', 'existing_notes',
+        'sewer_cost', 'sewer_allowance', 'sewer_extra', 'sewer_notes',
+        'stormwater_cost', 'stormwater_allowance', 'stormwater_extra', 'stormwater_notes', 'stormwater_detention_type', 'stormwater_detention_notes',
+        'notes', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'
     ];
 
     protected $dates = ['inspected_at'];
 
     /**
-     * A SiteInspectionElectrical belongs to a site
+     * A SiteInspectionPlumbing belongs to a site
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -33,7 +36,7 @@ class SiteInspectionElectrical extends Model {
     }
 
     /**
-     * A SiteInspectionElectrical assigned to a user
+     * A SiteInspectionPlumbing assigned to a company
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
@@ -43,7 +46,7 @@ class SiteInspectionElectrical extends Model {
     }
 
     /**
-     * A SiteInspectionElectrical belongs to a user
+     * A SiteInspectionPlumbing belongs to a user
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
@@ -53,14 +56,14 @@ class SiteInspectionElectrical extends Model {
     }
 
     /**
-     * Create ToDoo for Electrical Report and assign to given user(s)
+     * Create ToDoo for Plumbing Report and assign to given user(s)
      */
     public function createAssignedToDo($user_list)
     {
         $todo_request = [
-            'type'       => 'inspection_electrical',
+            'type'       => 'inspection_plumbing',
             'type_id'    => $this->id,
-            'name'       => 'Electrical Inspection Report - ' . ' (' . $this->site->name . ')',
+            'name'       => 'Plumbing Inspection Report - ' . ' (' . $this->site->name . ')',
             'info'       => 'Please complete the inspection report',
             'priority'   => '1',
             'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
@@ -74,15 +77,15 @@ class SiteInspectionElectrical extends Model {
     }
 
     /**
-     * Create ToDoo for Electrical Report and assign to given user(s)
+     * Create ToDoo for Plumbing Report and assign to given user(s)
      */
     public function createContructionToDo($user_list)
     {
         // Create ToDoo for Construction Manager to assign to company
         $todo_request = [
-            'type'       => 'inspection_electrical',
+            'type'       => 'inspection_plumbing',
             'type_id'    => $this->id,
-            'name'       => 'Electrical Inspection Report Created - ' . ' (' . $this->site->name . ')',
+            'name'       => 'Plumbing Inspection Report Created - ' . ' (' . $this->site->name . ')',
             'info'       => 'Please review inspection and assign to a company',
             'due_at'     => nextWorkDate(Carbon::today(), '+', 2)->toDateTimeString(),
             'company_id' => $this->site->owned_by->id,
@@ -98,7 +101,7 @@ class SiteInspectionElectrical extends Model {
      */
     public function closeToDo()
     {
-        $todos = Todo::where('type', 'inspection_electrical')->where('type_id', $this->id)->where('status', '1')->get();
+        $todos = Todo::where('type', 'inspection_plumbing')->where('type_id', $this->id)->where('status', '1')->get();
         foreach ($todos as $todo) {
             $todo->status = 0;
             $todo->done_at = Carbon::now();

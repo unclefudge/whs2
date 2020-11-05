@@ -161,6 +161,12 @@
                                     <a href="/safety/doc/wms/{{ $todo->type_id }}" class="btn dark">View expired SWMS</a>
                                     <a href="/safety/doc/wms/{{ $todo->type_id }}/replace" class="btn blue">Make new SWMS</a>
                                 @endif
+                                @if($todo->type == 'inspection_electrical')
+                                    <a href="/site/inspection/electrical/{{ $todo->type_id }}" class="btn dark">View Report</a>
+                                @endif
+                                @if($todo->type == 'inspection_plumbing')
+                                    <a href="/site/inspection/plumbing/{{ $todo->type_id }}" class="btn dark">View Report</a>
+                                @endif
                                 @if($todo->type == 'company doc')
                                     <?php $doc = \App\Models\Company\CompanyDoc::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/{{ $doc->id }}/edit" class="btn dark">View Document</a>
@@ -169,9 +175,9 @@
                                     <?php $doc = \App\Models\Company\CompanyDocPeriodTrade::find($todo->type_id) ?>
                                     <a href="/company/{{ $doc->for_company_id }}/doc/period-trade-contract/{{ $doc->id }}" class="btn dark">View Document</a>
                                 @endif
-                                    @if($todo->type == 'company privacy')
-                                        <a href="/company/{{ Auth::user()->company_id }}/doc/privacy-policy/create" class="btn dark">View Document</a>
-                                    @endif
+                                @if($todo->type == 'company privacy')
+                                    <a href="/company/{{ Auth::user()->company_id }}/doc/privacy-policy/create" class="btn dark">View Document</a>
+                                @endif
                                 @if($todo->type == 'user doc')
                                     <?php $doc = \App\Models\User\UserDoc::find($todo->type_id) ?>
                                     <a href="/user/{{ $doc->user_id }}/doc/{{ $doc->id }}/edit" class="btn dark">View Document</a>

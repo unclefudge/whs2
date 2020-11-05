@@ -107,6 +107,7 @@
                                                         <li><h3 class="h3-submenu">&nbsp;</h3></li>
                                                         @if (Auth::user()->hasAnyPermissionType('site.inspection'))
                                                             <li><a href="/site/inspection/electrical" class="nav-link"> Electrical Inspection </a></li>
+                                                            <li><a href="/site/inspection/plumbing" class="nav-link"> Plumbing Inspection </a></li>
                                                         @endif
                                                     </ul>
                                                 </div>

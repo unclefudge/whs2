@@ -140,9 +140,9 @@
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false},
             {data: 'reported_date', name: 'm.reported'},
-            {data: 'site_id', name: 'm.site_id'},
+            {data: 'site_id', name: 's.code'},
             {data: 'sitename', name: 's.name'},
-            {data: 'super_id', name: 's.super_id'},
+            {data: 'super_id', name: 'm.super_id'},
             {data: 'last_updated', name: 'last_updated', orderable: false, searchable: false},
             {data: 'completed', name: 'completed', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},

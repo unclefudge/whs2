@@ -5,7 +5,7 @@
         @if (Auth::user()->hasAnyPermissionType('site'))
             <li><a href="/site">Sites</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><span>Electrical Inspection Reports</span></li>
+        <li><span>Plumbing Inspection</span></li>
     </ul>
     @stop
 
@@ -19,11 +19,11 @@
                     <div class="portlet-title">
                         <div class="caption font-dark">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Electrical Inspection Reports</span>
+                            <span class="caption-subject bold uppercase font-green-haze">Plumbing Inspection Reports</span>
                         </div>
                         <div class="actions">
                             @if(Auth::user()->allowed2('add.site.inspection'))
-                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/inspection/electrical/create" data-original-title="Add">Add</a>
+                                <a class="btn btn-circle green btn-outline btn-sm" href="/site/inspection/plumbing/create" data-original-title="Add">Add</a>
                             @endif
                         </div>
                     </div>
@@ -79,7 +79,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            'url': '{!! url('site/inspection/electrical/dt/list') !!}',
+            'url': '{!! url('site/inspection/plumbing/dt/list') !!}',
             'type': 'GET',
             'data': function (d) {
                 d.status = $('#status').val();
@@ -87,7 +87,7 @@
         },
         columns: [
             {data: 'view', name: 'view', orderable: false, searchable: false},
-            {data: 'nicedate', name: 'site_inspection_electrical.created_at'},
+            {data: 'nicedate', name: 'site_inspection_plumbing.created_at'},
             {data: 'code', name: 'sites.code'},
             {data: 'sitename', name: 'sites.name'},
             {data: 'assigned_to', name: 'assigned_to', orderable: false, searchable: false},

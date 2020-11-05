@@ -11,7 +11,7 @@ use Mail;
 use Session;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
-use App\Models\Site\SiteInspectionElectrical;
+use App\Models\Site\SiteInspectionPlumbing;
 use App\Models\Comms\Todo;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -21,10 +21,10 @@ use nilsenj\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
 /**
- * Class SiteInspectionElectricalController
+ * Class SiteInspectionPlumbingController
  * @package App\Http\Controllers
  */
-class SiteInspectionElectricalController extends Controller {
+class SiteInspectionPlumbingController extends Controller {
 
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->hasAnyPermissionType('site.inspection'))
             return view('errors/404');
 
-        return view('site/inspection/electrical/list');
+        return view('site/inspection/plumbing/list');
     }
 
     /**
@@ -51,7 +51,7 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->allowed2('add.site.inspection'))
             return view('errors/404');
 
-        return view('site/inspection/electrical/create');
+        return view('site/inspection/plumbing/create');
     }
 
     /**
@@ -61,16 +61,16 @@ class SiteInspectionElectricalController extends Controller {
      */
     public function edit($id)
     {
-        $report = SiteInspectionElectrical::findOrFail($id);
+        $report = SiteInspectionPlumbing::findOrFail($id);
 
         /// Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site.inspection', $report))
             return view('errors/404');
 
         if ($report->status)
-            return view('/site/inspection/electrical/edit', compact('report'));
+            return view('/site/inspection/plumbing/edit', compact('report'));
 
-        return redirect('/site/inspection/electrical/' . $report->id);
+        return redirect('/site/inspection/plumbing/' . $report->id);
     }
 
     /**
@@ -96,7 +96,7 @@ class SiteInspectionElectricalController extends Controller {
         //dd($report_request);
 
         // Create Report
-        $report = SiteInspectionElectrical::create($report_request);
+        $report = SiteInspectionPlumbing::create($report_request);
 
         if ($report->assigned_to) {
             // Create ToDoo for assigned company
@@ -108,7 +108,7 @@ class SiteInspectionElectricalController extends Controller {
 
         Toastr::success("Created inspection report");
 
-        return redirect('/site/inspection/electrical');
+        return redirect('/site/inspection/plumbing');
     }
 
     /**
@@ -118,16 +118,16 @@ class SiteInspectionElectricalController extends Controller {
      */
     public function show($id)
     {
-        $report = SiteInspectionElectrical::findOrFail($id);
+        $report = SiteInspectionPlumbing::findOrFail($id);
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('view.site.inspection', $report))
             return view('errors/404');
 
         if ($report->status && Auth::user()->allowed2('edit.site.inspection', $report))
-            return redirect('/site/inspection/electrical/' . $report->id . '/edit');
+            return redirect('/site/inspection/plumbing/' . $report->id . '/edit');
 
-        return view('/site/inspection/electrical/show', compact('report'));
+        return view('/site/inspection/plumbing/show', compact('report'));
     }
 
     /**
@@ -137,21 +137,33 @@ class SiteInspectionElectricalController extends Controller {
      */
     public function update($id)
     {
-        $report = SiteInspectionElectrical::findOrFail($id);
+        $report = SiteInspectionPlumbing::findOrFail($id);
         $assigned_to_previous = $report->assigned_to;
 
         // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site.inspection', $report))
             return view('errors/404');
 
-        $rules = ['client_name'    => 'required',
-                  'client_address' => 'required',
-                  'inspected_name' => 'required_if:status,0',
-                  'inspected_lic'  => 'required_if:status,0'];
+        $rules = ['client_name'        => 'required',
+                  'client_address'     => 'required',
+                  'inspected_name'     => 'required_if:status,0',
+                  'inspected_lic'      => 'required_if:status,0',
+                  'pressure_reduction' => 'required_if:status,0',
+                  'hammer' => 'required_if:status,0',
+                  'hotwater_lowered' => 'required_if:status,0',
+                  'gas_position' => 'required_if:status,0',
+                  'stormwater_detention_type' => 'required_if:status,0',
+        ];
         $mesg = ['client_name.required'       => 'The client name field is required.',
                  'client_address.required'    => 'The client address field is required.',
                  'inspected_name.required_if' => 'The inspection carried out by field is required.',
-                 'inspected_lic.required_if'  => 'The licence no. field is required.'];
+                 'inspected_lic.required_if'  => 'The licence no. field is required.',
+                 'pressure_reduction.required_if'  => 'The pressure reduction value field is required.',
+                 'hammer.required_if'  => 'The water hammer field is required.',
+                 'hotwater_lowered.required_if'  => 'The will pipes in roof hot water need to be lowered field is required.',
+                 'gas_position.required_if'  => 'The gas meter position field is required.',
+                 'stormwater_detention_type.required_if'  => 'The onsite stormwater detention field is required.',
+        ];
 
         if (in_array(Auth::user()->id, DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray())) {
             $rules = $rules + ['assigned_to' => 'required'];
@@ -174,7 +186,7 @@ class SiteInspectionElectricalController extends Controller {
 
             // Email completed notification
             $email_list = (\App::environment('prod')) ? $report->site->company->notificationsUsersEmailType('n.site.inspection.completed') : [env('EMAIL_DEV')];
-            if ($email_list) Mail::to($email_list)->send(new \App\Mail\Site\SiteInspectionElectricalCompleted($report));
+            if ($email_list) Mail::to($email_list)->send(new \App\Mail\Site\SiteInspectionPlumbingCompleted($report));
 
         } elseif (request('status') == 1) {
             $report_request['inspected_name'] = null;
@@ -194,15 +206,14 @@ class SiteInspectionElectricalController extends Controller {
         Toastr::success("Updated inspection report");
 
         if (request('assigned_to') && $assigned_to_previous == null)
-            return redirect('site/inspection/electrical');
+            return redirect('site/inspection/plumbing');
         else
-            return redirect('site/inspection/electrical/' . $report->id . '/edit');
+            return redirect('site/inspection/plumbing/' . $report->id . '/edit');
     }
 
     public function reportPDF($id)
     {
-
-        $report = SiteInspectionElectrical::findOrFail($id);
+        $report = SiteInspectionPlumbing::findOrFail($id);
 
         if ($report) {
             $completed = 1;
@@ -233,28 +244,28 @@ class SiteInspectionElectricalController extends Controller {
      */
     public function getInspections(Request $request)
     {
-        $inpect_ids = SiteInspectionElectrical::where('status', request('status'))->pluck('id')->toArray();
-        $inspect_records = SiteInspectionElectrical::select([
-            'site_inspection_electrical.id', 'site_inspection_electrical.site_id', 'site_inspection_electrical.inspected_name', 'site_inspection_electrical.inspected_by',
-            'site_inspection_electrical.inspected_at', 'site_inspection_electrical.created_at',
-            'site_inspection_electrical.status', 'sites.company_id',
-            DB::raw('DATE_FORMAT(site_inspection_electrical.created_at, "%d/%m/%y") AS nicedate'),
-            DB::raw('DATE_FORMAT(site_inspection_electrical.inspected_at, "%d/%m/%y") AS nicedate2'),
+        $inpect_ids = SiteInspectionPlumbing::where('status', request('status'))->pluck('id')->toArray();
+        $inspect_records = SiteInspectionPlumbing::select([
+            'site_inspection_plumbing.id', 'site_inspection_plumbing.site_id', 'site_inspection_plumbing.inspected_name', 'site_inspection_plumbing.inspected_by',
+            'site_inspection_plumbing.inspected_at', 'site_inspection_plumbing.created_at',
+            'site_inspection_plumbing.status', 'sites.company_id',
+            DB::raw('DATE_FORMAT(site_inspection_plumbing.created_at, "%d/%m/%y") AS nicedate'),
+            DB::raw('DATE_FORMAT(site_inspection_plumbing.inspected_at, "%d/%m/%y") AS nicedate2'),
             DB::raw('sites.name AS sitename'), 'sites.code',
         ])
-            ->join('sites', 'site_inspection_electrical.site_id', '=', 'sites.id')
-            ->where('site_inspection_electrical.status', '=', request('status'))
-            ->whereIn('site_inspection_electrical.id', $inpect_ids);
+            ->join('sites', 'site_inspection_plumbing.site_id', '=', 'sites.id')
+            ->where('site_inspection_plumbing.status', '=', request('status'))
+            ->whereIn('site_inspection_plumbing.id', $inpect_ids);
 
         $dt = Datatables::of($inspect_records)
             ->addColumn('view', function ($inspect) {
-                return ('<div class="text-center"><a href="/site/inspection/electrical/' . $inspect->id . '"><i class="fa fa-search"></i></a></div>');
+                return ('<div class="text-center"><a href="/site/inspection/plumbing/' . $inspect->id . '"><i class="fa fa-search"></i></a></div>');
             })
             ->editColumn('nicedate2', function ($inspect) {
                 return ($inspect->nicedate2 == '00/00/00') ? '' : $inspect->nicedate2;
             })
             ->editColumn('assigned_to', function ($inspect) {
-                $r = SiteInspectionElectrical::find($inspect->id);
+                $r = SiteInspectionPlumbing::find($inspect->id);
 
                 return ($r->assigned_to) ? $r->assignedTo->name : '-';
             })

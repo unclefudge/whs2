@@ -42,7 +42,7 @@ class CreateSiteInspectionPlumbingTable extends Migration
             $table->string('gas_position', 10)->nullable();
             $table->string('gas_pipes', 25)->nullable();
             $table->tinyInteger('gas_lines')->nullable();
-            $table->text('gas')->nullable();
+            $table->text('gas_notes')->nullable();
             $table->text('existing')->nullable();
             $table->text('existing_notes')->nullable();
             $table->string('sewer_cost', 10)->nullable();
@@ -53,7 +53,7 @@ class CreateSiteInspectionPlumbingTable extends Migration
             $table->string('stormwater_allowance', 10)->nullable();
             $table->string('stormwater_extra', 10)->nullable();
             $table->text('stormwater_notes')->nullable();
-            $table->string('stormwater_detention_type', 10)->nullable();
+            $table->string('stormwater_detention_type', 50)->nullable();
             $table->text('stormwater_detention_notes')->nullable();
             $table->text('notes')->nullable();
             $table->tinyInteger('status')->default(1);
