@@ -432,7 +432,7 @@
     </div>
     </div>
 
-    <pre v-if="xx.dev">@{{ $data | json }}</pre>
+    <!--<pre v-if="xx.dev">@{{ $data | json }}</pre>
     -->
 
     <!-- loading Spinner -->
@@ -763,7 +763,7 @@
                 this.xx.main.items_total = 0;
                 this.xx.main.items_done = 0;
                 for (var i = 0; i < this.xx.itemList.length; i++) {
-                    if ((this.xx.itemList[i]['status'] == 0)) { // || this.xx.itemList[i]['status'] == -1)) && this.xx.itemList[i]['sign_by']) {
+                    if ((this.xx.itemList[i]['done_by'])) { // || this.xx.itemList[i]['status'] == -1)) && this.xx.itemList[i]['sign_by']) {
                         this.xx.main.items_done++;
                     }
                     this.xx.main.items_total++;
