@@ -90,10 +90,11 @@
                             {{-- Existing --}}
                             @if ($report->existing)
                                 <h4 class="font-green-haze">Condition of existing wiring</h4>
-                                The existing wiring was found to be
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                The existing wiring was found to be:
                                 <div class="row">
-                                    <div class="col-md-12">{!! nl2br($report->existing) !!}</div>
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->existing) !!}</div>
                                 </div>
                                 <br>
                             @endif
@@ -101,33 +102,37 @@
                             {{-- Required --}}
                             @if ($report->required || $report->required_cost)
                                 <h4 class="font-green-haze">Required work to meet compliance</h4>
-                                The following work is required so that Existing Electrical Wiring will comply to the requirements of S.A.A Codes and the local Council.
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                The following work is required so that Existing Electrical Wiring will comply to the requirements of S.A.A Codes and the local Council:
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        {!! nl2br($report->required) !!}
-                                        @if ($report->required_cost)
-                                            <br><br>
-                                            <hr style="margin: 0px"><span style="float: right;"> <b> at a cost of ${{ $report->required_cost }} Incl GST</b></span>
-                                        @endif
-                                    </div>
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->required) !!}</div>
                                 </div>
+                                @if ($report->required_cost)
+                                    <br>
+                                    <hr style="margin: 0px">
+                                    <div class="row" style="text-align: right;">
+                                        <div class="col-md-12"><b> at a cost of ${{ $report->required_cost }} Incl GST</b></div>
+                                    </div>
+                                @endif
                             @endif
 
                             {{-- Required --}}
                             @if ($report->recommend || $report->recommend_cost)
                                 <h4 class="font-green-haze">Recommended works</h4>
-                                Work not essential but strongly recommended to be carried out to prevent the necessity of costly maintenance in the future when access to same.
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                Work not essential but strongly recommended to be carried out to prevent the necessity of costly maintenance in the future when access to same:
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        {!! nl2br($report->recommend) !!}
-                                        @if ($report->recommend_cost)
-                                            <br><br>
-                                            <hr style="margin: 0px"><span style="float: right;"> <b> at a cost of ${{ $report->recommend_cost }} Incl GST</b></span>
-                                        @endif
-                                    </div>
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->recommend) !!}</div>
                                 </div>
+                                @if ($report->required_cost)
+                                    <br>
+                                    <hr style="margin: 0px">
+                                    <div class="row" style="text-align: right;">
+                                        <div class="col-md-12"><b> at a cost of ${{ $report->recommend_cost }} Incl GST</b></div>
+                                    </div>
+                                @endif
                             @endif
 
                             {{-- Additional --}}
@@ -135,9 +140,8 @@
                                 <h4 class="font-green-haze">Additional Notes</h4>
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        {!! nl2br($report->notes) !!}
-                                    </div>
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->notes) !!}</div>
                                 </div>
                             @endif
                         </div>

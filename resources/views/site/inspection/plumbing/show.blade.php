@@ -36,12 +36,7 @@
                             {!! Form::model($report, ['method' => 'PATCH', 'action' => ['Site\SiteInspectionPlumbingController@update', $report->id], 'class' => 'horizontal-form']) !!}
 
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('site_id', 'Site', ['class' => 'control-label']) !!}
-                                        {!! Form::text('site_name', $report->site->name, ['class' => 'form-control', 'readonly']) !!}
-                                    </div>
-                                </div>
+                                <div class="col-md-6"><h3 style="margin: 0px"> {{ $report->site->name }}</h3></div>
                                 <div class="col-md-6">
                                     <h2 style="margin: 0px; padding-right: 20px">
                                         @if($report->status == '0')
@@ -56,334 +51,204 @@
                                 </div>
                             </div>
 
-                            <h4 class="font-green-haze">Client details</h4>
+                            <h4 class="font-green-haze">Job details</h4>
                             <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group {!! fieldHasError('client_name', $errors) !!}">
-                                        {!! Form::label('client_name', 'Name', ['class' => 'control-label']) !!}
-                                        {!! Form::text('client_name', null, ['class' => 'form-control','readonly']) !!}
+                                {{-- Inspection --}}
+                                <div class="col-md-6">
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-4"><b>Date</b></div>
+                                        <div class="col-md-8">{{ ($report->inspected_at) ?  $report->inspected_at->format('d/m/Y g:i a') : '' }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 0px 5px;">
+                                        <div class="col-md-4">Inspection carried out by</div>
+                                        <div class="col-md-8">{{ ($report->assignedTo) ? $report->assignedTo->name : '' }}<br>Licence No. {{ $report->inspected_lic }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-4"><b>Signature</b></div>
+                                        <div class="col-md-8">{{ $report->inspected_name }}</div>
                                     </div>
                                 </div>
-                                <div class="col-md-7">
-                                    <div class="form-group {!! fieldHasError('client_address', $errors) !!}">
-                                        {!! Form::label('client_address', 'Address', ['class' => 'control-label']) !!}
-                                        {!! Form::text('client_address', null, ['class' => 'form-control', 'readonly']) !!}
+                                {{-- Client --}}
+                                <div class="col-md-6">
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-2"><b>Client</b></div>
+                                        <div class="col-md-10">{{ $report->client_name }}</div>
+                                    </div>
+                                    <div class="row" style="padding: 0px 5px;">
+                                        <div class="col-md-2 hidden-sm hidden-xs">&nbsp;</div>
+                                        <div class="col-md-10">{{ $report->client_address }}<br><br></div>
+                                    </div>
+                                    <div class="row" style="padding: 5px;">
+                                        <div class="col-md-2 hidden-sm hidden-xs">&nbsp;</div>
+                                        <div class="col-md-10">Client contact was made: &nbsp; {{ ($report->client_contacted) ? 'Yes' : 'No' }}</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <hr>
 
-                        <h4 class="font-green-haze">Inspection details</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            {{-- Assigned To Company --}}
-                            <div class="col-md-4">
-                                <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
-                                    {!! Form::label('assigned_to', 'Assigned to company', ['class' => 'control-label']) !!}
-                                    {!! Form::text('assigned_name', ($report->assignedTo) ? $report->assignedTo->name : '', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
+                            {{-- Inspection Detai;s --}}
+                            <h4 class="font-green-haze">Inspection Details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            {{--Water Pressure / Hammer--}}
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Water Pressure</div>
+                                <div class="col-xs-3">{{ $report->pressure }} kpa</div>
+                                <div class="col-xs-5 hidden-sm hidden-xs" style="text-align: right">500kpa Water Pressure Reduction Value Recommend</div>
+                                <div class="col-xs-5 visible-sm visible-xs">500kpa Water Pressure Reduction Value Recommend</div>
+                                <div class="col-xs-2">{{ ($report->pressure_reduction) ? 'Yes' : 'No' }}</div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group {!! fieldHasError('date', $errors) !!}">
-                                    {!! Form::label('inspected_at', 'Date / Time of Inspection', ['class' => 'control-label']) !!}
-                                    {!! Form::text('inspected_at', ($report->inspected_at) ? $report->inspected_at->format('d/m/Y g:i a') : '', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Water Hammer</div>
+                                <div class="col-xs-10">{{ $report->hammer }} &nbsp; &nbsp; &nbsp; (Refer to Water Hammer comments below)</div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group {!! fieldHasError('client_contacted', $errors) !!}">
-                                    {!! Form::label('client_contacted', 'Client contacted', ['class' => 'control-label']) !!}
-                                    {!! Form::text('client_address', ($report->client_contacted == 1) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Existing Hot Water Type</div>
+                                <div class="col-xs-3">{{ $report->hotwater_type }}</div>
+                                <div class="col-xs-5 hidden-sm hidden-xs" style="text-align: right">Will pipes in roof hot water need to be lowerd?</div>
+                                <div class="col-xs-5 visible-sm visible-xs">Will pipes in roof hot water need to be lowerd?</div>
+                                <div class="col-xs-2">{{ ($report->hotwater_lowered) ? 'Yes' : 'No' }}</div>
                             </div>
-                            {{-- Status --}}
-                            <div class="col-md-2 pull-right">
-                                <div class="form-group">
-                                    {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-                                    {!! Form::text('status_text', ($report->status == 0) ? 'Completed' : 'Active', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Fuel Type</div>
+                                <div class="col-xs-10">{{ $report->fuel_type }}</div>
                             </div>
-                        </div>
-                        @if ($report->status == 0)
+
+
+                            {{--  Gas  Meter / Pipes--}}
+                            <h4 class="font-green-haze">Gas</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Gas Meter Position OK?</div>
+                                <div class="col-xs-3">{{ $report->gas_position }}</div>
+                                <div class="col-xs-5 hidden-sm hidden-xs" style="text-align: right">Are gas pipes able to be tapped into?</div>
+                                <div class="col-xs-5 visible-sm visible-xs">Are gas pipes able to be tapped into?</div>
+                                <div class="col-xs-2">{{ ($report->gas_lines) ? 'Yes' : 'No' }}</div>
+                            </div>
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-xs-2">Gas Pipe</div>
+                                <div class="col-xs-10">{{ $report->gas_pipes }}</div>
+                            </div>
+                            {{-- Gas Notes --}}
+                            <div class="row" style="padding: 5px 0px">
+                                <div class="col-md-12">Gas Notes</div>
+                            </div>
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        {!! Form::label('inspected_name', 'Inspection carried out by', ['class' => 'control-label']) !!}
-                                        {!! Form::text('inspected_name', $report->inspected_name, ['class' => 'form-control', 'readonly']) !!}
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->notes) !!}</div>
+                            </div>
+
+
+                            {{-- Existing Plumbing --}}
+                            <br>
+                            <h4 class="font-green-haze">Condition of existing plumbing</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            The existing plumbing was found to be:
+                            <div class="row">
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->existing) !!}</div>
+                            </div>
+
+                            <!-- Comments -->
+                            @if ($report->notes)
+                                <br>
+                                <h4 class="font-green-haze">Additional notes</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->notes) !!}</div>
+                                </div>
+                            @endif
+
+                            {{-- Water Pressure --}}
+                            <br>
+                            <h4 class="font-green-haze">Water Pressure</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            Water pressure higher than 500KPA will void the warranty on all mixer sets; it is our recommendation that you have fitted a pressure limiting valve at the metre to avoid possible problems:
+                            <div class="row">
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->pressure_notes) !!}</div>
+                            </div>
+                            @if ($report->pressure_cost)
+                                <br>
+                                <hr style="margin: 0px"><span style="float: right;">at a cost of <b>${{ $report->pressure_cost }}</b> Incl GST</span>
+                            @endif
+
+
+                            {{-- Water Hammer --}}
+                            <br>
+                            <h4 class="font-green-haze">Water Hammer</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->hammer_notes) !!}</div>
+                            </div>
+
+                            {{-- Sewer --}}
+                            <h4 class="font-green-haze">Sewer</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            Upon closer inspection of the sewer diagram that we have obtained from the Water Board:
+                            <div class="row">
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->sewer_notes) !!}</div>
+                            </div>
+                            <br>
+                            <hr style="margin: 0px">
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    Cost estimate <b>${{ $report->sewer_cost }}</b> (incl GST)<br>
+                                    Allowance in your tender document is <b>${{ $report->sewer_allowance }}</b> (incl GST)<br>
+                                    Meaning you may incur extra costs of <b>${{ $report->sewer_extra }}</b> (incl GST)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="text-align: center"><h6>PRICE TO BE CONFIRMED AT TIME OF CONSTRUCTION AND DOES NOT INCLUDE BUILDERS MARGIN</h6><br></div>
+                            </div>
+
+
+                            {{-- Stormwater --}}
+                            <h4 class="font-green-haze">Stormwater</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            Upon closer examination of your current stormwater system:
+                            <div class="row">
+                                <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                <div class="col-md-11">{!! nl2br($report->stormwater_notes) !!}</div>
+                            </div>
+                            <br>
+                            <hr style="margin: 0px">
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    Cost estimate <b>${{ $report->stormwater_cost }}</b> (incl GST)<br>
+                                    Allowance in your tender document is <b>${{ $report->stormwater_allowance }}</b> (incl GST)<br>
+                                    Meaning you may incur extra costs of <b>${{ $report->stormwater_extra }}</b> (incl GST)
+                                </div>
+                            </div>
+
+
+                            {{-- Stormwater Detention --}}
+                            @if ($report->stormwater_detention_type)
+                                <h4 class="font-green-haze">Onsite Stormwater Detention</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ $report->stormwater_detention_type }}:
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        {!! Form::label('inspected_lic', 'Licence No.', ['class' => 'control-label']) !!}
-                                        {!! Form::text('inspected_lic', $report->inspected_lic, ['class' => 'form-control', 'readonly']) !!}
-                                    </div>
+                                <div class="row">
+                                    <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
+                                    <div class="col-md-11">{!! nl2br($report->stormwater_detention_notes) !!}</div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        <h4 class="font-green-haze">Hot / Cold Water</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        {{--Water Pressure / Hammer--}}
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('pressure', 'Water Pressure (kpa)', ['class' => 'control-label']) !!}
-                                    {!! Form::text('pressure', null, ['class' => 'form-control', 'readonly']) !!}
+                            {{-- Note --}}
+                            <br>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6>Please note that these remain best estimate until the final position and depth of services are located. Final estimates will be relayed to you at that time for your approval. <br><br>Thank you for your acknowledgment of the above and we will do our best to
+                                        keep all costs to a minimum.</h6>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group {!! fieldHasError('pressure_reduction', $errors) !!}">
-                                    {!! Form::label('pressure_reduction', '500kpa Water Pressure Reduction Value Recommend', ['class' => 'control-label']) !!}
-                                    {!! Form::text('pressure_reduction', ($report->pressure_reduction) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    {!! Form::label('hammer', 'Water Hammer', ['class' => 'control-label']) !!}
-                                    {!! Form::text('hammer', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Hotwater / Pipes / Gas --}}
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('hotwater_type', 'Existing Hot Water Type', ['class' => 'control-label']) !!}
-                                    {!! Form::text('hotwater_type', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    {!! Form::label('hotwater_lowered', 'Will pipes in roof hot water need to be lowerd?', ['class' => 'control-label']) !!}
-                                    {!! Form::text('hotwater_lowered', ($report->hotwater_lowered) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    {!! Form::label('fuel_type', 'Fuel Type', ['class' => 'control-label']) !!}
-                                    {!! Form::text('fuel_type', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{--  Gas  Meter / Pipes--}}
-                        <h4 class="font-green-haze">Gas</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('gas_position', 'Gas Meter Position OK?', ['class' => 'control-label']) !!}
-                                    {!! Form::text('gas_position', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    {!! Form::label('gas_lines', 'Are gas pipes able to be tapped into?', ['class' => 'control-label']) !!}
-                                    {!! Form::text('gas_lines', ($report->gas_lines) ? 'Yes' : 'No', ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    {!! Form::label('gas_pipes', 'Gas Pipes', ['class' => 'control-label']) !!}
-                                    {!! Form::text('gas_pipes', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Gas Notes --}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    {!! Form::label('gas_notes', 'Gas Notes', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('gas_notes', null, ['rows' => '5', 'class' => 'form-control']) !!}
-                                </div>
-                            </div>
-                        </div>
-
-
-                        {{-- Existing Plumbing --}}
-                        <h4 class="font-green-haze">Condition of existing plumbing</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('existing', $errors) !!}">
-                                    {!! Form::label('existing', 'The existing plumbing was found to be', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('existing', null, ['rows' => '5', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('existing', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Comments -->
-                        <h4 class="font-green-haze">Comments</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('notes', $errors) !!}">
-                                    {!! Form::label('notes', 'Additional notes', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('notes', null, ['rows' => '10', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('notes', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Water Pressure --}}
-                        <h4 class="font-green-haze">Water Pressure</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('pressure_notes', $errors) !!}">
-                                    {!! Form::label('pressure_notes', 'Water pressure higher than 500KPA will void the warranty on all mixer sets; it is our recommendation that you have fitted a pressure limiting valve at the metre to avoid possible problems.      ', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('pressure_notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('pressure_notes', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group {!! fieldHasError('pressure_cost', $errors) !!}">
-                                    {!! Form::label('pressure_cost', 'Cost (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('pressure_cost', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('pressure_cost', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Water Hammer --}}
-                        <h4 class="font-green-haze">Water Hammer</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('hammer_notes', $errors) !!}">
-                                    {!! Form::label('hammer_notes', 'Water hammer comments', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('hammer_notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('hammer_notes', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Sewer --}}
-                        <h4 class="font-green-haze">Sewer</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('sewer_notes', $errors) !!}">
-                                    {!! Form::label('sewer_notes', 'Upon closer inspection of the sewer diagram that we have obtained from the Water Board', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('sewer_notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('sewer_notes', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group {!! fieldHasError('sewer_cost', $errors) !!}">
-                                    {!! Form::label('sewer_cost', 'Cost estimate (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('sewer_cost', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('sewer_cost', $errors) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group {!! fieldHasError('sewer_allowance', $errors) !!}">
-                                    {!! Form::label('sewer_allowance', 'Allowance in your tender document is (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('sewer_allowance', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('sewer_allowance', $errors) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group {!! fieldHasError('sewer_extra', $errors) !!}">
-                                    {!! Form::label('sewer_extra', 'Meaning you may incur extra costs of (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('sewer_extra', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('sewer_extra', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><h6>PRICE TO BE CONFIRMED AT TIME OF CONSTRUCTION AND DOES NOT INCLUDE BUILDERS MARGIN</h6><br></div>
-                        </div>
-
-
-                        {{-- Stormwater --}}
-                        <h4 class="font-green-haze">Stormwater</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group {!! fieldHasError('stormwater_notes', $errors) !!}">
-                                    {!! Form::label('stormwater_notes', 'Upon closer examination of your current stormwater system', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('stormwater_notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                    {!! fieldErrorMessage('stormwater_notes', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group {!! fieldHasError('stormwater_cost', $errors) !!}">
-                                    {!! Form::label('stormwater_cost', 'Cost estimate (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('stormwater_cost', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('stormwater_cost', $errors) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group {!! fieldHasError('stormwater_allowance', $errors) !!}">
-                                    {!! Form::label('stormwater_allowance', 'Allowance in your tender document is (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('stormwater_allowance', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('stormwater_allowance', $errors) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group {!! fieldHasError('stormwater_extra', $errors) !!}">
-                                    {!! Form::label('stormwater_extra', 'Meaning you may incur extra costs of (incl GST)', ['class' => 'control-label']) !!}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                        {!! Form::text('stormwater_extra', null, ['class' => 'form-control']) !!}
-                                    </div>
-                                    {!! fieldErrorMessage('stormwater_extra', $errors) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Stormwater Detention --}}
-                        <h4 class="font-green-haze">Onsite Stormwater Detention</h4>
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::text('stormwater_detention_type', null, ['class' => 'form-control', 'readonly']) !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group ">
-                                    {!! Form::label('stormwater_detention_notes', 'Onsite Stormwater Detention Comments', ['class' => 'control-label']) !!}
-                                    {!! Form::textarea('stormwater_detention_notes', null, ['rows' => '3', 'class' => 'form-control']) !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Note --}}
-                        <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h6>Please note that these remain best estimate until the final position and depth of services are located. Final estimates will be relayed to you at that time for your approval. <br><br>Thank you for your acknowledgment of the above and we will do our best to keep all costs to a minimum.</h6><br></div>
                         </div>
 
                         @if(Auth::user()->allowed2('edit.site.inspection', $report))
