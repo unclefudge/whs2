@@ -395,7 +395,7 @@
                                 @endif
                             </div>
                             <div class="col-sm-3 text-right">Construction Manager:</div>
-                            <div class="col-sm-9">@{{ xx.main.items_total }} @{{ xx.main.items_done }}
+                            <div class="col-sm-9">
                                 @if ($main->manager_sign_by)
                                     {!! \App\User::find($main->manager_sign_by)->full_name !!}, &nbsp;{{ $main->manager_sign_at->format('d/m/Y') }}
                                 @else
