@@ -232,10 +232,10 @@ class SiteInspectionPlumbingController extends Controller {
             touch($output_file);
             */
 
-            //return view('pdf/site/inspection-electrical', compact('report', 'site'));
-            return PDF::loadView('pdf/site/inspection-electrical', compact('report', 'site'))->setPaper('a4')->stream();
+            //return view('pdf/site/inspection-plumbing', compact('report', 'site'));
+            return PDF::loadView('pdf/site/inspection-plumbing', compact('report', 'site'))->setPaper('a4')->stream();
             // Queue the job to generate PDF
-            SiteQaPdf::dispatch(request('site_id'), $data, $output_file);
+            //SiteQaPdf::dispatch(request('site_id'), $data, $output_file);
         }
     }
 
