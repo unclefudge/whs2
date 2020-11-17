@@ -12,6 +12,7 @@ use App\User;
 use App\Models\Misc\Equipment\Equipment;
 use App\Models\Misc\Equipment\EquipmentLocation;
 use App\Models\Misc\Equipment\EquipmentLocationItem;
+use App\Models\Misc\Equipment\EquipmentLocationOther;
 use App\Models\Misc\Equipment\EquipmentLost;
 use App\Models\Misc\Equipment\EquipmentLog;
 use App\Models\Comms\Todo;
@@ -56,14 +57,48 @@ class EquipmentTransferController extends Controller {
         if (!Auth::user()->allowed2('edit.equipment.stocktake', $location))
             return view('errors/404');
 
-        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc)
-            $sites[$loc->id] = $loc->name;
-        asort($sites);
-        $sites = ['1' => 'CAPE COD STORE'] + $sites;
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', '<>', '25')->get() as $loc) {
+            if ($loc->items->count())
+                $sites[$loc->name] = $loc->id;
+        }
+        //$sites[$loc->id] = $loc->name;
 
-        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', null)->get() as $loc)
-            $others[$loc->id] = $loc->name;
-        asort($others);
+        ksort($sites);
+        $sites = ['CAPE COD STORE' => '1'] + $sites;
+        $supers = [];
+        $users = [];
+        $others = [];
+        $misc = [];
+
+
+        $all_supers = Auth::user()->company->reportsTo()->supervisors()->pluck('name')->toArray();
+        $all_users = Auth::user()->company->reportsTo()->onsiteUsers('1')->pluck('name')->toArray();
+        $all_others = EquipmentLocationOther::where('status', 1)->pluck('name')->toArray();
+
+
+        foreach (EquipmentLocation::where('status', 1)->where('notes', null)->where('site_id', null)->get() as $loc) {
+            if ($loc->items->count()) {
+                if (in_array($loc->name, $all_supers))
+                    $supers[$loc->name] = $loc->id;
+                elseif (in_array($loc->name, $all_users))
+                    $users[$loc->name] = $loc->id;
+                elseif (in_array($loc->name, $all_others))
+                    $others[$loc->name] = $loc->id;
+                else
+                    $misc[$loc->name] = $loc->id;
+            }
+            $others2[$loc->id] = $loc->name;
+        }
+        ksort($supers);
+        ksort($users);
+        ksort($others);
+        ksort($misc);
+
+        //var_dump($supers);
+        //var_dump($users);
+        //var_dump($others);
+        //var_dump($misc);
+
 
         $items = [];
         if ($location) {
@@ -74,7 +109,7 @@ class EquipmentTransferController extends Controller {
             });
         }
 
-        return view('misc/equipment/transfer-bulk', compact('location', 'sites', 'others', 'items'));
+        return view('misc/equipment/transfer-bulk', compact('location', 'sites', 'supers', 'users', 'others', 'others2', 'misc', 'items'));
     }
 
     /**
@@ -174,10 +209,10 @@ class EquipmentTransferController extends Controller {
     {
         $rules = ['location_id' => 'required', 'type' => 'required', 'site_id' => 'required_if:type,site', 'other' => 'required_if:type,other', 'reason' => 'required_if:type,dispose'];
         $mesg = [
-            'type.required'      => 'The transfer to field is required',
-            'site.required_if'   => 'The site field is required',
-            'other.required_if'  => 'The other location field is required',
-            'reason.required_if' => 'The reason field is required',
+            'type.required'       => 'The transfer to field is required',
+            'site_id.required_if' => 'The site field is required',
+            'other.required_if'   => 'The other location field is required',
+            'reason.required_if'  => 'The reason field is required',
         ];
         request()->validate($rules, $mesg); // Validate
 

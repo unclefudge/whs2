@@ -134,6 +134,23 @@ class PagesController extends Controller {
 
     public function quick()
     {
+
+        echo "<b>Active Equipment Locations with no items </b></br>";
+        $locations = EquipmentLocation::where('status', 1)->get();
+        foreach ($locations as $location) {
+            if ($location->items->count() == 0) {
+                if (!$location->site_id)
+                    echo "*O [$location->id] $location->name<br>";
+                elseif ($location->site_id && $location->site->status == 0)
+                    echo "*S [$location->id] $location->name<br>";
+                else
+                    echo "-- [$location->id] $location->name<br>";
+            }
+
+        }
+
+
+        /*
         echo "<b>Export of Dev Support Tickets </b></br>";
         $tickets = SupportTicket::where('status', 1)->where('type', 1)->get();
 
@@ -146,6 +163,9 @@ class PagesController extends Controller {
             }
         }
         echo "</table>";
+        */
+
+
         /*
         echo "<b>Archiving SWMS for inactive companies </b></br>";
         $sws = WmsDoc::where('status', '>', 0)->where('master', 0)->get();
