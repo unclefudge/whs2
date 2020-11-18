@@ -738,7 +738,8 @@ class SitePlannerExportController extends Controller {
             ];
         }
 
-        $planner = DB::table('site_planner AS p')
+        /*
+         $planner = DB::table('site_planner AS p')
             ->select(['p.id', 'p.site_id', 'p.entity_type', 'p.entity_id', 'p.task_id', 'p.from', 't.code'])
             ->join('trade_task as t', 'p.task_id', '=', 't.id')
             ->whereDate('p.from', '>=', $today)
@@ -751,6 +752,7 @@ class SitePlannerExportController extends Controller {
             ->whereDate('p.from', '>=', $today)
             ->where('t.id', 86)
             ->orderBy('p.from')->get();
+        */
 
         //return view('pdf/plan-jobstart', compact('startdata'));
         $pdf = PDF::loadView('pdf/plan-jobstart', compact('startdata'));
@@ -763,10 +765,10 @@ class SitePlannerExportController extends Controller {
             return $pdf->stream();
 
         if ($request->has('email_pdf')) {
-            /*$file = public_path('filebank/tmp/jobstart-' . Auth::user()->id  . '.pdf');
+            $file = public_path('filebank/tmp/jobstart-' . Auth::user()->id  . '.pdf');
             if (file_exists($file))
                 unlink($file);
-            $pdf->save($file);*/
+            $pdf->save($file);
 
             if ($request->get('email_list')) {
                 $email_list = explode(';', $request->get('email_list'));
@@ -777,13 +779,14 @@ class SitePlannerExportController extends Controller {
                     'user_company_name' => Auth::user()->company->name,
                     'startdata'         => $startdata
                 ];
-                Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
+                Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data, $file) {
                     $user_email = Auth::user()->email;
                     ($user_email) ? $send_from = $user_email : $send_from = 'do-not-reply@safeworksite.com.au';
 
                     $m->from($send_from, Auth::user()->fullname);
                     $m->to($email_list);
                     $m->subject('Upcoming Job Start Dates');
+                    $m->attach($file);
                 });
                 if (count(Mail::failures()) > 0) {
                     foreach (Mail::failures as $email_address)

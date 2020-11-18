@@ -140,6 +140,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('user/{id}/security', 'UserController@updateSecurity');
     Route::post('user/{id}/construction', 'UserController@updateConstruction');
     Route::get('user/{id}/resetpermissions', 'UserController@resetPermissions');
+    Route::post('user/{id}/compliance', 'UserController@storeCompliance');
+    Route::post('user/{id}/compliance/update', 'UserController@updateCompliance');
     Route::get('contractor', 'UserController@contractorList');
     Route::resource('user', 'UserController');
 

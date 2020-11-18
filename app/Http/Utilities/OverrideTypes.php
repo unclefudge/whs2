@@ -10,6 +10,7 @@ class OverrideTypes {
         'cd2' => 'Workers Compensation',
         'cd3' => 'Sickness & Accident Insurance',
         'cd7' => 'Contractor Licence',
+        'ud1' => 'White Card',
     ];
 
 
@@ -29,6 +30,19 @@ class OverrideTypes {
         $array = ['' => 'Select override'];
         foreach (static::$ComplianceOverrideTypes as $key => $val) {
             if ($key[0] == 'c')
+                $array[$key] = $val;
+        }
+        return $array;
+    }
+
+    /**
+     * @return array
+     */
+    public static function userSelect()
+    {
+        $array = ['' => 'Select override'];
+        foreach (static::$ComplianceOverrideTypes as $key => $val) {
+            if ($key[0] == 'u')
                 $array[$key] = $val;
         }
         return $array;

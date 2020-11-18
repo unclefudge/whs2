@@ -337,6 +337,15 @@ trait UserDocs {
         return ($format == 'csv') ? $missing_html : $missing_docs;
     }
 
+    /**
+     * List of Compliance overrides set for this user
+     */
+    public function complianceOverrides()
+    {
+        return ComplianceOverride::where('user_id', $this->id)->where('status', 1)->get();
+    }
+
+
 
     /****************************
      *

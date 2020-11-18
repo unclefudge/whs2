@@ -12,6 +12,7 @@ use App\User;
 use App\Models\Company\Company;
 use App\Models\Misc\Role2;
 use App\Models\Misc\Permission2;
+use App\Models\Misc\ComplianceOverride;
 use App\Models\Misc\PermissionRoleCompany;
 use App\Http\Requests;
 use App\Http\Requests\UserRequest;
@@ -432,6 +433,95 @@ class UserController extends Controller {
 
         return redirect("/user/$user->id");
 
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCompliance($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('edit.compliance.manage', $user->company))
+            return view('errors/404');
+
+        // Validate
+        $validator = Validator::make(request()->all(), ['reason' => 'required'], ['reason.required' => 'Please specify a reason']);
+        if ($validator->fails()) {
+            $validator->errors()->add('FORM', 'compliance.add');
+            Toastr::error("Failed to save compliance override");
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $existing_same_type = ComplianceOverride::where('user_id', $user->id)->where('type', request('compliance_type'))->where('status', 1)->first();
+        if ($existing_same_type) {
+            Toastr::error("User already has a Compliance Override of same type");
+
+            $type_name = OverrideTypes::name(request('compliance_type'));
+
+            return back()->withErrors(['FORM' => 'compliance.add', 'duplicate_override' => "This user currently has a override of same type and the old one MUST be deleted first."])->withInput();
+        }
+
+
+        // Format date from daterange picker to mysql format
+        $compliace_request['type'] = request('compliance_type');
+        $compliace_request['required'] = (request('compliance_type') != 'cdu') ? request('required') : null;
+        $compliace_request['user_id'] = $user->id;
+        $compliace_request['company_id'] = Auth::user()->company_id;
+        $compliace_request['reason'] = request('reason');
+        $compliace_request['expiry'] = (request('expiry')) ? Carbon::createFromFormat('d/m/Y H:i', request('expiry') . '00:00')->toDateTimeString() : null;
+        $compliace_request['status'] = 1;
+
+        //dd($compliace_request);
+        // Create Compliance Override
+        ComplianceOverride::create($compliace_request);
+        Toastr::success("Created new compliance override");
+
+        return redirect("user/$user->id");
+    }
+
+    /**
+     * Update Compliance resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCompliance($id)
+    {
+        $user = User::findOrFail($id);
+
+        /// Check authorisation and throw 404 if not
+        //if (!Auth::user()->allowed2('edit.compliance.manage', $user))
+        //    return view('errors/404');
+
+        foreach (request()->all() as $key => $val) {
+            if (preg_match('/compliance_type-/', $key)) {
+                list($crap, $over_id) = explode('-', $key);
+                $compliace_request['expiry'] = (request("expiry-$over_id")) ? Carbon::createFromFormat('d/m/Y H:i', request("expiry-$over_id") . '00:00')->toDateTimeString() : null;
+                $compliace_request['required'] = (request("compliance_type-$over_id") != 'cdu') ? request("required-$over_id") : null;
+                $compliace_request['reason'] = request("reason-$over_id");
+                $compliance = ComplianceOverride::findOrFail($over_id);
+                //var_dump($compliace_request);
+                $compliance->update($compliace_request);
+            }
+        }
+
+        // Delete Marked records
+        $records2del = (request('co_del')) ? request('co_del') : [];
+        if ($records2del && count($records2del)) {
+            foreach ($records2del as $del_id) {
+                $rec = ComplianceOverride::findOrFail($del_id);
+                $rec->status = 0;
+                $rec->save();
+                Toastr::error("Deleted override");
+            }
+        }
+        Toastr::success("Saved changes");
+
+        return redirect("user/$user->id");
     }
 
     /**

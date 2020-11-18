@@ -1,5 +1,6 @@
 @inject('ozstates', 'App\Http\Utilities\OzStates')
 @inject('companyEntity', 'App\Http\Utilities\CompanyEntityTypes')
+@inject('overrideTypes', 'App\Http\Utilities\OverrideTypes')
 @extends('layout')
 
 @section('breadcrumbs')
@@ -49,6 +50,13 @@
                 @if (Auth::user()->allowed2('view.user.construction', $user))
                     @include('user/_show-construction')
                     @include('user/_edit-construction')
+                @endif
+
+                {{-- Compliance Management --}}
+                @if (Auth::user()->allowed2('view.compliance.manage', $user->company))
+                    @include('user/_show-compliance-manage')
+                    @include('user/_edit-compliance-manage')
+                    @include('user/_add-compliance-manage')
                 @endif
 
                 {{-- Attendance --}}
@@ -114,11 +122,43 @@
         $('#apprentice').change(function (e) {
             $('#apprentice-div').toggle();
         });
+
+        $('#compliance_type').change(function (e) {
+            overide();
+        });
+
+        function overide() {
+            var type = $('#compliance_type').val();
+            if (type != '') {
+                $('#add_compliance_fields').show();
+                $('#save_compliance').show();
+                if (type == 'cdu')
+                    $('#add_compliance_required').hide();
+                else {
+                    $('#add_compliance_required').show();
+                    var cat = type.substring(2, type.length);
+                    if ($('#ot_'+type).val() == '1') {
+                        $('#creq_yes').show();
+                        $('#creq_not').hide();
+                        $('#required').val('0');
+                    } else {
+                        $('#creq_yes').hide();
+                        $('#creq_not').show();
+                        $('#required').val('1');
+                    }
+                    $('#required').trigger('change');
+                }
+            } else {
+                $('#add_compliance_fields').hide();
+                $('#save_compliance').hide();
+            }
+        }
     });
 
     function editForm(name) {
         $('#show_' + name).hide();
         $('#edit_' + name).show();
+        $('#add_' + name).hide();
     }
 
     function cancelForm(e, name) {
@@ -130,12 +170,13 @@
 
     function addForm(name) {
         $('#show_' + name).hide();
+        $('#edit_' + name).hide();
         $('#add_' + name).show();
     }
 
             @if (count($errors) > 0)
     var errors = {!! $errors !!};
-    if (errors.FORM == 'contact' || errors.FORM == 'login' || errors.FORM == 'security' || errors.FORM == 'construction') {
+    if (errors.FORM == 'contact' || errors.FORM == 'login' || errors.FORM == 'security' || errors.FORM == 'construction' || errors.FORM == 'compliance') {
         $('#show_' + errors.FORM).hide();
         $('#edit_' + errors.FORM).show();
     }
@@ -143,6 +184,11 @@
         $('#show_leave').hide();
         $('#edit_leave').hide();
         $('#add_leave').show();
+    }
+    if (errors.FORM == 'compliance.add') {
+        $('#show_compliance').hide();
+        $('#edit_compliance').hide();
+        $('#add_compliance').show();
     }
 
     console.log(errors)

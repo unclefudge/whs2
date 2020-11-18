@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Misc;
 use Illuminate\Http\Request;
 
 use DB;
+use PDF;
 use Mail;
 use File;
 use Carbon\Carbon;
@@ -820,17 +821,26 @@ class CronController extends Controller {
             ];
         }
 
+        // Create PDF
+        $file = public_path('filebank/tmp/jobstart-cron.pdf');
+        if (file_exists($file))
+            unlink($file);
+        $pdf = PDF::loadView('pdf/plan-jobstart', compact('startdata'));
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->save($file);
+
         $email_list = $cc->notificationsUsersEmailType('n.site.jobstartexport');
         $data = [
             'user_fullname'     => "Auto Generated",
             'user_company_name' => "Cape Cod",
             'startdata'         => $startdata
         ];
-        Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data) {
+        Mail::send('emails/jobstart', $data, function ($m) use ($email_list, $data, $file) {
             $send_from = 'do-not-reply@safeworksite.com.au';
             $m->from($send_from, 'Safe Worksite');
             $m->to($email_list);
             $m->subject('Upcoming Job Start Dates');
+            $m->attach($file);
         });
 
 
