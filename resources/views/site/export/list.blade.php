@@ -50,6 +50,9 @@
                                 <td><a href="/site/export/completion"> Practical Completion Export </a></td>
                             </tr>
                             <tr>
+                                <td><a href="/manage/report/site_inspections"> Site Inspection Reports (Electrical/Plumbing) </a></td>
+                            </tr>
+                            <tr>
                                 <td><a href="/site/export/qa"> Quality Assurance Export </a></td>
                             </tr>
                             @if (Auth::user()->hasPermission2('view.company.doc.gen') || Auth::user()->hasPermission2('view.company.doc.lic') || Auth::user()->hasPermission2('view.company.whs') || Auth::user()->hasPermission2('view.company.doc.ics'))

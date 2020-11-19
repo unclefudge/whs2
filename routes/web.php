@@ -119,6 +119,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/manage/report/qa/{id}', 'Misc\ReportController@QAdebug');
     Route::get('/manage/report/maintenance_no_action', 'Misc\ReportController@maintenanceNoAction');
     Route::get('/manage/report/maintenance_on_hold', 'Misc\ReportController@maintenanceOnHold');
+    Route::get('/manage/report/site_inspections', 'Misc\ReportController@siteInspections');
+    Route::get('/manage/report/site_inspections/dt/list', 'Misc\ReportController@getSiteInspections');
 
 
     // User Docs
@@ -149,7 +151,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/company/leave/dt/leave', 'Company\CompanyLeaveController@getCompanyLeave');
     Route::resource('/company/leave', 'Company\CompanyLeaveController');
 
-
+    // Company Standard Documents
     Route::get('company/doc/standard', 'Company\CompanyDocController@showStandard');
     Route::get('company/doc/standard/dt/docs', 'Company\CompanyDocController@getStandard');
 
@@ -166,8 +168,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('company/{cid}/doc/privacy-policy', 'Company\CompanyPrivacyPolicyController');
 
     // Company Docs
-    //Route::any('company/doc/create', 'Company\CompanyDocController@create');
-    //Route::any('company/doc/upload', 'Company\CompanyDocController@upload');
     Route::any('company/doc/export', 'Company\CompanyExportController@exportDocs');
     Route::post('company/doc/export/pdf', 'Company\CompanyExportController@docsPDF');
     Route::get('company/doc/create/tradecontract/{id}/{version}', 'Company\CompanyExportController@tradecontractPDF');
@@ -271,7 +271,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Site Inspection Electrical Register
     Route::get('site/inspection/electrical/dt/list', 'Site\SiteInspectionElectricalController@getInspections');
-    //Route::get('site/inspection/electrical/{id}/status/{status}', 'Site\SiteInspectionElectricalController@updateStatus');
     Route::any('site/inspection/electrical/upload', 'Site\SiteInspectionElectricalController@uploadAttachment');
     Route::any('site/inspection/electrical/{id}/docs', 'Site\SiteInspectionElectricalController@documents');
     Route::get('site/inspection/electrical/{id}/report', 'Site\SiteInspectionElectricalController@reportPDF');

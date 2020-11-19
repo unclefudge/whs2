@@ -12,6 +12,8 @@ use App\Models\Site\SiteQaItem;
 use App\Models\Site\SiteMaintenance;
 use App\Models\Site\Planner\SitePlanner;
 use App\Models\Site\Planner\SiteAttendance;
+use App\Models\Site\SiteInspectionElectrical;
+use App\Models\Site\SiteInspectionPlumbing;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyDoc;
 use App\Models\Company\CompanyDocCategory;
@@ -791,6 +793,71 @@ class ReportController extends Controller {
             })
             ->rawColumns(['company_docs.id', 'full_name', 'companys.name', 'company_docs.name', 'expiry'])
             ->make(true);
+
+        return $dt;
+    }
+
+    /*
+    * Inspection List Report
+    */
+    public function siteInspections()
+    {
+        //$equipment = Equipment::where('status', 1)->orderBy('name')->get();
+
+        return view('manage/report/site_inspections');
+    }
+
+    /**
+     * Get Accidents current user is authorised to manage + Process datatables ajax request.
+     */
+    public function getSiteInspections()
+    {
+        if (request('type') == 'electrical') {
+            $inspect_records = SiteInspectionElectrical::select([
+                'site_inspection_electrical.id', 'site_inspection_electrical.site_id', 'site_inspection_electrical.inspected_name', 'site_inspection_electrical.inspected_by',
+                'site_inspection_electrical.inspected_at', 'site_inspection_electrical.created_at',
+                'site_inspection_electrical.status', 'sites.company_id', 'companys.name',
+                DB::raw('DATE_FORMAT(site_inspection_electrical.inspected_at, "%d/%m/%y") AS nicedate'),
+                DB::raw('sites.name AS sitename'), 'sites.code',
+                DB::raw('companys.name AS companyname'),
+            ])
+                ->join('sites', 'site_inspection_electrical.site_id', '=', 'sites.id')
+                ->join('companys', 'site_inspection_electrical.assigned_to', '=', 'companys.id')
+                ->where('site_inspection_electrical.status', '=', 0);
+
+            $dt = Datatables::of($inspect_records)
+                ->addColumn('view', function ($inspect) {
+                    return ('<div class="text-center"><a href="/site/inspection/electrical/' . $inspect->id . '"><i class="fa fa-search"></i></a></div>');
+                })
+                ->addColumn('action', function ($inspect) {
+                    return ('<a href="/site/inspection/electrical/' . $inspect->id . '/report" target="_blank"><i class="fa fa-file-pdf-o"></i></a>');
+                })
+                ->rawColumns(['view', 'action'])
+                ->make(true);
+        } else {
+            $inspect_records = SiteInspectionPlumbing::select([
+                'site_inspection_plumbing.id', 'site_inspection_plumbing.site_id', 'site_inspection_plumbing.inspected_name', 'site_inspection_plumbing.inspected_by',
+                'site_inspection_plumbing.inspected_at', 'site_inspection_plumbing.created_at',
+                'site_inspection_plumbing.status', 'sites.company_id', 'companys.name',
+                DB::raw('DATE_FORMAT(site_inspection_plumbing.inspected_at, "%d/%m/%y") AS nicedate'),
+                DB::raw('sites.name AS sitename'), 'sites.code',
+                DB::raw('companys.name AS companyname'),
+            ])
+                ->join('sites', 'site_inspection_plumbing.site_id', '=', 'sites.id')
+                ->join('companys', 'site_inspection_plumbing.assigned_to', '=', 'companys.id')
+                ->where('site_inspection_plumbing.status', '=', 0);
+
+            $dt = Datatables::of($inspect_records)
+                ->addColumn('view', function ($inspect) {
+                    return ('<div class="text-center"><a href="/site/inspection/plumbing/' . $inspect->id . '"><i class="fa fa-search"></i></a></div>');
+                })
+                ->addColumn('action', function ($inspect) {
+                    return ('<a href="/site/inspection/plumbing/' . $inspect->id . '/report" target="_blank"><i class="fa fa-file-pdf-o"></i></a>');
+                })
+                ->rawColumns(['view', 'action'])
+                ->make(true);
+
+        }
 
         return $dt;
     }
