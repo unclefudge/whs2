@@ -25,6 +25,28 @@
                         {!! Form::model('SiteInspectionPlumbing', ['action' => 'Site\SiteInspectionPlumbingController@store', 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
+
+                        {{-- Progress Steps --}}
+                        <div class="mt-element-step hidden-sm hidden-xs">
+                            <div class="row step-thin" id="steps">
+                                <div class="col-md-4 mt-step-col first active">
+                                    <div class="mt-step-number bg-white font-grey">1</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Create</div>
+                                    <div class="mt-step-content font-grey-cascade">Create report</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col">
+                                    <div class="mt-step-number bg-white font-grey">2</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                                    <div class="mt-step-content font-grey-cascade">Add Photos/Documents</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col last">
+                                    <div class="mt-step-number bg-white font-grey">3</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
+                                    <div class="mt-step-content font-grey-cascade">Assign company</div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="form-body">
                             <div class="row">
                                 {{-- Site --}}

@@ -25,7 +25,31 @@
                         {!! Form::model('SiteInspectionElectrical', ['action' => 'Site\SiteInspectionElectricalController@store', 'class' => 'horizontal-form']) !!}
 
                         @include('form-error')
+
+                        {{-- Progress Steps --}}
+                        <div class="mt-element-step hidden-sm hidden-xs">
+                            <div class="row step-thin" id="steps">
+                                <div class="col-md-4 mt-step-col first active">
+                                    <div class="mt-step-number bg-white font-grey">1</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Create</div>
+                                    <div class="mt-step-content font-grey-cascade">Create report</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col">
+                                    <div class="mt-step-number bg-white font-grey">2</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                                    <div class="mt-step-content font-grey-cascade">Add Photos/Documents</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col last">
+                                    <div class="mt-step-number bg-white font-grey">3</div>
+                                    <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
+                                    <div class="mt-step-content font-grey-cascade">Assign company</div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="form-body">
+                            <h4 class="font-green-haze">Site details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
                                 {{-- Site --}}
                                 <div class="col-md-6">
@@ -37,25 +61,10 @@
                                         {!! fieldErrorMessage('site_id', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-1"></div>
-                                {{-- Assigned To Company --}}
-                                <div class="col-md-5">
-                                    <div class="form-group {!! fieldHasError('assigned_to', $errors) !!}" style="{{ fieldHasError('assigned_to', $errors) ? '' : 'display:show' }}" id="company-div">
-                                        {!! Form::label('assigned_to', 'Assigned to company', ['class' => 'control-label']) !!}
-                                        <select id="assigned_to" name="assigned_to" class="form-control bs-select" style="width:100%">
-                                            <option value="">Select company</option>
-                                            @foreach (Auth::user()->company->reportsTo()->companies('1')->sortBy('name') as $company)
-                                                @if (in_array('4', $company->tradesSkilledIn->pluck('id')->toArray()))
-                                                    <option value="{{ $company->id }}" {{ (old('assigned_to') && old('assigned_to') == $company->id) ? 'selected' : '' }}>{{ $company->name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                        {!! fieldErrorMessage('assigned_to', $errors) !!}
-                                    </div>
-                                </div>
                             </div>
 
                             <h4 class="font-green-haze">Client details</h4>
+                            <hr style="padding: 0px; margin: 0px 0px 10px 0px">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group {!! fieldHasError('client_name', $errors) !!}">

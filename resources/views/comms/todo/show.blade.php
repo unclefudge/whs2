@@ -19,10 +19,6 @@
                             <span class="caption-subject font-green-haze bold uppercase"> Todo item</span>
                             <span class="caption-helper"> - ID: {{ $todo->id }}</span>
                         </div>
-                        <div class="actions">
-                            <a href="" class="btn btn-circle btn-icon-only btn-default collapse"> </a>
-                            <a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen"> </a>
-                        </div>
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->

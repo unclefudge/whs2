@@ -3,11 +3,10 @@
 @section('breadcrumbs')
     <ul class="page-breadcrumb breadcrumb">
         <li><a href="/">Home</a><i class="fa fa-circle"></i></li>
-        @if (Auth::user()->hasAnyPermissionType('site'))
-            <li><a href="/site">Sites</a><i class="fa fa-circle"></i></li>
+        @if (Auth::user()->company->subscription)
+            <li><a href="/site/inspection/plumbing">Plumbing Inspection Report</a><i class="fa fa-circle"></i></li>
         @endif
-        <li><a href="/site/maintenance">Maintenance</a><i class="fa fa-circle"></i></li>
-        <li><span>View Request</span></li>
+        <li><span>Edit Report</span></li>
     </ul>
 @stop
 
@@ -27,15 +26,16 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="icon-layers"></i>
-                            <span class="caption-subject bold uppercase font-green-haze"> Site Maintenance Request</span>
-                            <span class="caption-helper">ID: {{ $main->code }}</span>
+                            <span class="caption-subject bold uppercase font-green-haze">Plumbing Inspection Report</span>
+                            <span class="caption-helper">ID: {{ $report->code }}</span>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="page-content-inner">
-                            {!! Form::model($main, ['action' => ['Site\SiteMaintenanceController@photos', $main->id], 'class' => 'horizontal-form', 'files' => true]) !!}
-                            <input type="hidden" name="main_id" id="main_id" value="{{ $main->id }}">
-                            <input type="hidden" name="site_id" id="site_id" value="{{ $main->site_id }}">
+                            {!! Form::model($report, ['method' => 'PATCH', 'action' => ['Site\SiteInspectionPlumbingController@documents', $report->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                            <input type="hidden" name="report_id" id="report_id" value="{{ $report->id }}">
+                            <input type="hidden" name="site_id" id="site_id" value="{{ $report->site_id }}">
+
                             @include('form-error')
 
                             {{-- Progress Steps --}}
@@ -44,7 +44,7 @@
                                     <div class="col-md-4 mt-step-col first done">
                                         <div class="mt-step-number bg-white font-grey">1</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Create</div>
-                                        <div class="mt-step-content font-grey-cascade">Create request</div>
+                                        <div class="mt-step-content font-grey-cascade">Create report</div>
                                     </div>
                                     <div class="col-md-4 mt-step-col active">
                                         <div class="mt-step-number bg-white font-grey">2</div>
@@ -54,41 +54,31 @@
                                     <div class="col-md-4 mt-step-col last">
                                         <div class="mt-step-number bg-white font-grey">3</div>
                                         <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
-                                        <div class="mt-step-content font-grey-cascade">Assign supervisor</div>
+                                        <div class="mt-step-content font-grey-cascade">Assign company</div>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col-md-5">
-                                    <p><h4>Site Details</h4>
-                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                    @if ($main->site) <b>{{ $main->site->name }} (#{{ $main->site->code }})</b> @endif<br>
-                                    @if ($main->site) {{ $main->site->full_address }}<br> @endif
-                                    {{--@if ($main->site && $main->site->client_phone) {{ $main->site->client_phone }} ({{ $main->site->client_phone_desc }})  @endif --}}
-                                    <br>
-                                    @if ($main->completed)<b>Prac Completion:</b> {{ $main->completed->format('d/m/Y') }}<br> @endif
-                                    @if ($main->supervisor)<b>Supervisor:</b> {{ $main->supervisor }} @endif
-                                    </p>
+                                <div class="col-md-2"><b>Site</b></div>
+                                <div class="col-md-10">{{ $report->site->name }} (#{{ $report->site->code }})</div>
                                 </div>
-                                <div class="col-md-1"></div>
-
-                                <div class="col-md-6">
-                                    <p><h4>Client Details</h4>
-                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                    @if ($main->contact_name) <b>{{ $main->contact_name }}</b> @endif<br>
-                                    @if ($main->contact_phone) {{ $main->contact_phone }}<br> @endif
-                                    @if ($main->contact_email) {{ $main->contact_email }}<br> @endif
-                                    </p>
-                                </div>
+                            <div class="row">
+                                <div class="col-md-2"><b>Client name</b></div>
+                                <div class="col-md-10">{{ $report->client_name }}</div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-2"><b>Client address</b></div>
+                                <div class="col-md-10">{{ $report->client_address }}</div>
+                            </div>
+                            <br>
 
 
                             <!-- Multi File upload -->
                             <div id="multifile-div">
-                                <h4>Photos</h4>
+                                <h4>Photos / Documents</h4>
                                 <hr style="padding: 0px; margin: 0px 0px 10px 0px">
-                                @if(Auth::user()->allowed2('add.site.maintenance'))
+                                @if(Auth::user()->allowed2('add.site.inspection'))
                                     <div class="note note-warning">
                                         Multiple documents/photos/images can be uploaded with this maintenance request.
                                         <ul>
@@ -115,8 +105,8 @@
 
                             <hr>
                             <div class="pull-right" style="min-height: 50px">
-                                <a href="/site/maintenance" class="btn default"> Back</a>
-                                @if(Auth::user()->allowed2('add.site.maintenance'))
+                                <a href="/site/inspection/electrical" class="btn default"> Back</a>
+                                @if(Auth::user()->allowed2('add.site.inspection'))
                                     <button type="submit" name="save" class="btn blue"> Next Step</button>
                                 @endif
                             </div>
@@ -175,34 +165,10 @@
             }
         });
 
-        $("#status").change(function () {
-            //updateFields()
-        });
-
-        $("#more").click(function (e) {
-            e.preventDefault();
-            $('#more').hide();
-            $('#more_items').show();
-        });
-
-        //updateFields();
-
-        function updateInfo() {
-            $('#super-div').hide();
-            $('#company-div').hide();
-
-            if ($("#assign_to").val() == 'super') {
-                $('#super-div').show();
-            }
-
-            if ($("#assign_to").val() == 'company') {
-                $('#company-div').show();
-            }
-        }
 
         /* Bootstrap Fileinput */
         $("#multifile").fileinput({
-            uploadUrl: "/site/maintenance/upload/", // server upload action
+            uploadUrl: "/site/inspection/plumbing/upload/", // server upload action
             uploadAsync: true,
             //allowedFileExtensions: ["image"],
             //allowedFileTypes: ["image"],
@@ -216,7 +182,7 @@
             uploadIcon: "<i class=\"fa fa-upload\"></i> ",
             uploadExtraData: {
                 "site_id": site_id,
-                "main_id": main_id,
+                "report_id": report_id,
             },
             layoutTemplates: {
                 main1: '<div class="input-group {class}">\n' +
@@ -234,7 +200,7 @@
 
         $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
             data.form.append("site_id", $("#site_id").val());
-            data.form.append("main_id", $("#main_id").val());
+            data.form.append("report_id", $("#report_id").val());
         });
     });
 </script>

@@ -36,7 +36,7 @@ class CreateSiteInspectionElectricalTable extends Migration
             $table->text('recommend')->nullable();
             $table->string('recommend_cost', 10)->nullable();
             $table->text('notes')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(2);
 
             // Foreign keys
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');

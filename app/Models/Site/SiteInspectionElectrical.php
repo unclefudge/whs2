@@ -6,6 +6,7 @@ use Mail;
 use App\User;
 use App\Models\Misc\Action;
 use App\Models\Comms\Todo;
+use App\Models\Site\SiteInspectionDoc;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use nilsenj\Toastr\Facades\Toastr;
@@ -40,6 +41,16 @@ class SiteInspectionElectrical extends Model {
     public function assignedTo()
     {
         return $this->belongsTo('App\Models\Company\Company', 'assigned_to');
+    }
+
+    /**
+     * A SiteInspectionElectrical has many Docs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function docs()
+    {
+        return SiteInspectionDoc::where('inspect_id', $this->id)->where('table', 'electrical')->get();
     }
 
     /**

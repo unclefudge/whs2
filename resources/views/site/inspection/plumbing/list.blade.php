@@ -13,6 +13,51 @@
 
             <!-- BEGIN PAGE CONTENT INNER -->
     <div class="page-content-inner">
+        @if ($non_assigned->count())
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption font-dark">
+                                <i class="icon-layers"></i>
+                                <span class="caption-subject bold uppercase font-green-haze"> To Be Assigned</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table class="table table-striped table-bordered table-hover order-column" id="under_review">
+                                <thead>
+                                <tr class="mytable-header">
+                                    <th width="5%"> #</th>
+                                    <th width="10%"> Created</th>
+                                    <th width="7%"> Site</th>
+                                    <th> Name</th>
+                                    <th width="5%"></th>
+                                </tr>
+                                </thead>
+                                @foreach ($non_assigned as $rec)
+                                    <?php $report = App\Models\Site\SiteInspectionPlumbing::find($rec->id) ?>
+                                    <tr>
+                                        <td>
+                                            <div class="text-center"><a href="/site/inspection/plumbing/{{ $rec->id }}"><i class="fa fa-search"></i></a></div>
+                                        </td>
+                                        <td> {{ $rec->created_at->format('d/m/Y') }}</td>
+                                        <td> {{ $rec->site->code }}</td>
+                                        <td> {{ $rec->site->name }}</td>
+                                        <td>
+                                            @if(Auth::user()->allowed2('edit.site.inspection', $report))
+                                                <a href="/site/inspection/plumbing/{{ $rec->id }}/edit" class="btn blue btn-xs btn-outline sbold uppercase margin-bottom"><i class="fa fa-pencil"></i> Edit</a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">

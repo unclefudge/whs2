@@ -12,6 +12,7 @@ use Session;
 use App\Models\Company\Company;
 use App\Models\Site\Site;
 use App\Models\Site\SiteInspectionElectrical;
+use App\Models\Site\SiteInspectionDoc;
 use App\Models\Comms\Todo;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -37,7 +38,16 @@ class SiteInspectionElectricalController extends Controller {
         if (!Auth::user()->hasAnyPermissionType('site.inspection'))
             return view('errors/404');
 
-        return view('site/inspection/electrical/list');
+        $non_assigned = SiteInspectionElectrical::select([
+            'site_inspection_electrical.id', 'site_inspection_electrical.site_id', 'site_inspection_electrical.created_at',
+            'site_inspection_electrical.status', 'sites.company_id',
+            DB::raw('sites.name AS sitename'), 'sites.code',
+        ])
+            ->join('sites', 'site_inspection_electrical.site_id', '=', 'sites.id')
+            ->where('site_inspection_electrical.status', '=', 2)
+            ->orWhere('site_inspection_electrical.assigned_to', '=', NULL)->get();
+
+        return view('site/inspection/electrical/list', compact('non_assigned'));
     }
 
     /**
@@ -63,14 +73,16 @@ class SiteInspectionElectricalController extends Controller {
     {
         $report = SiteInspectionElectrical::findOrFail($id);
 
-        /// Check authorisation and throw 404 if not
+        // Check authorisation and throw 404 if not
         if (!Auth::user()->allowed2('edit.site.inspection', $report))
             return view('errors/404');
 
-        if ($report->status)
+        if ($report->status == 1)
             return view('/site/inspection/electrical/edit', compact('report'));
-
-        return redirect('/site/inspection/electrical/' . $report->id);
+        elseif ($report->status == 2)
+            return view('/site/inspection/electrical/docs', compact('report'));
+        else
+            return redirect('/site/inspection/electrical/' . $report->id);
     }
 
     /**
@@ -97,18 +109,9 @@ class SiteInspectionElectricalController extends Controller {
 
         // Create Report
         $report = SiteInspectionElectrical::create($report_request);
-
-        if ($report->assigned_to) {
-            // Create ToDoo for assigned company
-            $company = Company::find($report->assigned_to);
-            if ($company)
-                $report->createAssignedToDo($company->staff->pluck('id')->toArray());
-        } else
-            $report->createContructionToDo(DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray());
-
         Toastr::success("Created inspection report");
 
-        return redirect('/site/inspection/electrical');
+        return redirect('/site/inspection/electrical/' . $report->id . '/edit');
     }
 
     /**
@@ -128,6 +131,25 @@ class SiteInspectionElectricalController extends Controller {
             return redirect('/site/inspection/electrical/' . $report->id . '/edit');
 
         return view('/site/inspection/electrical/show', compact('report'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function documents($id)
+    {
+        $report = SiteInspectionElectrical::findOrFail($id);
+
+        // Check authorisation and throw 404 if not
+        if (!Auth::user()->allowed2('add.site.inspection'))
+            return view('errors/404');
+
+        $report->status = 1;
+        $report->save();
+        $report->createContructionToDo(DB::table('role_user')->where('role_id', 8)->get()->pluck('user_id')->toArray());
+        Toastr::success("Updated Report");
+
+        return redirect('site/inspection/electrical');
     }
 
     /**
@@ -186,7 +208,7 @@ class SiteInspectionElectricalController extends Controller {
             $report->closeToDo();
             $company = Company::find(request('assigned_to'));
             if ($company)
-                $report->createAssignedToDo($company->staff->pluck('id')->toArray());
+                $report->createAssignedToDo($company->staffStatus(1)->pluck('id')->toArray());
         }
 
         //dd($report_request);
@@ -199,9 +221,54 @@ class SiteInspectionElectricalController extends Controller {
             return redirect('site/inspection/electrical/' . $report->id . '/edit');
     }
 
+    /**
+     * Upload File + Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadAttachment(Request $request)
+    {
+        // Check authorisation and throw 404 if not
+        //if (!(Auth::user()->allowed2('add.site.inspection') || Auth::user()->allowed2('edit.site.inspection', $report)))
+        //    return json_encode("failed");
+
+        //dd('here');
+        //dd(request()->all());
+        // Handle file upload
+        $files = $request->file('multifile');
+        foreach ($files as $file) {
+            $path = "filebank/site/" . $request->get('site_id') . '/inspection';
+            $name = $request->get('site_id') . '-' . sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . strtolower($file->getClientOriginalExtension());
+
+            // Ensure filename is unique by adding counter to similiar filenames
+            $count = 1;
+            while (file_exists(public_path("$path/$name")))
+                $name = $request->get('site_id') . '-' . sanitizeFilename(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . $count ++ . '.' . strtolower($file->getClientOriginalExtension());
+            $file->move($path, $name);
+
+            $doc_request = $request->only('site_id');
+            $doc_request['name'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $doc_request['company_id'] = Auth::user()->company_id;
+            $doc_request['type'] = (in_array(strtolower($file->getClientOriginalExtension()), ['jpg', 'jpeg', 'gif', 'png'])) ? 'photo' : 'doc';
+
+            // Create SiteMaintenanceDoc
+            $doc = SiteInspectionDoc::create($doc_request);
+            $doc->table = 'electrical';
+            $doc->inspect_id = $request->get('report_id');
+            $doc->attachment = $name;
+            $doc->save();
+        }
+
+        return json_encode("success");
+    }
+
+    /**
+     * Generate PDF report
+     *
+     * @return PDF
+     */
     public function reportPDF($id)
     {
-
         $report = SiteInspectionElectrical::findOrFail($id);
 
         if ($report) {
@@ -244,6 +311,7 @@ class SiteInspectionElectricalController extends Controller {
         ])
             ->join('sites', 'site_inspection_electrical.site_id', '=', 'sites.id')
             ->where('site_inspection_electrical.status', '=', request('status'))
+            ->where('site_inspection_electrical.assigned_to', '<>', NULL)
             ->whereIn('site_inspection_electrical.id', $inpect_ids);
 
         $dt = Datatables::of($inspect_records)

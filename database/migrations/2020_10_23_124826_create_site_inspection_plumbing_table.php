@@ -56,7 +56,7 @@ class CreateSiteInspectionPlumbingTable extends Migration
             $table->string('stormwater_detention_type', 50)->nullable();
             $table->text('stormwater_detention_notes')->nullable();
             $table->text('notes')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(2);
 
             // Foreign keys
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');

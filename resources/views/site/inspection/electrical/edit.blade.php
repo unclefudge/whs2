@@ -23,9 +23,36 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        {!! Form::model($report, ['method' => 'PATCH', 'action' => ['Site\SiteInspectionElectricalController@update', $report->id], 'class' => 'horizontal-form']) !!}
+                        {!! Form::model($report, ['method' => 'PATCH', 'action' => ['Site\SiteInspectionElectricalController@update', $report->id], 'class' => 'horizontal-form', 'files' => true]) !!}
+                        <input type="hidden" name="report_id" id="report_id" value="{{ $report->id }}">
+                        <input type="hidden" name="site_id" id="site_id" value="{{ $report->site_id }}">
 
                         @include('form-error')
+
+                        @if (!$report->assigned_to)
+                            {{-- Progress Steps --}}
+                            <div class="mt-element-step hidden-sm hidden-xs">
+                                <div class="row step-thin" id="steps">
+                                    <div class="col-md-4 mt-step-col first done">
+                                        <div class="mt-step-number bg-white font-grey">1</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Create</div>
+                                        <div class="mt-step-content font-grey-cascade">Create report</div>
+                                    </div>
+                                    <div class="col-md-4 mt-step-col done">
+                                        <div class="mt-step-number bg-white font-grey">2</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Documents</div>
+                                        <div class="mt-step-content font-grey-cascade">Add Photos/Documents</div>
+                                    </div>
+                                    <div class="col-md-4 mt-step-col last active">
+                                        <div class="mt-step-number bg-white font-grey">3</div>
+                                        <div class="mt-step-title uppercase font-grey-cascade">Assign</div>
+                                        <div class="mt-step-content font-grey-cascade">Assign company</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        @endif
+
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-6">
@@ -40,7 +67,7 @@
                                             <span class="pull-right font-red hidden-sm hidden-xs"><small class="font-red">COMPLETED {{ $report->updated_at->format('d/m/Y') }}</small></span>
                                             <span class="text-center font-red visible-sm visible-xs">COMPLETED {{ $report->updated_at->format('d/m/Y') }}</span>
                                         @endif
-                                        @if($report->status == '1')
+                                        @if($report->status == '1' && $report->assigned_to)
                                             <span class="pull-right font-red hidden-sm hidden-xs">ACTIVE</span>
                                             <span class="text-center font-red visible-sm visible-xs">ACTIVE</span>
                                         @endif
@@ -63,6 +90,53 @@
                                         {!! Form::label('client_address', 'Address', ['class' => 'control-label']) !!}
                                         {!! Form::text('client_address', null, ['class' => 'form-control', (Auth::user()->allowed2('add.site.inspection')) ? '' : 'readonly']) !!}
                                         {!! fieldErrorMessage('client_address', $errors) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Gallery --}}
+                            <br>
+                            <div class="row"  id="photos-show">
+                                <div class="col-md-7">
+                                    <h4>Photos
+                                        @if(Auth::user()->allowed2('add.site.inspection') || Auth::user()->allowed2('edit.site.inspection', $report))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-photos">Edit</button>
+                                        @endif</h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/inspection/_gallery')
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4" id="docs-show">
+                                    <h4>Documents
+                                        @if(Auth::user()->allowed2('add.site.inspection') || Auth::user()->allowed2('edit.site.inspection', $report))
+                                            <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="edit-docs">Edit</button>
+                                        @endif
+                                    </h4>
+                                    <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                    @include('site/inspection/_docs')
+                                </div>
+                            </div>
+
+                            <div id="photos-edit">
+                                <h4>Photos / Documents
+                                    @if(Auth::user()->allowed2('add.site.inspection') || Auth::user()->allowed2('edit.site.inspection', $report))
+                                        <button class="btn dark btn-outline btn-sm pull-right" style="margin-top: -10px; border: 0px" id="view-photos">View</button>
+                                    @endif</h4>
+                                <hr style="padding: 0px; margin: 0px 0px 10px 0px">
+                                <div class="note note-warning">
+                                    Multiple photos/images can be uploaded with this maintenance request.
+                                    <ul>
+                                        <li>Once you have selected your files upload them by clicking
+                                            <button class="btn dark btn-outline btn-xs" href="javascript:;"><i class="fa fa-upload"></i> Upload</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Files</label>
+                                            <input id="multifile" name="multifile[]" type="file" multiple class="file-loading">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -238,31 +312,33 @@
 
 
 @section('page-level-plugins-head')
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
-
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/libs/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
+    <!--<link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>-->
+    <link href="/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">var html5lightbox_options = {watermark: "", watermarklink: ""};</script>
 @stop
 
 @section('page-level-plugins')
-    <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/js/libs/fileinput.min.js"></script>
     <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/js/moment.min.js" type="text/javascript"></script>
+    <script src="/js/libs/html5lightbox/html5lightbox.js" type="text/javascript"></script>
 @stop
 
 @section('page-level-scripts') {{-- Metronic + custom Page Scripts --}}
-<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-<script src="/assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
 <script src="/assets/pages/scripts/components-date-time-pickers.min.js" type="text/javascript"></script>
-<script src="/assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {'X-CSRF-Token': $('meta[name=token]').attr('value')}
+    });
+
     $(document).ready(function () {
         /* Select2 */
-        $("#site_id").select2({placeholder: "Select Site"});
         $("#assigned_to").select2({placeholder: "Select Company"});
 
         $("#status").change(function () {
@@ -271,6 +347,60 @@
             if ($("#status").val() == '0') {
                 $('#inspector-div').show();
             }
+        });
+
+        $('#photos-edit').hide();
+        $("#edit-photos").click(function (e) {
+            e.preventDefault();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#edit-docs").click(function (e) {
+            e.preventDefault();
+            $('#photos-show').hide();
+            $('#photos-edit').show();
+        });
+        $("#view-photos").click(function (e) {
+            e.preventDefault();
+            $('#photos-show').show();
+            $('#photos-edit').hide();
+        });
+
+        /* Bootstrap Fileinput */
+        $("#multifile").fileinput({
+            uploadUrl: "/site/inspection/electrical/upload/", // server upload action
+            uploadAsync: true,
+            //allowedFileExtensions: ["image"],
+            //allowedFileTypes: ["image"],
+            browseClass: "btn blue",
+            browseLabel: "Browse",
+            browseIcon: "<i class=\"fa fa-folder-open\"></i> ",
+            //removeClass: "btn red",
+            removeLabel: "",
+            removeIcon: "<i class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn dark",
+            uploadIcon: "<i class=\"fa fa-upload\"></i> ",
+            uploadExtraData: {
+                "site_id": site_id,
+                "report_id": report_id,
+            },
+            layoutTemplates: {
+                main1: '<div class="input-group {class}">\n' +
+                '   {caption}\n' +
+                '   <div class="input-group-btn">\n' +
+                '       {remove}\n' +
+                '       {upload}\n' +
+                '       {browse}\n' +
+                '   </div>\n' +
+                '</div>\n' +
+                '<div class="kv-upload-progress hide" style="margin-top:10px"></div>\n' +
+                '{preview}\n'
+            },
+        });
+
+        $('#multifile').on('filepreupload', function (event, data, previewId, index, jqXHR) {
+            data.form.append("site_id", $("#site_id").val());
+            data.form.append("report_id", $("#report_id").val());
         });
     });
 </script>
